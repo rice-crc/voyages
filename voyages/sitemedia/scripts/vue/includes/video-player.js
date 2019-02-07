@@ -1,7 +1,7 @@
 $('#play-video').on('click', function (e) {
   e.preventDefault();
   $('#video-overlay').addClass('open');
-  $("#video-overlay").append('<iframe src="https://player.vimeo.com/video/298399231?autoplay=1" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen ></iframe >');
+  $("#video-overlay").append('<iframe src="https://player.vimeo.com/video/315957327?autoplay=1" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen ></iframe >');
 });
 
 $('.video-overlay, .video-overlay-close').on('click', function (e) {
