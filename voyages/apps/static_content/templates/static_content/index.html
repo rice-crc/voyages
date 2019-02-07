@@ -118,7 +118,7 @@
 				 	</p>
 				</div>
 				<div class="align-self-end band-buttons">
-					<a class="" href="{% url 'voyage:guide' %}">
+					<a class="" href="{% url 'voyage:about' %}">
 						<button class="btn btn-outline-primary trans-btn">{% trans "About" %}</button>
 					</a>
 					<a class="" href="{% url 'voyage:database' %}">
@@ -127,10 +127,10 @@
 					<a class="" href="{% url 'assessment:estimates' %}">
 						<button class="btn btn-outline-primary trans-btn">{% trans "Estimates" %}</button>
 					</a>
-					<a class="" href="{% url 'assessment:essays' %}">
+					<a class="" href="{% url 'voyage:essays' %}">
 						<button class="btn btn-outline-primary trans-btn">{% trans "Essays" %}</button>
 					</a>
-					<a class="" href="{% url 'voyage:download' %}">
+					<a class="" href="{% url 'voyage:downloads' %}">
 						<button class="btn btn-outline-primary trans-btn">{% trans "Downloads" %}</button>
 					</a>
 
@@ -166,8 +166,8 @@
 
 					<a class="btn btn-outline-primary intra-btn" href="{% url 'american:about' %}">{% trans "About" %}</a>
 					<a class="btn btn-outline-primary intra-btn" href="{% url 'american:database' %}">{% trans "Database" %}</a>
-					<button class="btn btn-outline-primary intra-btn" data-toggle="modal" data-target="#intra-modal">Downloads</button>
-					<button class="btn btn-outline-primary intra-btn" data-toggle="modal" data-target="#intra-modal">Contribute</button>
+					<a class="btn btn-outline-primary intra-btn" href="{% url 'american:downloads' %}">Downloads</a>
+					<a class="btn btn-outline-primary intra-btn" href="{% url 'contribute:index' %}">Contribute</a>
 				</div>
 			</div>
 		</div>
@@ -192,8 +192,9 @@
 					<a class="" href="{% url 'resources:origins' %}">
 						<button class="btn btn-outline-primary past-btn">{% trans 'Database' %}</button>
 					</a>
-					<!-- <button class="btn btn-outline-primary past-btn">Downloads</button> -->
-					<!-- <button class="btn btn-outline-primary past-btn">Contribute</button> -->
+					<a class="" href="{% url 'resources:downloads' %}">
+						<button class="btn btn-outline-primary past-btn">{% trans 'Downloads' %}</button>
+					</a>
 				</div>
 			</div>
 			<div class="col-md-4 sm-hidden ">

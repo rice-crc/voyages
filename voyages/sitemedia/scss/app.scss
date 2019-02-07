@@ -123,9 +123,9 @@ footer {
   border-color: $trans-color;
 }
 
-.trans-btn:hover {
-  background-color: $trans-color;
-  border-color: $trans-color;
+.trans-btn:hover, .trans-btn:active {
+  background-color: $trans-color !important;
+  border-color: $trans-color !important;
 }
 
 .intra-btn {
