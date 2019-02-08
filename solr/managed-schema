@@ -159,7 +159,7 @@
   <field name="faq_question_lang_pt_exact" type="text_pt" multiValued="false" indexed="true" stored="true"/>
   <field name="faq_question_order" type="long" multiValued="false" indexed="true" stored="true"/>
   <field name="file" type="text_en" multiValued="false" indexed="true" stored="true"/>
-  <field name="full_ref" type="text_en" multiValued="false" indexed="true" stored="true"/>
+  <field name="full_ref" type="string" multiValued="false" indexed="true" stored="true"/>
   <field name="glossary_description" type="text_en" multiValued="false" indexed="true" stored="true"/>
   <field name="glossary_description_lang_en" type="text_en" multiValued="false" indexed="true" stored="true"/>
   <field name="glossary_description_lang_en_exact" type="text_en" multiValued="false" indexed="true" stored="true"/>
@@ -176,7 +176,7 @@
   <field name="glossary_term_lang_pt" type="text_pt" multiValued="false" indexed="true" stored="true"/>
   <field name="glossary_term_lang_pt_exact" type="text_pt" multiValued="false" indexed="true" stored="true"/>
   <field name="group_id" type="long" multiValued="false" indexed="true" stored="true"/>
-  <field name="group_name" type="text_en" multiValued="false" indexed="true" stored="true"/>
+  <field name="group_name" type="string" multiValued="false" indexed="true" stored="true"/>
   <field name="id" type="string" multiValued="false" indexed="true" required="true" stored="true"/>
   <field name="imgtext" type="ngram" multiValued="false" indexed="true" stored="true"/>
   <field name="import_area" type="text_en" multiValued="false" indexed="true" stored="true"/>
@@ -187,7 +187,7 @@
   <field name="nation" type="text_en" multiValued="false" indexed="true" stored="true"/>
   <field name="order_num" type="long" multiValued="false" indexed="true" stored="true"/>
   <field name="ready_to_go" type="booleans" multiValued="false" indexed="true" stored="true"/>
-  <field name="short_ref" type="text_en" multiValued="false" indexed="true" stored="true"/>
+  <field name="short_ref" type="string" multiValued="false" indexed="true" stored="true"/>
   <field name="show_at_zoom" type="long" multiValued="false" indexed="true" stored="true"/>
   <field name="show_on_map" type="booleans" multiValued="false" indexed="true" stored="true"/>
   <field name="slave_age" type="long" multiValued="false" indexed="true" stored="true"/>

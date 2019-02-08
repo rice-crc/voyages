@@ -152,14 +152,14 @@ def get_flat_page_tree(prefix, language=None):
 
     return recursive_create(structure, None)
 
-@cache_page(1)
+@cache_page(3600)
 def get_flat_page_content(request, url):
     page = get_object_or_404(FlatPage, url=url)
     # Remove CDATA before we return
     content = page.content.replace("// <![CDATA[", "").replace("// ]]>", "")
     return HttpResponse(content, 'text/html; charset=utf-8')
 
-@cache_page(1)
+@cache_page(3600)
 def get_flat_page_hierarchy(request, prefix):
     tree = get_flat_page_tree(prefix)
     lang = get_language()
