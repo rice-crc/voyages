@@ -19,8 +19,8 @@ django-simple-captcha==0.5.5
 django-haystack
 haversine==0.4.5
 libsass==0.13.3
-django-compressor
-django-sass-processor
-django-storages
+django-compressor==2.2
+django-sass-processor==0.7.2
+django-storages==1.7.1
 six==1.10.0
 ijson
