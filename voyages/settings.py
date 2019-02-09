@@ -163,6 +163,7 @@ INSTALLED_APPS = (
     'allauth.socialaccount',
     #'allauth.socialaccount.providers.facebook',
     'allauth.socialaccount.providers.google',
+    'storages',
 )
 
 I18N_HELPER_DEBUG = False
