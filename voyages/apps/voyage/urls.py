@@ -17,12 +17,6 @@ urlpatterns = [
 
     url(r'^c(?P<chapternum>\w{2})_s(?P<sectionnum>\w{2})_p(?P<pagenum>\w{2})',
         voyages.apps.voyage.views.get_page, name='get-page'),
-    url(r'^source/(?P<category>\w+)/(?P<sort>\w+)',
-        voyages.apps.voyage.views.sources_list, name='sources-list-sort'),
-    url(r'^source/(?P<category>\w+)',
-        voyages.apps.voyage.views.sources_list, name='sources-list'),
-    url(r'^source',
-        voyages.apps.voyage.views.sources_list, name='sources-list-default'),
     url(r'^$', voyages.apps.static_content.views.get_static_content, {'group': 'Voyage'}, name='index'),
     url(r'^understanding-db/(?P<name>.*)', voyages.apps.voyage.views.understanding_page, name='understanding-page'),
     url(r'^understanding-db', voyages.apps.voyage.views.understanding_page, name='guide'),
