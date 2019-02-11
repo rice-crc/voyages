@@ -639,7 +639,7 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
             }
             percentageKeys.forEach(function(percentageKey){
               if (json.data[i][percentageKey]) {
-                json.data[i][percentageKey] = round(json.data[i][percentageKey] * 100, 1) + "%";
+                json.data[i][percentageKey] = roundDecimal(json.data[i][percentageKey] * 100, 1) + "%";
               }
             });
           }
