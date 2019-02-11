@@ -1722,55 +1722,6 @@ def variable_list():
 
     return var_list_stats
 
-
-def sources_list(request, category="documentary_sources", sort="short_ref"):
-    """
-    Creates list of sources of required category, sorted by 'sort'
-    method.
-    :param request: request to serve
-    :param category: category of source list
-    :param sort: sort type
-    :return: render object
-    """
-
-    category_search = " ".join(category.split("_"))
-    sources = SearchQuerySet().models(VoyageSources).filter(group_name__exact=category_search)
-    divided_groups = []
-    sorted_letters = False
-
-    # Create dictionary with sources
-    for i in sources:
-        insert_source(divided_groups, category, i)
-
-    # Additional sorting is needed for documentary_sources (by cities and countries)
-    if category == "documentary_sources":
-        # Count sources in each city (needed in template)
-        for v in divided_groups:
-            for city in v["cities_list"]:
-                city_rows = 0
-                for j in city["city_groups_dict"]:
-                    city_rows += int(len(j['sources']) + 1)
-                city["number_of_rows"] = city_rows
-
-        # Sort dictionary and set even and odd marks in dictionary
-        sorted_dict = sort_documentary_sources_dict(divided_groups, sort)
-        set_even_odd_sources_dict(sorted_dict)
-
-    else:
-        # Another sorting by first letter is needed for some categories.
-        if category in globals.letters_sorted_source_types:
-            sorted_letters = True
-            sorted_dict = sort_by_first_letter(divided_groups, sort)
-        else:
-            sorted_dict = sorted(divided_groups, key=lambda k: k[sort])
-
-    return render(request, "voyage_sources.html",
-                  {'results': sorted_dict,
-                   'sort_method': sort,
-                   'sorted_letters': sorted_letters,
-                   'category': category})
-
-
 def insert_source(dict, category, source):
     """
     Inserts source in appropriate place in dictionary
