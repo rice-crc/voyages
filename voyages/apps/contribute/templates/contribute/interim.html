@@ -1481,7 +1481,7 @@
                         </div>
                         <div class="form-group">
                             <label for="article_first_page">{% trans "Page numbers" %}</label>
-                            <div style="width: 100%; overflow-x: hidden">
+                            <div class="flex">
                                 <input class="form-control form-control-inline col-sm-2 not_selectized" type="text" id="article_first_page" style="width: 35%;">
                                 <div style="display: inline; float: left;">&nbsp;-&nbsp;</div>
                                 <input class="form-control form-control-inline col-sm-2 not_selectized" type="text" id="article_last_page" style="width: 35%;">
@@ -1532,7 +1532,7 @@
                         </div>
                         <div class="form-group">
                             <label for="book_first_page">{% trans "Page numbers" %}</label>
-                            <div style="width: 100%; overflow-x: hidden">
+                            <div class="flex">
                                 <input class="form-control form-control-inline col-sm-2 not_selectized" type="text" id="book_first_page" style="width: 35%;">
                                 <div style="display: inline; float: left;">&nbsp;-&nbsp;</div>
                                 <input class="form-control form-control-inline col-sm-2 not_selectized" type="text" id="book_last_page" style="width: 35%;">
@@ -2351,7 +2351,7 @@
         });
 
         $("#add_source_btn").click(function () {
-            var typeName = $("ul#tab_control li.active").data("sourcetype");
+            var typeName = $("ul#tab_control li > .nav-link.active").parent()[0].dataset.sourcetype;
             $('#sources_table').show();
             var source = createSourceByTypeName(typeName);
             if (source) {
