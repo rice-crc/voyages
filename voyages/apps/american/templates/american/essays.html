@@ -33,24 +33,15 @@
           <button type="button" class="btn btn-solid btn-sm" data-toggle="offcanvas">
             <div>
               <span class="fa fa-exchange" style=" vertical-align: middle;"></span>
-              <span>Toggle Sidebar</span>
+              {% endverbatim %}
+              <span>{% trans 'Toggle Sidebar' %}</span>
+              {% verbatim %}
             </div>
           </button>
         </p>
 
   			<div id="center-content-inner">
           <div v-html="content"></div>
-  				<!-- {% if not page %} {% include "voyage/guide.html" %} {% else %} {% include page %} {% endif %} -->
-
-          <!-- <div class="page-navigation-flexbox">
-            <div class="page-navigation-item" v-if="hasPrev">
-              <a @click=navPrevious>Previous: {{previous.title}}</a>
-            </div>
-            <div class="page-navigation-item" v-if="hasNext">
-              <a @click="navNext">Next: {{next.title}}</a>
-            </div>
-          </div> -->
-
   			</div>
 
       </div>

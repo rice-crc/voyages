@@ -29,7 +29,7 @@
 {% block content %}
 
 <div class="nav-header">
-  <div>Trans-Atlantic Slave Trade - Estimates</div>
+  <div>{% trans 'Trans-Atlantic Slave Trade - Estimates' %}</div>
   <div class="navbar-subtitle flex">
     <div class="navbar-subitem">
       {% trans 'Current Query' %} <i class="fa fa-question-circle" data-toggle="tooltip" data-placement="top" title="For purposes of calculation, estimates of embarked and disembarked slaves in tables, the timeline, and maps have been rounded to integers. When users cite any number, they are advised to round it to the nearest hundred."></i>
@@ -38,7 +38,7 @@
       <a data-toggle="collapse" href="#panelCollapse" role="button" aria-expanded="false" aria-controls="panelCollapse">
         <div class="btn-navbar">
           <i class="fa fa-filter"></i>
-          View All
+          {% trans 'View All' %}
         </div>
       </a>
     </div>
@@ -47,7 +47,7 @@
         onclick="return resetAll();">
         <div class="btn-navbar">
           <i class="fa fa-times"></i>
-          Reset All
+          {% trans 'Reset All' %}
         </div>
       </a>
     </div>
@@ -102,7 +102,7 @@
     </span>
 
     <a data-toggle="collapse" href="#panelCollapse" role="button" aria-expanded="true" aria-controls="panelCollapse">
-      <div class="btn-panel"><i class="fa fa-times-circle"></i> Hide</div>
+      <div class="btn-panel"><i class="fa fa-times-circle"></i> {% trans 'Hide' %}</div>
     </a>
   </div>
 </div>
@@ -124,7 +124,7 @@
               <button type="button" class="btn btn-solid btn-sm" data-toggle="offcanvas">
                 <div>
                   <span class="fa fa-exchange" style=" vertical-align: middle;"></span>
-                  <span>Toggle Sidebar</span>
+                  <span>{% trans 'Toggle Sidebar' %}</span>
                 </div>
               </button>
             </p>
