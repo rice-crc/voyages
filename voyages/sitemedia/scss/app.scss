@@ -133,9 +133,9 @@ footer {
   border-color: $intra-color;
 }
 
-.intra-btn:hover {
-  background-color: $intra-color;
-  border-color: $intra-color;
+.intra-btn:hover, .intra-btn:active  {
+  background-color: $intra-color !important;
+  border-color: $intra-color !important;
 }
 
 .past-btn {
@@ -143,9 +143,9 @@ footer {
   border-color: $past-color;
 }
 
-.past-btn:hover {
-  background-color: $past-color;
-  border-color: $past-color;
+.past-btn:hover, .past-btn:active {
+  background-color: $past-color !important;
+  border-color: $past-color !important;
 }
 
 .band {
