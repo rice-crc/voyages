@@ -56,32 +56,4 @@
         </div>
     </div>
     <script src="{{ STATIC_URL }}scripts/library/datatables.custom.min.js" type="text/javascript"></script>
-    <script type="text/javascript">
-        // $('#estimates-table tr').filter("[name!='header']").hover(function() {
-        //     $(this).addClass('highlight-row');
-        // }, function() {
-        //     $(this).removeClass('highlight-row');
-        // });
-    /*
-        {% for i in totals_header_cols_span|get_range %}
-            $('#estimates-table tr td:nth-last-child({{ i|add:"1" }})').filter("[name!='header']").addClass('tbl-total');
-        {% endfor %}
-        $('#estimates-table tfoot tr:last-child').attr('name', 'header');
-        $('#estimates-table tfoot tr:last-child').children().filter("[name!='header']").addClass('tbl-total');
-        var sizeHelper = function() {
-            console.log('hello');
-            var h = $('#inner-main-table_wrapper').height();
-            $(".DTFC_LeftBodyWrapper").get(0).style.height = h + "px";
-            var wrapper = $('#main-table-wrapper');
-            wrapper.get(0).style.height = (h + 60) + "px";
-        };
-        var table = $('#estimates-table').dataTable({
-            "aaSorting": [],
-            "bAutoWidth": false,
-            "scrollX": true,
-            "bFilter": false,
-            "bPaginate": {{ rows|length }} > 100,
-        });
-        */
-    </script>
 </div>
