@@ -1,6 +1,6 @@
 var var_imp_arrival_at_port_of_dis = new YearVariable({
     varName: "imp_arrival_at_port_of_dis",
-    label: "Year range",
+    label: gettext("Year range"),
     description: "",
   },{
     op: "is between",
