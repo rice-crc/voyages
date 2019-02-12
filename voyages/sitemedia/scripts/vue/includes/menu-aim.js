@@ -15,15 +15,28 @@ function activateSubmenu(row) {
 
 		// var parentWidth = $row.width();
 		var parentWidth = 301;
+	
+		// responsive design
+		var vpWidth = document.documentElement.clientWidth;
+		var MOBILE_CUTOFF_WIDTH = 1200;
+		
+		var top = -1;
+		var left = parentWidth + 27; // main should overlay submenu
+		// var height = height - 4; // padding for main dropdown's arrow
 
+		// // responsive design
+		// if (vpWidth < MOBILE_CUTOFF_WIDTH) {
+		// 	top = 75;
+		// 	left = 40;
+		// }
+		
 		// Show the submenu
 		$submenu.css({
-				display: "block",
-				top: -1,
-				left: parentWidth + 47 // main should overlay submenu
-				// height: height - 4  // padding for main dropdown's arrow
+			display: "block",
+			top: top,
+			left: left,
 		});
-
+		
 		// Keep the currently activated row's highlighted look
 		$row.addClass("maintainHover");
 }

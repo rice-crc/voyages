@@ -78,13 +78,26 @@ a {
 
 .trans-search-bar {
   z-index: 1;
-  padding: 0 4rem;
   background: $trans-secondary-color !important;
   @media (min-width: 1199px) {
     .nav-item {
       padding-top: 0;
     }
   }
+}
+
+@media (max-width: 1199px) {
+  .search-menu-singular, .search-submenu {
+    width: 100% !important;
+    min-width: auto !important;
+    height: auto !important;
+  }
+  .search-menu, .search-menu-singular {
+    width: 100% !important;
+    height: auto !important;
+    max-height: auto !important;
+  }
+
 }
 
 #results_main_table {
