@@ -1,3 +1,9 @@
+@media (max-width: 1199px) {
+  .video-play-button span {
+    left: 0 !important;
+  }
+}
+
 .video-player-flexbox {
   display: flex;
   align-items: center;
