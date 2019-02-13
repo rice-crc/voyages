@@ -8,11 +8,10 @@
 {% block content %}
 <link href="{% sass_src 'scss/intro-maps.scss' %}" rel="stylesheet" type="text/css" />
 
-{% verbatim %}
   <div id="flatpage" v-cloak>
     <v-breadcrumb 
-      module="Trans-Atlantic Slave Trade" 
-      title="Introductory Maps"></v-breadcrumb>
+      module="{% trans 'Trans-Atlantic Slave Trade' %}" 
+      title="{% trans 'Introductory Maps' %}"></v-breadcrumb>
     <div class="container-new">
       <div class="row row-offcanvas row-offcanvas-right">
         <div class="col-md-12">
@@ -23,8 +22,6 @@
       </div>
     </div>
   </div>
-
-{% endverbatim %}
 
 {% include '_scripts.html' %}
 <script src="{{ STATIC_URL }}scripts/vue/components/v-flatpage-data-maps.js"></script>

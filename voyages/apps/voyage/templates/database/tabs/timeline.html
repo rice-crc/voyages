@@ -1,13 +1,11 @@
-{% verbatim %}
+{% load i18n %}
 
 <div class="row">
   <div class="col-md-12">
-    <v-dropdown title="Choose a variable to plot" description="" @changed="updateTabOptions" :options="tabs.timeline.chart.options" :clearable="false" :variable="tabs.timeline.chart"></v-dropdown>
+    <v-dropdown title="{% trans 'Choose a variable to plot' %}" description="{% trans '' %}" @changed="updateTabOptions" :options="tabs.timeline.chart.options" :clearable="false" :variable="tabs.timeline.chart"></v-dropdown>
   </div>
 </div>
 
 <div class="row">
   <div class="col-md-12" id="hc-timeline"></div>
 </div>
-
-{% endverbatim %}

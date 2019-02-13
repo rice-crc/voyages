@@ -1,9 +1,10 @@
-{% verbatim %}
+{% load i18n %}
+
 <li class="nav-item dropdown">
-  <v-menu-title :count="filter.year.count" title="Year range"></v-menu-title>
-  <v-panel-singular @apply="apply" @reset="reset" group="year" sub-group="year" title="Year Range" :filters="filter.year.year" align="left">
+  <v-menu-title :count="filter.year.count" title="{% trans 'Year range' %}"></v-menu-title>
+  <v-panel-singular @apply="apply" @reset="reset" group="year" sub-group="year" title="{% trans 'Year Range' %}" :filters="filter.year.year" align="left">
     <div slot="v-panel-header">
-      <v-panel-header title="Year range" description="Year range of your search. Please enter a range between 1514 and 1866.">
+      <v-panel-header title="{% trans 'Year range' %}" description="{% trans 'Year range of your search. Please enter a range between 1514 and 1866.' %}">
         <div slot="v-modal-content"></div>
       </v-panel-header>
     </div>
@@ -17,4 +18,3 @@
     </div>
   </v-panel-singular>
 </li>
-{% endverbatim %}
