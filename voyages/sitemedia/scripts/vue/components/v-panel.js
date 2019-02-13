@@ -1,7 +1,4 @@
-// v-panel
-Vue.component('v-panel', {
-  props: ['title', "filters", "group", "subGroup", "data"],
-  template: `
+template = `
     <li class="dropdown-item-li search-dropdown-item" :data-submenu-id="idValue">
         <div class="dropdown-menu-title">
           <div class="dropdown-menu-title-text">
@@ -19,17 +16,22 @@ Vue.component('v-panel', {
               <slot name="v-panel-header"></slot>
               <slot name="v-panel-content" :filters="filtersValue" :data="data"></slot>
               <div class="margin-v">
-                <b-button variant="info" size="sm" @click="apply">
-                  Apply
-                </b-button>
-                <b-button variant="outline-secondary" size="sm" @click="reset">
-                  Reset
-                </b-button>
+                <b-button variant="info" size="sm" @click="apply">` +
+                  gettext('Apply') +
+                `</b-button>
+                <b-button variant="outline-secondary" size="sm" @click="reset">` +
+                  gettext('Reset') +
+                `</b-button>
               </div>
             </div>
         </div>
     </li>
-  `,
+  `;
+
+// v-panel
+Vue.component('v-panel', {
+  props: ['title', "filters", "group", "subGroup", "data"],
+  template: template,
 
   data: function() {
     return {

@@ -1,10 +1,11 @@
-{% verbatim %}
+{% load i18n %}
+
 <div class="row" style="padding-top: 1rem;">
   <div class="col-md-2">
     <nav class="nav flex-column" role="tablist">
-      <a class="side-control-tab v-title active" id="xy-chart-tab" @click="refresh" data-toggle="tab" href="#xy-scatter-plot" role="tab" aria-controls="home" aria-selected="true" :clearable="true">X-Y Scatter Plot</a>
-      <a class="side-control-tab v-title" id="bar-chart-tab" @click="refresh" data-toggle="tab" href="#bar-chart" role="tab" aria-controls="profile" aria-selected="false">Bar Chart</a>
-      <a class="side-control-tab v-title" id="donut-chart-tab" @click="refresh" data-toggle="tab" href="#donut-chart" role="tab" aria-controls="contact" aria-selected="false">Donut Chart</a>
+      <a class="side-control-tab v-title active" id="xy-chart-tab" @click="refresh" data-toggle="tab" href="#xy-scatter-plot" role="tab" aria-controls="home" aria-selected="true" :clearable="true">{% trans 'X-Y Scatter Plot' %}</a>
+      <a class="side-control-tab v-title" id="bar-chart-tab" @click="refresh" data-toggle="tab" href="#bar-chart" role="tab" aria-controls="profile" aria-selected="false">{% trans 'Bar Chart' %}</a>
+      <a class="side-control-tab v-title" id="donut-chart-tab" @click="refresh" data-toggle="tab" href="#donut-chart" role="tab" aria-controls="contact" aria-selected="false">{% trans 'Donut Chart' %}</a>
     </nav>
   </div>
   <div class="col-md-10">
@@ -12,10 +13,10 @@
       <div class="control-tab-pane tab-pane fade show active" id="xy-scatter-plot" role="tabpanel" aria-labelledby="home-tab">
         <div class="row">
           <div class="col-md-6">
-            <v-dropdown title="X Axis" description="" @changed="updateTabOptions" :options="tabs.visualization.scatter.x.options" :variable="tabs.visualization.scatter.x" :is-multiple="false" :clearable="false"></v-dropdown>
+            <v-dropdown title="{% trans 'X Axis' %}" description="{% trans '' %}" @changed="updateTabOptions" :options="tabs.visualization.scatter.x.options" :variable="tabs.visualization.scatter.x" :is-multiple="false" :clearable="false"></v-dropdown>
           </div>
           <div class="col-md-6">
-            <v-dropdown title="Y Axes" description="" @changed="updateTabOptions" :options="tabs.visualization.scatter.y.options" :variable="tabs.visualization.scatter.y" :is-multiple="true" :clearable="true"></v-dropdown>
+            <v-dropdown title="{% trans 'Y Axes' %}" description="{% trans '' %}" @changed="updateTabOptions" :options="tabs.visualization.scatter.y.options" :variable="tabs.visualization.scatter.y" :is-multiple="true" :clearable="true"></v-dropdown>
           </div>
         </div>
         <div class="row">
@@ -28,10 +29,10 @@
       <div class="control-tab-pane tab-pane fade" id="bar-chart" role="tabpanel" aria-labelledby="profile-tab">
         <div class="row">
           <div class="col-md-6">
-            <v-dropdown title="X Axis" description="" @changed="updateTabOptions" :options="tabs.visualization.bar.x.options" :variable="tabs.visualization.bar.x" :is-multiple="false" :clearable="false"></v-dropdown>
+            <v-dropdown title="{% trans 'X Axis' %}" description="{% trans '' %}" @changed="updateTabOptions" :options="tabs.visualization.bar.x.options" :variable="tabs.visualization.bar.x" :is-multiple="false" :clearable="false"></v-dropdown>
           </div>
           <div class="col-md-6">
-            <v-dropdown title="Y Axes" description="" @changed="updateTabOptions" :options="tabs.visualization.bar.y.options" :variable="tabs.visualization.bar.y" :is-multiple="true" :clearable="true"></v-dropdown>
+            <v-dropdown title="{% trans 'Y Axes' %}" description="{% trans '' %}" @changed="updateTabOptions" :options="tabs.visualization.bar.y.options" :variable="tabs.visualization.bar.y" :is-multiple="true" :clearable="true"></v-dropdown>
           </div>
         </div>
         <div class="row">
@@ -43,10 +44,10 @@
       <div class="control-tab-pane tab-pane fade" id="donut-chart" role="tabpanel" aria-labelledby="contact-tab">
         <div class="row">
           <div class="col-md-6">
-            <v-dropdown title="Sectors" description="" @changed="updateTabOptions" :options="tabs.visualization.donut.sectors.options" :variable="tabs.visualization.donut.sectors" :is-multiple="false" :clearable="false"></v-dropdown>
+            <v-dropdown title="{% trans 'Sectors' %}" description="{% trans '' %}" @changed="updateTabOptions" :options="tabs.visualization.donut.sectors.options" :variable="tabs.visualization.donut.sectors" :is-multiple="false" :clearable="false"></v-dropdown>
           </div>
           <div class="col-md-6">
-            <v-dropdown title="Values" description="" @changed="updateTabOptions" :options="tabs.visualization.donut.values.options" :variable="tabs.visualization.donut.values" :is-multiple="false" :clearable="false"></v-dropdown>
+            <v-dropdown title="{% trans 'Values' %}" description="{% trans '' %}" @changed="updateTabOptions" :options="tabs.visualization.donut.values.options" :variable="tabs.visualization.donut.values" :is-multiple="false" :clearable="false"></v-dropdown>
           </div>
         </div>
         <div class="row">
@@ -58,5 +59,3 @@
     </div>
   </div>
 </div>
-
-{% endverbatim %}

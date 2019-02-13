@@ -1,20 +1,15 @@
-// input (select + textbox x 2)
-Vue.component('v-year', {
-  props: ['title', 'description', 'varName', 'searchTermCaption', 'filter'],
-  template: `
+template = `
     <div class="v-form-group">
       <div class="v-title">
         <span>{{title}}</span>
-        <span>
-
-        </span>
+        <span></span>
       </div>
       <div class="v-description" v-text="description"></div>
 
       <div class="row">
-        <div class="col-md-4">
-          is between
-        </div>
+        <div class="col-md-4">` +
+          gettext('is between') +
+        `</div>
         <div class="col-md-4">
           <v-textbox @entered="updateSearchTerm0" :search-term-caption="options.searchTermCaption0" :value="item.searchTerm0" :type="options.type"></v-textbox>
         </div>
@@ -32,13 +27,21 @@ Vue.component('v-year', {
 
       <div class="row v-padding">
         <div class="col-md-12">
-          <b-button :disabled="!options.changed" variant="success" size="sm" @click="apply">Apply</b-button>
-          <b-button :disabled="!options.changed" variant="secondary" size="sm" @click="reset">Reset</b-button>
+          <b-button :disabled="!options.changed" variant="success" size="sm" @click="apply">` +
+          gettext('Apply') +
+          `</b-button>
+          <b-button :disabled="!options.changed" variant="secondary" size="sm" @click="reset">` +
+          gettext('Reset') +
+          `</b-button>
         </div>
       </div>
 
     </div>
-  `,
+  `;
+// input (select + textbox x 2)
+Vue.component('v-year', {
+  props: ['title', 'description', 'varName', 'searchTermCaption', 'filter'],
+  template: template,
 
   data: function() {
     return {
@@ -101,16 +104,16 @@ Vue.component('v-year', {
         // labels
         if (this.item.op == "is between") {
           this.options.searchTerm1Disabled = true;
-          this.options.searchTermCaption0 = "Enter the lower bound";
-          this.options.searchTermCaption1 = "Enter the upper bound";
+          this.options.searchTermCaption0 = gettext("Enter the lower bound");
+          this.options.searchTermCaption1 = gettext("Enter the upper bound");
         } else {
           this.options.searchTerm1Disabled = false;
           this.item.searchTerm1 = null;
           if (this.item.op == "is at most") {
-            this.options.searchTermCaption0 = "Enter the upper bound";
+            this.options.searchTermCaption0 = gettext("Enter the upper bound");
           }
           if (this.item.op == "is at least") {
-            this.options.searchTermCaption0 = "Enter the lower bound";
+            this.options.searchTermCaption0 = gettext("Enter the lower bound");
           }
           if (this.item.op == "is equal to") {
             this.options.searchTermCaption0 = this.searchTermCaption;

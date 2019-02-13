@@ -1,13 +1,13 @@
-{% verbatim %}
+{% load i18n %}
 
 <li class="nav-item dropdown">
-	<v-menu-title :count="filter.slave.count" title="Enslaved people"></v-menu-title>
+	<v-menu-title :count="filter.slave.count" title="{% trans 'Enslaved people' %}"></v-menu-title>
 	<div class="">
 		<ul class="dropdown-menu search-menu" id="slave" role="menu">
 
-			<v-panel @reset="reset" group="slave" sub-group="overallNumbers" @apply="apply" title="Overall numbers" :filters="filter.slave.overallNumbers">
+			<v-panel @reset="reset" group="slave" sub-group="overallNumbers" @apply="apply" title="{% trans 'Overall numbers' %}" :filters="filter.slave.overallNumbers">
 				<div slot="v-panel-header">
-					<v-panel-header title="Overall numbers" description="Embarkations and disembarkations">
+					<v-panel-header title="{% trans 'Overall numbers' %}" description="{% trans 'Embarkations and disembarkations' %}">
 						<div slot="v-modal-content"></div>
 					</v-panel-header>
 				</div>
@@ -30,9 +30,9 @@
 				</div>
 			</v-panel>
 
-			<v-panel @reset="reset" group="slave" sub-group="purchaseNumbers" @apply="apply" title="Purchase numbers" :filters="filter.slave.purchaseNumbers">
+			<v-panel @reset="reset" group="slave" sub-group="purchaseNumbers" @apply="apply" title="{% trans 'Purchase numbers' %}" :filters="filter.slave.purchaseNumbers">
 				<div slot="v-panel-header">
-					<v-panel-header title="Purchase numbers" description="Number of slaves purchased">
+					<v-panel-header title="{% trans 'Purchase numbers' %}" description="{% trans 'Number of slaves purchased' %}">
 						<div slot="v-modal-content"></div>
 					</v-panel-header>
 				</div>
@@ -58,9 +58,9 @@
 				</div>
 			</v-panel>
 
-			<v-panel @apply="apply" @reset="reset" group="slave" sub-group="landingNumbers" :filters="filter.slave.landingNumbers" title="Landing numbers" >
+			<v-panel @apply="apply" @reset="reset" group="slave" sub-group="landingNumbers" :filters="filter.slave.landingNumbers" title="{% trans 'Landing numbers' %}" >
 				<div slot="v-panel-header">
-					<v-panel-header title="Landing numbers" description="Number of slaves landed">
+					<v-panel-header title="{% trans 'Landing numbers' %}" description="{% trans 'Number of slaves landed' %}">
 						<div slot="v-modal-content"></div>
 					</v-panel-header>
 				</div>
@@ -86,9 +86,9 @@
 				</div>
 			</v-panel>
 
-			<v-panel @apply="apply" @reset="reset" group="slave" sub-group="percentageBySexAndAgeGroup" :filters="filter.slave.percentageBySexAndAgeGroup" title="Percentage by sex and age">
+			<v-panel @apply="apply" @reset="reset" group="slave" sub-group="percentageBySexAndAgeGroup" :filters="filter.slave.percentageBySexAndAgeGroup" title="{% trans 'Percentage by sex and age' %}">
 				<div slot="v-panel-header">
-					<v-panel-header title="Percentage by sex and age" description="Please enter as an integer. e.g. 75">
+					<v-panel-header title="{% trans 'Percentage by sex and age' %}" description="{% trans 'Please enter as an integer. e.g. 75' %}">
 						<div slot="v-modal-content"></div>
 					</v-panel-header>
 				</div>
@@ -122,9 +122,9 @@
 				</div>
 			</v-panel>
 
-			<v-panel @apply="apply" @reset="reset" group="slave" sub-group="otherCharacteristics" :filters="filter.slave.otherCharacteristics" title="Other characteristics">
+			<v-panel @apply="apply" @reset="reset" group="slave" sub-group="otherCharacteristics" :filters="filter.slave.otherCharacteristics" title="{% trans 'Other characteristics' %}">
 				<div slot="v-panel-header">
-					<v-panel-header title="Other characteristics" description="Additional characteristics about slaves">
+					<v-panel-header title="{% trans 'Other characteristics' %}" description="{% trans 'Additional characteristics about slaves' %}">
 						<div slot="v-modal-content"></div>
 					</v-panel-header>
 				</div>
@@ -151,5 +151,3 @@
 			</ul>
 	</div>
 </li>
-
-{% endverbatim %}

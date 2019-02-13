@@ -84,13 +84,13 @@
 <b-modal v-model="rowModalShow" size="lg">
   <div slot="modal-title">
     <div class="v-modal-title">
-      Full detail
+      {% trans "Full detail" %}
     </div>
   </div>
 
   <div class="row">
     <div class="col-md-12">
-      <p class="body-text">{% trans "Here are the currently available details for this voyage." %} <a href="#" @click="row.collapseVisible = !row.collapseVisible">Expand/Collapse</a> to see/hide all.<p>
+      <p class="body-text">{% trans "Here are the currently available details for this voyage." %} <a href="#" @click="row.collapseVisible = !row.collapseVisible">{% trans 'Expand/Collapse' %}</a> {% trans 'to see/hide all' %}.<p>
     </div>
   </div>
 
@@ -107,12 +107,14 @@
             <div class="row" v-for="variable in result.variables">
               <div class='col-md-4 text-bold'>
                 {{variable.label}}
+                  {% endverbatim %}
                 <b-badge pill
                   v-if="variable.isImputed"
-                  v-b-tooltip.hover title="Calculated by an algorithm and not based on historical record."
+                  v-b-tooltip.hover title="{% trans 'Imputed results are calculated by an algorithm.' %}"
                   variant="secondary"
                   class="v-badge-imputed">
-                  IMP
+                  {% trans 'IMP' %}
+                  {% verbatim %}
                 </b-badge>
               </div>
               <div class='col-md-8'>
@@ -127,7 +129,7 @@
 
   <div slot="modal-footer">
    <b-btn size="sm" class="float-right" variant="info" @click="rowModalShow=false">
-     Close
+    {% trans 'Close' %}
    </b-btn>
  </div>
 

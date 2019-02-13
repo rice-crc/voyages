@@ -1,12 +1,13 @@
-{% verbatim %}
+{% load i18n %}
+
 <li class="nav-item dropdown">
-  <v-menu-title title="Captain and crew" :count="filter.captainAndCrew.count"></v-menu-title>
+  <v-menu-title title="{% trans 'Captain and crew' %}" :count="filter.captainAndCrew.count"></v-menu-title>
 
   <v-panel-singular @apply="apply" @reset="reset"
-    group="captainAndCrew" title="Captain and Crew" sub-group="captainAndCrew"
+    group="captainAndCrew" title="{% trans 'Captain and Crew' %}" sub-group="captainAndCrew"
     :filters="filter.captainAndCrew.captainAndCrew" align="left">
     <div slot="v-panel-header">
-      <v-panel-header title="Captain and crew" description="">
+      <v-panel-header title="{% trans 'Captain and crew' %}" description="{% trans '' %}">
         <div slot="v-modal-content"></div>
       </v-panel-header>
     </div>
@@ -35,4 +36,3 @@
   </v-panel-singular>
 
 </li>
-{% endverbatim %}

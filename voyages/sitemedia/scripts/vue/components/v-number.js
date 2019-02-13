@@ -1,21 +1,18 @@
-Vue.component('v-number', {
-  props: ['filter'],
-  template: `
-    <div class="v-form-group">
+var template = `<div class="v-form-group">
       <div class="v-title">
         <span>{{filter.label}}</span>
         <b-badge pill
           v-if="filter.options.isImputed"
-          v-b-tooltip.hover title="Calculated by an algorithm and not based on historical record."
-          variant="secondary"
-          class="v-badge-imputed">
-          IMPUTED
-        </b-badge>
+          v-b-tooltip.hover title="` +
+          gettext('Imputed results are calculated by an algorithm.') + `" variant="secondary"
+          class="v-badge-imputed">` + 
+          gettext('IMPUTED') +
+        `</b-badge>
         
         <!--
         <b-badge
           v-if="filter.options.isAdvanced"
-          v-b-tooltip.hover title="Advanced variables are additional parameters that are frequenlty used. They do not change current search behavior."
+          v-b-tooltip.hover title="{% trans 'Advanced variables are additional parameters that are frequenlty used. They do not change current search behavior.' %}"
           variant="danger" class="v-badge-advanced">Advanced</b-badge>
         -->
       </div>
@@ -42,14 +39,21 @@ Vue.component('v-number', {
             <code>{{item}}</code>
           </div>
           <div>
-            <b-button :disabled="!options.changed" variant="success" size="sm" @click="apply">Apply</b-button>
-            <b-button :disabled="!options.changed" variant="secondary" size="sm" @click="reset">Reset</b-button>
+            <b-button :disabled="!options.changed" variant="success" size="sm" @click="apply">` + 
+            gettext('Apply') + 
+            `</b-button>
+            <b-button :disabled="!options.changed" variant="secondary" size="sm" @click="reset">` +
+            gettext('Reset') +
+            `</b-button>
           </div>
         </div>
       </div>
 
-    </div>
-  `,
+    </div>`;
+
+Vue.component('v-number', {
+  props: ['filter'],
+  template: template,
 
   data: function() {
     return {
@@ -108,16 +112,16 @@ Vue.component('v-number', {
         // labels
         if (this.item.op == "is between") {
           this.options.searchTerm1Disabled = true;
-          this.options.searchTermCaption0 = "Enter the lower bound";
-          this.options.searchTermCaption1 = "Enter the upper bound";
+          this.options.searchTermCaption0 = gettext("Enter the lower bound");
+          this.options.searchTermCaption1 = gettext("Enter the upper bound");
         } else {
           this.options.searchTerm1Disabled = false;
           this.item.searchTerm1 = null;
           if (this.item.op == "is at most") {
-            this.options.searchTermCaption0 = "Enter the upper bound";
+            this.options.searchTermCaption0 = gettext("Enter the upper bound");
           }
           if (this.item.op == "is at least") {
-            this.options.searchTermCaption0 = "Enter the lower bound";
+            this.options.searchTermCaption0 = gettext("Enter the lower bound");
           }
           if (this.item.op == "is equal to") {
             this.options.searchTermCaption0 = this.searchTermCaption;
@@ -153,16 +157,16 @@ Vue.component('v-number', {
     // labels
     if (this.item.op == "is between") {
       this.options.searchTerm1Disabled = true;
-      this.options.searchTermCaption0 = "Enter the lower bound";
-      this.options.searchTermCaption1 = "Enter the upper bound";
+      this.options.searchTermCaption0 = gettext("Enter the lower bound");
+      this.options.searchTermCaption1 = gettext("Enter the upper bound");
     } else {
       this.options.searchTerm1Disabled = false;
       this.item.searchTerm1 = null;
       if (this.item.op == "is at most") {
-        this.options.searchTermCaption0 = "Enter the upper bound";
+        this.options.searchTermCaption0 = gettext("Enter the upper bound");
       }
       if (this.item.op == "is at least") {
-        this.options.searchTermCaption0 = "Enter the lower bound";
+        this.options.searchTermCaption0 = gettext("Enter the lower bound");
       }
       if (this.item.op == "is equal to") {
         this.options.searchTermCaption0 = this.searchTermCaption;

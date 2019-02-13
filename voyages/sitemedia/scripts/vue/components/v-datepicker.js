@@ -1,17 +1,15 @@
-// v-datepicker
-Vue.component("v-datepicker", {
-  props: ['filter'],
-  template: `
+template = `
   <div class="v-form-group">
     <div class="v-title">
       <span>{{filter.label}}</span>
       <b-badge pill
         v-if="filter.options.isImputed"
-        v-b-tooltip.hover title="Calculated by an algorithm and not based on historical record."
-        variant="secondary"
-        class="v-badge-imputed">
-        IMPUTED
-      </b-badge>
+        v-b-tooltip.hover title="` +
+          gettext('Imputed results are calculated by an algorithm.') +
+        `" variant="secondary"
+        class="v-badge-imputed">` +
+          gettext('IMPUTED') +
+      `</b-badge>
     </div>
     <div class="v-description" v-text="filter.description"></div>
 
@@ -70,15 +68,25 @@ Vue.component("v-datepicker", {
           <code>{{item}}</code>
         </div>
         <div>
-          <b-button :disabled="!options.changed" variant="success" size="sm" @click="apply">Apply</b-button>
-          <b-button :disabled="!options.changed" variant="secondary" size="sm" @click="reset">Reset</b-button>
+          <b-button :disabled="!options.changed" variant="success" size="sm" @click="apply">` +
+          gettext('Apply') +
+          `</b-button>
+          <b-button :disabled="!options.changed" variant="secondary" size="sm" @click="reset">` +
+          gettext('Reset') +
+          `</b-button>
         </div>
       </div>
     </div>
 
   </div>
 
-  `,
+  `;
+
+
+// v-datepicker
+Vue.component("v-datepicker", {
+  props: ['filter'],
+  template: template,
 
   components: {
     datepicker: vuejsDatepicker,
@@ -167,16 +175,16 @@ Vue.component("v-datepicker", {
         // labels
         if (this.item.op == "is between") {
           this.options.searchTerm1Disabled = true;
-          this.options.searchTermCaption0 = "Enter the lower bound";
-          this.options.searchTermCaption1 = "Enter the upper bound";
+          this.options.searchTermCaption0 = gettext("Enter the lower bound");
+          this.options.searchTermCaption1 = gettext("Enter the upper bound");
         } else {
           this.options.searchTerm1Disabled = false;
           this.item.searchTerm1 = null;
           if (this.item.op == "is at most") {
-            this.options.searchTermCaption0 = "Enter the upper bound";
+            this.options.searchTermCaption0 = gettext("Enter the upper bound");
           }
           if (this.item.op == "is at least") {
-            this.options.searchTermCaption0 = "Enter the lower bound";
+            this.options.searchTermCaption0 = gettext("Enter the lower bound");
           }
           if (this.item.op == "is equal to") {
             this.options.searchTermCaption0 = this.searchTermCaption;

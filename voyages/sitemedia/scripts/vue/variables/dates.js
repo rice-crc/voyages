@@ -1,8 +1,8 @@
 // this is included but not used in the search; primarily for the full detail to display
 var var_imp_arrival_at_port_of_dis = new YearVariable({
     varName: "imp_arrival_at_port_of_dis",
-    label: "Year of arrival at port of disembarkation",
-    description: "",
+    label: gettext("Year of arrival at port of disembarkation"),
+    description: gettext(""),
   },{
     op: "is equal to",
     searchTerm0: null,
@@ -14,8 +14,8 @@ var var_imp_arrival_at_port_of_dis = new YearVariable({
 
 var_length_middle_passage_days = new NumberVariable({
     varName: "length_middle_passage_days",
-    label: "Middle passage",
-    description: "",
+    label: gettext("Middle passage"),
+    description: gettext(""),
   },{
     op: "is equal to",
     searchTerm0: null,
@@ -27,8 +27,8 @@ var_length_middle_passage_days = new NumberVariable({
 
 var_voyage_began = new DateVariable({
     varName: "voyage_began",
-    label: "Date that voyage began",
-    description: "",
+    label: gettext("Date that voyage began"),
+    description: gettext(""),
   },{
     op: "is equal to",
     searchTerm0: null,
@@ -40,8 +40,8 @@ var_voyage_began = new DateVariable({
 
 var_slave_purchase_began = new DateVariable({
     varName: "slave_purchase_began",
-    label: "Date trade began in Africa",
-    description: "",
+    label: gettext("Date trade began in Africa"),
+    description: gettext(""),
   },{
     op: "is equal to",
     searchTerm0: null,
@@ -53,8 +53,8 @@ var_slave_purchase_began = new DateVariable({
 
 var_date_departed_africa = new DateVariable({
     varName: "date_departed_africa",
-    label: "Date vessel departed Africa",
-    description: "",
+    label: gettext("Date vessel departed Africa"),
+    description: gettext(""),
   },{
     op: "is equal to",
     searchTerm0: null,
@@ -66,8 +66,8 @@ var_date_departed_africa = new DateVariable({
 
 var_first_dis_of_slaves = new DateVariable({
     varName: "first_dis_of_slaves",
-    label: "Date vessel arrived with slaves",
-    description: "",
+    label: gettext("Date vessel arrived with slaves"),
+    description: gettext(""),
   },{
     op: "is equal to",
     searchTerm0: null,
@@ -79,8 +79,8 @@ var_first_dis_of_slaves = new DateVariable({
 
 var_departure_last_place_of_landing = new DateVariable({
     varName: "departure_last_place_of_landing",
-    label: "Date vessel departed for homeport",
-    description: "",
+    label: gettext("Date vessel departed for homeport"),
+    description: gettext(""),
   },{
     op: "is equal to",
     searchTerm0: null,
@@ -92,8 +92,8 @@ var_departure_last_place_of_landing = new DateVariable({
 
 var_voyage_completed = new DateVariable({
     varName: "voyage_completed",
-    label: "Date voyage completed",
-    description: "",
+    label: gettext("Date voyage completed"),
+    description: gettext(""),
   },{
     op: "is equal to",
     searchTerm0: null,
@@ -105,8 +105,8 @@ var_voyage_completed = new DateVariable({
 
 var_imp_length_home_to_disembark = new NumberVariable({
     varName: "imp_length_home_to_disembark",
-    label: "Voyage length, homeport to disembarkation",
-    description: "",
+    label: gettext("Voyage length, homeport to disembarkation"),
+    description: gettext(""),
   },{
     op: "is equal to",
     searchTerm0: null,

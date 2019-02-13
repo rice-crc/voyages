@@ -494,7 +494,7 @@ var parsePlaces = function(response) {
   var data = processPlacesAjax(response.data.data);
   var options = [{
     id: 0,
-    label: "Select All",
+    label: gettext("Select All"),
     children: null
   }];
 
@@ -502,7 +502,7 @@ var parsePlaces = function(response) {
   options = [{
     id: 0,
     code: 0,
-    label: "Select All",
+    label: gettext("Select All"),
     children: [],
   }];
 
@@ -822,7 +822,7 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
         // preprocess the returned data to replace * with IMP
         dataSrc: function (json) {
           for (var i = 0, ien = json.data.length; i < ien; i++) {
-            json.data[i][0] = json.data[i][0].replace("*", '<span class="badge badge-pill badge-secondary" data-toggle="tooltip" data-placement="top" data-original-title="Imputed results are calculated by an algorithm."> IMP </span>');
+            json.data[i][0] = json.data[i][0].replace("*", '<span class="badge badge-pill badge-secondary" data-toggle="tooltip" data-placement="top" data-original-title="' + gettext("Imputed results are calculated by an algorithm.") + '"> ' + gettext("IMP") + ' </span>');
           }
           return json.data;
         },
@@ -850,7 +850,7 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
           extend: 'collection',
           text: '<span class="fa fa-columns"></span>',
           className: 'btn btn-info buttons-collection dropdown-toggle',
-          text: 'Download',
+          text: gettext('Download'),
           // Top level: CSV vs. Excel
           buttons: ['csvHtml5', 'excelHtml5']
         }
@@ -901,7 +901,7 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
           return key[0] == '_' ? undefined : key;
         });
         var totalsHeader = '<th colspan="' + subCells.length + '" rowspan="' + columnHeaderRows + '">' + gettext('Totals') + '</th>';
-        var tr = '<tr><th rowspan="' + (columnHeaderRows + (subCells.length > 1 ? 1 : 0)) + '">Year Range</th>';
+        var tr = '<tr><th rowspan="' + (columnHeaderRows + (subCells.length > 1 ? 1 : 0)) + '">' + gettext('Year Range') + '</th>';
         // Append extra column headers.
         if (columnHeaderRows > 1) {
           for (var i = 0; i < columnHeaderRows - 1; ++i) {
@@ -1072,7 +1072,7 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
               extend: 'collection',
               text: '<span class="fa fa-columns"></span>',
               className: 'btn btn-info buttons-collection dropdown-toggle',
-              text: 'Download',
+              text: gettext('Download'),
               // Top level: CSV vs. Excel
               buttons: ['csvHtml5', 'excelHtml5']
             }
@@ -1136,14 +1136,14 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
           },
           subtitle: {
             text: document.ontouchstart === undefined ?
-              'Click and drag in the plot area to zoom in' : 'Pinch the chart to zoom in',
+              gettext('Click and drag in the plot area to zoom in') : gettext('Pinch the chart to zoom in'),
           },
           xAxis: {
             type: 'datetime',
           },
           yAxis: {
             title: {
-              text: 'Value'
+              text: gettext('Value'),
             },
             min: 0,
             startOnTick: true,
@@ -1164,11 +1164,11 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
               formatter: function() {
                   var year = moment.unix(this.x / 1000).utc().format("YYYY");
                   var postfix = isPercentage ? "%" : ""; // for percentage based charts
-                  return 'Year ' + year + ': ' + '<b>' + this.y + postfix +'</b> ';
+              return gettext('Year ') + year + ': ' + '<b>' + this.y + postfix +'</b> ';
               }
           },
           lang: {
-              noData: "We are sorry but there is no data to display or an error has occurred."
+            noData: gettext('We are sorry but there is no data to display or an error has occurred.'),
           },
           plotOptions: {
             area: {
