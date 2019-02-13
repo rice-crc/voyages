@@ -210,7 +210,7 @@
   <field name="slave_voyage_number" type="text_en" multiValued="false" indexed="true" stored="true"/>
   <field name="source" type="text_en" multiValued="false" indexed="true" stored="true"/>
   <field name="text" type="text_en" multiValued="false" indexed="true" stored="true"/>
-  <field name="title" type="text_en" multiValued="false" indexed="true" stored="true"/>
+  <field name="title" type="string" multiValued="false" indexed="true" stored="true"/>
   <field name="var_captain" type="ngram" multiValued="false" indexed="true" stored="true"/>
   <field name="var_captain_plaintext" type="text_en" multiValued="false" indexed="true" stored="true"/>
   <field name="var_captain_plaintext_exact" type="string" multiValued="false" indexed="true" stored="true"/>

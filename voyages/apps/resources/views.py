@@ -14,6 +14,8 @@ from voyages.apps.common.export import download_xls
 
 from voyages.apps.voyage.views import prepare_paginator_variables
 from voyages.apps.voyage.globals import structure_places
+from itertools import groupby
+from django.utils.translation import ugettext as _
 
 def image_search_results(adapt_query_set=lambda cat, q: q):
     images = []
@@ -142,7 +144,7 @@ def images_search(request):
         request.session['results_images'] = None
         form = SearchForm(post)
         restart = post.get('restart') is not None
-        base_query = SearchQuerySet().models(Image)
+        base_query = SearchQuerySet().models(Image).order_by('category_label')
 
         if form.is_valid():
             images = []
@@ -253,6 +255,9 @@ def images_search(request):
     else:
         results = request.session.get('results_images')
         images = request.session.get('images_images')
+    
+    categorized = {cat: sorted(g, key=lambda x: x.title) 
+        for cat, g in groupby(results, key=lambda x: x.category_label)}
 
     return render(request, 'resources/images-search-results.html',
             {'results': results,
@@ -260,7 +265,8 @@ def images_search(request):
              'query': request.session['query'],
              'time_start': request.session['time_start'],
              'time_end': request.session['time_end'],
-             'enabled_categories': request.session['enabled_categories']})
+             'enabled_categories': request.session['enabled_categories'],
+             'categorized': categorized})
 
 
 def images_search_detail(request, page):
