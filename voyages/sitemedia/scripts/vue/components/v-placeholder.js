@@ -6,7 +6,7 @@ Vue.component('v-placeholder', {
         <span>{{title}}</span>
         <span>
           <b-badge
-            v-b-tooltip.hover title="Need backend API to support this variable"
+            v-b-tooltip.hover title="{% trans 'Need backend API to support this variable' %}"
             variant="dark">
             Need API
           </b-badge>

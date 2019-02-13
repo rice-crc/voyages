@@ -1,11 +1,11 @@
-{% verbatim %}
+{% load i18n %}
 
 <li class="nav-item dropdown">
-  <v-menu-title :count="filter.source.count" title="Source"></v-menu-title>
+  <v-menu-title :count="filter.source.count" title="{% trans 'Source' %}"></v-menu-title>
 
-  <v-panel-singular @apply="apply" @reset="reset" group="source" sub-group="source" title="" :filters="filter.source.source" align="right">
+  <v-panel-singular @apply="apply" @reset="reset" group="source" sub-group="source" title="{% trans '' %}" :filters="filter.source.source" align="right">
     <div slot="v-panel-header">
-      <v-panel-header title="Source" description="">
+      <v-panel-header title="{% trans 'Source' %}" description="{% trans '' %}">
         <div slot="v-modal-content"></div>
       </v-panel-header>
     </div>
@@ -18,5 +18,3 @@
     </div>
   </v-panel-singular>
 </li>
-
-{% endverbatim %}

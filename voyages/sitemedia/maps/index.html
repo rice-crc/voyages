@@ -71,7 +71,7 @@
             </div>
             <div class="btn-group" role="group" aria-label="Map options">
                 <button id="loadFlows" type="button" class="btn btn-default"
-                        title="Load all flows from database (may take a while)">
+                        title="{% trans 'Load all flows from database (may take a while)' %}">
                     <span class="glyphicon glyphicon-transfer" aria-hidden="true"></span>
                     Flows
                 </button>
@@ -120,46 +120,46 @@
                 </div>
             </div>
             <div class="btn-group" role="group" data-toggle="buttons" id="tools">
-                <button class="btn btn-primary" title="Recompute flow paths" onclick="reload();">
+                <button class="btn btn-primary" title="{% trans 'Recompute flow paths' %}" onclick="reload();">
                     <span class="glyphicon glyphicon-refresh" aria-hidden="true"></span>
                 </button>
-                <button id="lockBtn" class="btn btn-primary active" title="Prevent editing when toggled">
+                <button id="lockBtn" class="btn btn-primary active" title="{% trans 'Prevent editing when toggled' %}">
                     <input type="radio" name="tools" value="lock" autocomplete="off">
                     <span class="glyphicon glyphicon-lock" aria-hidden="true"></span>
                 </button>
-                <button class="btn btn-primary" title="Rollback last action" onclick="undo();">
+                <button class="btn btn-primary" title="{% trans 'Rollback last action' %}" onclick="undo();">
                     <span class="glyphicon glyphicon-step-backward" aria-hidden="true"></span>
                 </button></button>
-                <button class="btn btn-primary" title="Drag nodes to change their position">
+                <button class="btn btn-primary" title="{% trans 'Drag nodes to change their position' %}">
                     <input type="radio" name="tools" value="drag" autocomplete="off">
                     <span class="glyphicon glyphicon-move" aria-hidden="true"></span>
                 </button>
-                <button class="btn btn-primary" title="Add marker">
+                <button class="btn btn-primary" title="{% trans 'Add marker' %}">
                     <input type="radio" name="tools" value="coord" autocomplete="off">
                     <span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span>
                 </button>
-                <button class="btn btn-primary" title="Split link">
+                <button class="btn btn-primary" title="{% trans 'Split link' %}">
                     <input type="radio" name="tools" value="split" autocomplete="off">
                     <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
                 </button>
-                <button class="btn btn-danger" title="Delete marker">
+                <button class="btn btn-danger" title="{% trans 'Delete marker' %}">
                     <input type="radio" name="tools" value="del" autocomplete="off">
                     <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
                 </button>
-                <button class="btn btn-primary" title="Add link">
+                <button class="btn btn-primary" title="{% trans 'Add link' %}">
                     <input type="radio" name="tools" value="addlink" autocomplete="off">
                     <span class="glyphicon glyphicon-link" aria-hidden="true"></span>
                 </button>
-                <button class="btn btn-danger" title="Delete link">
+                <button class="btn btn-danger" title="{% trans 'Delete link' %}">
                     <input type="radio" name="tools" value="dellink" autocomplete="off">
                     <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
                 </button>
-                <button class="btn btn-danger" title="Delete every marker and link" onclick="deleteAllMarkers();">
+                <button class="btn btn-danger" title="{% trans 'Delete every marker and link' %}" onclick="deleteAllMarkers();">
                     Delete all
                 </button>
             </div>
             <div class="btn-group" role="group" data-toggle="buttons">
-                <button class="btn btn-default" title="Help" data-toggle="modal" data-target="#helpDialog">
+                <button class="btn btn-default" title="{% trans 'Help' %}" data-toggle="modal" data-target="#helpDialog">
                     <span class="glyphicon glyphicon-question-sign" aria-hidden="true"></span>
                 </button>
             </div>

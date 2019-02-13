@@ -1,22 +1,24 @@
-// v-panel
-Vue.component('v-panel-singular', {
-  props: ['title', "filters", "group", "subGroup", "align", "controlInvisible"],
-  template: `
+template = `
   <div class="dropdown-menu search-menu search-submenu search-menu-singular" :id="idValue" v-bind:class="dropdownMenuDirection">
     <div class="popover-content">
       <slot name="v-panel-header"></slot>
       <slot name="v-panel-content" :filters="filtersValue"></slot>
       <div class="margin-v" v-if="!controlInvisible">
-        <b-button variant="info" size="sm" @click="apply">
-          Apply
-        </b-button>
-        <b-button variant="outline-secondary" size="sm" @click="reset">
-          Reset
-        </b-button>
+        <b-button variant="info" size="sm" @click="apply">` +
+          gettext('Apply') +
+        `</b-button>
+        <b-button variant="outline-secondary" size="sm" @click="reset">` +
+          gettext('Reset') +
+        `</b-button>
       </div>
     </div>
   </div>
-  `,
+  `;
+
+// v-panel
+Vue.component('v-panel-singular', {
+  props: ['title', "filters", "group", "subGroup", "align", "controlInvisible"],
+  template: template,
 
   data: function() {
     return {
@@ -25,7 +27,6 @@ Vue.component('v-panel-singular', {
       idValue: null,
       applyDisabled: true,
       resetDisabled: true,
-
       dropdownMenuDirection: "dropdown-menu-left",
     }
   },

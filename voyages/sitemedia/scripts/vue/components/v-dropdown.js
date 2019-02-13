@@ -1,6 +1,4 @@
-Vue.component("v-dropdown", {
-  props: ['title', 'description', 'options', 'isMultiple', 'clearable', 'variable'],
-  template: `
+template = `
   <div class="">
     <div class="v-title" v-text="title"></div>
     <div class="v-description" v-text="description"></div>
@@ -15,27 +13,33 @@ Vue.component("v-dropdown", {
         <span>{{ isImputed(node.label) ? trimImputedLabel(node.label) : node.label }}</span>
         <b-badge pill
           v-if="isImputed(node.label)"
-          v-b-tooltip.hover title="Calculated by an algorithm and not based on historical record."
-          variant="secondary"
-          class="v-badge-imputed">
-          IMP
-        </b-badge>
+          v-b-tooltip.hover title="` + 
+          gettext('Imputed results are calculated by an algorithm.') +
+          `" variant="secondary"
+          class="v-badge-imputed">` +
+          gettext('IMP') +
+        `</b-badge>
       </div>
 
       <label class="vue-treeselect__label" slot="option-label" slot-scope="{ node }" >
         {{ isImputed(node.label) ? trimImputedLabel(node.label) : node.label }}
         <b-badge pill
           v-if="isImputed(node.label)"
-          v-b-tooltip.hover title="Calculated by an algorithm and not based on historical record."
-          variant="secondary"
-          class="v-badge-imputed">
-          IMP
-        </b-badge>
+          v-b-tooltip.hover title="` +
+          gettext('Imputed results are calculated by an algorithm.') +
+          `" variant="secondary"
+          class="v-badge-imputed">` +
+          gettext('IMP') +
+        `</b-badge>
       </label>
 
     </treeselect>
   </div>
-  `,
+  `;
+
+Vue.component("v-dropdown", {
+  props: ['title', 'description', 'options', 'isMultiple', 'clearable', 'variable'],
+  template: template,
 
   components: {
     treeselect: window.VueTreeselect.Treeselect,

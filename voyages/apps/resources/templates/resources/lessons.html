@@ -3,7 +3,7 @@
 {% load sass_tags %}
 {% load i18n %}
 
-{% block title %} Resources - Lesson Plans {% endblock %}
+{% block title %} {% trans 'Resources - Lesson Plans' %} {% endblock %}
 
 {% block content %}
 
@@ -13,11 +13,10 @@
 <link href="{% sass_src 'scss/resources.scss' %}" rel="stylesheet" type="text/css" />
 <link href="{% sass_src 'scss/library/bootstrap-vue-2.0.0-rc.11.css' %}" rel="stylesheet" type="text/css" />
 
-{% verbatim %}
   <div id="flatpage" v-cloak>
     <v-breadcrumb 
-      module="Resources" 
-      title="Lesson Plans" 
+      module="{% trans 'Resources' %}" 
+      title="{% trans 'Lesson Plans' %}"
       :breadcrumb="breadcrumb" 
       @clicked="navigate">
     </v-breadcrumb>
@@ -34,33 +33,19 @@
             <button type="button" class="btn btn-solid btn-sm" data-toggle="offcanvas">
               <div>
                 <span class="fa fa-exchange" style=" vertical-align: middle;"></span>
-                <span>Toggle Sidebar</span>
+                <span>{% trans 'Toggle Sidebar' %}</span>
               </div>
             </button>
           </p>
 
           <div id="center-content-inner">
             <div v-html="content"></div>
-            <!-- {% if not page %} {% include "voyage/guide.html" %} {% else %} {% include page %} {% endif %} -->
-
-            <!-- <div class="page-navigation-flexbox">
-              <div class="page-navigation-item" v-if="hasPrev">
-                <a @click=navPrevious>Previous: {{previous.title}}</a>
-              </div>
-              <div class="page-navigation-item" v-if="hasNext">
-                <a @click="navNext">Next: {{next.title}}</a>
-              </div>
-            </div> -->
-
           </div>
 
         </div>
       </div>
     </div>
 </div>
-
-{% endverbatim %}
-
 
 <script src="{{ STATIC_URL }}scripts/library/vue@2.5.16.js" type="text/javascript"></script>
 <script src="{{ STATIC_URL }}scripts/library/babel-polyfill@6.26.0.min.js" type="text/javascript"></script>
