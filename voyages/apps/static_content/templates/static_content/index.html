@@ -2,7 +2,7 @@
 
 
 <!-- Page title here -->
-{% block title %}{% trans "Trans-Atlantic Slave Trade" %}{% endblock %}
+{% block title %}{% trans "Slave Voyages" %}{% endblock %}
 {% block csslist %}
 	{% comment %} Additional styles for the home page {% endcomment %}
 	{% compress css %}
@@ -34,7 +34,7 @@
 					<a id="play-video" class="video-play-button" href="#">
 						<span></span>
 					</a>
-					<div class="special-feature-desc video-player-desc">Henry Louis Gates introduces Slave Voyages 2.0 and some its people</div>
+					<div class="special-feature-desc video-player-desc">{% trans 'Henry Louis Gates introduces Slave Voyages 2.0 and some of its people' %}</div>
 				</div>
 			</div>
 
@@ -80,7 +80,7 @@
 						<a href="https://www.facebook.com/Voyages-The-Trans-Atlantic-Slave-Trade-Database-125441173016/" target="_blank" rel="noopener" alt="Slave Voyages on Facebook"><img data-src="{{STATIC_URL}}images/site/social-media/fb.svg" class="social-icon lazy" alt="Facebook Logo"></img></a>
 						<!-- <a href="" target="_blank" alt=""><img src="{{STATIC_URL}}images/site/social-media/instagram.svg" class="social-icon"></img></a>
 						<a href="https://www.youtube.com/user/EmoryUniversity/" target="_blank" alt=""><img src="{{STATIC_URL}}images/site/social-media/youtube.svg" class="social-icon"></img></a> -->
-						<a href="https://securelb.imodules.com/s/1705/giving/index.aspx?sid=1705&gid=3&pgid=600&cid=1358&bledit=1&dids=11428&appealcode=8WLSV" alt="Donate to This Project" rel="noopener" target="_blank"><span class="social-icon" >donate to this project</span></a>
+						<a href="https://securelb.imodules.com/s/1705/giving/index.aspx?sid=1705&gid=3&pgid=600&cid=1358&bledit=1&dids=11428&appealcode=8WLSV" alt="Donate to This Project" rel="noopener" target="_blank"><span class="social-icon" >{% trans 'donate to this project' %}</span></a>
 						<div class="scroll"> {% trans 'scroll down to learn more' %}</div>
 					</div>
 

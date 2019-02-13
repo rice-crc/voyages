@@ -1,14 +1,14 @@
-{% verbatim %}
+{% load i18n %}
 
 <li class="nav-item dropdown">
-	<v-menu-title :count="filter.itinerary.count" title="Itinerary"></v-menu-title>
+	<v-menu-title :count="filter.itinerary.count" title="{% trans 'Itinerary' %}"></v-menu-title>
 	<div class="">
 		<ul class="dropdown-menu search-menu" id="itinerary" role="menu">
 
-			<v-panel @reset="reset" group="itinerary" sub-group="departure" @apply="apply" title="Place of departure" :filters="filter.itinerary.departure">
+			<v-panel @reset="reset" group="itinerary" sub-group="departure" @apply="apply" title="{% trans 'Place of departure' %}" :filters="filter.itinerary.departure">
 
 				<div slot="v-panel-header">
-					<v-panel-header title="Place of departure" description="Locations where the voyage began">
+					<v-panel-header title="{% trans 'Place of departure' %}" description="{% trans 'Locations where the voyage began' %}">
 						<div slot="v-modal-content"></div>
 					</v-panel-header>
 				</div>
@@ -24,9 +24,9 @@
 				</div>
 			</v-panel>
 
-			<v-panel @reset="reset" group="itinerary" sub-group="purchase" @apply="apply" title="Place of purchase" :filters="filter.itinerary.purchase">
+			<v-panel @reset="reset" group="itinerary" sub-group="purchase" @apply="apply" title="{% trans 'Place of purchase' %}" :filters="filter.itinerary.purchase">
 				<div slot="v-panel-header">
-					<v-panel-header title="Place of purchase" description="Locations where captives embarked">
+					<v-panel-header title="{% trans 'Place of purchase' %}" description="{% trans 'Locations where captives embarked' %}">
 						<div slot="v-modal-content"></div>
 					</v-panel-header>
 				</div>
@@ -58,10 +58,10 @@
 				</div>
 			</v-panel>
 
-			<v-panel @reset="reset" group="itinerary" sub-group="call" @apply="apply" title="Places of call before Atlantic crossing" :filters="filter.itinerary.call"
+			<v-panel @reset="reset" group="itinerary" sub-group="call" @apply="apply" title="{% trans 'Places of call before Atlantic crossing' %}" :filters="filter.itinerary.call"
 			v-if="filter.settings.settings.var_search_settings.value.searchTerm">
 				<div slot="v-panel-header">
-					<v-panel-header title="Places of call before Atlantic crossing" description="">
+					<v-panel-header title="{% trans 'Places of call before Atlantic crossing' %}" description="{% trans '' %}">
 						<div slot="v-modal-content"></div>
 					</v-panel-header>
 				</div>
@@ -76,9 +76,9 @@
 				</div>
 			</v-panel>
 
-			<v-panel @reset="reset" group="itinerary" sub-group="landing" @apply="apply" title="Place of landing" :filters="filter.itinerary.landing">
+			<v-panel @reset="reset" group="itinerary" sub-group="landing" @apply="apply" title="{% trans 'Place of landing' %}" :filters="filter.itinerary.landing">
 				<div slot="v-panel-header">
-					<v-panel-header title="Place of landing" description="Locations where captives disembarked">
+					<v-panel-header title="{% trans 'Place of landing' %}" description="{% trans 'Locations where captives disembarked' %}">
 						<div slot="v-modal-content"></div>
 					</v-panel-header>
 				</div>
@@ -110,9 +110,9 @@
 				</div>
 			</v-panel>
 
-			<v-panel @reset="reset" group="itinerary" sub-group="destination" @apply="apply" title="Place where voyage ended" :filters="filter.itinerary.destination">
+			<v-panel @reset="reset" group="itinerary" sub-group="destination" @apply="apply" title="{% trans 'Place where voyage ended' %}" :filters="filter.itinerary.destination">
 				<div slot="v-panel-header">
-					<v-panel-header title="Place where voyage ended" description="">
+					<v-panel-header title="{% trans 'Place where voyage ended' %}" description="{% trans '' %}">
 						<div slot="v-modal-content"></div>
 					</v-panel-header>
 				</div>
@@ -130,5 +130,3 @@
 			</ul>
 	</div>
 </li>
-
-{% endverbatim %}

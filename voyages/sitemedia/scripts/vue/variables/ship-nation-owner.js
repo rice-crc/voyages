@@ -1,7 +1,7 @@
 var_voyage_id = new NumberVariable({
     varName: "voyage_id",
-    label: "Voyage ID",
-    description: "This is the unique ID number assigned to a voyage",
+    label: gettext("Voyage ID"),
+    description: gettext("This is the unique ID number assigned to a voyage"),
   },{
     op: "is equal to",
     searchTerm0: null,
@@ -13,8 +13,8 @@ var_voyage_id = new NumberVariable({
 
 var_ship_name = new TextVariable({
     varName: "ship_name",
-    label: "Vessel name",
-    description: "",
+    label: gettext("Vessel name"),
+    description: gettext(""),
   },{
     op: "contains",
     searchTerm: null,
@@ -25,8 +25,8 @@ var_ship_name = new TextVariable({
 
 var_owner = new TextVariable({
     varName: "owner",
-    label: "Vessel owner",
-    description: "",
+    label: gettext("Vessel owner"),
+    description: gettext(""),
   },{
     op: "contains",
     searchTerm: null,
@@ -37,8 +37,8 @@ var_owner = new TextVariable({
 
 var_year_of_construction = new NumberVariable({
     varName: "year_of_construction",
-    label: "Year constructed",
-    description: "",
+    label: gettext("Year constructed"),
+    description: gettext(""),
   },{
     op: "is equal to",
     searchTerm0: null,
@@ -50,8 +50,8 @@ var_year_of_construction = new NumberVariable({
 
 var_vessel_construction_place_idnum = new PlaceVariable({
     varName: "vessel_construction_place_idnum",
-    label: "Place constructed",
-    description: "",
+    label: gettext("Place constructed"),
+    description: gettext(""),
   },{
     op: "is one of",
     searchTerm: [],
@@ -62,8 +62,8 @@ var_vessel_construction_place_idnum = new PlaceVariable({
 
 var_registered_year = new NumberVariable({
     varName: "registered_year",
-    label: "Year registered",
-    description: "",
+    label: gettext("Year registered"),
+    description: gettext(""),
   },{
     op: "is equal to",
     searchTerm0: null,
@@ -75,8 +75,8 @@ var_registered_year = new NumberVariable({
 
 var_registered_place_idnum = new PlaceVariable({
     varName: "registered_place_idnum",
-    label: "Place registered",
-    description: "",
+    label: gettext("Place registered"),
+    description: gettext(""),
   },{
     op: "is one of",
     searchTerm: [],
@@ -87,8 +87,8 @@ var_registered_place_idnum = new PlaceVariable({
 
 var_nationality = new TreeselectVariable({
     varName: "nationality",
-    label: "Flag",
-    description: "",
+    label: gettext("Flag"),
+    description: gettext(""),
   },{
     op: "is one of",
     searchTerm: [],
@@ -99,8 +99,8 @@ var_nationality = new TreeselectVariable({
 
 var_imputed_nationality = new TreeselectVariable({
     varName: "imputed_nationality",
-    label: "Flag (imputed)",
-    description: "",
+    label: gettext("Flag (imputed)"),
+    description: gettext(""),
   },{
     op: "is one of",
     searchTerm: [],
@@ -111,8 +111,8 @@ var_imputed_nationality = new TreeselectVariable({
 
 var_rig_of_vessel = new TreeselectVariable({
     varName: "rig_of_vessel",
-    label: "Rig of vessel",
-    description: "",
+    label: gettext("Rig of vessel"),
+    description: gettext(""),
   },{
     op: "is one of",
     searchTerm: [],
@@ -123,8 +123,8 @@ var_rig_of_vessel = new TreeselectVariable({
 
 var_tonnage = new NumberVariable({
     varName: "tonnage",
-    label: "Tonnage",
-    description: "",
+    label: gettext("Tonnage"),
+    description: gettext(""),
   },{
     op: "is equal to",
     searchTerm0: null,
@@ -136,8 +136,8 @@ var_tonnage = new NumberVariable({
 
 var_tonnage_mod = new NumberVariable({
     varName: "tonnage_mod",
-    label: "Standardized tonnage",
-    description: "",
+    label: gettext("Standardized tonnage"),
+    description: gettext(""),
   },{
     op: "is equal to",
     searchTerm0: null,
@@ -149,8 +149,8 @@ var_tonnage_mod = new NumberVariable({
 
 var_guns_mounted = new NumberVariable({
     varName: "guns_mounted",
-    label: "Guns mounted",
-    description: "",
+    label: gettext("Guns mounted"),
+    description: gettext(""),
   },{
     op: "is equal to",
     searchTerm0: null,

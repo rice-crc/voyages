@@ -7,11 +7,10 @@
 
 {% block content %}
 
-{% verbatim %}
   <div id="flatpage" v-cloak>
     <v-breadcrumb 
-      module="Trans-Atlantic Slave Trade" 
-      title="Downloads" 
+      module="{% trans 'Trans-Atlantic Slave Trade' %}" 
+      title="{% trans 'Downloads' %}" 
       :breadcrumb="breadcrumb"
       @clicked="navigate"></v-breadcrumb>
 
@@ -27,10 +26,7 @@
           <button type="button" class="btn btn-solid btn-sm" data-toggle="offcanvas">
             <div>
               <span class="fa fa-exchange" style=" vertical-align: middle;"></span>
-              {% endverbatim %}
               <span>{% trans 'Toggle Sidebar' %}</span>
-              {% verbatim %}
-
             </div>
           </button>
         </p>
@@ -43,8 +39,6 @@
     </div>
   </div>
 </div>
-
-{% endverbatim %}
 
 {% include '_scripts.html' %}
 <script src="{{ STATIC_URL }}scripts/vue/components/v-flatpage-data-downloads.js"></script>

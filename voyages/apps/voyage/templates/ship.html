@@ -3,26 +3,24 @@
 {% load sass_tags %}
 {% load i18n %}
 
-{% block title %} {% trans "Trans-Atlantic - Slave ship in 3D video" %} {% endblock %}
+{% block title %} {% trans "Trans-Atlantic - Slave Ship in 3D Video" %} {% endblock %}
 
 {% block content %}
 
-{% verbatim %}
-  <div id="flatpage" v-cloak>
-    <v-breadcrumb 
-      module="Trans-Atlantic Slave Trade" 
-      title="Slave Ship in 3D video"></v-breadcrumb>
-    <div class="container-new">
-      <div class="row row-offcanvas row-offcanvas-right">
-        <div class="col-md-12">
-          <div id="center-content-inner">
-            <div v-html="content"></div>
-          </div>
+<div id="flatpage" v-cloak>
+  <v-breadcrumb 
+    module="{% trans 'Trans-Atlantic Slave Trade' %}" 
+    title="{% trans 'Slave Ship in 3D video' %}"></v-breadcrumb>
+  <div class="container-new">
+    <div class="row row-offcanvas row-offcanvas-right">
+      <div class="col-md-12">
+        <div id="center-content-inner">
+          <div v-html="content"></div>
         </div>
       </div>
     </div>
   </div>
-{% endverbatim %}
+</div>
 
 {% include '_scripts.html' %}
 <script src="{{ STATIC_URL }}scripts/vue/components/v-flatpage-ship.js"></script>

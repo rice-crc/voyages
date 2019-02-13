@@ -1,10 +1,11 @@
-{% verbatim %}
-<li class="nav-item dropdown">
-  <v-menu-title :count="filter.outcome.count" title="Outcome"></v-menu-title>
+{% load i18n %}
 
-  <v-panel-singular @apply="apply" @reset="reset" group="outcome" sub-group="outcome" title="Outcome" :filters="filter.outcome.outcome" align="left">
+<li class="nav-item dropdown">
+  <v-menu-title :count="filter.outcome.count" title="{% trans 'Outcome' %}"></v-menu-title>
+
+  <v-panel-singular @apply="apply" @reset="reset" group="outcome" sub-group="outcome" title="{% trans 'Outcome' %}" :filters="filter.outcome.outcome" align="left">
     <div slot="v-panel-header">
-      <v-panel-header title="Outcome" description="Outcome of voyage">
+      <v-panel-header title="{% trans 'Outcome' %}" description="{% trans 'Outcome of voyage' %}">
         <div slot="v-modal-content"></div>
       </v-panel-header>
     </div>
@@ -43,4 +44,3 @@
   </v-panel-singular>
 
 </li>
-{% endverbatim %}

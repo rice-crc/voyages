@@ -1,12 +1,12 @@
 var categoryNames = [
-  "Ship, nation, owners",
-  "Itinerary",
-  "Slave",
-  "Year range",
-  "Dates",
-  "Captain and crew",
-  "Outcome",
-  "Source",
+  gettext("Ship, nation, owners"),
+  gettext("Itinerary"),
+  gettext("Slave"),
+  gettext("Year range"),
+  gettext("Dates"),
+  gettext("Captain and crew"),
+  gettext("Outcome"),
+  gettext("Source"),
 ];
 
 var allColumns = [
@@ -33,7 +33,7 @@ var allColumns = [
   { data: "var_second_place_slave_purchase", category: 1, header: gettext("2nd place of purchase"), "visible": false, isImputed: false },
   { data: "var_third_place_slave_purchase", category: 1, header: gettext("3rd place of purchase"), "visible": false, isImputed: false },
   { data: "var_port_of_call_before_atl_crossing", category: 1, header: gettext("Places of call before Atlantic crossing"), "visible": false, isImputed: false },
-  { data: "var_imp_principal_port_slave_dis", category: 1, header: gettext("Principal place of slave landing"), isImputed: true },
+  { data: "var_imp_principal_port_slave_dis_lang", category: 1, header: gettext("Principal place of slave landing"), isImputed: true },
   { data: "var_first_landing_place", category: 1, header: gettext("1st place of slave landing"), "visible": false, isImputed: false },
   { data: "var_second_landing_place", category: 1, header: gettext("2nd place of slave landing"), "visible": false, isImputed: false },
   { data: "var_third_landing_place", category: 1, header: gettext("3rd place of slave landing"), "visible": false, isImputed: false },
@@ -107,7 +107,7 @@ var allColumns = [
           var elements = source.split("<>");
           // var postfix = data.length == count ? "" : ";";
           var postfix = "";
-          sourceString += "<span data-toggle='tooltip' data-placement='top' data-html='true' title='" + elements[1] + "'>" + elements[0] + postfix + " </span><br/>";
+          sourceString += "<span data-toggle='tooltip' data-placement='top' data-html='true' title='" + gettext(elements[1]) + "'>" + gettext(elements[0]) + gettext(postfix) + " </span><br/>";
         });
       }
       return sourceString;
@@ -126,7 +126,7 @@ var categories = $.map(categoryNames, function(name) {
 
 allColumns.forEach(function(c, index) {
 
-  var title = c.isImputed ? "<span class='imputed-result'>" + c.header + "</span> <span class='badge badge-pill badge-secondary' data-toggle='tooltip' data-placement='top' title='Imputed results are calculated by an algorithm.'> IMP </span>" : c.header;
+  var title = c.isImputed ? "<span class='imputed-result'>" + c.header + "</span> <span class='badge badge-pill badge-secondary' data-toggle='tooltip' data-placement='top' title='" + gettext("Imputed results are calculated by an algorithm.") + "'> IMP </span>" : gettext(c.header);
 
   categories[c.category].columns.push({
     extend: 'columnToggle',
@@ -136,7 +136,7 @@ allColumns.forEach(function(c, index) {
 
   // add render function to customize the display of imputed variables
   if (c.isImputed) {
-    c.title = "<span class='imputed-result'>" + c.header + "</span>" + ' <span class="badge badge-pill badge-secondary" data-toggle="tooltip" data-placement="top" title="Imputed results are calculated by an algorithm."> IMP </span>'; // italicized column title
+    c.title = "<span class='imputed-result'>" + c.header + "</span>" + ' <span class="badge badge-pill badge-secondary" data-toggle="tooltip" data-placement="top" title="' + gettext("Imputed results are calculated by an algorithm.") + '"> IMP </span>'; // italicized column title
     c.render = function(data) {
       var formatedString = "";
       if (data !== null) {
@@ -162,15 +162,15 @@ var defaultBtns = $.map(categories, function (category) {
 var restoreBtn = {
   extend: 'colvis',
   buttons: 'colvisRestore',
-  text: "Restore visibility",
+  text: gettext("Restore default"),
 };
 
 defaultBtns.push(restoreBtn);
 
 var columnToggleMenu = {
   extend: 'collection',
-  text: 'Configure columns',
-  titleAttr: 'Configure visible columns',
+  text: gettext('Configure columns'),
+  titleAttr: gettext('Configure visible columns'),
   className: 'btn btn-info buttons-collection dropdown-toggle',
   buttons: defaultBtns,
 };

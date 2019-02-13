@@ -1,21 +1,19 @@
-// v-treeselect
-Vue.component("v-treeselect", {
-  props: ['filter'],
-  template: `
+template = `
   <div class="v-form-group">
     <div class="v-title">
       <span>{{filter.label}}</span>
       <b-badge pill
         v-if="filter.options.isImputed"
-        v-b-tooltip.hover title="Calculated by an algorithm and not based on historical record."
-        variant="secondary"
-        class="v-badge-imputed">
-        IMPUTED
-      </b-badge>
+        v-b-tooltip.hover title="` +
+  gettext('Imputed results are calculated by an algorithm.') +
+        `" variant="secondary"
+        class="v-badge-imputed">` +
+  gettext('IMPUTED') +
+      `</b-badge>
       <!--
       <b-badge
         v-if="filter.options.isAdvanced"
-        v-b-tooltip.hover title="Advanced variables are additional parameters that are frequenlty used. They do not change current search behavior."
+        v-b-tooltip.hover title="{% trans 'Advanced variables are additional parameters that are frequenlty used. They do not change current search behavior.' %}"
         variant="danger" class="v-badge-advanced">Advanced</b-badge>
       -->
     </div>
@@ -42,16 +40,22 @@ Vue.component("v-treeselect", {
           <code>{{item}}</code>
         </div>
         <div>
-          <b-button :disabled="!options.changed" variant="success" size="sm" @click="apply">Apply</b-button>
-          <b-button :disabled="!options.changed" variant="secondary" size="sm" @click="reset">Reset</b-button>
+          <b-button :disabled="!options.changed" variant="success" size="sm" @click="apply">` +
+          gettext('Apply') +
+          `</b-button>
+          <b-button :disabled="!options.changed" variant="secondary" size="sm" @click="reset">` +
+          gettext('Reset') +
+          `</b-button>
         </div>
       </div>
     </div>
-
   </div>
-
-  `,
-
+  `;
+  
+// v-treeselect
+Vue.component("v-treeselect", {
+  props: ['filter'],
+  template: template,
   components: {
     treeselect: window.VueTreeselect.Treeselect,
   },
