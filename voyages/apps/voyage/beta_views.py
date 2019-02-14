@@ -157,7 +157,7 @@ def get_results_graph(results, post):
     output = get_graph_data(results, x_axis_info, [_all_y_axes[y] for y in y_axes])
     data_format = post.get('data_format', 'json')
     if data_format == 'json':
-        return JsonResponse({str(_(k)): [{'x': v[0], 'value': v[1]} for v in lst] for k, lst in output.items()})
+        return JsonResponse({unicode(_(k)): [{'x': v[0], 'value': v[1]} for v in lst] for k, lst in output.items()})
     if data_format == 'csv':
         # Here we need to build a tabular data format. The output
         # is a collection of series, each correspond to a column in
