@@ -256,7 +256,7 @@ def images_search(request):
         results = request.session.get('results_images')
         images = request.session.get('images_images')
     
-    categorized = {cat: sorted(g, key=lambda x: x.title) 
+    categorized = {cat: sorted(g, key=lambda x: _(x.title)) 
         for cat, g in groupby(results, key=lambda x: x.category_label)}
 
     return render(request, 'resources/images-search-results.html',
