@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-02-02 09:21-0500\n"
-"PO-Revision-Date: 2015-10-30 09:56-0300\n"
+"PO-Revision-Date: 2019-02-14 10:48-0500\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: pt\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 1.7.5\n"
+"X-Generator: Poedit 2.2.1\n"
 
 #: voyages/sitemedia/maps/js/voyagesMap.js:144
 msgid "port"
@@ -169,8 +169,7 @@ msgid "The contribution has to specify at least one source reference."
 msgstr ""
 
 #: voyages/sitemedia/scripts/contribute/interim.js:482
-msgid ""
-"Any pre-existing source marked for editing or deletion requires a comment."
+msgid "Any pre-existing source marked for editing or deletion requires a comment."
 msgstr ""
 
 #: voyages/sitemedia/scripts/contribute/interim.js:508
