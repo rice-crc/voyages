@@ -3,122 +3,32 @@
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
-#: voyages/sitemedia/scripts/vue/variables/captain-and-crew.js:4
-#: voyages/sitemedia/scripts/vue/variables/captain-and-crew.js:16
-#: voyages/sitemedia/scripts/vue/variables/captain-and-crew.js:29
-#: voyages/sitemedia/scripts/vue/variables/captain-and-crew.js:42
-#: voyages/sitemedia/scripts/vue/variables/dates.js:5
-#: voyages/sitemedia/scripts/vue/variables/dates.js:18
-#: voyages/sitemedia/scripts/vue/variables/dates.js:31
-#: voyages/sitemedia/scripts/vue/variables/dates.js:44
-#: voyages/sitemedia/scripts/vue/variables/dates.js:57
-#: voyages/sitemedia/scripts/vue/variables/dates.js:70
-#: voyages/sitemedia/scripts/vue/variables/dates.js:83
-#: voyages/sitemedia/scripts/vue/variables/dates.js:96
-#: voyages/sitemedia/scripts/vue/variables/dates.js:109
-#: voyages/sitemedia/scripts/vue/variables/itinerary.js:4
-#: voyages/sitemedia/scripts/vue/variables/itinerary.js:16
-#: voyages/sitemedia/scripts/vue/variables/itinerary.js:28
-#: voyages/sitemedia/scripts/vue/variables/itinerary.js:40
-#: voyages/sitemedia/scripts/vue/variables/itinerary.js:52
-#: voyages/sitemedia/scripts/vue/variables/itinerary.js:64
-#: voyages/sitemedia/scripts/vue/variables/itinerary.js:76
-#: voyages/sitemedia/scripts/vue/variables/itinerary.js:88
-#: voyages/sitemedia/scripts/vue/variables/itinerary.js:100
-#: voyages/sitemedia/scripts/vue/variables/itinerary.js:112
-#: voyages/sitemedia/scripts/vue/variables/itinerary.js:124
-#: voyages/sitemedia/scripts/vue/variables/outcome.js:4
-#: voyages/sitemedia/scripts/vue/variables/outcome.js:16
-#: voyages/sitemedia/scripts/vue/variables/outcome.js:28
-#: voyages/sitemedia/scripts/vue/variables/outcome.js:40
-#: voyages/sitemedia/scripts/vue/variables/outcome.js:52
-#: voyages/sitemedia/scripts/vue/variables/ship-nation-owner.js:17
-#: voyages/sitemedia/scripts/vue/variables/ship-nation-owner.js:29
-#: voyages/sitemedia/scripts/vue/variables/ship-nation-owner.js:41
-#: voyages/sitemedia/scripts/vue/variables/ship-nation-owner.js:54
-#: voyages/sitemedia/scripts/vue/variables/ship-nation-owner.js:66
-#: voyages/sitemedia/scripts/vue/variables/ship-nation-owner.js:79
-#: voyages/sitemedia/scripts/vue/variables/ship-nation-owner.js:91
-#: voyages/sitemedia/scripts/vue/variables/ship-nation-owner.js:103
-#: voyages/sitemedia/scripts/vue/variables/ship-nation-owner.js:115
-#: voyages/sitemedia/scripts/vue/variables/ship-nation-owner.js:127
-#: voyages/sitemedia/scripts/vue/variables/ship-nation-owner.js:140
-#: voyages/sitemedia/scripts/vue/variables/ship-nation-owner.js:153
-#: voyages/sitemedia/scripts/vue/variables/slave.js:4
-#: voyages/sitemedia/scripts/vue/variables/slave.js:17
-#: voyages/sitemedia/scripts/vue/variables/slave.js:30
-#: voyages/sitemedia/scripts/vue/variables/slave.js:44
-#: voyages/sitemedia/scripts/vue/variables/slave.js:57
-#: voyages/sitemedia/scripts/vue/variables/slave.js:70
-#: voyages/sitemedia/scripts/vue/variables/slave.js:82
-#: voyages/sitemedia/scripts/vue/variables/slave.js:95
-#: voyages/sitemedia/scripts/vue/variables/slave.js:108
-#: voyages/sitemedia/scripts/vue/variables/slave.js:120
-#: voyages/sitemedia/scripts/vue/variables/slave.js:133
-#: voyages/sitemedia/scripts/vue/variables/slave.js:147
-#: voyages/sitemedia/scripts/vue/variables/slave.js:160
-#: voyages/sitemedia/scripts/vue/variables/slave.js:173
-#: voyages/sitemedia/scripts/vue/variables/slave.js:186
-#: voyages/sitemedia/scripts/vue/variables/slave.js:199
-#: voyages/sitemedia/scripts/vue/variables/slave.js:212
-#: voyages/sitemedia/scripts/vue/variables/slave.js:238
-#: voyages/sitemedia/scripts/vue/variables/source.js:4
-#: voyages/sitemedia/scripts/vue/variables/year.js:4
-#: voyages/apps/voyage/templates/database/_captain_and_crew.html:10
-#: voyages/apps/voyage/templates/database/_itinerary.html:64
-#: voyages/apps/voyage/templates/database/_itinerary.html:115
-#: voyages/apps/voyage/templates/database/_settings.html:50
-#: voyages/apps/voyage/templates/database/_source.html:6
-#: voyages/apps/voyage/templates/database/_source.html:8
-#: voyages/apps/voyage/templates/database/tabs/tables.html:6
-#: voyages/apps/voyage/templates/database/tabs/tables.html:9
-#: voyages/apps/voyage/templates/database/tabs/tables.html:12
-#: voyages/apps/voyage/templates/database/tabs/timeline.html:5
-#: voyages/apps/voyage/templates/database/tabs/visualization.html:16
-#: voyages/apps/voyage/templates/database/tabs/visualization.html:19
-#: voyages/apps/voyage/templates/database/tabs/visualization.html:32
-#: voyages/apps/voyage/templates/database/tabs/visualization.html:35
-#: voyages/apps/voyage/templates/database/tabs/visualization.html:47
-#: voyages/apps/voyage/templates/database/tabs/visualization.html:50
-#, fuzzy
 msgid ""
 msgstr ""
-"#-#-#-#-#  djangojs.po  #-#-#-#-#\n"
-"#-#-#-#-#  djangojs.po  #-#-#-#-#\n"
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-02-02 09:21-0500\n"
-"PO-Revision-Date: 2015-10-30 09:56-0300\n"
-"Last-Translator: \n"
+"PO-Revision-Date: 2019-02-14 18:25-0200\n"
 "Language-Team: \n"
-"Language: pt\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 1.7.5\n"
-"#-#-#-#-#  djangojs.po  #-#-#-#-#\n"
+"X-Generator: Poedit 2.0.6\n"
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-02-14 14:57-0500\n"
 "PO-Revision-Date: 2015-10-30 09:56-0300\n"
-"Last-Translator: \n"
 "Language-Team: \n"
-"Language: pt\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 1.7.5\n"
-"#-#-#-#-#  intersection.po  #-#-#-#-#\n"
-"#-#-#-#-#  django.po  #-#-#-#-#\n"
-"#-#-#-#-#  django.po  #-#-#-#-#\n"
-"#-#-#-#-#  django.po  #-#-#-#-#\n"
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-02-02 09:17-0500\n"
 "PO-Revision-Date: 2016-05-24 14:36-0300\n"
-"Language: pt\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -164,16 +74,12 @@ msgstr ""
 "X-Generator: Poedit 1.8.4\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Generator: Poedit 1.7.5\n"
-"Last-Translator: \n"
 "Language-Team: \n"
-"#-#-#-#-#  django.po  #-#-#-#-#\n"
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-01-28 12:42-0500\n"
 "PO-Revision-Date: 2016-05-24 14:36-0300\n"
-"Last-Translator: \n"
 "Language-Team: \n"
-"Language: pt\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -219,18 +125,14 @@ msgstr ""
 "X-Generator: Poedit 1.8.4\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Generator: Poedit 1.7.5\n"
-"#-#-#-#-#  django.po  #-#-#-#-#\n"
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-02-13 14:44-0500\n"
 "PO-Revision-Date: 2016-05-24 14:36-0300\n"
-"Last-Translator: \n"
 "Language-Team: \n"
-"Language: pt\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"#-#-#-#-#  django.po  #-#-#-#-#\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Generator: Poedit 1.8.4\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
@@ -273,7 +175,6 @@ msgstr ""
 "X-Generator: Poedit 1.8.4\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Generator: Poedit 1.7.5\n"
-"#-#-#-#-#  django.po  #-#-#-#-#\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Generator: Poedit 1.8.4\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
@@ -316,94 +217,89 @@ msgstr ""
 "X-Generator: Poedit 1.8.4\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Generator: Poedit 1.7.5\n"
-"#-#-#-#-#  djangojs.po  #-#-#-#-#\n"
-"#-#-#-#-#  djangojs.po  #-#-#-#-#\n"
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-02-02 09:21-0500\n"
 "PO-Revision-Date: 2015-10-30 09:56-0300\n"
-"Last-Translator: \n"
 "Language-Team: \n"
-"Language: pt\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 1.7.5\n"
-"#-#-#-#-#  djangojs.po  #-#-#-#-#\n"
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-02-14 14:57-0500\n"
 "PO-Revision-Date: 2015-10-30 09:56-0300\n"
-"Last-Translator: \n"
 "Language-Team: \n"
-"Language: pt\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 1.7.5\n"
+"Last-Translator: \n"
+"Language: es\n"
 
 #: voyages/sitemedia/maps/js/voyagesMap.js:144
 msgid "port"
-msgstr "porto"
+msgstr ""
 
 #: voyages/sitemedia/maps/js/voyagesMap.js:144
 msgid "ports"
-msgstr "portos"
+msgstr ""
 
 #: voyages/sitemedia/maps/js/voyagesMap.js:145
 msgid "region"
-msgstr "região"
+msgstr ""
 
 #: voyages/sitemedia/maps/js/voyagesMap.js:145
 msgid "regions"
-msgstr "regiões"
+msgstr ""
 
 #: voyages/sitemedia/maps/js/voyagesMap.js:146
 msgid "broad region"
-msgstr "grande região"
+msgstr ""
 
 #: voyages/sitemedia/maps/js/voyagesMap.js:146
 msgid "broad regions"
-msgstr "grande regiões"
+msgstr ""
 
 #: voyages/sitemedia/maps/js/voyagesMap.js:365
 #: voyages/sitemedia/maps/js/voyagesMap.js:456
 msgid "click for details"
-msgstr "clique para ver detalhes"
+msgstr ""
 
 #: voyages/sitemedia/maps/js/voyagesMap.js:411
 msgid "Africans arriving from Africa"
-msgstr "Africanos chegando da África"
+msgstr ""
 
 #: voyages/sitemedia/maps/js/voyagesMap.js:413
 msgid "Africans returning to Africa"
-msgstr "Africanos retornando à África"
+msgstr ""
 
 #: voyages/sitemedia/maps/js/voyagesMap.js:419
 msgid "Africans carried off"
-msgstr "Africanos transportados de"
+msgstr ""
 
 #: voyages/sitemedia/maps/js/voyagesMap.js:694
 #: voyages/sitemedia/maps/js/voyagesMap.js:745
 msgid "Place or region of embarkation:"
-msgstr "Porto ou região de embarque:"
+msgstr ""
 
 #: voyages/sitemedia/maps/js/voyagesMap.js:733
 #: voyages/sitemedia/maps/js/voyagesMap.js:746
 msgid "Place or region of disembarkation:"
-msgstr "Porto ou região de desembarque:"
+msgstr ""
 
 #: voyages/sitemedia/scripts/vue/includes/breadcrumb.js:9
 #: voyages/sitemedia/scripts/vue/includes/breadcrumb.js:13
 msgid "Home"
-msgstr "Página inicial"
+msgstr ""
 
 #: voyages/sitemedia/scripts/vue/includes/breadcrumb.js:31
 #: voyages/sitemedia/scripts/vue/includes/breadcrumb.js:33
 msgid "Understanding the Database"
-msgstr "Entendendo a base de dados"
+msgstr ""
 
 #: voyages/sitemedia/scripts/contribute/forms.js:15
 msgid "Voyage already added to selection"
@@ -498,9 +394,8 @@ msgstr ""
 
 #: voyages/sitemedia/scripts/contribute/interim.js:508
 #: voyages/sitemedia/scripts/contribute/interim.js:667
-#, fuzzy
 msgid "Voyages"
-msgstr "Banco de Dados Viagens"
+msgstr ""
 
 #: voyages/sitemedia/scripts/contribute/interim.js:508
 #: voyages/sitemedia/scripts/contribute/interim.js:668
@@ -513,37 +408,37 @@ msgstr ""
 
 #: voyages/sitemedia/scripts/legacy/navigation_topbar.js:7
 msgid "Educational Materials"
-msgstr "Materiais educacionais"
+msgstr ""
 
 #: voyages/sitemedia/scripts/legacy/navigation_topbar.js:9
 msgid "Contribute"
-msgstr "Contribua"
+msgstr ""
 
 #: voyages/sitemedia/scripts/vue/includes/voyage-search.js:177
 msgid "[nothing selected]"
-msgstr "[nada selecionado]"
+msgstr ""
 
 msgid "Inbound"
-msgstr "Entrada"
+msgstr ""
 
 msgid "Outbound"
-msgstr "Saída"
+msgstr ""
 
 #: voyages/sitemedia/scripts/vue/search.js:9
 msgid "Source"
-msgstr "Origem"
+msgstr ""
 
 msgid "Outbound traffic"
-msgstr "Tráfico saindo"
+msgstr ""
 
 msgid "Destination"
-msgstr "Destino"
+msgstr ""
 
 msgid "Inbound traffic"
-msgstr "Tráfico entrando"
+msgstr ""
 
 msgid "Traffic from"
-msgstr "Tráfico originado em"
+msgstr ""
 
 #: voyages/sitemedia/scripts/contribute/editorial.js:9
 msgid "A server error occurred, please contact the IT department"
@@ -1105,10 +1000,8 @@ msgid "Shipwrecked or destroyed, after embarkation of slaves or during slaving"
 msgstr ""
 
 #: voyages/sitemedia/scripts/vue/includes/form-data.js:135
-#, fuzzy
-#| msgid "Place or region of disembarkation:"
 msgid "Shipwrecked or destroyed, after disembarkation"
-msgstr "Porto ou região de desembarque:"
+msgstr ""
 
 #: voyages/sitemedia/scripts/vue/includes/form-data.js:136
 msgid "Shipwrecked or destroyed - unspecified"
@@ -1139,10 +1032,8 @@ msgid "Captured by British - after embarkation of slaves"
 msgstr ""
 
 #: voyages/sitemedia/scripts/vue/includes/form-data.js:143
-#, fuzzy
-#| msgid "Place or region of disembarkation:"
 msgid "Captured by British - after disembarkation"
-msgstr "Porto ou região de desembarque:"
+msgstr ""
 
 #: voyages/sitemedia/scripts/vue/includes/form-data.js:144
 msgid "Captured by British - unspecified"
@@ -1843,10 +1734,8 @@ msgid "Slaves disembarked in Americas"
 msgstr ""
 
 #: voyages/sitemedia/scripts/vue/includes/form-data.js:321
-#, fuzzy
-#| msgid "Disembarked"
 msgid "No slaves embarked"
-msgstr "Desembarcados"
+msgstr ""
 
 #: voyages/sitemedia/scripts/vue/includes/form-data.js:322
 msgid "Slaves disembarked in Old World"
@@ -2028,10 +1917,8 @@ msgstr ""
 
 #: voyages/sitemedia/scripts/vue/search.js:15
 #: voyages/sitemedia/scripts/vue/variables/ship-nation-owner.js:3
-#, fuzzy
-#| msgid "Voyages Database"
 msgid "Voyage ID"
-msgstr "Banco de Dados Viagens"
+msgstr ""
 
 #: voyages/sitemedia/scripts/vue/search.js:16
 #: voyages/sitemedia/scripts/vue/variables/ship-nation-owner.js:16
@@ -2139,10 +2026,8 @@ msgid "Voyage length, homeport to landing (days)"
 msgstr ""
 
 #: voyages/sitemedia/scripts/vue/search.js:75
-#, fuzzy
-#| msgid "Disembarked"
 msgid "Date disembarked"
-msgstr "Desembarcados"
+msgstr ""
 
 #: voyages/sitemedia/scripts/vue/search.js:76
 #: voyages/sitemedia/scripts/vue/variables/dates.js:43
@@ -2188,10 +2073,8 @@ msgid "African resistance"
 msgstr ""
 
 #: voyages/sitemedia/scripts/vue/search.js:99
-#, fuzzy
-#| msgid "Source"
 msgid "Sources"
-msgstr "Origem"
+msgstr ""
 
 #: voyages/sitemedia/scripts/vue/search.js:165
 msgid "Restore default"
@@ -2214,10 +2097,8 @@ msgid "Date that voyage began"
 msgstr ""
 
 #: voyages/sitemedia/scripts/vue/variables/dates.js:108
-#, fuzzy
-#| msgid "Place or region of disembarkation:"
 msgid "Voyage length, homeport to disembarkation"
-msgstr "Porto ou região de desembarque:"
+msgstr ""
 
 #: voyages/sitemedia/scripts/vue/variables/settings.js:3
 msgid "Show advanced variables in search filters"
@@ -2427,10 +2308,8 @@ msgstr ""
 
 #: voyages/sitemedia/scripts/vue/variables/tabs.js:88
 #: voyages/sitemedia/scripts/vue/variables/tabs.js:108
-#, fuzzy
-#| msgid "broad regions"
 msgid "Embarkation regions"
-msgstr "grande regiões"
+msgstr ""
 
 #: voyages/sitemedia/scripts/vue/variables/tabs.js:89
 #: voyages/sitemedia/scripts/vue/variables/tabs.js:109
@@ -2439,17 +2318,13 @@ msgstr ""
 
 #: voyages/sitemedia/scripts/vue/variables/tabs.js:90
 #: voyages/sitemedia/scripts/vue/variables/tabs.js:110
-#, fuzzy
-#| msgid "Place or region of disembarkation:"
 msgid "Specific regions of disembarkation"
-msgstr "Porto ou região de desembarque:"
+msgstr ""
 
 #: voyages/sitemedia/scripts/vue/variables/tabs.js:91
 #: voyages/sitemedia/scripts/vue/variables/tabs.js:111
-#, fuzzy
-#| msgid "Place or region of disembarkation:"
 msgid "Broad regions of disembarkation"
-msgstr "Porto ou região de desembarque:"
+msgstr ""
 
 #: voyages/sitemedia/scripts/vue/variables/tabs.js:92
 #: voyages/sitemedia/scripts/vue/variables/tabs.js:112
@@ -2582,16 +2457,12 @@ msgid "Voyage length, home port to slaves landing (days)"
 msgstr ""
 
 #: voyages/sitemedia/scripts/vue/variables/tabs.js:162
-#, fuzzy
-#| msgid "Disembarked"
 msgid "Slaves embarked*"
-msgstr "Desembarcados"
+msgstr ""
 
 #: voyages/sitemedia/scripts/vue/variables/tabs.js:163
-#, fuzzy
-#| msgid "Disembarked"
 msgid "Slaves disembarked*"
-msgstr "Desembarcados"
+msgstr ""
 
 #: voyages/sitemedia/scripts/vue/variables/tabs.js:210
 msgid "Average tonnage (standardized)*"
