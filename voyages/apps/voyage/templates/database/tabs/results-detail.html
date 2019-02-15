@@ -54,7 +54,7 @@
 
       <th>{% trans "Middle passage" %}</th>
       <th>{% trans "Voyage length, homeport to landing" %}</th>
-      <th>{% trans "Year of arrival at port of disembarkation" %}</th>
+      <th>{% trans "Year arrived with slaves" %}</th>
       <th>{% trans "Date trade began in Africa" %}</th>
       <th>{% trans "Date vessel departed Africa" %}</th>
       <th>{% trans "Date vessel arrived with slaves" %}</th>
@@ -126,13 +126,13 @@
       </b-card>
     </div>
   </div>
-
+{% endverbatim %}
   <div slot="modal-footer">
    <b-btn size="sm" class="float-right" variant="info" @click="rowModalShow=false">
     {% trans 'Close' %}
    </b-btn>
  </div>
 
-{% endverbatim %}
+
 
 </b-modal>
