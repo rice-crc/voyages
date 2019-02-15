@@ -565,9 +565,12 @@ margin-bottom: .25rem;
 .logo-grid-container {
   display: flex;
   justify-content: center;
-  padding: 2rem 0;
+  padding: 2.5rem 0 0;
   background-color: #BBC2CB;
   /*padding: 1rem 4rem;*/
+  &:last-child {
+    padding: 2.5rem 0;
+  }
 }
 
 .logo-grid {
@@ -580,9 +583,9 @@ margin-bottom: .25rem;
 
 .logo-grid-item {
   /*border: 1px solid #fff;*/
-  width: 200px;
+  width: 250px;
   height: 100px;
-  padding: 0 15px;
+  padding: 0 20px;
   align-items: center;
   display: flex;
 }
@@ -594,6 +597,7 @@ margin-bottom: .25rem;
 .logo-grid-item:last-child {
   padding-right: 0;
 }*/
+
 
 .no-padding {
   padding: 0;
