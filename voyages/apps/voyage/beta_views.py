@@ -63,7 +63,9 @@ def perform_search(search, lang):
         for field in order_fields:
             # Remap field names if they are plain text or language dependent.
             order_by_field = u'var_' + unicode(field['name'])
-            if order_by_field in translated_field_list:
+            if order_by_field.endswith('_lang'):
+                order_by_field += '_' + lang + '_exact'
+            elif order_by_field in translated_field_list:
                 order_by_field += '_lang_' + lang + '_exact'
             elif order_by_field in plain_text_suffix_list:
                 order_by_field += '_plaintext_exact'
@@ -290,8 +292,10 @@ def ajax_search(request):
     output_type = data.get('output')
     if output_type == 'resultsTable':
         target_lang = 'lang_' + lang
+        requested_fields = [x['data'] for x in data['tableParams']['columns']]
+        requested_fields = set([f + '_' + lang if f.endswith('lang') else f for f in requested_fields])
         return get_results_table(results, data, 
-            field_filter=lambda field_name: 'lang' not in field_name or target_lang in field_name,
+            field_filter=lambda field_name: field_name in requested_fields,
             key_adapter=lambda key_val: key_val[0].replace(target_lang, 'lang'))
     elif output_type == 'mapAnimation':
         return get_results_map_animation(results)
