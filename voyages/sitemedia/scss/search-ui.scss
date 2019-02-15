@@ -1,5 +1,11 @@
 @import "colors";
 
+// for the timelapse jquery ui scroll handle
+.ui-state-active, .ui-widget-content .ui-state-active {
+  border-color: #6c757d !important; 
+  background-color: #6c757d !important; 
+}
+
 .search-menu {
   border-radius: 0;
   border-right: none;
