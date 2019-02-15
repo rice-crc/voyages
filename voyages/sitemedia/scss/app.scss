@@ -256,11 +256,34 @@ footer {
   /*border: 1px white solid;*/
 }
 
+.separator {
+  color:  #dddddd;
+  opacity: 0.5;
+}
+
 .social-icon {
   width: 1.5rem;
   opacity: 0.5;
   color: #dddddd;
   margin: 0 .3rem;
+  transition-duration: 0.2s;
+  transition-timing-function: cubic-bezier(0.42, 0, 0.58, 1);
+}
+
+.donate-icon {
+  width: 1.5rem;
+  color: #dddddd;
+  margin: 0;
+  border-radius: 100%;
+  box-shadow:
+    // inset 0 0 50px $trans-color,      /* inner trans */
+    // inset 20px 0 80px $trans-color,   /* inner left trans short */
+    // inset -20px 0 80px $trans-color,  /* inner right trans short */
+    // inset 20px 0 80px $trans-color,  /* inner left trans broad */
+    // inset -20px 0 80px $trans-color, /* inner right trans broad */
+    0 0 20px white;            /* outer white */
+  transition-duration: 0.2s;
+  transition-timing-function: cubic-bezier(0.42, 0, 0.58, 1);
 }
 
 .social-icon:first-child {
@@ -270,7 +293,7 @@ footer {
 .social-icon:hover {
   opacity: 1;
   transition-duration: 0.2s;
-  transition-timing-function: ease-in-out;
+  transition-timing-function: cubic-bezier(0.42, 0, 0.58, 1);
   cursor: pointer;
   color: #dddddd;
 }
@@ -353,7 +376,6 @@ video#bgvid {
 .scroll {
   color: #dddddd;
   opacity: 0.5;
-  text-align: center;
   margin-top: 1rem;
 }
 
