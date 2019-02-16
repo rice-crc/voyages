@@ -1,6 +1,6 @@
 var_imp_total_num_slaves_purchased = new NumberVariable({
     varName: "imp_total_num_slaves_purchased",
-    label: gettext("Total embarked (imputed)"),
+    label: gettext("Total embarked"),
     description: gettext(""),
   },{
     op: "is equal to",
