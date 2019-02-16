@@ -693,8 +693,8 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
         },
       ],
 
-      "order": [[ 0, "asc" ]],
-      "destroy": true,
+      order: [[ 1, "asc" ]],
+      destroy: true,
 
       // page length Default
       pageLength: 15,
