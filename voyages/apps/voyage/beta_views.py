@@ -16,10 +16,12 @@ from voyages.apps.common.models import get_pks_from_haystack_results, SavedQuery
 from voyages.apps.common.views import get_ordered_places
 from voyages.apps.common.views import get_datatable_json_result as get_results_table
 from voyages.apps.voyage.models import *
+from voyages.apps.voyage.search_indexes import VoyageIndex
 from voyages.apps.voyage.tables import *
 import csv
 import itertools
 import json
+import re
 import unicodecsv
 
 class SearchOperator():
@@ -311,6 +313,50 @@ def ajax_search(request):
         return get_results_summary_stats(results)
     return HttpResponseBadRequest('Unkown type of output.')
 
+download_header_map = {}
+
+def get_download_header(var_name):
+    """
+    Here we use a bit of magic to follow relationships in Django models
+    specified on the model_attr of indexed fields.
+    """
+    def follow_field(model, name_to_follow):
+        split = name_to_follow.find('__')
+        current = name_to_follow[:split] if split > 0 else name_to_follow
+        try:
+            f = model._meta.get_field(current)
+        except:
+            f = None
+        result = f.verbose_name if f else ''
+        if split > 0 and f:
+            result += ' ' + follow_field(f.remote_field.model, name_to_follow[split + 2:])
+        return result
+    def smart(h):
+        # Clean up name.
+        h = h.lower()
+        words = h.split(' ')
+        for w in words:
+            pos = h.find(w) + len(w)
+            h = h[:pos] + h[pos:].replace(w, '')
+        h = re.sub(r'\s+', ' ', h)
+        return h[:1].upper() + h[1:]
+    def smart_var_name():
+        s = var_name.lower()
+        s = s.replace('var_', '')
+        s = s.replace('_', ' ')
+        s = s.replace('imp ', 'imputed ')
+        s = s.replace('plaintext', '')
+        return s[:1].upper() + s[1:]
+    header = download_header_map.get(var_name)
+    if header is None:
+        if hasattr(VoyageIndex, var_name):
+            index = getattr(VoyageIndex, var_name)
+            if index and hasattr(index, 'model_attr') and index.model_attr:
+                model = index.related_model if hasattr(index, 'related_model') else Voyage
+                header = smart(follow_field(model, index.model_attr))
+            download_header_map[var_name] = header
+    return header if (not header is None and header != '') else smart_var_name()
+
 @require_POST
 @csrf_exempt
 def ajax_download(request):
@@ -343,13 +389,14 @@ def ajax_download(request):
         columns = [col if 'lang' not in col or 'lang_' in col else col + '_' + lang for col in columns]
     if excel_mode:
         return download_xls(
-            [[(col, 1) for col in columns]],
+            [[(_(get_download_header(col)), 1) for col in columns]],
             [[item[col] for col in columns] for item in [x.get_stored_fields() for x in results]])
     else:
         response = HttpResponse(content_type='text/csv')
         response['Content-Disposition'] = 'attachment; filename="data.csv"'
         writer = unicodecsv.DictWriter(response, fieldnames=columns)
-        writer.writeheader()
+        #writer.writeheader()
+        writer.writerow({col: _(get_download_header(col)) for col in columns})
         for x in results:
             item = x.get_stored_fields()
             writer.writerow({col: item[col] for col in columns})
