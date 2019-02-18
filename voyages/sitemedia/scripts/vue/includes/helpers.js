@@ -656,8 +656,8 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
       
       scrollX: true,
       columnDefs: [{
-          width: "10%",
-          targets: 2
+          width: "1%",
+          targets: 0
         },
         {
           width: "10%",
@@ -682,10 +682,6 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
         {
           width: "5%",
           targets: 34
-        },
-        {
-          width: "5%",
-          targets: 25
         },
         {
           width: "5%",
