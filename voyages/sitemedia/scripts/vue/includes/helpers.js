@@ -1180,7 +1180,23 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
               threshold: null
             }
           },
-
+          exporting: {
+            buttons: {
+              contextButton: {
+                menuItems: ["printChart",
+                  "separator",
+                  "downloadPNG",
+                  "downloadJPEG",
+                  "downloadPDF",
+                  "downloadSVG",
+                  "separator",
+                  "downloadCSV",
+                  "downloadXLS",
+                  //"viewData",
+                  "openInCloud"]
+              }
+            }
+          },
           series: [{
             type: 'area',
             name: timelineVariable,
