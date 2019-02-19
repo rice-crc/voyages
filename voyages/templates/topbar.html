@@ -61,7 +61,7 @@
 				</li>
 
 				<li class="nav-item dropdown" id="link-about">
-					<a class="nav-link" href="{% url 'about:about' %}" role="button">About</a>
+					<a class="nav-link" href="{% url 'about:about' %}" role="button">{% trans 'About' %}</a>
 				</li>
 
 				{% get_current_language as LANGUAGE_CODE %}
@@ -88,16 +88,15 @@
 	// highlight the active link in the navigation bar
 	var url = window.location.pathname;
 	urlElements = url.split("/");
-	if (urlElements[1] == "voyage" || urlElements[1] == "assessment"
-			|| urlElements[1] == "accounts" || urlElements[1] == "contribute") {
+	if (urlElements[1] == "voyage" || urlElements[1] == "assessment") {
 		document.getElementById("link-trans-atlantic").classList.add("active-link");
 	} else if (urlElements[1] == "american") {
 		document.getElementById("link-american").classList.add("active-link");
 	} else if (urlElements[1] == "resources" && urlElements[2] == "about") {
 		document.getElementById("link-past").classList.add("active-link");
-	} else if (urlElements[1] == "resources" && urlElements[2] == "names-database") {
+	} else if ((urlElements[1] == "resources" && urlElements[2] == "names-database") || (urlElements[1] == "resources" && urlElements[2] == "downloads")) {
 		document.getElementById("link-past").classList.add("active-link");
-	} else if (urlElements[1] == "resources" && urlElements[2] == "images" || urlElements[1] == "education") {
+	} else if (urlElements[1] == "resources" || urlElements[1] == "education") {
 		document.getElementById("link-resources").classList.add("active-link");
 	} else if (urlElements[1] == "about" || urlElements[1] == "help") {
 		document.getElementById("link-about").classList.add("active-link");
