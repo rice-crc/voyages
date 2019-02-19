@@ -31,7 +31,7 @@ def test():
 
     # We are specifying apps to test because of problem with autocomplete_light.
     # There is missing some sub app to test and it causes fail of all tests.
-    local('python manage.py test --noinput about assessment common contribute education help resources voyage')
+    local('python manage.py test --noinput about assessment common contribute resources voyage')
 
 
 def doc():

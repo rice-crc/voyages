@@ -4,7 +4,6 @@ from .models import ContentPage
 group_templates = {"Voyage": "voyages-index.html",
                    "Assessment": "assessment-index.html",
                    "Resources": "resources-index.html",
-                   "Educational Materials": "education-index.html",
                    "About": "about-index.html"}
 
 
