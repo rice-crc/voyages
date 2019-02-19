@@ -61,6 +61,20 @@
       </p>
 
 			<div id="center-content-inner">
+				<div class="page-title-1">
+					{% trans 'Images of ' %}
+					{% for images_set in images %}
+					{% if images_set.images %}
+					{{ images_set.label_name|trans_log }}
+					{% for i in images %}
+					{% if i.label_name == category %}
+					({{ i.images|length }} {% trans 'images' %})
+					{% endif %}
+					{% endfor %}
+					{% endif %}
+					{% endfor %}
+				</div>
+
 				{%  for images_set in images %}
 						{% if images_set.images %}
 								{% for i in images %}

@@ -63,8 +63,9 @@
       </p>
 
 			<div id="center-content-inner">
+				<div class="page-title-1"> {% trans 'Search Results' %}</div>
 					{% for cat_name, cat_results in categorized.items %}
-						<h2>{{ cat_name|trans_log }}</h2>
+						<div class="page-title-2">{{ cat_name|trans_log }}</div>
 		            {% for result in cat_results %}
 		                {% ifequal forloop.counter0|modulo:4 0 %}
 										<div class="gallery-flexbox">
