@@ -286,6 +286,18 @@ footer {
   transition-timing-function: cubic-bezier(0.42, 0, 0.58, 1);
 }
 
+.legacy-icon {
+  width: 1.5rem;
+  color: #dddddd;
+  margin: 0;
+  transition-duration: 0.2s;
+  transition-timing-function: cubic-bezier(0.42, 0, 0.58, 1);
+}
+
+.no-margin-left {
+  margin-left: 0;
+}
+
 .social-icon:first-child {
   margin-left: 0;
 }
