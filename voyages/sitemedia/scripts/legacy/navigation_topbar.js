@@ -4,7 +4,6 @@ var majorSectionName = {
 	"voyage" : gettext("Voyages Database"),
 	"assessment" : gettext("Assessing the Slave Trade"),
 	"resources" : gettext("Resources"),
-	"education" : gettext("Educational Materials"),
 	"about" : gettext("About the Project"),
 	"contribute" : gettext("Contribute")
 }
