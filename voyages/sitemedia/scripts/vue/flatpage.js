@@ -81,7 +81,7 @@ var flatpage = new Vue({
         $("#center-content-inner").html(response.data)
         vm.updateNav();
         var hashURL = vm.extractURL(currentURL, vm.pathname, true);
-        console.log(hashURL);
+        // console.log(hashURL);
       })
       .catch(function (error) {
         console.log(error);
@@ -146,7 +146,7 @@ var flatpage = new Vue({
     axios.get(url)
     .then(function (response) {
       vm.response = response.data;
-      console.log(response);
+      // console.log(response);
       // Vue.set(vm.response, response.data);
       var articles = [];
       for (var i = 0; i < response.data.items.length; i++) {
