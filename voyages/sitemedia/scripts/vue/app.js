@@ -207,14 +207,19 @@ var searchBar = new Vue({
                     })
                   }
 
-                  // Patch
-                  if (varName == "var_vessel_construction_place_idnum" || varName == "var_registered_place_idnum") {
-                    value = this.row.data[varName.slice(0, -6)];
+                  // Patch outcome
+                  if (varName.includes("outcome") || varName.includes("resistance")) {
+                    value = this.row.data[varName + "_lang"];
                   }
 
                   // Patch place variables
                   if (item.type == "place") {
-                    value = this.row.data[varName.slice(0, -3)];
+                    value = this.row.data[varName.slice(0, -3) + "_lang"];
+                  }
+
+                  // Patch two special place variables (after generic)
+                  if (varName == "var_vessel_construction_place_idnum" || varName == "var_registered_place_idnum") {
+                    value = this.row.data[varName.slice(0, -6) + "_lang"];
                   }
 
                   datum.variables[varName] = {
