@@ -114,7 +114,7 @@ def download_file(request):
     handle_uploaded_file() to store files on the disk.
     This view is available only for admin users.
     """
-    templatename = 'voyage/upload.html'
+    templatename = 'upload.html'
 
     if request.method == 'POST':
         form = UploadFileForm(request.POST, request.FILES)
