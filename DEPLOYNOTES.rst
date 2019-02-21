@@ -88,7 +88,7 @@ After installing solr, create the 'voyages' core with:
     and 
   [solr]$ cp src/voyages/solr/managed_schema.xml src/voyages/solr/solrconfig.xml src/voyages/solr/mapping-ISOLatin1Accent.txt src/voyages/solr/protwords.txt src/voyages/solr/stopwords.txt src/voyages/solr/synonyms.txt <core config path>
     check if <core config path>/lang/ exists (and stopwords_en.txt in it), if not:
-  [solr]$ cp src/voyages/solr/stopwords_en.txt <core config path>/lang/
+  [solr]$ cp src/voyages/solr/stopwords_en.txt src/voyages/solr/stopwords_pt.txt src/voyages/solr/stopwords_es.txt <core config path>/lang/
 
 
 The url for accessing the configured Solr instance should be set in
