@@ -3,14 +3,14 @@
 <nav class="navbar navbar-expand-xl navbar-dark bg-dark">
 	<div class="nav-container">
 		<!-- <a href="/" class="navbar-brand">Slave Voyages</a> -->
-		<a href="/" class="navbar-brand" ><!--<img src="img/logos/sv-logo.svg" alt="Slave Voyages" style="height: 3.5rem;">--> Slave Voyages</a>
+		<a href="/" class="navbar-brand" ><!--<img src="img/logos/sv-logo.svg" alt="Slave Voyages" style="height: 3.5rem;">--> {% trans 'Slave Voyages' %} </a>
 		<button class="navbar-toggler float-right" aria-label="Navigation Toggle" type="button" data-toggle="collapse" data-target="#sv-navbar-collapse">
 			<span class="navbar-toggler-icon"></span>
 		</button>
 		<div class="navbar-collapse collapse" id="sv-navbar-collapse">
 			<ul class="navbar-nav ml-auto" id="sv-navbar">
 				<li class="nav-item dropdown" id="link-trans-atlantic">
-					<a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Trans-Atlantic</a>
+					<a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">{% trans 'Trans-Atlantic' %}</a>
 					<div class="dropdown-menu">
 						<a class="dropdown-item" href="{% url 'voyage:about' %}">{% trans "Understanding the Database" %}</a>
 						<a class="dropdown-item" href="{% url 'voyage:database' %}">{% trans "Database" %}</a>
@@ -28,7 +28,7 @@
 				</li>
 
 				<li class="nav-item dropdown" id="link-american">
-					<a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false" >Intra-American</a>
+					<a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false" >{% trans 'Intra-American' %}</a>
 					<div class="dropdown-menu">
 						<a class="dropdown-item" href="{% url 'american:about' %}">{% trans "Understanding the Database" %}</a>
 						<a class="dropdown-item" href="{% url 'american:database' %}">{% trans "Database" %}</a>
@@ -40,7 +40,7 @@
 				</li>
 
 				<li class="nav-item dropdown" id="link-past">
-					<a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false" >African Names<!--People of the Atlantic Slave Trade--></a>
+					<a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false" >{% trans 'African Names' %}<!--People of the Atlantic Slave Trade--></a>
 					<div class="dropdown-menu">
 						<a class="dropdown-item" href="{% url 'resources:about' %}">Understanding the Database</a>
 						<a class="dropdown-item" href="{% url 'resources:origins' %}">{% trans "Database" %}</a>
@@ -52,7 +52,7 @@
 				</li>
 
 				<li class="nav-item dropdown" id="link-resources">
-					<a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false" >Resources</a>
+					<a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false" >{% trans 'Resources' %}</a>
 					<div class="dropdown-menu">
 						<a class="dropdown-item" href="{% url 'resources:images' %}">{% trans "Image Galleries" %}</a>
 						<a class="dropdown-item" href="{% url 'resources:lessons' %}">{% trans "Lesson Plans" %}</a>
