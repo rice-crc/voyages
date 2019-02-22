@@ -14,7 +14,7 @@ var_voyage_id = new NumberVariable({
 var_ship_name = new TextVariable({
     varName: "ship_name",
     label: gettext("Vessel name"),
-    description: gettext(""),
+    description: "",
   },{
     op: "contains",
     searchTerm: null,
@@ -26,7 +26,7 @@ var_ship_name = new TextVariable({
 var_owner = new TextVariable({
     varName: "owner",
     label: gettext("Vessel owner"),
-    description: gettext(""),
+    description: "",
   },{
     op: "contains",
     searchTerm: null,
@@ -38,7 +38,7 @@ var_owner = new TextVariable({
 var_year_of_construction = new NumberVariable({
     varName: "year_of_construction",
     label: gettext("Year constructed"),
-    description: gettext(""),
+    description: "",
   },{
     op: "is equal to",
     searchTerm0: null,
@@ -51,7 +51,7 @@ var_year_of_construction = new NumberVariable({
 var_vessel_construction_place_idnum = new PlaceVariable({
     varName: "vessel_construction_place_idnum",
     label: gettext("Place constructed"),
-    description: gettext(""),
+    description: "",
   },{
     op: "is one of",
     searchTerm: [],
@@ -63,7 +63,7 @@ var_vessel_construction_place_idnum = new PlaceVariable({
 var_registered_year = new NumberVariable({
     varName: "registered_year",
     label: gettext("Year registered"),
-    description: gettext(""),
+    description: "",
   },{
     op: "is equal to",
     searchTerm0: null,
@@ -76,7 +76,7 @@ var_registered_year = new NumberVariable({
 var_registered_place_idnum = new PlaceVariable({
     varName: "registered_place_idnum",
     label: gettext("Place registered"),
-    description: gettext(""),
+    description: "",
   },{
     op: "is one of",
     searchTerm: [],
@@ -88,7 +88,7 @@ var_registered_place_idnum = new PlaceVariable({
 var_nationality = new TreeselectVariable({
     varName: "nationality",
     label: gettext("Flag"),
-    description: gettext(""),
+    description: "",
   },{
     op: "is one of",
     searchTerm: [],
@@ -100,7 +100,7 @@ var_nationality = new TreeselectVariable({
 var_imputed_nationality = new TreeselectVariable({
     varName: "imputed_nationality",
     label: gettext("Flag (imputed)"),
-    description: gettext(""),
+    description: "",
   },{
     op: "is one of",
     searchTerm: [],
@@ -112,7 +112,7 @@ var_imputed_nationality = new TreeselectVariable({
 var_rig_of_vessel = new TreeselectVariable({
     varName: "rig_of_vessel",
     label: gettext("Rig of vessel"),
-    description: gettext(""),
+    description: "",
   },{
     op: "is one of",
     searchTerm: [],
@@ -124,7 +124,7 @@ var_rig_of_vessel = new TreeselectVariable({
 var_tonnage = new NumberVariable({
     varName: "tonnage",
     label: gettext("Tonnage"),
-    description: gettext(""),
+    description: "",
   },{
     op: "is equal to",
     searchTerm0: null,
@@ -137,7 +137,7 @@ var_tonnage = new NumberVariable({
 var_tonnage_mod = new NumberVariable({
     varName: "tonnage_mod",
     label: gettext("Standardized tonnage"),
-    description: gettext(""),
+    description: "",
   },{
     op: "is equal to",
     searchTerm0: null,
@@ -150,7 +150,7 @@ var_tonnage_mod = new NumberVariable({
 var_guns_mounted = new NumberVariable({
     varName: "guns_mounted",
     label: gettext("Guns mounted"),
-    description: gettext(""),
+    description: "",
   },{
     op: "is equal to",
     searchTerm0: null,
