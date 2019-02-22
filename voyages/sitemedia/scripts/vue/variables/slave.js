@@ -1,7 +1,7 @@
 var_imp_total_num_slaves_purchased = new NumberVariable({
     varName: "imp_total_num_slaves_purchased",
     label: gettext("Total embarked"),
-    description: gettext(""),
+    description: "",
   },{
     op: "is equal to",
     searchTerm0: null,
@@ -14,7 +14,7 @@ var_imp_total_num_slaves_purchased = new NumberVariable({
 var_total_num_slaves_purchased = new NumberVariable({
     varName: "total_num_slaves_purchased",
     label: gettext("Total embarked"),
-    description: gettext(""),
+    description: "",
   },{
     op: "is equal to",
     searchTerm0: null,
@@ -27,7 +27,7 @@ var_total_num_slaves_purchased = new NumberVariable({
 var_imp_total_slaves_disembarked = new NumberVariable({
     varName: "imp_total_slaves_disembarked",
     label: gettext("Total disembarked"),
-    description: gettext(""),
+    description: "",
   },{
     op: "is equal to",
     searchTerm0: null,
@@ -41,7 +41,7 @@ var_imp_total_slaves_disembarked = new NumberVariable({
 var_num_slaves_intended_first_port = new NumberVariable({
     varName: "num_slaves_intended_first_port",
     label: gettext("Slaves intended at 1st place"),
-    description: gettext(""),
+    description: "",
   },{
     op: "is equal to",
     searchTerm0: null,
@@ -54,7 +54,7 @@ var_num_slaves_intended_first_port = new NumberVariable({
 var_num_slaves_carried_first_port = new NumberVariable({
     varName: "num_slaves_carried_first_port",
     label: gettext("Slaves carried from 1st port"),
-    description: gettext(""),
+    description: "",
   },{
     op: "is equal to",
     searchTerm0: null,
@@ -67,7 +67,7 @@ var_num_slaves_carried_first_port = new NumberVariable({
 var_num_slaves_carried_second_port = new NumberVariable({
     varName: "num_slaves_carried_second_port",
     label: gettext("Slaves carried from 2nd port"),
-    description: gettext(""),
+    description: "",
   },{
     op: "is equal to",
     searchTerm0: null,
@@ -79,7 +79,7 @@ var_num_slaves_carried_second_port = new NumberVariable({
 var_num_slaves_carried_third_port = new NumberVariable({
     varName: "num_slaves_carried_third_port",
     label: gettext("Slaves carried from 3rd port"),
-    description: gettext(""),
+    description: "",
   },{
     op: "is equal to",
     searchTerm0: null,
@@ -92,7 +92,7 @@ var_num_slaves_carried_third_port = new NumberVariable({
 var_total_num_slaves_arr_first_port_embark = new NumberVariable({
     varName: "total_num_slaves_arr_first_port_embark",
     label: gettext("Slaves arrived at 1st port"),
-    description: gettext(""),
+    description: "",
   },{
     op: "is equal to",
     searchTerm0: null,
@@ -105,7 +105,7 @@ var_total_num_slaves_arr_first_port_embark = new NumberVariable({
 var_num_slaves_disembark_first_place = new NumberVariable({
     varName: "num_slaves_disembark_first_place",
     label: gettext("Slaves landed at 1st port"),
-    description: gettext(""),
+    description: "",
   },{
     op: "is equal to",
     searchTerm0: null,
@@ -117,7 +117,7 @@ var_num_slaves_disembark_first_place = new NumberVariable({
 var_num_slaves_disembark_second_place = new NumberVariable({
     varName: "num_slaves_disembark_second_place",
     label: gettext("Slaves landed at 2nd port"),
-    description: gettext(""),
+    description: "",
   },{
     op: "is equal to",
     searchTerm0: null,
@@ -130,7 +130,7 @@ var_num_slaves_disembark_second_place = new NumberVariable({
 var_num_slaves_disembark_third_place = new NumberVariable({
     varName: "num_slaves_disembark_third_place",
     label: gettext("Slaves landed at 3rd port"),
-    description: gettext(""),
+    description: "",
   },{
     op: "is equal to",
     searchTerm0: null,
@@ -144,7 +144,7 @@ var_num_slaves_disembark_third_place = new NumberVariable({
 var_imputed_percentage_men = new PercentageVariable({
     varName: "imputed_percentage_men",
     label: gettext("Percent men"),
-    description: gettext(""),
+    description: "",
   },{
     op: "is equal to",
     searchTerm0: null,
@@ -157,7 +157,7 @@ var_imputed_percentage_men = new PercentageVariable({
 var_imputed_percentage_women = new PercentageVariable({
     varName: "imputed_percentage_women",
     label: gettext("Percent women"),
-    description: gettext(""),
+    description: "",
   },{
     op: "is equal to",
     searchTerm0: null,
@@ -170,7 +170,7 @@ var_imputed_percentage_women = new PercentageVariable({
 var_imputed_percentage_boys = new PercentageVariable({
     varName: "imputed_percentage_boys",
     label: gettext("Percent boys"),
-    description: gettext(""),
+    description: "",
   },{
     op: "is equal to",
     searchTerm0: null,
@@ -183,7 +183,7 @@ var_imputed_percentage_boys = new PercentageVariable({
 var_imputed_percentage_girls = new PercentageVariable({
     varName: "imputed_percentage_girls",
     label: gettext("Percent girls"),
-    description: gettext(""),
+    description: "",
   },{
     op: "is equal to",
     searchTerm0: null,
@@ -196,7 +196,7 @@ var_imputed_percentage_girls = new PercentageVariable({
 var_imputed_percentage_male = new PercentageVariable({
     varName: "imputed_percentage_male",
     label: gettext("Percent males"),
-    description: gettext(""),
+    description: "",
   },{
     op: "is equal to",
     searchTerm0: null,
@@ -209,7 +209,7 @@ var_imputed_percentage_male = new PercentageVariable({
 var_imputed_percentage_child = new PercentageVariable({
     varName: "imputed_percentage_child",
     label: gettext("Percent children"),
-    description: gettext(""),
+    description: "",
   },{
     op: "is equal to",
     searchTerm0: null,
@@ -235,7 +235,7 @@ var_imputed_sterling_cash = new NumberVariable({
 var_imputed_death_middle_passage = new NumberVariable({
     varName: "imputed_death_middle_passage",
     label: gettext("Slaves died during middle passage"),
-    description: gettext(""),
+    description: "",
   },{
     op: "is equal to",
     searchTerm0: null,

@@ -1,7 +1,7 @@
 var_captain = new TextVariable({
     varName: "captain",
     label: gettext("Captain's name"),
-    description: gettext(""),
+    description: "",
   },{
     op: "is equal to",
     searchTerm: null,
@@ -13,7 +13,7 @@ var_captain = new TextVariable({
 var_crew_voyage_outset = new NumberVariable({
     varName: "crew_voyage_outset",
     label: gettext("Crew at voyage outset"),
-    description: gettext(""),
+    description: "",
   },{
     op: "is equal to",
     searchTerm0: null,
@@ -26,7 +26,7 @@ var_crew_voyage_outset = new NumberVariable({
 var_crew_first_landing = new NumberVariable({
     varName: "crew_first_landing",
     label: gettext("Crew at first landing of slaves"),
-    description: gettext(""),
+    description: "",
   },{
     op: "is equal to",
     searchTerm0: null,
@@ -39,7 +39,7 @@ var_crew_first_landing = new NumberVariable({
 var_crew_died_complete_voyage = new NumberVariable({
     varName: "crew_died_complete_voyage",
     label: gettext("Crew deaths during voyage"),
-    description: gettext(""),
+    description: "",
   },{
     op: "is equal to",
     searchTerm0: null,

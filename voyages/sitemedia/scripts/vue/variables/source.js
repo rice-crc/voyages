@@ -1,7 +1,7 @@
 var_sources_plaintext = new TextVariable({
     varName: "sources_plaintext",
     label: gettext("Source of data"),
-    description: gettext(""),
+    description: "",
   },{
     op: "contains",
     searchTerm: null,

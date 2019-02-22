@@ -1,7 +1,7 @@
 var var_imp_arrival_at_port_of_dis = new YearVariable({
     varName: "imp_arrival_at_port_of_dis",
     label: gettext("Year arrived with slaves"),
-    description: gettext(""),
+    description: "",
   },{
     op: "is between",
     searchTerm0: 1514,
