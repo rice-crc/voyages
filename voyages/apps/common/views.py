@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.contrib.flatpages.models import FlatPage
 from django.core.paginator import Paginator
 from django.shortcuts import get_object_or_404, render
@@ -8,6 +9,7 @@ from voyages.apps.voyage.models import Place
 from django.http import Http404, HttpResponse, JsonResponse
 from django.views.decorators.cache import cache_page
 import django
+import re
 
 def get_ordered_places(place_query=None, translate=True):
     if place_query is None:
@@ -157,6 +159,7 @@ def get_flat_page_content(request, url):
     page = get_object_or_404(FlatPage, url=url)
     # Remove CDATA before we return
     content = page.content.replace("// <![CDATA[", "").replace("// ]]>", "")
+    content = re.sub(r'\{\{\s*MEDIA_URL\s*\}\}', settings.MEDIA_URL, content, flags=re.MULTILINE)
     return HttpResponse(content, 'text/html; charset=utf-8')
 
 @cache_page(3600)
