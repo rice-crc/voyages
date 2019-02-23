@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-02-23 01:28-0500\n"
-"PO-Revision-Date: 2019-02-23 01:55-0500\n"
+"PO-Revision-Date: 2019-02-23 02:04-0500\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: pt\n"
@@ -5118,7 +5118,7 @@ msgstr "Pessoas escravizadas"
 #: voyages/apps/voyage/templates/database/_slave.html:8
 #: voyages/apps/voyage/templates/database/_slave.html:10
 msgid "Overall numbers"
-msgstr "Escravos (números)"
+msgstr "Números globais"
 
 #: voyages/apps/voyage/templates/database/_slave.html:10
 msgid "Embarkations and disembarkations"
@@ -5127,7 +5127,7 @@ msgstr "Embarque e desembarque"
 #: voyages/apps/voyage/templates/database/_slave.html:33
 #: voyages/apps/voyage/templates/database/_slave.html:35
 msgid "Purchase numbers"
-msgstr "Escravos (números)"
+msgstr "Números de compra"
 
 #: voyages/apps/voyage/templates/database/_slave.html:35
 msgid "Number of slaves purchased"
@@ -5136,7 +5136,7 @@ msgstr "Número de mortes de escravos"
 #: voyages/apps/voyage/templates/database/_slave.html:61
 #: voyages/apps/voyage/templates/database/_slave.html:63
 msgid "Landing numbers"
-msgstr "Escravos (números)"
+msgstr "Números de aterragem"
 
 #: voyages/apps/voyage/templates/database/_slave.html:63
 msgid "Number of slaves landed"
@@ -32481,11 +32481,11 @@ msgstr "Tonelagem padronizada*"
 
 #: voyages/apps/voyage/templates/database/tabs/results-detail.html:20
 msgid "Place where voyage began"
-msgstr "Porto onde a viagem começou*:"
+msgstr "Porto onde a viagem começou"
 
 #: voyages/apps/voyage/templates/database/tabs/results-detail.html:21
 msgid "Principal place of purchase"
-msgstr "Principal lugar de aquisição de escravos*"
+msgstr "Principal lugar de aquisição de escravos"
 
 #: voyages/apps/voyage/templates/database/tabs/results-detail.html:22
 msgid "1st place of slave purchase"
@@ -32501,7 +32501,7 @@ msgstr "Terceiro lugar de aquisição de escravos"
 
 #: voyages/apps/voyage/templates/database/tabs/results-detail.html:26
 msgid "Principal place of landing"
-msgstr "Principal lugar de desembarque de escravos*"
+msgstr "Principal lugar de desembarque de escravos"
 
 #: voyages/apps/voyage/templates/database/tabs/results-detail.html:27
 msgid "1st place of slave landing"
@@ -32509,11 +32509,11 @@ msgstr "Primeiro lugar de desembarque de escravos"
 
 #: voyages/apps/voyage/templates/database/tabs/results-detail.html:28
 msgid "2nd place of slave landing"
-msgstr "Principal lugar de desembarque de escravos*"
+msgstr "2º lugar de desembarque de escravos"
 
 #: voyages/apps/voyage/templates/database/tabs/results-detail.html:29
 msgid "3rd place of slave landing"
-msgstr "Principal lugar de desembarque de escravos*"
+msgstr "3º lugar de desembarque de escravos"
 
 #: voyages/apps/voyage/templates/database/tabs/results-detail.html:32
 msgid "Total embarked (imputed)"
@@ -32525,7 +32525,7 @@ msgstr "Total de escravos embarcados"
 
 #: voyages/apps/voyage/templates/database/tabs/results-detail.html:34
 msgid "Total disembarked"
-msgstr "Total de escravos desembarcados*"
+msgstr "Total desembarcado"
 
 #: voyages/apps/voyage/templates/database/tabs/results-detail.html:35
 msgid "Slaves intended at 1st place"
@@ -32561,35 +32561,35 @@ msgstr "Número de escravos desembarcados no terceiro porto de desembarque"
 
 #: voyages/apps/voyage/templates/database/tabs/results-detail.html:43
 msgid "Percent men"
-msgstr "Percentagem de homens*"
+msgstr "Porcentagem de homens"
 
 #: voyages/apps/voyage/templates/database/tabs/results-detail.html:44
 msgid "Percent women"
-msgstr "Percentagem de mulheres*"
+msgstr "Porcentagem de mulheres"
 
 #: voyages/apps/voyage/templates/database/tabs/results-detail.html:45
 msgid "Percent boys"
-msgstr "Percentagem de meninos*"
+msgstr "Porcentagem de meninos"
 
 #: voyages/apps/voyage/templates/database/tabs/results-detail.html:46
 msgid "Percent girls"
-msgstr "Percentagem de meninas*"
+msgstr "Porcentagem de meninas"
 
 #: voyages/apps/voyage/templates/database/tabs/results-detail.html:47
 msgid "Percent males"
-msgstr "Percentagem de machos*"
+msgstr "Porcentagem de homens"
 
 #: voyages/apps/voyage/templates/database/tabs/results-detail.html:48
 msgid "Percent children"
-msgstr "Percentagem de de crianças*"
+msgstr "Porcentagem de crianças"
 
 #: voyages/apps/voyage/templates/database/tabs/results-detail.html:50
 msgid "Slaves died during middle passage"
-msgstr "Mortes de escravos durante a travessia do Atlântico*"
+msgstr "Escravos morreram durante a passagem do meio"
 
 #: voyages/apps/voyage/templates/database/tabs/results-detail.html:51
 msgid "Mortality rate"
-msgstr "Taxa de mortalidade*"
+msgstr "Taxa de mortalidade"
 
 #: voyages/apps/voyage/templates/database/tabs/results-detail.html:55
 msgid "Middle passage"
@@ -32597,8 +32597,7 @@ msgstr "A travessia do Atlântico"
 
 #: voyages/apps/voyage/templates/database/tabs/results-detail.html:56
 msgid "Voyage length, homeport to landing"
-msgstr ""
-"Duração da viagem, do porto de origem ao de desembarque de escravos (dias)*"
+msgstr "Duração da viagem, porto de origem ao desembarque"
 
 #: voyages/apps/voyage/templates/database/tabs/results-detail.html:57
 msgid "Year of arrival at port of disembarkation"
@@ -32618,15 +32617,15 @@ msgstr "Mortes de tripulação durante a viagem"
 
 #: voyages/apps/voyage/templates/database/tabs/results-detail.html:70
 msgid "Outcome of voyage for slaves"
-msgstr "Resultado da viagem para os escravos*"
+msgstr "Resultado da viagem para os escravos"
 
 #: voyages/apps/voyage/templates/database/tabs/results-detail.html:71
 msgid "Outcome of voyage if ship captured"
-msgstr "Resultado da viagem se navio capturado*"
+msgstr "Resultado da viagem se navio capturado"
 
 #: voyages/apps/voyage/templates/database/tabs/results-detail.html:72
 msgid "Outcome of voyage for owner"
-msgstr "Resultado da viagem para o dono*"
+msgstr "Resultado da viagem para o dono"
 
 #: voyages/apps/voyage/templates/database/tabs/results-detail.html:75
 msgid "Source of data"
@@ -32707,7 +32706,7 @@ msgstr "Tráfico originado em"
 
 #: voyages/sitemedia/scripts/vue/includes/form-data.js:135
 msgid "Shipwrecked or destroyed, after disembarkation"
-msgstr "Porto ou região de desembarque:"
+msgstr "Porto ou região de desembarque"
 
 #: voyages/sitemedia/scripts/vue/search.js:75
 msgid "Date disembarked"
@@ -32715,7 +32714,7 @@ msgstr "Desembarcados"
 
 #: voyages/sitemedia/scripts/vue/variables/dates.js:108
 msgid "Voyage length, homeport to disembarkation"
-msgstr "Porto ou região de desembarque:"
+msgstr "Porto ou região de desembarque"
 
 #: voyages/sitemedia/scripts/vue/variables/tabs.js:162
 msgid "Slaves embarked*"
