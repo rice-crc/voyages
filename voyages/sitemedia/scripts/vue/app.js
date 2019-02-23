@@ -387,8 +387,8 @@ var searchBar = new Vue({
 
       var vm = this;
       axios.post('/voyage/save-query', {
-        // query: serializeFilter({"filter": searchTerms}),
-        query: serializeFilter({"filter": vm.filter}),
+        query: serializeFilter({"filter": searchTerms}),
+        // query: serializeFilter({"filter": vm.filter}),
       })
       .then(function (response) {
 
@@ -429,7 +429,30 @@ var searchBar = new Vue({
       axios.get(url, {})
       .then(function (response) {
         var query = JSON.parse(response.data.query);
-        vm.filter = query.filter;
+        var varNames = query.filter.map(variable => "var_" + variable.varName );
+        for (group in vm.filter) {
+          for (subGroup in vm.filter[group]) {
+            if (subGroup != "count"){
+              for (varName in vm.filter[group][subGroup]) {
+                if (varNames.includes(varName)){
+                  var variable = query.filter.find(obj => {
+                    return obj.varName == varName.slice(4);
+                  })
+                  vm.filter[group][subGroup][varName].activated = true;
+                  vm.filter[group][subGroup][varName].changed = true;
+                  vm.filter[group][subGroup][varName].value.op = variable.op;
+                  if (Array.isArray(variable.searchTerm)) {
+                    vm.filter[group][subGroup][varName].value.searchTerm0 = variable.searchTerm[0];
+                    vm.filter[group][subGroup][varName].value.searchTerm1 = variable.searchTerm[1];
+                  } else {
+                    vm.filter[group][subGroup][varName].value.searchTerm = variable.searchTerm;
+                  }
+                }
+              }
+            }
+          }
+        }
+        // vm.filter = query.filter;
         vm.refresh();
       })
       .catch(function (error) {
