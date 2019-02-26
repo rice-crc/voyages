@@ -136,11 +136,9 @@ Vue.component('v-year', {
     // update prop 'filter' from store
     filter: {
       handler: function(){
-        if (!this.filter.changed) { // update when filter is not activated
-          this.item.searchTerm0 = this.filter.value.searchTerm0;
-          this.item.searchTerm1 = this.filter.value.searchTerm1;
-          this.item.op = this.filter.value.op;
-        }
+        this.item.searchTerm0 = this.filter.value.searchTerm0;
+        this.item.searchTerm1 = this.filter.value.searchTerm1;
+        this.item.op = this.filter.value.op;
       },
       deep: true,
     }
