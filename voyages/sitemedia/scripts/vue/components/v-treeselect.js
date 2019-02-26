@@ -26,7 +26,7 @@ template = `
           :multiple="true"
           :loading="true"
           :options=treeselectOptions
-          :auto-load-root-options="false"
+          :auto-load-root-options=isAutoLoaded
           :default-expand-level="1"
           :placeholder=filter.options.caption
           v-model="item.searchTerm"
@@ -72,6 +72,7 @@ Vue.component("v-treeselect", {
         changed: false,
       },
       treeselectOptions: null,
+      isAutoLoaded: true,
     }
   },
 
@@ -116,12 +117,8 @@ Vue.component("v-treeselect", {
     // update prop 'filter' from store
     filter: {
       handler: function(value){
-        if (!this.filter.changed) { // update when filter is not activated
-          this.item.searchTerm = this.filter.default.searchTerm;
-
-          // this.item.searchTerm = this.filter.value.searchTerm;
-          // this.item.op = this.filter.value.op;
-        }
+        // fill filter values to UI element
+        this.item.searchTerm = this.filter.value.searchTerm;
       },
       deep: true,
     }

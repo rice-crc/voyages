@@ -103,9 +103,9 @@ template = `
     // update prop 'filter' from store
     filter: {
       handler: function(){
-        if (!this.filter.changed) { // update when filter is not activated
-          this.item.searchTerm = this.filter.value.searchTerm;
-        }
+        // fill filter values to UI element
+        this.item.searchTerm = this.filter.value.searchTerm;
+        this.item.op = this.filter.value.op;
       },
       deep: true,
     }

@@ -429,19 +429,34 @@ var searchBar = new Vue({
       axios.get(url, {})
       .then(function (response) {
         var query = JSON.parse(response.data.query);
-        var varNames = query.filter.map(variable => "var_" + variable.varName );
+        var varNames = query.filter.map(variable => "var_" + variable.varName);
+        var adjustedVarNames = [];
+        varNames.forEach(function(varName) {
+          if (varName.slice(-5) == "idnum") {
+            adjustedVarNames.push(varName.slice(0, -3));
+          } else {
+            adjustedVarNames.push(varName);
+          }
+        })
+
+        // fill a loaded search query into the UI elements
         for (group in vm.filter) {
           for (subGroup in vm.filter[group]) {
             if (subGroup != "count"){
               for (varName in vm.filter[group][subGroup]) {
-                if (varNames.includes(varName)){
+
+                if (adjustedVarNames.includes(varName)){
                   var variable = query.filter.find(obj => {
-                    return obj.varName == varName.slice(4);
-                  })
+                    // remove prefix var_ to match; or match _idnum
+                    return (obj.varName == varName.slice(4)) || (obj.varName.slice(0, -3) == varName.slice(4));
+                  });
                   vm.filter[group][subGroup][varName].activated = true;
                   vm.filter[group][subGroup][varName].changed = true;
-                  vm.filter[group][subGroup][varName].value.op = variable.op;
-                  if (Array.isArray(variable.searchTerm)) {
+                  vm.filter[group][subGroup][varName].value.op = (variable.op == "equals") ? "is equal to" : variable.op;
+                  
+                  if (vm.filter[group][subGroup][varName] instanceof PlaceVariable) {
+                    vm.filter[group][subGroup][varName].value.searchTerm = variable.searchTerm;
+                  } else if (Array.isArray(variable.searchTerm)) {
                     vm.filter[group][subGroup][varName].value.searchTerm0 = variable.searchTerm[0];
                     vm.filter[group][subGroup][varName].value.searchTerm1 = variable.searchTerm[1];
                   } else {
@@ -455,12 +470,12 @@ var searchBar = new Vue({
         // vm.filter = query.filter;
         vm.refresh();
       })
-      .catch(function (error) {
-        options.errorMessage = error;
-        $("#sv-loader").addClass("display-none");
-        $("#sv-loader-error").removeClass("display-none");
-        console.log(error);
-      });
+      // .catch(function (error) {
+      //   options.errorMessage = error;
+      //   $("#sv-loader").addClass("display-none");
+      //   $("#sv-loader-error").removeClass("display-none");
+      //   console.log(error);
+      // });
     },
 
     reportError(){
