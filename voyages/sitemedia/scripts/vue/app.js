@@ -356,6 +356,8 @@ var searchBar = new Vue({
 
     resetAll() {
       window.location.reload(); // forced reload
+      this.resetURL();
+      localStorage.removeItem("saved");
       // for (group in this.filter) {
       //   if (group !== "settings") {
       //     for (subGroup in this.filter[group]) {
