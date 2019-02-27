@@ -379,7 +379,7 @@ var searchBar = new Vue({
     },
 
     save() {
-      var searchTerms = searchAll(this.filter, this.filterData);
+      var items = searchAll(this.filter, this.filterData);
       // var existingKeys = []
       // var key = generateUniqueRandomKey(existingKeys);
       // this.saved.unshift({
@@ -389,7 +389,7 @@ var searchBar = new Vue({
 
       var vm = this;
       axios.post('/voyage/save-query', {
-        query: serializeFilter({"filter": searchTerms}),
+        items: serializeFilter(items),
         // query: serializeFilter({"filter": vm.filter}),
       })
       .then(function (response) {
@@ -430,11 +430,18 @@ var searchBar = new Vue({
       var vm = this;
       axios.get(url, {})
       .then(function (response) {
-        var query = JSON.parse(response.data.query);
-        var varNames = query.filter.map(variable => "var_" + variable.varName);
+        var query;
+        if (Array.isArray(response.data.items)) {
+          query = response.data.items;
+        } else {
+          query = JSON.parse(response.data.items);
+        }
+        var varNames = query.map(variable => "var_" + variable.varName);
         var adjustedVarNames = [];
         varNames.forEach(function(varName) {
           if (varName.slice(-5) == "idnum") {
+            adjustedVarNames.push(varName.slice(0, -6));
+          } else if (varName.slice(-3) == "_id") {
             adjustedVarNames.push(varName.slice(0, -3));
           } else {
             adjustedVarNames.push(varName);
@@ -446,21 +453,23 @@ var searchBar = new Vue({
           for (subGroup in vm.filter[group]) {
             if (subGroup != "count"){
               for (varName in vm.filter[group][subGroup]) {
-
                 if (adjustedVarNames.includes(varName)){
-                  var variable = query.filter.find(obj => {
+                  var variable = query.find(obj => {
                     // remove prefix var_ to match; or match _idnum
-                    return (obj.varName == varName.slice(4)) || (obj.varName.slice(0, -3) == varName.slice(4));
+                    return (obj.varName == varName.slice(4)) || (obj.varName.slice(0, -3) == varName.slice(4) || (obj.varName.slice(0, -6) == varName.slice(4)));
                   });
                   vm.filter[group][subGroup][varName].activated = true;
                   vm.filter[group][subGroup][varName].changed = true;
                   vm.filter[group][subGroup][varName].value.op = (variable.op == "equals") ? "is equal to" : variable.op;
-                  
-                  if (vm.filter[group][subGroup][varName] instanceof PlaceVariable) {
+ 
+                  if (vm.filter[group][subGroup][varName] instanceof PlaceVariable || vm.filter[group][subGroup][varName] instanceof TreeselectVariable) {
                     vm.filter[group][subGroup][varName].value.searchTerm = variable.searchTerm;
+                  } else if (vm.filter[group][subGroup][varName] instanceof PercentageVariable){
+                    vm.filter[group][subGroup][varName].value.searchTerm0 = parseInt(variable.searchTerm[0] * 100);
+                    vm.filter[group][subGroup][varName].value.searchTerm1 = parseInt(variable.searchTerm[1] * 100);
                   } else if (Array.isArray(variable.searchTerm)) {
-                    vm.filter[group][subGroup][varName].value.searchTerm0 = variable.searchTerm[0];
-                    vm.filter[group][subGroup][varName].value.searchTerm1 = variable.searchTerm[1];
+                     vm.filter[group][subGroup][varName].value.searchTerm0 = variable.searchTerm[0];
+                      vm.filter[group][subGroup][varName].value.searchTerm1 = variable.searchTerm[1];
                   } else {
                     vm.filter[group][subGroup][varName].value.searchTerm = variable.searchTerm;
                   }
@@ -472,12 +481,13 @@ var searchBar = new Vue({
         // vm.filter = query.filter;
         vm.refresh();
       })
-      // .catch(function (error) {
-      //   options.errorMessage = error;
-      //   $("#sv-loader").addClass("display-none");
-      //   $("#sv-loader-error").removeClass("display-none");
-      //   console.log(error);
-      // });
+      .catch(function (error) {
+        vm.options.errorMessage = error;
+        $("#sv-loader").addClass("display-none");
+        $("#sv-loader-error").removeClass("display-none");
+        $(".sv-loader-error-message-container").children(".v-panel-description").html(gettext("This search is either no longer valid or causing an error."));
+        console.log(error);
+      });
     },
 
     reportError(){
@@ -492,7 +502,7 @@ var searchBar = new Vue({
                       "?subject=" + title + 
                       "&body=" + message + encodeURIComponent("\n\n") +
                       "Error: " + this.options.errorMessage + encodeURIComponent("\n\n") + 
-                      "Filter: " + JSON.stringify(this.filter) + encodeURIComponent("\n\n") + 
+                      "Filter: " + JSON.stringify(searchAll(this.filter, this.filterData)) + encodeURIComponent("\n\n") + 
                       "URL: " + encodeURIComponent(originalURL)+ encodeURIComponent("\n\n") + 
                       "Datetime: " + Date().toString();
 
