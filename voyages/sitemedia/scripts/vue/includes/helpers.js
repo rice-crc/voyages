@@ -881,11 +881,13 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
     };
     var cell = getTableElement("cell");
     var rowElement = getTableElement("row");
+    var colElement = getTableElement("column");
+    
     var postData = {
       searchData: currentSearchObj,
       output: "pivotTable",
-      row_field: getField("row"),
-      col_field: getField("column"),
+      row_field: rowElement.varName,
+      col_field: colElement.varName,
       pivot_functions: cell ? cell.functions : null,
       omit_empty: tabData.tables.options.omitEmpty.toString(),
     };
@@ -894,6 +896,7 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
       postData.range = rowElement.range;
     }
     // Validate post before issuing AJAX call.
+
     if (postData.row_field && postData.col_field && postData.pivot_functions) {
       $("#sv-loader").removeClass("display-none");
 
