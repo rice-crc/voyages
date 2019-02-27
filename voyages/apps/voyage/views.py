@@ -37,6 +37,8 @@ from django.utils.translation import get_language
 from cache import VoyageCache, CachedGeo
 from voyages.apps.common.models import get_pks_from_haystack_results
 from graphs import *
+from django.shortcuts import redirect
+
 
 # Here we enumerate all fields that should be cleared
 # from the session if a reset is required.
@@ -2193,8 +2195,9 @@ def restore_permalink(request, link_id):
     :return: a Redirect to the Voyages search page after setting the session POST data to match the permalink
     or an Http404 error if the link is not found.
     """
-    from voyages.apps.common.models import SavedQuery
-    return SavedQuery.restore_link(link_id, request.session, 'voyages_post_data', 'voyage:search')
+    # from voyages.apps.common.models import SavedQuery
+    # return SavedQuery.restore_link(link_id, request.session, 'voyages_post_data', 'voyage:search')
+    return redirect("/voyage/database#searchId=" + link_id)
 
 def debug_permalink(request, link_id):
     from voyages.apps.common.models import SavedQuery
