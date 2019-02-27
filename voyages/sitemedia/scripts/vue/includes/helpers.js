@@ -728,8 +728,8 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
           extend: 'collection',
           text: '<span class="fa fa-columns" style="vertical-align: middle;"></span>',
           className: 'btn btn-info buttons-collection dropdown-toggle',
-          text: 'Download',
-          titleAttr: 'Download results',
+          text: gettext('Download'),
+          titleAttr: gettext('Download results'),
           // Top level: CSV vs. Excel
           buttons: [{
             extend: 'collection',
