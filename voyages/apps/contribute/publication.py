@@ -823,6 +823,7 @@ def _save_editorial_version(review_request, contrib_type, in_cd_rom_override=Non
     # Voyage Itinerary    
     itinerary = VoyageItinerary()
     itinerary.voyage = voyage
+    itinerary.port_of_departure = interim.port_of_departure
     itinerary.int_first_port_emb = interim.first_port_intended_embarkation
     itinerary.int_second_port_emb = interim.second_port_intended_embarkation
     itinerary.int_first_region_purchase_slaves = region(interim.first_port_intended_embarkation)
@@ -936,10 +937,10 @@ def _save_editorial_version(review_request, contrib_type, in_cd_rom_override=Non
     slaves_numbers.num_slaves_disembark_first_place = numbers.get('SLAS32')
     slaves_numbers.num_slaves_disembark_second_place = numbers.get('SLAS36')
     slaves_numbers.num_slaves_disembark_third_place = numbers.get('SLAS39')
-    slaves_numbers.imp_total_num_slaves_embarked = numbers.get('SLAXIMP')
-    slaves_numbers.imp_total_num_slaves_disembarked = numbers.get('SLAMIMP')
-    slaves_numbers.imp_jamaican_cash_price = numbers.get('JAMCASPR')
-    slaves_numbers.imp_mortality_during_voyage = numbers.get('VYMRTIMP')
+    slaves_numbers.imp_total_num_slaves_embarked = interim.imputed_total_slaves_embarked
+    slaves_numbers.imp_total_num_slaves_disembarked = interim.imputed_total_slaves_disembarked
+    slaves_numbers.imp_jamaican_cash_price = interim.imputed_standardized_price_of_slaves
+    slaves_numbers.imp_mortality_during_voyage = interim.imputed_total_slave_deaths_during_middle_passage
     slaves_numbers.num_men_embark_first_port_purchase = numbers.get('MEN1')
     slaves_numbers.num_women_embark_first_port_purchase = numbers.get('WOMEN1')
     slaves_numbers.num_boy_embark_first_port_purchase = numbers.get('BOY1')
@@ -1012,7 +1013,7 @@ def _save_editorial_version(review_request, contrib_type, in_cd_rom_override=Non
     slaves_numbers.total_slaves_landed_gender_identified = numbers.get('SLAVEMX3')
     slaves_numbers.total_slaves_dept_or_arr_age_identified = numbers.get('SLAVEMA7')
     slaves_numbers.total_slaves_dept_or_arr_gender_identified = numbers.get('SLAVEMX7')
-    slaves_numbers.imp_slaves_embarked_for_mortality = numbers.get('TSLMTIMP')
+    slaves_numbers.imp_slaves_embarked_for_mortality = interim.imputed_number_of_slaves_embarked_for_mortality_calculation
     slaves_numbers.imp_num_men_total = numbers.get('MEN7')
     slaves_numbers.imp_num_women_total = numbers.get('WOMEN7')
     slaves_numbers.imp_num_boy_total = numbers.get('BOY7')
@@ -1029,7 +1030,7 @@ def _save_editorial_version(review_request, contrib_type, in_cd_rom_override=Non
     slaves_numbers.percentage_child = numbers.get('CHILDRAT7')
     slaves_numbers.percentage_adult = 1.0 - slaves_numbers.percentage_child if slaves_numbers.percentage_child is not None else None
     slaves_numbers.percentage_female = 1.0 - slaves_numbers.percentage_male if slaves_numbers.percentage_male is not None else None
-    slaves_numbers.imp_mortality_ratio = numbers.get('VYMRTRAT')
+    slaves_numbers.imp_mortality_ratio = interim.imputed_mortality_rate
     slaves_numbers.save()
     
     # Voyage sources
