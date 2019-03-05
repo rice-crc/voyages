@@ -96,6 +96,31 @@ var generateUniqueRandomKey = function(previous) {
   return id;
 };
 
+// get formated source by parsing through the backend response
+function getFormattedSource(sources) {
+    var value = ""; // empty value string
+    sources.forEach(function (source) {
+      var first = source.split("<>")[0];
+      var second = source.split("<>")[1];
+      value += "<div><span class='source-title'>" + first + ": </span>";
+      value += "<span class='source-content'>" + second + "</span></div>";
+    })
+  return value;
+}
+
+// get formated source by parsing through the backend response
+// returns the format for table display
+// ABCD - [Tooltip: details]
+function getFormattedSourceInTable(sources) {
+    var value = ""; // empty value string
+    sources.forEach(function (source) {
+      var first = source.split("<>")[0];
+      var second = source.split("<>")[1];
+      value += "<div><span data-toggle='tooltip' data-placement='top' data-html='true' data-original-title='" + second + "'>" + first + "</span>";
+    })
+  return value;
+}
+
 // solr date format
 const SOLR_DATE_FORMAT = "YYYY-MM-DDThh:mm:ss[Z]";
 
@@ -239,12 +264,14 @@ function searchAll(filter, filterData) {
                     // i.e. add 23:59:59 to searchTerm0
                     if (filter[key1][key2][key3].value["op"] == "is equal to") {
                       filter[key1][key2][key3].value["op"] = "is between";
-                      filter[key1][key2][key3].value["searchTerm1"] = filter[key1][key2][key3].value["searchTerm0"];
+                      filter[key1][key2][key3].value["searchTerm1"] = filter[key1][key2][key3].value["searchTerm0"].substring(0, 10);
+                      filter[key1][key2][key3].value["searchTerm0"] = filter[key1][key2][key3].value["searchTerm1"].replace("/", "-") + "T00:00:00[Z]";
                     }
                     // make the to date always inclusive (add 23:59:59)
                     if (filter[key1][key2][key3].value["searchTerm1"] !== null) {
-                      filter[key1][key2][key3].value["searchTerm1"] = moment(filter[key1][key2][key3].value["searchTerm1"], SOLR_DATE_FORMAT).add(1, "days").subtract(1, "seconds");
-                      filter[key1][key2][key3].value["searchTerm1"] = filter[key1][key2][key3].value["searchTerm1"].format(SOLR_DATE_FORMAT);
+                      // filter[key1][key2][key3].value["searchTerm1"] = moment(filter[key1][key2][key3].value["searchTerm1"], SOLR_DATE_FORMAT).add(1, "days").subtract(1, "seconds");
+                      filter[key1][key2][key3].value["searchTerm1"] = filter[key1][key2][key3].value["searchTerm1"].replace("/", "-") + "T23:59:59[Z]";
+                      debugger;
                     }
                     item["searchTerm"] = [filter[key1][key2][key3].value["searchTerm0"], filter[key1][key2][key3].value["searchTerm1"]];
                   }
@@ -627,11 +654,14 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
           });
         },
 
-        // preprocess the returned data to remove * for IMP
+        // preprocess the returned data
+        // a - to use % instead of decimals (e.g. 30% vs. 0.30)
+        // b - to format source into HTML decorated string
         dataSrc: function (json) {
           var keys = null;
           var percentageKeys = [];
           for (var i = 0, ien = json.data.length; i < ien; i++) {
+            // percentage vs. decimal
             if (percentageKeys.length <= 0) {
               keys = Object.keys(json.data[i]);
               keys.forEach(function(key){
@@ -643,6 +673,11 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
                 json.data[i][percentageKey] = roundDecimal(json.data[i][percentageKey] * 100, 1) + "%";
               }
             });
+
+            // source formatting
+            json.data[i]["var_sources_raw"] = json.data[i]["var_sources"];
+            json.data[i]["var_sources"] = getFormattedSourceInTable(json.data[i]["var_sources"]);
+
           }
           return json.data;
         },
