@@ -819,7 +819,9 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
       }
     });
     
-
+    mainDatatable.on('draw.dt', function () {
+      $('[data-toggle="tooltip"]').tooltip();
+    });
 
     // built for the datatable download dropdown menu
     function makeDownloadFunction(isExcel, isFiltered, isVisibleColumns) {
