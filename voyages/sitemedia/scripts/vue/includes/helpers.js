@@ -124,6 +124,21 @@ function getFormattedSourceInTable(sources) {
 // solr date format
 const SOLR_DATE_FORMAT = "YYYY-MM-DDThh:mm:ss[Z]";
 
+// get language for datatables
+var dtLanguage = {};
+if (LANGUAGE_CODE == "es") {
+  dtLanguage = {
+    url: "//cdn.datatables.net/plug-ins/1.10.19/i18n/Spanish.json"
+  };
+} else if (LANGUAGE_CODE == "pt") {
+  dtLanguage = {
+    url: "//cdn.datatables.net/plug-ins/1.10.19/i18n/Portuguese.json"
+  };
+}
+
+// IMP tooltip
+var impTooltipString = '<span class="badge badge-pill badge-secondary tooltip-pointer" data-toggle="tooltip" data-placement="top" data-original-title="' + gettext("Imputed results are calculated by an algorithm.") + '"> ' + gettext("IMP") + ' </span>';
+
 // mark a variable as changed and activated state
 function activateFilter(filter, group, subGroup, filterValues) {
   for (key1 in filter[group][subGroup]) {
@@ -264,14 +279,13 @@ function searchAll(filter, filterData) {
                     // i.e. add 23:59:59 to searchTerm0
                     if (filter[key1][key2][key3].value["op"] == "is equal to") {
                       filter[key1][key2][key3].value["op"] = "is between";
-                      filter[key1][key2][key3].value["searchTerm1"] = filter[key1][key2][key3].value["searchTerm0"].substring(0, 10);
-                      filter[key1][key2][key3].value["searchTerm0"] = filter[key1][key2][key3].value["searchTerm1"].replace("/", "-") + "T00:00:00[Z]";
+                      // filter[key1][key2][key3].value["searchTerm1"] = filter[key1][key2][key3].value["searchTerm0"].substring(0, 10);
+                      // filter[key1][key2][key3].value["searchTerm0"] = filter[key1][key2][key3].value["searchTerm1"].replace("/", "-") + "T00:00:00Z";
                     }
                     // make the to date always inclusive (add 23:59:59)
                     if (filter[key1][key2][key3].value["searchTerm1"] !== null) {
-                      // filter[key1][key2][key3].value["searchTerm1"] = moment(filter[key1][key2][key3].value["searchTerm1"], SOLR_DATE_FORMAT).add(1, "days").subtract(1, "seconds");
-                      filter[key1][key2][key3].value["searchTerm1"] = filter[key1][key2][key3].value["searchTerm1"].replace("/", "-") + "T23:59:59[Z]";
-                      debugger;
+                      filter[key1][key2][key3].value["searchTerm1"] = moment(filter[key1][key2][key3].value["searchTerm1"], SOLR_DATE_FORMAT).add(1, "days").subtract(1, "seconds");
+                      // filter[key1][key2][key3].value["searchTerm1"] = filter[key1][key2][key3].value["searchTerm1"].replace("/", "-") + "T23:59:59Z";
                     }
                     item["searchTerm"] = [filter[key1][key2][key3].value["searchTerm0"], filter[key1][key2][key3].value["searchTerm1"]];
                   }
@@ -623,6 +637,8 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
       className: 'btn btn-info buttons-collection dropdown-toggle',
     };
 
+    
+
     var mainDatatable = $('#results_main_table').DataTable({
       ajax: {
         url: searchUrl,
@@ -752,9 +768,7 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
         ['15 rows', '50 rows', '100 rows', '200 rows']
       ],
 
-      language: {
-        info: "Showing _START_ to _END_ of _TOTAL_ entries",
-      },
+      language: dtLanguage,
 
       buttons: [
         columnToggleMenu,
@@ -867,7 +881,7 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
         // preprocess the returned data to replace * with IMP
         dataSrc: function (json) {
           for (var i = 0, ien = json.data.length; i < ien; i++) {
-            json.data[i][0] = json.data[i][0].replace("*", '<span class="badge badge-pill badge-secondary" data-toggle="tooltip" data-placement="top" data-original-title="' + gettext("Imputed results are calculated by an algorithm.") + '"> ' + gettext("IMP") + ' </span>');
+            json.data[i][0] = json.data[i][0].includes("*") ? gettext(json.data[i][0].slice(0, -1)).concat(impTooltipString) : gettext(json.data[i][0]);
           }
           return json.data;
         },
@@ -890,6 +904,7 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
       dom: "<'flex-container'iB>" +
         "<'row'<'col-sm-12'tr>>" +
         "<'row'<'col-sm-5'><'col-sm-7'p>>",
+      language: dtLanguage,
       buttons: [
         {
           extend: 'collection',
@@ -1115,6 +1130,7 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
           dom: "<'flex-container'iB>" +
             "<'row'<'col-sm-12'tr>>" +
             "<'row'<'col-sm-5'><'col-sm-7'p>>",
+          language: dtLanguage,
           buttons: [
             {
               extend: 'collection',

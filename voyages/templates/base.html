@@ -1,6 +1,7 @@
 {% load i18n %}
 {% load sass_tags %}
 {% load compress %}
+{% get_current_language as LANGUAGE_CODE %}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -44,6 +45,7 @@
 
 	<!-- Use a global JS constant to specify the root of static urls -->
 	<script language="javascript">var STATIC_URL = "{{ STATIC_URL|escapejs }}";</script>
+	<script language="javascript">var LANGUAGE_CODE = "{{ LANGUAGE_CODE|escapejs }}";</script>
 
 	{% compress js %}
 	<script src="{{ STATIC_URL }}scripts/library/fontawesome.min.js" type="text/javascript"></script>
