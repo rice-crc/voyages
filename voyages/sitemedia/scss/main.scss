@@ -57,6 +57,11 @@ table.dataTable thead .sorting:before, table.dataTable thead .sorting:after, tab
   }
 }
 
+// make all tooltip elements to show pointer cursor
+.tooltip-pointer:hover {
+  cursor: pointer;
+}
+
 // accordion
 .sidebar-section-accordion:first-child {
   // margin-top: 1.5rem;
