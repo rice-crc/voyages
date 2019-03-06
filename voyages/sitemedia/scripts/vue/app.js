@@ -166,12 +166,11 @@ var searchBar = new Vue({
       if (this.filter.settings.settings.var_display_settings.value.searchTerm) {
         $( ".dataTable" ).removeClass( "dt-font-md" );
         $( ".dataTable" ).addClass( "dt-font-sm" );
-        refreshUi(this.filter, this.filterData, this.currentTab, this.tabs, this.options);
       } else {
         $( ".dataTable" ).removeClass( "dt-font-sm" );
         $( ".dataTable" ).addClass( "dt-font-md" );
-        refreshUi(this.filter, this.filterData, this.currentTab, this.tabs, this.options);
       }
+      this.refresh();
     },
 
     // row in a datatable
@@ -243,7 +242,7 @@ var searchBar = new Vue({
 
     currentTab:{
       handler: function(){
-        refreshUi(this.filter, this.filterData, this.currentTab, this.tabs, this.options);
+        this.refresh();
       }
     }
 
@@ -284,7 +283,7 @@ var searchBar = new Vue({
 
     // set the current tab to be the active tab
     setActive(tab) {
-        this.currentTab = tab;
+      this.currentTab = tab;
     },
 
     // update tab options
@@ -297,7 +296,7 @@ var searchBar = new Vue({
       currentObjState.value = value;
       var refreshTabs = ['tables', 'visualization', 'timeline'];
       if (refreshTabs.indexOf(this.currentTab) >= 0) {
-        refreshUi(this.filter, this.filterData, this.currentTab, this.tabs, this.options);
+        this.refresh();
       }
     },
 
@@ -333,20 +332,18 @@ var searchBar = new Vue({
       $("a.maintainHover").removeClass("maintainHover");
       // hide all menu upon search
       activateFilter(this.filter, group, subGroup, filterValues);
-      var searchTerms = searchAll(this.filter, this.filterData);
+      // var searchTerms = searchAll(this.filter, this.filterData);
       // alert(JSON.stringify(searchTerms));
       //search(this.searchFilter, searchTerms);
-      // TEMP Yang: once this is working, we should wrap
-      // this call in a single instance method.
-      refreshUi(this.filter, this.filterData, this.currentTab, this.tabs, this.options);
+      this.refresh();
     },
 
     // reset inputs, filters, and counts back to default state
     reset(group, subGroup) {
       resetFilter(this.filter, group, subGroup);
-      var searchTerms = searchAll(this.filter, this.filterData);
+      // var searchTerms = searchAll(this.filter, this.filterData);
       //search(this.searchFilter, searchTerms);
-      refreshUi(this.filter, this.filterData, this.currentTab, this.tabs, this.options);
+      this.refresh();
     },
 
     resetAll() {
@@ -535,8 +532,6 @@ var searchBar = new Vue({
       e.stopPropagation();
       e.preventDefault();
     });
-    var self = {};
-    var $vm = this;
 
     // load a search when present in URL
     if (location.href.includes(SAVED_SEARCH_LABEL)) {
@@ -544,7 +539,6 @@ var searchBar = new Vue({
       this.load(savedSearchId);
     }
 
-    refreshUi(this.filter, this.filterData, this.currentTab, this.tabs, this.options);
   },
 
   // event loop - update the menuAim everytime after it's re-rendered
@@ -570,10 +564,10 @@ window.onload = function(){
 
 // Make Highcharts work with Bootstrap Tabs
 jQuery(document).on( 'shown.bs.tab', 'a[data-toggle="tab"]', function (e) { // on tab selection event
-    jQuery( "#hc-container, #graph-container-red").each(function() {
-        // var chart = jQuery(this).highcharts(); // target the chart itself
-        // chart.reflow() // reflow that chart
-    });
+    // jQuery( "#hc-container, #graph-container-red").each(function() {
+    //     var chart = jQuery(this).highcharts(); // target the chart itself
+    //     chart.reflow() // reflow that chart
+    // });
 
     // datatable
     $($.fn.dataTable.tables(true)).DataTable()
