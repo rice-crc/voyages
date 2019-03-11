@@ -45,7 +45,7 @@ var searchBar = new Vue({
 
     tabs: {
       handler: function() {
-        refreshUi(this.filter, this.filterData, this.currentTab, this.tabs, this.options);
+        this.refresh();
       },
       deep: true,
     },
@@ -538,6 +538,8 @@ var searchBar = new Vue({
       var savedSearchId = location.href.split(SAVED_SEARCH_LABEL).pop();
       this.load(savedSearchId);
     }
+
+    this.refresh();
 
   },
 
