@@ -3,8 +3,10 @@
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
+#, fuzzy
 msgid ""
 msgstr ""
+"#-#-#-#-#  old.po  #-#-#-#-#\n"
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-02-23 01:28-0500\n"
@@ -803,6 +805,705 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 1.7.5\n"
+"#-#-#-#-#  new.po  #-#-#-#-#\n"
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2019-03-07 01:09-0500\n"
+"PO-Revision-Date: 2019-03-11 01:31-0400\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: pt\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 2.2.1\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
 
 #: voyages/apps/about/templates/_base.html:4
 #: voyages/apps/about/templates/index.html:6
@@ -958,6 +1659,9 @@ msgstr "Para"
 #: voyages/apps/assessment/globals.py:177
 #: voyages/apps/assessment/templates/assessment/estimates-left-menu.html:84
 #: voyages/apps/voyage/templates/database/tabs/results-detail.html:13
+#: voyages/sitemedia/scripts/vue/search.js:30
+#: voyages/sitemedia/scripts/vue/search.js:31
+#: voyages/sitemedia/scripts/vue/variables/ship-nation-owner.js:90
 msgid "Flag"
 msgstr "Bandeira"
 
@@ -966,6 +1670,8 @@ msgstr "Bandeira"
 #: voyages/apps/assessment/globals.py:167
 #: voyages/apps/assessment/globals.py:178
 #: voyages/apps/assessment/templates/assessment/estimates-left-menu.html:169
+#: voyages/sitemedia/scripts/vue/variables/tabs.js:88
+#: voyages/sitemedia/scripts/vue/variables/tabs.js:108
 msgid "Embarkation regions"
 msgstr "Regiões de embarque"
 
@@ -990,26 +1696,31 @@ msgstr "Anos específicos"
 
 #: voyages/apps/assessment/globals.py:168 voyages/apps/voyage/globals.py:568
 #: voyages/apps/assessment/globals.py:171 voyages/apps/voyage/globals.py:547
+#: voyages/sitemedia/scripts/vue/variables/tabs.js:94
 msgid "5-year periods"
 msgstr "Períodos de 5 anos"
 
 #: voyages/apps/assessment/globals.py:169 voyages/apps/voyage/globals.py:569
 #: voyages/apps/assessment/globals.py:172 voyages/apps/voyage/globals.py:548
+#: voyages/sitemedia/scripts/vue/variables/tabs.js:95
 msgid "10-year periods"
 msgstr "Períodos de 10 anos"
 
 #: voyages/apps/assessment/globals.py:170 voyages/apps/voyage/globals.py:570
 #: voyages/apps/assessment/globals.py:173 voyages/apps/voyage/globals.py:549
+#: voyages/sitemedia/scripts/vue/variables/tabs.js:96
 msgid "25-year periods"
 msgstr "Períodos de 25 anos"
 
 #: voyages/apps/assessment/globals.py:171 voyages/apps/voyage/globals.py:571
 #: voyages/apps/assessment/globals.py:174 voyages/apps/voyage/globals.py:550
+#: voyages/sitemedia/scripts/vue/variables/tabs.js:97
 msgid "50-year periods"
 msgstr "Períodos de 50 anos"
 
 #: voyages/apps/assessment/globals.py:172 voyages/apps/voyage/globals.py:572
 #: voyages/apps/assessment/globals.py:175 voyages/apps/voyage/globals.py:551
+#: voyages/sitemedia/scripts/vue/variables/tabs.js:98
 msgid "100-year periods"
 msgstr "Períodos de 100 anos"
 
@@ -1048,12 +1759,20 @@ msgstr "A extensão total de tempo coberto pelas estimativas é 1501-1866."
 #: voyages/apps/assessment/templates/assessment/estimates-left-menu.html:29
 #: voyages/apps/assessment/templates/assessment/estimates-left-menu.html:58
 #: voyages/apps/assessment/templates/assessment/estimates-left-menu.html:216
+#: voyages/sitemedia/scripts/vue/components/v-number.js:43
+#: voyages/sitemedia/scripts/vue/components/v-panel-singular.js:8
+#: voyages/sitemedia/scripts/vue/components/v-text.js:36
+#: voyages/sitemedia/scripts/vue/components/v-toggle.js:41
+#: voyages/sitemedia/scripts/vue/components/v-treeselect.js:44
 msgid "Apply"
 msgstr "Aplicar"
 
 #: voyages/apps/assessment/templates/assessment/estimates-left-menu.html:30
 #: voyages/apps/assessment/templates/assessment/estimates-left-menu.html:60
 #: voyages/apps/assessment/templates/assessment/estimates-left-menu.html:217
+#: voyages/sitemedia/scripts/vue/components/v-datepicker.js:75
+#: voyages/sitemedia/scripts/vue/components/v-panel.js:23
+#: voyages/sitemedia/scripts/vue/components/v-year.js:34
 msgid "Reset"
 msgstr "Redefinir"
 
@@ -1071,6 +1790,8 @@ msgstr "Regiões de embarque"
 #: voyages/apps/assessment/templates/assessment/estimates-left-menu.html:211
 #: voyages/apps/resources/templates/resources/names-left-menu.html:214
 #: voyages/apps/resources/templates/resources/names-left-menu.html:323
+#: voyages/sitemedia/scripts/vue/includes/helpers.js:545
+#: voyages/sitemedia/scripts/vue/includes/helpers.js:553
 msgid "Select All"
 msgstr "Selecionar todas"
 
@@ -1265,6 +1986,9 @@ msgstr "Ano"
 #: voyages/apps/assessment/templates/assessment/estimates_timeline.html:147
 #: voyages/apps/assessment/templates/assessment/estimates_timeline.html:215
 #: voyages/apps/voyage/templates/voyage/search_tables.html:50
+#: voyages/sitemedia/maps/js/voyagesMap.js:420
+#: voyages/sitemedia/maps/js/voyagesMap.js:422
+#: voyages/sitemedia/maps/js/voyagesMap.js:689
 msgid "Embarked"
 msgstr "Embarcados"
 
@@ -1273,6 +1997,9 @@ msgstr "Embarcados"
 #: voyages/apps/assessment/templates/assessment/estimates_timeline.html:148
 #: voyages/apps/assessment/templates/assessment/estimates_timeline.html:215
 #: voyages/apps/voyage/templates/voyage/search_tables.html:51
+#: voyages/sitemedia/maps/js/voyagesMap.js:421
+#: voyages/sitemedia/maps/js/voyagesMap.js:422
+#: voyages/sitemedia/maps/js/voyagesMap.js:691
 msgid "Disembarked"
 msgstr "Desembarcados"
 
@@ -1479,6 +2206,8 @@ msgstr "Nação transportadora"
 #: voyages/apps/contribute/templates/contribute/interim.html:176
 #: voyages/apps/contribute/templates/contribute/interim.html:135
 #: voyages/apps/voyage/templates/database/tabs/results-detail.html:15
+#: voyages/sitemedia/scripts/vue/search.js:32
+#: voyages/sitemedia/scripts/vue/variables/ship-nation-owner.js:114
 msgid "Rig of vessel"
 msgstr "Equipamento do navio"
 
@@ -1492,6 +2221,8 @@ msgstr "Portos de destino"
 
 #: voyages/apps/contribute/forms.py:150 voyages/apps/contribute/forms.py:141
 #: voyages/apps/voyage/templates/database/tabs/results-detail.html:18
+#: voyages/sitemedia/scripts/vue/search.js:35
+#: voyages/sitemedia/scripts/vue/variables/ship-nation-owner.js:152
 msgid "Guns mounted"
 msgstr "Armas montadas"
 
@@ -1520,6 +2251,9 @@ msgstr "Alguma informação sobre resultado da viagem disponível"
 #: voyages/apps/voyage/globals.py:876
 #: voyages/apps/contribute/templates/contribute/interim.html:287
 #: voyages/apps/voyage/templates/database/tabs/results-detail.html:73
+#: voyages/sitemedia/scripts/vue/search.js:93
+#: voyages/sitemedia/scripts/vue/variables/outcome.js:51
+#: voyages/sitemedia/scripts/vue/variables/tabs.js:32
 msgid "African resistance"
 msgstr "Resistência africana"
 
@@ -1560,6 +2294,7 @@ msgid "Third place of slave purchase"
 msgstr "Terceiro lugar de aquisição de escravos"
 
 #: voyages/apps/contribute/forms.py:167 voyages/apps/contribute/forms.py:158
+#: voyages/sitemedia/scripts/vue/variables/itinerary.js:15
 msgid "Principal place of slave purchase"
 msgstr "Principal lugar de aquisição de escravos*"
 
@@ -1568,6 +2303,8 @@ msgstr "Principal lugar de aquisição de escravos*"
 #: voyages/apps/voyage/templates/database/_itinerary.html:64
 #: voyages/apps/contribute/forms.py:159
 #: voyages/apps/voyage/templates/database/tabs/results-detail.html:25
+#: voyages/sitemedia/scripts/vue/search.js:43
+#: voyages/sitemedia/scripts/vue/variables/itinerary.js:63
 msgid "Places of call before Atlantic crossing"
 msgstr "Portos de escala antes da travessia atlântica"
 
@@ -1981,6 +2718,7 @@ msgstr "Publicado"
 #: voyages/apps/voyage/templates/voyage/search_left_menu.html:291
 #: voyages/apps/voyage/templates/voyage/search_left_menu.html:195
 #: voyages/apps/voyage/templates/voyage/search_left_menu.html:275
+#: voyages/sitemedia/scripts/vue/variables/constructors.js:20
 msgid "Select all"
 msgstr "Selecionar todas"
 
@@ -2000,6 +2738,9 @@ msgstr "Remover quebras de linha das células CSV"
 #: voyages/apps/education/templates/education/lesson-plans.html:49
 #: voyages/apps/education/templates/education/lesson-plans.html:52
 #: voyages/apps/voyage/templates/voyage/download.html:16
+#: voyages/sitemedia/scripts/vue/includes/helpers.js:788
+#: voyages/sitemedia/scripts/vue/includes/helpers.js:921
+#: voyages/sitemedia/scripts/vue/includes/helpers.js:1147
 msgid "Download"
 msgstr "Download"
 
@@ -2028,6 +2769,7 @@ msgstr "Início das exportações de açúcar do Caribe Oriental"
 #: voyages/apps/contribute/templates/contribute/editor_main.html:38
 #: voyages/apps/voyage/templates/voyage/variable-list.html:26
 #: voyages/apps/contribute/templates/contribute/editor_main.html:42
+#: voyages/sitemedia/scripts/contribute/interim.js:667
 msgid "Voyages"
 msgstr "Viagens"
 
@@ -2087,6 +2829,8 @@ msgstr "Baixar tabela"
 #: voyages/apps/resources/templates/resources/image-category-detail.html:138
 #: voyages/apps/resources/templates/resources/names-index.html:230
 #: voyages/apps/voyage/templates/database/tabs/results-detail.html:6
+#: voyages/sitemedia/scripts/vue/search.js:23
+#: voyages/sitemedia/scripts/vue/variables/ship-nation-owner.js:3
 msgid "Voyage ID"
 msgstr "Identidade da viagem"
 
@@ -2103,6 +2847,7 @@ msgstr "Tipo"
 #: voyages/apps/contribute/templates/contribute/voyage_selection_table.html:20
 #: voyages/apps/contribute/templates/contribute/editor_main.html:62
 #: voyages/apps/contribute/templates/contribute/editor_main.html:90
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:44
 msgid "Ship"
 msgstr "Navio"
 
@@ -2449,6 +3194,9 @@ msgstr "Capitão e Tripulação"
 #: voyages/apps/contribute/templates/contribute/interim.html:833
 #: voyages/apps/contribute/templates/contribute/interim_summary.html:346
 #: voyages/apps/voyage/templates/database/tabs/results-detail.html:65
+#: voyages/sitemedia/scripts/vue/search.js:84
+#: voyages/sitemedia/scripts/vue/variables/captain-and-crew.js:15
+#: voyages/sitemedia/scripts/vue/variables/tabs.js:160
 msgid "Crew at voyage outset"
 msgstr "Tripulação ao início da viagem"
 
@@ -2469,6 +3217,9 @@ msgstr "Escravos trazidos do primeiro porto de aquisição"
 #: voyages/apps/contribute/templates/contribute/interim.html:849
 #: voyages/apps/contribute/templates/contribute/interim_summary.html:360
 #: voyages/apps/voyage/templates/database/tabs/results-detail.html:66
+#: voyages/sitemedia/scripts/vue/search.js:85
+#: voyages/sitemedia/scripts/vue/variables/captain-and-crew.js:28
+#: voyages/sitemedia/scripts/vue/variables/tabs.js:161
 msgid "Crew at first landing of slaves"
 msgstr "Tripulação ao primeiro desembarque de escravos"
 
@@ -2866,6 +3617,9 @@ msgstr "Mortes de escravos durante a travessia do Atlântico*"
 #: voyages/apps/contribute/templates/contribute/interim.html:1222
 #: voyages/apps/voyage/templates/database/tabs/results-detail.html:35
 #: voyages/apps/voyage/templates/database/tabs/results-detail.html:113
+#: voyages/sitemedia/scripts/vue/includes/helpers.js:140
+#: voyages/sitemedia/scripts/vue/search.js:129
+#: voyages/sitemedia/scripts/vue/search.js:139
 msgid "Imputed results are calculated by an algorithm."
 msgstr "Os resultados imputados são calculados por um algoritmo."
 
@@ -2939,6 +3693,7 @@ msgstr "Proporção de machos"
 #: voyages/apps/contribute/templates/contribute/interim.html:1305
 #: voyages/apps/contribute/templates/contribute/interim_summary.html:585
 #: voyages/apps/voyage/templates/voyage/understanding_left_menu.html:245
+#: voyages/sitemedia/scripts/vue/search.js:99
 msgid "Sources"
 msgstr "Fontes"
 
@@ -3030,6 +3785,8 @@ msgstr "Comentários do contribuinte sobre esta entrada:"
 
 #: voyages/apps/contribute/templates/contribute/interim.html:1381
 #: voyages/apps/contribute/templates/contribute/interim.html:1376
+#: voyages/sitemedia/scripts/vue/components/v-clipboard.js:3
+#: voyages/sitemedia/scripts/vue/components/v-saved-searches.js:13
 msgid "Save"
 msgstr "Salvar"
 
@@ -3195,6 +3952,10 @@ msgstr "Autor"
 #: voyages/apps/contribute/templates/contribute/interim.html:1513
 #: voyages/apps/contribute/templates/contribute/interim.html:1579
 #: voyages/apps/contribute/templates/contribute/interim.html:1606
+#: voyages/sitemedia/scripts/contribute/interim.js:231
+#: voyages/sitemedia/scripts/contribute/interim.js:290
+#: voyages/sitemedia/scripts/contribute/interim.js:399
+#: voyages/sitemedia/scripts/contribute/interim.js:442
 msgid "Title"
 msgstr "Título"
 
@@ -3240,6 +4001,7 @@ msgstr "Título do ensaio/capítulo"
 
 #: voyages/apps/contribute/templates/contribute/interim.html:1510
 #: voyages/apps/contribute/templates/contribute/interim.html:1505
+#: voyages/sitemedia/scripts/contribute/interim.js:297
 msgid "Editors"
 msgstr ""
 "Embora as fontes sejam relativamente ricas, a diversidade traz um novo "
@@ -3288,6 +4050,7 @@ msgstr "Lugar de embarque"
 #: voyages/apps/contribute/templates/contribute/interim.html:1548
 #: voyages/apps/contribute/templates/contribute/interim_summary.html:640
 #: voyages/apps/resources/templates/resources/names-index.html:145
+#: voyages/sitemedia/scripts/contribute/interim.js:354
 msgid "Name"
 msgstr "Nome"
 
@@ -3298,6 +4061,7 @@ msgstr "Nome alternativo"
 
 #: voyages/apps/contribute/templates/contribute/interim.html:1561
 #: voyages/apps/contribute/templates/contribute/interim.html:1556
+#: voyages/sitemedia/scripts/contribute/interim.js:355
 msgid "City"
 msgstr ""
 "São Tomé, juntamente com outras ilhas do golfo de Biafra, formaram um "
@@ -3318,6 +4082,7 @@ msgstr ""
 
 #: voyages/apps/contribute/templates/contribute/interim.html:1565
 #: voyages/apps/contribute/templates/contribute/interim.html:1560
+#: voyages/sitemedia/scripts/contribute/interim.js:356
 msgid "Country"
 msgstr "País"
 
@@ -3325,6 +4090,8 @@ msgstr "País"
 #: voyages/apps/contribute/templates/contribute/interim.html:1607
 #: voyages/apps/contribute/templates/contribute/interim.html:1575
 #: voyages/apps/contribute/templates/contribute/interim.html:1602
+#: voyages/sitemedia/scripts/contribute/interim.js:398
+#: voyages/sitemedia/scripts/contribute/interim.js:441
 msgid "Authors"
 msgstr ""
 "Estes materiais foram criados para fins de currículo e instrução e não se "
@@ -3353,6 +4120,7 @@ msgstr "Página para upload viagem"
 #: voyages/apps/contribute/templates/contribute/interim.html:1629
 #: voyages/apps/contribute/templates/contribute/interim.html:2345
 #: voyages/apps/contribute/templates/contribute/interim.html:2350
+#: voyages/sitemedia/scripts/library/selectize.js:1372
 msgid "Add"
 msgstr "Adicionar"
 
@@ -3531,6 +4299,7 @@ msgstr "Página de colaboração"
 #: voyages/apps/contribute/templates/contribute/interim.html:102
 #: voyages/apps/contribute/templates/contribute/interim_summary.html:36
 #: voyages/apps/contribute/templates/contribute/interim_summary.html:22
+#: voyages/sitemedia/scripts/vue/search.js:3
 msgid "Ship, nation, owners"
 msgstr "Navio, nação, proprietários"
 
@@ -3561,6 +4330,7 @@ msgstr "Datas de viagem"
 #: voyages/apps/contribute/templates/contribute/interim.html:545
 #: voyages/apps/contribute/templates/contribute/interim_summary.html:327
 #: voyages/apps/contribute/templates/contribute/interim_summary.html:319
+#: voyages/sitemedia/scripts/vue/search.js:7
 msgid "Captain and crew"
 msgstr "Capitão e Tripulação"
 
@@ -3642,6 +4412,7 @@ msgstr "Viagens relacionadas"
 #: voyages/apps/voyage/templates/voyage/voyage_main_content.html:38
 #: voyages/apps/contribute/templates/contribute/interim_summary.html:938
 #: voyages/apps/voyage/templates/voyage/voyage_main_content.html:20
+#: voyages/sitemedia/scripts/contribute/interim.js:668
 msgid "Voyage"
 msgstr "Viagem"
 
@@ -3876,6 +4647,7 @@ msgstr "Nomes africanos"
 #: voyages/apps/american/templates/american/base.html:6
 #: voyages/apps/education/templates/education/educationbase.html:6
 #: voyages/apps/static_content/templates/static_content/about-index.html:6
+#: voyages/sitemedia/scripts/legacy/navigation_topbar.js:7
 msgid "About the Project"
 msgstr "Sobre o projeto"
 
@@ -4088,6 +4860,7 @@ msgstr "Planos de Aula"
 #: voyages/templates/topbar.html:55
 #: voyages/apps/static_content/templates/static_content/resources-index.html:9
 #: voyages/templates/topbar.html:46
+#: voyages/sitemedia/scripts/legacy/navigation_topbar.js:6
 msgid "Resources"
 msgstr "Recursos"
 
@@ -4495,6 +5268,7 @@ msgstr "Banco de dados"
 #: voyages/templates/account/base.html:25
 #: voyages/apps/static_content/templates/static_content/index.html:139
 #: voyages/sitemedia/scripts/legacy/navigation_topbar.js:9
+#: voyages/sitemedia/scripts/legacy/navigation_topbar.js:8
 msgid "Contribute"
 msgstr "Colabore"
 
@@ -4648,16 +5422,24 @@ msgstr "Variável da linha do tempo"
 #: voyages/apps/voyage/globals.py:558 voyages/apps/voyage/globals.py:574
 #: voyages/apps/voyage/globals.py:537 voyages/apps/voyage/globals.py:553
 #: voyages/apps/voyage/globals.py:870
+#: voyages/sitemedia/scripts/vue/variables/tabs.js:26
+#: voyages/sitemedia/scripts/vue/variables/tabs.js:84
+#: voyages/sitemedia/scripts/vue/variables/tabs.js:104
 msgid "Flag*"
 msgstr "Bandeira*"
 
 #: voyages/apps/voyage/globals.py:559 voyages/apps/voyage/globals.py:575
 #: voyages/apps/voyage/globals.py:538 voyages/apps/voyage/globals.py:554
+#: voyages/sitemedia/scripts/vue/variables/tabs.js:85
+#: voyages/sitemedia/scripts/vue/variables/tabs.js:105
 msgid "Broad region where voyage began"
 msgstr "Grande região onde viagem teve início"
 
 #: voyages/apps/voyage/globals.py:560 voyages/apps/voyage/globals.py:576
 #: voyages/apps/voyage/globals.py:539 voyages/apps/voyage/globals.py:555
+#: voyages/sitemedia/scripts/vue/variables/tabs.js:34
+#: voyages/sitemedia/scripts/vue/variables/tabs.js:86
+#: voyages/sitemedia/scripts/vue/variables/tabs.js:106
 msgid "Region where voyage began"
 msgstr "Região onde viagem teve início"
 
@@ -4673,11 +5455,15 @@ msgstr "Portos de embarque"
 
 #: voyages/apps/voyage/globals.py:564 voyages/apps/voyage/globals.py:580
 #: voyages/apps/voyage/globals.py:543 voyages/apps/voyage/globals.py:559
+#: voyages/sitemedia/scripts/vue/variables/tabs.js:90
+#: voyages/sitemedia/scripts/vue/variables/tabs.js:110
 msgid "Specific regions of disembarkation"
 msgstr "Regiões específicas de desembarque"
 
 #: voyages/apps/voyage/globals.py:565 voyages/apps/voyage/globals.py:581
 #: voyages/apps/voyage/globals.py:544 voyages/apps/voyage/globals.py:560
+#: voyages/sitemedia/scripts/vue/variables/tabs.js:91
+#: voyages/sitemedia/scripts/vue/variables/tabs.js:111
 msgid "Broad regions of disembarkation"
 msgstr "Grandes regiões de desembarque"
 
@@ -4701,18 +5487,22 @@ msgid "Sum of embarked slaves"
 msgstr "Soma de escravos embarcados"
 
 #: voyages/apps/voyage/globals.py:719 voyages/apps/voyage/globals.py:696
+#: voyages/sitemedia/scripts/vue/variables/tabs.js:120
 msgid "Average number of embarked slaves"
 msgstr "Número médio de escravos embarcados"
 
 #: voyages/apps/voyage/globals.py:720 voyages/apps/voyage/globals.py:697
+#: voyages/sitemedia/scripts/vue/variables/tabs.js:121
 msgid "Number of voyages - embarked slaves"
 msgstr "Número de viagens – escravos embarcados"
 
 #: voyages/apps/voyage/globals.py:721 voyages/apps/voyage/globals.py:698
+#: voyages/sitemedia/scripts/vue/variables/tabs.js:122
 msgid "Percent of embarked slaves (row total)"
 msgstr "Porcentagem de escravos embarcados (total de linha)"
 
 #: voyages/apps/voyage/globals.py:722 voyages/apps/voyage/globals.py:699
+#: voyages/sitemedia/scripts/vue/variables/tabs.js:123
 msgid "Percent of embarked slaves (column total)"
 msgstr "Porcentagem de escravos embarcados (total de coluna)"
 
@@ -4721,18 +5511,22 @@ msgid "Sum of disembarked slaves"
 msgstr "Soma de escravos desembarcados"
 
 #: voyages/apps/voyage/globals.py:724 voyages/apps/voyage/globals.py:701
+#: voyages/sitemedia/scripts/vue/variables/tabs.js:125
 msgid "Average number of disembarked slaves"
 msgstr "Número médio de escravos desembarcados"
 
 #: voyages/apps/voyage/globals.py:725 voyages/apps/voyage/globals.py:702
+#: voyages/sitemedia/scripts/vue/variables/tabs.js:126
 msgid "Number of voyages - disembarked slaves"
 msgstr "Número de viagens – escravos desembarcados"
 
 #: voyages/apps/voyage/globals.py:726 voyages/apps/voyage/globals.py:703
+#: voyages/sitemedia/scripts/vue/variables/tabs.js:127
 msgid "Percent of disembarked slaves (row total)"
 msgstr "Porcentagem de escravos desembarcados (total de linha)"
 
 #: voyages/apps/voyage/globals.py:727 voyages/apps/voyage/globals.py:704
+#: voyages/sitemedia/scripts/vue/variables/tabs.js:128
 msgid "Percent of disembarked slaves (column total)"
 msgstr "Porcentagem de escravos desembarcados (total de coluna)"
 
@@ -4743,35 +5537,43 @@ msgstr "Soma de escravos embarcados/desembarcados"
 
 #: voyages/apps/voyage/globals.py:729 voyages/apps/voyage/globals.py:744
 #: voyages/apps/voyage/globals.py:706 voyages/apps/voyage/globals.py:721
+#: voyages/sitemedia/scripts/vue/variables/tabs.js:130
 msgid "Average number of embarked/disembarked slaves"
 msgstr "Número médio de escravos embarcados/desembarcados"
 
 #: voyages/apps/voyage/globals.py:730 voyages/apps/voyage/globals.py:744
 #: voyages/apps/voyage/globals.py:707 voyages/apps/voyage/globals.py:721
+#: voyages/sitemedia/scripts/vue/variables/tabs.js:131
 msgid "Number of voyages - embarked/disembarked slaves"
 msgstr "Número de viagens – escravos embarcados/desembarcados"
 
 #: voyages/apps/voyage/globals.py:731 voyages/apps/voyage/globals.py:708
+#: voyages/sitemedia/scripts/vue/variables/tabs.js:132
 msgid "Average percentage male"
 msgstr "Porcentagem média de machos"
 
 #: voyages/apps/voyage/globals.py:732 voyages/apps/voyage/globals.py:709
+#: voyages/sitemedia/scripts/vue/variables/tabs.js:133
 msgid "Number of voyages - percentage male"
 msgstr "Número de viagens – porcentagem de machos"
 
 #: voyages/apps/voyage/globals.py:733 voyages/apps/voyage/globals.py:710
+#: voyages/sitemedia/scripts/vue/variables/tabs.js:134
 msgid "Average percentage children"
 msgstr "Porcentagem média de crianças"
 
 #: voyages/apps/voyage/globals.py:734 voyages/apps/voyage/globals.py:711
+#: voyages/sitemedia/scripts/vue/variables/tabs.js:135
 msgid "Number of voyages - percentage children"
 msgstr "Número de viagens – porcentagem de crianças"
 
 #: voyages/apps/voyage/globals.py:735 voyages/apps/voyage/globals.py:712
+#: voyages/sitemedia/scripts/vue/variables/tabs.js:136
 msgid "Average percentage of slaves embarked who died during voyage"
 msgstr "Porcentagem média de escravos embarcados que morreram durante a viagem"
 
 #: voyages/apps/voyage/globals.py:736 voyages/apps/voyage/globals.py:713
+#: voyages/sitemedia/scripts/vue/variables/tabs.js:137
 msgid ""
 "Number of voyages - percentage of slaves embarked who died during voyage"
 msgstr ""
@@ -4779,10 +5581,13 @@ msgstr ""
 "a viagem"
 
 #: voyages/apps/voyage/globals.py:737 voyages/apps/voyage/globals.py:714
+#: voyages/sitemedia/scripts/vue/variables/tabs.js:56
+#: voyages/sitemedia/scripts/vue/variables/tabs.js:138
 msgid "Average middle passage (days)"
 msgstr "Média de travessia do Atlântico (dias)"
 
 #: voyages/apps/voyage/globals.py:738 voyages/apps/voyage/globals.py:715
+#: voyages/sitemedia/scripts/vue/variables/tabs.js:139
 msgid "Number of voyages - middle passage (days)"
 msgstr "Número de viagens – travessia do Atlântico (dias)"
 
@@ -4791,20 +5596,30 @@ msgid "Average standarized tonnage"
 msgstr "Tonelagem padronizada média"
 
 #: voyages/apps/voyage/globals.py:740 voyages/apps/voyage/globals.py:717
+#: voyages/sitemedia/scripts/vue/variables/tabs.js:141
 msgid "Number of voyages - standarized tonnage"
 msgstr "Número de viagens – tonelagem padronizada"
 
 #: voyages/apps/voyage/globals.py:741 voyages/apps/voyage/globals.py:718
 #: voyages/apps/voyage/templates/database/tabs/results-detail.html:49
+#: voyages/sitemedia/scripts/vue/search.js:68
+#: voyages/sitemedia/scripts/vue/variables/slave.js:224
+#: voyages/sitemedia/scripts/vue/variables/tabs.js:72
+#: voyages/sitemedia/scripts/vue/variables/tabs.js:142
+#: voyages/sitemedia/scripts/vue/variables/tabs.js:228
 msgid "Sterling cash price in Jamaica"
 msgstr "Preço à vista em libras esterlinas na Jamaica"
 
 #: voyages/apps/voyage/globals.py:742 voyages/apps/voyage/globals.py:719
+#: voyages/sitemedia/scripts/vue/variables/tabs.js:143
 msgid "Number of voyages - sterling cash price in Jamaica"
 msgstr "Número de viagens – Preço à vista em libras esterlinas na Jamaica"
 
 #: voyages/apps/voyage/globals.py:1692 voyages/apps/voyage/globals.py:763
 #: voyages/apps/voyage/globals.py:1872
+#: voyages/sitemedia/scripts/vue/variables/tabs.js:54
+#: voyages/sitemedia/scripts/vue/variables/tabs.js:118
+#: voyages/sitemedia/scripts/vue/variables/tabs.js:209
 msgid "Number of voyages"
 msgstr "Número de viagens"
 
@@ -4817,28 +5632,36 @@ msgid "Average tonnage (standardized)"
 msgstr "Tonelagem média (padronizada)"
 
 #: voyages/apps/voyage/globals.py:1695 voyages/apps/voyage/globals.py:1875
+#: voyages/sitemedia/scripts/vue/variables/tabs.js:211
 msgid "Average number of guns"
 msgstr "Número médio de armas"
 
 #: voyages/apps/voyage/globals.py:1696 voyages/apps/voyage/globals.py:782
 #: voyages/apps/voyage/globals.py:1876
+#: voyages/sitemedia/scripts/vue/variables/tabs.js:73
+#: voyages/sitemedia/scripts/vue/variables/tabs.js:212
 msgid "Rate of resistance"
 msgstr "Taxa de resistência"
 
 #: voyages/apps/voyage/globals.py:1698 voyages/apps/voyage/globals.py:1878
+#: voyages/sitemedia/scripts/vue/variables/tabs.js:213
 msgid "Average duration of voyage from home port to disembarkation (days)"
 msgstr "Duração média da viagem do porto de partida ao desembarque (dias)"
 
 #: voyages/apps/voyage/globals.py:1700 voyages/apps/voyage/globals.py:1880
+#: voyages/sitemedia/scripts/vue/variables/tabs.js:214
 msgid "Average duration of middle passage (days)"
 msgstr "Duração média da travessia do Atlântico (dias)"
 
 #: voyages/apps/voyage/globals.py:1701 voyages/apps/voyage/globals.py:1881
+#: voyages/sitemedia/scripts/vue/variables/tabs.js:215
 msgid "Average crew at outset"
 msgstr "Tripulação média no início"
 
 #: voyages/apps/voyage/globals.py:1702 voyages/apps/voyage/globals.py:768
 #: voyages/apps/voyage/globals.py:1882
+#: voyages/sitemedia/scripts/vue/variables/tabs.js:59
+#: voyages/sitemedia/scripts/vue/variables/tabs.js:216
 msgid "Average crew at first landing of slaves"
 msgstr "Tripulação média no primeiro desembarque de escravos"
 
@@ -4847,6 +5670,7 @@ msgid "Number of crew deaths"
 msgstr "Número de mortes da tripulação"
 
 #: voyages/apps/voyage/globals.py:1704 voyages/apps/voyage/globals.py:1884
+#: voyages/sitemedia/scripts/vue/variables/tabs.js:217
 msgid "Average crew deaths"
 msgstr "Média de mortes da tripulação"
 
@@ -4916,6 +5740,7 @@ msgid "Average slave deaths"
 msgstr "Média de mortes de escravos"
 
 #: voyages/apps/voyage/globals.py:1727 voyages/apps/voyage/globals.py:1907
+#: voyages/sitemedia/scripts/vue/variables/tabs.js:229
 msgid "Average percentage of slaves embarked who died during the voyage"
 msgstr "Porcentagem média de escravos embarcados que morreram durante a viagem"
 
@@ -4973,6 +5798,7 @@ msgstr "Reiniciar tudo"
 
 #: voyages/apps/voyage/templates/database/_dates.html:4
 #: voyages/apps/voyage/templates/voyage/methodology-7.html:3
+#: voyages/sitemedia/scripts/vue/search.js:6
 msgid "Dates"
 msgstr "Datas"
 
@@ -4995,6 +5821,7 @@ msgid "Please follow the format of YYYY/MM/DD. All dates are inclusive."
 msgstr "Por favor, siga o formato AAAAA/MM/DD. Todas as datas são inclusivas."
 
 #: voyages/apps/voyage/templates/database/_itinerary.html:4
+#: voyages/sitemedia/scripts/vue/search.js:4
 msgid "Itinerary"
 msgstr "Itinerário"
 
@@ -5029,12 +5856,16 @@ msgstr "Número total de cativos desembarcados"
 #: voyages/apps/voyage/templates/database/_itinerary.html:115
 #: voyages/apps/voyage/globals.py:884
 #: voyages/apps/voyage/templates/database/tabs/results-detail.html:30
+#: voyages/sitemedia/scripts/vue/search.js:48
+#: voyages/sitemedia/scripts/vue/variables/itinerary.js:123
+#: voyages/sitemedia/scripts/vue/variables/tabs.js:40
 msgid "Place where voyage ended"
 msgstr "Porto onde a viagem terminou"
 
 #: voyages/apps/voyage/templates/database/_outcome.html:4
 #: voyages/apps/voyage/templates/database/_outcome.html:6
 #: voyages/apps/voyage/templates/database/_outcome.html:8
+#: voyages/sitemedia/scripts/vue/search.js:8
 msgid "Outcome"
 msgstr "Resultado desconhecido"
 
@@ -5178,10 +6009,12 @@ msgstr "Visualização de dados"
 
 #: voyages/apps/voyage/templates/database/_year.html:4
 #: voyages/apps/voyage/templates/database/_year.html:7
+#: voyages/sitemedia/scripts/vue/search.js:2
 msgid "Year range"
 msgstr "Ano de registro"
 
 #: voyages/apps/voyage/templates/database/_year.html:5
+#: voyages/sitemedia/scripts/vue/includes/helpers.js:975
 msgid "Year Range"
 msgstr "Faixa de ano"
 
@@ -5230,6 +6063,7 @@ msgstr "para ver/ocultar todos"
 
 #: voyages/apps/voyage/templates/database/tabs/results-detail.html:38
 #: voyages/apps/voyage/templates/database/tabs/results-detail.html:116
+#: voyages/sitemedia/scripts/vue/includes/helpers.js:140
 msgid "IMP"
 msgstr "IMP"
 
@@ -5445,10 +6279,12 @@ msgid "English"
 msgstr "Inglês"
 
 #: voyages/settings.py:193 voyages/settings.py:196
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:333
 msgid "Spanish"
 msgstr "Espanhol"
 
 #: voyages/settings.py:194 voyages/settings.py:178 voyages/settings.py:195
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:335
 msgid "Portuguese"
 msgstr "Português"
 
@@ -11208,6 +12044,7 @@ msgid "Crew died during Middle Passage"
 msgstr "Mortes de escravos durante a travessia do Atlântico*"
 
 #: voyages/apps/contribute/templates/contribute/interim.html:916
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:24
 msgid "Other"
 msgstr "Outro"
 
@@ -12307,6 +13144,7 @@ msgstr "Nova consulta"
 
 #: voyages/apps/static_content/templates/static_content/assessment-index.html:5
 #: voyages/templates/topbar.html:28
+#: voyages/sitemedia/scripts/legacy/navigation_topbar.js:5
 msgid "Assessing the Slave Trade"
 msgstr "Análises do Tráfico de Escravos"
 
@@ -12382,6 +13220,8 @@ msgstr ""
 "que os da América do Norte continental."
 
 #: voyages/apps/static_content/templates/static_content/index.html:91
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:7
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:340
 msgid "Brazil"
 msgstr "Brasil"
 
@@ -12488,26 +13328,34 @@ msgid "Average middle passage (days)*"
 msgstr "Duração média de travessia do Atlântico (dias)*"
 
 #: voyages/apps/voyage/globals.py:766
+#: voyages/sitemedia/scripts/vue/variables/tabs.js:57
 msgid "Standardized tonnage*"
 msgstr "Tonelagem padronizada*"
 
 #: voyages/apps/voyage/globals.py:767
+#: voyages/sitemedia/scripts/vue/variables/tabs.js:58
 msgid "Average crew at voyage outset"
 msgstr "Tripulação média na partida"
 
 #: voyages/apps/voyage/globals.py:769
+#: voyages/sitemedia/scripts/vue/variables/tabs.js:60
 msgid "Total crew at voyage outset"
 msgstr "Total de tripulação no início da viagem"
 
 #: voyages/apps/voyage/globals.py:770
+#: voyages/sitemedia/scripts/vue/variables/tabs.js:61
 msgid "Total crew at first landing of slaves"
 msgstr "Total de tripulação no primeiro desembarque de escravos"
 
 #: voyages/apps/voyage/globals.py:771
+#: voyages/sitemedia/scripts/vue/variables/tabs.js:62
+#: voyages/sitemedia/scripts/vue/variables/tabs.js:219
 msgid "Average number of slaves embarked"
 msgstr "Número médio de escravos embarcados"
 
 #: voyages/apps/voyage/globals.py:772
+#: voyages/sitemedia/scripts/vue/variables/tabs.js:63
+#: voyages/sitemedia/scripts/vue/variables/tabs.js:221
 msgid "Average number of slaves disembarked"
 msgstr "Número médio de escravos desembarcados"
 
@@ -12548,6 +13396,7 @@ msgid "Percentage of slaves embarked who died during voyage*"
 msgstr "Porcentagem de escravos embarcados que morreram durante a viagem*"
 
 #: voyages/apps/voyage/globals.py:809
+#: voyages/sitemedia/scripts/vue/variables/tabs.js:157
 msgid "Year arrived with slaves*"
 msgstr "Ano da chegada ao porto de desembarque*"
 
@@ -12573,6 +13422,7 @@ msgid "var_imputed_nationality"
 msgstr "var_imputed_nationality"
 
 #: voyages/apps/voyage/globals.py:871
+#: voyages/sitemedia/scripts/vue/variables/tabs.js:27
 msgid "Rig"
 msgstr "Armação"
 
@@ -12581,6 +13431,7 @@ msgid "var_rig_of_vessel"
 msgstr "var_rig_of_vessel"
 
 #: voyages/apps/voyage/globals.py:872
+#: voyages/sitemedia/scripts/vue/variables/tabs.js:28
 msgid "Particular outcome of the voyage"
 msgstr "Resultado específico da viagem"
 
@@ -12617,6 +13468,7 @@ msgid "var_resistance"
 msgstr "var_resistance"
 
 #: voyages/apps/voyage/globals.py:877
+#: voyages/sitemedia/scripts/vue/variables/tabs.js:33
 msgid "Place where voyage began*"
 msgstr "Porto onde a viagem começou*"
 
@@ -12633,6 +13485,7 @@ msgid "var_imp_region_voyage_begin"
 msgstr "var_imp_region_voyage_begin"
 
 #: voyages/apps/voyage/globals.py:879
+#: voyages/sitemedia/scripts/vue/variables/tabs.js:35
 msgid "Principal place of slave purchase*"
 msgstr "Principal lugar de aquisição de escravos*"
 
@@ -12649,6 +13502,7 @@ msgid "var_imp_principal_region_of_slave_purchase"
 msgstr "var_imp_principal_region_of_slave_purchase"
 
 #: voyages/apps/voyage/globals.py:881
+#: voyages/sitemedia/scripts/vue/variables/tabs.js:37
 msgid "Principal place of slave landing*"
 msgstr "Principal lugar de desembarque de escravos*"
 
@@ -12677,6 +13531,7 @@ msgid "var_place_voyage_ended"
 msgstr "var_place_voyage_ended"
 
 #: voyages/apps/voyage/globals.py:885
+#: voyages/sitemedia/scripts/vue/variables/tabs.js:41
 msgid "Region where voyage ended"
 msgstr "Região onde viagem terminou"
 
@@ -12685,38 +13540,47 @@ msgid "var_region_voyage_ended"
 msgstr "var_region_voyage_ended"
 
 #: voyages/apps/voyage/globals.py:886
+#: voyages/sitemedia/scripts/vue/variables/tabs.js:42
 msgid "Month voyage began"
 msgstr "Mês em que viagem começou"
 
 #: voyages/apps/voyage/globals.py:887
+#: voyages/sitemedia/scripts/vue/variables/tabs.js:43
 msgid "Month trade began in Africa"
 msgstr "Mês em que o tráfico começou na África"
 
 #: voyages/apps/voyage/globals.py:888
+#: voyages/sitemedia/scripts/vue/variables/tabs.js:44
 msgid "Month vessel departed Africa"
 msgstr "Mês em que navio partiu da África"
 
 #: voyages/apps/voyage/globals.py:889
+#: voyages/sitemedia/scripts/vue/variables/tabs.js:45
 msgid "Month vessel arrived with slaves"
 msgstr "Mês em que navio chegou com escravos"
 
 #: voyages/apps/voyage/globals.py:890
+#: voyages/sitemedia/scripts/vue/variables/tabs.js:46
 msgid "Month vessel departed for home port"
 msgstr "Mês em que navio partiu para o porto de origem"
 
 #: voyages/apps/voyage/globals.py:891
+#: voyages/sitemedia/scripts/vue/variables/tabs.js:47
 msgid "Month voyage completed"
 msgstr "Mês do término da viagem"
 
 #: voyages/apps/voyage/globals.py:892
+#: voyages/sitemedia/scripts/vue/variables/tabs.js:48
 msgid "Year arrived with slaves (5 year periods)"
 msgstr "Ano em que chegou com escravos (períodos de 5 anos)"
 
 #: voyages/apps/voyage/globals.py:893
+#: voyages/sitemedia/scripts/vue/variables/tabs.js:49
 msgid "Year arrived with slaves (10 year periods)"
 msgstr "Ano em que chegou com escravos (períodos de 10 anos)"
 
 #: voyages/apps/voyage/globals.py:894
+#: voyages/sitemedia/scripts/vue/variables/tabs.js:50
 msgid "Year arrived with slaves (25 year periods)"
 msgstr "Ano em que chegou com escravos (períodos de 25 anos)"
 
@@ -14264,6 +15128,8 @@ msgstr ""
 #: voyages/apps/voyage/templates/voyage/understanding_left_menu.html:201
 #: voyages/apps/voyage/templates/voyage/understanding_left_menu.html:205
 #: voyages/apps/voyage/templates/database/tabs/results-detail.html:16
+#: voyages/sitemedia/scripts/vue/search.js:33
+#: voyages/sitemedia/scripts/vue/variables/ship-nation-owner.js:126
 msgid "Tonnage"
 msgstr "Tonelagem"
 
@@ -14789,6 +15655,7 @@ msgstr "América Espanhola, 1626-41"
 
 #: voyages/apps/voyage/templates/voyage/methodology-21.html:36
 #: voyages/apps/voyage/templates/voyage/methodology-21.html:39
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:68
 msgid "Steamer"
 msgstr "Navio a vapor"
 
@@ -14859,6 +15726,7 @@ msgstr "Bahia, depois de 1825"
 
 #: voyages/apps/voyage/templates/voyage/methodology-21.html:162
 #: voyages/apps/voyage/templates/voyage/methodology-21.html:165
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:87
 msgid "Balandra"
 msgstr "Balandra"
 
@@ -14879,6 +15747,7 @@ msgstr "Barque, 1851-75"
 
 #: voyages/apps/voyage/templates/voyage/methodology-21.html:198
 #: voyages/apps/voyage/templates/voyage/methodology-21.html:201
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:60
 msgid "Barqua"
 msgstr "Barqua"
 
@@ -14999,11 +15868,13 @@ msgstr "Buque, 1726-1825"
 
 #: voyages/apps/voyage/templates/voyage/methodology-21.html:414
 #: voyages/apps/voyage/templates/voyage/methodology-21.html:417
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:63
 msgid "Chalupa"
 msgstr "Chalupa"
 
 #: voyages/apps/voyage/templates/voyage/methodology-21.html:423
 #: voyages/apps/voyage/templates/voyage/methodology-21.html:426
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:84
 msgid "Charrua"
 msgstr "Charrua"
 
@@ -15023,10 +15894,12 @@ msgid "Curveta, 1776-1800"
 msgstr "Curveta, 1776-1800"
 
 #: voyages/apps/voyage/templates/voyage/methodology-21.html:489
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:55
 msgid "Felucca"
 msgstr "Felucca"
 
 #: voyages/apps/voyage/templates/voyage/methodology-21.html:498
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:72
 msgid "Fluit"
 msgstr "Fluit"
 
@@ -15050,16 +15923,19 @@ msgstr "Iate, antes de 1826"
 
 #: voyages/apps/voyage/templates/voyage/methodology-21.html:773
 #: voyages/apps/voyage/templates/voyage/methodology-21.html:750
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:88
 msgid "Paquete"
 msgstr "Paquete"
 
 #: voyages/apps/voyage/templates/voyage/methodology-21.html:782
 #: voyages/apps/voyage/templates/voyage/methodology-21.html:759
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:47
 msgid "Patacho"
 msgstr "Patacho"
 
 #: voyages/apps/voyage/templates/voyage/methodology-21.html:791
 #: voyages/apps/voyage/templates/voyage/methodology-21.html:768
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:81
 msgid "Penque"
 msgstr "Penque"
 
@@ -15070,6 +15946,7 @@ msgstr "Polacca"
 
 #: voyages/apps/voyage/templates/voyage/methodology-21.html:1079
 #: voyages/apps/voyage/templates/voyage/methodology-21.html:1029
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:46
 msgid "Smack"
 msgstr "Smack"
 
@@ -16751,6 +17628,7 @@ msgid "List of voyages"
 msgstr "Lista de viagens"
 
 #: voyages/apps/voyage/templates/voyage/search_config.html:6
+#: voyages/sitemedia/scripts/vue/search.js:176
 msgid "Configure columns"
 msgstr "Configurar colunas"
 
@@ -16931,6 +17809,9 @@ msgstr "Baixar dados da tabela"
 #: voyages/apps/voyage/templates/voyage/search_tables.html:44
 #: voyages/apps/voyage/templates/voyage/search_tables.html:46
 #: voyages/apps/voyage/templates/voyage/search_tables.html:77
+#: voyages/sitemedia/maps/js/voyagesMap.js:459
+#: voyages/sitemedia/scripts/vue/includes/helpers.js:974
+#: voyages/sitemedia/scripts/vue/includes/helpers.js:1123
 msgid "Totals"
 msgstr "Totais"
 
@@ -16943,6 +17824,8 @@ msgid "Display variable"
 msgstr "Mostrar variável"
 
 #: voyages/apps/voyage/templates/voyage/search_xy_graphs.html:133
+#: voyages/sitemedia/scripts/vue/includes/helpers.js:1218
+#: voyages/sitemedia/scripts/vue/includes/helpers.js:1404
 msgid "Value"
 msgstr "Valor"
 
@@ -17222,6 +18105,7 @@ msgid "Please come back later."
 msgstr "Por favor volte mais tarde."
 
 #: voyages/templates/topbar.html:7
+#: voyages/sitemedia/scripts/legacy/navigation_topbar.js:4
 msgid "Voyages Database"
 msgstr "Banco de Dados Viagens"
 
@@ -17972,6 +18856,7 @@ msgstr ""
 "History, Special Collections, University of Virginia Library. Exige-se "
 "permissão para reproduzi-la."
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:338
 msgid "African"
 msgstr "Africano"
 
@@ -18240,6 +19125,7 @@ msgstr ""
 "Tracy W. McGregor Library of American History, Special Collections, "
 "University of Virginia Library. Exige-se permissão para reproduzi-la. "
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:334
 msgid "Dutch"
 msgstr "Holandês"
 
@@ -22817,6 +23703,7 @@ msgstr ""
 msgid "Time frame:[T]"
 msgstr "Intervalo de tempo:"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:343
 msgid "Unknown"
 msgstr "Desconhecido"
 
@@ -22997,12 +23884,15 @@ msgstr ""
 "History, Special Collections, University of Virginia Library. Exige-se "
 "permissão para reproduzi-la. "
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:168
 msgid "Abandoned and/or sold off Africa"
 msgstr "Abandonado e/ou vendido ao largo da costa africana"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:260
 msgid "Abandoned in Europe after completing voyage"
 msgstr "Abandonado na Europa após completar viagem"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:215
 msgid "Abandoned or condemned for unseaworthiness in the Americas"
 msgstr "Abandonado ou condenado por inavegabilidade nas Américas"
 
@@ -23434,18 +24324,22 @@ msgstr ""
 "As regiões de embarque nas Estimativas e no Banco de Dados: Viagens são "
 "definidas de forma diferente?"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:16
 msgid "Argentina"
 msgstr "Argentina"
 
 msgid "Arguim"
 msgstr "Arguim"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:252
 msgid "Arrested by Brazil or given up to the Brazilian government"
 msgstr "Apresado por Brasil ou cedido ao governo brasileiro"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:195
 msgid "Arrived in Africa, subsequent fate unknown"
 msgstr "Chegou à África, destino subsequente desconhecido"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:296
 msgid "Arrived in Brazil and refused permission to disembark"
 msgstr "Chegou ao Brasil e não teve permissão de desembarcar"
 
@@ -23580,6 +24474,7 @@ msgstr "Barbados, porto não especificado"
 msgid "Barbary pirates"
 msgstr "Piratas da Berbéria"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:116
 msgid "Barca"
 msgstr "Barca"
 
@@ -23589,9 +24484,11 @@ msgstr "Barcelona"
 msgid "Barmouth"
 msgstr "Barmouth"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:49
 msgid "Barque"
 msgstr "Barque"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:71
 msgid "Barque (Dutch)"
 msgstr "Barque (Holandês)"
 
@@ -23607,6 +24504,7 @@ msgstr "Basse-Terre"
 msgid "Batabanó  "
 msgstr "Batabanó"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:107
 msgid "Batelão"
 msgstr "Batelão"
 
@@ -23649,6 +24547,7 @@ msgstr "Bergantim"
 msgid "Bergen"
 msgstr "Bergen"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:90
 msgid "Berlin"
 msgstr "Berlin"
 
@@ -23685,6 +24584,7 @@ msgstr "Bilbau"
 msgid "Bilbay"
 msgstr "Bilbay"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:94
 msgid "Billd"
 msgstr "Billd"
 
@@ -23709,6 +24609,7 @@ msgstr "Rio Black"
 msgid "Boary"
 msgstr "Boary"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:95
 msgid "Boat"
 msgstr "Boat"
 
@@ -23736,6 +24637,7 @@ msgstr "Borrowstounness"
 msgid "Boston"
 msgstr "Boston"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:183
 msgid "Bought at least one slave in Africa - subsequent fate unknown"
 msgstr ""
 "Comprou ao menos um escravo na África - destino subsequente desconhecido"
@@ -23779,12 +24681,15 @@ msgstr "Brest"
 msgid "Bridgeport"
 msgstr "Bridgeport"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:41
 msgid "Brig"
 msgstr "Brig"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:102
 msgid "Brigue-escuna"
 msgstr "Brigue-escuna"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:73
 msgid "Brik"
 msgstr "Brik"
 
@@ -23816,6 +24721,7 @@ msgstr ""
 "passou a empregar mais jamaicanos de ascendência africana após a Abolição da "
 "Escravatura, em 1833."
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:332
 msgid "British"
 msgstr "Britânico"
 
@@ -23855,6 +24761,7 @@ msgstr "Buenos Aires"
 msgid "Bundy"
 msgstr "Bundy"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:100
 msgid "Buque"
 msgstr "Buque"
 
@@ -23979,6 +24886,8 @@ msgid "Cap Lopez And Cabo Santa Catarina"
 msgstr "Cabo Lopes e Cabo Santa Catarina"
 
 #: voyages/apps/voyage/templates/database/tabs/results-detail.html:64
+#: voyages/sitemedia/scripts/vue/search.js:83
+#: voyages/sitemedia/scripts/vue/variables/captain-and-crew.js:3
 msgid "Captain's name"
 msgstr "Nome do capitão"
 
@@ -24008,15 +24917,19 @@ msgstr "Cativo / cativos"
 msgid "Captor"
 msgstr "Captor"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:341
 msgid "Captor unspecified"
 msgstr "Captor não especificado"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:196
 msgid "Captured and recaptured after disembarking slaves"
 msgstr "Capturado e recapturado depois de desembarque de escravos"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:256
 msgid "Captured and released without court proceedings"
 msgstr "Capturado e liberado sem julgamento"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:189
 msgid ""
 "Captured before disembarking slaves; vessel recaptured or released "
 "subsequently"
@@ -24024,167 +24937,218 @@ msgstr ""
 "Capturado antes de desembarque de escravos; navio recapturado ou solto "
 "subsequentemente"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:290
 msgid "Captured by Algerian pirates"
 msgstr "Capturado por piratas argelinos"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:261
 msgid "Captured by Argentinian privateers after embarkation of slaves"
 msgstr "Capturado por corsários argentinos depois de embarque de escravos"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:143
 msgid "Captured by British - after disembarkation"
 msgstr "Capturado por britânicos - depois do desembarque"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:142
 msgid "Captured by British - after embarkation of slaves"
 msgstr "Capturado por britânicos - depois do embarque de escravos"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:141
 msgid "Captured by British - before slaves embarked"
 msgstr "Capturado por britânicos - antes de embarque de escravos"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:292
 msgid "Captured by British, released"
 msgstr "Capturado por britânicos, liberado"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:144
 msgid "Captured by British - unspecified"
 msgstr "Capturado por britânicos - não especificado"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:167
 msgid "Captured by Cie du Senegal"
 msgstr "Capturado pela Cia do Senegal"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:192
 msgid "Captured by crew, did not land slaves in the Americas"
 msgstr "Capturado por tripulação, não desembarcou escravos nas Américas"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:181
 msgid "Captured by crew: fate unknown"
 msgstr "Capturado por tripulação: destino desconhecido"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:151
 msgid "Captured by Dutch - after disembarkation"
 msgstr "Capturado por holandeses - depois do desembarque"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:149
 msgid "Captured by Dutch - before slaves embarked"
 msgstr "Capturado por holandeses - antes do embarque dos escravos"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:285
 msgid "Captured by Dutch, slaves turned loose in Africa"
 msgstr "Capturado por holandeses, escravos soltos na África"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:286
 msgid "Captured by Dutch, slaves turned loose in Brazil"
 msgstr "Capturado por holandeses, escravos soltos no Brasil"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:152
 msgid "Captured by Dutch - unspecified"
 msgstr "Capturado por holandeses - não especificado"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:302
 msgid "Captured by English, slaves turned loose on Spanish Main"
 msgstr ""
 "Capturado por ingleses, escravos soltos na América continental espanhola"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:294
 msgid ""
 "Captured by first by the British and then by the Dutch after slaves embarked"
 msgstr ""
 "Capturado primeiro por britânicos e depois por holandeses após embarque de "
 "escravos"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:301
 msgid "Captured by pirates after slaves embarked, ship and slaves burned."
 msgstr ""
 "Capturado por piratas após embarque de escravos, navio e escravos queimados."
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:306
 msgid "captured by pirates and burned"
 msgstr "Capturado por piratas e queimado"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:139
 msgid "Captured by pirates or privateers - after disembarkation"
 msgstr "Capturados por piratas ou corsários - depois do desembarque"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:138
 msgid "Captured by pirates or privateers - after embarkation of slaves"
 msgstr "Capturados por piratas ou corsários - depois do embarque de escravos"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:137
 msgid "Captured by pirates or privateers - before slaves embarked"
 msgstr "Capturados por piratas ou corsários - antes do embarque de escravos"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:140
 msgid "Captured by pirates or privateers - unspecified"
 msgstr "Capturados por piratas ou corsários - não especificado"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:172
 msgid "Captured by pirates - slaves sold in Americas from another ship"
 msgstr "Capturado por piratas – escravos vendidos nas Américas em outro navio"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:154
 msgid "Captured by Portuguese - after embarkation of slaves"
 msgstr "Capturado por portugueses - depois do embarque de escravos"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:155
 msgid "Captured by Portuguese - Americas after disembarkation"
 msgstr "Capturado por portugueses - Américas depois do desembarque"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:289
 msgid "Captured by Portuguese and Dutch"
 msgstr "Capturado por portugueses e holandeses"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:153
 msgid "Captured by Portuguese - before slaves embarked"
 msgstr "Capturado por portugueses - antes do embarque de escravos"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:156
 msgid "Captured by Portuguese - unspecified"
 msgstr "Capturado por portugueses - não especificado"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:199
 msgid "Captured by slaves, recaptured and landed slaves in the Americas"
 msgstr ""
 "Capturado por escravos, recapturado e desembarcou escravos nas Américas"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:200
 msgid "Captured by slaves, recaptured and landed slaves in the Americas, lost"
 msgstr ""
 "Capturado por escravos, recapturado e desembarcou escravos nas Américas, "
 "perdido"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:180
 msgid "Captured by slaves: ship did not reach the Americas"
 msgstr "Capturado por escravos: navio não chegou às Américas"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:191
 msgid "Captured by slaves, unknown outcome"
 msgstr "Capturado por escravos, resultado desconhecido"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:147
 msgid "Captured by Spanish - after disembarkation"
 msgstr "Capturado por espanhóis - depois do desembarque"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:146
 msgid "Captured by Spanish - after embarkation of slaves"
 msgstr "Capturado por espanhóis - depois do embarque de escravos"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:145
 msgid "Captured by Spanish - before slaves embarked"
 msgstr "Capturado por espanhóis - antes do embarque de escravos"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:148
 msgid "Captured by Spanish - unspecified"
 msgstr "Capturado por espanhóis - não especificado"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:162
 msgid "Captured by the Barbary Powers before embarking slaves"
 msgstr "Capturado pelos estados da Barbária antes do embarque de escravos"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:300
 msgid "Captured by the British, retaken by original crew, completed voyage"
 msgstr ""
 "Capturado por britânicos, retomado por tripulação original, completou viagem"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:208
 msgid "Captured by the crew, no slaves taken, crew sold gold in Europe"
 msgstr ""
 "Capturado pela tripulação, nenhum escravo tomado, tripulação vendou ouro na "
 "Europa"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:310
 msgid "Captured by the Dominican Republic"
 msgstr "Capturado pela República Dominicana"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:175
 msgid "Captured by the French - after embarkation of slaves"
 msgstr "Capturado por franceses - depois do embarque de escravos"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:176
 msgid "Captured by the French - after slaves disembarked"
 msgstr "Capturado por franceses - depois do desembarque de escravos"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:174
 msgid "Captured by the French - before slaves embarked"
 msgstr "Capturado por franceses - antes do embarque de escravos"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:177
 msgid "Captured by the French - unspecified"
 msgstr "Capturado por franceses - não especificado"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:309
 msgid "Captured by the Swedes"
 msgstr "Capturado pelos suecos"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:291
 msgid "Captured by Turks"
 msgstr "Capturado por turcos"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:264
 msgid "Captured by United States after slaves disembarked"
 msgstr "Capturado por EUA depois do desembarque de escravos"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:262
 msgid "Captured by United States before slaves embarked"
 msgstr "Capturado por franceses - antes do embarque de escravos"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:265
 msgid "Captured by United States, slave presence unspecified"
 msgstr "Capturado por EUA, presença de escravos não especificada"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:263
 msgid "Captured by United States with slaves"
 msgstr "Capturado por EUA com escravos"
 
@@ -24194,15 +25158,19 @@ msgstr "Capturado pela CIO"
 msgid "Captured interloper"
 msgstr "Capturado intermediário"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:157
 msgid "Captured - unspecified"
 msgstr "Capturado - não especificado"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:170
 msgid "Captured unspecified after embarkation of slaves"
 msgstr "Capturado não especificado depois do embarque de escravos"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:171
 msgid "Captured unspecified after slaves disembarked"
 msgstr "Capturado não especificado depois do desembarque de escravos"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:169
 msgid "Captured unspecified before slaves embarked"
 msgstr "Capturado não especificado antes de embarque de escravos"
 
@@ -24212,6 +25180,7 @@ msgstr "Captura (de navio negreiro)"
 msgid "Caracas"
 msgstr "Caracas"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:108
 msgid "Caravela"
 msgstr "Caravela"
 
@@ -24266,9 +25235,11 @@ msgstr "Charleston"
 msgid "Charlestown"
 msgstr "Charlestown"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:86
 msgid "Charrauinha"
 msgstr "Charruinha"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:62
 msgid "Charrua de guerra"
 msgstr "Charrua de guerra"
 
@@ -24341,31 +25312,39 @@ msgstr ""
 msgid "Compagnie (Cie) du S‚n‚gal (Senegal Company)"
 msgstr "Compagnie (Cie) du Sénégal (Companhia do Senegal)"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:203
 msgid "Completed voyage after slaves removed for salvage"
 msgstr "Completou viagem depois que escravos foram removidos para recuperação"
 
 msgid "Condemnation (of slave ship)"
 msgstr "Condenação (de navio negreiro)"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:160
 msgid "Condemned - Americas after disembarkation"
 msgstr "Condenado - Américas depois do desembarque"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:299
 msgid "Condemned at Goree by the British"
 msgstr "Condenado em Goreia por britânicos"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:158
 msgid "Condemned - before slaves embarked"
 msgstr "Condenado - antes do embarque de escravos"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:209
 msgid "Condemned in Africa with slaves, slaves transshipped/sold"
 msgstr "Condenado na África com escravos, escravos baldeados/vendidos"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:178
 msgid "Condemned in the Americas by British after slaves disembarked"
 msgstr ""
 "Condenado nas Américas por britânicos depois do desembarque de escravos"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:182
 msgid "Condemned in the Americas by British before slaves disembarked"
 msgstr "Condenado nas Américas por britânicos antes do desembarque de escravos"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:161
 msgid "Condemned - unspecified"
 msgstr "Condenado - não especificado"
 
@@ -24396,6 +25375,7 @@ msgstr "Corisco"
 msgid "Cork"
 msgstr "Cork"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:83
 msgid "Corsario"
 msgstr "Corsário"
 
@@ -24414,33 +25394,43 @@ msgstr "Costa da Malagueta (de Cabo Palmas à Costa do Barlavento)"
 msgid "Court of Mixed Commission"
 msgstr "Tribunal de Comissão Mista"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:242
 msgid "Court of Mixed Commission, Cape of Good Hope, condemned"
 msgstr "Tribunal de Comissão Mista, Cabo da Boa Esperança, condenado"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:243
 msgid "Court of Mixed Commission, Cape of Good Hope, restored"
 msgstr "Tribunal de Comissão Mista, Cabo da Boa Esperança, reintegrado"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:236
 msgid "Court of Mixed Commission, Havana, condemned"
 msgstr "Tribunal de Comissão Mista, Havana, condenado"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:237
 msgid "Court of Mixed Commission, Havana, restored"
 msgstr "Tribunal de Comissão Mista, Havana, reintegrado"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:240
 msgid "Court of Mixed Commission, Luanda, condemned"
 msgstr "Tribunal de Comissão Mista, Luanda, condenado"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:241
 msgid "Court of Mixed Commission, Luanda, restored"
 msgstr "Tribunal de Comissão Mista, Luanda, reintegrado"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:238
 msgid "Court of Mixed Commission, Rio de Janeiro, condemned"
 msgstr "Tribunal de Comissão Mista, Rio de Janeiro, condenado"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:239
 msgid "Court of Mixed Commission, Rio de Janeiro, restored"
 msgstr "Tribunal de Comissão Mista, Rio de Janeiro, reintegrado"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:234
 msgid "Court of Mixed Commission, Sierra Leone, condemned"
 msgstr "Tribunal de Comissão Mista, Serra Leoa, condenado"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:235
 msgid "Court of Mixed Commission, Sierra Leone, restored"
 msgstr "Tribunal de Comissão Mista, Serra Leoa, reintegrado"
 
@@ -24456,6 +25446,7 @@ msgstr "Crioulo"
 msgid "Crew"
 msgstr "Tripulação"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:339
 msgid "Crew action"
 msgstr "Ação da tripulação"
 
@@ -24499,18 +25490,22 @@ msgstr "Alfândega"
 msgid "Cut off"
 msgstr "Interceptação"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:198
 msgid ""
 "Cut off by Africans from shore. Recaptured and landed slaves in Americas"
 msgstr ""
 "Interceptado por africanos na costa. Recapturado e desembarcou escravos nas "
 "Américas"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:187
 msgid "Cut off by Africans from shore, ship did not reach the Americas"
 msgstr "Interceptado por africanos na costa, navio não chegou às Américas"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:361
 msgid "Cut-off (meaning unclear)"
 msgstr "Interceptado (significado obscuro)"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:57
 msgid "Cutter"
 msgstr "Cutter"
 
@@ -24538,6 +25533,8 @@ msgstr ""
 "tripulantes) do navio tenha sobrevivido, documentando os dias de navegação."
 
 #: voyages/apps/voyage/templates/database/tabs/results-detail.html:58
+#: voyages/sitemedia/scripts/vue/search.js:76
+#: voyages/sitemedia/scripts/vue/variables/dates.js:43
 msgid "Date trade began in Africa"
 msgstr "Data em que o comércio começou na África"
 
@@ -24545,10 +25542,14 @@ msgid "Date vessel arriveds with slaves"
 msgstr "Data em que o navio chegou com escravos"
 
 #: voyages/apps/voyage/templates/database/tabs/results-detail.html:59
+#: voyages/sitemedia/scripts/vue/search.js:77
+#: voyages/sitemedia/scripts/vue/variables/dates.js:56
 msgid "Date vessel departed Africa"
 msgstr "Data em que o navio partiu da África"
 
 #: voyages/apps/voyage/templates/database/tabs/results-detail.html:61
+#: voyages/sitemedia/scripts/vue/search.js:79
+#: voyages/sitemedia/scripts/vue/variables/dates.js:82
 msgid "Date vessel departed for homeport"
 msgstr "Data em que o navio partiu do porto de origem"
 
@@ -24567,6 +25568,7 @@ msgstr "Delaware, porto não especificado"
 msgid "Delaware River"
 msgstr "Rio Delaware"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:351
 msgid "Delivered slaves for original owners"
 msgstr "Entregou escravos aos donos originais"
 
@@ -24576,6 +25578,7 @@ msgstr "Dembia"
 msgid "Demerara"
 msgstr "Demerara"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:12
 msgid "Denmark"
 msgstr "Dinamarca"
 
@@ -24602,12 +25605,15 @@ msgstr ""
 msgid "Deptford"
 msgstr "Deptford"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:184
 msgid "Destroyed, lost or sold as result of slave rebellion"
 msgstr "Destruído, perdido ou vendido como resultado de rebelião de escravos"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:163
 msgid "Destroyed - unspecified"
 msgstr "Destruído - não especificado"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:284
 msgid "Detained and condemned in the United States after slaves disembarked"
 msgstr "Detido e condenado nos EUA depois do desembarque de escravos"
 
@@ -24640,6 +25646,7 @@ msgstr "Dinard"
 msgid "Disembark/disembarkation"
 msgstr "Desembarque"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:202
 msgid "ditto Arquivos Angola, II, vol 25, pp. 432-33."
 msgstr "dito Arquivos Angola, II, vol 25, pp. 432-33."
 
@@ -24922,6 +25929,7 @@ msgstr ""
 msgid "Dixcove"
 msgstr "Dixcove"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:99
 msgid "Dogger"
 msgstr "Dogger"
 
@@ -24943,9 +25951,11 @@ msgstr "Dover"
 msgid "DOWNLOADS"
 msgstr "DOWNLOADS"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:190
 msgid "Driven off the African Coast with slaves on board"
 msgstr "Expulso da costa africana com escravos a bordo"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:257
 msgid "Driven or run on shore in the Americas: no court proceedings"
 msgstr "Expulso ou batido na costa nas Américas: sem resultados de corte"
 
@@ -25041,6 +26051,7 @@ msgstr "Índias Orientais, porto não especificado"
 msgid "EDUCATIONAL MATERIALS"
 msgstr "MATERIAIS EDUCATIVOS"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:214
 msgid "Either shipwrecked or captured by pirates before slaves taken on board"
 msgstr ""
 "Ou naufragado ou capturado por piratas antes de trazer escravos a bordo"
@@ -25075,6 +26086,7 @@ msgstr "Enkhuizen"
 msgid "Epe"
 msgstr "Epe"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:117
 msgid "Escaller"
 msgstr "Escaller"
 
@@ -25105,6 +26117,7 @@ msgstr "Falmouth (Ingl.)"
 msgid "Falmouth (Jam.)"
 msgstr "Falmouth (Jam.)"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:111
 msgid "Faluxo"
 msgstr "Faluxo"
 
@@ -25114,6 +26127,7 @@ msgstr "Destino"
 msgid "Fernando Po"
 msgstr "Fernando Po"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:118
 msgid "Filibote"
 msgstr "Filibote"
 
@@ -25165,9 +26179,12 @@ msgstr "Fort Dauphin"
 msgid "Fort-Royale"
 msgstr "Fort-Royale"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:103
 msgid "Fragatihna"
 msgstr "Fragatinha"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:11
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:34
 msgid "France"
 msgstr "França"
 
@@ -25186,9 +26203,11 @@ msgstr "Freetown (Mass.)"
 msgid "Free trade era"
 msgstr "Era do tráfico livre"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:70
 msgid "Fregat"
 msgstr "Fregat"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:85
 msgid "Fregata"
 msgstr "Fragata"
 
@@ -25225,57 +26244,75 @@ msgstr ""
 "seus empreendimentos no tráfico de escravos transatlântico após 1792, "
 "durante a Revolução Francesa."
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:266
 msgid "French proceedings initiated in Africa, acquittal"
 msgstr "Processo francês iniciado na África, absolvido"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:267
 msgid "French proceedings initiated in Africa, condemned"
 msgstr "Processo francês iniciado na África, condenado"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:268
 msgid "French proceedings initiated in Africa, unknown outcome"
 msgstr "Processo francês iniciado na África, resultado desconhecido"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:278
 msgid "French proceedings initiated in Cayenne, acquittal"
 msgstr "Processo francês iniciado em Caiena, absolvido"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:279
 msgid "French proceedings initiated in Cayenne, condemned"
 msgstr "Processo francês iniciado em Caiena, condenado"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:280
 msgid "French proceedings initiated in Cayenne, unknown outcome"
 msgstr "Processo francês iniciado em Caiena, resultado desconhecido"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:281
 msgid "French proceedings initiated in France, acquittal"
 msgstr "Processo francês iniciado na França, absolvido"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:282
 msgid "French proceedings initiated in France, condemned"
 msgstr "Processo francês iniciado na França, condenado"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:283
 msgid "French proceedings initiated in France, unknown outcome"
 msgstr "Processo francês iniciado na França, resultado desconhecido"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:272
 msgid "French proceedings initiated in Guadaloupe, acquittal"
 msgstr "Processo francês iniciado em Guadalupe, absolvido"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:273
 msgid "French proceedings initiated in Guadaloupe, condemned"
 msgstr "Processo francês iniciado em Guadalupe, condenado"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:274
 msgid "French proceedings initiated in Guadaloupe, unknown outcome"
 msgstr "Processo francês iniciado em Guadalupe, resultado desconhecido"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:275
 msgid "French proceedings initiated in Martinique, acquittal"
 msgstr "Processo francês iniciado na Martinica, absolvido"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:276
 msgid "French proceedings initiated in Martinique, condemned"
 msgstr "Processo francês iniciado na Martinica, condenado"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:277
 msgid "French proceedings initiated in Martinique, unknown outcome"
 msgstr "Processo francês iniciado na Martinica, resultado desconhecido"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:269
 msgid "French proceedings, initiated in unknown location, acquittal"
 msgstr "Processo francês, iniciado em lugar desconhecido, absolvido"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:270
 msgid "French proceedings, initiated in unknown location, condemned"
 msgstr "Processo francês, iniciado em lugar desconhecido, condenado"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:271
 msgid "French proceedings, initiated in unknown location, unknown outcome"
 msgstr ""
 "Processo francês, iniciado em lugar desconhecido, resultado desconhecido"
@@ -25292,18 +26329,22 @@ msgstr "Gainsborough"
 msgid "Galam"
 msgstr "Galam"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:109
 msgid "Galeão"
 msgstr "Galeão"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:65
 msgid "Galera"
 msgstr "Galera"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:78
 msgid "Galjoot"
 msgstr "Galjoot"
 
 msgid "Gallinhas"
 msgstr "Gallinhas"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:56
 msgid "Galliot"
 msgstr "Galliot"
 
@@ -25319,6 +26360,7 @@ msgstr "Gênero"
 msgid "GENERAL"
 msgstr "GERAL"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:20
 msgid "Genoa"
 msgstr "Gênova"
 
@@ -25337,9 +26379,11 @@ msgstr "Geórgia, porto não especificado"
 msgid "Gibraltar"
 msgstr "Gibraltar"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:258
 msgid "Given up to the Mexican Government, Vera Cruz"
 msgstr "Cedido ao governo mexicano, Vera Cruz"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:251
 msgid "Given up to the United States government"
 msgstr "Cedido ao governo dos EUA"
 
@@ -25409,6 +26453,8 @@ msgstr "Grand Popo"
 msgid "Grand Sestos"
 msgstr "Grand Sestos"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:8
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:31
 msgid "Great Britain"
 msgstr "Grã-Bretanha"
 
@@ -25475,6 +26521,7 @@ msgstr "Gustavia, S. Bartolomeu"
 msgid "Haddam"
 msgstr "Haddam"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:344
 msgid "Haitians"
 msgstr "Haitianos"
 
@@ -25490,6 +26537,7 @@ msgstr "Hamilton (Bermuda)"
 msgid "Hampton"
 msgstr "Hampton"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:13
 msgid "Hanse Towns, Brandenburg"
 msgstr "Cidades hanseáticas, Brandemburgo"
 
@@ -25510,6 +26558,7 @@ msgstr ""
 "anos. Os traficantes de escravos priorizavam os escravos nessas condições e "
 "pagavam ágio por eles."
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:79
 msgid "Hekboot"
 msgstr "Hekboot"
 
@@ -25519,9 +26568,11 @@ msgstr "Hellevoetsluis"
 msgid "hidden"
 msgstr "oculto"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:232
 msgid "High Court of Admiralty, condemned"
 msgstr "Tribunal Superior do Almirantado, condenado"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:233
 msgid "High Court of Admiralty, restored"
 msgstr "Tribunal Superior do Almirantado, reintegrado"
 
@@ -25546,6 +26597,7 @@ msgstr "H.M.S. “Rattler” Capturando o Negreiro “Andorinha”"
 msgid "H.M.S. \"\"Rifleman\"\" Chasing the  Slaver \"\"Esmeralda\"\""
 msgstr "H.M.S.”Rifleman” Perseguindo o Negreiro “Esmeralda”"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:74
 msgid "Hoeker"
 msgstr "Hoeker"
 
@@ -25702,6 +26754,7 @@ msgstr "Agenciamento humano"
 msgid "Husum"
 msgstr "Husum"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:89
 msgid "Hyate (iate)"
 msgstr "Hyate (iate)"
 
@@ -25909,6 +26962,7 @@ msgstr "Inhambane"
 msgid "Insurrection"
 msgstr "Insurreição"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:363
 msgid "Insurrection planned, but thwarted"
 msgstr "Insurreição planejada, mas impedida"
 
@@ -26062,6 +27116,7 @@ msgstr "Kendal"
 msgid "Keta"
 msgstr "Keta"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:93
 msgid "Ketch"
 msgstr "Ketch"
 
@@ -26110,6 +27165,7 @@ msgstr "Lagos"
 msgid "Lagos, Onim"
 msgstr "Lagos, Onim"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:244
 msgid "Lagos, Vice-Admiralty Court, condemned"
 msgstr "Lagos, Tribunal de Vice-Almirantado, condenado"
 
@@ -26119,9 +27175,11 @@ msgstr "La Guaira"
 msgid "Laid up"
 msgstr "Desarmado"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:212
 msgid "Laid up (disarmed) or broken up in Africa"
 msgstr "Desarmado ou desmontado na África"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:213
 msgid "Laid up (disarmed) or broken up in the Americas"
 msgstr "Desarmado ou desmontado nas Américas"
 
@@ -26131,6 +27189,7 @@ msgstr "Rio Lamo"
 msgid "Lancaster"
 msgstr "Lancaster"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:105
 msgid "Lancha"
 msgstr "Lancha"
 
@@ -26140,9 +27199,11 @@ msgstr "Largo, Fifeshire"
 msgid "La Rochelle"
 msgstr "La Rochelle"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:101
 msgid "Laud"
 msgstr "Laud"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:59
 msgid "Launch"
 msgstr "Launch"
 
@@ -26152,9 +27213,11 @@ msgstr "Lay"
 msgid "Leeward Islands"
 msgstr "Ilhas de Sotavento"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:165
 msgid "Left coast with trading cargo intact"
 msgstr "Deixou a costa com carga comercial intacta"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:305
 msgid "Left home port, no further record"
 msgstr "Deixou porto de origem, sem mais registro"
 
@@ -26238,15 +27301,18 @@ msgstr "Londonderry"
 msgid "Long Island"
 msgstr "Long Island"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:293
 msgid "Looted by Dutch at Elmina"
 msgstr "Saqueado por holandeses em Elmina"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:307
 msgid "looted by pirates, voyage continued"
 msgstr "Saqueado por piratas, a viagem continuou"
 
 msgid "Lorient"
 msgstr "Lorient"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:193
 msgid "Lost before reaching Americas: slaves reached port in other ships"
 msgstr ""
 "Perdido antes de chegar às Américas: escravos alcançaram o porto em outros "
@@ -26270,6 +27336,7 @@ msgstr "Luanda"
 msgid "Lucea"
 msgstr "Lucea"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:92
 msgid "Lugger"
 msgstr "Lugger"
 
@@ -26437,6 +27504,7 @@ msgstr ""
 msgid "Metrueba"
 msgstr "Metrueba"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:19
 msgid "Mexico"
 msgstr "México"
 
@@ -26536,19 +27604,25 @@ msgstr "Nápoles"
 msgid "Nassau"
 msgstr "Nassau"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:330
 msgid "Natural hazard"
 msgstr "Desastres naturais"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:104
 msgid "Nau caravela"
 msgstr "Nau caravela"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:110
 msgid "Nau-Caravela"
 msgstr "Nau-Caravela"
 
 #: voyages/apps/voyage/templates/voyage/methodology-21.html:651
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:61
 msgid "Navio mercante"
 msgstr "Navio mercante"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:9
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:32
 msgid "Netherlands"
 msgstr "Países Baixos"
 
@@ -26684,15 +27758,18 @@ msgstr "Potomac do Norte"
 msgid "North Shields"
 msgstr "Shields do Norte"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:15
 msgid "Norway"
 msgstr "Noruega"
 
 msgid "Norwich"
 msgstr "Norwich"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:321
 msgid "No slaves embarked"
 msgstr "Nenhum escravo embarcado"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:342
 msgid "Not captured"
 msgstr "Não capturado"
 
@@ -26784,9 +27861,11 @@ msgstr ""
 "portos com infraestrutura suficiente podiam organizar grandes números de "
 "empreendimentos negreiros."
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:353
 msgid "Original goal thwarted (human agency)"
 msgstr "Meta original frustrada (agência humana)"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:352
 msgid "Original goal thwarted (natural hazard)"
 msgstr "Meta original frustrada (desastre natural)"
 
@@ -26820,6 +27899,9 @@ msgstr "Américas espanholas outro"
 msgid "Other Spanish Caribbean"
 msgstr "Outro Caribe espanhol"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:125
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:315
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:364
 msgid "Other (specify in note)"
 msgstr "Outro (especificar em nota)"
 
@@ -26893,12 +27975,14 @@ msgstr ""
 msgid "Padstowe"
 msgstr "Padstowe"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:51
 msgid "Pailebot"
 msgstr "Pailebot"
 
 msgid "Paimboeuf"
 msgstr "Paimboeuf"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:115
 msgid "Palla"
 msgstr "Palla"
 
@@ -26929,6 +28013,7 @@ msgstr ""
 "quociente, mais perto da média os casos específicos estarão. Quanto maior "
 "for o quociente, maior será a variação acima e abaixo da média.</p>"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:114
 msgid "Pangaio"
 msgstr "Pangaio"
 
@@ -27005,6 +28090,8 @@ msgid "Parkgate"
 msgstr "Parkgate"
 
 #: voyages/apps/voyage/templates/database/tabs/results-detail.html:69
+#: voyages/sitemedia/scripts/vue/search.js:89
+#: voyages/sitemedia/scripts/vue/variables/outcome.js:3
 msgid "Particular outcome of voyage"
 msgstr "Resultado particular da viagem"
 
@@ -27437,9 +28524,11 @@ msgid "Pillau"
 msgstr "Pillau"
 
 #: voyages/apps/voyage/templates/voyage/methodology-21.html:777
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:52
 msgid "Pilot boat"
 msgstr "Pilot boat"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:77
 msgid "Pinas"
 msgstr "Pinas"
 
@@ -27461,6 +28550,7 @@ msgstr ""
 "“Redefinir para o padrão” em uma caixa, os ajustes iniciais são restaurados "
 "em todas as especificações.</p>"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:97
 msgid "Pink"
 msgstr "Pink"
 
@@ -27475,6 +28565,8 @@ msgstr ""
 "1850) e a gama de número de escravos representada por pontos de diferentes "
 "tamanhos.</p>"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:58
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:120
 msgid "Pinnace"
 msgstr "Pinnace"
 
@@ -27514,6 +28606,7 @@ msgstr ""
 "quando a linha onde ela aparece na lista de viagens é clicada) é para "
 "“Imagens relacionadas”.</p>"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:331
 msgid "pirate/privateer action"
 msgstr "ação de pirata/corsário"
 
@@ -27707,6 +28800,7 @@ msgstr "Point Askaig"
 msgid "Pointe-à-Pitre"
 msgstr "Pointe-à-Pitre"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:64
 msgid "Pollaca"
 msgstr "Pollaca"
 
@@ -27812,6 +28906,7 @@ msgstr "Portos de escala"
 msgid "Portudal"
 msgstr "Portudal"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:6
 msgid "Portugal"
 msgstr "Portugal"
 
@@ -27909,6 +29004,7 @@ msgstr ""
 "consulta para limitar as categorias representadas em um gráfico de barras ou "
 "pizza é importante para se utilizar o recurso de modo eficaz.</p>"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:179
 msgid "Pressed into government service"
 msgstr "Pressionado ao serviço do governo"
 
@@ -28543,9 +29639,11 @@ msgstr "Resistência"
 msgid "RESULTS (VOYAGE DATABASE)"
 msgstr "RESULTADOS (BANCO DE DADOS: VIAGENS)"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:210
 msgid "Returned direct to Africa after bringing slaves to the Americas"
 msgstr "Voltou diretamente para África após trazer escravos para Américas"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:211
 msgid "Returned to Europe or Americas without obtaining slaves"
 msgstr "Voltou para Europa ou Américas sem obter escravos"
 
@@ -28666,6 +29764,7 @@ msgstr "Roterdão"
 msgid "Royal African Company"
 msgstr "Royal African Company"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:17
 msgid "Russia"
 msgstr "Rússia"
 
@@ -28768,6 +29867,7 @@ msgstr "São Tomé"
 msgid "São Tomé or Princes Island"
 msgstr "São Tomé ou Ilha do Príncipe"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:18
 msgid "Sardinia"
 msgstr "Sardenha"
 
@@ -28786,9 +29886,11 @@ msgstr "Scarborough"
 msgid "Scarcies"
 msgstr "Scarcies"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:42
 msgid "Schooner"
 msgstr "Schooner"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:45
 msgid "Schooner-brig"
 msgstr "Schooner-brig"
 
@@ -28878,28 +29980,35 @@ msgstr "Sherbro"
 msgid "Shields"
 msgstr "Shields"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:297
 msgid "Ship and cargo captured by Africans and ship released"
 msgstr "Navio e carregamento capturados por africanos e navio liberado"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:216
 msgid "Ship and slaves sold in Africa"
 msgstr "Navio e escravos vendidos na África"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:298
 msgid "Ship captured by Haitian navy and slaves released in Haiti"
 msgstr "Navio capturado por marinha haitiana e escravos soltos no Haiti"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:204
 msgid ""
 "Ship returned direct to home port after selling slaves to another vessel"
 msgstr ""
 "Navio voltou diretamente para porto de origem depois de vender escravos a "
 "outro navio"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:134
 msgid "Shipwrecked or destroyed, after embarkation of slaves or during slaving"
 msgstr ""
 "Naufragado ou destruído, depois do embarque de escravos ou durante o tráfico"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:133
 msgid "Shipwrecked or destroyed, before slaves embarked"
 msgstr "Naufragado ou destruído, antes do embarque de escravos"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:136
 msgid "Shipwrecked or destroyed - unspecified"
 msgstr "Naufragado ou destruído - não especificado"
 
@@ -28921,6 +30030,7 @@ msgstr "Serra Leoa (região)"
 msgid "Siraboom"
 msgstr "Siraboom"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:358
 msgid "Slave insurrection"
 msgstr "Insurreição de escravos"
 
@@ -28930,6 +30040,7 @@ msgstr "Negreiro (em imagem)"
 msgid "Slaves"
 msgstr "Escravos"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:288
 msgid ""
 "Slaves are removed by the Dutch and vessel allowed to continue, subsequent "
 "fate unknown"
@@ -28946,9 +30057,11 @@ msgstr "Escravos desembarcados na África/Europa"
 msgid "Slaves embarked *"
 msgstr "Escravos embarcados*"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:326
 msgid "Slaves embarked but not disembarked in Europe or America"
 msgstr "Escravos embarcados mas não desembarcados nem na Europa nem na América"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:324
 msgid "Slaves embarked, transhipped or no further record"
 msgstr "Escravos embarcados, transportados ou sem outro registro"
 
@@ -28958,6 +30071,7 @@ msgstr "Navio negreiro"
 msgid "Slaves Liberated from Slaver  \"\"Zeldina\"\", Jamaica"
 msgstr "Escravos Libertados do Negreiro “Zeldina,” Jamaica"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:323
 msgid "Slaves perished with ship"
 msgstr "Escravos pereceram com navio"
 
@@ -29104,6 +30218,7 @@ msgstr ""
 "risco”, porque nelas, como em qualquer negócio, o comerciante punha em risco "
 "seu capital."
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:75
 msgid "Snauw"
 msgstr "Snauw"
 
@@ -29113,23 +30228,29 @@ msgstr "Sofala"
 msgid "Sold at sea to another vessel"
 msgstr "Vendido no mar a outro navio"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:186
 msgid "Sold in the Americas after disembarking slaves"
 msgstr "Vendido nas Américas depois de desembarque de escravos"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:188
 msgid "Sold in the Americas - not known whether ship brought slaves"
 msgstr "Vendido nas Américas – não se sabe se navio trouxe escravos"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:206
 msgid "Sold prematurely in Europe after disembarking slaves in the Americas"
 msgstr ""
 "Vendido prematuramente in Europa depois de desembarque de escravos nas "
 "Américas"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:173
 msgid "Sold slaves in Americas - subsequent fate unknown"
 msgstr "Vendeu escravos nas Américas – destino subsequente desconhecido"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:304
 msgid "Sold slaves in Europe - subsequent fate unknown"
 msgstr "Vendeu escravos na Europa - destino subsequente desconhecido"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:194
 msgid "Some slaves removed by pirates/privateers"
 msgstr "Alguns escravos removidos por piratas/corsários"
 
@@ -29172,6 +30293,7 @@ msgstr "Potomac do Sul"
 msgid "Soyo"
 msgstr "Soyo"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:4
 msgid "Spain"
 msgstr "Espanha"
 
@@ -29286,6 +30408,8 @@ msgstr "Sunderland"
 msgid "Swansea"
 msgstr "Swansea"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:14
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:346
 msgid "Sweden"
 msgstr "Suécia"
 
@@ -29301,22 +30425,28 @@ msgstr "Tabou"
 msgid "Taipu"
 msgstr "Taipu"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:166
 msgid "Taken by Africans"
 msgstr "Tomado por africanos"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:217
 msgid "Taken by slaves, recaptured, then ship lost"
 msgstr "Tomado por escravos, recapturado, então perdido"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:205
 msgid "Taken by slaves, vessel recaptured, unknown outcome"
 msgstr "Tomado por escravos, navio recapturado, resultado desconhecido"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:185
 msgid "Taken, retaken and salvaged before reaching African trade site"
 msgstr ""
 "Tomado, retomado e recuperado antes de chegar a local de tráfico na África"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:259
 msgid "Taken to Genoa and given up to Sardinian authorities"
 msgstr "Levado a Gênova e cedido a autoridades sardas"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:106
 msgid "Talaveira"
 msgstr "Talaveira"
 
@@ -29329,6 +30459,7 @@ msgstr "Tantumquerry"
 msgid "Teignmouth"
 msgstr "Teignmouth"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:287
 msgid ""
 "Temporarily detained by the Dutch: Voyage allowed to continue with slaves"
 msgstr ""
@@ -29881,6 +31012,7 @@ msgstr ""
 "Tempo. Como posso utilizá-las para observar diferenças ao longo do tempo? As "
 "tendências devem parecer semelhantes nas duas seções?"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:362
 msgid "Three or more slaves jumping overboard, missing, or escaped"
 msgstr "Três ou mais escravos pularam do navio, desapareceram ou fugiram"
 
@@ -30061,18 +31193,22 @@ msgstr "Ilha Tybee"
 msgid "Ubatuba"
 msgstr "Ubatuba"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:354
 msgid "Unknown outcome"
 msgstr "Resultado desconhecido"
 
 msgid "Upper James River"
 msgstr "Alto Rio James"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:119
 msgid "Urca"
 msgstr "Urca"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:5
 msgid "Uruguay"
 msgstr "Uruguai"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:337
 msgid "US"
 msgstr "EUA"
 
@@ -30091,9 +31227,11 @@ msgstr "Vannes"
 msgid "VARIABLES"
 msgstr "VARIÁVEIS"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:113
 msgid "Vasca"
 msgstr "Vasca"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:345
 msgid "Venezuela"
 msgstr "Venezuela"
 
@@ -30103,17 +31241,22 @@ msgstr "Empreendimento de risco"
 msgid "Veracruz"
 msgstr "Veracruz"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:66
 msgid "Vessel"
 msgstr "Embarcação"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:359
 msgid "Vessel attacked from shore"
 msgstr "Embarcação atacada da costa"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:295
 msgid "Vessel driven back into Portdep by British and voyage aborted"
 msgstr ""
 "Navio obrigado a retornar a porto de origem pelos ingleses e viagem abortada"
 
 #: voyages/apps/voyage/templates/database/tabs/results-detail.html:7
+#: voyages/sitemedia/scripts/vue/search.js:24
+#: voyages/sitemedia/scripts/vue/variables/ship-nation-owner.js:16
 msgid "Vessel name"
 msgstr "Nome da embarcação"
 
@@ -30123,78 +31266,99 @@ msgstr "Proprietários da embarcação"
 msgid "Vessels"
 msgstr "Navios"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:360
 msgid "Vessel's boats attacked from shore"
 msgstr "Botes da embarcação atacados da costa"
 
 msgid "Vice-Admiralty Court"
 msgstr "Tribunal de Vice-Almirantado"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:245
 msgid "Vice-Admiralty Court, Antigua, condemned"
 msgstr "Tribunal do Vice-Almirantado, Antígua, condenado"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:254
 msgid "Vice-Admiralty Court, Bahamas, condemned"
 msgstr "Tribunal do Vice-Almirantado, Bahamas, condenado"
 
 msgid " Vice-Admiralty Court, Bahamas, restored"
 msgstr "Tribunal do Vice-Almirantado, Bahamas, reintegrado"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:228
 msgid "Vice-Admiralty Court, Barbados, condemned"
 msgstr "Tribunal do Vice-Almirantado, Barbados, condenado"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:229
 msgid "Vice-Admiralty Court, Barbados, restored"
 msgstr "Tribunal do Vice-Almirantado, Barbados, reintegrado"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:220
 msgid "Vice-Admiralty Court, British Guiana, condemned"
 msgstr "Tribunal do Vice-Almirantado, Guiana Inglesa, condenado"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:221
 msgid "Vice-Admiralty Court, British Guiana, restored"
 msgstr "Tribunal do Vice-Almirantado, Guiana Inglesa, reintegrado"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:222
 msgid "Vice-Admiralty Court, Cape of Good Hope, condemned"
 msgstr "Tribunal do Vice-Almirantado, Cabo da Boa Esperança, condenado"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:223
 msgid "Vice-Admiralty Court, Cape of Good Hope, restored"
 msgstr "Tribunal do Vice-Almirantado, Cabo da Boa Esperança, reintegrado"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:253
 msgid "Vice Admiralty Court, Dominica, condemned"
 msgstr "Tribunal do Vice-Almirantado, Dominica, condenado"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:248
 msgid "Vice-Admiralty Court, Halifax, Condemned"
 msgstr "Tribunal do Vice-Almirantado, Halifax, condenado"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:224
 msgid "Vice-Admiralty Court, Jamaica, condemned"
 msgstr "Tribunal do Vice-Almirantado, Jamaica, condenado"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:225
 msgid "Vice-Admiralty Court, Jamaica, restored"
 msgstr "Tribunal do Vice-Almirantado, Jamaica, reintegrado"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:230
 msgid "Vice-Admiralty Court, Mauritius, condemned"
 msgstr "Tribunal do Vice-Almirantado, Maurício, condenado"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:231
 msgid "Vice-Admiralty Court, Mauritius, restored"
 msgstr "Tribunal do Vice-Almirantado, Maurício, reintegrado"
 
 msgid "Vice-Admiralty Court, Sierra Leone, condemned    ,"
 msgstr "Tribunal do Vice-Almirantado, Serra Leoa, condenado"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:227
 msgid "Vice-Admiralty Court, Sierra Leone, restored"
 msgstr "Tribunal do Vice-Almirantado, Serra Leoa, reintegrado"
 
 msgid "Vice-Admiralty Court, St.Helena,  condemned"
 msgstr "Tribunal do Vice-Almirantado, Santa Helena, condenado"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:219
 msgid "Vice-Admiralty Court, St. Helena, restored"
 msgstr "Tribunal do Vice-Almirantado, Santa Helena, reintegrado"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:246
 msgid "Vice-Admiralty Court, Tortola, condemned"
 msgstr "Tribunal do Vice-Almirantado, Tortola, condenado"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:247
 msgid "Vice-Admiralty Court, Tortola, restored"
 msgstr "Tribunal do Vice-Almirantado, Tortola, reintegrado"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:249
 msgid "Vice-Admiralty Court, unspecified, condemned"
 msgstr "Tribunal do Vice-Almirantado, não especificado, condenado"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:250
 msgid "Vice-Admiralty Court, unspecified, restored"
 msgstr "Tribunal do Vice-Almirantado, não especificado, reintegrado"
 
@@ -30213,6 +31377,7 @@ msgstr "Vitória"
 msgid "Vlissingen"
 msgstr "Vlissingen"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:132
 msgid "Voyage completed as intended"
 msgstr "Viagem completada conforme o pretendido"
 
@@ -30271,6 +31436,7 @@ msgstr "Wexford"
 msgid "Weymouth"
 msgstr "Weymouth"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:69
 msgid "Whaler"
 msgstr "Whaler"
 
@@ -30436,12 +31602,15 @@ msgstr "Rio Wye"
 msgid "X axis"
 msgstr "Eixo X"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:112
 msgid "xixorro"
 msgstr "xixorro"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:54
 msgid "Yacht"
 msgstr "Yacht"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:76
 msgid "Yaght"
 msgstr "Yaght"
 
@@ -30519,6 +31688,7 @@ msgstr ""
 msgid "???"
 msgstr "???"
 
+#: voyages/sitemedia/scripts/vue/includes/form-data.js:82
 msgid "Não"
 msgstr "Não"
 
@@ -32456,46 +33626,64 @@ msgid "Slave Trade"
 msgstr "Memorial do Tráfico de Escravos"
 
 #: voyages/apps/voyage/templates/database/tabs/results-detail.html:8
+#: voyages/sitemedia/scripts/vue/search.js:25
+#: voyages/sitemedia/scripts/vue/variables/ship-nation-owner.js:28
 msgid "Vessel owner"
 msgstr "Proprietários da embarcação"
 
 #: voyages/apps/voyage/templates/database/tabs/results-detail.html:9
+#: voyages/sitemedia/scripts/vue/search.js:26
+#: voyages/sitemedia/scripts/vue/variables/ship-nation-owner.js:40
 msgid "Year constructed"
 msgstr "Ano de construção"
 
 #: voyages/apps/voyage/templates/database/tabs/results-detail.html:10
+#: voyages/sitemedia/scripts/vue/search.js:27
+#: voyages/sitemedia/scripts/vue/variables/ship-nation-owner.js:53
 msgid "Place constructed"
 msgstr "Porto de construção"
 
 #: voyages/apps/voyage/templates/database/tabs/results-detail.html:11
+#: voyages/sitemedia/scripts/vue/search.js:28
+#: voyages/sitemedia/scripts/vue/variables/ship-nation-owner.js:65
 msgid "Year registered"
 msgstr "Ano de registro"
 
 #: voyages/apps/voyage/templates/database/tabs/results-detail.html:12
+#: voyages/sitemedia/scripts/vue/search.js:29
+#: voyages/sitemedia/scripts/vue/variables/ship-nation-owner.js:78
 msgid "Place registered"
 msgstr "Porto de registro"
 
 #: voyages/apps/voyage/templates/database/tabs/results-detail.html:17
+#: voyages/sitemedia/scripts/vue/search.js:34
+#: voyages/sitemedia/scripts/vue/variables/ship-nation-owner.js:139
 msgid "Standardized tonnage"
 msgstr "Tonelagem padronizada*"
 
 #: voyages/apps/voyage/templates/database/tabs/results-detail.html:20
+#: voyages/sitemedia/scripts/vue/search.js:38
+#: voyages/sitemedia/scripts/vue/variables/itinerary.js:3
 msgid "Place where voyage began"
 msgstr "Porto onde a viagem começou*:"
 
 #: voyages/apps/voyage/templates/database/tabs/results-detail.html:21
+#: voyages/sitemedia/scripts/vue/search.js:39
 msgid "Principal place of purchase"
 msgstr "Principal lugar de aquisição de escravos*"
 
 #: voyages/apps/voyage/templates/database/tabs/results-detail.html:22
+#: voyages/sitemedia/scripts/vue/variables/itinerary.js:27
 msgid "1st place of slave purchase"
 msgstr "Primeiro lugar de aquisição de escravos"
 
 #: voyages/apps/voyage/templates/database/tabs/results-detail.html:23
+#: voyages/sitemedia/scripts/vue/variables/itinerary.js:39
 msgid "2nd place of slave purchase"
 msgstr "Segundo lugar de aquisição de escravos"
 
 #: voyages/apps/voyage/templates/database/tabs/results-detail.html:24
+#: voyages/sitemedia/scripts/vue/variables/itinerary.js:51
 msgid "3rd place of slave purchase"
 msgstr "Terceiro lugar de aquisição de escravos"
 
@@ -32504,14 +33692,20 @@ msgid "Principal place of landing"
 msgstr "Principal lugar de desembarque de escravos*"
 
 #: voyages/apps/voyage/templates/database/tabs/results-detail.html:27
+#: voyages/sitemedia/scripts/vue/search.js:45
+#: voyages/sitemedia/scripts/vue/variables/itinerary.js:87
 msgid "1st place of slave landing"
 msgstr "Primeiro lugar de desembarque de escravos"
 
 #: voyages/apps/voyage/templates/database/tabs/results-detail.html:28
+#: voyages/sitemedia/scripts/vue/search.js:46
+#: voyages/sitemedia/scripts/vue/variables/itinerary.js:99
 msgid "2nd place of slave landing"
 msgstr "Principal lugar de desembarque de escravos*"
 
 #: voyages/apps/voyage/templates/database/tabs/results-detail.html:29
+#: voyages/sitemedia/scripts/vue/search.js:47
+#: voyages/sitemedia/scripts/vue/variables/itinerary.js:111
 msgid "3rd place of slave landing"
 msgstr "Principal lugar de desembarque de escravos*"
 
@@ -32520,78 +33714,113 @@ msgid "Total embarked (imputed)"
 msgstr "Total de escravos embarcados"
 
 #: voyages/apps/voyage/templates/database/tabs/results-detail.html:33
+#: voyages/sitemedia/scripts/vue/search.js:51
+#: voyages/sitemedia/scripts/vue/search.js:52
+#: voyages/sitemedia/scripts/vue/variables/slave.js:3
+#: voyages/sitemedia/scripts/vue/variables/slave.js:16
 msgid "Total embarked"
 msgstr "Total de escravos embarcados"
 
 #: voyages/apps/voyage/templates/database/tabs/results-detail.html:34
+#: voyages/sitemedia/scripts/vue/search.js:53
+#: voyages/sitemedia/scripts/vue/variables/slave.js:29
 msgid "Total disembarked"
 msgstr "Total de escravos desembarcados*"
 
 #: voyages/apps/voyage/templates/database/tabs/results-detail.html:35
+#: voyages/sitemedia/scripts/vue/variables/slave.js:43
 msgid "Slaves intended at 1st place"
 msgstr "Número de escravos desembarcados no primeiro porto de desembarque"
 
 #: voyages/apps/voyage/templates/database/tabs/results-detail.html:36
+#: voyages/sitemedia/scripts/vue/variables/slave.js:56
 msgid "Slaves carried from 1st port"
 msgstr "Escravos trazidos do primeiro porto de aquisição"
 
 #: voyages/apps/voyage/templates/database/tabs/results-detail.html:37
+#: voyages/sitemedia/scripts/vue/variables/slave.js:69
 msgid "Slaves carried from 2nd port"
 msgstr "Escravos trazidos do segundo porto de aquisição"
 
 #: voyages/apps/voyage/templates/database/tabs/results-detail.html:38
+#: voyages/sitemedia/scripts/vue/variables/slave.js:81
 msgid "Slaves carried from 3rd port"
 msgstr "Escravos trazidos do terceiro porto de aquisição"
 
 #: voyages/apps/voyage/templates/database/tabs/results-detail.html:39
+#: voyages/sitemedia/scripts/vue/variables/slave.js:94
 msgid "Slaves arrived at 1st port"
 msgstr "Escravos trazidos do primeiro porto de aquisição"
 
 #: voyages/apps/voyage/templates/database/tabs/results-detail.html:40
+#: voyages/sitemedia/scripts/vue/variables/slave.js:107
 msgid "Slaves landed at 1st port"
 msgstr "Número de escravos desembarcados no primeiro porto de desembarque"
 
 #: voyages/apps/voyage/templates/database/tabs/results-detail.html:41
+#: voyages/sitemedia/scripts/vue/variables/slave.js:119
 msgid "Slaves landed at 2nd port"
 msgstr "Escravos (números)"
 
 #: voyages/apps/voyage/templates/database/tabs/results-detail.html:42
+#: voyages/sitemedia/scripts/vue/variables/slave.js:132
 msgid "Slaves landed at 3rd port"
 msgstr "Número de escravos desembarcados no terceiro porto de desembarque"
 
 #: voyages/apps/voyage/templates/database/tabs/results-detail.html:43
+#: voyages/sitemedia/scripts/vue/search.js:62
+#: voyages/sitemedia/scripts/vue/variables/slave.js:146
+#: voyages/sitemedia/scripts/vue/variables/tabs.js:66
 msgid "Percent men"
 msgstr "Percentagem de homens*"
 
 #: voyages/apps/voyage/templates/database/tabs/results-detail.html:44
+#: voyages/sitemedia/scripts/vue/search.js:63
+#: voyages/sitemedia/scripts/vue/variables/slave.js:159
+#: voyages/sitemedia/scripts/vue/variables/tabs.js:67
 msgid "Percent women"
 msgstr "Percentagem de mulheres*"
 
 #: voyages/apps/voyage/templates/database/tabs/results-detail.html:45
+#: voyages/sitemedia/scripts/vue/search.js:64
+#: voyages/sitemedia/scripts/vue/variables/slave.js:172
+#: voyages/sitemedia/scripts/vue/variables/tabs.js:68
 msgid "Percent boys"
 msgstr "Percentagem de meninos*"
 
 #: voyages/apps/voyage/templates/database/tabs/results-detail.html:46
+#: voyages/sitemedia/scripts/vue/search.js:65
+#: voyages/sitemedia/scripts/vue/variables/slave.js:185
+#: voyages/sitemedia/scripts/vue/variables/tabs.js:69
 msgid "Percent girls"
 msgstr "Percentagem de meninas*"
 
 #: voyages/apps/voyage/templates/database/tabs/results-detail.html:47
+#: voyages/sitemedia/scripts/vue/search.js:66
+#: voyages/sitemedia/scripts/vue/variables/slave.js:198
 msgid "Percent males"
 msgstr "Percentagem de machos*"
 
 #: voyages/apps/voyage/templates/database/tabs/results-detail.html:48
+#: voyages/sitemedia/scripts/vue/search.js:67
+#: voyages/sitemedia/scripts/vue/variables/slave.js:211
+#: voyages/sitemedia/scripts/vue/variables/tabs.js:70
 msgid "Percent children"
 msgstr "Percentagem de de crianças*"
 
 #: voyages/apps/voyage/templates/database/tabs/results-detail.html:50
+#: voyages/sitemedia/scripts/vue/variables/slave.js:237
 msgid "Slaves died during middle passage"
 msgstr "Mortes de escravos durante a travessia do Atlântico*"
 
 #: voyages/apps/voyage/templates/database/tabs/results-detail.html:51
+#: voyages/sitemedia/scripts/vue/search.js:70
+#: voyages/sitemedia/scripts/vue/variables/slave.js:250
 msgid "Mortality rate"
 msgstr "Taxa de mortalidade*"
 
 #: voyages/apps/voyage/templates/database/tabs/results-detail.html:55
+#: voyages/sitemedia/scripts/vue/variables/dates.js:17
 msgid "Middle passage"
 msgstr "A travessia do Atlântico"
 
@@ -32601,34 +33830,48 @@ msgstr ""
 "Duração da viagem, do porto de origem ao de desembarque de escravos (dias)*"
 
 #: voyages/apps/voyage/templates/database/tabs/results-detail.html:57
+#: voyages/sitemedia/scripts/vue/variables/dates.js:4
 msgid "Year of arrival at port of disembarkation"
 msgstr "Datas de chegada em lugar de desembarque disponíveis"
 
 #: voyages/apps/voyage/templates/database/tabs/results-detail.html:60
+#: voyages/sitemedia/scripts/vue/search.js:78
+#: voyages/sitemedia/scripts/vue/variables/dates.js:69
 msgid "Date vessel arrived with slaves"
 msgstr "Data em que o navio chegou com escravos"
 
 #: voyages/apps/voyage/templates/database/tabs/results-detail.html:62
+#: voyages/sitemedia/scripts/vue/search.js:80
+#: voyages/sitemedia/scripts/vue/variables/dates.js:95
 msgid "Date voyage completed"
 msgstr "Data em que a viagem terminou"
 
 #: voyages/apps/voyage/templates/database/tabs/results-detail.html:67
+#: voyages/sitemedia/scripts/vue/search.js:86
+#: voyages/sitemedia/scripts/vue/variables/captain-and-crew.js:41
 msgid "Crew deaths during voyage"
 msgstr "Mortes de tripulação durante a viagem"
 
 #: voyages/apps/voyage/templates/database/tabs/results-detail.html:70
+#: voyages/sitemedia/scripts/vue/search.js:90
+#: voyages/sitemedia/scripts/vue/variables/outcome.js:15
 msgid "Outcome of voyage for slaves"
 msgstr "Resultado da viagem para os escravos*"
 
 #: voyages/apps/voyage/templates/database/tabs/results-detail.html:71
+#: voyages/sitemedia/scripts/vue/search.js:91
+#: voyages/sitemedia/scripts/vue/variables/outcome.js:27
 msgid "Outcome of voyage if ship captured"
 msgstr "Resultado da viagem se navio capturado*"
 
 #: voyages/apps/voyage/templates/database/tabs/results-detail.html:72
+#: voyages/sitemedia/scripts/vue/search.js:92
+#: voyages/sitemedia/scripts/vue/variables/outcome.js:39
 msgid "Outcome of voyage for owner"
 msgstr "Resultado da viagem para o dono*"
 
 #: voyages/apps/voyage/templates/database/tabs/results-detail.html:75
+#: voyages/sitemedia/scripts/vue/variables/source.js:3
 msgid "Source of data"
 msgstr "Porto de origem"
 
@@ -32967,6 +34210,7 @@ msgstr ""
 "desembarque de cada indivíduo."
 
 #: voyages/apps/voyage/templates/database/tabs/results-detail.html:14
+#: voyages/sitemedia/scripts/vue/variables/ship-nation-owner.js:102
 msgid "Flag (imputed)"
 msgstr "Marcador (calculado)"
 
@@ -33149,6 +34393,8 @@ msgstr ": "
 #: voyages/sitemedia/scripts/vue/components/v-number.js:169
 #: voyages/sitemedia/scripts/vue/components/v-year.js:107
 #: voyages/sitemedia/scripts/vue/components/v-year.js:116
+#: voyages/sitemedia/scripts/vue/components/v-number.js:161
+#: voyages/sitemedia/scripts/vue/components/v-number.js:170
 msgid "Enter the lower bound"
 msgstr "Entrar o limite inferior"
 
@@ -33160,6 +34406,8 @@ msgstr "Entrar o limite inferior"
 #: voyages/sitemedia/scripts/vue/components/v-number.js:166
 #: voyages/sitemedia/scripts/vue/components/v-year.js:108
 #: voyages/sitemedia/scripts/vue/components/v-year.js:113
+#: voyages/sitemedia/scripts/vue/components/v-number.js:162
+#: voyages/sitemedia/scripts/vue/components/v-number.js:167
 msgid "Enter the upper bound"
 msgstr "Entrar o limite superior"
 
@@ -33344,95 +34592,121 @@ msgstr "Capturado por franceses - não especificado"
 
 #: voyages/sitemedia/scripts/vue/includes/helpers.js:730
 #: voyages/sitemedia/scripts/vue/includes/helpers.js:749
+#: voyages/sitemedia/scripts/vue/includes/helpers.js:796
+#: voyages/sitemedia/scripts/vue/includes/helpers.js:815
 msgid "All results with all columns"
 msgstr "Todos os resultados com todas as colunas"
 
 #: voyages/sitemedia/scripts/vue/includes/helpers.js:733
 #: voyages/sitemedia/scripts/vue/includes/helpers.js:752
+#: voyages/sitemedia/scripts/vue/includes/helpers.js:799
+#: voyages/sitemedia/scripts/vue/includes/helpers.js:818
 msgid "All results with visible columns"
 msgstr "Todos os resultados com colunas visíveis"
 
 #: voyages/sitemedia/scripts/vue/includes/helpers.js:736
 #: voyages/sitemedia/scripts/vue/includes/helpers.js:755
+#: voyages/sitemedia/scripts/vue/includes/helpers.js:802
+#: voyages/sitemedia/scripts/vue/includes/helpers.js:821
 msgid "Filtered results with all columns"
 msgstr "Resultados filtrados com todas as colunas"
 
 #: voyages/sitemedia/scripts/vue/includes/helpers.js:739
 #: voyages/sitemedia/scripts/vue/includes/helpers.js:758
+#: voyages/sitemedia/scripts/vue/includes/helpers.js:805
+#: voyages/sitemedia/scripts/vue/includes/helpers.js:824
 msgid "Filtered results with visible columns"
 msgstr "Resultados filtrados com colunas visíveis"
 
 #: voyages/sitemedia/scripts/vue/includes/helpers.js:1139
+#: voyages/sitemedia/scripts/vue/includes/helpers.js:1211
 msgid "Click and drag in the plot area to zoom in"
 msgstr "Clique e arraste na área de plotagem para ampliar"
 
 #: voyages/sitemedia/scripts/vue/includes/helpers.js:1139
+#: voyages/sitemedia/scripts/vue/includes/helpers.js:1211
 msgid "Pinch the chart to zoom in"
 msgstr "Aperte a carta para aumentar o zoom"
 
 #: voyages/sitemedia/scripts/vue/includes/helpers.js:1167
+#: voyages/sitemedia/scripts/vue/includes/helpers.js:1239
 msgid "Year "
 msgstr "Ano:"
 
 #: voyages/sitemedia/scripts/vue/includes/helpers.js:1171
+#: voyages/sitemedia/scripts/vue/includes/helpers.js:1243
 msgid "We are sorry but there is no data to display or an error has occurred."
 msgstr ""
 "Nós somos desculpe mas não há nenhum dado a indicar ou ocorreu um erro."
 
 #: voyages/sitemedia/scripts/vue/search.js:4
+#: voyages/sitemedia/scripts/vue/search.js:5
 msgid "Slave"
 msgstr "O fim do tráfico de escravos"
 
 #: voyages/sitemedia/scripts/vue/search.js:32
+#: voyages/sitemedia/scripts/vue/search.js:40
 msgid "1st place of purchase"
 msgstr "1º lugar de compra"
 
 #: voyages/sitemedia/scripts/vue/search.js:33
+#: voyages/sitemedia/scripts/vue/search.js:41
 msgid "2nd place of purchase"
 msgstr "2º lugar de compra"
 
 #: voyages/sitemedia/scripts/vue/search.js:34
+#: voyages/sitemedia/scripts/vue/search.js:42
 msgid "3rd place of purchase"
 msgstr "3º lugar de compra"
 
 #: voyages/sitemedia/scripts/vue/search.js:36
 #: voyages/sitemedia/scripts/vue/variables/itinerary.js:75
+#: voyages/sitemedia/scripts/vue/search.js:44
 msgid "Principal place of slave landing"
 msgstr "Principal local de desembarque de escravos"
 
 #: voyages/sitemedia/scripts/vue/search.js:46
+#: voyages/sitemedia/scripts/vue/search.js:54
 msgid "Slaves intended"
 msgstr "Escravos destinados"
 
 #: voyages/sitemedia/scripts/vue/search.js:47
+#: voyages/sitemedia/scripts/vue/search.js:55
 msgid "Slaves from 1st port"
 msgstr "Escravos do 1º porto"
 
 #: voyages/sitemedia/scripts/vue/search.js:48
+#: voyages/sitemedia/scripts/vue/search.js:56
 msgid "Slaves from 2nd port"
 msgstr "Escravos do 2º porto"
 
 #: voyages/sitemedia/scripts/vue/search.js:49
+#: voyages/sitemedia/scripts/vue/search.js:57
 msgid "Slaves from 3rd port"
 msgstr "Escravos do 3º porto"
 
 #: voyages/sitemedia/scripts/vue/search.js:50
+#: voyages/sitemedia/scripts/vue/search.js:58
 msgid "Slaves arrived 1st port"
 msgstr "Escravos chegaram ao 1º porto"
 
 #: voyages/sitemedia/scripts/vue/search.js:51
+#: voyages/sitemedia/scripts/vue/search.js:59
 msgid "Slaves landed 1st port"
 msgstr "Escravos desembarcaram no 1º porto"
 
 #: voyages/sitemedia/scripts/vue/search.js:52
+#: voyages/sitemedia/scripts/vue/search.js:60
 msgid "Slaves landed 2nd port"
 msgstr "Escravos desembarcaram no 2º porto"
 
 #: voyages/sitemedia/scripts/vue/search.js:53
+#: voyages/sitemedia/scripts/vue/search.js:61
 msgid "Slaves landed 3rd port"
 msgstr "Escravos desembarcaram no 3º porto"
 
 #: voyages/sitemedia/scripts/vue/search.js:61
+#: voyages/sitemedia/scripts/vue/search.js:69
 msgid "Captives died during middle passage"
 msgstr "Os cativos morreram durante a passagem do meio"
 
@@ -33446,14 +34720,18 @@ msgid "Voyage length, homeport to landing (days)"
 msgstr "Duração da viagem, porto de origem ao desembarque (dias)"
 
 #: voyages/sitemedia/scripts/vue/search.js:165
+#: voyages/sitemedia/scripts/vue/search.js:168
+#: voyages/sitemedia/scripts/vue/search.js:169
 msgid "Restore default"
 msgstr "Restaurar colunas padronizadas"
 
 #: voyages/sitemedia/scripts/vue/search.js:173
+#: voyages/sitemedia/scripts/vue/search.js:177
 msgid "Configure visible columns"
 msgstr "Configurar colunas visíveis"
 
 #: voyages/sitemedia/scripts/vue/variables/dates.js:30
+#: voyages/sitemedia/scripts/vue/search.js:75
 msgid "Date that voyage began"
 msgstr "Data em que a viagem começou"
 
@@ -33609,3 +34887,18 @@ msgstr "Porcentagem de mulheres (entre escravas)"
 #: voyages/sitemedia/scripts/vue/variables/tabs.js:227
 msgid "Percentage male (among slaves)"
 msgstr "Porcentagem de homens (entre escravos)"
+
+#: voyages/sitemedia/scripts/vue/app.js:480
+msgid "This search is either no longer valid or causing an error."
+msgstr ""
+
+#: voyages/sitemedia/scripts/vue/includes/helpers.js:789
+#, fuzzy
+#| msgid "Download all results"
+msgid "Download results"
+msgstr "Baixar resultados"
+
+#: voyages/sitemedia/scripts/vue/search.js:18
+#: voyages/sitemedia/scripts/vue/variables/year.js:3
+msgid "Year arrived with slaves"
+msgstr "Ano chegou com escravos"
