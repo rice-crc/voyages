@@ -279,15 +279,19 @@ function searchAll(filter, filterData) {
                     // i.e. add 23:59:59 to searchTerm0
                     if (filter[key1][key2][key3].value["op"] == "is equal to") {
                       filter[key1][key2][key3].value["op"] = "is between";
-                      // filter[key1][key2][key3].value["searchTerm1"] = filter[key1][key2][key3].value["searchTerm0"].substring(0, 10);
-                      // filter[key1][key2][key3].value["searchTerm0"] = filter[key1][key2][key3].value["searchTerm1"].replace("/", "-") + "T00:00:00Z";
+                      filter[key1][key2][key3].value["searchTerm1"] = filter[key1][key2][key3].value["searchTerm0"].substring(0, 10);
+                      filter[key1][key2][key3].value["searchTerm0"] = filter[key1][key2][key3].value["searchTerm1"].replace("/", "-") + "T00:00:00Z";
+                      filter[key1][key2][key3].value["searchTerm1"] = filter[key1][key2][key3].value["searchTerm1"] + "T23:59:59Z";
                     }
                     // make the to date always inclusive (add 23:59:59)
                     if (filter[key1][key2][key3].value["searchTerm1"] !== null) {
-                      filter[key1][key2][key3].value["searchTerm1"] = moment(filter[key1][key2][key3].value["searchTerm1"], SOLR_DATE_FORMAT).add(1, "days").subtract(1, "seconds");
-                      // filter[key1][key2][key3].value["searchTerm1"] = filter[key1][key2][key3].value["searchTerm1"].replace("/", "-") + "T23:59:59Z";
+                      if (filter[key1][key2][key3].value["searchTerm0"].substring(0, 10) != filter[key1][key2][key3].value["searchTerm1"].substring(0, 10)) {
+                        // filter[key1][key2][key3].value["searchTerm1"] = moment(filter[key1][key2][key3].value["searchTerm1"], SOLR_DATE_FORMAT).add(1, "days").subtract(1, "seconds");
+                        filter[key1][key2][key3].value["searchTerm1"] = filter[key1][key2][key3].value["searchTerm1"].replace("/", "-") + "T23:59:59Z";
+                      }
                     }
                     item["searchTerm"] = [filter[key1][key2][key3].value["searchTerm0"], filter[key1][key2][key3].value["searchTerm1"]];
+                    item["op"] = filter[key1][key2][key3].value["op"];
                   }
 
                   // patch for percentage variables
@@ -629,6 +633,7 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
     items: searchAll(filter, filterData),
     orderBy: []
   };
+
   var searchUrl = "api/beta_ajax_search";
   if (currentTab == 'results') {
     // Results DataTable
