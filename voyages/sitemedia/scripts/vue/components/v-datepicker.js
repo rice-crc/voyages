@@ -207,6 +207,12 @@ Vue.component("v-datepicker", {
     // update prop 'filter' from store
     filter: {
       handler: function(value){
+        if (this.filter.value.searchTerm0 != null && this.filter.value.searchTerm1 != null) {
+          if (this.filter.value.searchTerm0.slice(0, 10) == this.filter.value.searchTerm1.slice(0, 10)) {
+            this.filter.value.op = "is equal to";
+            this.filter.value.searchTerm1 = null;
+          }
+        }
         this.item.searchTerm0 = this.filter.value.searchTerm0;
         this.item.searchTerm1 = this.filter.value.searchTerm1;
         this.item.op = this.filter.value.op;
