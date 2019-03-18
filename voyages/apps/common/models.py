@@ -34,7 +34,7 @@ class SavedQuery(models.Model):
         from django.http import HttpResponse
         return HttpResponse(link, content_type='text/plain')
 
-    def get_post(self):
+    def __deprecated_get_post(self):
         """
         Parse the stored query string and return a dict which is compatible
         with the original post that generated the permalink.
@@ -46,24 +46,25 @@ class SavedQuery(models.Model):
         for name, value in src.items():
             # This is an ugly HACK to detect entries which should be lists
             # even though there is only one entry in said list.
-            # The best way to handle the whole issue of permanent links would
-            # be to implement a complete model of the search queries, which
-            # could be persisted to the database in a structured format.
-            # At this point, though the options are somewhat limited.
+            # This method is now being deprecated as we move in with a JSON
+            # backend/frontend-agnostic format that is much cleaner and
+            # more flexible.
             if len(value) == 1 and 'choice_field' not in name and 'select' not in name:
                 post[name] = value[0]
             else:
                 post[name] = value
         return post
 
-    def save(self, *args, **kwargs):
+    def save(self, preserve_id=False, *args, **kwargs):
         import hashlib
         hash_object = hashlib.sha1(self.query)
         self.hash = hash_object.hexdigest()
-        pre_existing = list(SavedQuery.objects.filter(hash=self.hash).filter(query=self.query))
-        if len(pre_existing) > 0:
-            self.id = pre_existing[0].id
-            return
+        if not self.id or not preserve_id:
+            pre_existing = list(SavedQuery.objects.filter(hash=self.hash).filter(query=self.query))
+            if len(pre_existing) > 0:
+                self.id = pre_existing[0].id
+                # No update to perform.
+                return
         if not self.id:
             import random
             import string
@@ -73,7 +74,7 @@ class SavedQuery(models.Model):
         super(SavedQuery, self).save(*args, **kwargs)
 
     @classmethod
-    def restore_link(cls, link_id, session, session_key, redirect_url_name):
+    def __deprecated_restore_link(cls, link_id, session, session_key, redirect_url_name):
         """
         Fetch the given link_id post data and set session[session_key]
         with the POST dict. Then redirect the page to the URL identified
@@ -87,7 +88,7 @@ class SavedQuery(models.Model):
         """
         permalink = get_object_or_404(SavedQuery, pk=link_id)
         # Save the query in the session and redirect.
-        session[session_key] = permalink.get_post()
+        session[session_key] = permalink.__deprecated_get_post()
         from django.http import HttpResponseRedirect
         from django.core.urlresolvers import reverse
         return HttpResponseRedirect(reverse(redirect_url_name))
