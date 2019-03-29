@@ -25,3 +25,4 @@ django-storages==1.7.1
 boto3
 six==1.10.0
 ijson
+requests
