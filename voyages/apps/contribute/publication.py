@@ -286,10 +286,23 @@ def publish_accepted_contributions(log_file, skip_backup=False):
             entry = settings.HAYSTACK_CONNECTIONS.get('default')
             solr_url = entry.get('URL') if entry else None
             if solr_url:
-                import urllib2
+                import requests
+                solr_url += '/update'
+                headers = { 'Content-type': 'text/xml' }
+                def post(data):
+                    return requests.post(solr_url, data, headers=headers)
+
+                def post_delete_request(id):
+                    r = post('<delete><query>var_voyage_id:' + str(id) + '</query></delete>')
+                    if r.status_code != 200:
+                        log('Failed to delete Solr record for voyage_id ' + str(id) + ' response code: ' + str(r.status_code))
+                    else:
+                        r = post('<commit />')
+                        if r.status_code != 200:
+                            log('Failed to commit deletion for Solr record for voyage_id ' + str(id) + ' response code: ' + str(r.status_code))
+                            
                 for id in all_deleted_ids:
-                    url = solr_url + '/update?stream.body=<delete><query>var_voyage_id:' + str(id) + '</query></delete>&commit=true'
-                    urllib2.urlopen(url).read()
+                    post_delete_request(id)
         except:
             pass
         management.call_command('update_index', 'voyage.voyage', age=24, stdout=log_file)
@@ -1027,7 +1040,7 @@ def _save_editorial_version(review_request, contrib_type, in_cd_rom_override=Non
     slaves_numbers.percentage_boy = numbers.get('BOYRAT7')
     slaves_numbers.percentage_girl = numbers.get('GIRLRAT7')
     slaves_numbers.percentage_male = numbers.get('MALRAT7')
-    slaves_numbers.percentage_child = numbers.get('CHILDRAT7')
+    slaves_numbers.percentage_child = numbers.get('CHILRAT7')
     slaves_numbers.percentage_adult = 1.0 - slaves_numbers.percentage_child if slaves_numbers.percentage_child is not None else None
     slaves_numbers.percentage_female = 1.0 - slaves_numbers.percentage_male if slaves_numbers.percentage_male is not None else None
     slaves_numbers.imp_mortality_ratio = interim.imputed_mortality_rate
