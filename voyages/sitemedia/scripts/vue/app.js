@@ -339,11 +339,16 @@ var searchBar = new Vue({
     },
 
     // reset inputs, filters, and counts back to default state
-    reset(group, subGroup) {
-      resetFilter(this.filter, group, subGroup);
-      // var searchTerms = searchAll(this.filter, this.filterData);
-      //search(this.searchFilter, searchTerms);
-      this.refresh();
+    reset(filter) {
+      for (group in filter) {
+        if (group !== "settings") {
+          for (subGroup in filter[group]) {
+            if (subGroup !== "count"){
+              resetFilter(filter, group, subGroup);
+            }
+          }
+        }
+      }
     },
 
     resetAll() {
@@ -428,28 +433,20 @@ var searchBar = new Vue({
         } else {
           query = JSON.parse(response.data.items);
         }
-        var varNames = query.map(variable => "var_" + variable.varName);
-        var adjustedVarNames = [];
-        varNames.forEach(function(varName) {
-          if (varName.slice(-5) == "idnum") {
-            adjustedVarNames.push(varName.slice(0, -6));
-          } else if (varName.slice(-3) == "_id") {
-            adjustedVarNames.push(varName.slice(0, -3));
-          } else {
-            adjustedVarNames.push(varName);
-          }
-        })
+        var mappedVarNames = query.map(variable => variableMapping[variable.varName]);
+        
+        vm.reset(vm.filter);
 
         // fill a loaded search query into the UI elements
         for (group in vm.filter) {
           for (subGroup in vm.filter[group]) {
             if (subGroup != "count"){
               for (varName in vm.filter[group][subGroup]) {
-                if (adjustedVarNames.includes(varName)){
+                if (mappedVarNames.includes(varName)){
                   var variable = query.find(obj => {
-                    // remove prefix var_ to match; or match _idnum
-                    return (obj.varName == varName.slice(4)) || (obj.varName.slice(0, -3) == varName.slice(4) || (obj.varName.slice(0, -6) == varName.slice(4)));
+                    return (variableMapping[obj.varName] == varName);
                   });
+
                   vm.filter[group][subGroup][varName].activated = true;
                   vm.filter[group][subGroup][varName].changed = true;
                   vm.filter[group][subGroup][varName].value.op = (variable.op == "equals") ? "is equal to" : variable.op;
@@ -470,6 +467,7 @@ var searchBar = new Vue({
             }
           }
         }
+        debugger;
         // vm.filter = query.filter;
         vm.refresh();
       })
