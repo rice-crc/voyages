@@ -57,6 +57,12 @@ table.dataTable thead .sorting:before, table.dataTable thead .sorting:after, tab
   }
 }
 
+// make a table scroll horizontally
+.scroll-x {
+  overflow-x: scroll;
+  display: block;
+}
+
 // make all tooltip elements to show pointer cursor
 .tooltip-pointer:hover {
   cursor: pointer;
