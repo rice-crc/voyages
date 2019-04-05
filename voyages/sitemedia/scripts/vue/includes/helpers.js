@@ -624,6 +624,9 @@ var parsePlaces = function(response) {
     children: [],
   }];
 
+  // sort regions by order
+  data.regions = Object.keys(data.regions).sort(function (a, b) { return data.regions[a].order - data.regions[b].order }).map(key => data.regions[key]);   // sort data.regions by "order" attribute
+
   // fill broad regions
   for (key in data.broadRegions) {
     options[0].children.push({
