@@ -508,9 +508,9 @@ var searchBar = new Vue({
     if (location.href.includes(SAVED_SEARCH_LABEL)) {
       var savedSearchId = location.href.split(SAVED_SEARCH_LABEL).pop();
       this.load(savedSearchId);
+    } else {
+      this.refresh();
     }
-
-    this.refresh();
   },
 
   // event loop - update the menuAim everytime after it's re-rendered
