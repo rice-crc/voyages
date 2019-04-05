@@ -23,27 +23,24 @@ var searchBar = new Vue({
       },
     },
     activated: false,
-    query: {
-      // put the search query in here
-    },
     saved: [],
     options: {
       debug: false,
       errorMessage: null,
     },
-    tabs: tabs,
-    row: {
+    tabs: tabs, // dropdown options for each tab | vue/variables/tabs.js
+    row: { // store current row's data; used for displaying entry full details
       data: null,
       collapseVisible: true,
     },
     currentQuery: {},
     hasCurrentQuery: false,
     rowModalShow: false,
-    currentTab: "results",
+    currentTab: "results", // currently active tab
   },
   watch: {
 
-    tabs: {
+    tabs: { // when tab search option updates, refresh the UI
       handler: function() {
         this.refresh();
       },
@@ -194,7 +191,7 @@ var searchBar = new Vue({
                   var value = this.row.data[varName];
                   var isImputed = (item.options) ? item.options.isImputed : false;
 
-                  // Patch
+                  // Patch source variable
                   if (varName == "var_sources_plaintext") {
                     value = ""; // empty value string
                     var sources = this.row.data["var_sources_raw"];
@@ -322,7 +319,6 @@ var searchBar = new Vue({
           }
         }
       }
-      // function to locate a variable
     },
 
     // turn changed items into activated state; then execute search
@@ -334,7 +330,7 @@ var searchBar = new Vue({
       activateFilter(this.filter, group, subGroup, filterValues);
       // var searchTerms = searchAll(this.filter, this.filterData);
       // alert(JSON.stringify(searchTerms));
-      //search(this.searchFilter, searchTerms);
+      // search(this.searchFilter, searchTerms);
       this.refresh();
     },
 
@@ -352,38 +348,74 @@ var searchBar = new Vue({
     },
 
     resetAll() {
-      window.location.reload(); // forced reload
+      this.refreshPage();
       this.resetURL();
-      // localStorage.removeItem("saved");
-      // for (group in this.filter) {
-      //   if (group !== "settings") {
-      //     for (subGroup in this.filter[group]) {
-      //       if (subGroup !== "count"){
-      //         resetFilter(this.filter, group, subGroup);
-      //       }
-      //     }
-      //   }
-      // }
-      // var searchTerms = searchAll(this.filter, this.filterData);
-      // this.currentQuery = {};
-      // //search(this.searchFilter, searchTerms);
-      // this.resetURL();
-      // refreshUi(this.filter, this.filterData, this.currentTab, this.tabs, this.options);
     },
 
     refresh() {
       refreshUi(this.filter, this.filterData, this.currentTab, this.tabs, this.options);
     },
 
+    load(value) {
+      console.log(value);
+      var url = "/voyage/get-saved-query/" + value;
+      var vm = this;
+      axios.get(url, {})
+        .then(function (response) {
+          var query;
+          if (Array.isArray(response.data.items)) {
+            query = response.data.items;
+          } else {
+            query = JSON.parse(response.data.items);
+          }
+          var mappedVarNames = query.map(variable => variableMapping[variable.varName]);
+
+          vm.reset(vm.filter);
+
+          // fill a loaded search query into the UI elements
+          for (group in vm.filter) {
+            for (subGroup in vm.filter[group]) {
+              if (subGroup != "count") {
+                for (varName in vm.filter[group][subGroup]) {
+                  if (mappedVarNames.includes(varName)) {
+                    var variable = query.find(obj => {
+                      return (variableMapping[obj.varName] == varName);
+                    });
+
+                    vm.filter[group][subGroup][varName].activated = true;
+                    vm.filter[group][subGroup][varName].changed = true;
+                    vm.filter[group][subGroup][varName].value.op = (variable.op == "equals") ? "is equal to" : variable.op;
+
+                    if (vm.filter[group][subGroup][varName] instanceof PlaceVariable || vm.filter[group][subGroup][varName] instanceof TreeselectVariable) {
+                      vm.filter[group][subGroup][varName].value.searchTerm = variable.searchTerm;
+                    } else if (vm.filter[group][subGroup][varName] instanceof PercentageVariable) {
+                      vm.filter[group][subGroup][varName].value.searchTerm0 = parseInt(variable.searchTerm[0] * 100);
+                      vm.filter[group][subGroup][varName].value.searchTerm1 = parseInt(variable.searchTerm[1] * 100);
+                    } else if (Array.isArray(variable.searchTerm)) {
+                      vm.filter[group][subGroup][varName].value.searchTerm0 = variable.searchTerm[0];
+                      vm.filter[group][subGroup][varName].value.searchTerm1 = variable.searchTerm[1];
+                    } else {
+                      console.log(variable.searchTerm);
+                      vm.filter[group][subGroup][varName].value.searchTerm = variable.searchTerm;
+                    }
+                  }
+                }
+              }
+            }
+          }
+          vm.refresh();
+        })
+        .catch(function (error) {
+          vm.options.errorMessage = error;
+          $("#sv-loader").addClass("display-none");
+          $("#sv-loader-error").removeClass("display-none");
+          $(".sv-loader-error-message-container").children(".v-panel-description").html(gettext("This search is either no longer valid or causing an error."));
+          console.log(error);
+        });
+    },
+
     save() {
       var items = searchAll(this.filter, this.filterData);
-      // var existingKeys = []
-      // var key = generateUniqueRandomKey(existingKeys);
-      // this.saved.unshift({
-      //   key: key,
-      //   searchTerms: searchTerms
-      // });
-
       var vm = this;
       axios.post('/voyage/save-query', {
         items: serializeFilter(items),
@@ -401,7 +433,7 @@ var searchBar = new Vue({
         if (!exists) {
           vm.saved.unshift({
             saved_query_id: response.data.saved_query_id,
-            saved_query_url: window.location.origin + "/" + TRANS_PATH + SAVED_SEARCH_LABEL + response.data.saved_query_id
+            saved_query_url: window.location.origin + "/" + TRANS_PATH + response.data.saved_query_id
           });
 
           localStorage.setItem("saved", JSON.stringify(vm.saved));
@@ -419,65 +451,6 @@ var searchBar = new Vue({
     clear() {
       localStorage.removeItem("saved");
       this.saved = [];
-    },
-
-    load(value) {
-      console.log(value);
-      var url = "/voyage/get-saved-query/" + value;
-      var vm = this;
-      axios.get(url, {})
-      .then(function (response) {
-        var query;
-        if (Array.isArray(response.data.items)) {
-          query = response.data.items;
-        } else {
-          query = JSON.parse(response.data.items);
-        }
-        var mappedVarNames = query.map(variable => variableMapping[variable.varName]);
-        
-        vm.reset(vm.filter);
-
-        // fill a loaded search query into the UI elements
-        for (group in vm.filter) {
-          for (subGroup in vm.filter[group]) {
-            if (subGroup != "count"){
-              for (varName in vm.filter[group][subGroup]) {
-                if (mappedVarNames.includes(varName)){
-                  var variable = query.find(obj => {
-                    return (variableMapping[obj.varName] == varName);
-                  });
-
-                  vm.filter[group][subGroup][varName].activated = true;
-                  vm.filter[group][subGroup][varName].changed = true;
-                  vm.filter[group][subGroup][varName].value.op = (variable.op == "equals") ? "is equal to" : variable.op;
- 
-                  if (vm.filter[group][subGroup][varName] instanceof PlaceVariable || vm.filter[group][subGroup][varName] instanceof TreeselectVariable) {
-                    vm.filter[group][subGroup][varName].value.searchTerm = variable.searchTerm;
-                  } else if (vm.filter[group][subGroup][varName] instanceof PercentageVariable){
-                    vm.filter[group][subGroup][varName].value.searchTerm0 = parseInt(variable.searchTerm[0] * 100);
-                    vm.filter[group][subGroup][varName].value.searchTerm1 = parseInt(variable.searchTerm[1] * 100);
-                  } else if (Array.isArray(variable.searchTerm)) {
-                     vm.filter[group][subGroup][varName].value.searchTerm0 = variable.searchTerm[0];
-                      vm.filter[group][subGroup][varName].value.searchTerm1 = variable.searchTerm[1];
-                  } else {
-                    vm.filter[group][subGroup][varName].value.searchTerm = variable.searchTerm;
-                  }
-                }
-              }
-            }
-          }
-        }
-        debugger;
-        // vm.filter = query.filter;
-        vm.refresh();
-      })
-      .catch(function (error) {
-        vm.options.errorMessage = error;
-        $("#sv-loader").addClass("display-none");
-        $("#sv-loader-error").removeClass("display-none");
-        $(".sv-loader-error-message-container").children(".v-panel-description").html(gettext("This search is either no longer valid or causing an error."));
-        console.log(error);
-      });
     },
 
     reportError(){
@@ -501,7 +474,7 @@ var searchBar = new Vue({
     },
 
     refreshPage(){
-      location.reload();
+      window.location.reload();
     },
 
     resetURL() {
@@ -538,7 +511,6 @@ var searchBar = new Vue({
     }
 
     this.refresh();
-
   },
 
   // event loop - update the menuAim everytime after it's re-rendered
