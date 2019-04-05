@@ -402,9 +402,6 @@ def ajax_download(request):
             writer.writerow({col: item[col] for col in columns})
         return response
 
-def search_view(request):
-    return render(request, 'voyage/beta_search_main.html')
-
 _options_model = {
     'var_outcome_voyage': ParticularOutcome.objects,
     'var_outcome_slaves': SlavesOutcome.objects,

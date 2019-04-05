@@ -706,7 +706,7 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
     orderBy: []
   };
 
-  var searchUrl = "api/beta_ajax_search";
+  var searchUrl = "api/search";
   if (currentTab == 'results') {
     // Results DataTable
     var pageLength = {
@@ -922,7 +922,7 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
           return visible ? allColumns[index].data : undefined;
         }) : [];
 
-        var form = $("<form action='api/beta_ajax_download' method='post'>{% csrf_token %}</form>");
+        var form = $("<form action='api/download' method='post'>{% csrf_token %}</form>");
         form.append($("<input name='data' type='hidden'></input>").attr('value', JSON.stringify({
 
           searchData: isFiltered ? currentSearchObj : { "items": [] }, // decides if it's returning filtered data or all data
