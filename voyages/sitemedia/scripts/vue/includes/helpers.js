@@ -1,6 +1,6 @@
 // reserved keyword for saved search query identifier
 const SAVED_SEARCH_LABEL = "#searchId=";
-const TRANS_PATH = "voyage/database";
+const TRANS_PATH = "voyages/";
 
 /**
  * Add space between camelCase text.
