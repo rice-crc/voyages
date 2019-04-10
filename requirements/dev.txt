@@ -7,3 +7,5 @@ unittest-xml-reporting
 unittest2
 django-cities-light
 xlrd
+mpu
+scipy

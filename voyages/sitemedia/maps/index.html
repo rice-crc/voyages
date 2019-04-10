@@ -64,6 +64,10 @@
                     <span class="glyphicon glyphicon-download" aria-hidden="true"></span>
                     Save
                 </button>
+                <button class="btn btn-success" onclick="downloadNetwork(true);" class="control">
+                    <span class="glyphicon glyphicon-download" aria-hidden="true"></span>
+                    Save.py
+                </button>
                 <button class="btn btn-primary" id="uploadNetworkButton" class="control">
                     <span class="glyphicon glyphicon-upload" aria-hidden="true"></span>
                     Load
@@ -350,20 +354,31 @@ function gettext(x) {
 			return $("input:radio[name=tools]:checked").val();
 		}
 
-		function downloadNetwork() {
-			var out = "var routeNodes = [\r\n";
-			for (var i = 0; i < routeNodes.length; ++i) {
-				out += "\tnew L.LatLng(" + routeNodes[i].lat + ", " + routeNodes[i].lng + "),\r\n";
+		function downloadNetwork(python) {
+			python = !!python;
+
+			var out = (python ? "" : "var ") + "routeNodes = [\r\n";
+			for (var i = 0; i < network.routeNodes.length; ++i) {
+				out += "\t" + (python ? "" : "new L.LatLng") + "(" + network.routeNodes[i].lat + ", " + network.routeNodes[i].lng + "),\r\n";
 			}
-			out += "];\r\nvar links = [\r\n";
+			if (python) {
+				out += "]\r\nlinks = [\r\n";
+			} else {
+				out += "];\r\nvar links = [\r\n";
+			}
 			for (var i = 0; i < toolData.links.length; ++i) {
 				var link = toolData.links[i];
-				out += "\t{ start: " + uidToArrayIndex[link.idStart] + ", end: " + uidToArrayIndex[link.idEnd] + " },\r\n";
+				if (python) {
+					out += "\t(" + uidToArrayIndex[link.idStart] + ", " + uidToArrayIndex[link.idEnd] + "),\r\n";
+				} else {
+					out += "\t{ start: " + uidToArrayIndex[link.idStart] + ", end: " + uidToArrayIndex[link.idEnd] + " },\r\n";
+				}
 			}
-			out += "];";
+			out += "]";
+			if (!python) out += ";";
 			var pom = document.createElement('a');
 			pom.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(out));
-			pom.setAttribute('download', 'routeNodes.js');
+			pom.setAttribute('download', python ? 'network.py' : 'routeNodes.js');
 			pom.style.display = 'none';
 			document.body.appendChild(pom);
 			pom.click();
@@ -381,6 +396,7 @@ function gettext(x) {
 			var marker = L.marker(network.routeNodes[k], {
 				icon: normalIcon,
 				draggable: true,
+				title: 'node ' + k
 			}).addTo(voyagesMap);
 			marker.id = uid();
 			marker.inLinks = [ ];
