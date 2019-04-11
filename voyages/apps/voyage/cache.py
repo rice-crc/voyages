@@ -41,6 +41,7 @@ class CachedVoyage:
         self.ship_name = ship_name
         self.ship_ton = ship_ton
         self.year = VoyageDates.get_date_year(date_voyage_began)
+        self.month = VoyageDates.get_date_month(date_voyage_began)
         self.embarked = embarked
         self.disembarked = disembarked
 
