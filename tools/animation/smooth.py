@@ -4,33 +4,23 @@ from region_from import *
 from region_to import *
 from region_network import *
 from scipy.interpolate import interp1d
+from mpu import haversine_distance as hdist
 import numpy as np
-import mpu
 
 def precompile_paths():
     VoyageCache.load()
     source_port_pks = set([v.emb_pk for v in VoyageCache.voyages.values() if v.emb_pk])
     dest_port_pks = set([v.dis_pk for v in VoyageCache.voyages.values() if v.dis_pk])
-
-    def get_port(pk):
-        p = VoyageCache.ports[pk]
-        return (float(p.lat), float(p.lng))
     
     # Map closest point from an origin.
     def get_closest(origin, choices):
-        min_index = min(enumerate(choices), key=lambda (_, pt): mpu.haversine_distance(pt, origin))[0]
+        min_index = min(enumerate(choices), key=lambda (_, pt): hdist(pt, origin))[0]
         return min_index
 
-    source_regions = { pk: get_closest(get_port(pk), region_from) for pk in source_port_pks }
-    dest_regions = { pk: get_closest(get_port(pk), region_to) for pk in dest_port_pks }
     region_from_nodes = [get_closest(r, routeNodes) for r in region_from]
     region_to_nodes = [get_closest(r, routeNodes) for r in region_to]
-
-    regional_pairs = set([(region_from_nodes[source_regions[v.emb_pk]], region_to_nodes[dest_regions[v.dis_pk]])
-        for v in VoyageCache.voyages.values() if v.emb_pk and v.dis_pk])
-
     # We now compute the regional routes.
-    distances = [mpu.haversine_distance(routeNodes[s], routeNodes[d]) for (s, d) in links]
+    distances = [hdist(routeNodes[s], routeNodes[d]) for (s, d) in links]
     n = len(routeNodes)
     outlinks = [[(d, link_index) for (link_index, (s, d)) in enumerate(links) if s == i] for i in range(0, n)]
 
@@ -59,13 +49,49 @@ def precompile_paths():
         # Interpolate curve and evaluate at equidistant points along the curve.
         interpolated = interp1d(distance, points, kind='quadratic', axis=0)
         alpha = np.linspace(0, 1, max([20, 5 * len(path)]))
-        return interpolated(alpha)
+        return interpolated(alpha).tolist()
 
-    regional_routes = [(s, d, smooth_path(s, d)) for (s, d) in regional_pairs]
-    return regional_routes
+    regional_routes = [[smooth_path(region_from_nodes[sind], region_to_nodes[dind]) 
+        for dind in range(0, len(region_to))] 
+        for sind in range(0, len(region_from))]
 
+    def connect_port_to_region(regions, threshold=5000):
+        proutes = {}
+        for (pk, p) in VoyageCache.ports.items():
+            if not p.lat or not p.lng: continue
+            pt = (float(p.lat), float(p.lng))
+            closest_region_index = get_closest(pt, regions)
+            region_pt = regions[closest_region_index]
+            closest_distance = hdist(pt, region_pt)
+            if closest_distance < threshold:
+                # TODO: use another network to connect ports to their regional hubs.
+                # For now we simply connect them directly through a geodesic (GreatArc).
+                proutes[pk] = { 'reg': closest_region_index, 'path': [pt], 'name': p.name }
+        return proutes
+
+    port_routes = {}
+    port_routes['src'] = connect_port_to_region(region_from)
+    port_routes['dst'] = connect_port_to_region(region_to)
+    warnings = ['Port ' + p.name + ' is too far from any regional hub'
+        for (pk, p) in VoyageCache.ports.items() if pk not in port_routes and p.lat and p.lng]
+    return regional_routes, port_routes, warnings
+
+def generate_static_files():
+    """
+    Generate JSON files with regional routes and port paths to respective hubs.
+    """
+    (regional_routes, port_routes, warnings) = precompile_paths()
+    if len(warnings) > 0:
+        print("Warnings (" + str(len(warnings)) + ")")
+        for w in warnings:
+            print(w)
+    import os, json
+    base_folder = os.path.join(os.path.dirname(os.path.abspath(__file__)), '../../voyages/sitemedia/maps/js/')
+    with open(os.path.join(base_folder, 'regional_routes.json'), 'w') as f:
+        json.dump(regional_routes, f)
+    with open(os.path.join(base_folder, 'port_routes.json'), 'w') as f:
+        json.dump(port_routes, f)
+
+# Tp update the static JSON files, run the following on ./manage.py shell
 # from tools.animation.smooth import *
-# from tools.animation.region_from import *
-# from tools.animation.region_to import *
-# from tools.animation.region_network import *
-# precompile_paths()
+# generate_static_files()

@@ -1885,6 +1885,7 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
       searchData: currentSearchObj,
       output: 'mapAnimation'
     };
+    var SMOOTH_HELPER = null;
     var mapAnimationSearchCallback = function() {
       var $map = $('#map');
       $.post(searchUrl, JSON.stringify(postData), function(result) {
@@ -1895,9 +1896,11 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
         }
         voyagesMap.clear();
         $('.animationElement').show();
-        animationHelper.startAnimation(result);
+        //animationHelper.startAnimation(result);
+        SMOOTH_HELPER = new AnimationHelper(result);
       }).done(function(){
-        animationHelper.reset();
+        SMOOTH_HELPER.reset();
+        //animationHelper.reset();
         $("#sv-loader").addClass("display-none");
         $("#maps").removeClass("display-none");
         loader.resizeMap();
@@ -1992,7 +1995,8 @@ function LazyLoader() {
           self.loadScript(STATIC_URL + 'maps/js/arc.js'),
           self.loadScript(STATIC_URL + 'maps/js/leaflet.geodesic.min.js')
         )
-        .then(self.loadScript(STATIC_URL + 'scripts/vue/includes/animation.js'))
+        .then(self.loadScript(STATIC_URL + 'scripts/vue/includes/animation.js')) // TODO[smooth]: keep only one script.
+        .then(self.loadScript(STATIC_URL + 'scripts/vue/includes/beta_animation.js'))
         .then(function() {
           self.animationScriptsLoaded = true;
           done();

@@ -632,7 +632,8 @@ class VoyageDates(models.Model):
             except:
                 return None
 
-    def get_date_month(self, value):
+    @classmethod
+    def get_date_month(cls, value):
         """
         Returns month value from CommaSeparatedField, or 0 if undefined
         """
@@ -647,7 +648,8 @@ class VoyageDates(models.Model):
             except:
                 return None
 
-    def get_date_day(self, value):
+    @classmethod
+    def get_date_day(cls, value):
         """
         Returns date value from CommaSeparatedField, or 0 if undefined
         """

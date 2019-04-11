@@ -200,7 +200,7 @@ function setup() {
                 selection
                     .append("circle")
                     .classed("animation_voyage_inner_circle", true)
-                    .attr("r", 2)
+                    .attr("r", 2);
                 applyTransition(selection, 0);
             } catch (e) {
                 console.log(e);
