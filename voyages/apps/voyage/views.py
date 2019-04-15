@@ -1299,7 +1299,7 @@ def search(request):
                               ', "year": ' + str(voyage.year) + \
                               ', "ship_ton": ' + \
                               (str(voyage.ship_ton) if voyage.ship_ton is not None else '0') + \
-                              ', "ship_nationality_id": ' + \
+                              ', "nat_id": ' + \
                               (str(voyage.ship_nat_pk) if voyage.ship_nat_pk is not None else '0') + \
                               ', "ship_nationality_name": "' + _(flag) + '"' \
                               ', "ship_name": "' + \

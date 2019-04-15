@@ -205,21 +205,13 @@ def get_results_map_animation(results):
                 "voyage_id": str(voyage.voyage_id),
                 "src": voyage.emb_pk,
                 "dst": voyage.dis_pk,
-                "source_name": unicode(source[0].name), # TODO[smooth] remove
-                "source_lat": str(source[0].lat), # TODO[smooth] remove
-                "source_lng": str(source[0].lng), # TODO[smooth] remove
-                "destination_name": unicode(destination[0].name), # TODO[smooth] remove
-                "destination_lat": str(destination[0].lat), # TODO[smooth] remove
-                "destination_lng": str(destination[0].lng), # TODO[smooth] remove
                 "embarked": str(voyage.embarked),
                 "disembarked": str(voyage.disembarked),
                 "year": str(voyage.year),
                 "month": str(voyage.month),
                 "ship_ton": str(voyage.ship_ton) if voyage.ship_ton is not None else '0',
-                "ship_nationality_id": str(voyage.ship_nat_pk) if voyage.ship_nat_pk is not None else '0',
-                "ship_nationality_name": unicode(flag),
+                "nat_id": str(voyage.ship_nat_pk) if voyage.ship_nat_pk is not None else '0',
                 "ship_name": unicode(voyage.ship_name) if voyage.ship_name is not None else '',
-                "route": route # TODO[smooth] remove
             })
     return JsonResponse(items, safe=False)
 

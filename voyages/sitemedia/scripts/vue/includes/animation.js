@@ -163,7 +163,7 @@ function setup() {
                         voyagesMap.addLayer(selectedRoute);
                         // Set tooltip content.
                         var content = $("#tooltip_content");
-                        content.attr("class", "animation_voyage_content flag_" + d.ship_nationality_id);
+                        content.attr("class", "animation_voyage_content flag_" + d.nat_id);
                         var template = '<h1>' + (d.ship_name != "" ? d.ship_name : "&nbsp;") + "</h1>";
                         if (d.ship_nationality_name != "") {
                             template += "<h2>" + d.ship_nationality_name + "</h2>";
