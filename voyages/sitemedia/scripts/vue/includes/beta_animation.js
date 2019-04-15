@@ -1,5 +1,9 @@
 // Scripts for the timelapse animation of voyages in the map.
 
+var DEFAULT_TIMER_RESOLUTION = 40; // milliseconds
+
+var _now = function () { return (new Date()).getTime(); };
+
 // Represents a route on the globe using lat/lng coordinates.
 function Route(points) {
     var self = this;
@@ -30,6 +34,7 @@ function Route(points) {
         var lastTime = 0;
         var lastPointIdx = 0;
         var lastAngle = 0;
+        if (angles.length == 0) return function () { return [0.0, 0.0] };
         return function (time) {
             if (time < 0) time = 0;
             if (time > 1.0) time = 1.0;
@@ -41,10 +46,11 @@ function Route(points) {
                 from_idx = 0;
             }
             var idx = from_idx;
-            while (lastAngle + angles[idx] < currentAngle && idx < angles.length - 1) {
+            while (idx < angles.length - 1 && lastAngle + angles[idx] < currentAngle) {
                 lastAngle += angles[idx];
                 ++idx;
             }
+            if (idx >= angles.length) idx = angles.length - 1;
             // Update cache.
             lastTime = time;
             lastPointIdx = idx;
@@ -117,6 +123,7 @@ function AnimationModel(routes, voyages) {
             }
         }
         lastWindowStart = from_idx;
+        lastTime = time;
         return result;
     };
     self.getFirstStartTime = function () {
@@ -148,12 +155,12 @@ function AnimationControl(routes, voyages, timerResolution, timeStepPerSec, onRe
     self._paused = false;
     var setStepPerSec = function (stepPerSec) {
         timeStepPerSec = stepPerSec || 1;
-        timerResolution = timerResolution || 200;
-        if (timerResolution * timeStepPerSec < 1000.0) {
+        timerResolution = timerResolution || DEFAULT_TIMER_RESOLUTION;
+        if (timerResolution * timeStepPerSec < 500.0) {
             // Ensure that the resolution is not too fine 
             // (e.g. multiple ticks would be required for
             // an increase in simulated time).
-            timerResolution = 1000.0 / timeStepPerSec;
+            timerResolution = 500.0 / timeStepPerSec;
         }
         if (self._timer != null) {
             window.clearInterval(self._timer);
@@ -175,13 +182,14 @@ function AnimationControl(routes, voyages, timerResolution, timeStepPerSec, onRe
                 console.log('Render error!');
                 console.log(e);
             }
-            lastRealTime = (new Date()).getTime();
+            lastRealTime = _now();
+            self._paused = self._paused || (nextSimTime >= maxTime - 0.01);
         }
     };
     var tick = function () {
         if (self._paused) return;
         // Advance the simulated time in sync with real time.
-        var now = (new Date()).getTime();
+        var now = _now();
         var nextSimTime = 0;
         if (lastRealTime != null) {
             // Avoid too large gap between simulated times (which would be
@@ -207,7 +215,7 @@ function AnimationControl(routes, voyages, timerResolution, timeStepPerSec, onRe
         self._paused = true;
     };
     self.play = function () {
-        lastRealTime = Date.now;
+        lastRealTime = _now();
         self._paused = false;
     };
     self.stop = function () {
@@ -246,28 +254,81 @@ var _flatten = function (arr) {
     return r;
 };
 
-var _applySmoothJoint = function (current, added, reverseAdded) {
-    if (current.length <= 1 || added.length <= 1) {
-        _appendArrHelper(added, current, reverseAdded);
-        return;
+function _normSq(v) {
+    var r = 0.0;
+    for (var i = 0; i < v.length; ++i) {
+        var a = v[i];
+        r += a * a;
     }
-    var segment = [
-        current[current.length - 2],
-        current[current.length - 1],
-        added[reverseAdded ? added.length - 1 : 0],
-        added[reverseAdded ? added.length - 2 : 1]
-    ];
-    var points = _flatten(segment);
-    var smooth = voyagesMap._getCurvePoints(points, null, 4, false);
-    // Remove last two points from current path since they will be smoothed.
-    current.splice(current.length - 2, 2);
-    // Append joint.
-    for (var i = 0; i < smooth.length - 1; i += 2) {
-        current.push([smooth[i], smooth[i + 1]]);
+    return r;
+}
+
+function _angleInfo(center, p1, p2) {
+    var cx = center[0];
+    var cy = center[1]
+    var v1 = [p1[0] - cx, p1[1] - cy];
+    var v2 = [p2[0] - cx, p2[1] - cy];
+    var n1 = _normSq(v1);
+    var n2 = _normSq(v2);
+    var dot = v1[0] * v2[0] + v1[1] * v2[1];
+    var sqrtNormProd = Math.sqrt(n1 * n2);
+    return { angle: Math.acos(dot / sqrtNormProd), center: center, dot: dot, sqrtNormProd: sqrtNormProd, v1: v1, v2: v2, n1sq: n1, n2sq: n2 };
+}
+
+// Given two paths that may form a sharp corner when concatenated,
+// compute an index on path2 that is not too far along the path such
+// that the angle formed by the concatenation is within a threshold.
+function _reduceSharpCorner(lastP1pt, second, reverse, maxPathSector, threshold) {
+    if (second.length <= 3) return second;
+    // Attempt to find a position further along the second path for which
+    // the incidence angle is lower than the given threshold. If not found,
+    // the least incidence angle on the initial segment of the path is
+    // used instead.
+    var p2index = 0;
+    threshold = threshold || Math.PI * 0.15;
+    var bestIndex = 0;
+    var bestAngle = Math.PI;
+    maxPathSector = maxPathSector || 0.25;
+    reverse = !!reverse;
+    while (p2index < second.length * maxPathSector - 1) {
+        var a = reverse
+            ? _angleInfo(second[second.length - p2index - 2], lastP1pt, second[second.length - 1 - p2index]).angle
+            : _angleInfo(second[p2index + 1], lastP1pt, second[p2index]).angle;
+        if (a < threshold) {
+            bestIndex = p2index;
+            break;
+        }
+        if (a < bestAngle) {
+            bestAngle = a;
+            bestIndex = p2index;
+        }
+        ++p2index;
     }
-    // Append added segment except for first two points used for smoothing.
-    _appendArrHelper(added, current, reverseAdded, 2, 0);
-};
+    // Instead of taking a direct jump from the last point in the first path
+    // to the path's best incidence point, we include additional points to
+    // smooth the curve. Our approach is to use a quadratic scale to ensure
+    // matching tangents from both ends of the best incidence point.
+    var ai = reverse
+        ? _angleInfo(second[second.length - p2index - 2], lastP1pt, second[second.length - 1 - p2index])
+        : _angleInfo(second[bestIndex + 1], lastP1pt, second[bestIndex]);
+    var endTangentScalar = ai.sqrtNormProd / ai.n2sq;
+    var endTangent = [ai.v2[0] * endTangentScalar, ai.v2[1] * endTangentScalar];
+    var prefix = [];
+    var NUM_POINTS = 10;
+    for (var j = NUM_POINTS - 1; j >= 1; --j) {
+        var lambda = reverse
+            ? (NUM_POINTS - j + 0.0) / NUM_POINTS
+            : (j + 0.0) / NUM_POINTS;
+        var a = [ai.center[0] + lambda * ai.v1[0], ai.center[1] + lambda * ai.v1[1]];
+        var b = [ai.center[0] + lambda * endTangent[0], ai.center[1] + lambda * endTangent[1]];
+        var lambda2 = lambda * lambda;
+        var pt = [b[0] + lambda2 * (a[0] - b[0]), b[1] + lambda2 * (a[1] - b[1])];
+        prefix.push(pt);
+    }
+    return reverse
+        ? second.slice(0, second.length - 1 - p2index).concat(prefix)
+        : prefix.concat(second.slice(bestIndex));
+}
 
 /**
  * For compactness, the routes are decomposed in 3 segments.
@@ -304,8 +365,20 @@ function compileRoutes(regionSegments, portSegments, routeData) {
         var third = dstInfo.path;
         // Smooth each of the two joins.
         var points = first.slice(0);
-        _applySmoothJoint(points, second, false);
-        _applySmoothJoint(points, third, true);
+        // If the port-to-region/region-to-port segments
+        // consist of direct paths, we will calculate the
+        // angle formed by the concatenation of the paths
+        // and attempt to reduce sharp corners by replacing
+        // the joint point by another further along the
+        // curve.
+        if (points.length == 1) {
+            second = _reduceSharpCorner(points[0], second);
+        }
+        _appendArrHelper(second, points);
+        if (third.length == 1) {
+            points = _reduceSharpCorner(third[0], points, true);
+        }
+        _appendArrHelper(third, points, true);
         result.push(points);
     }
     return result;
@@ -317,7 +390,8 @@ function compileRoutes(regionSegments, portSegments, routeData) {
  * @param {*} voyages The set of voyages to display in the animation.
  * @param {*} ui An object containing a Leaflet map entry, 
  * a d3view object which hosts the animation svg elements, and methods
- * initialize(control) and setTime(simTime)
+ * initialize(control), setTime(simTime), showTooltip(data, sourceRect),
+ * and closeTooltip.
  * @param {*} monthsPerSecond How many months should elapse for each 
  * animation second.
  */
@@ -326,8 +400,10 @@ function d3MapTimelapse(voyages, ui, monthsPerSecond) {
     // Compile routes from segments.
     var regionSegments = null;
     var portSegments = null;
+    var nations = {};
     var self = this;
     var selectedRoute = null;
+
     var setSelectedRoute = function (route) {
         if (selectedRoute) {
             ui.map.removeLayer(selectedRoute);
@@ -337,6 +413,7 @@ function d3MapTimelapse(voyages, ui, monthsPerSecond) {
             ui.map.addLayer(selectedRoute);
         }
     };
+
     var render = function (simTime, items) {
         setSelectedRoute(null);
         ui.setTime(simTime);
@@ -351,7 +428,7 @@ function d3MapTimelapse(voyages, ui, monthsPerSecond) {
         var updatePos = function (sel) {
             if (sel) return sel
                 .transition()
-                .duration(100)
+                .duration(DEFAULT_TIMER_RESOLUTION)
                 .attr("transform", function (d) { return "translate(" + d.point.x + "," + d.point.y + ")"; });
         };
         var selection = ui.d3view.selectAll(".animation_voyage_group")
@@ -378,7 +455,7 @@ function d3MapTimelapse(voyages, ui, monthsPerSecond) {
                 $(this).animate({ opacity: 0 }, 300);
             })
             .on("click", function () {
-                //closeToolTip();
+                ui.closeTooltip();
                 d3.select(".selected").classed("selected", false);
                 d3.select(this).classed("selected", true);
                 var d = this.__data__;
@@ -388,13 +465,18 @@ function d3MapTimelapse(voyages, ui, monthsPerSecond) {
                     className: "animation_selected_route"
                 });
                 setSelectedRoute(route);
+                data = Object.assign({}, d.voyage.data);
+                data.source_name = portSegments['src'][data.src].name;
+                data.destination_name = portSegments['dst'][data.dst].name;
+                data.ship_nationality_name = nations[data.nat_id] || '';
+                ui.showTooltip(data, this.getBoundingClientRect());
             });
         updatePos(enterSel);
         selection.exit().remove();
     };
     var init = function () {
         var routes = compileRoutes(regionSegments, portSegments, voyages);
-        self.control = new AnimationControl(routes, voyages, 100, monthsPerSecond, render);
+        self.control = new AnimationControl(routes, voyages, DEFAULT_TIMER_RESOLUTION, monthsPerSecond, render);
         ui.initialize(self.control);
     };
     $.getJSON(STATIC_URL + "maps/js/regional_routes.json", function (data) {
@@ -404,6 +486,11 @@ function d3MapTimelapse(voyages, ui, monthsPerSecond) {
     $.getJSON(STATIC_URL + "maps/js/port_routes.json", function (data) {
         portSegments = data;
         if (!!regionSegments && !!portSegments && !self.control) init();
+    });
+    $.getJSON("/common/nations", function(data) {
+        for (var key in data) {
+            nations[key] = data[key].name;
+        }
     });
 }
 
@@ -415,6 +502,9 @@ function AnimationHelper(data) {
     var map = voyagesMap._map;
     var svg = d3.select(map.getPanes().overlayPane).append("svg");
     var g = svg.append("g").attr("class", "leaflet-zoom-hide");
+    var tooltip = $('#tooltip');
+    var tooltipShown = false;
+
     // Set SVG size and position within map.
     var positionSvg = function () {
         var bounds = map.getBounds();
@@ -437,18 +527,65 @@ function AnimationHelper(data) {
             });
         }
     };
+
+    var closeTooltip = function () {
+        tooltip.hide();
+        svg.selectAll('.selected')
+            .style('opacity', 0)
+            .classed('selected', false);
+        tooltipShown = false;
+    };
+
+    var showTooltip = function (d, rCirc) {
+        // Set tooltip content.
+        tooltipShown = true;
+        var content = $("#tooltip_content");
+        content.attr("class", "animation_voyage_content flag_" + d.nat_id);
+        var template = '<h1>' + (d.ship_name != "" ? d.ship_name : "&nbsp;") + "</h1>";
+        if (d.ship_nationality_name != "") {
+            template += "<h2>" + d.ship_nationality_name + "</h2>";
+        }
+        if (d.ship_ton) {
+            template += gettext("<p>This {ton}ship left {source} with {embarked} enslaved people and arrived in {destination} with {disembarked}.</p>");
+            var tonNum = parseInt(d.ship_ton);
+            template = template.replace("{ton}", tonNum ? (tonNum + ' ' + gettext('ton') + ' ') : '');
+        } else {
+            template += gettext("<p>This ship left {source} with {embarked} enslaved people and arrived in {destination} with {disembarked}.</p>");
+        }
+        template = template.replace("{source}", d.source_name)
+            .replace("{destination}", d.destination_name)
+            .replace("{embarked}", d.embarked)
+            .replace("{disembarked}", d.disembarked);
+        content.html(template + '<span class="animation_tooltip_moreinfo"><a target="_blank" href="/voyage/' + d.voyage_id + '/variables">' +
+            gettext("More info") + " »</a></span>");
+        // Position and show tooltip.
+        tooltip.show();
+        var rSvg = map.getContainer().getBoundingClientRect();
+        var tooltip_width = tooltip.width();
+        var tooltip_height = tooltip.height();
+        var top = rCirc.bottom - rSvg.top + 50;
+        if (top + tooltip_height + 120 > rSvg.bottom) {
+            top -= tooltip_height + 100;
+        }
+        tooltip.animate({
+            left: ((rCirc.left + rCirc.right) / 2 - rSvg.left - tooltip_width / 2 - 20) + "px",
+            top: top + "px",
+            opacity: 0.9
+        }, 800);
+    }
+
     map.on("zoomend", positionSvg);
 
     // Create ui object and hook events.
     // TODO: implement UI that allows changing months per second.
-    var ui = { map: map, d3view: g, monthsPerSecond: 12 };
+    var ui = { map: map, d3view: g, monthsPerSecond: 12, showTooltip: showTooltip, closeTooltip: closeTooltip };
     ui.initialize = function (control) {
         var updateControls = function () {
             if (control.isPaused()) {
                 $("#pauseBtn").hide();
                 $("#playBtn").show();
             } else {
-                // closeToolTip(); TODO
+                closeTooltip();
                 $("#pauseBtn").show();
                 $("#playBtn").hide();
             }
@@ -476,6 +613,7 @@ function AnimationHelper(data) {
         // TODO: monthly
         $("#yearLabel").text(Math.round(time / 120));
         positionSvg();
+        if (tooltipShown) closeTooltip();
     };
     // Process data, we will use the simple formula 10 * (12 * year + month)
     // as the voyage "time". Voyages without month values will get a
@@ -486,17 +624,19 @@ function AnimationHelper(data) {
         var year = parseInt(item.year);
         var month = parseInt(item.month);
         if (!(month <= 12 && month >= 1)) {
-            month = Math.round(Math.random() * 12);
+            month = Math.round(Math.random() * 120);
         } else {
-            --month; // zero-based
+            month = 10 * (month - 1) + Math.round(Math.random() * 10);
         }
-        var start = year * 120 + month * 10;
+        var start = year * 120 + month;
         // TODO: monthly
-        // For now we set duration = 12 months but when monthly is 
+        // For now we set duration = 12 +- 3 months but when monthly is 
         // enabled we can use the real voyage length when available.
-        var v = new Voyage(i, item.src, item.dst, start, start + 120, item);
+        var duration = 120 + Math.random() * 90;
+        var v = new Voyage(i, item.src, item.dst, start, start + duration, item);
         voyages.push(v);
-        // break; // DEBUG
+        // DEBUG
+        // if (voyages.length == 10) break;
     }
     self.reset = function () {
         if (self.control) {

@@ -5,11 +5,16 @@ from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
 from django.utils.translation import get_language
 from django.utils.translation import ugettext as _
-from voyages.apps.voyage.models import Place
+from voyages.apps.voyage.models import Place, Nationality
 from django.http import Http404, HttpResponse, JsonResponse
 from django.views.decorators.cache import cache_page
 import django
 import re
+
+@cache_page(3600)
+def get_nations(request):
+    nations = {n.pk: { 'name': n.label, 'code': n.value } for n in Nationality.objects.all()}
+    return JsonResponse(nations)
 
 def get_ordered_places(place_query=None, translate=True):
     if place_query is None:
