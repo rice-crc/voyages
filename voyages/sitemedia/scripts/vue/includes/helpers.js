@@ -1885,7 +1885,7 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
       searchData: currentSearchObj,
       output: 'mapAnimation'
     };
-    var SMOOTH_HELPER = null;
+    var animationHelper = null;
     var mapAnimationSearchCallback = function() {
       var $map = $('#map');
       $.post(searchUrl, JSON.stringify(postData), function(result) {
@@ -1896,11 +1896,9 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
         }
         voyagesMap.clear();
         $('.animationElement').show();
-        //animationHelper.startAnimation(result);
-        SMOOTH_HELPER = new AnimationHelper(result);
+        animationHelper = new AnimationHelper(result);
       }).done(function(){
-        SMOOTH_HELPER.reset();
-        //animationHelper.reset();
+        animationHelper.reset();
         $("#sv-loader").addClass("display-none");
         $("#maps").removeClass("display-none");
         loader.resizeMap();

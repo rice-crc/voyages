@@ -541,7 +541,8 @@ function AnimationHelper(data) {
         tooltipShown = true;
         var content = $("#tooltip_content");
         content.attr("class", "animation_voyage_content flag_" + d.nat_id);
-        var template = '<h1>' + (d.ship_name != "" ? d.ship_name : "&nbsp;") + "</h1>";
+        var shipName = (d.ship_name || '').trim();
+        var template = '<h1>' + (shipName != "" ? shipName : gettext("[Unknown ship name]")) + "</h1>";
         if (d.ship_nationality_name != "") {
             template += "<h2>" + d.ship_nationality_name + "</h2>";
         }
