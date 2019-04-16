@@ -1885,7 +1885,6 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
       searchData: currentSearchObj,
       output: 'mapAnimation'
     };
-    var animationHelper = null;
     var mapAnimationSearchCallback = function() {
       var $map = $('#map');
       $.post(searchUrl, JSON.stringify(postData), function(result) {
@@ -1896,9 +1895,9 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
         }
         voyagesMap.clear();
         $('.animationElement').show();
+        if (animationHelper) disposeAnimationHelper();
         animationHelper = new AnimationHelper(result);
       }).done(function(){
-        animationHelper.reset();
         $("#sv-loader").addClass("display-none");
         $("#maps").removeClass("display-none");
         loader.resizeMap();
@@ -1914,11 +1913,23 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
       loader.loadAnimationScripts(mapAnimationSearchCallback);
     });
   }
+
+  // Ensure that the animation resources are properly disposed.
+  if (animationHelper && currentTab != 'animation') {
+    disposeAnimationHelper();
+  }
 }
 
 // helpers
 
 var loader = new LazyLoader();
+
+var animationHelper = null;
+
+var disposeAnimationHelper = function () {
+  animationHelper.dispose();
+  animationHelper = null;
+};
 
 // Helper to load CSS files and scripts on demand.
 function LazyLoader() {
@@ -1953,9 +1964,6 @@ function LazyLoader() {
     voyagesMap._map.invalidateSize();
   };
   self.loadMap = function(done) {
-    if (self.animationScriptsLoaded) {
-      animationHelper.stopAnimation();
-    }
     $('#map').show();
     if (!self.mapLoaded) {
       self.loadCss(STATIC_URL + 'maps/css/leaflet.css');
@@ -1993,8 +2001,7 @@ function LazyLoader() {
           self.loadScript(STATIC_URL + 'maps/js/arc.js'),
           self.loadScript(STATIC_URL + 'maps/js/leaflet.geodesic.min.js')
         )
-        .then(self.loadScript(STATIC_URL + 'scripts/vue/includes/animation.js')) // TODO[smooth]: keep only one script.
-        .then(self.loadScript(STATIC_URL + 'scripts/vue/includes/beta_animation.js'))
+        .then(self.loadScript(STATIC_URL + 'scripts/vue/includes/animation.js'))
         .then(function() {
           self.animationScriptsLoaded = true;
           done();
