@@ -180,24 +180,23 @@ def get_results_graph(results, post):
         return response
     return JsonResponse({'error': 'Invalid format in request ' + str(data_format)})
 
-def get_results_map_animation(results):
+def get_results_map_animation(results, allow_no_numbers = False):
     VoyageCache.load()
     all_voyages = VoyageCache.voyages
-    from voyages.apps.voyage.maps import VoyageRoutesCache
-    all_routes = VoyageRoutesCache.load()
 
     keys = get_pks_from_haystack_results(results)
     items = []
     for pk in keys:
         voyage = all_voyages.get(pk)
         if voyage is None:
+            print "Missing voyage with PK" + str(pk)
             continue
-        route = all_routes.get(pk, ([],))[0]
         source = CachedGeo.get_hierarchy(voyage.emb_pk)
         destination = CachedGeo.get_hierarchy(voyage.dis_pk)
         if source is not None and destination is not None and source[0].show and \
                 destination[0].show and voyage.year is not None and \
-                voyage.embarked is not None and voyage.embarked > 0 and voyage.disembarked is not None:
+                (allow_no_numbers or \
+                    (voyage.embarked is not None and voyage.embarked > 0 and voyage.disembarked is not None)):
             flag = VoyageCache.nations.get(voyage.ship_nat_pk)
             if flag is None:
                 flag = ''
@@ -205,8 +204,8 @@ def get_results_map_animation(results):
                 "voyage_id": str(voyage.voyage_id),
                 "src": voyage.emb_pk,
                 "dst": voyage.dis_pk,
-                "embarked": str(voyage.embarked),
-                "disembarked": str(voyage.disembarked),
+                "embarked": str(voyage.embarked or 0),
+                "disembarked": str(voyage.disembarked or 0),
                 "year": str(voyage.year),
                 "month": str(voyage.month),
                 "ship_ton": str(voyage.ship_ton) if voyage.ship_ton is not None else '0',
