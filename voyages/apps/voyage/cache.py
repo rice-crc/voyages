@@ -11,7 +11,7 @@ class CachedGeo:
         self.name = name
         self.lat = lat
         self.lng = lng
-        self.show = show
+        self.show = show or (lat is not None and lng is not None and (abs(lat) + abs(lng) > 0.1))
         self.parent = parent
 
     @classmethod
@@ -120,7 +120,7 @@ class VoyageCache:
                                                                'voyage_ship__imputed_nationality_id',
                                                                'voyage_ship__ship_name',
                                                                'voyage_ship__tonnage',
-                                                               'voyage_dates__voyage_began',
+                                                               'voyage_dates__imp_voyage_began',
                                                                'voyage_slaves_numbers__imp_total_num_slaves_embarked',
                                                                'voyage_slaves_numbers__imp_total_num_slaves_disembarked'
                                                                ).iterator()}
