@@ -55,11 +55,23 @@ def precompile_paths():
         for dind in range(0, len(region_to))] 
         for sind in range(0, len(region_from))]
 
+    def get_coords(geo_entry):
+        if geo_entry is not None:
+            valid_coord = geo_entry.lat and geo_entry.lng
+            if valid_coord:
+                pt = (float(geo_entry.lat), float(geo_entry.lng))
+                valid_coord = abs(pt[0]) + abs(pt[1]) > 0.01
+                if valid_coord: return pt
+        return None
+
     def connect_port_to_region(regions, threshold=5000):
         proutes = {}
         for (pk, p) in VoyageCache.ports.items():
-            if not p.lat or not p.lng: continue
-            pt = (float(p.lat), float(p.lng))
+            pt = get_coords(p)
+            if pt is None:
+                # This is an invalid coordinate, try parent coordinates instead.
+                pt = get_coords(VoyageCache.regions.get(p.parent))
+            if pt is None: continue
             closest_region_index = get_closest(pt, regions)
             region_pt = regions[closest_region_index]
             closest_distance = hdist(pt, region_pt)

@@ -1,6 +1,7 @@
 // Scripts for the timelapse animation of voyages in the map.
 
-var DEFAULT_TIMER_RESOLUTION = 40; // milliseconds
+var DEFAULT_TIMER_RESOLUTION = 50; // milliseconds
+var dropFrameCount = 0; // for DEBUG.
 
 var _now = function () { return (new Date()).getTime(); };
 
@@ -55,7 +56,16 @@ function Route(points) {
             lastTime = time;
             lastPointIdx = idx;
             // Compute the result by interpolating on the (now) current arc.
-            var pt = arcs[idx].interpolate((currentAngle - lastAngle) / angles[idx]);
+            var currentArc = arcs[idx];
+            var arcAngle = angles[idx];
+            // Interpolate if the arc is somewhat large, otherwise take one
+            // of the extreme points, which is computationally much faster.
+            var arcRatio = (currentAngle - lastAngle) / arcAngle;
+            var pt = arcAngle > 0.05 * totalAngle
+                ? currentArc.interpolate(arcRatio)
+                : (arcRatio < 0.5
+                    ? [currentArc.start.lon, currentArc.start.lat]
+                    : [currentArc.end.lon, currentArc.end.lat]);
             // The perturbation is minimal at the beginning and end of the route,
             // being larger on the middle of the path.
             var factor = time * (1.0 - time);
@@ -191,6 +201,7 @@ function AnimationControl(routes, voyages, timerResolution, timeStepPerSec, onRe
             }
         }
     };
+    var maxElapsedTime = 3 * timerResolution;
     var tick = function () {
         if (self._paused) return;
         // Advance the simulated time in sync with real time.
@@ -200,7 +211,11 @@ function AnimationControl(routes, voyages, timerResolution, timeStepPerSec, onRe
             // Avoid too large gap between simulated times (which would be
             // indicative that the browser is not able to keep up with our
             // required precision).
-            var elapsed = Math.min(5 * timerResolution, now - lastRealTime);
+            var elapsed = now - lastRealTime;
+            if (elapsed > maxElapsedTime) {
+                elapsed = maxElapsedTime;
+                ++dropFrameCount;
+            }
             nextSimTime = Math.round(elapsed * timeStepPerSec * 0.001 + lastSimTime);
         } else {
             nextSimTime = lastSimTime + 1;
@@ -437,6 +452,7 @@ function d3MapTimelapse(voyages, ui, monthsPerSecond) {
                 if (applyTransition) {
                     sel = sel
                         .transition()
+                        .ease(d3.easeLinear)
                         .duration(DEFAULT_TIMER_RESOLUTION);
                 }
                 return sel.attr("transform", function (d) { return "translate(" + d.point.x + "," + d.point.y + ")"; });
@@ -539,6 +555,11 @@ function d3MapTimelapse(voyages, ui, monthsPerSecond) {
 
 var MONTH_LABELS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
+function TimelineControl(data, parent, onChange) {
+    // TODO: Implement a D3.js cumulative line graph with embarked,
+    // grouped by major region of disembarkation
+}
+
 function AnimationHelper(data, monthsPerSecond) {
     var self = this;
     // Keep the line below.
@@ -546,6 +567,24 @@ function AnimationHelper(data, monthsPerSecond) {
 
     var map = voyagesMap._map;
     var svg = d3.select(map.getPanes().overlayPane).append("svg");
+    var controlLayer = d3.select(map.getContainer()).append("svg").style("pointer-events", "none");
+    var yearLabel = controlLayer
+        .style('position', 'absolute')
+        .append('text')
+        .attr('font-family', 'Roboto')
+        .attr('font-size', '36')
+        .attr('text-anchor', 'middle')
+        .text("");
+    // It is normal for the characters below to look like a box, don't replace them
+    // unless you know how they will render using FontAwesome.
+    var playText = "";
+    var pauseText = "";
+    var playPauseBtn = controlLayer.append('text')
+        .style("pointer-events", "auto")
+        .attr('font-family', 'FontAwesome')
+        .attr('font-size', '24')
+        .attr('text-anchor', 'middle')
+        .text(pauseText);
     var defs = svg.append("defs");
     var filter = defs.append("filter")
         .attr("id", "motionFilter") // Unique Id to blur effect
@@ -587,6 +626,11 @@ function AnimationHelper(data, monthsPerSecond) {
                 }
             });
         }
+        var size = map.getSize();
+        controlLayer.attr("width", size.x)
+            .attr("height", size.y);
+        yearLabel.attr("transform", "translate(" + (size.x / 2) + ", 50)");
+        playPauseBtn.attr("transform", "translate(" + (size.x / 2) + ", 80)");
     };
 
     var ui = {};
@@ -667,14 +711,12 @@ function AnimationHelper(data, monthsPerSecond) {
     };
     var updateControls = function () {
         if (self.control.isPaused()) {
-            $("#pauseBtn").hide();
-            $("#playBtn").show();
             setBlurFilter("0.0");
+            playPauseBtn.text(playText);
         } else {
             closeTooltip();
-            $("#pauseBtn").show();
-            $("#playBtn").hide();
             setBlurFilter();
+            playPauseBtn.text(pauseText);
         }
     };
     ui.pause = function () {
@@ -691,9 +733,21 @@ function AnimationHelper(data, monthsPerSecond) {
     };
     ui.initialize = function (control) {
         self.control = control;
+        playPauseBtn
+            .on("mouseover", function () {
+                d3.select(this).style("fill", "red");
+            })
+            .on("mouseout", function () {
+                d3.select(this).style("fill", "black");
+            })
+            .on("click", function () {
+                if (control.isPaused()) {
+                    ui.play();
+                } else {
+                    ui.pause();
+                }
+            })
         $('.animation_tooltip_close_button').click(closeTooltip);
-        $("#playBtn").click(ui.play);
-        $("#pauseBtn").click(ui.pause);
         // Initialize slider.
         var model = control.getModel();
         var minTime = model.getFirstStartTime();
@@ -711,10 +765,11 @@ function AnimationHelper(data, monthsPerSecond) {
     ui.setTime = function (time) {
         // Update slider and label.
         $("#slider").slider('value', time);
-        $("#yearLabel").text(
-            ui.monthsPerSecond == 1
-                ? Math.round(time / 120) + "-" + gettext(MONTH_LABELS[~~Math.round(time / 10) % 12])
-                : Math.round(time / 120));
+        var yearText = ui.monthsPerSecond == 1
+            ? Math.round(time / 120) + "-" + gettext(MONTH_LABELS[~~Math.round(time / 10) % 12])
+            : Math.round(time / 120);
+        yearLabel.text(yearText);
+        $("#yearLabel").text(yearText);
         positionSvg();
         if (tooltipShown) closeTooltip();
     };

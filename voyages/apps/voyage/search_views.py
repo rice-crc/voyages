@@ -191,10 +191,13 @@ def get_results_map_animation(results, allow_no_numbers = False):
         if voyage is None:
             print "Missing voyage with PK" + str(pk)
             continue
-        source = CachedGeo.get_hierarchy(voyage.emb_pk)
-        destination = CachedGeo.get_hierarchy(voyage.dis_pk)
-        if source is not None and destination is not None and source[0].show and \
-                destination[0].show and voyage.year is not None and \
+        
+        def can_show(port_pk):
+            ph = CachedGeo.get_hierarchy(port_pk)
+            return ph is not None and (ph[0].show or ph[1].show)
+        
+        if can_show(voyage.emb_pk) and can_show(voyage.dis_pk) and \
+                voyage.year is not None and \
                 (allow_no_numbers or \
                     (voyage.embarked is not None and voyage.embarked > 0 and voyage.disembarked is not None)):
             flag = VoyageCache.nations.get(voyage.ship_nat_pk)

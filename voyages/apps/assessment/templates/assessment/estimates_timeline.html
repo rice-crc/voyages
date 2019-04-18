@@ -68,13 +68,13 @@ var margin = {top: 20, right: 10, bottom: 40, left: 40},
 
 $('#mouseOverInfo').css('margin-left', margin.left);
 
-var x = d3.scale.ordinal()
+var x = d3.scaleOrdinal()
     .domain(d3.range({{ min_year }}, {{ max_year|add:"1" }}))
     .rangeRoundBands([0, width]);
 
 var xShift = -x({{ min_year }});
 
-var y = d3.scale.linear()
+var y = d3.scaleLinear()
     .domain([0, yStackMax * 1.1])
     .range([height, 0]);
 
@@ -103,20 +103,18 @@ if (firstOrdinal % modulus) {
 for (; t <= lastOrdinal; t += modulus) {
     tickSet.push(t);
 }
-var xAxis = d3.svg.axis()
+var xAxis = d3.axisTop()
     .scale(x)
 	.tickValues(tickSet)
     .tickSize(-height)
-    .tickPadding(5)
-    .orient("top");
+    .tickPadding(5);
 
-var yAxis = d3.svg.axis()
+var yAxis = d3.axisLeft()
     .scale(y)
     .ticks(5)
     .tickFormat(yTickFormat)
     .tickPadding(5)
-    .tickSize(-width)
-    .orient("left");
+    .tickSize(-width);
 
 var svg = d3.select("#graphContainer").append("svg")
     .attr("width", width + margin.left + margin.right)
@@ -152,7 +150,7 @@ var rect = layer.selectAll("rect")
 	.append("rect")
     .attr("x", function(d) { return x(d.x); })
     .attr("y", height)
-    .attr("width", x.rangeBand())
+    .attr("width", x.bandwidth())
     .attr("height", 0);
 
 rect.transition()
@@ -225,7 +223,7 @@ function changeHoveredBar(index) {
     if (!out) {
         mouseover(data[index]);
         vertical.style("opacity", 1.0);
-        vertical.attr("transform", "translate(" + (x.rangeBand() / 2 + x(data[index].x) + xShift) + ",0)");
+        vertical.attr("transform", "translate(" + (x.bandwidth() / 2 + x(data[index].x) + xShift) + ",0)");
         circle0.attr("transform", "translate(0, " + y(data[index].y0) + ")");
         circle1.attr("transform", "translate(0, " + y(data[index].y1) + ")");
     }
@@ -303,7 +301,7 @@ var events = null;
         .attr("width", boxSize)
         .attr("height", boxSize)
         .attr('y', margin.top + height - boxSize - 1)
-        .attr('x', function(d) { return x(d.year) + xShift - (boxSize - x.rangeBand()) / 2; })
+        .attr('x', function(d) { return x(d.year) + xShift - (boxSize - x.bandwidth()) / 2; })
         .style('fill', color[2])
         .style('stroke', 'black');
     historicalMarkers.selectAll('g')
@@ -311,7 +309,7 @@ var events = null;
         .attr("width", boxSize)
         .attr("text-anchor", "middle")
         .attr('y', margin.top + height - (boxSize / 2))
-        .attr('x', function(d) { return x(d.year) + xShift + x.rangeBand() / 2; })
+        .attr('x', function(d) { return x(d.year) + xShift + x.bandwidth() / 2; })
         .attr("dominant-baseline", "central")
         .text(function(d) { return d.counter; })
         .style('cursor', 'default')
