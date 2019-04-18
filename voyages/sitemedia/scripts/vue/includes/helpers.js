@@ -40,11 +40,11 @@ function camel2title(camelCase) {
   // no side-effects
   return camelCase
     // inject space before the upper case letters
-    .replace(/([A-Z])/g, function(match) {
+    .replace(/([A-Z])/g, function (match) {
       return " " + match;
     })
     // replace first char with upper case
-    .replace(/^./, function(match) {
+    .replace(/^./, function (match) {
       return match.toUpperCase();
     });
 }
@@ -59,7 +59,7 @@ const isPercentageAxis = (axes) => {
     return axes.length > 0 && axes.reduce((agg, axis) => agg && isPercentageAxis(axis), true);
   }
   let axis = axes;
-  return axis.includes('percentage') || 
+  return axis.includes('percentage') ||
     axis.includes('mortality') ||
     axis.includes('resistance_idnum') ||
     axis == 'var_resistance_freq' ||
@@ -67,7 +67,7 @@ const isPercentageAxis = (axes) => {
 }
 
 // a function that generates a random key for saved queries
-var generateRandomKey = function() {
+var generateRandomKey = function () {
   var ALPHABET = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
   var ID_LENGTH = 8;
   var rtn = '';
@@ -79,7 +79,7 @@ var generateRandomKey = function() {
 
 // a function that generates a unique key for saved queries
 // it depends on function generateRandomKey
-var generateUniqueRandomKey = function(previous) {
+var generateUniqueRandomKey = function (previous) {
   var UNIQUE_RETRIES = 9999;
   previous = previous || [];
   var retries = 0;
@@ -98,13 +98,13 @@ var generateUniqueRandomKey = function(previous) {
 
 // get formated source by parsing through the backend response
 function getFormattedSource(sources) {
-    var value = ""; // empty value string
-    sources.forEach(function (source) {
-      var first = source.split("<>")[0];
-      var second = source.split("<>")[1];
-      value += "<div><span class='source-title'>" + first + ": </span>";
-      value += "<span class='source-content'>" + second + "</span></div>";
-    })
+  var value = ""; // empty value string
+  sources.forEach(function (source) {
+    var first = source.split("<>")[0];
+    var second = source.split("<>")[1];
+    value += "<div><span class='source-title'>" + first + ": </span>";
+    value += "<span class='source-content'>" + second + "</span></div>";
+  })
   return value;
 }
 
@@ -112,12 +112,12 @@ function getFormattedSource(sources) {
 // returns the format for table display
 // ABCD - [Tooltip: details]
 function getFormattedSourceInTable(sources) {
-    var value = ""; // empty value string
-    sources.forEach(function (source) {
-      var first = source.split("<>")[0];
-      var second = source.split("<>")[1];
-      value += "<div><span data-toggle='tooltip' data-placement='top' data-html='true' data-original-title='" + second + "'>" + first + "</span>";
-    })
+  var value = ""; // empty value string
+  sources.forEach(function (source) {
+    var first = source.split("<>")[0];
+    var second = source.split("<>")[1];
+    value += "<div><span data-toggle='tooltip' data-placement='top' data-html='true' data-original-title='" + second + "'>" + first + "</span>";
+  })
   return value;
 }
 
@@ -244,7 +244,7 @@ function resetFilter(filter, group, subGroup) {
 }
 
 // serialize a filter
-function serializeFilter(filter){
+function serializeFilter(filter) {
   return JSON.stringify(filter);
 }
 
@@ -278,36 +278,36 @@ function searchAll(filter, filterData) {
                     var sortedSelections = filter[key1][key2][key3].value["searchTerm"].sort(sortNumber);
                     var searchTerm = [];
 
-                    sortedSelections.forEach(function(selection) {
+                    sortedSelections.forEach(function (selection) {
                       var varName = filter[key1][key2][key3]["varName"];
                       if (selection == filterData.treeselectOptions[varName][0].id) {
                         // select all
-                        filterData.treeselectOptions[varName][0].children.forEach(function(broadRegion) {
-                          broadRegion.children.forEach(function(region) {
-                            region.children.forEach(function(subRegion) {
+                        filterData.treeselectOptions[varName][0].children.forEach(function (broadRegion) {
+                          broadRegion.children.forEach(function (region) {
+                            region.children.forEach(function (subRegion) {
                               searchTerm.push(subRegion.id);
                             })
                           })
                         });
                       } else {
                         // broadRegion
-                        filterData.treeselectOptions[varName][0].children.forEach(function(broadRegion) {
+                        filterData.treeselectOptions[varName][0].children.forEach(function (broadRegion) {
                           if (selection == broadRegion.id) {
-                            broadRegion.children.forEach(function(region) {
-                              region.children.forEach(function(subRegion) {
+                            broadRegion.children.forEach(function (region) {
+                              region.children.forEach(function (subRegion) {
                                 searchTerm.push(subRegion.id);
                               });
                             })
                           } else {
-                            broadRegion.children.forEach(function(region) {
+                            broadRegion.children.forEach(function (region) {
                               // region
                               if (selection == region.id) {
-                                region.children.forEach(function(subRegion) {
+                                region.children.forEach(function (subRegion) {
                                   searchTerm.push(subRegion.id);
                                 });
                               } else {
                                 // subRegion
-                                region.children.forEach(function(subRegion) {
+                                region.children.forEach(function (subRegion) {
                                   if (selection == subRegion.id) {
                                     searchTerm.push(subRegion.id);
                                   }
@@ -325,11 +325,11 @@ function searchAll(filter, filterData) {
                   } else if (filter[key1][key2][key3].constructor.name === "TreeselectVariable") {
                     var sortedSelections = filter[key1][key2][key3].value["searchTerm"].sort(sortNumber);
                     var searchTerm = [];
-                    
+
 
                     if (sortedSelections.includes("0")) {
                       // select all
-                      filterData.treeselectOptions[varName][0].children.forEach(function(options) {
+                      filterData.treeselectOptions[varName][0].children.forEach(function (options) {
                         searchTerm.push(options.id);
                       });
                     } else {
@@ -337,8 +337,8 @@ function searchAll(filter, filterData) {
                     }
 
                     item["searchTerm"] = searchTerm;
-                  } else if (filter[key1][key2][key3].constructor.name === "PercentageVariable"){
-                    item["searchTerm"] = parseInt(filter[key1][key2][key3].value["searchTerm"])/100;
+                  } else if (filter[key1][key2][key3].constructor.name === "PercentageVariable") {
+                    item["searchTerm"] = parseInt(filter[key1][key2][key3].value["searchTerm"]) / 100;
                   } else {
                     item["searchTerm"] = filter[key1][key2][key3].value["searchTerm"];
                   }
@@ -368,8 +368,8 @@ function searchAll(filter, filterData) {
 
                   // patch for percentage variables
                   if (filter[key1][key2][key3].constructor.name === "PercentageVariable") {
-                    var searchTerm0 = parseInt(filter[key1][key2][key3].value["searchTerm0"])/100;
-                    var searchTerm1 = parseInt(filter[key1][key2][key3].value["searchTerm1"])/100;
+                    var searchTerm0 = parseInt(filter[key1][key2][key3].value["searchTerm0"]) / 100;
+                    var searchTerm1 = parseInt(filter[key1][key2][key3].value["searchTerm1"]) / 100;
                     item["searchTerm"] = [searchTerm0, searchTerm1];
                   }
                 }
@@ -405,7 +405,7 @@ function searchAll(filter, filterData) {
 
   // placeholder
   hasYear = false;
-  items.map(function(item) {
+  items.map(function (item) {
     if (item.varName == "imp_arrival_at_port_of_dis") {
       if (item.op == "between") {
         item.op = "is between"; // patch a backend bug
@@ -483,7 +483,7 @@ function getTreeselectLabel(currentVariable, searchTerms, treeselectOptions) {
   if (currentVariable.constructor.name == "TreeselectVariable") {
     treeselectOptions = treeselectOptions["var_" + currentVariable.varName];
     searchTerms.forEach(function (searchTerm) {
-      treeselectOptions.forEach(function(treeselectOption){
+      treeselectOptions.forEach(function (treeselectOption) {
         if (treeselectOption.value == searchTerm) {
           labels.push(treeselectOption.label);
         }
@@ -539,62 +539,62 @@ function loadTreeselectOptions(vm, vTreeselect, filter, callback) {
     // load special weird variables
     if (["registered_place_idnum", "vessel_construction_place_idnum"].indexOf(varName) >= 0) {
       axios.post('/voyage/filtered-places', {})
-      .then(function (response) {
-        var options = parsePlaces(response);
-        vm.filterData.treeselectOptions[varName] = options;
-        vTreeselect.treeselectOptions = vm.filterData.treeselectOptions[varName];
-        callback(); // notify vue-treeselect about data population completion
-        return;
-      })
-      .catch(function (error) {
-        options.errorMessage = error;
-        $("#sv-loader").addClass("display-none");
-        $("#sv-loader-error").removeClass("display-none");
-        return error;
-      });
+        .then(function (response) {
+          var options = parsePlaces(response);
+          vm.filterData.treeselectOptions[varName] = options;
+          vTreeselect.treeselectOptions = vm.filterData.treeselectOptions[varName];
+          callback(); // notify vue-treeselect about data population completion
+          return;
+        })
+        .catch(function (error) {
+          options.errorMessage = error;
+          $("#sv-loader").addClass("display-none");
+          $("#sv-loader-error").removeClass("display-none");
+          return error;
+        });
     }
 
     // load PlaceVariable
-    else if (loadType == "place"){
+    else if (loadType == "place") {
       axios.post('/voyage/filtered-places', {
         var_name: varName,
       })
-      .then(function (response) {
-        var options = parsePlaces(response);
-        vm.filterData.treeselectOptions[varName] = options;
-        vTreeselect.treeselectOptions = vm.filterData.treeselectOptions[varName];
-        callback(); // notify vue-treeselect about data population completion
-        return;
-      })
-      .catch(function (error) {
-        options.errorMessage = error;
-        $("#sv-loader").addClass("display-none");
-        $("#sv-loader-error").removeClass("display-none");
-        return error;
-      });
+        .then(function (response) {
+          var options = parsePlaces(response);
+          vm.filterData.treeselectOptions[varName] = options;
+          vTreeselect.treeselectOptions = vm.filterData.treeselectOptions[varName];
+          callback(); // notify vue-treeselect about data population completion
+          return;
+        })
+        .catch(function (error) {
+          options.errorMessage = error;
+          $("#sv-loader").addClass("display-none");
+          $("#sv-loader-error").removeClass("display-none");
+          return error;
+        });
     }
-    
+
     // load TreeselectVariable
-    else if (loadType == "treeselect"){
+    else if (loadType == "treeselect") {
       varName = "var_" + varName;
       axios.post('/voyage/var-options', {
         var_name: varName,
       })
-      .then(function (response) {
-        response.data.data.map(function(data) {
-          data["id"] = data["value"];
+        .then(function (response) {
+          response.data.data.map(function (data) {
+            data["id"] = data["value"];
+          });
+          vm.filterData.treeselectOptions[varName] = response.data.data;
+          vTreeselect.treeselectOptions = vm.filterData.treeselectOptions[varName];
+          callback(); // notify vue-treeselect about data population completion
+          return;
+        })
+        .catch(function (error) {
+          options.errorMessage = error;
+          $("#sv-loader").addClass("display-none");
+          $("#sv-loader-error").removeClass("display-none");
+          return error;
         });
-        vm.filterData.treeselectOptions[varName] = response.data.data;
-        vTreeselect.treeselectOptions = vm.filterData.treeselectOptions[varName];
-        callback(); // notify vue-treeselect about data population completion
-        return;
-      })
-      .catch(function (error) {
-        options.errorMessage = error;
-        $("#sv-loader").addClass("display-none");
-        $("#sv-loader-error").removeClass("display-none");
-        return error;
-      });
     }
 
     // load weird place variables
@@ -608,7 +608,7 @@ function loadTreeselectOptions(vm, vTreeselect, filter, callback) {
 }
 
 // parsePlaces function
-var parsePlaces = function(response) {
+var parsePlaces = function (response) {
   var data = processPlacesAjax(response.data.data);
   var options = [{
     id: 0,
@@ -661,9 +661,9 @@ var parsePlaces = function(response) {
     var broadRegionId = data.ports[portId].region.broad_region.order;
 
     // locate corresponding location in the options tree
-    options[0].children.map(function(broadRegion) {
+    options[0].children.map(function (broadRegion) {
       if (broadRegion.id == broadRegionId) {
-        broadRegion.children.map(function(region) {
+        broadRegion.children.map(function (region) {
           if (region.id == regionId) { // in the correct region
             region.children.push({ // fill port
               id: code,
@@ -717,15 +717,15 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
       className: 'btn btn-info buttons-collection dropdown-toggle',
     };
 
-    
+
 
     var mainDatatable = $('#results_main_table').DataTable({
       ajax: {
         url: searchUrl,
         type: 'POST',
-        data: function(d) {
+        data: function (d) {
           if (d.order) {
-            currentSearchObj.orderBy = $.map(d.order, function(item) {
+            currentSearchObj.orderBy = $.map(d.order, function (item) {
               var columnIndex = mainDatatable ?
                 mainDatatable.colReorder.order()[item.column] :
                 item.column;
@@ -739,7 +739,7 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
           // TEMP Yang: I don't think this is the right place for this code...
           // Besides, I think that this is attaching multiple handlers for
           // the click, which is inefficient.
-          $('#results_main_table tbody').on('click', 'tr', function() {
+          $('#results_main_table tbody').on('click', 'tr', function () {
             searchBar.row.data = mainDatatable.row(this).data();
           });
 
@@ -760,11 +760,11 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
             // percentage vs. decimal
             if (percentageKeys.length <= 0) {
               keys = Object.keys(json.data[i]);
-              keys.forEach(function(key){
+              keys.forEach(function (key) {
                 if (isPercentageAxis([key])) percentageKeys.push(key);
               });
             }
-            percentageKeys.forEach(function(percentageKey){
+            percentageKeys.forEach(function (percentageKey) {
               if (json.data[i][percentageKey]) {
                 json.data[i][percentageKey] = roundDecimal(json.data[i][percentageKey] * 100, 1) + "%";
               }
@@ -777,63 +777,63 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
           }
           return json.data;
         },
-        
+
         fail: function (xhr, status, error) {
           options.errorMessage = error;
           $("#sv-loader").addClass("display-none");
           $("#sv-loader-error").removeClass("display-none");
         },
-      
+
       },
-      
+
       scrollX: true,
       colReorder: {
         order: [
           1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
-          11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 
+          11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
           21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 0,
-          31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 
+          31, 32, 33, 34, 35, 36, 37, 38, 39, 40,
           41, 42, 43, 44, 45, 46, 47, 48, 49, 50,
-          51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 
+          51, 52, 53, 54, 55, 56, 57, 58, 59, 60,
           61, 62
         ]
       },
 
       columnDefs: [{
-          width: "1%",
-          targets: 0
-        },
-        {
-          width: "5%",
-          targets: 1
-        },
-        {
-          width: "15%",
-          targets: 62
-        },
-        {
-          width: "5%",
-          targets: 32
-        },
-        {
-          width: "10%",
-          targets: 50
-        },
-        {
-          width: "5%",
-          targets: 33
-        },
-        {
-          width: "5%",
-          targets: 34
-        },
-        {
-          width: "5%",
-          targets: 25
-        },
+        width: "1%",
+        targets: 0
+      },
+      {
+        width: "5%",
+        targets: 1
+      },
+      {
+        width: "15%",
+        targets: 62
+      },
+      {
+        width: "5%",
+        targets: 32
+      },
+      {
+        width: "10%",
+        targets: 50
+      },
+      {
+        width: "5%",
+        targets: 33
+      },
+      {
+        width: "5%",
+        targets: 34
+      },
+      {
+        width: "5%",
+        targets: 25
+      },
       ],
 
-      order: [[ 1, "asc" ]],
+      order: [[1, "asc"]],
       destroy: true,
 
       // page length Default
@@ -871,33 +871,33 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
                 text: gettext('All results with visible columns'),
                 action: makeDownloadFunction(false, false, true)
               }, {
-                text: gettext('Filtered results with all columns'), 
-                action: makeDownloadFunction(false, true, false) 
+                text: gettext('Filtered results with all columns'),
+                action: makeDownloadFunction(false, true, false)
               }, {
                 text: gettext('Filtered results with visible columns'),
                 action: makeDownloadFunction(false, true, true)
               }],
-            },
+          },
 
-            {
-              extend: 'collection',
-              text: 'Excel',
-              buttons: [
-                {
-                  text: gettext('All results with all columns'),
-                  action: makeDownloadFunction(true, false, false)
-                }, {
-                  text: gettext('All results with visible columns'),
-                  action: makeDownloadFunction(true, false, true)
-                }, {
-                  text: gettext('Filtered results with all columns'),
-                  action: makeDownloadFunction(true, true, false)
-                }, {
-                  text: gettext('Filtered results with visible columns'),
-                  action: makeDownloadFunction(true, true, true)
-                }
-              ],
-            }
+          {
+            extend: 'collection',
+            text: 'Excel',
+            buttons: [
+              {
+                text: gettext('All results with all columns'),
+                action: makeDownloadFunction(true, false, false)
+              }, {
+                text: gettext('All results with visible columns'),
+                action: makeDownloadFunction(true, false, true)
+              }, {
+                text: gettext('Filtered results with all columns'),
+                action: makeDownloadFunction(true, true, false)
+              }, {
+                text: gettext('Filtered results with visible columns'),
+                action: makeDownloadFunction(true, true, true)
+              }
+            ],
+          }
           ]
         }
       ],
@@ -908,11 +908,11 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
       columns: allColumns,
       stateSave: true,
       stateDuration: -1,
-      initComplete: function() {
+      initComplete: function () {
         $('[data-toggle="tooltip"]').tooltip()
       }
     });
-    
+
     mainDatatable.on('draw.dt', function () {
       $('[data-toggle="tooltip"]').tooltip();
     });
@@ -937,7 +937,7 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
       }
     }
 
-    mainDatatable.on( 'column-visibility.dt', function ( e, settings, column, state ) {
+    mainDatatable.on('column-visibility.dt', function (e, settings, column, state) {
       $('[data-toggle="tooltip"]').tooltip()
     });
 
@@ -950,7 +950,7 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
       ajax: {
         url: searchUrl,
         type: 'POST',
-        data: function(d) {
+        data: function (d) {
           return JSON.stringify({
             searchData: currentSearchObj,
             tableParams: d,
@@ -973,7 +973,7 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
         }
       },
       columnDefs: [{
-        targets:[1,2], // do not eliminate the HTML parsing in the first column
+        targets: [1, 2], // do not eliminate the HTML parsing in the first column
         type: 'num-fmt',
         render: $.fn.dataTable.render.number(",")
       }],
@@ -1001,20 +1001,20 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
       }
     });
   } else if (currentTab == 'tables') {
-    var getTableElement = function(source) {
+    var getTableElement = function (source) {
       var id = tabData.tables[source].value;
-      return tabs.tables[source].options.find(function(x) {
+      return tabs.tables[source].options.find(function (x) {
         return x.id == id;
       });
     };
-    var getField = function(source) {
+    var getField = function (source) {
       var el = getTableElement(source);
       return el ? fieldMap[el.label] : null;
     };
     var cell = getTableElement("cell");
     var rowElement = getTableElement("row");
     var colElement = getTableElement("column");
-    
+
     var postData = {
       searchData: currentSearchObj,
       output: "pivotTable",
@@ -1032,7 +1032,7 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
     if (postData.row_field && postData.col_field && postData.pivot_functions) {
       $("#sv-loader").removeClass("display-none");
 
-      $.post(searchUrl, JSON.stringify(postData), function(result) {
+      $.post(searchUrl, JSON.stringify(postData), function (result) {
         // Produce a table with data content.
         var table = $('#v-tables');
         destroyPreviousTable('#v-tables');
@@ -1040,7 +1040,7 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
         var thead = table.find('thead');
         thead.empty();
         // Top-left row is blank.
-        var subCells = $.map(Object.keys(cell.functions), function(key) {
+        var subCells = $.map(Object.keys(cell.functions), function (key) {
           return key[0] == '_' ? undefined : key;
         });
         var totalsHeader = '<th colspan="' + subCells.length + '" rowspan="' + columnHeaderRows + '">' + gettext('Totals') + '</th>';
@@ -1164,7 +1164,7 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
             }
           }
         }
-        var fmtFunc = function(x) {
+        var fmtFunc = function (x) {
           return x.toLocaleString(undefined, {
             style: format,
             minimumFractionDigits: (format == 'percent' || weightByCount) ? 1 : 0,
@@ -1222,7 +1222,7 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
             }
           ],
         });
-      }).done(function() {
+      }).done(function () {
         $("#sv-loader").addClass("display-none");
       }).fail(function (xhr, status, error) {
         options.errorMessage = error;
@@ -1242,17 +1242,17 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
     if (postData.timelineVariable) {
       // if it is a percentage based variable; used to add % to the labels
       var isPercentage = isPercentageAxis([postData.timelineVariable]);
-      $( "#sv-loader" ).removeClass( "display-none" );
-      $.post(searchUrl, JSON.stringify(postData), function(result) {
+      $("#sv-loader").removeClass("display-none");
+      $.post(searchUrl, JSON.stringify(postData), function (result) {
         $("#sv-loader").removeClass("display-none");
 
         var data = [];
 
         var current_year = result.data[0].year;
 
-        for (var i=0; i<result.data.length; i++) {
+        for (var i = 0; i < result.data.length; i++) {
           var element = result.data[i];
-          for (var j=current_year; j<element.year; j++) {
+          for (var j = current_year; j < element.year; j++) {
             var time = Date.parse(j.toString());
             data.push([time, 0]);
           }
@@ -1272,11 +1272,11 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
           chart: {
             zoomType: 'x',
             style: {
-                fontFamily: '-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol", serif'
+              fontFamily: '-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol", serif'
             }
           },
           title: {
-              text: ''
+            text: ''
           },
           subtitle: {
             text: document.ontouchstart === undefined ?
@@ -1292,7 +1292,7 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
             min: 0,
             startOnTick: true,
             labels: {
-              formatter: function() {
+              formatter: function () {
                 var postfix = isPercentage ? "%" : ""; // for percentage based charts
                 return this.value + postfix;
               }
@@ -1305,11 +1305,11 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
             enabled: false,
           },
           tooltip: {
-              formatter: function() {
-                  var year = moment.unix(this.x / 1000).utc().format("YYYY");
-                  var postfix = isPercentage ? "%" : ""; // for percentage based charts
-              return gettext('Year ') + year + ': ' + '<b>' + this.y + postfix +'</b> ';
-              }
+            formatter: function () {
+              var year = moment.unix(this.x / 1000).utc().format("YYYY");
+              var postfix = isPercentage ? "%" : ""; // for percentage based charts
+              return gettext('Year ') + year + ': ' + '<b>' + this.y + postfix + '</b> ';
+            }
           },
           lang: {
             noData: gettext('We are sorry but there is no data to display or an error has occurred.'),
@@ -1353,8 +1353,8 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
           }]
         });
 
-      }).done(function(){
-        $( "#sv-loader" ).addClass( "display-none" );
+      }).done(function () {
+        $("#sv-loader").addClass("display-none");
       }).fail(function (xhr, status, error) {
         options.errorMessage = error;
         $("#sv-loader").addClass("display-none");
@@ -1365,7 +1365,7 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 
   } else if (currentTab == 'visualization') {
     loader.loadScript(STATIC_URL + 'scripts/library/d3.min.js')
-      .then(function() {
+      .then(function () {
 
 
         // Ready to plot graphs!
@@ -1380,7 +1380,7 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
         var yIds = tabs.visualization[chartType[0]][chartType[2]].value;
         var yAxes = [];
         if (Array.isArray(yIds)) {
-          yIds.forEach(function(element, index, yIds) {
+          yIds.forEach(function (element, index, yIds) {
             yAxes[index] = tabs.visualization[chartType[0]][chartType[2]].options[yIds[index]]["varName"];
           });
         } else {
@@ -1402,7 +1402,7 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 
         if (postData.graphData.xAxis && postData.graphData.yAxes.length > 0) {
           $("#sv-loader").removeClass("display-none");
-          $.post(searchUrl, JSON.stringify(postData), function(series) {
+          $.post(searchUrl, JSON.stringify(postData), function (series) {
             $("#sv-loader").removeClass("display-none");
             if (chartType[0] == 'scatter') {
               $("#tabs-visualization-xy").empty();
@@ -1418,42 +1418,40 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
                   if (items[i].value > maxValue) maxValue = items[i].value;
                 }
               }
-              xValues = d3.set(xValues).values().map(function(s) {
+              xValues = d3.set(xValues).values().map(function (s) {
                 return parseFloat(s);
               });
 
               var margin = {
-                  top: 90 + 20 * (seriesNames.length - 2),
-                  right: 15,
-                  bottom: 110,
-                  left: 80
-                },
+                top: 90 + 20 * (seriesNames.length - 2),
+                right: 15,
+                bottom: 110,
+                left: 80
+              },
                 width = 960 - margin.left - margin.right,
                 height = 460 - margin.top - margin.bottom;
-              var x = d3.scale.linear()
+              var x = d3.scaleLinear()
                 .domain([d3.min(xValues), d3.max(xValues)])
                 .nice()
                 .range([0, width]);
-              var y = d3.scale.linear()
+              var y = d3.scaleLinear()
                 .domain([0, maxValue * 1.1])
                 .range([height, 0]);
-              var color = d3.scale.category10();
-              var xAxis = d3.svg.axis()
+              var color = d3.scaleOrdinal(d3.schemeCategory10);
+              var xAxis = d3.axisBottom()
                 .scale(x)
-                .orient("bottom")
                 .tickSize(-height);
               if (postData.graphData.xAxis == 'var_imp_arrival_at_port_of_dis') {
-                xAxis = xAxis.tickFormat(function(d, i) {
+                xAxis = xAxis.tickFormat(function (d, i) {
                   return d.toString();
                 });
               }
-              var yAxis = d3.svg.axis()
+              var yAxis = d3.axisLeft()
                 .scale(y)
-                .orient("left")
                 .tickSize(-width);
               // If percentage, add to ticks.
               if (isPercentageAxis(postData.graphData.yAxes)) {
-                yAxis.tickFormat(function(d) { return parseInt(d, 10) + "%"; });
+                yAxis.tickFormat(function (d) { return parseInt(d, 10) + "%"; });
               }
               var svg = d3.select("#tabs-visualization-xy")
                 .append("svg")
@@ -1480,7 +1478,7 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
                 .enter()
                 .append("g")
                 .attr("class", "legend")
-                .attr("transform", function(d, i) {
+                .attr("transform", function (d, i) {
                   return "translate(0," + (i * 20 - margin.top + 30) + ")";
                 });
 
@@ -1495,16 +1493,16 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
                 .attr("y", 9)
                 .attr("dy", ".35em")
                 .style("text-anchor", "end")
-                .text(function(d) {
+                .text(function (d) {
                   return d;
                 });
 
               for (var yid in series) {
-                var line = d3.svg.line()
-                  .x(function(d) {
+                var line = d3.line()
+                  .x(function (d) {
                     return x(d.x);
                   })
-                  .y(function(d) {
+                  .y(function (d) {
                     return y(d.value);
                   });
                 svg.append('svg:path')
@@ -1529,9 +1527,9 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
               }
               labels = d3.set(labels).values();
 
-              var wrap = function(text) {
+              var wrap = function (text) {
                 var w = margin.bottom - 10;
-                text.each(function() {
+                text.each(function () {
                   var text = d3.select(this),
                     words = text.text().split(/\s+/).reverse(),
                     word,
@@ -1562,32 +1560,30 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
               // used in a way that all the data items across different
               // series sharing the same label are grouped together.
               var margin = {
-                  top: 90 + 20 * (seriesNames.length - 2),
-                  right: 10,
-                  bottom: 110,
-                  left: 80
-                },
+                top: 90 + 20 * (seriesNames.length - 2),
+                right: 10,
+                bottom: 110,
+                left: 80
+              },
                 width = 960 - margin.left - margin.right,
                 height = 460 - margin.top - margin.bottom;
-              var x0 = d3.scale.ordinal()
+              var x0 = d3.scaleBand()
                 .domain(labels)
-                .rangeRoundBands([0, width], .08);
-              var x1 = d3.scale.ordinal()
+                .rangeRound([0, width], .08);
+              var x1 = d3.scaleBand()
                 .domain(seriesNames)
-                .rangeRoundBands([0, x0.rangeBand()]);
-              var y = d3.scale.linear()
+                .rangeRound([0, x0.bandwidth()]);
+              var y = d3.scaleLinear()
                 .domain([0, maxValue * 1.1])
                 .range([height, 0]);
-              var color = d3.scale.category10();
-              var xAxis = d3.svg.axis()
-                .scale(x0)
-                .orient("bottom");
-              var yAxis = d3.svg.axis()
-                .scale(y)
-                .orient("left");
+              var color = d3.scaleOrdinal(d3.schemeCategory10);
+              var xAxis = d3.axisBottom()
+                .scale(x0);
+              var yAxis = d3.axisLeft()
+                .scale(y);
               // If percentage, add to ticks.
               if (isPercentageAxis(postData.graphData.yAxes)) {
-                yAxis.tickFormat(function(d) { return parseInt(d, 10) + "%"; });
+                yAxis.tickFormat(function (d) { return parseInt(d, 10) + "%"; });
               }
               var svg = d3.select("#tabs-visualization-bar")
                 .append("svg")
@@ -1604,7 +1600,7 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
                 .style("text-anchor", "end")
                 .attr("dx", "-.8em")
                 .attr("dy", ".15em")
-                .attr("transform", function(d) {
+                .attr("transform", function (d) {
                   return "rotate(-45)"
                 })
                 .call(wrap);
@@ -1623,7 +1619,7 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
                 .enter()
                 .append("g")
                 .attr("class", "legend")
-                .attr("transform", function(d, i) {
+                .attr("transform", function (d, i) {
                   return "translate(0," + (i * 20 - margin.top + 30) + ")";
                 });
 
@@ -1638,7 +1634,7 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
                 .attr("y", 9)
                 .attr("dy", ".35em")
                 .style("text-anchor", "end")
-                .text(function(d) {
+                .text(function (d) {
                   return d;
                 });
 
@@ -1648,20 +1644,20 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
                 .enter()
                 .append("g")
                 .attr("class", "g")
-                .attr("transform", function(d) {
+                .attr("transform", function (d) {
                   return "translate(" + x0(d) + ",0)";
                 });
               gLabels
                 .append("line")
                 .attr("x1", 0)
-                .attr("x2", x0.rangeBand())
+                .attr("x2", x0.bandwidth())
                 .attr("y1", height)
                 .attr("y2", height)
                 .style('stroke-width', 0.5)
                 .style('stroke', 'black');
               // Add bars to all label groups.
               gLabels.selectAll("rect")
-                .data(function(d) {
+                .data(function (d) {
                   // Filter by label.
                   var res = [];
                   for (var yid in series) {
@@ -1679,53 +1675,53 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
                 })
                 .enter()
                 .append("rect")
-                .attr("width", x1.rangeBand())
-                .attr("x", function(d) {
+                .attr("width", x1.bandwidth())
+                .attr("x", function (d) {
                   return x1(d.series);
                 })
-                .attr("y", function(d) {
+                .attr("y", function (d) {
                   return y(d.value);
                 })
-                .attr("height", function(d) {
+                .attr("height", function (d) {
                   return height - y(d.value);
                 })
-                .style("fill", function(d) {
+                .style("fill", function (d) {
                   return color(d.series);
                 });
             } else if (chartType[0] == 'donut') {
               $("#tabs-visualization-donut").empty();
               var label = Object.keys(series)[0];
               var data = series[label];
-              data.sort(function(a, b) {
+              data.sort(function (a, b) {
                 return a.value - b.value;
               });
-              var sum = d3.sum(data, function(d) {
+              var sum = d3.sum(data, function (d) {
                 return d.value;
               });
               var margin = {
-                  top: 20,
-                  right: 10,
-                  bottom: 50,
-                  left: 20
-                },
+                top: 20,
+                right: 10,
+                bottom: 50,
+                left: 20
+              },
                 width = 960 - margin.left - margin.right,
                 height = 460 - margin.top - margin.bottom;
-              var color = d3.scale.category20c();
+              var color = d3.scaleOrdinal(d3.schemeAccent);
               var radius = Math.min(width, height) / 2 - margin.top;
 
-              var arc = d3.svg.arc()
+              var arc = d3.arc()
                 .outerRadius(radius * 0.8)
                 .innerRadius(radius * 0.4);
 
-              var outerArc = d3.svg.arc()
+              var outerArc = d3.arc()
                 .outerRadius(radius * 0.9)
                 .innerRadius(radius * 0.9);
 
               var angleShift = Math.min(-0.1, -Math.min(0.25, data[data.length - 1].value / sum));
-              var pie = d3.layout.pie()
+              var pie = d3.pie()
                 .startAngle(angleShift * Math.PI)
                 .endAngle((2 + angleShift) * Math.PI)
-                .value(function(d) {
+                .value(function (d) {
                   return d.value;
                 });
               var svg = d3.select("#tabs-visualization-donut")
@@ -1747,12 +1743,12 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
                 .enter().append("g")
                 .attr("class", "arc");
 
-              var key = function(d) {
+              var key = function (d) {
                 return d.data.x;
               };
               g.append("path")
                 .attr("d", arc)
-                .style("fill", function(d) {
+                .style("fill", function (d) {
                   return color(key(d));
                 });
 
@@ -1761,47 +1757,39 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
               svg.append("g")
                 .attr("class", "lines");
               // Text labels.
+              var labelTransform = function (d) {
+                // effectively computes the centre of the slice.
+                // see https://github.com/d3/d3-shape/blob/master/README.md#arc_centroid
+                var pos = outerArc.centroid(d);
+
+                // changes the point to be on left or right depending on where label is.
+                pos[0] = radius * 0.95 * (midAngle(d) < Math.PI ? 1 : -1);
+                return 'translate(' + pos + ')';
+              };
               var text = svg.select(".labels").selectAll("text")
                 .data(pie(data), key);
 
-              var opacityFn = function(d) {
+              var opacityFn = function (d) {
                 var x = Math.sin(d.endAngle - d.startAngle);
                 return Math.min(0.5, Math.pow(x, 1.5) * 15);
+              };
+
+              var midAngle = function (d) {
+                return d.startAngle + (d.endAngle - d.startAngle) / 2;
               };
               var isPercentage = isPercentageAxis(postData.graphData.yAxes);
               text.enter()
                 .append("text")
                 .style('opacity', opacityFn)
                 .attr("dy", ".35em")
-                .text(function(d) {
-                  return key(d) + " = " + d.value.toLocaleString() + 
+                .text(function (d) {
+                  return key(d) + " = " + d.value.toLocaleString() +
                     (isPercentage ? '%' : '');
-                });
-
-              var midAngle = function(d) {
-                return d.startAngle + (d.endAngle - d.startAngle) / 2;
-              };
-
-              text.transition().duration(1000)
-                .attrTween("transform", function(d) {
-                  this._current = this._current || d;
-                  var interpolate = d3.interpolate(this._current, d);
-                  this._current = interpolate(0);
-                  return function(t) {
-                    var d2 = interpolate(t);
-                    var pos = outerArc.centroid(d2);
-                    pos[0] = radius * (midAngle(d2) < Math.PI ? 1 : -1);
-                    return "translate(" + pos + ")";
-                  };
                 })
-                .styleTween("text-anchor", function(d) {
-                  this._current = this._current || d;
-                  var interpolate = d3.interpolate(this._current, d);
-                  this._current = interpolate(0);
-                  return function(t) {
-                    var d2 = interpolate(t);
-                    return midAngle(d2) < Math.PI ? "start" : "end";
-                  };
+                .attr('transform', labelTransform)
+                .style('text-anchor', function (d) {
+                  // if slice centre is on the left, anchor text to start, otherwise anchor to end
+                  return (midAngle(d)) < Math.PI ? 'start' : 'end';
                 });
 
               text.exit()
@@ -1812,26 +1800,19 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
                 .data(pie(data), key);
 
               polyline.enter()
-                .append("polyline");
-
-              polyline.transition().duration(1000)
+                .append("polyline")
                 .style('opacity', opacityFn)
-                .attrTween("points", function(d) {
-                  this._current = this._current || d;
-                  var interpolate = d3.interpolate(this._current, d);
-                  this._current = interpolate(0);
-                  return function(t) {
-                    var d2 = interpolate(t);
-                    var pos = outerArc.centroid(d2);
-                    pos[0] = radius * 0.95 * (midAngle(d2) < Math.PI ? 1 : -1);
-                    return [arc.centroid(d2), outerArc.centroid(d2), pos];
-                  };
+                .attr("points", function (d) {
+                  // see label transform function for explanations of these three lines.
+                  var pos = outerArc.centroid(d);
+                  pos[0] = radius * 0.95 * (midAngle(d) < Math.PI ? 1 : -1);
+                  return [arc.centroid(d), outerArc.centroid(d), pos];
                 });
 
               polyline.exit()
                 .remove();
             }
-          }).done(function() {
+          }).done(function () {
             $("#sv-loader").addClass("display-none");
           }).fail(function (xhr, status, error) {
             options.errorMessage = error;
@@ -1853,14 +1834,14 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
       searchData: currentSearchObj,
       output: 'mapFlow'
     };
-    var mapFlowSearchCallback = function() {
+    var mapFlowSearchCallback = function () {
       var $map = $('#map');
-      $.post(searchUrl, JSON.stringify(postData), function(result) {
+      $.post(searchUrl, JSON.stringify(postData), function (result) {
         $("#sv-loader").removeClass("display-none");
 
         eval(result);
         voyagesMap.clear();
-      }).done(function(){
+      }).done(function () {
         $("#sv-loader").addClass("display-none");
         $("#maps").removeClass("display-none");
         loader.resizeMap(); // resize first before adding the networkflow
@@ -1869,25 +1850,25 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
         } catch (e) {
           console.log(e);
         }
-        }).fail(function (xhr, status, error) {
-          options.errorMessage = error;
-          $("#sv-loader").addClass("display-none");
-          $("#sv-loader-error").removeClass("display-none");
-        });
+      }).fail(function (xhr, status, error) {
+        options.errorMessage = error;
+        $("#sv-loader").addClass("display-none");
+        $("#sv-loader-error").removeClass("display-none");
+      });
     };
     loader.loadMap(mapFlowSearchCallback);
   } else if (currentTab == 'animation') {
     $("#maps").addClass("display-none");
     $("#sv-loader").removeClass("display-none");
     $("#animation-container").removeClass("display-none");
-    
+
     var postData = {
       searchData: currentSearchObj,
       output: 'mapAnimation'
     };
-    var mapAnimationSearchCallback = function() {
+    var mapAnimationSearchCallback = function () {
       var $map = $('#map');
-      $.post(searchUrl, JSON.stringify(postData), function(result) {
+      $.post(searchUrl, JSON.stringify(postData), function (result) {
         $("#sv-loader").removeClass("display-none");
 
         if (result) { // add title to the chart
@@ -1897,19 +1878,19 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
         $('.animationElement').show();
         if (animationHelper) disposeAnimationHelper();
         animationHelper = new AnimationHelper(result);
-      }).done(function(){
+      }).done(function () {
         $("#sv-loader").addClass("display-none");
         $("#maps").removeClass("display-none");
         loader.resizeMap();
         // get title here I'd say
-        }).fail(function (xhr, status, error) {
-          options.errorMessage = error;
-          $("#sv-loader").addClass("display-none");
-          $("#sv-loader-error").removeClass("display-none");
-        });
+      }).fail(function (xhr, status, error) {
+        options.errorMessage = error;
+        $("#sv-loader").addClass("display-none");
+        $("#sv-loader-error").removeClass("display-none");
+      });
     };
     // $('#loading').show();
-    loader.loadMap(function() {
+    loader.loadMap(function () {
       loader.loadAnimationScripts(mapAnimationSearchCallback);
     });
   }
@@ -1935,12 +1916,12 @@ var disposeAnimationHelper = function () {
 function LazyLoader() {
   var self = this;
   self.loadedFiles = {};
-  self.loadCss = function(url) {
+  self.loadCss = function (url) {
     $('head').append('<link rel="stylesheet" href="' + url + '" type="text/css" />');
   };
-  self.loadScript = function(url) {
+  self.loadScript = function (url) {
     var dfd = new $.Deferred();
-    var callback = function() {
+    var callback = function () {
       dfd.resolve('script loaded');
       self.loadedFiles[url] = true;
     };
@@ -1959,11 +1940,11 @@ function LazyLoader() {
   };
   self.animationScriptsLoaded = false;
   self.mapLoaded = false;
-  self.resizeMap = function() {
+  self.resizeMap = function () {
     $("#map").height($(window).height() - 200);
     voyagesMap._map.invalidateSize();
   };
-  self.loadMap = function(done) {
+  self.loadMap = function (done) {
     $('#map').show();
     if (!self.mapLoaded) {
       self.loadCss(STATIC_URL + 'maps/css/leaflet.css');
@@ -1972,16 +1953,16 @@ function LazyLoader() {
       self.loadScript(STATIC_URL + 'maps/js/leaflet.js')
         .then(self.loadScript(STATIC_URL + 'maps/js/leaflet.markercluster.js'))
         .then(self.loadScript(STATIC_URL + 'maps/js/leaflet.polylineDecorator.js'))
-        .then(function() {
+        .then(function () {
           $.when(
-              self.loadScript(STATIC_URL + 'maps/js/routeNodes.js'),
-              self.loadScript(STATIC_URL + 'maps/js/voyagesMap.js'),
-            )
-            .then(function() {
+            self.loadScript(STATIC_URL + 'maps/js/routeNodes.js'),
+            self.loadScript(STATIC_URL + 'maps/js/voyagesMap.js'),
+          )
+            .then(function () {
               voyagesMap.
-              init('1750', STATIC_URL + 'maps/', routeNodes, links).
-              setMaxPathWidth(20).
-              setPathOpacity(0.75);
+                init('1750', STATIC_URL + 'maps/', routeNodes, links).
+                setMaxPathWidth(20).
+                setPathOpacity(0.75);
               $(window).on("resize", self.resizeMap).trigger("resize");
               voyagesMap._map.invalidateSize();
               self.mapLoaded = true;
@@ -1992,17 +1973,17 @@ function LazyLoader() {
       done();
     }
   };
-  self.loadAnimationScripts = function(done) {
+  self.loadAnimationScripts = function (done) {
     if (!self.animationScriptsLoaded) {
       self.loadCss(STATIC_URL + 'scss/legacy/animation.css');
       $.when(
-          self.loadScript(STATIC_URL + 'scripts/library/d3.min.js'),
-          self.loadScript(STATIC_URL + 'scripts/library/jquery-ui@1.12.1.min.js'),
-          self.loadScript(STATIC_URL + 'maps/js/arc.js'),
-          self.loadScript(STATIC_URL + 'maps/js/leaflet.geodesic.min.js')
-        )
+        self.loadScript(STATIC_URL + 'scripts/library/d3.min.js'),
+        self.loadScript(STATIC_URL + 'scripts/library/jquery-ui@1.12.1.min.js'),
+        self.loadScript(STATIC_URL + 'maps/js/arc.js'),
+        self.loadScript(STATIC_URL + 'maps/js/leaflet.geodesic.min.js')
+      )
         .then(self.loadScript(STATIC_URL + 'scripts/vue/includes/animation.js'))
-        .then(function() {
+        .then(function () {
           self.animationScriptsLoaded = true;
           done();
         });
