@@ -120,7 +120,7 @@ class VoyageCache:
                                                                'voyage_ship__imputed_nationality_id',
                                                                'voyage_ship__ship_name',
                                                                'voyage_ship__tonnage',
-                                                               'voyage_dates__imp_voyage_began',
+                                                               'voyage_dates__imp_arrival_at_port_of_dis',
                                                                'voyage_slaves_numbers__imp_total_num_slaves_embarked',
                                                                'voyage_slaves_numbers__imp_total_num_slaves_disembarked'
                                                                ).iterator()}
