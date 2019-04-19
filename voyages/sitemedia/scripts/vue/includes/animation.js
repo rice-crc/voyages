@@ -1,9 +1,4 @@
-// Scripts for the timelapse animation of voyages in the map.
-
-var DEFAULT_TIMER_RESOLUTION = 50; // milliseconds
-var dropFrameCount = 0; // for DEBUG.
-
-var _now = function () { return (new Date()).getTime(); };
+// Scripts for the timelapse animation of voyages in the map v1.0.0.
 
 // Represents a route on the globe using lat/lng coordinates.
 function Route(points) {
@@ -58,10 +53,8 @@ function Route(points) {
             // Compute the result by interpolating on the (now) current arc.
             var currentArc = arcs[idx];
             var arcAngle = angles[idx];
-            // Interpolate if the arc is somewhat large, otherwise take one
-            // of the extreme points, which is computationally much faster.
             var arcRatio = (currentAngle - lastAngle) / arcAngle;
-            var pt = arcAngle > 0.05 * totalAngle
+            var pt = arcAngle > 0.015 * totalAngle
                 ? currentArc.interpolate(arcRatio)
                 : (arcRatio < 0.5
                     ? [currentArc.start.lon, currentArc.start.lat]
@@ -150,13 +143,12 @@ function AnimationModel(routes, voyages) {
  * updates via callback function.
  * @param {*} routes The set of pre-compiled, smooth, routes as an array of [lng, lat].
  * @param {*} voyages The set of voyages to display.
- * @param {*} timerResolution The interval between timer ticks.
  * @param {*} timeStepPerSec How much simulate time is increased every real second.
  * @param {*} onRender The callback that renders ongoing voyages. The arguments to the
  * callback are (simulated_time, [{ idx, voyage, position }, ...])
  * @param {*} onPauseChange An optional callback that receives pause state changes.
  */
-function AnimationControl(routes, voyages, timerResolution, timeStepPerSec, onRender, onPauseChange) {
+function AnimationControl(routes, voyages, timeStepPerSec, onRender, onPauseChange) {
     var self = this;
     var model = new AnimationModel(routes, voyages);
     var lastRealTime = null;
@@ -167,17 +159,10 @@ function AnimationControl(routes, voyages, timerResolution, timeStepPerSec, onRe
     self._paused = false;
     var setStepPerSec = function (stepPerSec) {
         timeStepPerSec = stepPerSec || 1;
-        timerResolution = timerResolution || DEFAULT_TIMER_RESOLUTION;
-        if (timerResolution * timeStepPerSec < 500.0) {
-            // Ensure that the resolution is not too fine 
-            // (e.g. multiple ticks would be required for
-            // an increase in simulated time).
-            timerResolution = 500.0 / timeStepPerSec;
-        }
         if (self._timer != null) {
-            window.clearInterval(self._timer);
+            self._timer.stop();
         }
-        self._timer = window.setInterval(tick, timerResolution);
+        self._timer = d3.timer(tick);
     }
     var setSimTime = function (nextSimTime) {
         nextSimTime = ~~nextSimTime;
@@ -194,40 +179,37 @@ function AnimationControl(routes, voyages, timerResolution, timeStepPerSec, onRe
                 console.log('Render error!');
                 console.log(e);
             }
-            lastRealTime = _now();
             if (!self._paused) {
                 self._paused = (nextSimTime >= maxTime - 0.01);
                 if (!!onPauseChange && self._paused) onPauseChange(true);
             }
         }
     };
-    var maxElapsedTime = 3 * timerResolution;
-    var tick = function () {
-        if (self._paused) return;
+    var tick = function (elapsed) {
+        if (self._paused) {
+            lastRealTime = elapsed;
+            return;
+        }
         // Advance the simulated time in sync with real time.
-        var now = _now();
         var nextSimTime = 0;
         if (lastRealTime != null) {
-            // Avoid too large gap between simulated times (which would be
-            // indicative that the browser is not able to keep up with our
-            // required precision).
-            var elapsed = now - lastRealTime;
-            if (elapsed > maxElapsedTime) {
-                elapsed = maxElapsedTime;
-                ++dropFrameCount;
-            }
-            nextSimTime = Math.round(elapsed * timeStepPerSec * 0.001 + lastSimTime);
+            var decimalIncrement = (elapsed - lastRealTime) * timeStepPerSec * 0.001;
+            var increment = Math.round(decimalIncrement);
+            // If the timer ticked too soon, do nothing.
+            if (increment < 1) return;
+            nextSimTime = lastSimTime + increment;
         } else {
             nextSimTime = lastSimTime + 1;
         }
         setSimTime(nextSimTime);
+        lastRealTime = elapsed;
     };
     setStepPerSec(timeStepPerSec);
     self.getModel = function () { return model; };
     self.isPaused = function () { return self._paused; };
     self.dispose = function () {
         if (self._timer) {
-            window.clearInterval(self._timer);
+            self._timer.stop();
             self._timer = null;
         }
     };
@@ -239,7 +221,6 @@ function AnimationControl(routes, voyages, timerResolution, timeStepPerSec, onRe
     };
     self.play = function () {
         if (self._paused) {
-            lastRealTime = _now();
             self._paused = false;
             if (lastSimTime >= (maxTime - 0.01)) {
                 // Hitting play at the end of the time scale should reset time.
@@ -271,18 +252,6 @@ var _appendArrHelper = function (source, target, reverse, skipStart, skipLast) {
             target.push(source[i]);
         }
     }
-};
-
-// flatten an array of arrays.
-var _flatten = function (arr) {
-    var r = [];
-    for (var i = 0; i < arr.length; ++i) {
-        var v = arr[i];
-        for (var j = 0; j < v.length; ++j) {
-            r.push(v[j]);
-        }
-    }
-    return r;
 };
 
 function _normSq(v) {
@@ -428,8 +397,8 @@ var geoCache = {
  * @param {*} voyages The set of voyages to display in the animation.
  * @param {*} ui An object containing a Leaflet map entry, 
  * a d3view object which hosts the animation svg elements, and methods
- * initialize(control), setTime(simTime), showTooltip(data, sourceRect),
- * play, pause, setSelectedRoute(route, circle), closeTooltip.
+ * initialize(control), setTime(simTime),
+ * play, pause, setSelectedRoute(route, circle),
  * @param {*} monthsPerSecond How many months should elapse for each 
  * animation second.
  */
@@ -438,28 +407,19 @@ function d3MapTimelapse(voyages, ui, monthsPerSecond) {
 
     var render = function (simTime, items) {
         ui.setSelectedRoute(null);
-        ui.setTime(simTime);
-        var modified = [];
         for (var i = 0; i < items.length; ++i) {
-            var item = Object.assign({}, items[i]);
+            var item = items[i];
             var pos = item.position;
             item.latLng = L.latLng(pos[1], pos[0]);
             item.point = ui.map.latLngToLayerPoint(item.latLng);
-            modified.push(item);
         }
-        var updatePos = function (sel, applyTransition) {
+        var updatePos = function (sel) {
             if (sel) {
-                if (applyTransition) {
-                    sel = sel
-                        .transition()
-                        .ease(d3.easeLinear)
-                        .duration(DEFAULT_TIMER_RESOLUTION);
-                }
                 return sel.attr("transform", function (d) { return "translate(" + d.point.x + "," + d.point.y + ")"; });
             }
         };
         var selection = ui.d3view.selectAll(".animation_voyage_group")
-            .data(modified, function (d) { return d.idx; });
+            .data(items, function (d) { return d.idx; });
         updatePos(selection, true);
         var enterSel = selection
             .enter()
@@ -475,38 +435,9 @@ function d3MapTimelapse(voyages, ui, monthsPerSecond) {
                 if (e <= 200) return 2;
                 return 2 * (1.0 + Math.log2(e / 200));
             });
-        enterSel
-            .append("circle")
-            .classed("animation_voyage_outer_circle", true)
-            .attr("r", 10)
-            .style("opacity", 0)
-            .on("mouseover", function () {
-                $(this).animate({ opacity: 1 }, 300);
-            })
-            .on("mouseout", function () {
-                if (ui.clickedCircle != this) {
-                    $(this).animate({ opacity: 0 }, 300);
-                }
-            })
-            .on("click", function () {
-                ui.closeTooltip();
-                d3.select(".selected").classed("selected", false);
-                d3.select(this).classed("selected", true);
-                var d = this.__data__;
-                var route = L.geodesic([d.voyage.latLngs], {
-                    weight: 3,
-                    color: "red",
-                    className: "animation_selected_route"
-                });
-                ui.setSelectedRoute(route, this);
-                data = Object.assign({}, d.voyage.data);
-                data.source_name = geoCache.portSegments['src'][data.src].name;
-                data.destination_name = geoCache.portSegments['dst'][data.dst].name;
-                data.ship_nationality_name = (geoCache.nations || {})[data.nat_id] || '';
-                ui.showTooltip(data, this.getBoundingClientRect());
-            });
         updatePos(enterSel, false);
         selection.exit().remove();
+        ui.setTime(simTime);
     };
     var init = function () {
         if (!control && !!geoCache.regionSegments && !!geoCache.portSegments) {
@@ -515,7 +446,6 @@ function d3MapTimelapse(voyages, ui, monthsPerSecond) {
             control = new AnimationControl(
                 routes,
                 voyages,
-                DEFAULT_TIMER_RESOLUTION,
                 monthsPerSecond,
                 render,
                 function (paused) {
@@ -597,7 +527,7 @@ function AnimationHelper(data, monthsPerSecond) {
         .attr("in", "SourceGraphic"); // Apply blur on the applied element;
 
     var setBlurFilter = function (val) {
-        return filter.attr("stdDeviation", val || "0.25");
+        return filter.attr("stdDeviation", val || "0.5");
     }
     setBlurFilter();
 
@@ -697,6 +627,40 @@ function AnimationHelper(data, monthsPerSecond) {
         }, 800);
     }
 
+    var addInteractiveUI = function () {
+        g.selectAll(".animation_voyage_group:not(.interactive_voyage_node)")
+            .classed('interactive_voyage_node', true)
+            .append("circle")
+            .classed("animation_voyage_outer_circle", true)
+            .attr("r", 10)
+            .style("opacity", 0)
+            .on("mouseover", function () {
+                $(this).animate({ opacity: 1 }, 300);
+            })
+            .on("mouseout", function () {
+                if (ui.clickedCircle != this) {
+                    $(this).animate({ opacity: 0 }, 300);
+                }
+            })
+            .on("click", function () {
+                closeTooltip();
+                d3.select(".selected").classed("selected", false);
+                d3.select(this).classed("selected", true);
+                var d = this.__data__;
+                var route = L.geodesic([d.voyage.latLngs], {
+                    weight: 3,
+                    color: "red",
+                    className: "animation_selected_route"
+                });
+                setSelectedRoute(route, this);
+                data = Object.assign({}, d.voyage.data);
+                data.source_name = geoCache.portSegments['src'][data.src].name;
+                data.destination_name = geoCache.portSegments['dst'][data.dst].name;
+                data.ship_nationality_name = (geoCache.nations || {})[data.nat_id] || '';
+                showTooltip(data, this.getBoundingClientRect());
+            });
+    };
+
     map.on("zoomend", positionSvg);
 
     // Set up ui object and hook events.
@@ -705,8 +669,6 @@ function AnimationHelper(data, monthsPerSecond) {
         map: map,
         d3view: g,
         monthsPerSecond: monthsPerSecond || 12,
-        showTooltip: showTooltip,
-        closeTooltip: closeTooltip,
         setSelectedRoute: setSelectedRoute
     };
     var updateControls = function () {
@@ -722,6 +684,7 @@ function AnimationHelper(data, monthsPerSecond) {
     ui.pause = function () {
         if (!!self.control && !self.control.isPaused()) {
             self.control.pause();
+            addInteractiveUI();
         }
         updateControls();
     };
@@ -772,6 +735,9 @@ function AnimationHelper(data, monthsPerSecond) {
         $("#yearLabel").text(yearText);
         positionSvg();
         if (tooltipShown) closeTooltip();
+        if (self.control.isPaused()) {
+            addInteractiveUI();
+        }
     };
     // Process data, we will use the simple formula 10 * (12 * year + month)
     // as the voyage "time". Voyages without month values will get a
