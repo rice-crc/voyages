@@ -186,7 +186,7 @@ function AnimationControl(routes, voyages, timeStepPerSec, onRender, onPauseChan
         }
     };
     var tick = function (elapsed) {
-        if (self._paused) {
+        if (self._paused || !document.hasFocus()) {
             lastRealTime = elapsed;
             return;
         }
@@ -490,12 +490,16 @@ function TimelineControl(data, parent, onChange) {
     // grouped by major region of disembarkation
     var self = this;
     var NORMAL_HEIGHT = 100;
+    var PLOT_LEFT_MARGIN = 140;
+    var PLOT_RIGHT_MARGIN = 60;
+    var PLOT_VERTICAL_MARGIN = 4;
     // The unicode "ICON" characters below will 
     // render properly with FontAwesome.
     var AFRICA_ICON = "";
     var AMERICA_ICON = "";
     var FLAG_ICON = "";
     var width = 960;
+    d3.select("#timeline_slider").remove();
     var g = parent
         .append("g")
         .attr("id", "timeline_slider")
@@ -503,19 +507,20 @@ function TimelineControl(data, parent, onChange) {
     var background = g.append("rect")
         .attr("height", NORMAL_HEIGHT)
         .attr("width", width)
-        .attr("fill", "rgba(0, 0, 0, 0.3)");
+        .attr("fill", "rgba(0, 0, 0, 0.3)")
+        .attr("rx", 4)
+        .attr("ry", 4);
 
     self.resize = function (w, h) {
         g.attr("transform", "translate(" + ((w - width) / 2) + "," + (h - NORMAL_HEIGHT) + ")");
     };
 
     // Enrich data set with grouping variables.
-    var unknownFlag = 'Unknown flag';
     for (var i = 0; i < data.length; ++i) {
         var item = data[i];
         // item.sourceRegion = ; // TODO
         // item.destinationRegion = ; // TODO
-        item.flag = (geoCache.nations || {})[item.nat_id] || unknownFlag;
+        item.flag = gettext((geoCache.nations || {})[item.nat_id] || 'Unknown flag');
     }
 
     var groupField = 'flag';
@@ -583,22 +588,18 @@ function TimelineControl(data, parent, onChange) {
 
     var x = d3.scaleLinear()
         .domain(d3.extent(table, function (d) { return d.year; }))
-        .range([0, width]);
-    var xAxis = d3.axisBottom().scale(x).ticks(20);
-    g.append('g')
-        .attr('class', 'x axis')
-        .attr('transform', 'translate(0,' + (NORMAL_HEIGHT - 5) + ')')
-        .call(xAxis);
+        .range([0, width - PLOT_LEFT_MARGIN - PLOT_RIGHT_MARGIN]);
+    var xAxis = d3.axisTop().scale(x).ticks(20).tickFormat(function (d) { return d; });
     var yMaxValue = d3.sum(data, function (d) { return d.embarked; });
-    var y = d3.scaleLinear().domain([0, yMaxValue]).range([NORMAL_HEIGHT, 0]);
-    var yAxis = d3.axisLeft().scale(y);
+    var y = d3.scaleLinear()
+        .domain([0, yMaxValue])
+        .range([NORMAL_HEIGHT - 2 * PLOT_VERTICAL_MARGIN, PLOT_VERTICAL_MARGIN]);
+    var yAxis = d3.axisRight().scale(y).ticks(4);
     var area = d3.area()
         .x(function (d) {
             return x(d.data.year);
         })
-        .y0(function (d) { 
-            return y(d[0]);
-         })
+        .y0(function (d) { return y(d[0]); })
         .y1(function (d) { return y(d[1]); });
     var stack = d3.stack()
     stack.keys(keys);
@@ -612,17 +613,48 @@ function TimelineControl(data, parent, onChange) {
     categories.append('path')
         .attr('class', 'area')
         .attr('d', area)
+        .attr('transform', 'translate(' + PLOT_LEFT_MARGIN + ', 0)')
         .style('fill', function (d) { return color(d.key); });
-/*
+    // Labels for categories.
+    var paddedHeight = NORMAL_HEIGHT - 2 * PLOT_VERTICAL_MARGIN;
     categories.append('text')
         .datum(function (d) { return d; })
-        .attr('transform', function (d) { return 'translate(' + x(data[13].date) + ',' + y(d[13][1]) + ')'; })
-        .attr('x', -6)
-        .attr('dy', '.35em')
+        .attr('transform', function (d, i) { return 'translate(30,' + (PLOT_VERTICAL_MARGIN + i * paddedHeight / keys.length) + ')'; })
+        .attr('dy', '1em')
+        .style("font-size", "10")
         .style("text-anchor", "start")
         .text(function (d) { return d.key; })
         .attr('fill-opacity', 1);
-        */
+    categories.append('rect')
+        .datum(function (d) { return d; })
+        .attr('transform', function (d, i) { return 'translate(10,' + (PLOT_VERTICAL_MARGIN + 2 + i * paddedHeight / keys.length) + ')'; })
+        .attr('width', 15)
+        .attr('height', Math.min(8, NORMAL_HEIGHT / keys.length - 4))
+        .attr('fill', function (d) { return color(d.key); })
+        .attr('stroke', 'gray')
+        .attr('stroke-width', 1);
+    g.append('g')
+        .attr('class', 't_axis')
+        .attr('transform', 'translate(' + PLOT_LEFT_MARGIN + ',' + (NORMAL_HEIGHT - 5) + ')')
+        .attr('color', 'black')
+        .call(xAxis);
+    g.append('g')
+        .attr('class', 'embarked_axis')
+        .attr('transform', 'translate(' + (width - PLOT_RIGHT_MARGIN) + ',0)')
+        .attr('color', 'black')
+        .call(yAxis);
+    d3.selectAll('g.tick>text').style('font-size', '10px');
+
+    // Create time indicator bar.
+    var tickLine = g.append('line')
+        .attr('stroke', 'red')
+        .attr('stroke-width', 1)
+        .attr('transform', 'translate(' + PLOT_LEFT_MARGIN + ',' + PLOT_VERTICAL_MARGIN + ')')
+        .attr('y2', paddedHeight);
+    self.setTime = function (time) {
+        tickLine
+            .attr('transform', 'translate(' + (PLOT_LEFT_MARGIN + x(time / 120)) + ',' + PLOT_VERTICAL_MARGIN + ')');
+    }
 }
 
 function AnimationHelper(data, monthsPerSecond) {
@@ -632,6 +664,7 @@ function AnimationHelper(data, monthsPerSecond) {
 
     var map = voyagesMap._map;
     var svg = d3.select(map.getPanes().overlayPane).append("svg");
+    d3.select("#timelapse_control_layer").remove();
     var controlLayer = d3.select(map.getContainer())
         .append("svg")
         .attr('id', 'timelapse_control_layer')
@@ -837,6 +870,8 @@ function AnimationHelper(data, monthsPerSecond) {
     };
     ui.initialize = function (control) {
         self.control = control;
+        // Initialize plot slider.
+        ui.timeline = new TimelineControl(data, controlLayer, control.jumpTo);
         playPauseBtn
             .on("mouseover", function () {
                 d3.select(this).style("fill", "red");
@@ -865,11 +900,10 @@ function AnimationHelper(data, monthsPerSecond) {
                 control.jumpTo(sliderCtrl.value);
             }
         });
-        // Initialize plot slider.
-        ui.timeline = new TimelineControl(data, controlLayer, control.jumpTo);
     };
     ui.setTime = function (time) {
         // Update slider and label.
+        ui.timeline.setTime(time);
         $("#slider").slider('value', time);
         var yearText = ui.monthsPerSecond == 1
             ? Math.round(time / 120) + "-" + gettext(MONTH_LABELS[~~Math.round(time / 10) % 12])
