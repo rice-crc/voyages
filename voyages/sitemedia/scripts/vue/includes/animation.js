@@ -488,6 +488,141 @@ var MONTH_LABELS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep
 function TimelineControl(data, parent, onChange) {
     // TODO: Implement a D3.js cumulative line graph with embarked,
     // grouped by major region of disembarkation
+    var self = this;
+    var NORMAL_HEIGHT = 100;
+    // The unicode "ICON" characters below will 
+    // render properly with FontAwesome.
+    var AFRICA_ICON = "";
+    var AMERICA_ICON = "";
+    var FLAG_ICON = "";
+    var width = 960;
+    var g = parent
+        .append("g")
+        .attr("id", "timeline_slider")
+        .attr("transform", "translate(" + 40 + ",300)");
+    var background = g.append("rect")
+        .attr("height", NORMAL_HEIGHT)
+        .attr("width", width)
+        .attr("fill", "rgba(0, 0, 0, 0.3)");
+
+    self.resize = function (w, h) {
+        g.attr("transform", "translate(" + ((w - width) / 2) + "," + (h - NORMAL_HEIGHT) + ")");
+    };
+
+    // Enrich data set with grouping variables.
+    var unknownFlag = 'Unknown flag';
+    for (var i = 0; i < data.length; ++i) {
+        var item = data[i];
+        // item.sourceRegion = ; // TODO
+        // item.destinationRegion = ; // TODO
+        item.flag = (geoCache.nations || {})[item.nat_id] || unknownFlag;
+    }
+
+    var groupField = 'flag';
+    var keys = d3.set(data, function (x) { return x[groupField]; }).values();
+    var color = d3.scaleOrdinal()
+        .domain(keys)
+        .range(d3.schemePaired);
+    var grouped = d3.nest()
+        .key(function (d) { return d[groupField]; })
+        .sortValues(function (a, b) { return a.year - b.year; })
+        .rollup(function (g) {
+            // Build aggregates based on year. 
+            var agg = [];
+            var lastYear = -1;
+            var acc = 0;
+            for (var i = 0; i < g.length; ++i) {
+                var d = g[i];
+                acc += d.embarked;
+                if (d.year == lastYear) {
+                    agg[agg.length - 1].acc = acc;
+                } else {
+                    lastYear = d.year;
+                    agg.push({ 'year': lastYear, 'acc': acc });
+                }
+            }
+            return agg;
+        })
+        .entries(data);
+    var yearData = {}
+    for (var i = 0; i < grouped.length; ++i) {
+        var grp = grouped[i];
+        var values = grp.value;
+        for (var j = 0; j < values.length; ++j) {
+            // Create an year-based object that contains one property for every group.
+            var item = values[j];
+            var yearObj = yearData[item.year] || {};
+            yearObj[grp.key] = item.acc;
+            yearData[item.year] = yearObj;
+        }
+    }
+    var start = d3.min(data, function (d) { return d.year; });
+    var end = d3.max(data, function (d) { return d.year; });
+    var table = [];
+    for (var year = start; year <= end; ++year) {
+        var yearObj = {};
+        if (table.length > 0) {
+            // Copy the values from the previous year.
+            yearObj = Object.assign({}, table[table.length - 1]);
+        } else {
+            // Ensure that all keys have values.
+            for (var i = 0; i < keys.length; ++i) {
+                var key = keys[i];
+                if (!yearObj.hasOwnProperty(key)) {
+                    yearObj[key] = 0;
+                }
+            }
+        }
+        // Update only the data for groups that had a change on the current year.
+        // The previous step ensures that all groups have the correct accumulated
+        // value from all previous years.
+        yearObj = Object.assign(yearObj, yearData[year]);
+        yearObj.year = year;
+        table.push(yearObj);
+    }
+
+    var x = d3.scaleLinear()
+        .domain(d3.extent(table, function (d) { return d.year; }))
+        .range([0, width]);
+    var xAxis = d3.axisBottom().scale(x).ticks(20);
+    g.append('g')
+        .attr('class', 'x axis')
+        .attr('transform', 'translate(0,' + (NORMAL_HEIGHT - 5) + ')')
+        .call(xAxis);
+    var yMaxValue = d3.sum(data, function (d) { return d.embarked; });
+    var y = d3.scaleLinear().domain([0, yMaxValue]).range([NORMAL_HEIGHT, 0]);
+    var yAxis = d3.axisLeft().scale(y);
+    var area = d3.area()
+        .x(function (d) {
+            return x(d.data.year);
+        })
+        .y0(function (d) { 
+            return y(d[0]);
+         })
+        .y1(function (d) { return y(d[1]); });
+    var stack = d3.stack()
+    stack.keys(keys);
+    var stackData = stack(table);
+    var categories = g.selectAll('.category')
+        .data(stackData)
+        .enter().append('g')
+        .attr('class', function (d) { return 'category ' + d.key; })
+        .attr('fill-opacity', 0.5);
+
+    categories.append('path')
+        .attr('class', 'area')
+        .attr('d', area)
+        .style('fill', function (d) { return color(d.key); });
+/*
+    categories.append('text')
+        .datum(function (d) { return d; })
+        .attr('transform', function (d) { return 'translate(' + x(data[13].date) + ',' + y(d[13][1]) + ')'; })
+        .attr('x', -6)
+        .attr('dy', '.35em')
+        .style("text-anchor", "start")
+        .text(function (d) { return d.key; })
+        .attr('fill-opacity', 1);
+        */
 }
 
 function AnimationHelper(data, monthsPerSecond) {
@@ -497,7 +632,10 @@ function AnimationHelper(data, monthsPerSecond) {
 
     var map = voyagesMap._map;
     var svg = d3.select(map.getPanes().overlayPane).append("svg");
-    var controlLayer = d3.select(map.getContainer()).append("svg").style("pointer-events", "none");
+    var controlLayer = d3.select(map.getContainer())
+        .append("svg")
+        .attr('id', 'timelapse_control_layer')
+        .style("pointer-events", "none");
     var yearLabel = controlLayer
         .style('position', 'absolute')
         .append('text')
@@ -561,6 +699,9 @@ function AnimationHelper(data, monthsPerSecond) {
             .attr("height", size.y);
         yearLabel.attr("transform", "translate(" + (size.x / 2) + ", 50)");
         playPauseBtn.attr("transform", "translate(" + (size.x / 2) + ", 80)");
+        if (ui.timeline) {
+            ui.timeline.resize(size.x, size.y);
+        }
     };
 
     var ui = {};
@@ -724,6 +865,8 @@ function AnimationHelper(data, monthsPerSecond) {
                 control.jumpTo(sliderCtrl.value);
             }
         });
+        // Initialize plot slider.
+        ui.timeline = new TimelineControl(data, controlLayer, control.jumpTo);
     };
     ui.setTime = function (time) {
         // Update slider and label.

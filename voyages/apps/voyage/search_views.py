@@ -204,15 +204,15 @@ def get_results_map_animation(results, allow_no_numbers = False):
             if flag is None:
                 flag = ''
             items.append({
-                "voyage_id": str(voyage.voyage_id),
+                "voyage_id": voyage.voyage_id,
                 "src": voyage.emb_pk,
                 "dst": voyage.dis_pk,
-                "embarked": str(voyage.embarked or 0),
-                "disembarked": str(voyage.disembarked or 0),
-                "year": str(voyage.year),
-                "month": str(voyage.month),
-                "ship_ton": str(voyage.ship_ton) if voyage.ship_ton is not None else '0',
-                "nat_id": str(voyage.ship_nat_pk) if voyage.ship_nat_pk is not None else '0',
+                "embarked": voyage.embarked or 0,
+                "disembarked": voyage.disembarked or 0,
+                "year": voyage.year,
+                "month": voyage.month,
+                "ship_ton": voyage.ship_ton if voyage.ship_ton is not None else 0,
+                "nat_id": voyage.ship_nat_pk if voyage.ship_nat_pk is not None else 0,
                 "ship_name": unicode(voyage.ship_name) if voyage.ship_name is not None else '',
             })
     return JsonResponse(items, safe=False)
