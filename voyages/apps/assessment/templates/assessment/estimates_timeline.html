@@ -55,8 +55,7 @@ for (var i = 0; i < data.length; ++i) {
     indexByYear[data[i].x] = i;
 }
 
-var stack = d3.layout.stack(),
-    layers = stack(d3.range(2).map(function(i) { return data.map(function(d) { return { x: d.x, y: d['y' + i], embarked: d.y1, disembarked: d.y0, y1: d.y1, y0: d.y0 }; }); })),
+var layers = d3.range(2).map(function(i) { return data.map(function(d) { return { x: d.x, y: d['y' + i], embarked: d.y1, disembarked: d.y0, y1: d.y1, y0: d.y0 }; }); }),
     yStackMax = d3.max(layers, function(layer) { return d3.max(layer, function(d) { return d.embarked; }); });
 
 // Swap layers so that embarked stays below in the SVG.
@@ -68,15 +67,13 @@ var margin = {top: 20, right: 10, bottom: 40, left: 40},
 
 $('#mouseOverInfo').css('margin-left', margin.left);
 
-var x = d3.scaleOrdinal()
+var x = d3.scaleBand()
     .domain(d3.range({{ min_year }}, {{ max_year|add:"1" }}))
-    .rangeRoundBands([0, width]);
+    .rangeRound([0, width]);
 
 var xShift = -x({{ min_year }});
 
-var y = d3.scaleLinear()
-    .domain([0, yStackMax * 1.1])
-    .range([height, 0]);
+var y = d3.scaleLinear([0, yStackMax * 1.1], [height, 0]);
 
 //var color = ["#004D71", "#054450", "rgb(30, 98, 127)"];
 var color = ["#AFEEEE", "#008080", "rgb(30, 98, 127)"];
@@ -211,9 +208,14 @@ legend.selectAll('text')
       .text(function(d, i) { return i != 0 ? "{% trans 'Disembarked' %}" : "{% trans 'Embarked' %}"; });
 
 //d3.select("#graphContainer")
-svg.on("mousemove", function(){
-        var mouseX = d3.mouse(this)[0] - xShift;
-        var year = d3.bisectLeft(x.range(), mouseX) + {{ min_year }} - 1;
+d3.select('.y.axis>.domain').on("mousemove", function() {
+        var mouseX = d3.mouse(this)[0];
+        var r = x.range();
+        var d = x.domain();
+        var dmin = d[0];
+        var dmax = d[d.length - 1];
+        var rsize = x(dmax) + xShift - r[0];
+        var year = ~~Math.round((mouseX - r[0]) / rsize * (dmax - dmin)) + dmin;
         var index = indexByYear[year];
         changeHoveredBar(index);
     });
