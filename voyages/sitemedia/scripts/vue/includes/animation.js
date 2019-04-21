@@ -385,11 +385,62 @@ function compileRoutes(regionSegments, portSegments, routeData) {
 }
 
 // Cache geo data in the script. 
-var geoCache = {
-    regionSegments: null,
-    portSegments: null,
-    nations: null
-};
+var geoCache = new (function () {
+    var self = this;
+    self.regionSegments = null;
+    self.portSegments = null;
+    self.nations = null;
+    // TODO: load source regions, destination broad regions.
+    var callbacks = [];
+    var allLoaded = false;
+
+    self.isReady = function () {
+        return allLoaded;
+    };
+
+    self.onReady = function (f) {
+        if (allLoaded) {
+            // No need to wait since everything is loaded.
+            f();
+        } else {
+            callbacks.push(f);
+        }
+    }
+
+    var loaded = function () {
+        allLoaded = self.regionSegments && self.portSegments && self.nations;
+        if (allLoaded) {
+            for (var i = 0; i < callbacks.length; ++i) {
+                callbacks[i]();
+            }
+            callbacks = [];
+        }
+    };
+
+    // Load cached data using AJAX.
+    if (!self.regionSegments) {
+        $.getJSON(STATIC_URL + "maps/js/regional_routes.json", function (data) {
+            self.regionSegments = data;
+            loaded();
+        });
+    }
+    if (!self.portSegments) {
+        $.getJSON(STATIC_URL + "maps/js/port_routes.json", function (data) {
+            self.portSegments = data;
+            loaded();
+        });
+    }
+    if (!self.nations) {
+        $.getJSON("/common/nations", function (data) {
+            var nations = {};
+            for (var key in data) {
+                nations[key] = data[key].name;
+            }
+            self.nations = nations;
+            loaded();
+        });
+    }
+})();
 
 /**
  * Sets up the UI to display voyages timelapse animation using D3.js
@@ -440,7 +491,7 @@ function d3MapTimelapse(voyages, ui, monthsPerSecond) {
         ui.setTime(simTime);
     };
     var init = function () {
-        if (!control && !!geoCache.regionSegments && !!geoCache.portSegments) {
+        if (!control && geoCache.isReady()) {
             var routes = compileRoutes(geoCache.regionSegments, geoCache.portSegments, voyages);
             var initialized = false;
             control = new AnimationControl(
@@ -460,27 +511,7 @@ function d3MapTimelapse(voyages, ui, monthsPerSecond) {
             initialized = true;
         }
     };
-    if (!geoCache.regionSegments) {
-        $.getJSON(STATIC_URL + "maps/js/regional_routes.json", function (data) {
-            geoCache.regionSegments = data;
-            init();
-        });
-    }
-    if (!geoCache.portSegments) {
-        $.getJSON(STATIC_URL + "maps/js/port_routes.json", function (data) {
-            geoCache.portSegments = data;
-            init();
-        });
-    }
-    if (!geoCache.nations) {
-        $.getJSON("/common/nations", function (data) {
-            geoCache.nations = {};
-            for (var key in data) {
-                geoCache.nations[key] = data[key].name;
-            }
-        });
-    }
-    init();
+    geoCache.onReady(init);
 }
 
 var MONTH_LABELS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
@@ -490,7 +521,7 @@ function TimelineControl(data, parent, onChange) {
     // grouped by major region of disembarkation
     var self = this;
     var NORMAL_HEIGHT = 100;
-    var PLOT_LEFT_MARGIN = 140;
+    var PLOT_LEFT_MARGIN = 170;
     var PLOT_RIGHT_MARGIN = 60;
     var PLOT_VERTICAL_MARGIN = 4;
     // The unicode "ICON" characters below will 
@@ -498,18 +529,24 @@ function TimelineControl(data, parent, onChange) {
     var AFRICA_ICON = "";
     var AMERICA_ICON = "";
     var FLAG_ICON = "";
-    var width = 960;
+    var ICONS = [
+        { key: 'flag', text: FLAG_ICON, tooltip: gettext('Group by ship nationality') },
+        { key: 'destinationRegion', text: AMERICA_ICON, tooltip: gettext('Group by disembarkation broad region') },
+        { key: 'embarkationRegion', text: AFRICA_ICON, tooltip: gettext('Group by embarkation region') }
+    ];
     d3.select("#timeline_slider").remove();
+    d3.select("#timeline_slider_tooltip").remove();
+    var tooltip = d3.select("body").append("div")
+        .attr("id", "timeline_slider_tooltip")
+        .attr("class", "tooltip")
+        .style("opacity", 0)
+        .style("background", 'white');
+    var width = 960;
     var g = parent
         .append("g")
         .attr("id", "timeline_slider")
+        .style("pointer-events", "auto")
         .attr("transform", "translate(" + 40 + ",300)");
-    var background = g.append("rect")
-        .attr("height", NORMAL_HEIGHT)
-        .attr("width", width)
-        .attr("fill", "rgba(0, 0, 0, 0.3)")
-        .attr("rx", 4)
-        .attr("ry", 4);
 
     self.resize = function (w, h) {
         g.attr("transform", "translate(" + ((w - width) / 2) + "," + (h - NORMAL_HEIGHT) + ")");
@@ -518,143 +555,253 @@ function TimelineControl(data, parent, onChange) {
     // Enrich data set with grouping variables.
     for (var i = 0; i < data.length; ++i) {
         var item = data[i];
-        // item.sourceRegion = ; // TODO
-        // item.destinationRegion = ; // TODO
-        item.flag = gettext((geoCache.nations || {})[item.nat_id] || 'Unknown flag');
+        item.sourceRegion = 'not implemented'; // TODO
+        item.destinationRegion = 'not implemented'; // TODO
+        item.flag = gettext(geoCache.nations[item.nat_id] || 'Other');
     }
 
-    var groupField = 'flag';
-    var keys = d3.set(data, function (x) { return x[groupField]; }).values();
-    var color = d3.scaleOrdinal()
-        .domain(keys)
-        .range(d3.schemePaired);
-    var grouped = d3.nest()
-        .key(function (d) { return d[groupField]; })
-        .sortValues(function (a, b) { return a.year - b.year; })
-        .rollup(function (g) {
-            // Build aggregates based on year. 
-            var agg = [];
-            var lastYear = -1;
-            var acc = 0;
-            for (var i = 0; i < g.length; ++i) {
-                var d = g[i];
-                acc += d.embarked;
-                if (d.year == lastYear) {
-                    agg[agg.length - 1].acc = acc;
-                } else {
-                    lastYear = d.year;
-                    agg.push({ 'year': lastYear, 'acc': acc });
+    var currentGroupField = null
+    var setCurrentGroupField = null;
+    var lastTickPos = 0;
+    var createTimelinePlot = function (groupField) {
+        $('#timeline_slider').empty();
+        // Append background.
+        g.append("rect")
+            .attr("height", NORMAL_HEIGHT)
+            .attr("width", width)
+            .attr("fill", "rgba(0, 0, 0, 0.3)")
+            .attr("rx", 4)
+            .attr("ry", 4);
+        g.selectAll('.timeline_group_button')
+            .data(ICONS)
+            .enter()
+            .append('text')
+            .attr('id', function (d) { return 'group_field_btn_' + d.key; })
+            .attr('font-family', 'FontAwesome')
+            .attr('font-size', '24')
+            .attr('text-anchor', 'middle')
+            .attr('fill', 'gray')
+            .attr('transform', function (_, i) { return 'translate(20,' + (2 + 30 * (i + 1)) + ')'; })
+            .text(function (d) { return d.text; })
+            .on('mouseover', function (d) {
+                d3.select(this).style("fill", "red");
+                tooltip.transition()
+                    .duration(200)
+                    .style("opacity", .9);
+                tooltip.html(d.tooltip)
+                    .style("left", (d3.event.pageX + 40) + "px")
+                    .style("top", (d3.event.pageY - 40) + "px");
+            })
+            .on("mouseout", function (d) {
+                d3.select(this).style("fill", d.key == currentGroupField ? "black" : "gray");
+                tooltip.transition()
+                    .duration(500)
+                    .style("opacity", 0);
+            })
+            .on('click', function () {
+                if (setCurrentGroupField) {
+                    setCurrentGroupField(this.__data__.key);
+                }
+            });
+        var keys = d3.set(data, function (x) { return x[groupField]; }).values();
+        var color = d3.scaleOrdinal()
+            .domain(keys)
+            .range(d3.schemePaired);
+        var grouped = d3.nest()
+            .key(function (d) { return d[groupField]; })
+            .sortValues(function (a, b) { return a.year - b.year; })
+            .rollup(function (g) {
+                // Build aggregates based on year. 
+                var agg = [];
+                var lastYear = -1;
+                var acc = 0;
+                for (var i = 0; i < g.length; ++i) {
+                    var d = g[i];
+                    acc += d.embarked;
+                    if (d.year == lastYear) {
+                        agg[agg.length - 1].acc = acc;
+                    } else {
+                        lastYear = d.year;
+                        agg.push({ 'year': lastYear, 'acc': acc });
+                    }
+                }
+                return agg;
+            })
+            .entries(data);
+        var yearData = {}
+        for (var i = 0; i < grouped.length; ++i) {
+            var grp = grouped[i];
+            var values = grp.value;
+            for (var j = 0; j < values.length; ++j) {
+                // Create an year-based object that contains one property for every group.
+                var item = values[j];
+                var yearObj = yearData[item.year] || {};
+                yearObj[grp.key] = item.acc;
+                yearData[item.year] = yearObj;
+            }
+        }
+        var start = d3.min(data, function (d) { return d.year; });
+        var end = d3.max(data, function (d) { return d.year; });
+        var table = [];
+        for (var year = start; year <= end; ++year) {
+            var yearObj = {};
+            if (table.length > 0) {
+                // Copy the values from the previous year.
+                yearObj = Object.assign({}, table[table.length - 1]);
+            } else {
+                // Ensure that all keys have values.
+                for (var i = 0; i < keys.length; ++i) {
+                    var key = keys[i];
+                    if (!yearObj.hasOwnProperty(key)) {
+                        yearObj[key] = 0;
+                    }
                 }
             }
-            return agg;
-        })
-        .entries(data);
-    var yearData = {}
-    for (var i = 0; i < grouped.length; ++i) {
-        var grp = grouped[i];
-        var values = grp.value;
-        for (var j = 0; j < values.length; ++j) {
-            // Create an year-based object that contains one property for every group.
-            var item = values[j];
-            var yearObj = yearData[item.year] || {};
-            yearObj[grp.key] = item.acc;
-            yearData[item.year] = yearObj;
-        }
-    }
-    var start = d3.min(data, function (d) { return d.year; });
-    var end = d3.max(data, function (d) { return d.year; });
-    var table = [];
-    for (var year = start; year <= end; ++year) {
-        var yearObj = {};
-        if (table.length > 0) {
-            // Copy the values from the previous year.
-            yearObj = Object.assign({}, table[table.length - 1]);
-        } else {
-            // Ensure that all keys have values.
+            // Update only the data for groups that had a change on the current year.
+            // The previous step ensures that all groups have the correct accumulated
+            // value from all previous years.
+            yearObj = Object.assign(yearObj, yearData[year]);
+            yearObj.year = year;
+            // Compute total for the year.
+            var yearTotal = 0;
             for (var i = 0; i < keys.length; ++i) {
                 var key = keys[i];
-                if (!yearObj.hasOwnProperty(key)) {
-                    yearObj[key] = 0;
+                yearTotal += yearObj[key];
+            }
+            yearObj.total = yearTotal;
+            table.push(yearObj);
+        }
+
+        var x = d3.scaleLinear()
+            .domain(d3.extent(table, function (d) { return d.year; }))
+            .range([0, width - PLOT_LEFT_MARGIN - PLOT_RIGHT_MARGIN]);
+        var xAxis = d3.axisTop().scale(x).ticks(20).tickFormat(function (d) { return d; });
+        var yMaxValue = d3.sum(data, function (d) { return d.embarked; });
+        var y = d3.scaleLinear()
+            .domain([0, yMaxValue])
+            .range([NORMAL_HEIGHT - 2 * PLOT_VERTICAL_MARGIN, PLOT_VERTICAL_MARGIN]);
+        var yAxis = d3.axisRight().scale(y).ticks(4);
+        var area = d3.area()
+            .x(function (d) {
+                return x(d.data.year);
+            })
+            .y0(function (d) { return y(d[0]); })
+            .y1(function (d) { return y(d[1]); });
+        var stack = d3.stack()
+        stack.keys(keys);
+        var stackData = stack(table);
+        var categories = g.selectAll('.category')
+            .data(stackData)
+            .enter().append('g')
+            .attr('class', function (d) { return 'category ' + d.key; })
+            .attr('fill-opacity', 0.5);
+
+        categories.append('path')
+            .attr('class', 'area')
+            .attr('d', area)
+            .attr('transform', 'translate(' + PLOT_LEFT_MARGIN + ', 0)')
+            .style('fill', function (d) { return color(d.key); });
+        // Labels for categories.
+        var paddedHeight = NORMAL_HEIGHT - 2 * PLOT_VERTICAL_MARGIN;
+        categories.append('text')
+            .datum(function (d) { return d; })
+            .attr('transform', function (d, i) { return 'translate(60,' + (PLOT_VERTICAL_MARGIN + i * paddedHeight / keys.length) + ')'; })
+            .attr('dy', '1em')
+            .style("font-size", "10")
+            .style("text-anchor", "start")
+            .text(function (d) { return d.key; })
+            .attr('fill-opacity', 1);
+        categories.append('rect')
+            .datum(function (d) { return d; })
+            .attr('transform', function (d, i) { return 'translate(40,' + (PLOT_VERTICAL_MARGIN + 2 + i * paddedHeight / keys.length) + ')'; })
+            .attr('width', 15)
+            .attr('height', Math.min(8, NORMAL_HEIGHT / keys.length - 4))
+            .attr('fill', function (d) { return color(d.key); })
+            .attr('stroke', 'gray')
+            .attr('stroke-width', 1);
+        g.append('g')
+            .attr('class', 't_axis')
+            .attr('transform', 'translate(' + PLOT_LEFT_MARGIN + ',' + (NORMAL_HEIGHT - 5) + ')')
+            .attr('color', 'black')
+            .call(xAxis);
+        g.append('g')
+            .attr('class', 'embarked_axis')
+            .attr('transform', 'translate(' + (width - PLOT_RIGHT_MARGIN) + ',0)')
+            .attr('color', 'black')
+            .call(yAxis);
+        d3.selectAll('g.tick>text').style('font-size', '10px');
+
+        // Create time indicator bar.
+        var tickLine = g.append('line')
+            .attr('stroke', 'red')
+            .attr('stroke-width', 1)
+            .attr('transform', 'translate(' + (PLOT_LEFT_MARGIN + lastTickPos) + ',' + PLOT_VERTICAL_MARGIN + ')')
+            .attr('y2', paddedHeight);
+        var embCirclePos = function (val) {
+            if (val > 0) {
+                // Convert a year value to the embarked count value for that year.
+                if (val < table[0].year || val > table[table.length - 1].year) {
+                    val = 0;
+                } else {
+                    val = table[val - table[0].year].total;
                 }
             }
+            return 'translate(' + (width - PLOT_RIGHT_MARGIN) + ',' + y(val) + ')';
+        };
+        var tickEmbarkedCircle = g.append('circle')
+            .attr('r', 2)
+            .attr('fill', 'red')
+            .attr('transform', embCirclePos(0));
+        self.setTime = function (time) {
+            var nextTickPos = ~~Math.round(x(time / 120));
+            if (nextTickPos != lastTickPos) {
+                tickLine
+                    .attr('transform', 'translate(' + (PLOT_LEFT_MARGIN + nextTickPos) + ',' + PLOT_VERTICAL_MARGIN + ')');
+                tickEmbarkedCircle
+                    .attr('transform', embCirclePos(~~Math.round(time / 120)));
+                lastTickPos = nextTickPos;
+            }
         }
-        // Update only the data for groups that had a change on the current year.
-        // The previous step ensures that all groups have the correct accumulated
-        // value from all previous years.
-        yearObj = Object.assign(yearObj, yearData[year]);
-        yearObj.year = year;
-        table.push(yearObj);
-    }
 
-    var x = d3.scaleLinear()
-        .domain(d3.extent(table, function (d) { return d.year; }))
-        .range([0, width - PLOT_LEFT_MARGIN - PLOT_RIGHT_MARGIN]);
-    var xAxis = d3.axisTop().scale(x).ticks(20).tickFormat(function (d) { return d; });
-    var yMaxValue = d3.sum(data, function (d) { return d.embarked; });
-    var y = d3.scaleLinear()
-        .domain([0, yMaxValue])
-        .range([NORMAL_HEIGHT - 2 * PLOT_VERTICAL_MARGIN, PLOT_VERTICAL_MARGIN]);
-    var yAxis = d3.axisRight().scale(y).ticks(4);
-    var area = d3.area()
-        .x(function (d) {
-            return x(d.data.year);
+        // Create mouse over bar.
+        var hoverLine = g.append('line')
+            .attr('stroke', 'red')
+            .attr('stroke-width', 1)
+            .style("stroke-dasharray", ("2, 2"))
+            .attr('transform', 'translate(' + PLOT_LEFT_MARGIN + ',' + PLOT_VERTICAL_MARGIN + ')')
+            .style('opacity', 0)
+            .attr('y2', paddedHeight);
+        g.on('mousemove', function () {
+            var xCoord = d3.mouse(this)[0];
+            if (xCoord >= PLOT_LEFT_MARGIN && xCoord <= (width - PLOT_RIGHT_MARGIN)) {
+                hoverLine
+                    .style('opacity', '0.8')
+                    .attr('transform', 'translate(' + xCoord + ',' + PLOT_VERTICAL_MARGIN + ')');
+            } else {
+                hoverLine.style('opacity', 0);
+            }
         })
-        .y0(function (d) { return y(d[0]); })
-        .y1(function (d) { return y(d[1]); });
-    var stack = d3.stack()
-    stack.keys(keys);
-    var stackData = stack(table);
-    var categories = g.selectAll('.category')
-        .data(stackData)
-        .enter().append('g')
-        .attr('class', function (d) { return 'category ' + d.key; })
-        .attr('fill-opacity', 0.5);
+        .on('mouseout', function () {
+            hoverLine.style('opacity', 0);
+        })
+        .on('mousedown', function () {
+            var xCoord = d3.mouse(this)[0];
+            if (xCoord >= PLOT_LEFT_MARGIN && xCoord <= (width - PLOT_RIGHT_MARGIN)) {
+                // Compute xValue to set.
+                onChange(120 * ~~Math.round(x.invert(xCoord - PLOT_LEFT_MARGIN)));
+            }
+        });
+    };
 
-    categories.append('path')
-        .attr('class', 'area')
-        .attr('d', area)
-        .attr('transform', 'translate(' + PLOT_LEFT_MARGIN + ', 0)')
-        .style('fill', function (d) { return color(d.key); });
-    // Labels for categories.
-    var paddedHeight = NORMAL_HEIGHT - 2 * PLOT_VERTICAL_MARGIN;
-    categories.append('text')
-        .datum(function (d) { return d; })
-        .attr('transform', function (d, i) { return 'translate(30,' + (PLOT_VERTICAL_MARGIN + i * paddedHeight / keys.length) + ')'; })
-        .attr('dy', '1em')
-        .style("font-size", "10")
-        .style("text-anchor", "start")
-        .text(function (d) { return d.key; })
-        .attr('fill-opacity', 1);
-    categories.append('rect')
-        .datum(function (d) { return d; })
-        .attr('transform', function (d, i) { return 'translate(10,' + (PLOT_VERTICAL_MARGIN + 2 + i * paddedHeight / keys.length) + ')'; })
-        .attr('width', 15)
-        .attr('height', Math.min(8, NORMAL_HEIGHT / keys.length - 4))
-        .attr('fill', function (d) { return color(d.key); })
-        .attr('stroke', 'gray')
-        .attr('stroke-width', 1);
-    g.append('g')
-        .attr('class', 't_axis')
-        .attr('transform', 'translate(' + PLOT_LEFT_MARGIN + ',' + (NORMAL_HEIGHT - 5) + ')')
-        .attr('color', 'black')
-        .call(xAxis);
-    g.append('g')
-        .attr('class', 'embarked_axis')
-        .attr('transform', 'translate(' + (width - PLOT_RIGHT_MARGIN) + ',0)')
-        .attr('color', 'black')
-        .call(yAxis);
-    d3.selectAll('g.tick>text').style('font-size', '10px');
+    setCurrentGroupField = function (field) {
+        if (currentGroupField != field) {
+            createTimelinePlot(field);
+            d3.selectAll('#group_field_btn_' + field).attr('fill', 'black');
+        }
+        currentGroupField = field;
+    };
 
-    // Create time indicator bar.
-    var tickLine = g.append('line')
-        .attr('stroke', 'red')
-        .attr('stroke-width', 1)
-        .attr('transform', 'translate(' + PLOT_LEFT_MARGIN + ',' + PLOT_VERTICAL_MARGIN + ')')
-        .attr('y2', paddedHeight);
-    self.setTime = function (time) {
-        tickLine
-            .attr('transform', 'translate(' + (PLOT_LEFT_MARGIN + x(time / 120)) + ',' + PLOT_VERTICAL_MARGIN + ')');
-    }
+    setCurrentGroupField('flag');
 }
 
 function AnimationHelper(data, monthsPerSecond) {
@@ -668,6 +815,7 @@ function AnimationHelper(data, monthsPerSecond) {
     var controlLayer = d3.select(map.getContainer())
         .append("svg")
         .attr('id', 'timelapse_control_layer')
+        .attr('width', 0)
         .style("pointer-events", "none");
     var yearLabel = controlLayer
         .style('position', 'absolute')
@@ -887,29 +1035,14 @@ function AnimationHelper(data, monthsPerSecond) {
                 }
             })
         $('.animation_tooltip_close_button').click(closeTooltip);
-        // Initialize slider.
-        var model = control.getModel();
-        var minTime = model.getFirstStartTime();
-        var maxTime = model.getLastFinishTime();
-        $("#slider").slider({
-            value: minTime,
-            min: minTime,
-            max: maxTime,
-            step: 1,
-            slide: function (_, sliderCtrl) {
-                control.jumpTo(sliderCtrl.value);
-            }
-        });
     };
     ui.setTime = function (time) {
         // Update slider and label.
         ui.timeline.setTime(time);
-        $("#slider").slider('value', time);
         var yearText = ui.monthsPerSecond == 1
             ? Math.round(time / 120) + "-" + gettext(MONTH_LABELS[~~Math.round(time / 10) % 12])
             : Math.round(time / 120);
         yearLabel.text(yearText);
-        $("#yearLabel").text(yearText);
         positionSvg();
         if (tooltipShown) closeTooltip();
         if (self.control.isPaused()) {
