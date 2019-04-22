@@ -43,4 +43,5 @@ urlpatterns = [
     url(r'^api/search', voyages.apps.voyage.search_views.ajax_search, name='search'),
     url(r'^api/download', voyages.apps.voyage.search_views.ajax_download, name='download'),
     url(r'get-all-sources', voyages.apps.voyage.search_views.get_all_sources, name='all-sources'),
+    url(r'get-timelapse-regions', voyages.apps.voyage.search_views.get_timelapse_port_regions, name='get-timelapse-regions')
 ]
