@@ -1333,7 +1333,7 @@
                         <td>
                             <div class="dropdown">
                                 <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                                    <span id="pre_source_action_span_{{ source.pk }}" class="fa fa-{% if source.action == 0 %}check-circle-o{% endif %}{% if source.action == 1 %}edit{% endif %}{% if source.action == 2 %}remove{% endif %}"></span>
+                                    <span id="pre_source_action_span_{{ source.pk }}" class="fa fa-{% if source.action == 0 %}check-circle{% endif %}{% if source.action == 1 %}edit{% endif %}{% if source.action == 2 %}trash{% endif %}"></span>
                                 </button>
                                 <input type="hidden" id="pre_existing_source_action_{{ source.pk }}" name="pre_existing_source_action_{{ source.pk }}" value="{{ source.action }}">
                                 <ul class="dropdown-menu pull-right">
