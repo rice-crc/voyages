@@ -5,6 +5,7 @@ from django.http import JsonResponse, HttpResponse, HttpResponseBadRequest, Http
 from django.shortcuts import render
 from django.utils.translation import get_language
 from django.utils.translation import ugettext as _
+from django.views.decorators.cache import cache_page
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 from graphs import *
@@ -203,10 +204,14 @@ def get_results_map_animation(results, allow_no_numbers = False):
             flag = VoyageCache.nations.get(voyage.ship_nat_pk)
             if flag is None:
                 flag = ''
+            hsrc = CachedGeo.get_hierarchy(voyage.emb_pk)
+            hdst = CachedGeo.get_hierarchy(voyage.dis_pk)
             items.append({
                 "voyage_id": voyage.voyage_id,
                 "src": voyage.emb_pk,
                 "dst": voyage.dis_pk,
+                "regsrc": hsrc[1].pk,
+                "bregdst": hdst[2].pk,
                 "embarked": voyage.embarked or 0,
                 "disembarked": voyage.disembarked or 0,
                 "year": voyage.year,
@@ -216,6 +221,16 @@ def get_results_map_animation(results, allow_no_numbers = False):
                 "ship_name": unicode(voyage.ship_name) if voyage.ship_name is not None else '',
             })
     return JsonResponse(items, safe=False)
+
+@cache_page(3600)
+def get_timelapse_port_regions(request):
+    # Generate a simple JSON that reports the broad regions.
+    VoyageCache.load()
+    regions = { 
+        'src': { pk: r.name for pk, r in VoyageCache.regions.items() if r.parent == 1 },
+        'dst': { pk: br.name for pk, br in VoyageCache.broad_regions.items() }
+    }
+    return JsonResponse(regions)
 
 def get_results_map_flow(request, results):
     map_ports = {}

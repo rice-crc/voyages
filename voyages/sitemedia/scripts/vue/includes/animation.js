@@ -67,6 +67,8 @@ function Route(points) {
     };
 }
 
+var _rnd128 = function () { return ~~Math.round(128 * Math.random()); };
+
 function Voyage(routeIdx, src, dst, start, finish, data) {
     this.routeIdx = routeIdx;
     this.src = src;
@@ -74,8 +76,10 @@ function Voyage(routeIdx, src, dst, start, finish, data) {
     this.start = ~~start;
     this.finish = ~~finish;
     this.data = data;
-    var rnd = function () { return ~~Math.round(128 * Math.random()); };
-    this.color = "rgb(" + rnd() + "," + rnd() + "," + rnd() + ")";
+    var self = this;
+    this.color = function () {
+        return self.data.color || "rgb(" + _rnd128() + "," + _rnd128() + "," + _rnd128() + ")";
+    };
 }
 
 var LAT_MAX_PERTURBATION = 20;
@@ -390,6 +394,7 @@ var geoCache = new (function () {
     self.regionSegments = null;
     self.portSegments = null;
     self.nations = null;
+    self.regionNames = null;
     // TODO: load source regions, destination broad regions.
     var callbacks = [];
     var allLoaded = false;
@@ -408,7 +413,7 @@ var geoCache = new (function () {
     }
 
     var loaded = function () {
-        allLoaded = self.regionSegments && self.portSegments && self.nations;
+        allLoaded = self.regionSegments && self.portSegments && self.nations && self.regionNames;
         if (allLoaded) {
             for (var i = 0; i < callbacks.length; ++i) {
                 callbacks[i]();
@@ -427,6 +432,12 @@ var geoCache = new (function () {
     if (!self.portSegments) {
         $.getJSON(STATIC_URL + "maps/js/port_routes.json", function (data) {
             self.portSegments = data;
+            loaded();
+        });
+    }
+    if (!self.regionNames) {
+        $.getJSON("/voyage/get-timelapse-regions", function (data) {
+            self.regionNames = data;
             loaded();
         });
     }
@@ -479,7 +490,7 @@ function d3MapTimelapse(voyages, ui, monthsPerSecond) {
         enterSel
             .append("circle")
             .classed("animation_voyage_inner_circle", true)
-            .style("fill", function (d) { return d.voyage.color; })
+            .style("fill", function (d) { return d.voyage.color(); })
             .style("filter", "url(#motionFilter)")
             .attr("r", function (d) {
                 var e = parseInt(d.voyage.data.embarked);
@@ -521,7 +532,7 @@ function TimelineControl(data, parent, onChange) {
     // grouped by major region of disembarkation
     var self = this;
     var NORMAL_HEIGHT = 100;
-    var PLOT_LEFT_MARGIN = 170;
+    var PLOT_LEFT_MARGIN = 220;
     var PLOT_RIGHT_MARGIN = 60;
     var PLOT_VERTICAL_MARGIN = 4;
     // The unicode "ICON" characters below will 
@@ -532,7 +543,7 @@ function TimelineControl(data, parent, onChange) {
     var ICONS = [
         { key: 'flag', text: FLAG_ICON, tooltip: gettext('Group by ship nationality') },
         { key: 'destinationRegion', text: AMERICA_ICON, tooltip: gettext('Group by disembarkation broad region') },
-        { key: 'embarkationRegion', text: AFRICA_ICON, tooltip: gettext('Group by embarkation region') }
+        { key: 'sourceRegion', text: AFRICA_ICON, tooltip: gettext('Group by embarkation region') }
     ];
     d3.select("#timeline_slider").remove();
     d3.select("#timeline_slider_tooltip").remove();
@@ -540,23 +551,28 @@ function TimelineControl(data, parent, onChange) {
         .attr("id", "timeline_slider_tooltip")
         .attr("class", "tooltip")
         .style("opacity", 0)
+        .style("padding", '6px')
         .style("background", 'white');
     var width = 960;
+    var left = 40;
+    var top = 300 - PLOT_VERTICAL_MARGIN;
     var g = parent
         .append("g")
         .attr("id", "timeline_slider")
         .style("pointer-events", "auto")
-        .attr("transform", "translate(" + 40 + ",300)");
+        .attr("transform", "translate(" + left + "," + top + ")");
 
     self.resize = function (w, h) {
-        g.attr("transform", "translate(" + ((w - width) / 2) + "," + (h - NORMAL_HEIGHT) + ")");
+        left = (w - width) / 2;
+        top = h - NORMAL_HEIGHT - PLOT_VERTICAL_MARGIN;
+        g.attr("transform", "translate(" + left + "," + top + ")");
     };
 
     // Enrich data set with grouping variables.
     for (var i = 0; i < data.length; ++i) {
         var item = data[i];
-        item.sourceRegion = 'not implemented'; // TODO
-        item.destinationRegion = 'not implemented'; // TODO
+        item.sourceRegion = gettext(geoCache.regionNames.src[item.regsrc] || 'Other Africa');
+        item.destinationRegion = gettext(geoCache.regionNames.dst[item.bregdst] || 'Other');
         item.flag = gettext(geoCache.nations[item.nat_id] || 'Other');
     }
 
@@ -752,8 +768,10 @@ function TimelineControl(data, parent, onChange) {
             .attr('r', 2)
             .attr('fill', 'red')
             .attr('transform', embCirclePos(0));
+        var _maxTickPos = width - PLOT_LEFT_MARGIN - PLOT_RIGHT_MARGIN;
         self.setTime = function (time) {
             var nextTickPos = ~~Math.round(x(time / 120));
+            if (nextTickPos > _maxTickPos) nextTickPos = _maxTickPos;
             if (nextTickPos != lastTickPos) {
                 tickLine
                     .attr('transform', 'translate(' + (PLOT_LEFT_MARGIN + nextTickPos) + ',' + PLOT_VERTICAL_MARGIN + ')');
@@ -781,16 +799,16 @@ function TimelineControl(data, parent, onChange) {
                 hoverLine.style('opacity', 0);
             }
         })
-        .on('mouseout', function () {
-            hoverLine.style('opacity', 0);
-        })
-        .on('mousedown', function () {
-            var xCoord = d3.mouse(this)[0];
-            if (xCoord >= PLOT_LEFT_MARGIN && xCoord <= (width - PLOT_RIGHT_MARGIN)) {
-                // Compute xValue to set.
-                onChange(120 * ~~Math.round(x.invert(xCoord - PLOT_LEFT_MARGIN)));
-            }
-        });
+            .on('mouseout', function () {
+                hoverLine.style('opacity', 0);
+            })
+            .on('mousedown', function () {
+                var xCoord = d3.mouse(this)[0];
+                if (xCoord >= PLOT_LEFT_MARGIN && xCoord <= (width - PLOT_RIGHT_MARGIN)) {
+                    // Compute xValue to set.
+                    onChange(120 * ~~Math.round(x.invert(xCoord - PLOT_LEFT_MARGIN)));
+                }
+            });
     };
 
     setCurrentGroupField = function (field) {
@@ -984,6 +1002,7 @@ function AnimationHelper(data, monthsPerSecond) {
     };
 
     map.on("zoomend", positionSvg);
+    $(window).resize(positionSvg);
 
     // Set up ui object and hook events.
     // TODO: implement UI that allows changing months per second.
