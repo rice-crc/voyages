@@ -525,29 +525,43 @@ function d3MapTimelapse(voyages, ui, monthsPerSecond) {
     geoCache.onReady(init);
 }
 
+// This is a hacky way to get Firefox to allow mouse events over the bounding rect of paths.
+// It would be much simpler to set pointer-events to bounding-box (which is supported by Chrome).
+function _addIconBackgroundRect(parent, icon) {
+    var g = parent.append('g')
+        .style('pointer-events', 'visible')
+    g.append('rect')
+        .attr('width', 500)
+        .attr('height', 500)
+        .attr('fill', 'transparent');
+    if (icon) {
+        g.append('path')
+            .attr('d', icon);
+    }
+    return g;
+}
+
 var MONTH_LABELS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
-function TimelineControl(data, parent, onChange) {
-    // TODO: Implement a D3.js cumulative line graph with embarked,
-    // grouped by major region of disembarkation
+function TimelineControl(data, parent, onChange, mapContainer) {
+    // A D3.js cumulative stacked area graph with embarked counts as Y-axes,
+    // grouped by major region of disembarkation/embarkation or flag.
     var self = this;
     var NORMAL_HEIGHT = 100;
     var PLOT_LEFT_MARGIN = 220;
     var PLOT_RIGHT_MARGIN = 60;
     var PLOT_VERTICAL_MARGIN = 4;
-    // The unicode "ICON" characters below will 
-    // render properly with FontAwesome.
-    var AFRICA_ICON = "";
-    var AMERICA_ICON = "";
-    var FLAG_ICON = "";
+    var AFRICA_ICON = "M248 8C111.03 8 0 119.03 0 256s111.03 248 248 248 248-111.03 248-248S384.97 8 248 8zm160 215.5v6.93c0 5.87-3.32 11.24-8.57 13.86l-15.39 7.7a15.485 15.485 0 0 1-15.53-.97l-18.21-12.14a15.52 15.52 0 0 0-13.5-1.81l-2.65.88c-9.7 3.23-13.66 14.79-7.99 23.3l13.24 19.86c2.87 4.31 7.71 6.9 12.89 6.9h8.21c8.56 0 15.5 6.94 15.5 15.5v11.34c0 3.35-1.09 6.62-3.1 9.3l-18.74 24.98c-1.42 1.9-2.39 4.1-2.83 6.43l-4.3 22.83c-.62 3.29-2.29 6.29-4.76 8.56a159.608 159.608 0 0 0-25 29.16l-13.03 19.55a27.756 27.756 0 0 1-23.09 12.36c-10.51 0-20.12-5.94-24.82-15.34a78.902 78.902 0 0 1-8.33-35.29V367.5c0-8.56-6.94-15.5-15.5-15.5h-25.88c-14.49 0-28.38-5.76-38.63-16a54.659 54.659 0 0 1-16-38.63v-14.06c0-17.19 8.1-33.38 21.85-43.7l27.58-20.69a54.663 54.663 0 0 1 32.78-10.93h.89c8.48 0 16.85 1.97 24.43 5.77l14.72 7.36c3.68 1.84 7.93 2.14 11.83.84l47.31-15.77c6.33-2.11 10.6-8.03 10.6-14.7 0-8.56-6.94-15.5-15.5-15.5h-10.09c-4.11 0-8.05-1.63-10.96-4.54l-6.92-6.92a15.493 15.493 0 0 0-10.96-4.54H199.5c-8.56 0-15.5-6.94-15.5-15.5v-4.4c0-7.11 4.84-13.31 11.74-15.04l14.45-3.61c3.74-.94 7-3.23 9.14-6.44l8.08-12.11c2.87-4.31 7.71-6.9 12.89-6.9h24.21c8.56 0 15.5-6.94 15.5-15.5v-21.7C359.23 71.63 422.86 131.02 441.93 208H423.5c-8.56 0-15.5 6.94-15.5 15.5z";
+    var AMERICA_ICON = "M248 8C111.03 8 0 119.03 0 256s111.03 248 248 248 248-111.03 248-248S384.97 8 248 8zm82.29 357.6c-3.9 3.88-7.99 7.95-11.31 11.28-2.99 3-5.1 6.7-6.17 10.71-1.51 5.66-2.73 11.38-4.77 16.87l-17.39 46.85c-13.76 3-28 4.69-42.65 4.69v-27.38c1.69-12.62-7.64-36.26-22.63-51.25-6-6-9.37-14.14-9.37-22.63v-32.01c0-11.64-6.27-22.34-16.46-27.97-14.37-7.95-34.81-19.06-48.81-26.11-11.48-5.78-22.1-13.14-31.65-21.75l-.8-.72a114.792 114.792 0 0 1-18.06-20.74c-9.38-13.77-24.66-36.42-34.59-51.14 20.47-45.5 57.36-82.04 103.2-101.89l24.01 12.01C203.48 89.74 216 82.01 216 70.11v-11.3c7.99-1.29 16.12-2.11 24.39-2.42l28.3 28.3c6.25 6.25 6.25 16.38 0 22.63L264 112l-10.34 10.34c-3.12 3.12-3.12 8.19 0 11.31l4.69 4.69c3.12 3.12 3.12 8.19 0 11.31l-8 8a8.008 8.008 0 0 1-5.66 2.34h-8.99c-2.08 0-4.08.81-5.58 2.27l-9.92 9.65a8.008 8.008 0 0 0-1.58 9.31l15.59 31.19c2.66 5.32-1.21 11.58-7.15 11.58h-5.64c-1.93 0-3.79-.7-5.24-1.96l-9.28-8.06a16.017 16.017 0 0 0-15.55-3.1l-31.17 10.39a11.95 11.95 0 0 0-8.17 11.34c0 4.53 2.56 8.66 6.61 10.69l11.08 5.54c9.41 4.71 19.79 7.16 30.31 7.16s22.59 27.29 32 32h66.75c8.49 0 16.62 3.37 22.63 9.37l13.69 13.69a30.503 30.503 0 0 1 8.93 21.57 46.536 46.536 0 0 1-13.72 32.98zM417 274.25c-5.79-1.45-10.84-5-14.15-9.97l-17.98-26.97a23.97 23.97 0 0 1 0-26.62l19.59-29.38c2.32-3.47 5.5-6.29 9.24-8.15l12.98-6.49C440.2 193.59 448 223.87 448 256c0 8.67-.74 17.16-1.82 25.54L417 274.25z";
+    var FLAG_ICON = "M349.565 98.783C295.978 98.783 251.721 64 184.348 64c-24.955 0-47.309 4.384-68.045 12.013a55.947 55.947 0 0 0 3.586-23.562C118.117 24.015 94.806 1.206 66.338.048 34.345-1.254 8 24.296 8 56c0 19.026 9.497 35.825 24 45.945V488c0 13.255 10.745 24 24 24h16c13.255 0 24-10.745 24-24v-94.4c28.311-12.064 63.582-22.122 114.435-22.122 53.588 0 97.844 34.783 165.217 34.783 48.169 0 86.667-16.294 122.505-40.858C506.84 359.452 512 349.571 512 339.045v-243.1c0-23.393-24.269-38.87-45.485-29.016-34.338 15.948-76.454 31.854-116.95 31.854z";
     var ICONS = [
-        { key: 'flag', text: FLAG_ICON, tooltip: gettext('Group by ship nationality') },
-        { key: 'destinationRegion', text: AMERICA_ICON, tooltip: gettext('Group by disembarkation broad region') },
-        { key: 'sourceRegion', text: AFRICA_ICON, tooltip: gettext('Group by embarkation region') }
+        { key: 'flag', path: FLAG_ICON, tooltip: gettext('Group by ship nationality') },
+        { key: 'destinationRegion', path: AMERICA_ICON, tooltip: gettext('Group by disembarkation broad region') },
+        { key: 'sourceRegion', path: AFRICA_ICON, tooltip: gettext('Group by embarkation region') }
     ];
     d3.select("#timeline_slider").remove();
     d3.select("#timeline_slider_tooltip").remove();
-    var tooltip = d3.select("body").append("div")
+    var tooltip = d3.select(mapContainer).append("div")
         .attr("id", "timeline_slider_tooltip")
         .attr("class", "tooltip")
         .style("opacity", 0)
@@ -556,11 +570,14 @@ function TimelineControl(data, parent, onChange) {
     var width = 960;
     var left = 40;
     var top = 300 - PLOT_VERTICAL_MARGIN;
+    var INITIAL_OPACITY = 0.5;
     var g = parent
         .append("g")
         .attr("id", "timeline_slider")
+        .style("opacity", INITIAL_OPACITY)
         .style("pointer-events", "auto")
-        .attr("transform", "translate(" + left + "," + top + ")");
+        .attr("transform", "translate(" + left + "," + top + ")")
+        .style('pointer-events', 'all');
 
     self.resize = function (w, h) {
         left = (w - width) / 2;
@@ -587,42 +604,39 @@ function TimelineControl(data, parent, onChange) {
             .attr("width", width)
             .attr("fill", "rgba(0, 0, 0, 0.3)")
             .attr("rx", 4)
-            .attr("ry", 4);
-        g.selectAll('.timeline_group_button')
-            .data(ICONS)
-            .enter()
-            .append('text')
-            .attr('id', function (d) { return 'group_field_btn_' + d.key; })
-            .attr('font-family', 'FontAwesome')
-            .attr('font-size', '24')
-            .attr('text-anchor', 'middle')
-            .attr('fill', 'gray')
-            .attr('transform', function (_, i) { return 'translate(20,' + (2 + 30 * (i + 1)) + ')'; })
-            .text(function (d) { return d.text; })
-            .on('mouseover', function (d) {
-                d3.select(this).style("fill", "red");
-                tooltip.transition()
-                    .duration(200)
-                    .style("opacity", .9);
-                tooltip.html(d.tooltip)
-                    .style("left", (d3.event.pageX + 40) + "px")
-                    .style("top", (d3.event.pageY - 40) + "px");
-            })
-            .on("mouseout", function (d) {
-                d3.select(this).style("fill", d.key == currentGroupField ? "black" : "gray");
-                tooltip.transition()
-                    .duration(500)
-                    .style("opacity", 0);
-            })
-            .on('click', function () {
-                if (setCurrentGroupField) {
-                    setCurrentGroupField(this.__data__.key);
-                }
-            });
-        var keys = d3.set(data, function (x) { return x[groupField]; }).values();
-        var color = d3.scaleOrdinal()
-            .domain(keys)
-            .range(d3.schemePaired);
+            .attr("ry", 4)
+            .on('mouseenter', function () { g.transition().duration(300).style('opacity', 1.0); })
+            .on('mouseleave', function () { g.transition().delay(2000).duration(1500).style('opacity', INITIAL_OPACITY); });
+        for (var i = 0; i < ICONS.length; ++i) {
+            var icon = ICONS[i];
+            var btn = _addIconBackgroundRect(g, icon.path)
+                .datum(icon)
+                .classed('timeline_group_button', true)
+                .on('mouseenter', function () {
+                    d3.select(this).selectAll('path').style("fill", "red");
+                    var pos = d3.mouse(mapContainer);
+                    tooltip.transition()
+                        .duration(200)
+                        .style("opacity", .9);
+                    tooltip.html(icon.tooltip)
+                        .style("left", (pos[0] + 40) + "px")
+                        .style("top", (pos[1] - 40) + "px");
+                })
+                .on("mouseleave", function (d) {
+                    d3.select(this).selectAll('path').style("fill", d.key == groupField ? "black" : "gray");
+                    tooltip.transition()
+                        .duration(500)
+                        .style("opacity", 0);
+                })
+                .on('click', function (d) {
+                    if (setCurrentGroupField) {
+                        setCurrentGroupField(d.key);
+                    }
+                })
+                .attr('transform', 'translate(7,' + (8 + 30 * i) + ')scale(0.05)');
+            btn.selectAll('path')
+                .attr('fill', icon.key == groupField ? "black" : "gray");
+        }
         var grouped = d3.nest()
             .key(function (d) { return d[groupField]; })
             .sortValues(function (a, b) { return a.year - b.year; })
@@ -644,6 +658,16 @@ function TimelineControl(data, parent, onChange) {
                 return agg;
             })
             .entries(data);
+        grouped.sort(function (a, b) { return b.value[b.value.length - 1].acc - a.value[a.value.length - 1].acc; });
+        var keys = d3.set(grouped, function (grp) { return grp.key; }).values();
+        var color = d3.scaleOrdinal()
+            .domain(keys)
+            .range(d3.schemeDark2);
+        // Update color for voyages.
+        for (var i = 0; i < data.length; ++i) {
+            var item = data[i];
+            item.color = color(item[groupField]);
+        }
         var yearData = {}
         for (var i = 0; i < grouped.length; ++i) {
             var grp = grouped[i];
@@ -709,8 +733,7 @@ function TimelineControl(data, parent, onChange) {
         var categories = g.selectAll('.category')
             .data(stackData)
             .enter().append('g')
-            .attr('class', function (d) { return 'category ' + d.key; })
-            .attr('fill-opacity', 0.5);
+            .attr('class', function (d) { return 'category ' + d.key; });
 
         categories.append('path')
             .attr('class', 'area')
@@ -725,8 +748,7 @@ function TimelineControl(data, parent, onChange) {
             .attr('dy', '1em')
             .style("font-size", "10")
             .style("text-anchor", "start")
-            .text(function (d) { return d.key; })
-            .attr('fill-opacity', 1);
+            .text(function (d) { return d.key; });
         categories.append('rect')
             .datum(function (d) { return d; })
             .attr('transform', function (d, i) { return 'translate(40,' + (PLOT_VERTICAL_MARGIN + 2 + i * paddedHeight / keys.length) + ')'; })
@@ -789,17 +811,18 @@ function TimelineControl(data, parent, onChange) {
             .attr('transform', 'translate(' + PLOT_LEFT_MARGIN + ',' + PLOT_VERTICAL_MARGIN + ')')
             .style('opacity', 0)
             .attr('y2', paddedHeight);
-        g.on('mousemove', function () {
-            var xCoord = d3.mouse(this)[0];
-            if (xCoord >= PLOT_LEFT_MARGIN && xCoord <= (width - PLOT_RIGHT_MARGIN)) {
-                hoverLine
-                    .style('opacity', '0.8')
-                    .attr('transform', 'translate(' + xCoord + ',' + PLOT_VERTICAL_MARGIN + ')');
-            } else {
-                hoverLine.style('opacity', 0);
-            }
-        })
-            .on('mouseout', function () {
+        g
+            .on('mousemove', function () {
+                var xCoord = d3.mouse(this)[0];
+                if (xCoord >= PLOT_LEFT_MARGIN && xCoord <= (width - PLOT_RIGHT_MARGIN)) {
+                    hoverLine
+                        .style('opacity', '0.8')
+                        .attr('transform', 'translate(' + xCoord + ',' + PLOT_VERTICAL_MARGIN + ')');
+                } else {
+                    hoverLine.style('opacity', 0);
+                }
+            })
+            .on('mouseleave', function () {
                 hoverLine.style('opacity', 0);
             })
             .on('mousedown', function () {
@@ -814,7 +837,7 @@ function TimelineControl(data, parent, onChange) {
     setCurrentGroupField = function (field) {
         if (currentGroupField != field) {
             createTimelinePlot(field);
-            d3.selectAll('#group_field_btn_' + field).attr('fill', 'black');
+            d3.selectAll('#group_field_btn_' + field + ">path").attr('fill', 'black');
         }
         currentGroupField = field;
     };
@@ -830,9 +853,11 @@ function AnimationHelper(data, monthsPerSecond) {
     var map = voyagesMap._map;
     var svg = d3.select(map.getPanes().overlayPane).append("svg");
     d3.select("#timelapse_control_layer").remove();
-    var controlLayer = d3.select(map.getContainer())
+    var mapContainer = map.getContainer();
+    var controlLayer = d3.select(mapContainer)
         .append("svg")
         .attr('id', 'timelapse_control_layer')
+        .style('z-index', 600)
         .attr('width', 0)
         .style("pointer-events", "none");
     var yearLabel = controlLayer
@@ -844,14 +869,13 @@ function AnimationHelper(data, monthsPerSecond) {
         .text("");
     // It is normal for the characters below to look like a box, don't replace them
     // unless you know how they will render using FontAwesome.
-    var playText = "";
-    var pauseText = "";
-    var playPauseBtn = controlLayer.append('text')
-        .style("pointer-events", "auto")
-        .attr('font-family', 'FontAwesome')
-        .attr('font-size', '24')
-        .attr('text-anchor', 'middle')
-        .text(pauseText);
+    var playPath = "M424.4 214.7L72.4 6.6C43.8-10.3 0 6.1 0 47.9V464c0 37.5 40.7 60.1 72.4 41.3l352-208c31.4-18.5 31.5-64.1 0-82.6z";
+    var pausePath = "M144 479H48c-26.5 0-48-21.5-48-48V79c0-26.5 21.5-48 48-48h96c26.5 0 48 21.5 48 48v352c0 26.5-21.5 48-48 48zm304-48V79c0-26.5-21.5-48-48-48h-96c-26.5 0-48 21.5-48 48v352c0 26.5 21.5 48 48 48h96c26.5 0 48-21.5 48-48z";
+    var playPauseBtn = _addIconBackgroundRect(controlLayer, pausePath);
+    /*.append('path')
+    .style("pointer-events", "visible")
+    .attr('transform', 'translate(-10000, -10000) scale(0.01)')
+    .attr('d', pausePath);*/
     var defs = svg.append("defs");
     var filter = defs.append("filter")
         .attr("id", "motionFilter") // Unique Id to blur effect
@@ -871,6 +895,62 @@ function AnimationHelper(data, monthsPerSecond) {
     var g = svg.append("g").attr("class", "leaflet-zoom-hide");
     var tooltip = $('#tooltip');
     var tooltipShown = false;
+
+    var hoverRed = function (e) {
+        var colorize = function (sel, c) {
+            sel.transition().duration(300).style("fill", c);
+        };
+        return e
+            .on("mouseenter", function () {
+                colorize(d3.select(this), 'red');
+                colorize(d3.select(this).selectAll('path'), 'red');
+            })
+            .on("mouseleave", function () {
+                colorize(d3.select(this), 'black');
+                colorize(d3.select(this).selectAll('path'), 'black');
+            });
+    }
+
+    // Check if we have browser full screen support
+    var fullscreenFunc = null;
+    var exitFullscreenFunc = null;
+    if (mapContainer.requestFullscreen) {
+        fullscreenFunc = mapContainer.requestFullscreen;
+        exitFullscreenFunc = document.exitFullscreen;
+    } else if (mapContainer.mozRequestFullScreen) { /* Firefox */
+        fullscreenFunc = mapContainer.mozRequestFullScreen;
+        exitFullscreenFunc = document.mozCancelFullScreen;
+    } else if (mapContainer.webkitRequestFullscreen) { /* Chrome, Safari and Opera */
+        fullscreenFunc = mapContainer.webkitRequestFullscreen;
+        exitFullscreenFunc = document.webkitExitFullscreen;
+    } else if (mapContainer.msRequestFullscreen) { /* IE/Edge */
+        fullscreenFunc = mapContainer.msRequestFullscreen;
+        exitFullscreenFunc = document.msExitFullscreen;
+    }
+    var fullscreenBtn = null;
+    if (fullscreenFunc) {
+        fullscreenFunc = fullscreenFunc.bind(mapContainer);
+        exitFullscreenFunc = exitFullscreenFunc.bind(document);
+        var isFullscreen = false;
+        var fullscreenIcon = "M352.201 425.775l-79.196 79.196c-9.373 9.373-24.568 9.373-33.941 0l-79.196-79.196c-15.119-15.119-4.411-40.971 16.971-40.97h51.162L228 284H127.196v51.162c0 21.382-25.851 32.09-40.971 16.971L7.029 272.937c-9.373-9.373-9.373-24.569 0-33.941L86.225 159.8c15.119-15.119 40.971-4.411 40.971 16.971V228H228V127.196h-51.23c-21.382 0-32.09-25.851-16.971-40.971l79.196-79.196c9.373-9.373 24.568-9.373 33.941 0l79.196 79.196c15.119 15.119 4.411 40.971-16.971 40.971h-51.162V228h100.804v-51.162c0-21.382 25.851-32.09 40.97-16.971l79.196 79.196c9.373 9.373 9.373 24.569 0 33.941L425.773 352.2c-15.119 15.119-40.971 4.411-40.97-16.971V284H284v100.804h51.23c21.382 0 32.09 25.851 16.971 40.971z";
+        var exitFullscreenIcon = "M200 288H88c-21.4 0-32.1 25.8-17 41l32.9 31-99.2 99.3c-6.2 6.2-6.2 16.4 0 22.6l25.4 25.4c6.2 6.2 16.4 6.2 22.6 0L152 408l31.1 33c15.1 15.1 40.9 4.4 40.9-17V312c0-13.3-10.7-24-24-24zm112-64h112c21.4 0 32.1-25.9 17-41l-33-31 99.3-99.3c6.2-6.2 6.2-16.4 0-22.6L481.9 4.7c-6.2-6.2-16.4-6.2-22.6 0L360 104l-31.1-33C313.8 55.9 288 66.6 288 88v112c0 13.3 10.7 24 24 24zm96 136l33-31.1c15.1-15.1 4.4-40.9-17-40.9H312c-13.3 0-24 10.7-24 24v112c0 21.4 25.9 32.1 41 17l31-32.9 99.3 99.3c6.2 6.2 16.4 6.2 22.6 0l25.4-25.4c6.2-6.2 6.2-16.4 0-22.6L408 360zM183 71.1L152 104 52.7 4.7c-6.2-6.2-16.4-6.2-22.6 0L4.7 30.1c-6.2 6.2-6.2 16.4 0 22.6L104 152l-33 31.1C55.9 198.2 66.6 224 88 224h112c13.3 0 24-10.7 24-24V88c0-21.3-25.9-32-41-16.9z";
+        var btnPath = null;
+        fullscreenBtn = _addIconBackgroundRect(controlLayer)
+            .on('click', function () {
+                isFullscreen = !isFullscreen;
+                if (isFullscreen) {
+                    fullscreenFunc();
+                    btnPath.attr('d', exitFullscreenIcon);
+                } else {
+                    exitFullscreenFunc();
+                    btnPath.attr('d', fullscreenIcon);
+                }
+            });
+        btnPath = fullscreenBtn
+            .append('path')
+            .attr('d', fullscreenIcon);
+        hoverRed(fullscreenBtn);
+    }
 
     // Set SVG size and position within map.
     var positionSvg = function () {
@@ -897,7 +977,10 @@ function AnimationHelper(data, monthsPerSecond) {
         controlLayer.attr("width", size.x)
             .attr("height", size.y);
         yearLabel.attr("transform", "translate(" + (size.x / 2) + ", 50)");
-        playPauseBtn.attr("transform", "translate(" + (size.x / 2) + ", 80)");
+        playPauseBtn.attr("transform", "translate(" + (size.x / 2 - 7) + ", 55) scale(0.04)");
+        if (fullscreenBtn) {
+            fullscreenBtn.attr('transform', 'translate(' + (size.x - 55) + ',20) scale(0.06)');
+        }
         if (ui.timeline) {
             ui.timeline.resize(size.x, size.y);
         }
@@ -1015,11 +1098,11 @@ function AnimationHelper(data, monthsPerSecond) {
     var updateControls = function () {
         if (self.control.isPaused()) {
             setBlurFilter("0.0");
-            playPauseBtn.text(playText);
+            playPauseBtn.selectAll('path').attr('d', playPath);
         } else {
             closeTooltip();
             setBlurFilter();
-            playPauseBtn.text(pauseText);
+            playPauseBtn.selectAll('path').attr('d', pausePath);
         }
     };
     ui.pause = function () {
@@ -1038,21 +1121,15 @@ function AnimationHelper(data, monthsPerSecond) {
     ui.initialize = function (control) {
         self.control = control;
         // Initialize plot slider.
-        ui.timeline = new TimelineControl(data, controlLayer, control.jumpTo);
-        playPauseBtn
-            .on("mouseover", function () {
-                d3.select(this).style("fill", "red");
-            })
-            .on("mouseout", function () {
-                d3.select(this).style("fill", "black");
-            })
-            .on("click", function () {
-                if (control.isPaused()) {
-                    ui.play();
-                } else {
-                    ui.pause();
-                }
-            })
+        ui.timeline = new TimelineControl(data, controlLayer, control.jumpTo, mapContainer);
+        hoverRed(playPauseBtn);
+        playPauseBtn.on("click", function () {
+            if (control.isPaused()) {
+                ui.play();
+            } else {
+                ui.pause();
+            }
+        })
         $('.animation_tooltip_close_button').click(closeTooltip);
     };
     ui.setTime = function (time) {
