@@ -159,6 +159,8 @@ var voyagesMap = {
 	_map: L.map('map', {
 		attributionControl: false,
 		maxBounds: _mapBoundaries,
+		wheelDebounceTime: 200,
+		wheelPxPerZoomLevel: 120
 	}).setView([6, -20], 3),
 	_mapLayer: null,
 	_maxPathWidth: 80,

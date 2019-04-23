@@ -53,25 +53,8 @@
 
 	text-align: center;
 	border-radius: 15px;
-	font: 13px "Helvetica Neue", Arial, Helvetica, sans-serif;
-	font-weight: bold;
+	font: 12px "Helvetica Neue", Arial, Helvetica, sans-serif;
 	}
 .marker-cluster span {
 	line-height: 30px;
 	}
-
-.cluster-detail0 {
-	background-color: blue;
-	opacity: 0.65;
-}
-
-.cluster-detail1 {
-	background-color: rgb(113, 201, 27);
-	opacity: 0.65;
-}
-
-.cluster-detail2 {
-	background-color: red;
-	opacity: 0.65;
-	color: lightgray;
-}
