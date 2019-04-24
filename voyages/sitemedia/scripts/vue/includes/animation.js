@@ -543,30 +543,33 @@ function _addIconBackgroundRect(parent, icon) {
 
 var MONTH_LABELS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
-function TimelineControl(data, parent, onChange, mapContainer) {
+function TimelineControl(data, parent, onChange, ui) {
     // A D3.js cumulative stacked area graph with embarked counts as Y-axes,
     // grouped by major region of disembarkation/embarkation or flag.
     var self = this;
     var NORMAL_HEIGHT = 100;
-    var PLOT_LEFT_MARGIN = 220;
+    var PLOT_LEFT_MARGIN = 260;
     var PLOT_RIGHT_MARGIN = 60;
     var PLOT_VERTICAL_MARGIN = 4;
-    var AFRICA_ICON = "M248 8C111.03 8 0 119.03 0 256s111.03 248 248 248 248-111.03 248-248S384.97 8 248 8zm160 215.5v6.93c0 5.87-3.32 11.24-8.57 13.86l-15.39 7.7a15.485 15.485 0 0 1-15.53-.97l-18.21-12.14a15.52 15.52 0 0 0-13.5-1.81l-2.65.88c-9.7 3.23-13.66 14.79-7.99 23.3l13.24 19.86c2.87 4.31 7.71 6.9 12.89 6.9h8.21c8.56 0 15.5 6.94 15.5 15.5v11.34c0 3.35-1.09 6.62-3.1 9.3l-18.74 24.98c-1.42 1.9-2.39 4.1-2.83 6.43l-4.3 22.83c-.62 3.29-2.29 6.29-4.76 8.56a159.608 159.608 0 0 0-25 29.16l-13.03 19.55a27.756 27.756 0 0 1-23.09 12.36c-10.51 0-20.12-5.94-24.82-15.34a78.902 78.902 0 0 1-8.33-35.29V367.5c0-8.56-6.94-15.5-15.5-15.5h-25.88c-14.49 0-28.38-5.76-38.63-16a54.659 54.659 0 0 1-16-38.63v-14.06c0-17.19 8.1-33.38 21.85-43.7l27.58-20.69a54.663 54.663 0 0 1 32.78-10.93h.89c8.48 0 16.85 1.97 24.43 5.77l14.72 7.36c3.68 1.84 7.93 2.14 11.83.84l47.31-15.77c6.33-2.11 10.6-8.03 10.6-14.7 0-8.56-6.94-15.5-15.5-15.5h-10.09c-4.11 0-8.05-1.63-10.96-4.54l-6.92-6.92a15.493 15.493 0 0 0-10.96-4.54H199.5c-8.56 0-15.5-6.94-15.5-15.5v-4.4c0-7.11 4.84-13.31 11.74-15.04l14.45-3.61c3.74-.94 7-3.23 9.14-6.44l8.08-12.11c2.87-4.31 7.71-6.9 12.89-6.9h24.21c8.56 0 15.5-6.94 15.5-15.5v-21.7C359.23 71.63 422.86 131.02 441.93 208H423.5c-8.56 0-15.5 6.94-15.5 15.5z";
-    var AMERICA_ICON = "M248 8C111.03 8 0 119.03 0 256s111.03 248 248 248 248-111.03 248-248S384.97 8 248 8zm82.29 357.6c-3.9 3.88-7.99 7.95-11.31 11.28-2.99 3-5.1 6.7-6.17 10.71-1.51 5.66-2.73 11.38-4.77 16.87l-17.39 46.85c-13.76 3-28 4.69-42.65 4.69v-27.38c1.69-12.62-7.64-36.26-22.63-51.25-6-6-9.37-14.14-9.37-22.63v-32.01c0-11.64-6.27-22.34-16.46-27.97-14.37-7.95-34.81-19.06-48.81-26.11-11.48-5.78-22.1-13.14-31.65-21.75l-.8-.72a114.792 114.792 0 0 1-18.06-20.74c-9.38-13.77-24.66-36.42-34.59-51.14 20.47-45.5 57.36-82.04 103.2-101.89l24.01 12.01C203.48 89.74 216 82.01 216 70.11v-11.3c7.99-1.29 16.12-2.11 24.39-2.42l28.3 28.3c6.25 6.25 6.25 16.38 0 22.63L264 112l-10.34 10.34c-3.12 3.12-3.12 8.19 0 11.31l4.69 4.69c3.12 3.12 3.12 8.19 0 11.31l-8 8a8.008 8.008 0 0 1-5.66 2.34h-8.99c-2.08 0-4.08.81-5.58 2.27l-9.92 9.65a8.008 8.008 0 0 0-1.58 9.31l15.59 31.19c2.66 5.32-1.21 11.58-7.15 11.58h-5.64c-1.93 0-3.79-.7-5.24-1.96l-9.28-8.06a16.017 16.017 0 0 0-15.55-3.1l-31.17 10.39a11.95 11.95 0 0 0-8.17 11.34c0 4.53 2.56 8.66 6.61 10.69l11.08 5.54c9.41 4.71 19.79 7.16 30.31 7.16s22.59 27.29 32 32h66.75c8.49 0 16.62 3.37 22.63 9.37l13.69 13.69a30.503 30.503 0 0 1 8.93 21.57 46.536 46.536 0 0 1-13.72 32.98zM417 274.25c-5.79-1.45-10.84-5-14.15-9.97l-17.98-26.97a23.97 23.97 0 0 1 0-26.62l19.59-29.38c2.32-3.47 5.5-6.29 9.24-8.15l12.98-6.49C440.2 193.59 448 223.87 448 256c0 8.67-.74 17.16-1.82 25.54L417 274.25z";
-    var FLAG_ICON = "M349.565 98.783C295.978 98.783 251.721 64 184.348 64c-24.955 0-47.309 4.384-68.045 12.013a55.947 55.947 0 0 0 3.586-23.562C118.117 24.015 94.806 1.206 66.338.048 34.345-1.254 8 24.296 8 56c0 19.026 9.497 35.825 24 45.945V488c0 13.255 10.745 24 24 24h16c13.255 0 24-10.745 24-24v-94.4c28.311-12.064 63.582-22.122 114.435-22.122 53.588 0 97.844 34.783 165.217 34.783 48.169 0 86.667-16.294 122.505-40.858C506.84 359.452 512 349.571 512 339.045v-243.1c0-23.393-24.269-38.87-45.485-29.016-34.338 15.948-76.454 31.854-116.95 31.854z";
+    // TODO: Remove FontAwesome Regular icons if we do not acquire their Pro license.
+    //var AFRICA_ICON = "M248 8C111.03 8 0 119.03 0 256s111.03 248 248 248 248-111.03 248-248S384.97 8 248 8zm160 215.5v6.93c0 5.87-3.32 11.24-8.57 13.86l-15.39 7.7a15.485 15.485 0 0 1-15.53-.97l-18.21-12.14a15.52 15.52 0 0 0-13.5-1.81l-2.65.88c-9.7 3.23-13.66 14.79-7.99 23.3l13.24 19.86c2.87 4.31 7.71 6.9 12.89 6.9h8.21c8.56 0 15.5 6.94 15.5 15.5v11.34c0 3.35-1.09 6.62-3.1 9.3l-18.74 24.98c-1.42 1.9-2.39 4.1-2.83 6.43l-4.3 22.83c-.62 3.29-2.29 6.29-4.76 8.56a159.608 159.608 0 0 0-25 29.16l-13.03 19.55a27.756 27.756 0 0 1-23.09 12.36c-10.51 0-20.12-5.94-24.82-15.34a78.902 78.902 0 0 1-8.33-35.29V367.5c0-8.56-6.94-15.5-15.5-15.5h-25.88c-14.49 0-28.38-5.76-38.63-16a54.659 54.659 0 0 1-16-38.63v-14.06c0-17.19 8.1-33.38 21.85-43.7l27.58-20.69a54.663 54.663 0 0 1 32.78-10.93h.89c8.48 0 16.85 1.97 24.43 5.77l14.72 7.36c3.68 1.84 7.93 2.14 11.83.84l47.31-15.77c6.33-2.11 10.6-8.03 10.6-14.7 0-8.56-6.94-15.5-15.5-15.5h-10.09c-4.11 0-8.05-1.63-10.96-4.54l-6.92-6.92a15.493 15.493 0 0 0-10.96-4.54H199.5c-8.56 0-15.5-6.94-15.5-15.5v-4.4c0-7.11 4.84-13.31 11.74-15.04l14.45-3.61c3.74-.94 7-3.23 9.14-6.44l8.08-12.11c2.87-4.31 7.71-6.9 12.89-6.9h24.21c8.56 0 15.5-6.94 15.5-15.5v-21.7C359.23 71.63 422.86 131.02 441.93 208H423.5c-8.56 0-15.5 6.94-15.5 15.5z";
+    var AFRICA_ICON = "M248 8C111.04 8 0 119.03 0 256s111.04 248 248 248 248-111.03 248-248S384.96 8 248 8zm0 448c-110.28 0-200-89.72-200-200S137.72 56 248 56c10.92 0 21.55 1.12 32 2.81v21.7c0 8.56-6.94 15.5-15.5 15.5h-24.21c-5.18 0-10.02 2.59-12.89 6.9l-8.08 12.11c-2.14 3.21-5.4 5.5-9.14 6.44l-14.45 3.61a15.492 15.492 0 0 0-11.74 15.04v4.4c0 8.56 6.94 15.5 15.5 15.5h90.09c4.11 0 8.05 1.63 10.96 4.54l6.92 6.92c2.91 2.91 6.85 4.54 10.96 4.54h10.09c8.56 0 15.5 6.94 15.5 15.5 0 6.67-4.27 12.59-10.6 14.7l-47.31 15.77c-3.9 1.3-8.15 1-11.83-.84l-14.72-7.36a54.682 54.682 0 0 0-24.43-5.77h-.89c-11.82 0-23.32 3.83-32.78 10.93l-27.58 20.69A54.545 54.545 0 0 0 152 283.31v14.06c0 14.49 5.76 28.38 16 38.63a54.641 54.641 0 0 0 38.63 16h25.88c8.56 0 15.5 6.94 15.5 15.5v29.88c0 12.25 2.85 24.33 8.33 35.29 4.7 9.4 14.31 15.34 24.82 15.34 9.28 0 17.94-4.64 23.09-12.36l13.03-19.55a159.608 159.608 0 0 1 25-29.16c2.47-2.26 4.14-5.26 4.76-8.56l4.3-22.83c.44-2.33 1.41-4.53 2.83-6.43l18.74-24.98c2.01-2.68 3.1-5.95 3.1-9.3V303.5c0-8.56-6.94-15.5-15.5-15.5h-8.21c-5.18 0-10.02-2.59-12.89-6.9l-13.24-19.86c-5.67-8.5-1.7-20.07 7.99-23.3l2.65-.88c4.54-1.51 9.52-.85 13.5 1.81l18.21 12.14a15.532 15.532 0 0 0 15.53.97l15.39-7.7c5.25-2.62 8.57-7.99 8.57-13.86v-6.93c0-8.56 6.94-15.5 15.5-15.5h18.44c3.82 15.41 6.07 31.43 6.07 48C448 366.28 358.28 456 248 456z";
+    // var AMERICA_ICON = "M248 8C111.03 8 0 119.03 0 256s111.03 248 248 248 248-111.03 248-248S384.97 8 248 8zm82.29 357.6c-3.9 3.88-7.99 7.95-11.31 11.28-2.99 3-5.1 6.7-6.17 10.71-1.51 5.66-2.73 11.38-4.77 16.87l-17.39 46.85c-13.76 3-28 4.69-42.65 4.69v-27.38c1.69-12.62-7.64-36.26-22.63-51.25-6-6-9.37-14.14-9.37-22.63v-32.01c0-11.64-6.27-22.34-16.46-27.97-14.37-7.95-34.81-19.06-48.81-26.11-11.48-5.78-22.1-13.14-31.65-21.75l-.8-.72a114.792 114.792 0 0 1-18.06-20.74c-9.38-13.77-24.66-36.42-34.59-51.14 20.47-45.5 57.36-82.04 103.2-101.89l24.01 12.01C203.48 89.74 216 82.01 216 70.11v-11.3c7.99-1.29 16.12-2.11 24.39-2.42l28.3 28.3c6.25 6.25 6.25 16.38 0 22.63L264 112l-10.34 10.34c-3.12 3.12-3.12 8.19 0 11.31l4.69 4.69c3.12 3.12 3.12 8.19 0 11.31l-8 8a8.008 8.008 0 0 1-5.66 2.34h-8.99c-2.08 0-4.08.81-5.58 2.27l-9.92 9.65a8.008 8.008 0 0 0-1.58 9.31l15.59 31.19c2.66 5.32-1.21 11.58-7.15 11.58h-5.64c-1.93 0-3.79-.7-5.24-1.96l-9.28-8.06a16.017 16.017 0 0 0-15.55-3.1l-31.17 10.39a11.95 11.95 0 0 0-8.17 11.34c0 4.53 2.56 8.66 6.61 10.69l11.08 5.54c9.41 4.71 19.79 7.16 30.31 7.16s22.59 27.29 32 32h66.75c8.49 0 16.62 3.37 22.63 9.37l13.69 13.69a30.503 30.503 0 0 1 8.93 21.57 46.536 46.536 0 0 1-13.72 32.98zM417 274.25c-5.79-1.45-10.84-5-14.15-9.97l-17.98-26.97a23.97 23.97 0 0 1 0-26.62l19.59-29.38c2.32-3.47 5.5-6.29 9.24-8.15l12.98-6.49C440.2 193.59 448 223.87 448 256c0 8.67-.74 17.16-1.82 25.54L417 274.25z";
+    var AMERICA_ICON = "M248 8C111 8 0 119 0 256s111 248 248 248 248-111 248-248S385 8 248 8zm-32 50.8v11.3c0 11.9-12.5 19.6-23.2 14.3l-24-12c14.9-6.4 30.7-10.9 47.2-13.6zm32 369.8V456c-110.3 0-200-89.7-200-200 0-29.1 6.4-56.7 17.6-81.7 9.9 14.7 25.2 37.4 34.6 51.1 5.2 7.6 11.2 14.6 18.1 20.7l.8.7c9.5 8.6 20.2 16 31.6 21.8 14 7 34.4 18.2 48.8 26.1 10.2 5.6 16.5 16.3 16.5 28v32c0 8.5 3.4 16.6 9.4 22.6 15 15.1 24.3 38.7 22.6 51.3zm42.7 22.7l17.4-46.9c2-5.5 3.3-11.2 4.8-16.9 1.1-4 3.2-7.7 6.2-10.7l11.3-11.3c8.8-8.7 13.7-20.6 13.7-33 0-8.1-3.2-15.9-8.9-21.6l-13.7-13.7c-6-6-14.1-9.4-22.6-9.4H232c-9.4-4.7-21.5-32-32-32s-20.9-2.5-30.3-7.2l-11.1-5.5c-4-2-6.6-6.2-6.6-10.7 0-5.1 3.3-9.7 8.2-11.3l31.2-10.4c5.4-1.8 11.3-.6 15.5 3.1l9.3 8.1c1.5 1.3 3.3 2 5.2 2h5.6c6 0 9.8-6.3 7.2-11.6l-15.6-31.2c-1.6-3.1-.9-6.9 1.6-9.3l9.9-9.6c1.5-1.5 3.5-2.3 5.6-2.3h9c2.1 0 4.2-.8 5.7-2.3l8-8c3.1-3.1 3.1-8.2 0-11.3l-4.7-4.7c-3.1-3.1-3.1-8.2 0-11.3L264 112l4.7-4.7c6.2-6.2 6.2-16.4 0-22.6l-28.3-28.3c2.5-.1 5-.4 7.6-.4 78.2 0 145.8 45.2 178.7 110.7l-13 6.5c-3.7 1.9-6.9 4.7-9.2 8.1l-19.6 29.4c-5.4 8.1-5.4 18.6 0 26.6l18 27c3.3 5 8.4 8.5 14.1 10l29.2 7.3c-10.8 84-73.9 151.9-155.5 169.7z";
+    //var FLAG_ICON = "M349.565 98.783C295.978 98.783 251.721 64 184.348 64c-24.955 0-47.309 4.384-68.045 12.013a55.947 55.947 0 0 0 3.586-23.562C118.117 24.015 94.806 1.206 66.338.048 34.345-1.254 8 24.296 8 56c0 19.026 9.497 35.825 24 45.945V488c0 13.255 10.745 24 24 24h16c13.255 0 24-10.745 24-24v-94.4c28.311-12.064 63.582-22.122 114.435-22.122 53.588 0 97.844 34.783 165.217 34.783 48.169 0 86.667-16.294 122.505-40.858C506.84 359.452 512 349.571 512 339.045v-243.1c0-23.393-24.269-38.87-45.485-29.016-34.338 15.948-76.454 31.854-116.95 31.854z";
+    var FLAG_ICON = "M344.348 74.667C287.742 74.667 242.446 40 172.522 40c-28.487 0-53.675 5.322-76.965 14.449C99.553 24.713 75.808-1.127 46.071.038 21.532.999 1.433 20.75.076 45.271-1.146 67.34 12.553 86.382 32 93.258V500c0 6.627 5.373 12 12 12h8c6.627 0 12-5.373 12-12V378.398c31.423-14.539 72.066-29.064 135.652-29.064 56.606 0 101.902 34.667 171.826 34.667 51.31 0 91.933-17.238 130.008-42.953 6.589-4.45 10.514-11.909 10.514-19.86V59.521c0-17.549-18.206-29.152-34.122-21.76-36.78 17.084-86.263 36.906-133.53 36.906zM48 28c11.028 0 20 8.972 20 20s-8.972 20-20 20-20-8.972-20-20 8.972-20 20-20zm432 289.333C456.883 334.03 415.452 352 371.478 352c-63.615 0-108.247-34.667-171.826-34.667-46.016 0-102.279 10.186-135.652 26V106.667C87.117 89.971 128.548 72 172.522 72c63.615 0 108.247 34.667 171.826 34.667 45.92 0 102.217-18.813 135.652-34.667v245.333z";
     var ICONS = [
         { key: 'flag', path: FLAG_ICON, tooltip: gettext('Group by ship nationality') },
-        { key: 'destinationRegion', path: AMERICA_ICON, tooltip: gettext('Group by disembarkation broad region') },
-        { key: 'sourceRegion', path: AFRICA_ICON, tooltip: gettext('Group by embarkation region') }
+        { key: 'sourceRegion', path: AFRICA_ICON, tooltip: gettext('Group by embarkation region') },
+        { key: 'destinationRegion', path: AMERICA_ICON, tooltip: gettext('Group by disembarkation broad region') }
     ];
-    d3.select("#timeline_slider").remove();
-    d3.select("#timeline_slider_tooltip").remove();
-    var tooltip = d3.select(mapContainer).append("div")
-        .attr("id", "timeline_slider_tooltip")
-        .attr("class", "tooltip")
-        .style("opacity", 0)
-        .style("padding", '6px')
-        .style("background", 'white');
+
+    // Method to destroy the UI elements that make up the timeline control.
+    self.dispose = function () {
+        d3.select("#timeline_slider").remove();
+    }
+    self.dispose();
+
     var width = 960;
     var left = 40;
     var top = 300 - PLOT_VERTICAL_MARGIN;
@@ -576,8 +579,7 @@ function TimelineControl(data, parent, onChange, mapContainer) {
         .attr("id", "timeline_slider")
         .style("opacity", INITIAL_OPACITY)
         .style("pointer-events", "auto")
-        .attr("transform", "translate(" + left + "," + top + ")")
-        .style('pointer-events', 'all');
+        .attr("transform", "translate(" + left + "," + top + ")");
 
     self.resize = function (w, h) {
         left = (w - width) / 2;
@@ -586,10 +588,22 @@ function TimelineControl(data, parent, onChange, mapContainer) {
     };
 
     // Enrich data set with grouping variables.
+    var regNames = geoCache.regionNames;
+    var regValues = {}
+    var getRegionName = function (set, pk, fallback) {
+        var match = set[pk];
+        var good = !!match && !!match.name && !!match.value;
+        if (good) {
+            regValues[match.name] = match.value;
+        } else {
+            regValues[fallback] = 999999; // fallback appears last
+        }
+        return gettext(good ? match.name : fallback);
+    }
     for (var i = 0; i < data.length; ++i) {
         var item = data[i];
-        item.sourceRegion = gettext(geoCache.regionNames.src[item.regsrc] || 'Other Africa');
-        item.destinationRegion = gettext(geoCache.regionNames.dst[item.bregdst] || 'Other');
+        item.sourceRegion = getRegionName(regNames.src, item.regsrc, 'Other Africa');
+        item.destinationRegion = getRegionName(regNames.dst, item.bregdst, 'Other');
         item.flag = gettext(geoCache.nations[item.nat_id] || 'Other');
     }
 
@@ -599,7 +613,8 @@ function TimelineControl(data, parent, onChange, mapContainer) {
     var createTimelinePlot = function (groupField) {
         $('#timeline_slider').empty();
         // Append background.
-        g.append("rect")
+        g
+            .append("rect")
             .attr("height", NORMAL_HEIGHT)
             .attr("width", width)
             .attr("fill", "rgba(0, 0, 0, 0.3)")
@@ -612,21 +627,13 @@ function TimelineControl(data, parent, onChange, mapContainer) {
             var btn = _addIconBackgroundRect(g, icon.path)
                 .datum(icon)
                 .classed('timeline_group_button', true)
-                .on('mouseenter', function () {
+                .on('mouseenter', function (d) {
                     d3.select(this).selectAll('path').style("fill", "red");
-                    var pos = d3.mouse(mapContainer);
-                    tooltip.transition()
-                        .duration(200)
-                        .style("opacity", .9);
-                    tooltip.html(icon.tooltip)
-                        .style("left", (pos[0] + 40) + "px")
-                        .style("top", (pos[1] - 40) + "px");
+                    ui.showTooltip(d.tooltip);
                 })
                 .on("mouseleave", function (d) {
                     d3.select(this).selectAll('path').style("fill", d.key == groupField ? "black" : "gray");
-                    tooltip.transition()
-                        .duration(500)
-                        .style("opacity", 0);
+                    ui.hideTooltip();
                 })
                 .on('click', function (d) {
                     if (setCurrentGroupField) {
@@ -658,11 +665,15 @@ function TimelineControl(data, parent, onChange, mapContainer) {
                 return agg;
             })
             .entries(data);
-        grouped.sort(function (a, b) { return b.value[b.value.length - 1].acc - a.value[a.value.length - 1].acc; });
+        if (groupField == 'flag') {
+            grouped.sort(function (a, b) { return b.value[b.value.length - 1].acc - a.value[a.value.length - 1].acc; });
+        } else {
+            grouped.sort(function (a, b) { return regValues[a.key] - regValues[b.key]; });
+        }
         var keys = d3.set(grouped, function (grp) { return grp.key; }).values();
         var color = d3.scaleOrdinal()
             .domain(keys)
-            .range(d3.schemeDark2);
+            .range(d3.schemeSet1);
         // Update color for voyages.
         for (var i = 0; i < data.length; ++i) {
             var item = data[i];
@@ -739,6 +750,7 @@ function TimelineControl(data, parent, onChange, mapContainer) {
             .attr('class', 'area')
             .attr('d', area)
             .attr('transform', 'translate(' + PLOT_LEFT_MARGIN + ', 0)')
+            .style('pointer-events', 'none')
             .style('fill', function (d) { return color(d.key); });
         // Labels for categories.
         var paddedHeight = NORMAL_HEIGHT - 2 * PLOT_VERTICAL_MARGIN;
@@ -767,14 +779,23 @@ function TimelineControl(data, parent, onChange, mapContainer) {
             .attr('transform', 'translate(' + (width - PLOT_RIGHT_MARGIN) + ',0)')
             .attr('color', 'black')
             .call(yAxis);
+        categories
+            .on('mouseenter', function (d) {
+                ui.showTooltip(d.key);
+            })
+            .on('mouseleave', function () {
+                ui.hideTooltip();
+            });
         d3.selectAll('g.tick>text').style('font-size', '10px');
 
         // Create time indicator bar.
         var tickLine = g.append('line')
-            .attr('stroke', 'red')
-            .attr('stroke-width', 1)
+            .classed('timelapse_slider_x_axis_bar', true)
+            .attr('stroke', 'black')
+            .attr('stroke-width', 2)
             .attr('transform', 'translate(' + (PLOT_LEFT_MARGIN + lastTickPos) + ',' + PLOT_VERTICAL_MARGIN + ')')
-            .attr('y2', paddedHeight);
+            .attr('y2', paddedHeight)
+            .style('stroke-opacity', '0.6');
         var embCirclePos = function (val) {
             if (val > 0) {
                 // Convert a year value to the embarked count value for that year.
@@ -784,12 +805,14 @@ function TimelineControl(data, parent, onChange, mapContainer) {
                     val = table[val - table[0].year].total;
                 }
             }
-            return 'translate(' + (width - PLOT_RIGHT_MARGIN) + ',' + y(val) + ')';
+            return 'translate(' + (width + 1 - PLOT_RIGHT_MARGIN) + ',' + y(val) + ')';
         };
         var tickEmbarkedCircle = g.append('circle')
-            .attr('r', 2)
-            .attr('fill', 'red')
-            .attr('transform', embCirclePos(0));
+            .classed('timelapse_slider_y_axis_circle', true)
+            .attr('r', 3)
+            .attr('fill', 'black')
+            .attr('transform', embCirclePos(0))
+            .style('opacity', '0.8');
         var _maxTickPos = width - PLOT_LEFT_MARGIN - PLOT_RIGHT_MARGIN;
         self.setTime = function (time) {
             var nextTickPos = ~~Math.round(x(time / 120));
@@ -805,8 +828,9 @@ function TimelineControl(data, parent, onChange, mapContainer) {
 
         // Create mouse over bar.
         var hoverLine = g.append('line')
+            .classed('timelapse_slider_x_axis_hover', true)
             .attr('stroke', 'red')
-            .attr('stroke-width', 1)
+            .attr('stroke-width', 2)
             .style("stroke-dasharray", ("2, 2"))
             .attr('transform', 'translate(' + PLOT_LEFT_MARGIN + ',' + PLOT_VERTICAL_MARGIN + ')')
             .style('opacity', 0)
@@ -826,11 +850,26 @@ function TimelineControl(data, parent, onChange, mapContainer) {
                 hoverLine.style('opacity', 0);
             })
             .on('mousedown', function () {
-                var xCoord = d3.mouse(this)[0];
-                if (xCoord >= PLOT_LEFT_MARGIN && xCoord <= (width - PLOT_RIGHT_MARGIN)) {
-                    // Compute xValue to set.
-                    onChange(120 * ~~Math.round(x.invert(xCoord - PLOT_LEFT_MARGIN)));
-                }
+                var update = (function () {
+                    var xCoord = d3.mouse(this)[0];
+                    if (xCoord >= PLOT_LEFT_MARGIN && xCoord <= (width - PLOT_RIGHT_MARGIN)) {
+                        // Compute xValue to set.
+                        onChange(120 * ~~Math.round(x.invert(xCoord - PLOT_LEFT_MARGIN)));
+                    }
+                }).bind(this);
+                update();
+                ui.map.dragging.disable();
+                hoverLine.style('visibility', 'hidden');
+                // Track mouse movements until mouse up.
+                var w = d3.select(window)
+                    .on("mousemove", update)
+                    .on("mouseup", function () {
+                        w.on("mousemove", null).on("mouseup", null);
+                        ui.map.dragging.enable();
+                        hoverLine.style('visibility', 'visible');
+                    });
+                d3.event.preventDefault();
+                d3.event.stopPropagation();
             });
     };
 
@@ -852,7 +891,6 @@ function AnimationHelper(data, monthsPerSecond) {
 
     var map = voyagesMap._map;
     var svg = d3.select(map.getPanes().overlayPane).append("svg");
-    d3.select("#timelapse_control_layer").remove();
     var mapContainer = map.getContainer();
     var controlLayer = d3.select(mapContainer)
         .append("svg")
@@ -867,6 +905,26 @@ function AnimationHelper(data, monthsPerSecond) {
         .attr('font-size', '36')
         .attr('text-anchor', 'middle')
         .text("");
+    var tooltip = d3.select(mapContainer).append("div")
+        .attr("id", "timeline_slider_tooltip")
+        .attr("class", "tooltip")
+        .style("opacity", 0)
+        .style("padding", '6px')
+        .style("background", 'white');
+    var showTooltip = function (html, offsetX, offsetY) {
+        var pos = d3.mouse(mapContainer);
+        tooltip.transition()
+            .duration(200)
+            .style("opacity", .9);
+        tooltip.html(html)
+            .style("left", (pos[0] + (offsetX || 40)) + "px")
+            .style("top", (pos[1] + (offsetY || -40)) + "px");
+    };
+    var hideTooltip = function () {
+        tooltip.transition()
+            .duration(500)
+            .style("opacity", 0);
+    };
     // It is normal for the characters below to look like a box, don't replace them
     // unless you know how they will render using FontAwesome.
     var playPath = "M424.4 214.7L72.4 6.6C43.8-10.3 0 6.1 0 47.9V464c0 37.5 40.7 60.1 72.4 41.3l352-208c31.4-18.5 31.5-64.1 0-82.6z";
@@ -893,10 +951,10 @@ function AnimationHelper(data, monthsPerSecond) {
     setBlurFilter();
 
     var g = svg.append("g").attr("class", "leaflet-zoom-hide");
-    var tooltip = $('#tooltip');
-    var tooltipShown = false;
+    var voyageInfoDialog = $('#voyage_info_dialog');
+    var voyageInfoDialogShown = false;
 
-    var hoverRed = function (e) {
+    var hoverRed = function (e, tooltipHtml, tooltipOffsetX, tooltipOffsetY) {
         var colorize = function (sel, c) {
             sel.transition().duration(300).style("fill", c);
         };
@@ -904,10 +962,16 @@ function AnimationHelper(data, monthsPerSecond) {
             .on("mouseenter", function () {
                 colorize(d3.select(this), 'red');
                 colorize(d3.select(this).selectAll('path'), 'red');
+                if (tooltipHtml) {
+                    showTooltip(tooltipHtml, tooltipOffsetX, tooltipOffsetY);
+                }
             })
             .on("mouseleave", function () {
                 colorize(d3.select(this), 'black');
                 colorize(d3.select(this).selectAll('path'), 'black');
+                if (tooltipHtml) {
+                    hideTooltip();
+                }
             });
     }
 
@@ -928,6 +992,7 @@ function AnimationHelper(data, monthsPerSecond) {
         exitFullscreenFunc = document.msExitFullscreen;
     }
     var fullscreenBtn = null;
+    var updateFullscreenBtn = null;
     if (fullscreenFunc) {
         fullscreenFunc = fullscreenFunc.bind(mapContainer);
         exitFullscreenFunc = exitFullscreenFunc.bind(document);
@@ -935,21 +1000,23 @@ function AnimationHelper(data, monthsPerSecond) {
         var fullscreenIcon = "M352.201 425.775l-79.196 79.196c-9.373 9.373-24.568 9.373-33.941 0l-79.196-79.196c-15.119-15.119-4.411-40.971 16.971-40.97h51.162L228 284H127.196v51.162c0 21.382-25.851 32.09-40.971 16.971L7.029 272.937c-9.373-9.373-9.373-24.569 0-33.941L86.225 159.8c15.119-15.119 40.971-4.411 40.971 16.971V228H228V127.196h-51.23c-21.382 0-32.09-25.851-16.971-40.971l79.196-79.196c9.373-9.373 24.568-9.373 33.941 0l79.196 79.196c15.119 15.119 4.411 40.971-16.971 40.971h-51.162V228h100.804v-51.162c0-21.382 25.851-32.09 40.97-16.971l79.196 79.196c9.373 9.373 9.373 24.569 0 33.941L425.773 352.2c-15.119 15.119-40.971 4.411-40.97-16.971V284H284v100.804h51.23c21.382 0 32.09 25.851 16.971 40.971z";
         var exitFullscreenIcon = "M200 288H88c-21.4 0-32.1 25.8-17 41l32.9 31-99.2 99.3c-6.2 6.2-6.2 16.4 0 22.6l25.4 25.4c6.2 6.2 16.4 6.2 22.6 0L152 408l31.1 33c15.1 15.1 40.9 4.4 40.9-17V312c0-13.3-10.7-24-24-24zm112-64h112c21.4 0 32.1-25.9 17-41l-33-31 99.3-99.3c6.2-6.2 6.2-16.4 0-22.6L481.9 4.7c-6.2-6.2-16.4-6.2-22.6 0L360 104l-31.1-33C313.8 55.9 288 66.6 288 88v112c0 13.3 10.7 24 24 24zm96 136l33-31.1c15.1-15.1 4.4-40.9-17-40.9H312c-13.3 0-24 10.7-24 24v112c0 21.4 25.9 32.1 41 17l31-32.9 99.3 99.3c6.2 6.2 16.4 6.2 22.6 0l25.4-25.4c6.2-6.2 6.2-16.4 0-22.6L408 360zM183 71.1L152 104 52.7 4.7c-6.2-6.2-16.4-6.2-22.6 0L4.7 30.1c-6.2 6.2-6.2 16.4 0 22.6L104 152l-33 31.1C55.9 198.2 66.6 224 88 224h112c13.3 0 24-10.7 24-24V88c0-21.3-25.9-32-41-16.9z";
         var btnPath = null;
+        updateFullscreenBtn = function (fs) {
+            if (btnPath) btnPath.attr('d', fs ? exitFullscreenIcon : fullscreenIcon);
+        }
         fullscreenBtn = _addIconBackgroundRect(controlLayer)
             .on('click', function () {
                 isFullscreen = !isFullscreen;
                 if (isFullscreen) {
                     fullscreenFunc();
-                    btnPath.attr('d', exitFullscreenIcon);
                 } else {
                     exitFullscreenFunc();
-                    btnPath.attr('d', fullscreenIcon);
                 }
+                updateFullscreenBtn(isFullscreen);
             });
         btnPath = fullscreenBtn
             .append('path')
             .attr('d', fullscreenIcon);
-        hoverRed(fullscreenBtn);
+        hoverRed(fullscreenBtn, gettext('Fullscreen on/off'), -150, 25);
     }
 
     // Set SVG size and position within map.
@@ -980,6 +1047,7 @@ function AnimationHelper(data, monthsPerSecond) {
         playPauseBtn.attr("transform", "translate(" + (size.x / 2 - 7) + ", 55) scale(0.04)");
         if (fullscreenBtn) {
             fullscreenBtn.attr('transform', 'translate(' + (size.x - 55) + ',20) scale(0.06)');
+            updateFullscreenBtn(!!document.fullscreenElement);
         }
         if (ui.timeline) {
             ui.timeline.resize(size.x, size.y);
@@ -1002,19 +1070,19 @@ function AnimationHelper(data, monthsPerSecond) {
         }
     };
 
-    var closeTooltip = function () {
-        tooltip.hide();
+    var closeVoyageInfoDialog = function () {
+        voyageInfoDialog.hide();
         svg.selectAll('.selected')
             .style('opacity', 0)
             .classed('selected', false);
-        tooltipShown = false;
+        voyageInfoDialogShown = false;
         setSelectedRoute(null);
     };
 
-    var showTooltip = function (d, rCirc) {
-        // Set tooltip content.
-        tooltipShown = true;
-        var content = $("#tooltip_content");
+    var showVoyageInfoDialog = function (d, rCirc) {
+        // Set dialog content.
+        voyageInfoDialogShown = true;
+        var content = $("#voyage_info_content");
         content.attr("class", "animation_voyage_content flag_" + d.nat_id);
         var shipName = (d.ship_name || '').trim();
         var template = '<h1>' + (shipName != "" ? shipName : gettext("[Unknown ship name]")) + "</h1>";
@@ -1032,19 +1100,19 @@ function AnimationHelper(data, monthsPerSecond) {
             .replace("{destination}", gettext(d.destination_name))
             .replace("{embarked}", d.embarked)
             .replace("{disembarked}", d.disembarked);
-        content.html(template + '<span class="animation_tooltip_moreinfo"><a target="_blank" href="/voyage/' + d.voyage_id + '/variables">' +
+        content.html(template + '<span class="animation_voyage_info_moreinfo"><a target="_blank" href="/voyage/' + d.voyage_id + '/variables">' +
             gettext("More info") + " »</a></span>");
-        // Position and show tooltip.
-        tooltip.show();
+        // Position and show dialog.
+        voyageInfoDialog.show();
         var rSvg = map.getContainer().getBoundingClientRect();
-        var tooltipWidth = tooltip.width();
-        var tooltipHeight = tooltip.height();
+        var dialogWidth = voyageInfoDialog.width();
+        var dialogHeight = voyageInfoDialog.height();
         var top = rCirc.bottom - rSvg.top + 100;
-        if (top + tooltipHeight + 170 > rSvg.bottom) {
-            top -= tooltipHeight + 100;
+        if (top + dialogHeight + 170 > rSvg.bottom) {
+            top -= dialogHeight + 100;
         }
-        tooltip.animate({
-            left: ((rCirc.left + rCirc.right) / 2 - rSvg.left - tooltipWidth / 2 - 20) + "px",
+        voyageInfoDialog.animate({
+            left: ((rCirc.left + rCirc.right) / 2 - rSvg.left - dialogWidth / 2 - 20) + "px",
             top: top + "px",
             opacity: 0.9
         }, 800);
@@ -1052,6 +1120,9 @@ function AnimationHelper(data, monthsPerSecond) {
 
     var addInteractiveUI = function () {
         g.selectAll(".animation_voyage_group:not(.interactive_voyage_node)")
+            .attr('id', function (d) { 
+                return 'animation_voyage_id_' + d.voyage.data.voyage_id;
+            })
             .classed('interactive_voyage_node', true)
             .append("circle")
             .classed("animation_voyage_outer_circle", true)
@@ -1066,7 +1137,7 @@ function AnimationHelper(data, monthsPerSecond) {
                 }
             })
             .on("click", function () {
-                closeTooltip();
+                closeVoyageInfoDialog();
                 d3.select(".selected").classed("selected", false);
                 d3.select(this).classed("selected", true);
                 var d = this.__data__;
@@ -1080,7 +1151,7 @@ function AnimationHelper(data, monthsPerSecond) {
                 data.source_name = geoCache.portSegments['src'][data.src].name;
                 data.destination_name = geoCache.portSegments['dst'][data.dst].name;
                 data.ship_nationality_name = (geoCache.nations || {})[data.nat_id] || '';
-                showTooltip(data, this.getBoundingClientRect());
+                showVoyageInfoDialog(data, this.getBoundingClientRect());
             });
     };
 
@@ -1093,14 +1164,16 @@ function AnimationHelper(data, monthsPerSecond) {
         map: map,
         d3view: g,
         monthsPerSecond: monthsPerSecond || 12,
-        setSelectedRoute: setSelectedRoute
+        setSelectedRoute: setSelectedRoute,
+        showTooltip: showTooltip,
+        hideTooltip: hideTooltip
     };
     var updateControls = function () {
         if (self.control.isPaused()) {
             setBlurFilter("0.0");
             playPauseBtn.selectAll('path').attr('d', playPath);
         } else {
-            closeTooltip();
+            closeVoyageInfoDialog();
             setBlurFilter();
             playPauseBtn.selectAll('path').attr('d', pausePath);
         }
@@ -1121,7 +1194,7 @@ function AnimationHelper(data, monthsPerSecond) {
     ui.initialize = function (control) {
         self.control = control;
         // Initialize plot slider.
-        ui.timeline = new TimelineControl(data, controlLayer, control.jumpTo, mapContainer);
+        ui.timeline = new TimelineControl(data, controlLayer, control.jumpTo, ui);
         hoverRed(playPauseBtn);
         playPauseBtn.on("click", function () {
             if (control.isPaused()) {
@@ -1130,7 +1203,7 @@ function AnimationHelper(data, monthsPerSecond) {
                 ui.pause();
             }
         })
-        $('.animation_tooltip_close_button').click(closeTooltip);
+        $('.animation_voyage_info_close_button').click(closeVoyageInfoDialog);
     };
     ui.setTime = function (time) {
         // Update slider and label.
@@ -1140,7 +1213,7 @@ function AnimationHelper(data, monthsPerSecond) {
             : Math.round(time / 120);
         yearLabel.text(yearText);
         positionSvg();
-        if (tooltipShown) closeTooltip();
+        if (voyageInfoDialogShown) closeVoyageInfoDialog();
         if (self.control.isPaused()) {
             addInteractiveUI();
         }
@@ -1170,10 +1243,15 @@ function AnimationHelper(data, monthsPerSecond) {
     // Should be called when the helper will no longer be used.
     self.dispose = function () {
         if (self.control) {
-            closeTooltip();
+            closeVoyageInfoDialog();
             self.control.stop();
             self.control.dispose();
         }
+        if (ui.timeline) {
+            ui.timeline.dispose();
+        }
+        d3.select("#timeline_slider_tooltip").remove();
+        d3.select("#timelapse_control_layer").remove();
     };
     d3MapTimelapse(voyages, ui, ui.monthsPerSecond * 10);
 }

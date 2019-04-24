@@ -39,7 +39,7 @@ def precompile_paths():
 
     def smooth_path(source, target):
         path = find_path(source, target)
-        if path is None: return None
+        if path is None: return [routeNodes[source], routeNodes[target]]
         path = path[1]
         nodes = [routeNodes[idx] for idx in path]
         points = np.array([[pt[0] for pt in nodes], [pt[1] for pt in nodes]]).T
@@ -64,6 +64,8 @@ def precompile_paths():
                 if valid_coord: return pt
         return None
 
+    warnings = []
+    
     def connect_port_to_region(regions, threshold=5000):
         proutes = {}
         for (pk, p) in VoyageCache.ports.items():
@@ -71,21 +73,21 @@ def precompile_paths():
             if pt is None:
                 # This is an invalid coordinate, try parent coordinates instead.
                 pt = get_coords(VoyageCache.regions.get(p.parent))
-            if pt is None: continue
+            if pt is None: 
+                warnings.append('Port [' + str(pk) + ']' + p.name + ' has invalid coordinates')
+                proutes[pk] = { 'reg': -1, 'path': [pt], 'name': p.name }
+                continue
             closest_region_index = get_closest(pt, regions)
             region_pt = regions[closest_region_index]
             closest_distance = hdist(pt, region_pt)
-            if closest_distance < threshold:
-                # TODO: use another network to connect ports to their regional hubs.
-                # For now we simply connect them directly through a geodesic (GreatArc).
-                proutes[pk] = { 'reg': closest_region_index, 'path': [pt], 'name': p.name }
+            proutes[pk] = { 'reg': closest_region_index, 'path': [pt], 'name': p.name }
+            if closest_distance > threshold:
+                warnings.append('Port [' + str(pk) + ']' + p.name + ' is too far from any regional hub')
         return proutes
 
     port_routes = {}
     port_routes['src'] = connect_port_to_region(region_from)
     port_routes['dst'] = connect_port_to_region(region_to)
-    warnings = ['Port ' + p.name + ' is too far from any regional hub'
-        for (pk, p) in VoyageCache.ports.items() if pk not in port_routes and p.lat and p.lng]
     return regional_routes, port_routes, warnings
 
 def generate_static_files():

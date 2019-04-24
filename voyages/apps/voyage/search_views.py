@@ -227,8 +227,8 @@ def get_timelapse_port_regions(request):
     # Generate a simple JSON that reports the broad regions.
     VoyageCache.load()
     regions = { 
-        'src': { pk: r.name for pk, r in VoyageCache.regions.items() if r.parent == 1 },
-        'dst': { pk: br.name for pk, br in VoyageCache.broad_regions.items() }
+        'src': { pk: { 'value': r.value, 'name': r.name } for pk, r in VoyageCache.regions.items() if r.parent == 1 },
+        'dst': { pk: { 'value': r.value, 'name': r.name } for pk, r in VoyageCache.broad_regions.items() }
     }
     return JsonResponse(regions)
 
