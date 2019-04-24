@@ -414,8 +414,9 @@ var voyagesMap = {
                 	if (totals.broadRegion && (totals.broadRegion.id <= 1 || totals.broadRegion.name == "Africa")) {
                 	    inboundHeader = gettext('Africans returning to Africa');
                 	}
-                	var table = '<div style="overflow-y: auto; overflow-x: hidden; max-height:250px; padding-right:20px;">' +
-                	 	'<table class="map_node_aggregate_table">' +
+									var table = '<div>' +
+										'<div class="tab-title">' + gettext("Overall statistics") + '</div>' +
+                	 	'<table class="table table-bordered margin-v">' +
                 		'<thead><tr><th rowspan="2">' + locations.locationType.singular.toUpperCase() +
                 		'</th><th colspan="2" class="inFlow">' + inboundHeader +
                 		'</th><th colspan="2" class="outFlow">' + gettext('Africans carried off') + '</th></tr>' +
