@@ -617,7 +617,7 @@ function TimelineControl(data, parent, onChange, ui) {
             .append("rect")
             .attr("height", NORMAL_HEIGHT)
             .attr("width", width)
-            .attr("fill", "rgba(0, 0, 0, 0.3)")
+            .attr("fill", "rgba(255, 255, 255, 0.5)")
             .attr("rx", 4)
             .attr("ry", 4)
             .on('mouseenter', function () { g.transition().duration(300).style('opacity', 1.0); })
