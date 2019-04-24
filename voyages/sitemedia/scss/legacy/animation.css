@@ -146,18 +146,23 @@
     font-size: 22px;
 }
 
-.animation_tooltip_moreinfo {
+.animation_voyage_info_moreinfo {
     font-variant: small-caps;
     font-size: small;
 }
 
-.animation_tooltip_close_button {
+.animation_voyage_info_close_button {
     position: absolute;
     top: 5px;
     right: 8px;
     cursor: pointer;
 }
 
-.animation_tooltip_close_button:hover {
+.animation_voyage_info_close_button:hover {
     color: red;
+}
+
+.leaflet-control-container {
+    position: absolute;
+    z-index: 1000;
 }

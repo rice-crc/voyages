@@ -11,7 +11,8 @@ class CachedGeo:
         self.name = name
         self.lat = lat
         self.lng = lng
-        self.show = show or (lat is not None and lng is not None and (abs(lat) + abs(lng) > 0.1))
+        # Ignore show in favor of having proper coordinates.
+        self.show = lat is not None and lng is not None and (abs(lat) + abs(lng) > 0.1)
         self.parent = parent
 
     @classmethod
