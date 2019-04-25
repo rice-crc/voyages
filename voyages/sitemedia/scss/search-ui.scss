@@ -6,6 +6,11 @@
   background-color: #6c757d !important; 
 }
 
+// Map leaftlet marker text 
+div.leaflet-pane.leaflet-marker-pane > div > div > span {
+  color: white;
+}
+
 .search-menu {
   border-radius: 0;
   border-right: none;
