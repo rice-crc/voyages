@@ -20,6 +20,8 @@ function Route(points) {
             latLngs.push(L.latLng(b.y, b.x));
         }
     }
+    // A good approximation for the length is given by the formula angle * earth radius.
+    self.getRouteLength = function() { return totalAngle * 6371; };
     self.latLngs = latLngs;
     // Create an interpolation function with perturbation parameters (pX, pY).
     // The interpolation function receives as argument a number from [0, 1.0]
@@ -89,10 +91,7 @@ var LNG_MAX_PERTURBATION = 20;
 // determining the position of all ships in the given time frame.
 function AnimationModel(routes, voyages) {
     var self = this;
-    self._routes = [];
-    for (var i = 0; i < routes.length; ++i) {
-        self._routes.push(new Route(routes[i]));
-    }
+    self._routes = routes;
     self._voyages = [];
     var lastFinish = 0;
     // Initialize voyage interpolation functions.
@@ -127,7 +126,7 @@ function AnimationModel(routes, voyages) {
             var duration = v.animationTime * timeStepPerSec;
             var finish = v.start + ~~duration;
             var isFinished = finish < time;
-            if (from_idx == i && isFinished) ++from_idx;
+            if (from_idx == i && isFinished)++from_idx;
             if (!isFinished) {
                 result.push({ idx: v.idx, voyage: v, position: v.interpolate((time - v.start) / duration) });
             }
@@ -159,6 +158,7 @@ function AnimationControl(routes, voyages, timeStepPerSec, onRender, onPauseChan
     var model = new AnimationModel(routes, voyages);
     var lastRealTime = null;
     var lastSimTime = -1;
+    var lastActive = null;
     var maxTime = model.getLastFinishTime();
     var minTime = model.getFirstStartTime();
     self._timer = null;
@@ -180,6 +180,7 @@ function AnimationControl(routes, voyages, timeStepPerSec, onRender, onPauseChan
             lastSimTime = nextSimTime;
             try {
                 onRender(nextSimTime, active);
+                lastActive = active;
             } catch (e) {
                 console.log('Render error!');
                 console.log(e);
@@ -222,6 +223,7 @@ function AnimationControl(routes, voyages, timeStepPerSec, onRender, onPauseChan
         if (!self._paused) {
             self._paused = true;
             if (!!onPauseChange) onPauseChange(true);
+            if (lastActive) onRender(lastSimTime, lastActive);
         }
     };
     self.play = function () {
@@ -353,6 +355,7 @@ function compileRoutes(regionSegments, portSegments, routeData) {
     var result = [];
     var sources = portSegments['src'];
     var targets = portSegments['dst'];
+    var cached = {}; // Create a cache for src vs dst routes.
     for (var i = 0; i < routeData.length; ++i) {
         var data = routeData[i];
         var srcInfo = sources[data.src];
@@ -365,26 +368,33 @@ function compileRoutes(regionSegments, portSegments, routeData) {
             result.push([]);
             continue;
         }
-        var first = srcInfo.path;
-        var second = regionSegments[srcInfo.reg][dstInfo.reg];
-        var third = dstInfo.path;
-        // Smooth each of the two joins.
-        var points = first.slice(0);
-        // If the port-to-region/region-to-port segments
-        // consist of direct paths, we will calculate the
-        // angle formed by the concatenation of the paths
-        // and attempt to reduce sharp corners by replacing
-        // the joint point by another further along the
-        // curve.
-        if (points.length == 1) {
-            second = _reduceSharpCorner(points[0], second);
+        var key = data.src + '_' + data.dst;
+        if (!cached.hasOwnProperty(key)) {
+            var first = srcInfo.path;
+            var second = regionSegments[srcInfo.reg][dstInfo.reg];
+            var third = dstInfo.path;
+            // Smooth each of the two joins.
+            var points = first.slice(0);
+            // If the port-to-region/region-to-port segments
+            // consist of direct paths, we will calculate the
+            // angle formed by the concatenation of the paths
+            // and attempt to reduce sharp corners by replacing
+            // the joint point by another further along the
+            // curve.
+            if (points.length == 1) {
+                second = _reduceSharpCorner(points[0], second);
+            }
+            _appendArrHelper(second, points);
+            if (third.length == 1) {
+                points = _reduceSharpCorner(third[0], points, true);
+            }
+            _appendArrHelper(third, points, true);
+            var route = new Route(points);
+            cached[key] = route;
+            result.push(route);
+        } else {
+            result.push(cached[key]);
         }
-        _appendArrHelper(second, points);
-        if (third.length == 1) {
-            points = _reduceSharpCorner(third[0], points, true);
-        }
-        _appendArrHelper(third, points, true);
-        result.push(points);
     }
     return result;
 }
@@ -396,7 +406,6 @@ var geoCache = new (function () {
     self.portSegments = null;
     self.nations = null;
     self.regionNames = null;
-    // TODO: load source regions, destination broad regions.
     var callbacks = [];
     var allLoaded = false;
 
@@ -454,6 +463,12 @@ var geoCache = new (function () {
     }
 })();
 
+function _getShipCircleRadius(d) {
+    var e = parseInt(d.voyage.data.embarked);
+    if (e <= 200) return 2;
+    return 2 * (1.0 + Math.log2(e / 200));
+}
+
 /**
  * Sets up the UI to display voyages timelapse animation using D3.js
  * on top of a Leaflet map.
@@ -465,8 +480,11 @@ var geoCache = new (function () {
  */
 function d3MapTimelapse(voyages, ui, monthsPerSecond) {
     var control = null;
+    var initialized = false;
 
     var render = function (simTime, items) {
+        if (!initialized) return;
+        ui.prerender();
         ui.setSelectedRoute(null);
         for (var i = 0; i < items.length; ++i) {
             var item = items[i];
@@ -481,7 +499,6 @@ function d3MapTimelapse(voyages, ui, monthsPerSecond) {
         };
         var selection = ui.d3view.selectAll(".animation_voyage_group")
             .data(items, function (d) { return d.idx; });
-        updatePos(selection, true);
         var enterSel = selection
             .enter()
             .append("g")
@@ -490,12 +507,8 @@ function d3MapTimelapse(voyages, ui, monthsPerSecond) {
             .append("circle")
             .classed("animation_voyage_inner_circle", true)
             .style("fill", function (d) { return d.voyage.color(); })
-            .style("filter", "url(#motionFilter)")
-            .attr("r", function (d) {
-                var e = parseInt(d.voyage.data.embarked);
-                if (e <= 200) return 2;
-                return 2 * (1.0 + Math.log2(e / 200));
-            });
+            .attr("r", _getShipCircleRadius);
+        updatePos(selection, true);
         updatePos(enterSel, false);
         selection.exit().remove();
         ui.setTime(simTime);
@@ -503,7 +516,11 @@ function d3MapTimelapse(voyages, ui, monthsPerSecond) {
     var init = function () {
         if (!control && geoCache.isReady()) {
             var routes = compileRoutes(geoCache.regionSegments, geoCache.portSegments, voyages);
-            var initialized = false;
+            // Rescale times for voyages based on the length of the routes.
+            for (var i = 0; i < routes.length; ++i) {
+                var r = routes[i];
+                voyages[i].animationTime *= Math.min(1.0, r.getRouteLength() / 12000);
+            }
             control = new AnimationControl(
                 routes,
                 voyages,
@@ -888,8 +905,21 @@ function AnimationHelper(data, monthsPerSecond) {
     // Keep the line below.
     voyagesMap.addLayer(L.polyline(L.latLng(0, 0), L.latLng(0, 0)));
 
+    // We add both an SVG as well as a Canvas element to the map.
+    // The idea is to run the animation on the canvas, which is much
+    // faster and use the SVG when paused to allow UI interaction.
+    // Luckily D3.js is powerful enough that we can reuse most of
+    // the code and render the ship's circles on each target with
+    // only minor changes.
     var map = voyagesMap._map;
     var svg = d3.select(map.getPanes().overlayPane).append("svg");
+    var canvas =  d3.select(map.getPanes().overlayPane).append("canvas");
+    var ctxCanvas = canvas.node().getContext("2d");
+    // We create a virtual node that will be used for D3.js to
+    // produce the DOM elements for ships when the animation is
+    // running. The elements produced by D3.js are then rendered
+    // directly on the Canvas.
+    var faux = d3.select(document.createElement("faux"));
     var mapContainer = map.getContainer();
     var controlLayer = d3.select(mapContainer)
         .append("svg")
@@ -898,8 +928,14 @@ function AnimationHelper(data, monthsPerSecond) {
         .attr('width', 0)
         .style("pointer-events", "none");
     var ctrlBackground = controlLayer
-        .on('mouseenter', function () { ctrlBackground.transition().duration(300).style('opacity', 1.0); })
-        .on('mouseleave', function () { ctrlBackground.transition().duration(300).style('opacity', 0.5); })
+        .on('mouseenter', function () {
+            map.doubleClickZoom.disable();
+            ctrlBackground.transition().duration(300).style('opacity', 1.0);
+        })
+        .on('mouseleave', function () {
+            map.doubleClickZoom.enable();
+            ctrlBackground.transition().duration(300).style('opacity', 0.5);
+        })
         .append('rect')
         .attr('width', 120)
         .attr('height', 70)
@@ -944,21 +980,6 @@ function AnimationHelper(data, monthsPerSecond) {
     var playPauseBtn = _addIconBackgroundRect(controlLayer, PAUSE_PATH);
     var speedUpBtn = _addIconBackgroundRect(controlLayer, SPEED_UP_PATH);
     var speedDownBtn = _addIconBackgroundRect(controlLayer, SPEED_DOWN_PATH);
-    var defs = svg.append("defs");
-    var filter = defs.append("filter")
-        .attr("id", "motionFilter") // Unique Id to blur effect
-        // Increase the width of the filter region to remove blur "boundary"
-        .attr("width", "300%")
-        // Put center of the "width" back in the middle of the element
-        .attr("x", "-100%")
-        .append("feGaussianBlur") // Append a filter technique
-        .attr("class", "blurValues") // Needed to select later on
-        .attr("in", "SourceGraphic"); // Apply blur on the applied element;
-
-    var setBlurFilter = function (val) {
-        return filter.attr("stdDeviation", val || "0.5");
-    }
-    setBlurFilter();
 
     var g = svg.append("g").attr("class", "leaflet-zoom-hide");
     var voyageInfoDialog = $('#voyage_info_dialog');
@@ -1033,16 +1054,34 @@ function AnimationHelper(data, monthsPerSecond) {
     }
 
     // Set SVG size and position within map.
+    var bounds = null;
+    var topLeft = null;
     var positionSvg = function () {
-        var bounds = map.getBounds();
-        var topLeft = map.latLngToLayerPoint(bounds.getNorthWest());
+        if (!self.control) return;
+        bounds = map.getBounds();
+        topLeft = map.latLngToLayerPoint(bounds.getNorthWest());
         var bottomRight = map.latLngToLayerPoint(bounds.getSouthEast());
-        svg.attr("width", bottomRight.x - topLeft.x)
-            .attr("height", bottomRight.y - topLeft.y)
+        var hostWidth = bottomRight.x - topLeft.x;
+        var hostHeight = bottomRight.y - topLeft.y;
+        // Set position of SVG and Canvas to align with the map.
+        svg.attr("width", hostWidth)
+            .attr("height", hostHeight)
             .style("left", topLeft.x + "px")
             .style("top", topLeft.y + "px");
+        canvas.attr("width", hostWidth)
+            .attr("height", hostHeight)
+            .style("left", topLeft.x + "px")
+            .style("top", topLeft.y + "px");
+        // Apply a transform so that when drawing the ships'
+        // circles, they geo-coordinates match.
+        ctxCanvas.transform(1, 0, 0, 1, -topLeft.x, -topLeft.y);
         g.attr("transform", "translate(" + -topLeft.x + "," + -topLeft.y + ")");
         if (self.control && self.control.isPaused()) {
+            // This code is necessary when the user zooms the map with the
+            // animation paused. The points have to be re-computed with
+            // respect to the map. When the animation is running, we do
+            // not bother to update the position of emitted nodes since
+            // those nodes are short lived.
             g.selectAll(".animation_voyage_group").each(function () {
                 var latLng = this.__data__.latLng;
                 if (latLng) {
@@ -1053,6 +1092,7 @@ function AnimationHelper(data, monthsPerSecond) {
                 }
             });
         }
+        // Position the UI controls.
         var size = map.getSize();
         controlLayer.attr("width", size.x)
             .attr("height", size.y);
@@ -1071,6 +1111,8 @@ function AnimationHelper(data, monthsPerSecond) {
     };
 
     var ui = {};
+
+    // Handle selected ship route display.
     var selectedRoute = null;
     var setSelectedRoute = function (route, circle) {
         if (ui.clickedCircle) {
@@ -1136,7 +1178,7 @@ function AnimationHelper(data, monthsPerSecond) {
 
     var addInteractiveUI = function () {
         g.selectAll(".animation_voyage_group:not(.interactive_voyage_node)")
-            .attr('id', function (d) { 
+            .attr('id', function (d) {
                 return 'animation_voyage_id_' + d.voyage.data.voyage_id;
             })
             .classed('interactive_voyage_node', true)
@@ -1175,10 +1217,9 @@ function AnimationHelper(data, monthsPerSecond) {
     $(window).resize(positionSvg);
 
     // Set up ui object and hook events.
-    // TODO: implement UI that allows changing months per second.
     ui = {
         map: map,
-        d3view: g,
+        d3view: faux,
         monthsPerSecond: monthsPerSecond || 12,
         setSelectedRoute: setSelectedRoute,
         showTooltip: showTooltip,
@@ -1186,11 +1227,9 @@ function AnimationHelper(data, monthsPerSecond) {
     };
     var updateControls = function () {
         if (self.control.isPaused()) {
-            setBlurFilter("0.0");
             playPauseBtn.selectAll('path').attr('d', PLAY_PATH);
         } else {
             closeVoyageInfoDialog();
-            setBlurFilter();
             playPauseBtn.selectAll('path').attr('d', PAUSE_PATH);
         }
     };
@@ -1214,7 +1253,6 @@ function AnimationHelper(data, monthsPerSecond) {
         hoverRed(playPauseBtn);
         hoverRed(speedDownBtn, gettext('Slow down the clock'));
         hoverRed(speedUpBtn, gettext('Speed up the clock'));
-        speedUpBtn.classed('timelapse_btn_disabled', true);
         playPauseBtn.on("click", function () {
             if (control.isPaused()) {
                 ui.play();
@@ -1223,7 +1261,7 @@ function AnimationHelper(data, monthsPerSecond) {
             }
         });
         var MIN_SPEED = 3;
-        var MAX_SPEED = 12;
+        var MAX_SPEED = 24;
         var updateSpeed = function (speed) {
             speed = Math.min(MAX_SPEED, Math.max(MIN_SPEED, speed));
             ui.monthsPerSecond = speed;
@@ -1243,6 +1281,12 @@ function AnimationHelper(data, monthsPerSecond) {
         });
         $('.animation_voyage_info_close_button').click(closeVoyageInfoDialog);
     };
+    ui.prerender = function () {
+        // When the animation is running, D3.js will be used to
+        // modify the DOM on our faux element. When paused, it
+        // will modify the DOM of the SVG element.
+        ui.d3view = self.control.isPaused() ? g : faux;
+    };
     ui.setTime = function (time) {
         // Update slider and label.
         ui.timeline.setTime(time);
@@ -1254,6 +1298,19 @@ function AnimationHelper(data, monthsPerSecond) {
         if (voyageInfoDialogShown) closeVoyageInfoDialog();
         if (self.control.isPaused()) {
             addInteractiveUI();
+        } else if (topLeft) {
+            // We have to manually draw the elements that correspond to
+            // the D3.js generated virtual DOM elements.
+            g.selectAll(".animation_voyage_group").remove();
+            ctxCanvas.clearRect(topLeft.x, topLeft.y, canvas.attr('width'), canvas.attr('height'));
+            faux.selectAll(".animation_voyage_group").each(function() {
+                var d = d3.select(this).datum();
+                ctxCanvas.beginPath();
+                ctxCanvas.beginPath();
+                ctxCanvas.arc(d.point.x, d.point.y, _getShipCircleRadius(d), 0, 2 * Math.PI);
+                ctxCanvas.fillStyle = d.voyage.color();
+                ctxCanvas.fill();
+            });
         }
     };
     // Process data, we will use the simple formula 10 * (12 * year + month)
@@ -1274,7 +1331,7 @@ function AnimationHelper(data, monthsPerSecond) {
         var start = year * 120 + month;
         // We specify the animationTime in seconds and let the control
         // figure out how many frames that would take.
-        var animationTime = 0.9 + 0.6 * Math.random();
+        var animationTime = 1.6 + 0.4 * Math.random();
         var v = new Voyage(i, item.src, item.dst, start, animationTime, item);
         voyages.push(v);
     }
