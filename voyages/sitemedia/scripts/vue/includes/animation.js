@@ -69,12 +69,12 @@ function Route(points) {
 
 var _rnd128 = function () { return ~~Math.round(128 * Math.random()); };
 
-function Voyage(routeIdx, src, dst, start, finish, data) {
+function Voyage(routeIdx, src, dst, start, animationTime, data) {
     this.routeIdx = routeIdx;
     this.src = src;
     this.dst = dst;
     this.start = ~~start;
-    this.finish = ~~finish;
+    this.animationTime = animationTime;
     this.data = data;
     var self = this;
     this.color = function () {
@@ -98,10 +98,10 @@ function AnimationModel(routes, voyages) {
     // Initialize voyage interpolation functions.
     for (var i = 0; i < voyages.length; ++i) {
         var v = Object.assign({}, voyages[i]);
-        if (v.finish >= lastFinish) {
-            lastFinish = v.finish + 1;
+        var finish = ~~Math.round(v.start + 120);
+        if (finish >= lastFinish) {
+            lastFinish = finish + 1;
         }
-        v.duration = v.finish - v.start;
         var route = self._routes[v.routeIdx];
         v.interpolate = route.createInterpolation(
             (Math.random() - 0.5) * LNG_MAX_PERTURBATION,
@@ -116,7 +116,7 @@ function AnimationModel(routes, voyages) {
     var lastTime = 0;
     var lastWindowStart = 0;
     var nvoyages = self._voyages.length;
-    self.getWindow = function (time) {
+    self.getWindow = function (time, timeStepPerSec) {
         var result = [];
         if (time == lastFinish) return []; // Ensure that we report empty results at the very end.
         var from_idx = time >= lastTime ? lastWindowStart : 0;
@@ -124,10 +124,12 @@ function AnimationModel(routes, voyages) {
             var v = self._voyages[i];
             if (v.start > time) break;
             // See if we can shift the cached window start index by one.
-            var isFinished = v.finish < time;
-            if (from_idx == i && isFinished)++from_idx;
+            var duration = v.animationTime * timeStepPerSec;
+            var finish = v.start + ~~duration;
+            var isFinished = finish < time;
+            if (from_idx == i && isFinished) ++from_idx;
             if (!isFinished) {
-                result.push({ idx: v.idx, voyage: v, position: v.interpolate((time - v.start) / v.duration) });
+                result.push({ idx: v.idx, voyage: v, position: v.interpolate((time - v.start) / duration) });
             }
         }
         lastWindowStart = from_idx;
@@ -161,12 +163,11 @@ function AnimationControl(routes, voyages, timeStepPerSec, onRender, onPauseChan
     var minTime = model.getFirstStartTime();
     self._timer = null;
     self._paused = false;
-    var setStepPerSec = function (stepPerSec) {
-        timeStepPerSec = stepPerSec || 1;
-        if (self._timer != null) {
-            self._timer.stop();
+    self.setStepPerSec = function (stepPerSec) {
+        self.timeStepPerSec = stepPerSec || 120;
+        if (self._timer == null) {
+            self._timer = d3.timer(tick);
         }
-        self._timer = d3.timer(tick);
     }
     var setSimTime = function (nextSimTime) {
         nextSimTime = ~~nextSimTime;
@@ -175,7 +176,7 @@ function AnimationControl(routes, voyages, timeStepPerSec, onRender, onPauseChan
         if (nextSimTime != lastSimTime) {
             // We only bother with updates if the 
             // simulated time has changed.
-            var active = model.getWindow(nextSimTime);
+            var active = model.getWindow(nextSimTime, self.timeStepPerSec);
             lastSimTime = nextSimTime;
             try {
                 onRender(nextSimTime, active);
@@ -197,7 +198,7 @@ function AnimationControl(routes, voyages, timeStepPerSec, onRender, onPauseChan
         // Advance the simulated time in sync with real time.
         var nextSimTime = 0;
         if (lastRealTime != null) {
-            var decimalIncrement = (elapsed - lastRealTime) * timeStepPerSec * 0.001;
+            var decimalIncrement = (elapsed - lastRealTime) * self.timeStepPerSec * 0.001;
             var increment = Math.round(decimalIncrement);
             // If the timer ticked too soon, do nothing.
             if (increment < 1) return;
@@ -208,7 +209,7 @@ function AnimationControl(routes, voyages, timeStepPerSec, onRender, onPauseChan
         setSimTime(nextSimTime);
         lastRealTime = elapsed;
     };
-    setStepPerSec(timeStepPerSec);
+    self.setStepPerSec(timeStepPerSec);
     self.getModel = function () { return model; };
     self.isPaused = function () { return self._paused; };
     self.dispose = function () {
@@ -460,9 +461,7 @@ var geoCache = new (function () {
  * @param {*} ui An object containing a Leaflet map entry, 
  * a d3view object which hosts the animation svg elements, and methods
  * initialize(control), setTime(simTime),
- * play, pause, setSelectedRoute(route, circle),
- * @param {*} monthsPerSecond How many months should elapse for each 
- * animation second.
+ * play, pause, setSelectedRoute(route, circle)
  */
 function d3MapTimelapse(voyages, ui, monthsPerSecond) {
     var control = null;
@@ -898,6 +897,17 @@ function AnimationHelper(data, monthsPerSecond) {
         .style('z-index', 600)
         .attr('width', 0)
         .style("pointer-events", "none");
+    var ctrlBackground = controlLayer
+        .on('mouseenter', function () { ctrlBackground.transition().duration(300).style('opacity', 1.0); })
+        .on('mouseleave', function () { ctrlBackground.transition().duration(300).style('opacity', 0.5); })
+        .append('rect')
+        .attr('width', 120)
+        .attr('height', 70)
+        .attr("fill", "rgba(255, 255, 255, 0.5)")
+        .attr("rx", 4)
+        .attr("ry", 4)
+        .style('opacity', 0.5)
+        .style("pointer-events", "auto");
     var yearLabel = controlLayer
         .style('position', 'absolute')
         .append('text')
@@ -927,13 +937,13 @@ function AnimationHelper(data, monthsPerSecond) {
     };
     // It is normal for the characters below to look like a box, don't replace them
     // unless you know how they will render using FontAwesome.
-    var playPath = "M424.4 214.7L72.4 6.6C43.8-10.3 0 6.1 0 47.9V464c0 37.5 40.7 60.1 72.4 41.3l352-208c31.4-18.5 31.5-64.1 0-82.6z";
-    var pausePath = "M144 479H48c-26.5 0-48-21.5-48-48V79c0-26.5 21.5-48 48-48h96c26.5 0 48 21.5 48 48v352c0 26.5-21.5 48-48 48zm304-48V79c0-26.5-21.5-48-48-48h-96c-26.5 0-48 21.5-48 48v352c0 26.5 21.5 48 48 48h96c26.5 0 48-21.5 48-48z";
-    var playPauseBtn = _addIconBackgroundRect(controlLayer, pausePath);
-    /*.append('path')
-    .style("pointer-events", "visible")
-    .attr('transform', 'translate(-10000, -10000) scale(0.01)')
-    .attr('d', pausePath);*/
+    var PLAY_PATH = "M424.4 214.7L72.4 6.6C43.8-10.3 0 6.1 0 47.9V464c0 37.5 40.7 60.1 72.4 41.3l352-208c31.4-18.5 31.5-64.1 0-82.6z";
+    var PAUSE_PATH = "M144 479H48c-26.5 0-48-21.5-48-48V79c0-26.5 21.5-48 48-48h96c26.5 0 48 21.5 48 48v352c0 26.5-21.5 48-48 48zm304-48V79c0-26.5-21.5-48-48-48h-96c-26.5 0-48 21.5-48 48v352c0 26.5 21.5 48 48 48h96c26.5 0 48-21.5 48-48z";
+    var SPEED_UP_PATH = "M443.28 296.47l-101.87 20.38C329.96 299.49 310.35 288 288 288c-35.35 0-64 28.65-64 64 0 11.72 3.38 22.55 8.88 32h110.25c3.54-6.08 5.73-12.89 7.18-19.99l102.41-20.48c13-2.59 21.41-15.23 18.81-28.23s-15.31-21.61-28.25-18.83zM288 32C128.94 32 0 160.94 0 320c0 52.8 14.25 102.26 39.06 144.8 5.61 9.62 16.3 15.2 27.44 15.2h443c11.14 0 21.83-5.58 27.44-15.2C561.75 422.26 576 372.8 576 320c0-159.06-128.94-288-288-288zm212.27 400H75.73C57.56 397.63 48 359.12 48 320 48 187.66 155.66 80 288 80s240 107.66 240 240c0 39.12-9.56 77.63-27.73 112z";
+    var SPEED_DOWN_PATH = "M288 288c-22.35 0-41.96 11.49-53.41 28.84l-101.87-20.38c-13.06-2.77-25.66 5.83-28.25 18.83s5.81 25.64 18.81 28.23L225.69 364c1.45 7.1 3.64 13.91 7.18 19.99h110.25c5.5-9.45 8.88-20.28 8.88-32 0-35.34-28.65-63.99-64-63.99zm0-256C128.94 32 0 160.94 0 320c0 52.8 14.25 102.26 39.06 144.8 5.61 9.62 16.3 15.2 27.44 15.2h443c11.14 0 21.83-5.58 27.44-15.2C561.75 422.26 576 372.8 576 320c0-159.06-128.94-288-288-288zm212.27 400H75.73C57.56 397.63 48 359.12 48 320 48 187.66 155.66 80 288 80s240 107.66 240 240c0 39.12-9.56 77.63-27.73 112z";
+    var playPauseBtn = _addIconBackgroundRect(controlLayer, PAUSE_PATH);
+    var speedUpBtn = _addIconBackgroundRect(controlLayer, SPEED_UP_PATH);
+    var speedDownBtn = _addIconBackgroundRect(controlLayer, SPEED_DOWN_PATH);
     var defs = svg.append("defs");
     var filter = defs.append("filter")
         .attr("id", "motionFilter") // Unique Id to blur effect
@@ -960,15 +970,18 @@ function AnimationHelper(data, monthsPerSecond) {
         };
         return e
             .on("mouseenter", function () {
-                colorize(d3.select(this), 'red');
-                colorize(d3.select(this).selectAll('path'), 'red');
+                var self = d3.select(this);
+                if (self.classed('timelapse_btn_disabled')) return;
+                colorize(self, 'red');
+                colorize(self.selectAll('path'), 'red');
                 if (tooltipHtml) {
                     showTooltip(tooltipHtml, tooltipOffsetX, tooltipOffsetY);
                 }
             })
             .on("mouseleave", function () {
-                colorize(d3.select(this), 'black');
-                colorize(d3.select(this).selectAll('path'), 'black');
+                var self = d3.select(this);
+                colorize(self, 'black');
+                colorize(self.selectAll('path'), 'black');
                 if (tooltipHtml) {
                     hideTooltip();
                 }
@@ -1043,8 +1056,11 @@ function AnimationHelper(data, monthsPerSecond) {
         var size = map.getSize();
         controlLayer.attr("width", size.x)
             .attr("height", size.y);
+        ctrlBackground.attr("transform", "translate(" + ((size.x / 2) - 60) + ", 15)");
         yearLabel.attr("transform", "translate(" + (size.x / 2) + ", 50)");
         playPauseBtn.attr("transform", "translate(" + (size.x / 2 - 7) + ", 55) scale(0.04)");
+        speedUpBtn.attr("transform", "translate(" + (size.x / 2 + 26) + ", 55) scale(0.04)");
+        speedDownBtn.attr("transform", "translate(" + (size.x / 2 - 45) + ", 55) scale(0.04)");
         if (fullscreenBtn) {
             fullscreenBtn.attr('transform', 'translate(' + (size.x - 55) + ',20) scale(0.06)');
             updateFullscreenBtn(!!document.fullscreenElement);
@@ -1171,11 +1187,11 @@ function AnimationHelper(data, monthsPerSecond) {
     var updateControls = function () {
         if (self.control.isPaused()) {
             setBlurFilter("0.0");
-            playPauseBtn.selectAll('path').attr('d', playPath);
+            playPauseBtn.selectAll('path').attr('d', PLAY_PATH);
         } else {
             closeVoyageInfoDialog();
             setBlurFilter();
-            playPauseBtn.selectAll('path').attr('d', pausePath);
+            playPauseBtn.selectAll('path').attr('d', PAUSE_PATH);
         }
     };
     ui.pause = function () {
@@ -1196,13 +1212,35 @@ function AnimationHelper(data, monthsPerSecond) {
         // Initialize plot slider.
         ui.timeline = new TimelineControl(data, controlLayer, control.jumpTo, ui);
         hoverRed(playPauseBtn);
+        hoverRed(speedDownBtn, gettext('Slow down the clock'));
+        hoverRed(speedUpBtn, gettext('Speed up the clock'));
+        speedUpBtn.classed('timelapse_btn_disabled', true);
         playPauseBtn.on("click", function () {
             if (control.isPaused()) {
                 ui.play();
             } else {
                 ui.pause();
             }
-        })
+        });
+        var MIN_SPEED = 3;
+        var MAX_SPEED = 12;
+        var updateSpeed = function (speed) {
+            speed = Math.min(MAX_SPEED, Math.max(MIN_SPEED, speed));
+            ui.monthsPerSecond = speed;
+            control.setStepPerSec(speed * 10);
+            speedDownBtn.classed('timelapse_btn_disabled', speed == MIN_SPEED);
+            speedUpBtn.classed('timelapse_btn_disabled', speed == MAX_SPEED);
+        }
+        speedDownBtn.on("click", function () {
+            if (ui.monthsPerSecond > MIN_SPEED) {
+                updateSpeed(ui.monthsPerSecond / 2);
+            }
+        });
+        speedUpBtn.on("click", function () {
+            if (ui.monthsPerSecond < MAX_SPEED) {
+                updateSpeed(ui.monthsPerSecond * 2);
+            }
+        });
         $('.animation_voyage_info_close_button').click(closeVoyageInfoDialog);
     };
     ui.setTime = function (time) {
@@ -1212,7 +1250,7 @@ function AnimationHelper(data, monthsPerSecond) {
             ? Math.round(time / 120) + "-" + gettext(MONTH_LABELS[~~Math.round(time / 10) % 12])
             : Math.round(time / 120);
         yearLabel.text(yearText);
-        positionSvg();
+        if (time % (10 * ui.monthsPerSecond) == 0) positionSvg();
         if (voyageInfoDialogShown) closeVoyageInfoDialog();
         if (self.control.isPaused()) {
             addInteractiveUI();
@@ -1234,10 +1272,10 @@ function AnimationHelper(data, monthsPerSecond) {
             month = 10 * (month - 1) + Math.round(Math.random() * 5);
         }
         var start = year * 120 + month;
-        // For now we set the duration to have a slight random
-        // deviation for more natural movement.
-        var duration = (10 + Math.random() * 8) * ui.monthsPerSecond;
-        var v = new Voyage(i, item.src, item.dst, start, start + duration, item);
+        // We specify the animationTime in seconds and let the control
+        // figure out how many frames that would take.
+        var animationTime = 0.9 + 0.6 * Math.random();
+        var v = new Voyage(i, item.src, item.dst, start, animationTime, item);
         voyages.push(v);
     }
     // Should be called when the helper will no longer be used.

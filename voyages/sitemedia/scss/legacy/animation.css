@@ -166,3 +166,7 @@
     position: absolute;
     z-index: 1000;
 }
+
+.timelapse_btn_disabled > path {
+    fill: gray !important;
+}
