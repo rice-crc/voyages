@@ -56,11 +56,7 @@ function Route(points) {
             var currentArc = arcs[idx];
             var arcAngle = angles[idx];
             var arcRatio = (currentAngle - lastAngle) / arcAngle;
-            var pt = arcAngle > 0.015 * totalAngle
-                ? currentArc.interpolate(arcRatio)
-                : (arcRatio < 0.5
-                    ? [currentArc.start.lon, currentArc.start.lat]
-                    : [currentArc.end.lon, currentArc.end.lat]);
+            var pt = currentArc.interpolate(arcRatio);
             // The perturbation is minimal at the beginning and end of the route,
             // being larger on the middle of the path.
             var factor = time * (1.0 - time);
@@ -115,7 +111,7 @@ function AnimationModel(routes, voyages) {
     var lastTime = 0;
     var lastWindowStart = 0;
     var nvoyages = self._voyages.length;
-    self.getWindow = function (time, timeStepPerSec) {
+    self.getWindow = function (time, timeStepPerSec, voyageDurationMultiplier) {
         var result = [];
         if (time == lastFinish) return []; // Ensure that we report empty results at the very end.
         var from_idx = time >= lastTime ? lastWindowStart : 0;
@@ -123,7 +119,7 @@ function AnimationModel(routes, voyages) {
             var v = self._voyages[i];
             if (v.start > time) break;
             // See if we can shift the cached window start index by one.
-            var duration = v.animationTime * timeStepPerSec;
+            var duration = v.animationTime * voyageDurationMultiplier * timeStepPerSec;
             var finish = v.start + ~~duration;
             var isFinished = finish < time;
             if (from_idx == i && isFinished)++from_idx;
@@ -137,6 +133,9 @@ function AnimationModel(routes, voyages) {
     };
     self.getFirstStartTime = function () {
         return nvoyages > 0 ? self._voyages[0].start : 0;
+    };
+    self.getLastStartTime = function () {
+        return nvoyages > 0 ? self._voyages[nvoyages - 1].start : 0;
     };
     self.getLastFinishTime = function () {
         return lastFinish;
@@ -163,8 +162,9 @@ function AnimationControl(routes, voyages, timeStepPerSec, onRender, onPauseChan
     var minTime = model.getFirstStartTime();
     self._timer = null;
     self._paused = false;
-    self.setStepPerSec = function (stepPerSec) {
+    self.setStepPerSec = function (stepPerSec, voyageDurationMultiplier) {
         self.timeStepPerSec = stepPerSec || 120;
+        self.voyageDurationMultiplier = voyageDurationMultiplier || 1.0;
         if (self._timer == null) {
             self._timer = d3.timer(tick);
         }
@@ -176,7 +176,7 @@ function AnimationControl(routes, voyages, timeStepPerSec, onRender, onPauseChan
         if (nextSimTime != lastSimTime) {
             // We only bother with updates if the 
             // simulated time has changed.
-            var active = model.getWindow(nextSimTime, self.timeStepPerSec);
+            var active = model.getWindow(nextSimTime, self.timeStepPerSec, self.voyageDurationMultiplier);
             lastSimTime = nextSimTime;
             try {
                 onRender(nextSimTime, active);
@@ -564,7 +564,7 @@ function TimelineControl(data, parent, onChange, ui) {
     // grouped by major region of disembarkation/embarkation or flag.
     var self = this;
     var NORMAL_HEIGHT = 100;
-    var PLOT_LEFT_MARGIN = 260;
+    var PLOT_LEFT_MARGIN = 280;
     var PLOT_RIGHT_MARGIN = 60;
     var PLOT_VERTICAL_MARGIN = 4;
     // TODO: Remove FontAwesome Regular icons if we do not acquire their Pro license.
@@ -593,6 +593,7 @@ function TimelineControl(data, parent, onChange, ui) {
     var g = parent
         .append("g")
         .attr("id", "timeline_slider")
+        .classed('timeline_slider_group', true)
         .style("opacity", INITIAL_OPACITY)
         .style("pointer-events", "auto")
         .attr("transform", "translate(" + left + "," + top + ")");
@@ -626,6 +627,7 @@ function TimelineControl(data, parent, onChange, ui) {
     var currentGroupField = null
     var setCurrentGroupField = null;
     var lastTickPos = 0;
+    var lastSetTime = -1;
     var createTimelinePlot = function (groupField) {
         $('#timeline_slider').empty();
         // Append background.
@@ -660,6 +662,7 @@ function TimelineControl(data, parent, onChange, ui) {
             btn.selectAll('path')
                 .attr('fill', icon.key == groupField ? "black" : "gray");
         }
+        var accVar = groupField == 'destinationRegion' ? 'disembarked' : 'embarked';
         var grouped = d3.nest()
             .key(function (d) { return d[groupField]; })
             .sortValues(function (a, b) { return a.year - b.year; })
@@ -670,7 +673,7 @@ function TimelineControl(data, parent, onChange, ui) {
                 var acc = 0;
                 for (var i = 0; i < g.length; ++i) {
                     var d = g[i];
-                    acc += d.embarked;
+                    acc += d[accVar];
                     if (d.year == lastYear) {
                         agg[agg.length - 1].acc = acc;
                     } else {
@@ -682,7 +685,12 @@ function TimelineControl(data, parent, onChange, ui) {
             })
             .entries(data);
         if (groupField == 'flag') {
-            grouped.sort(function (a, b) { return b.value[b.value.length - 1].acc - a.value[a.value.length - 1].acc; });
+            var otherFlag = gettext('Other');
+            grouped.sort(function (a, b) {
+                if (a.key == otherFlag) return 1;
+                if (b.key == otherFlag) return -1;
+                return b.value[b.value.length - 1].acc - a.value[a.value.length - 1].acc;
+            });
         } else {
             grouped.sort(function (a, b) { return regValues[a.key] - regValues[b.key]; });
         }
@@ -839,8 +847,21 @@ function TimelineControl(data, parent, onChange, ui) {
                 tickEmbarkedCircle
                     .attr('transform', embCirclePos(~~Math.round(time / 120)));
                 lastTickPos = nextTickPos;
+                lastSetTime = time;
             }
         }
+        if (lastSetTime >= 0) {
+            lastTickPos = -1;
+            self.setTime(lastSetTime);
+        }
+
+        // Add a Y-axis label.
+        g.append('text')
+            .attr('transform', 'translate(' + PLOT_LEFT_MARGIN + ',' + PLOT_VERTICAL_MARGIN + ')')
+            .attr('dy', '1em')
+            .text(
+                gettext('Accumulated captives') + ' (' + 
+                    (groupField != 'destinationRegion' ? gettext('embarked') : gettext('disembarked')) + ')');
 
         // Create mouse over bar.
         var hoverLine = g.append('line')
@@ -924,7 +945,7 @@ function AnimationHelper(data, monthsPerSecond) {
     var controlLayer = d3.select(mapContainer)
         .append("svg")
         .attr('id', 'timelapse_control_layer')
-        .style('z-index', 600)
+        .classed('timelapse_control_group', true)
         .attr('width', 0)
         .style("pointer-events", "none");
     var ctrlBackground = controlLayer
@@ -1246,8 +1267,10 @@ function AnimationHelper(data, monthsPerSecond) {
         }
         updateControls();
     };
+    var maxYear = 0;
     ui.initialize = function (control) {
         self.control = control;
+        maxYear = ~~Math.floor(control.getModel().getLastStartTime() / 120);
         // Initialize plot slider.
         ui.timeline = new TimelineControl(data, controlLayer, control.jumpTo, ui);
         hoverRed(playPauseBtn);
@@ -1265,7 +1288,7 @@ function AnimationHelper(data, monthsPerSecond) {
         var updateSpeed = function (speed) {
             speed = Math.min(MAX_SPEED, Math.max(MIN_SPEED, speed));
             ui.monthsPerSecond = speed;
-            control.setStepPerSec(speed * 10);
+            control.setStepPerSec(speed * 10, Math.max(1.0, 12 / speed));
             speedDownBtn.classed('timelapse_btn_disabled', speed == MIN_SPEED);
             speedUpBtn.classed('timelapse_btn_disabled', speed == MAX_SPEED);
         }
@@ -1290,10 +1313,14 @@ function AnimationHelper(data, monthsPerSecond) {
     ui.setTime = function (time) {
         // Update slider and label.
         ui.timeline.setTime(time);
-        var yearText = ui.monthsPerSecond == 1
-            ? Math.round(time / 120) + "-" + gettext(MONTH_LABELS[~~Math.round(time / 10) % 12])
-            : Math.round(time / 120);
-        yearLabel.text(yearText);
+        // Due to the artificially inflated length of voyages, the simulated
+        // time might go beyond the last year of the real simulated range.
+        // Here we limit the maximum displayed time and let the animation
+        // continue to finish the last voyages routes.
+        var maxTime = (maxYear + 1) * 120 - 1;
+        if (time > maxTime) time = maxTime;
+        var yearVal = ~~Math.floor(time / 120);
+        yearLabel.text(yearVal);
         if (time % (10 * ui.monthsPerSecond) == 0) positionSvg();
         if (voyageInfoDialogShown) closeVoyageInfoDialog();
         if (self.control.isPaused()) {
@@ -1303,14 +1330,24 @@ function AnimationHelper(data, monthsPerSecond) {
             // the D3.js generated virtual DOM elements.
             g.selectAll(".animation_voyage_group").remove();
             ctxCanvas.clearRect(topLeft.x, topLeft.y, canvas.attr('width'), canvas.attr('height'));
-            faux.selectAll(".animation_voyage_group").each(function() {
-                var d = d3.select(this).datum();
+            ctxCanvas.filter = 'blur(0.7px)';
+            // It is more efficient to draw elements with the same color together.
+            var nested = d3.nest()
+                .key(function (d) { return d.voyage.color(); })
+                .entries(faux.selectAll(".animation_voyage_group").data());
+            for (var i = 0; i < nested.length; ++i) {
                 ctxCanvas.beginPath();
-                ctxCanvas.beginPath();
-                ctxCanvas.arc(d.point.x, d.point.y, _getShipCircleRadius(d), 0, 2 * Math.PI);
-                ctxCanvas.fillStyle = d.voyage.color();
+                ctxCanvas.fillStyle = nested[i].key;
+                var values = nested[i].values;
+                for (var j = 0; j < values.length; ++j) {
+                    var d = values[j];
+                    var pt = d.point;
+                    var r = _getShipCircleRadius(d);
+                    ctxCanvas.moveTo(pt.x + r, pt.y);
+                    ctxCanvas.arc(pt.x, pt.y, r, 0, 2 * Math.PI);
+                }
                 ctxCanvas.fill();
-            });
+            }
         }
     };
     // Process data, we will use the simple formula 10 * (12 * year + month)
