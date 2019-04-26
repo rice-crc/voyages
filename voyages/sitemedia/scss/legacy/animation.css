@@ -164,9 +164,12 @@
 
 .leaflet-control-container {
     position: absolute;
-    z-index: 1000;
 }
 
 .timelapse_btn_disabled > path {
     fill: gray !important;
+}
+
+.timeline_slider_group *, .timelapse_control_group * {
+    cursor: pointer;
 }
