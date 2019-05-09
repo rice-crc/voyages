@@ -194,6 +194,8 @@ class Command(BaseCommand):
             if len(components) != 3:
                 components = iso_value.split(',')
             if len(components) != 3:
+                components = iso_value.split('/')
+            if len(components) != 3:
                 self.errors += 1
                 sys.stderr.write('Error with date ' + iso_value + '\n')
                 return ''

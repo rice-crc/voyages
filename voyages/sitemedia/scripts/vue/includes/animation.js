@@ -399,13 +399,16 @@ function compileRoutes(regionSegments, portSegments, routeData) {
     return result;
 }
 
-// Cache geo data in the script. 
-var geoCache = new (function () {
+// We use AJAX to fetch several pieces of geo-data used by the animation.
+// The routing network must be specified to fetch the correct graph.
+var _nationsCache = null;
+var _regionNamesCache = null;
+var _fetchGeoData = function (networkName) {
     var self = this;
     self.regionSegments = null;
     self.portSegments = null;
-    self.nations = null;
-    self.regionNames = null;
+    self.nations = _nationsCache;
+    self.regionNames = _regionNamesCache;
     var callbacks = [];
     var allLoaded = false;
 
@@ -434,13 +437,13 @@ var geoCache = new (function () {
 
     // Load cached data using AJAX.
     if (!self.regionSegments) {
-        $.getJSON(STATIC_URL + "maps/js/regional_routes.json", function (data) {
+        $.getJSON(STATIC_URL + "maps/js/" + networkName + "/regional_routes.json", function (data) {
             self.regionSegments = data;
             loaded();
         });
     }
     if (!self.portSegments) {
-        $.getJSON(STATIC_URL + "maps/js/port_routes.json", function (data) {
+        $.getJSON(STATIC_URL + "maps/js/" + networkName + "/port_routes.json", function (data) {
             self.portSegments = data;
             loaded();
         });
@@ -448,6 +451,7 @@ var geoCache = new (function () {
     if (!self.regionNames) {
         $.getJSON("/voyage/get-timelapse-regions", function (data) {
             self.regionNames = data;
+            _regionNamesCache = data;
             loaded();
         });
     }
@@ -458,10 +462,11 @@ var geoCache = new (function () {
                 nations[key] = data[key].name;
             }
             self.nations = nations;
+            _nationsCache = nations;
             loaded();
         });
     }
-})();
+}
 
 function _getShipCircleRadius(d) {
     var e = parseInt(d.voyage.data.embarked);
@@ -478,7 +483,7 @@ function _getShipCircleRadius(d) {
  * initialize(control), setTime(simTime),
  * play, pause, setSelectedRoute(route, circle)
  */
-function d3MapTimelapse(voyages, ui, monthsPerSecond) {
+function d3MapTimelapse(voyages, ui, timeStepPerSec, geoCache) {
     var control = null;
     var initialized = false;
 
@@ -524,7 +529,7 @@ function d3MapTimelapse(voyages, ui, monthsPerSecond) {
             control = new AnimationControl(
                 routes,
                 voyages,
-                monthsPerSecond,
+                timeStepPerSec,
                 render,
                 function (paused) {
                     if (!initialized) return;
@@ -559,7 +564,7 @@ function _addIconBackgroundRect(parent, icon) {
 
 var MONTH_LABELS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
-function TimelineControl(data, parent, onChange, ui) {
+function TimelineControl(data, parent, onChange, ui, geoCache) {
     // A D3.js cumulative stacked area graph with embarked counts as Y-axes,
     // grouped by major region of disembarkation/embarkation or flag.
     var self = this;
@@ -921,8 +926,12 @@ function TimelineControl(data, parent, onChange, ui) {
     setCurrentGroupField('flag');
 }
 
-function AnimationHelper(data, monthsPerSecond) {
+var _cachedGeoData = {};
+
+function AnimationHelper(data, networkName) {
     var self = this;
+    var geoCache = _cachedGeoData[networkName] || new _fetchGeoData(networkName);
+    _cachedGeoData[networkName] = geoCache;
     // Keep the line below.
     voyagesMap.addLayer(L.polyline(L.latLng(0, 0), L.latLng(0, 0)));
 
@@ -935,12 +944,14 @@ function AnimationHelper(data, monthsPerSecond) {
     var map = voyagesMap._map;
     var svg = d3.select(map.getPanes().overlayPane).append("svg");
     var canvas =  d3.select(map.getPanes().overlayPane).append("canvas");
+    canvas.attr("id", "timelapse_animation_canvas");
     var ctxCanvas = canvas.node().getContext("2d");
     // We create a virtual node that will be used for D3.js to
     // produce the DOM elements for ships when the animation is
     // running. The elements produced by D3.js are then rendered
     // directly on the Canvas.
     var faux = d3.select(document.createElement("faux"));
+    faux.attr("id", "faux_node");
     var mapContainer = map.getContainer();
     var controlLayer = d3.select(mapContainer)
         .append("svg")
@@ -1241,7 +1252,7 @@ function AnimationHelper(data, monthsPerSecond) {
     ui = {
         map: map,
         d3view: faux,
-        monthsPerSecond: monthsPerSecond || 12,
+        monthsPerSecond: 12,
         setSelectedRoute: setSelectedRoute,
         showTooltip: showTooltip,
         hideTooltip: hideTooltip
@@ -1272,7 +1283,7 @@ function AnimationHelper(data, monthsPerSecond) {
         self.control = control;
         maxYear = ~~Math.floor(control.getModel().getLastStartTime() / 120);
         // Initialize plot slider.
-        ui.timeline = new TimelineControl(data, controlLayer, control.jumpTo, ui);
+        ui.timeline = new TimelineControl(data, controlLayer, control.jumpTo, ui, geoCache);
         hoverRed(playPauseBtn);
         hoverRed(speedDownBtn, gettext('Slow down the clock'));
         hoverRed(speedUpBtn, gettext('Speed up the clock'));
@@ -1384,6 +1395,8 @@ function AnimationHelper(data, monthsPerSecond) {
         }
         d3.select("#timeline_slider_tooltip").remove();
         d3.select("#timelapse_control_layer").remove();
+        d3.select("#timelapse_animation_canvas").remove();
+        d3.select("#faux_node").remove();
     };
-    d3MapTimelapse(voyages, ui, ui.monthsPerSecond * 10);
+    d3MapTimelapse(voyages, ui, ui.monthsPerSecond * 10, geoCache);
 }

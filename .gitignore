@@ -13,3 +13,4 @@ voyages/sitemedia/scss/**/*.css
 voyages/sitemedia/scss/**/*.map
 .DS_Store
 voyages/static
+data/
