@@ -1,0 +1,46 @@
+version: '3.4'
+
+services:
+  voyages-mysql-service:
+    container_name: voyages-mysql # change localsettings.py db host to this name
+    restart: always
+    image: mysql:latest
+    ports:
+     - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: 'voyages'
+      MYSQL_USER: 'voyages'
+      MYSQL_PASS: 'voyages'
+    volumes:
+      - ./data/db:/var/lib/mysql
+  voyages-solr-service:
+    container_name: voyages-solr # change localsettings.py solr host http://{container_name}:8983/solr/voyages
+    image: solr:latest
+    ports:
+     - "8983:8983"
+    volumes:
+      - ./solr:/config
+      - ./data/solr:/var/solr/data
+    entrypoint:
+      - docker-entrypoint.sh
+      - solr-precreate
+      - voyages
+      - /config
+  voyages-django-service:
+    container_name: voyages-django
+    image: voyages-django-dev
+    build:
+      context: .
+      dockerfile: Dockerfile-dev
+    depends_on:
+      - voyages-mysql-service
+      - voyages-solr-service
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/src/voyages
+    entrypoint:
+      - python
+      - /src/voyages/manage.py
+      - runserver
+      - 0.0.0.0:8000

@@ -1877,7 +1877,7 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
         voyagesMap.clear();
         $('.animationElement').show();
         if (animationHelper) disposeAnimationHelper();
-        animationHelper = new AnimationHelper(result);
+        animationHelper = new AnimationHelper(result, SV_MODE == "intra" ? "intra" : "trans");
       }).done(function () {
         $("#sv-loader").addClass("display-none");
         $("#maps").removeClass("display-none");
