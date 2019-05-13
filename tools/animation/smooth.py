@@ -1,13 +1,25 @@
 # Pre-compile paths connecting "regions" and link ports to such regions.
 from voyages.apps.voyage.cache import *
-from region_from import *
-from region_to import *
-from region_network import *
+from voyages.apps.voyage.maps import VoyageRoutes
 from scipy.interpolate import interp1d
-from mpu import haversine_distance as hdist
+from haversine import haversine as hdist
+import importlib
 import numpy as np
 
-def precompile_paths():
+def precompile_paths(datasetName, twoWayLinks):
+    def get_module(mod):
+        return importlib.import_module("tools.animation." + datasetName + "." + mod)
+        
+    # Import the appropriate files
+    region_from = get_module("region_from").region_from
+    region_to = get_module("region_to").region_to
+    region_network = get_module("region_network")
+    routeNodes = region_network.routeNodes
+    links = region_network.links
+    if twoWayLinks:
+        links = links + [(b, a) for (a, b) in links]
+    links = set(links)
+
     VoyageCache.load()
     source_port_pks = set([v.emb_pk for v in VoyageCache.voyages.values() if v.emb_pk])
     dest_port_pks = set([v.dis_pk for v in VoyageCache.voyages.values() if v.dis_pk])
@@ -20,40 +32,7 @@ def precompile_paths():
     region_from_nodes = [get_closest(r, routeNodes) for r in region_from]
     region_to_nodes = [get_closest(r, routeNodes) for r in region_to]
     # We now compute the regional routes.
-    distances = [hdist(routeNodes[s], routeNodes[d]) for (s, d) in links]
-    n = len(routeNodes)
-    outlinks = [[(d, link_index) for (link_index, (s, d)) in enumerate(links) if s == i] for i in range(0, n)]
-
-    # We are doing a Depth first search since the network is very 
-    # low degree and we do not need to be very fast in the tooling code.
-    def find_path(source, target):
-        if source == target: return (0.0, [target])
-        best = None
-        for (neighbor, link_index) in outlinks[source]:
-            candidate = find_path(neighbor, target)
-            if candidate is not None:
-                candidate_dist = distances[link_index] + candidate[0]
-                if best is None or candidate_dist < best[0]:
-                    best = [candidate_dist, candidate[1]]
-        return (best[0], [source] + best[1]) if best else None
-
-    def smooth_path(source, target):
-        path = find_path(source, target)
-        if path is None: return [routeNodes[source], routeNodes[target]]
-        path = path[1]
-        nodes = [routeNodes[idx] for idx in path]
-        points = np.array([[pt[0] for pt in nodes], [pt[1] for pt in nodes]]).T
-        # Linear length along the points:
-        distance = np.cumsum(np.sqrt(np.sum(np.diff(points, axis=0)**2, axis=1)))
-        distance = np.insert(distance, 0, 0) / distance[-1]
-        # Interpolate curve and evaluate at equidistant points along the curve.
-        interpolated = interp1d(distance, points, kind='quadratic', axis=0)
-        alpha = np.linspace(0, 1, max([20, 5 * len(path)]))
-        return interpolated(alpha).tolist()
-
-    regional_routes = [[smooth_path(region_from_nodes[sind], region_to_nodes[dind]) 
-        for dind in range(0, len(region_to))] 
-        for sind in range(0, len(region_from))]
+    route_finder = VoyageRoutes(routeNodes, links)
 
     def get_coords(geo_entry):
         if geo_entry is not None:
@@ -63,6 +42,23 @@ def precompile_paths():
                 valid_coord = abs(pt[0]) + abs(pt[1]) > 0.01
                 if valid_coord: return pt
         return None
+
+    def smooth_path(source, target):
+        nodes = route_finder.find_route(source, target)
+        if nodes is None or source == target: return [routeNodes[source], routeNodes[target]]
+        points = np.array([[pt[0] for pt in nodes], [pt[1] for pt in nodes]]).T
+        # Linear length along the points:
+        distance = np.cumsum(np.sqrt(np.sum(np.diff(points, axis=0)**2, axis=1)))
+        if len(distance) > 1:
+            try:
+                distance = np.insert(distance, 0, 0) / distance[-1]
+                # Interpolate curve and evaluate at equidistant points along the curve.
+                interpolated = interp1d(distance, points, kind='quadratic', axis=0)
+                alpha = np.linspace(0, 1, max([20, 5 * len(nodes)]))
+                return interpolated(alpha).tolist()
+            except: pass
+        print str(source) + " " + str(target)
+        return [routeNodes[source], routeNodes[target]]
 
     warnings = []
     
@@ -88,19 +84,42 @@ def precompile_paths():
     port_routes = {}
     port_routes['src'] = connect_port_to_region(region_from)
     port_routes['dst'] = connect_port_to_region(region_to)
+
+    # Construct a collection of pairs (src_region_ind, dest_region_ind) that are
+    # actually used, to avoid producing unnecessary paths between hubs.
+    def get_port_reg(voyage, mode):
+        pk = voyage.emb_pk if mode == 'src' else voyage.dis_pk
+        pdata = port_routes[mode].get(pk)
+        return None if pdata is None else pdata.get('reg')
+
+    reg_route_pairs = [(s, d) for (s, d) in 
+        set([(get_port_reg(v, 'src'), get_port_reg(v, 'dst')) for v in VoyageCache.voyages.values()])
+        if s is not None and d is not None and s >= 0 and d >= 0]
+
+    print "Computing " + str(len(reg_route_pairs)) + " smooth paths between routes."
+
+    regional_routes = {}
+    computed = 0
+    for (sind, dind) in reg_route_pairs:
+        if computed % 10 == 0:
+            print "Computing path #" + str(computed + 1)
+        computed += 1
+        d = regional_routes.setdefault(sind, {})
+        d[dind] = smooth_path(region_from_nodes[sind], region_to_nodes[dind])
+
     return regional_routes, port_routes, warnings
 
-def generate_static_files():
+def generate_static_files(datasetName, twoWayLinks=False):
     """
     Generate JSON files with regional routes and port paths to respective hubs.
     """
-    (regional_routes, port_routes, warnings) = precompile_paths()
+    (regional_routes, port_routes, warnings) = precompile_paths(datasetName, twoWayLinks)
     if len(warnings) > 0:
-        print("Warnings (" + str(len(warnings)) + ")")
+        print("Warnings (" + unicode(len(warnings)) + ")")
         for w in warnings:
-            print(w)
+            print(w.encode('utf-8'))
     import os, json
-    base_folder = os.path.join(os.path.dirname(os.path.abspath(__file__)), '../../voyages/sitemedia/maps/js/')
+    base_folder = os.path.join(os.path.dirname(os.path.abspath(__file__)), '../../voyages/sitemedia/maps/js/', datasetName)
     with open(os.path.join(base_folder, 'regional_routes.json'), 'w') as f:
         json.dump(regional_routes, f)
     with open(os.path.join(base_folder, 'port_routes.json'), 'w') as f:
@@ -108,4 +127,6 @@ def generate_static_files():
 
 # Tp update the static JSON files, run the following on ./manage.py shell
 # from tools.animation.smooth import *
-# generate_static_files()
+# generate_static_files('trans')
+# or
+# generate_static_files('intra', True)

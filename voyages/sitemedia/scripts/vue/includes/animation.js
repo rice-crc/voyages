@@ -341,7 +341,7 @@ function _reduceSharpCorner(lastP1pt, second, reverse, maxPathSector, threshold)
  * For compactness, the routes are decomposed in 3 segments.
  * This function compiles a whole path (with any required
  * smoothing at the joints) from these segments.
- * @param {*} regionSegments array[fromRegion][toRegion] gives the
+ * @param {*} regionSegments object[fromRegion][toRegion] gives the
  * smooth segment connecting fromRegion to toRegion.
  * @param {*} portInfo array[{ reg, path, ptype }] 
  * indicates the nearest region and a smooth segment 
@@ -365,7 +365,7 @@ function compileRoutes(regionSegments, portSegments, routeData) {
             !regionSegments[srcInfo.reg] ||
             !regionSegments[srcInfo.reg][dstInfo.reg]) {
             // This is a route we cannot handle...
-            result.push([]);
+            result.push(new Route([]));
             continue;
         }
         var key = data.src + '_' + data.dst;

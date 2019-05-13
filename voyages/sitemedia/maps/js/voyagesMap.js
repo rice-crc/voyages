@@ -159,6 +159,7 @@ var voyagesMap = {
 	_map: L.map('map', {
 		attributionControl: false,
 		maxBounds: _mapBoundaries,
+		maxBoundsViscosity: 1.0,
 		wheelDebounceTime: 200,
 		wheelPxPerZoomLevel: 120
 	}).setView([6, -20], 3),
@@ -330,6 +331,10 @@ var voyagesMap = {
 		this._arrowOpacity = opacity;
 		this.draw();
 		return this;
+	},
+
+	setMaxBounds: function(bounds) {
+		this._map.setMaxBounds(bounds || _mapBoundaries);
 	},
 
     /*!
