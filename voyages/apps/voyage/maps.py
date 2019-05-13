@@ -8,16 +8,10 @@ from haversine import haversine as dist
 import os, re, threading
 
 class VoyageRoutes():
-    def __init__(self):
-        dir = os.path.dirname(os.path.abspath(__file__))
-        with open(dir + '/../../sitemedia/maps/js/routeNodes.js', 'r') as f:
-            s = f.read()
-        self._routeJavaScriptData = s 
-        self._nodes = [(float(m.group(1)), float(m.group(2))) for m in re.finditer('LatLng\(([0-9\-\.]+),\s*([0-9\-\.]+)\)', s)]
-        edges = {}
-        all_pairs = [(int(m.group(1)), int(m.group(2))) for m in re.finditer('start:\s*([0-9]+),\s*end:\s*([0-9]+)', s)]
+    def __init__(self, nodes, links):
+        self._nodes = nodes
         edges = [[] for _ in self._nodes]
-        for a, b in all_pairs:
+        for a, b in links:
             edges[a].append((b, dist(self._nodes[a], self._nodes[b])))
         self._edges = edges
         self._routes = {}
@@ -111,6 +105,11 @@ class VoyageRoutesCache:
     def load(cls, force_reload = False):
         with cls._lock:
             if force_reload or not cls._cache:
-                routes = VoyageRoutes()
+                dir = os.path.dirname(os.path.abspath(__file__))
+                with open(dir + '/../../sitemedia/maps/js/routeNodes.js', 'r') as f:
+                    s = f.read()
+                nodes = [(float(m.group(1)), float(m.group(2))) for m in re.finditer('LatLng\(([0-9\-\.]+),\s*([0-9\-\.]+)\)', s)]
+                links = [(int(m.group(1)), int(m.group(2))) for m in re.finditer('start:\s*([0-9]+),\s*end:\s*([0-9]+)', s)]
+                routes = VoyageRoutes(nodes, links)
                 cls._cache = routes.get_voyage_routes()
             return cls._cache
