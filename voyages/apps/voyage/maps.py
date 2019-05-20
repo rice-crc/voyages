@@ -8,11 +8,14 @@ from haversine import haversine as dist
 import os, re, threading
 
 class VoyageRoutes():
-    def __init__(self, nodes, links):
+    def __init__(self, nodes, links, twoWay=False):
         self._nodes = nodes
         edges = [[] for _ in self._nodes]
         for a, b in links:
-            edges[a].append((b, dist(self._nodes[a], self._nodes[b])))
+            ab_dist = dist(self._nodes[a], self._nodes[b])
+            edges[a].append((b, ab_dist))
+            if twoWay:
+                edges[b].append((a, ab_dist))
         self._edges = edges
         self._routes = {}
         self._voyage_routes = {}
@@ -30,23 +33,22 @@ class VoyageRoutes():
             final_pt = nodes[final_index]
             edges = self._edges
             frontier = PriorityQueue()
-            frontier.put(start_index, 0)
+            frontier.put((0, start_index))
             came_from = {}
             cost_so_far = {}
             came_from[start_index] = None
             cost_so_far[start_index] = 0
             while not frontier.empty():
-                current = frontier.get()
+                (_, current) = frontier.get()
                 if current == final_index:
                     break
-                for next in edges[current]:
-                    # next is a pair (node index, edge distance)
-                    next_idx = next[0]
-                    new_cost = cost_so_far[current] + next[1]
-                    if next_idx not in cost_so_far or new_cost < cost_so_far[next_idx]:
+                for (next_idx, edge_cost) in edges[current]:
+                    new_cost = cost_so_far[current] + edge_cost
+                    current_cost = cost_so_far.get(next_idx)
+                    if current_cost is None or new_cost < current_cost:
                         cost_so_far[next_idx] = new_cost
                         priority = new_cost + dist(final_pt, nodes[next_idx])
-                        frontier.put(next_idx, priority)
+                        frontier.put((priority, next_idx))
                         came_from[next_idx] = current
             route = []
             if final_index in came_from:

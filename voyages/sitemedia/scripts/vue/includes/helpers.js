@@ -1881,10 +1881,14 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
             new L.LatLng(-59.517932, -111.936579),
             new L.LatLng(63.9, 0)
           ));
+          voyagesMap._map.setZoom(4);
         }
         $('.animationElement').show();
         if (animationHelper) disposeAnimationHelper();
-        animationHelper = new AnimationHelper(result, SV_MODE == "intra" ? "intra" : "trans");
+        animationHelper = new AnimationHelper(
+          result,
+          SV_MODE == "intra" ? "intra" : "trans",
+          SV_MODE == "intra" ? new AnimationOptions(0.4, 3, 6, 2, 18, 1000) : null);
       }).done(function () {
         $("#sv-loader").addClass("display-none");
         $("#maps").removeClass("display-none");

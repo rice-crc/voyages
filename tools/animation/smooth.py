@@ -2,7 +2,7 @@
 from voyages.apps.voyage.cache import *
 from voyages.apps.voyage.maps import VoyageRoutes
 from scipy.interpolate import interp1d
-from haversine import haversine as hdist
+from haversine import haversine as hs_dist
 import importlib
 import numpy as np
 
@@ -15,10 +15,7 @@ def precompile_paths(datasetName, twoWayLinks):
     region_to = get_module("region_to").region_to
     region_network = get_module("region_network")
     routeNodes = region_network.routeNodes
-    links = region_network.links
-    if twoWayLinks:
-        links = links + [(b, a) for (a, b) in links]
-    links = set(links)
+    links = set(region_network.links)
 
     VoyageCache.load()
     source_port_pks = set([v.emb_pk for v in VoyageCache.voyages.values() if v.emb_pk])
@@ -26,13 +23,12 @@ def precompile_paths(datasetName, twoWayLinks):
     
     # Map closest point from an origin.
     def get_closest(origin, choices):
-        min_index = min(enumerate(choices), key=lambda (_, pt): hdist(pt, origin))[0]
-        return min_index
+        return min(enumerate(choices), key=lambda (_, pt): hs_dist(pt, origin))[0]
 
     region_from_nodes = [get_closest(r, routeNodes) for r in region_from]
     region_to_nodes = [get_closest(r, routeNodes) for r in region_to]
     # We now compute the regional routes.
-    route_finder = VoyageRoutes(routeNodes, links)
+    route_finder = VoyageRoutes(routeNodes, links, twoWayLinks)
 
     def get_coords(geo_entry):
         if geo_entry is not None:
@@ -75,7 +71,7 @@ def precompile_paths(datasetName, twoWayLinks):
                 continue
             closest_region_index = get_closest(pt, regions)
             region_pt = regions[closest_region_index]
-            closest_distance = hdist(pt, region_pt)
+            closest_distance = hs_dist(pt, region_pt)
             proutes[pk] = { 'reg': closest_region_index, 'path': [pt], 'name': p.name }
             if closest_distance > threshold:
                 warnings.append('Port [' + str(pk) + ']' + p.name + ' is too far from any regional hub')
@@ -129,4 +125,5 @@ def generate_static_files(datasetName, twoWayLinks=False):
 # from tools.animation.smooth import *
 # generate_static_files('trans')
 # or
+# from tools.animation.smooth import *
 # generate_static_files('intra', True)

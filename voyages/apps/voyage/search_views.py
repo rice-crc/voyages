@@ -211,6 +211,7 @@ def get_results_map_animation(results, allow_no_numbers = False):
                 "src": voyage.emb_pk,
                 "dst": voyage.dis_pk,
                 "regsrc": hsrc[1].pk,
+                "bregsrc": hsrc[2].pk,
                 "bregdst": hdst[2].pk,
                 "embarked": voyage.embarked or 0,
                 "disembarked": voyage.disembarked or 0,
