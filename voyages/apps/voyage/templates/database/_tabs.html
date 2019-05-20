@@ -17,9 +17,11 @@
   <li class="nav-item">
     <a class="nav-link" @click="setActive('timeline')" href="#" data-toggle="tab" data-target="#timeline">{% trans 'Timeline' %}</a>
   </li>
+  {% if mode != "intra" %}
   <li class="nav-item">
     <a class="nav-link" @click="setActive('maps')" href="#" data-toggle="tab" data-target="#maps">{% trans 'Maps' %}</a>
   </li>
+  {% endif %}
   <li class="nav-item">
     <a class="nav-link" id="animation" @click="setActive('animation')" href="#" data-toggle="tab" data-target="#maps">{% trans 'Timelapse' %}</a>
   </li>
