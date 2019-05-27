@@ -1175,6 +1175,65 @@ class VoyageSlavesNumbers(models.Model):
     imp_num_females_total = models.IntegerField \
             ("Number of females (age unspecified) (FEMALE7) ", null=True, blank=True)
 
+    total_slaves_embarked_age_gender_identified = models.IntegerField \
+            ("Total slaves embarked wi th age and gender identified (SLAVMAX1)",
+             null=True, blank=True)
+    total_slaves_by_age_gender_identified_among_landed = models.IntegerField \
+            ("Total slaves identified by age and gender among landed (SLAVMAX3)",
+             null=True, blank=True)
+    total_slaves_by_age_gender_identified_departure_or_arrival = models.IntegerField \
+            ("Total slavesidentified by age and gender at departure or arrival (SLAVMAX7)",
+             null=True, blank=True)
+
+    percentage_boys_among_embarked_slaves = models.FloatField \
+            ("Percentage of boys among embarked slaves (BOYRAT1)", \
+            null=True, blank=True)
+
+    child_ratio_among_embarked_slaves = models.FloatField \
+            ("Child ratio among embarked slaves (CHILRAT1)", \
+            null=True, blank=True)
+
+    percentage_girls_among_embarked_slaves = models.FloatField \
+            ("Percentage of girls among embarked slaves (GIRLRAT1)", \
+            null=True, blank=True)
+
+    male_ratio_among_embarked_slaves = models.FloatField \
+            ("Male ratio among embarked slaves (MALRAT1)", \
+            null=True, blank=True)
+
+    percentage_men_among_embarked_slaves = models.FloatField \
+            ("Percentage of men among embarked slaves (MENRAT1)", \
+            null=True, blank=True)
+
+    percentage_women_among_embarked_slaves = models.FloatField \
+            ("Percentage of women among embarked slaves (WOMRAT1)", \
+            null=True, blank=True)
+
+    percentage_boys_among_landed_slaves = models.FloatField \
+            ("Percentage of boys among landed slaves (BOYRAT3)", \
+            null=True, blank=True)
+
+    child_ratio_among_landed_slaves = models.FloatField \
+            ("Child ratio among landed slaves (CHILRAT3)", \
+            null=True, blank=True)
+
+    percentage_girls_among_landed_slaves = models.FloatField \
+            ("Percentage of girls among landed slaves (GIRLRAT3)", \
+            null=True, blank=True)
+
+    male_ratio_among_landed_slaves = models.FloatField \
+            ("Male ratio among landed slaves (MALRAT3)", \
+            null=True, blank=True)
+
+    percentage_men_among_landed_slaves = models.FloatField \
+            ("Percentage of men among landed slaves (MENRAT3)", \
+            null=True, blank=True)
+
+    percentage_women_among_landed_slaves = models.FloatField \
+            ("Percentage of women among landed slaves (WOMRAT3)", \
+            null=True, blank=True)
+
+    # INSERT HERE any new number variables [model]
 
     voyage = models.ForeignKey('Voyage',
                                related_name="voyage_name_slave_characteristics")
