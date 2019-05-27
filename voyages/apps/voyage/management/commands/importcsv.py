@@ -423,6 +423,9 @@ class Command(BaseCommand):
                     numbers.total_slaves_landed_gender_identified = cint(row.get(u'slavemx3'))
                     numbers.total_slaves_dept_or_arr_age_identified = cint(row.get(u'slavema7'))
                     numbers.total_slaves_dept_or_arr_gender_identified = cint(row.get(u'slavemx7'))
+                    numbers.total_slaves_embarked_age_gender_identified = cint(row.get(u'slavmax1'))
+                    numbers.total_slaves_by_age_gender_identified_among_landed = cint(row.get(u'slavmax3'))
+                    numbers.total_slaves_by_age_gender_identified_departure_or_arrival = cint(row.get(u'slavmax7'))
                     numbers.imp_slaves_embarked_for_mortality = cint(row.get(u'tslmtimp'))
                     numbers.imp_num_men_total = cint(row.get(u'men7'))
                     numbers.imp_num_women_total = cint(row.get(u'women7'))
@@ -443,6 +446,19 @@ class Command(BaseCommand):
                     numbers.percentage_female = 1 - numbers.percentage_male \
                         if numbers.percentage_male is not None else None
                     numbers.imp_mortality_ratio = cfloat(row.get(u'vymrtrat'))
+                    numbers.percentage_boys_among_embarked_slaves = cfloat(row.get(u'boyrat1'))
+                    numbers.child_ratio_among_embarked_slaves = cfloat(row.get(u'chilrat1'))
+                    numbers.percentage_girls_among_embarked_slaves = cfloat(row.get(u'girlrat1'))
+                    numbers.male_ratio_among_embarked_slaves = cfloat(row.get(u'malrat1'))
+                    numbers.percentage_men_among_embarked_slaves = cfloat(row.get(u'menrat1'))
+                    numbers.percentage_women_among_embarked_slaves = cfloat(row.get(u'womrat1'))
+                    numbers.percentage_boys_among_landed_slaves = cfloat(row.get(u'boyrat3'))
+                    numbers.child_ratio_among_landed_slaves = cfloat(row.get(u'chilrat3'))
+                    numbers.percentage_girls_among_landed_slaves = cfloat(row.get(u'girlrat3'))
+                    numbers.male_ratio_among_landed_slaves = cfloat(row.get(u'malrat3'))
+                    numbers.percentage_men_among_landed_slaves = cfloat(row.get(u'menrat3'))
+                    numbers.percentage_women_among_landed_slaves = cfloat(row.get(u'womrat3'))
+                    # INSERT HERE any new number variables [import CSV]
                     numbers.voyage = voyage
                     voyage_numbers.append(numbers)
                     # voyage.voyage_slaves_numbers = numbers

@@ -580,6 +580,9 @@ def _map_voyage_to_spss(voyage):
     data['SLAVEMX3'] = numbers.total_slaves_landed_gender_identified
     data['SLAVEMA7'] = numbers.total_slaves_dept_or_arr_age_identified
     data['SLAVEMX7'] = numbers.total_slaves_dept_or_arr_gender_identified
+    data['SLAVMAX1'] = numbers.total_slaves_embarked_age_gender_identified
+    data['SLAVMAX3'] = numbers.total_slaves_by_age_gender_identified_among_landed
+    data['SLAVMAX7'] = numbers.total_slaves_by_age_gender_identified_departure_or_arrival
     data['TSLMTIMP'] = numbers.imp_slaves_embarked_for_mortality
     data['MEN7'] = numbers.imp_num_men_total
     data['WOMEN7'] = numbers.imp_num_women_total
@@ -596,6 +599,19 @@ def _map_voyage_to_spss(voyage):
     data['MALRAT7'] = numbers.percentage_male
     data['CHILRAT7'] = numbers.percentage_child
     data['VYMRTRAT'] = numbers.imp_mortality_ratio
+    data["BOYRAT1"] = numbers.percentage_boys_among_embarked_slaves
+    data["CHILRAT1"] = numbers.child_ratio_among_embarked_slaves
+    data["GIRLRAT1"] = numbers.percentage_girls_among_embarked_slaves
+    data["MALRAT1"] = numbers.male_ratio_among_embarked_slaves
+    data["MENRAT1"] = numbers.percentage_men_among_embarked_slaves
+    data["WOMRAT1"] = numbers.percentage_women_among_embarked_slaves
+    data["BOYRAT3"] = numbers.percentage_boys_among_landed_slaves
+    data["CHILRAT3"] = numbers.child_ratio_among_landed_slaves
+    data["GIRLRAT3"] = numbers.percentage_girls_among_landed_slaves
+    data["MALRAT3"] = numbers.male_ratio_among_landed_slaves
+    data["MENRAT3"] = numbers.percentage_men_among_landed_slaves
+    data["WOMRAT3"] = numbers.percentage_women_among_landed_slaves
+    # INSERT HERE any new number variables [export CSV]
     
     aux = 'ABCDEFGHIJKLMNOPQR'
     for i, source_conn in enumerate(voyage.group.all()):
@@ -1044,6 +1060,22 @@ def _save_editorial_version(review_request, contrib_type, in_cd_rom_override=Non
     slaves_numbers.percentage_adult = 1.0 - slaves_numbers.percentage_child if slaves_numbers.percentage_child is not None else None
     slaves_numbers.percentage_female = 1.0 - slaves_numbers.percentage_male if slaves_numbers.percentage_male is not None else None
     slaves_numbers.imp_mortality_ratio = interim.imputed_mortality_rate
+    slaves_numbers.total_slaves_embarked_age_gender_identified = numbers.get(u'SLAVMAX1')
+    slaves_numbers.total_slaves_by_age_gender_identified_among_landed = numbers.get(u'SLAVMAX3')
+    slaves_numbers.total_slaves_by_age_gender_identified_departure_or_arrival = numbers.get(u'SLAVMAX7')
+    slaves_numbers.percentage_boys_among_embarked_slaves = numbers.get(u'BOYRAT1')
+    slaves_numbers.child_ratio_among_embarked_slaves = numbers.get(u'CHILRAT1')
+    slaves_numbers.percentage_girls_among_embarked_slaves = numbers.get(u'GIRLRAT1')
+    slaves_numbers.male_ratio_among_embarked_slaves = numbers.get(u'MALRAT1')
+    slaves_numbers.percentage_men_among_embarked_slaves = numbers.get(u'MENRAT1')
+    slaves_numbers.percentage_women_among_embarked_slaves = numbers.get(u'WOMRAT1')
+    slaves_numbers.percentage_boys_among_landed_slaves = numbers.get(u'BOYRAT3')
+    slaves_numbers.child_ratio_among_landed_slaves = numbers.get(u'CHILRAT3')
+    slaves_numbers.percentage_girls_among_landed_slaves = numbers.get(u'GIRLRAT3')
+    slaves_numbers.male_ratio_among_landed_slaves = numbers.get(u'MALRAT3')
+    slaves_numbers.percentage_men_among_landed_slaves = numbers.get(u'MENRAT3')
+    slaves_numbers.percentage_women_among_landed_slaves = numbers.get(u'WOMRAT3')
+    # INSERT HERE any new number variables [publish from interim]
     slaves_numbers.save()
     
     # Voyage sources
