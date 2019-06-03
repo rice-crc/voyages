@@ -102,8 +102,8 @@ Vue.component('v-number', {
     item: {
       handler: function(){
         // set "" to null
-        this.item.searchTerm0 = (this.item.searchTerm0 == "") ? null:this.item.searchTerm0;
-        this.item.searchTerm1 = (this.item.searchTerm1 == "") ? null:this.item.searchTerm1;
+        this.item.searchTerm0 = (this.item.searchTerm0 === "") ? null:this.item.searchTerm0;
+        this.item.searchTerm1 = (this.item.searchTerm1 === "") ? null:this.item.searchTerm1;
 
         // convert to number
         if (this.item.searchTerm0) this.item.searchTerm0 = parseInt(this.item.searchTerm0);
