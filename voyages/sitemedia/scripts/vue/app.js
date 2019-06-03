@@ -337,6 +337,7 @@ var searchBar = new Vue({
     // reset inputs, filters, and counts back to default state
     reset(group, subGroup) {
       resetFilter(this.filter, group, subGroup);
+      this.refresh();
     },
 
     clearFilter(filter) {
