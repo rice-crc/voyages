@@ -2004,3 +2004,11 @@ function LazyLoader() {
   };
   return self;
 }
+
+// check if it is loading an intra-american search
+function redirectToIntraAmerican(query) {
+  var varNames = query.map(variable => variable["varName"]);
+  var isIntraAmericanQuery = varNames.includes("intra_american_voyage");
+  var isTransAtlanticURL = window.location.href.includes("voyage/database");
+  return isIntraAmericanQuery && isTransAtlanticURL;
+}

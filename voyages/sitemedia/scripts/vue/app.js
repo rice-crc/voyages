@@ -361,7 +361,6 @@ var searchBar = new Vue({
     },
 
     load(value) {
-      console.log(value);
       var url = "/voyage/get-saved-query/" + value;
       var vm = this;
       axios.get(url, {})
@@ -372,8 +371,12 @@ var searchBar = new Vue({
           } else {
             query = JSON.parse(response.data.items);
           }
-          var mappedVarNames = query.map(variable => variableMapping[variable.varName]);
+          if (redirectToIntraAmerican(query)) {
+            location.href = window.location.protocol + "//" + window.location.host + "/american/database#searchId=" + value;
+          }
 
+          var mappedVarNames = query.map(variable => variableMapping[variable.varName]);
+          
           vm.clearFilter(vm.filter);
 
           // fill a loaded search query into the UI elements
