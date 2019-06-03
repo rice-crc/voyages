@@ -335,7 +335,11 @@ var searchBar = new Vue({
     },
 
     // reset inputs, filters, and counts back to default state
-    reset(filter) {
+    reset(group, subGroup) {
+      resetFilter(this.filter, group, subGroup);
+    },
+
+    clearFilter(filter) {
       for (group in filter) {
         if (group !== "settings") {
           for (subGroup in filter[group]) {
@@ -370,7 +374,7 @@ var searchBar = new Vue({
           }
           var mappedVarNames = query.map(variable => variableMapping[variable.varName]);
 
-          vm.reset(vm.filter);
+          vm.clearFilter(vm.filter);
 
           // fill a loaded search query into the UI elements
           for (group in vm.filter) {

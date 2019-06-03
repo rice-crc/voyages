@@ -35,7 +35,7 @@ Vue.component('v-panel-singular', {
     apply() {
       this.$emit('apply', this.group, this.subGroup, this.filtersValue);
     },
-    reset(group, subGroup) {
+    reset() {
       this.$emit('reset', this.group, this.subGroup);
     }
   },
