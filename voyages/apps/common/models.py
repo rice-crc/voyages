@@ -34,7 +34,7 @@ class SavedQuery(models.Model):
         from django.http import HttpResponse
         return HttpResponse(link, content_type='text/plain')
 
-    def __deprecated_get_post(self):
+    def get_post(self):
         """
         Parse the stored query string and return a dict which is compatible
         with the original post that generated the permalink.
@@ -73,25 +73,24 @@ class SavedQuery(models.Model):
                 range(self.ID_LENGTH))
         super(SavedQuery, self).save(*args, **kwargs)
 
-    @classmethod
-    def __deprecated_restore_link(cls, link_id, session, session_key, redirect_url_name):
-        """
-        Fetch the given link_id post data and set session[session_key]
-        with the POST dict. Then redirect the page to the URL identified
-        by redirect_url_name.
-        If the link_id is not found, return Http404
-        :param link_id: The id of the link.
-        :param session: The web session.
-        :param session_key: The key that will be used to set the restored POST data to the session.
-        :param redirect_url_name: The name of the redirect url as in urls.py.
-        :return: A redirect response to the appropriate page or an Http404 exception.
-        """
-        permalink = get_object_or_404(SavedQuery, pk=link_id)
-        # Save the query in the session and redirect.
-        session[session_key] = permalink.__deprecated_get_post()
-        from django.http import HttpResponseRedirect
-        from django.core.urlresolvers import reverse
-        return HttpResponseRedirect(reverse(redirect_url_name))
+def restore_link(link_id, session, session_key, redirect_url_name):
+    """
+    Fetch the given link_id post data and set session[session_key]
+    with the POST dict. Then redirect the page to the URL identified
+    by redirect_url_name.
+    If the link_id is not found, return Http404
+    :param link_id: The id of the link.
+    :param session: The web session.
+    :param session_key: The key that will be used to set the restored POST data to the session.
+    :param redirect_url_name: The name of the redirect url as in urls.py.
+    :return: A redirect response to the appropriate page or an Http404 exception.
+    """
+    permalink = get_object_or_404(SavedQuery, pk=link_id)
+    # Save the query in the session and redirect.
+    session[session_key] = permalink.get_post()
+    from django.http import HttpResponseRedirect
+    from django.core.urlresolvers import reverse
+    return HttpResponseRedirect(reverse(redirect_url_name))
 
 def get_pks_from_haystack_results(results):
     """

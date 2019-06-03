@@ -346,8 +346,8 @@ def restore_permalink(request, link_id):
     :return: a Redirect to the Estimates page after setting the session POST data to match the permalink
     or an Http404 error if the link is not found.
     """
-    from voyages.apps.common.models import SavedQuery
-    return SavedQuery.__deprecated_restore_link(link_id, request.session, 'estimates_post_data', 'assessment:estimates')
+    from voyages.apps.common.models import restore_link
+    return restore_link(link_id, request.session, 'estimates_post_data', 'assessment:estimates')
 
 def get_estimates_common(request, data):
     """ Append common page content to the argument data
