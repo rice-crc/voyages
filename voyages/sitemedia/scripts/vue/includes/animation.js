@@ -1407,13 +1407,6 @@ function AnimationHelper(data, networkName, options) {
       "transform",
       "translate(" + (size.x / 2 - 45) + ", 55) scale(0.04)"
     );
-    if (fullscreenBtn) {
-      fullscreenBtn.attr(
-        "transform",
-        "translate(" + (size.x - 55) + ",20) scale(0.06)"
-      );
-      updateFullscreenBtn(!!document.fullscreenElement);
-    }
     if (ui.timeline) {
       ui.timeline.resize(size.x, size.y);
     }
