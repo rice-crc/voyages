@@ -1883,6 +1883,55 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
           ));
           voyagesMap._map.setZoom(4);
         }
+
+        // leaflet map control - top left
+        var mapTopLeft = L.control();
+        mapTopLeft.onAdd = function() {
+          this._div = document.getElementById("timelapse-top-left");
+          if (!L.Browser.touch) {
+            L.DomEvent.disableClickPropagation(
+              this._div
+            ).disableScrollPropagation(this._div);
+          } else {
+            L.DomEvent.on(
+              this._div,
+              "click",
+              L.DomEvent.stopPropagation
+            );
+          }
+          return this._div;
+        };
+        mapTopLeft.setPosition("topleft").addTo(voyagesMap._map);
+
+        // leaflet map control - bottom left
+        var mapBottomLeft = L.control();
+        mapBottomLeft.onAdd = function() {
+          return document.getElementById("timelapse-bottom-left");
+        };
+        mapBottomLeft.setPosition("bottomleft").addTo(voyagesMap._map);
+
+        // leaflet map control - top right
+        var mapTopRight = L.control();
+        mapTopRight.onAdd = function() {
+          return document.getElementById("timelapse-top-right");
+        };
+        mapTopRight.setPosition("topright").addTo(voyagesMap._map);
+        
+        // relocate zoom control to the top right
+        L.control
+          .zoom({
+            position: "topright"
+          })
+          .addTo(voyagesMap._map);
+
+        // leaflet map control - bottom right
+        var mapBottomRight = L.control();
+        mapBottomRight.onAdd = function() {
+          return document.getElementById("timelapse-bottom-right");
+        };
+        mapBottomRight.setPosition("bottomright").addTo(voyagesMap._map);
+
+        // Add Timelapse controls
         $('.animationElement').show();
         if (animationHelper) disposeAnimationHelper();
         animationHelper = new AnimationHelper(
