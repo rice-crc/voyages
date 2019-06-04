@@ -18,7 +18,7 @@
 
 <div class="row">
   <div class="col-md-12">
-    <div id="map" class="margin-v" style="width:100%; min-height: 500px; height: 750px;">
+    <div id="map" style="width:100%; min-height: 500px; height: 750px;">
       <div id="voyage_info_dialog" class="animation_voyage_info animationElement" style="display:none; opacity: 0;">
         <div id="voyage_info_content"></div>
         <div class="animation_voyage_info_close_button">x</div>
@@ -58,10 +58,9 @@
         <div class="timelapse-title">See <span>31,362</span> Slave Voyages Cross the Atlantic</div>
       </div>
 
-      <div class="timelapse-info-container">
-        <div class="timelapse-year">1664</div>
-        <div class="timelapse-year-title">current year</div>
-      </div>
+      
+      <v-year ref="timelapse-year"></v-year>
+      
     </div>
 
     <button id="timelapse-top-right" type="button" class="btn btn-sm btn-light margin-h-025" data-toggle="modal" data-target=".bd-example-modal-xl"
@@ -69,7 +68,7 @@
 
     <div class="col-md-12 flex-container" id="timelapse-bottom-left">
       <div class="flex-end">
-        <v-play class="margin-h-025"></v-play>
+        <v-play class="margin-h-025" ref="timelapse-play"></v-play>
 
         <div class="margin-h-025">
           <div class="collapse" id="collapseExample">
@@ -89,7 +88,7 @@
     </div>
 
     <div class="flex" id="timelapse-bottom-right">
-      <v-speed class="margin-h-025" :speeds="['1x', '2x', '4x']" v-b-tooltip.hover
+      <v-speed ref="timelapse-speed" class="margin-h-025" :speeds="[0.5, 1, 2, 4]" :multiplier="6" v-b-tooltip.hover
         title="{% trans 'Play at different speeds' %}">
       </v-speed>
       <v-fullscreen type="button" class="btn btn-sm btn-light margin-h-025" v-b-tooltip.hover
