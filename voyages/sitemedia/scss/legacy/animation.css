@@ -1,4 +1,4 @@
-.animation_voyage_controls {
+/* .animation_voyage_controls {
     position: absolute;
     left: 50%;
     top: 50px;
@@ -53,7 +53,7 @@
     background-repeat: no-repeat;
     background-position: right top;
     max-width: 300px;
-}
+} */
 
 .flag_1 {
     background-image: url('/static/images/flags/Spain.png')
@@ -140,7 +140,7 @@
 .flag_20 {
     background-image: url('/static/images/flags/Russia.png')
 }
-
+/* 
 .animation_voyage_info h2 {
     font-variant: small-caps;
     font-size: 22px;
@@ -172,4 +172,4 @@
 
 .timeline_slider_group *, .timelapse_control_group * {
     cursor: pointer;
-}
+} */
