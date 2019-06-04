@@ -1261,19 +1261,20 @@ function AnimationHelper(data, networkName, options) {
         .style("opacity", 0.5);
     })
     .append("rect")
-    .attr("width", 120)
-    .attr("height", 70)
+    .attr("width", 0)
+    .attr("height", 0)
     .attr("fill", "rgba(255, 255, 255, 0.5)")
     .attr("rx", 4)
     .attr("ry", 4)
-    .style("opacity", 0.5)
-    .style("pointer-events", "auto");
+    .style("opacity", 0)
+    .style("pointer-events", "all");
   var yearLabel = controlLayer
     .style("position", "absolute")
     .append("text")
-    .attr("font-family", "Roboto")
-    .attr("font-size", "36")
-    .attr("text-anchor", "middle")
+    .style("opacity", 0)
+    // .attr("font-family", "Roboto")
+    // .attr("font-size", "36")
+    // .attr("text-anchor", "middle")
     .text("");
   var tooltip = d3
     .select(mapContainer)
@@ -1302,17 +1303,17 @@ function AnimationHelper(data, networkName, options) {
   };
   // It is normal for the characters below to look like a box, don't replace them
   // unless you know how they will render using FontAwesome.
-  var PLAY_PATH =
-    "M424.4 214.7L72.4 6.6C43.8-10.3 0 6.1 0 47.9V464c0 37.5 40.7 60.1 72.4 41.3l352-208c31.4-18.5 31.5-64.1 0-82.6z";
-  var PAUSE_PATH =
-    "M144 479H48c-26.5 0-48-21.5-48-48V79c0-26.5 21.5-48 48-48h96c26.5 0 48 21.5 48 48v352c0 26.5-21.5 48-48 48zm304-48V79c0-26.5-21.5-48-48-48h-96c-26.5 0-48 21.5-48 48v352c0 26.5 21.5 48 48 48h96c26.5 0 48-21.5 48-48z";
-  var SPEED_UP_PATH =
-    "M443.28 296.47l-101.87 20.38C329.96 299.49 310.35 288 288 288c-35.35 0-64 28.65-64 64 0 11.72 3.38 22.55 8.88 32h110.25c3.54-6.08 5.73-12.89 7.18-19.99l102.41-20.48c13-2.59 21.41-15.23 18.81-28.23s-15.31-21.61-28.25-18.83zM288 32C128.94 32 0 160.94 0 320c0 52.8 14.25 102.26 39.06 144.8 5.61 9.62 16.3 15.2 27.44 15.2h443c11.14 0 21.83-5.58 27.44-15.2C561.75 422.26 576 372.8 576 320c0-159.06-128.94-288-288-288zm212.27 400H75.73C57.56 397.63 48 359.12 48 320 48 187.66 155.66 80 288 80s240 107.66 240 240c0 39.12-9.56 77.63-27.73 112z";
-  var SPEED_DOWN_PATH =
-    "M288 288c-22.35 0-41.96 11.49-53.41 28.84l-101.87-20.38c-13.06-2.77-25.66 5.83-28.25 18.83s5.81 25.64 18.81 28.23L225.69 364c1.45 7.1 3.64 13.91 7.18 19.99h110.25c5.5-9.45 8.88-20.28 8.88-32 0-35.34-28.65-63.99-64-63.99zm0-256C128.94 32 0 160.94 0 320c0 52.8 14.25 102.26 39.06 144.8 5.61 9.62 16.3 15.2 27.44 15.2h443c11.14 0 21.83-5.58 27.44-15.2C561.75 422.26 576 372.8 576 320c0-159.06-128.94-288-288-288zm212.27 400H75.73C57.56 397.63 48 359.12 48 320 48 187.66 155.66 80 288 80s240 107.66 240 240c0 39.12-9.56 77.63-27.73 112z";
-  var playPauseBtn = _addIconBackgroundRect(controlLayer, PAUSE_PATH);
-  var speedUpBtn = _addIconBackgroundRect(controlLayer, SPEED_UP_PATH);
-  var speedDownBtn = _addIconBackgroundRect(controlLayer, SPEED_DOWN_PATH);
+  // var PLAY_PATH =
+  //   "M424.4 214.7L72.4 6.6C43.8-10.3 0 6.1 0 47.9V464c0 37.5 40.7 60.1 72.4 41.3l352-208c31.4-18.5 31.5-64.1 0-82.6z";
+  // var PAUSE_PATH =
+  //   "M144 479H48c-26.5 0-48-21.5-48-48V79c0-26.5 21.5-48 48-48h96c26.5 0 48 21.5 48 48v352c0 26.5-21.5 48-48 48zm304-48V79c0-26.5-21.5-48-48-48h-96c-26.5 0-48 21.5-48 48v352c0 26.5 21.5 48 48 48h96c26.5 0 48-21.5 48-48z";
+  // var SPEED_UP_PATH =
+  //   "M443.28 296.47l-101.87 20.38C329.96 299.49 310.35 288 288 288c-35.35 0-64 28.65-64 64 0 11.72 3.38 22.55 8.88 32h110.25c3.54-6.08 5.73-12.89 7.18-19.99l102.41-20.48c13-2.59 21.41-15.23 18.81-28.23s-15.31-21.61-28.25-18.83zM288 32C128.94 32 0 160.94 0 320c0 52.8 14.25 102.26 39.06 144.8 5.61 9.62 16.3 15.2 27.44 15.2h443c11.14 0 21.83-5.58 27.44-15.2C561.75 422.26 576 372.8 576 320c0-159.06-128.94-288-288-288zm212.27 400H75.73C57.56 397.63 48 359.12 48 320 48 187.66 155.66 80 288 80s240 107.66 240 240c0 39.12-9.56 77.63-27.73 112z";
+  // var SPEED_DOWN_PATH =
+  //   "M288 288c-22.35 0-41.96 11.49-53.41 28.84l-101.87-20.38c-13.06-2.77-25.66 5.83-28.25 18.83s5.81 25.64 18.81 28.23L225.69 364c1.45 7.1 3.64 13.91 7.18 19.99h110.25c5.5-9.45 8.88-20.28 8.88-32 0-35.34-28.65-63.99-64-63.99zm0-256C128.94 32 0 160.94 0 320c0 52.8 14.25 102.26 39.06 144.8 5.61 9.62 16.3 15.2 27.44 15.2h443c11.14 0 21.83-5.58 27.44-15.2C561.75 422.26 576 372.8 576 320c0-159.06-128.94-288-288-288zm212.27 400H75.73C57.56 397.63 48 359.12 48 320 48 187.66 155.66 80 288 80s240 107.66 240 240c0 39.12-9.56 77.63-27.73 112z";
+  // var playPauseBtn = _addIconBackgroundRect(controlLayer, PAUSE_PATH);
+  // var speedUpBtn = _addIconBackgroundRect(controlLayer, SPEED_UP_PATH);
+  // var speedDownBtn = _addIconBackgroundRect(controlLayer, SPEED_DOWN_PATH);
 
   var g = svg.append("g").attr("class", "leaflet-zoom-hide");
 
@@ -1388,23 +1389,23 @@ function AnimationHelper(data, networkName, options) {
     // Position the UI controls.
     var size = map.getSize();
     controlLayer.attr("width", size.x).attr("height", size.y);
-    ctrlBackground.attr(
-      "transform",
-      "translate(" + (size.x / 2 - 60) + ", 15)"
-    );
-    yearLabel.attr("transform", "translate(" + size.x / 2 + ", 50)");
-    playPauseBtn.attr(
-      "transform",
-      "translate(" + (size.x / 2 - 7) + ", 55) scale(0.04)"
-    );
-    speedUpBtn.attr(
-      "transform",
-      "translate(" + (size.x / 2 + 26) + ", 55) scale(0.04)"
-    );
-    speedDownBtn.attr(
-      "transform",
-      "translate(" + (size.x / 2 - 45) + ", 55) scale(0.04)"
-    );
+    // ctrlBackground.attr(
+    //   "transform",
+    //   "translate(" + (size.x / 2 - 60) + ", 15)"
+    // );
+    // yearLabel.attr("transform", "translate(" + size.x / 2 + ", 50)");
+    // playPauseBtn.attr(
+    //   "transform",
+    //   "translate(" + (size.x / 2 - 7) + ", 55) scale(0.04)"
+    // );
+    // speedUpBtn.attr(
+    //   "transform",
+    //   "translate(" + (size.x / 2 + 26) + ", 55) scale(0.04)"
+    // );
+    // speedDownBtn.attr(
+    //   "transform",
+    //   "translate(" + (size.x / 2 - 45) + ", 55) scale(0.04)"
+    // );
     if (ui.timeline) {
       ui.timeline.resize(size.x, size.y);
     }
@@ -1493,10 +1494,10 @@ function AnimationHelper(data, networkName, options) {
   };
   var updateControls = function() {
     if (self.control.isPaused()) {
-      playPauseBtn.selectAll("path").attr("d", PLAY_PATH);
+      // playPauseBtn.selectAll("path").attr("d", PLAY_PATH);
     } else {
       closeVoyageInfoDialog();
-      playPauseBtn.selectAll("path").attr("d", PAUSE_PATH);
+      // playPauseBtn.selectAll("path").attr("d", PAUSE_PATH);
     }
   };
   ui.pause = function() {
@@ -1524,21 +1525,21 @@ function AnimationHelper(data, networkName, options) {
       ui,
       geoCache
     );
-    hoverRed(playPauseBtn);
-    hoverRed(speedDownBtn, gettext("Slow down the clock"));
-    hoverRed(speedUpBtn, gettext("Speed up the clock"));
+    // hoverRed(playPauseBtn);
+    // hoverRed(speedDownBtn, gettext("Slow down the clock"));
+    // hoverRed(speedUpBtn, gettext("Speed up the clock"));
 
     // notify vue v-play component to update its props "ui" and "control"
     searchBar.$refs["timelapse-play"].ui = ui;
     searchBar.$refs["timelapse-play"].control = control;
 
-    playPauseBtn.on("click", function() {
-      if (control.isPaused()) {
-        ui.play();
-      } else {
-        ui.pause();
-      }
-    });
+    // playPauseBtn.on("click", function() {
+    //   if (control.isPaused()) {
+    //     ui.play();
+    //   } else {
+    //     ui.pause();
+    //   }
+    // });
 
     // notify vue v-speed component to update its props "ui" and "options"
     searchBar.$refs["timelapse-speed"].ui = ui;
@@ -1549,19 +1550,19 @@ function AnimationHelper(data, networkName, options) {
       speed = Math.min(options.maxSpeed, Math.max(options.minSpeed, speed));
       ui.monthsPerSecond = speed;
       control.setStepPerSec(speed * 10, Math.max(1.0, 12 / speed));
-      speedDownBtn.classed("timelapse_btn_disabled", speed == options.minSpeed);
-      speedUpBtn.classed("timelapse_btn_disabled", speed == options.maxSpeed);
+      // speedDownBtn.classed("timelapse_btn_disabled", speed == options.minSpeed);
+      // speedUpBtn.classed("timelapse_btn_disabled", speed == options.maxSpeed);
     };
-    speedDownBtn.on("click", function() {
-      if (ui.monthsPerSecond > options.minSpeed) {
-        updateSpeed(ui.monthsPerSecond / 2);
-      }
-    });
-    speedUpBtn.on("click", function() {
-      if (ui.monthsPerSecond < options.maxSpeed) {
-        updateSpeed(ui.monthsPerSecond * 2);
-      }
-    });
+    // speedDownBtn.on("click", function() {
+    //   if (ui.monthsPerSecond > options.minSpeed) {
+    //     updateSpeed(ui.monthsPerSecond / 2);
+    //   }
+    // });
+    // speedUpBtn.on("click", function() {
+    //   if (ui.monthsPerSecond < options.maxSpeed) {
+    //     updateSpeed(ui.monthsPerSecond * 2);
+    //   }
+    // });
     $(".animation_voyage_info_close_button").click(closeVoyageInfoDialog);
   };
   ui.prerender = function() {
