@@ -1345,55 +1345,6 @@ function AnimationHelper(data, networkName, options) {
       });
   };
 
-  // Check if we have browser full screen support
-  var fullscreenFunc = null;
-  var exitFullscreenFunc = null;
-  if (mapContainer.requestFullscreen) {
-    fullscreenFunc = mapContainer.requestFullscreen;
-    exitFullscreenFunc = document.exitFullscreen;
-  } else if (mapContainer.mozRequestFullScreen) {
-    /* Firefox */
-    fullscreenFunc = mapContainer.mozRequestFullScreen;
-    exitFullscreenFunc = document.mozCancelFullScreen;
-  } else if (mapContainer.webkitRequestFullscreen) {
-    /* Chrome, Safari and Opera */
-    fullscreenFunc = mapContainer.webkitRequestFullscreen;
-    exitFullscreenFunc = document.webkitExitFullscreen;
-  } else if (mapContainer.msRequestFullscreen) {
-    /* IE/Edge */
-    fullscreenFunc = mapContainer.msRequestFullscreen;
-    exitFullscreenFunc = document.msExitFullscreen;
-  }
-  var fullscreenBtn = null;
-  var updateFullscreenBtn = null;
-  if (fullscreenFunc) {
-    fullscreenFunc = fullscreenFunc.bind(mapContainer);
-    exitFullscreenFunc = exitFullscreenFunc.bind(document);
-    var isFullscreen = false;
-    var fullscreenIcon =
-      "M352.201 425.775l-79.196 79.196c-9.373 9.373-24.568 9.373-33.941 0l-79.196-79.196c-15.119-15.119-4.411-40.971 16.971-40.97h51.162L228 284H127.196v51.162c0 21.382-25.851 32.09-40.971 16.971L7.029 272.937c-9.373-9.373-9.373-24.569 0-33.941L86.225 159.8c15.119-15.119 40.971-4.411 40.971 16.971V228H228V127.196h-51.23c-21.382 0-32.09-25.851-16.971-40.971l79.196-79.196c9.373-9.373 24.568-9.373 33.941 0l79.196 79.196c15.119 15.119 4.411 40.971-16.971 40.971h-51.162V228h100.804v-51.162c0-21.382 25.851-32.09 40.97-16.971l79.196 79.196c9.373 9.373 9.373 24.569 0 33.941L425.773 352.2c-15.119 15.119-40.971 4.411-40.97-16.971V284H284v100.804h51.23c21.382 0 32.09 25.851 16.971 40.971z";
-    var exitFullscreenIcon =
-      "M200 288H88c-21.4 0-32.1 25.8-17 41l32.9 31-99.2 99.3c-6.2 6.2-6.2 16.4 0 22.6l25.4 25.4c6.2 6.2 16.4 6.2 22.6 0L152 408l31.1 33c15.1 15.1 40.9 4.4 40.9-17V312c0-13.3-10.7-24-24-24zm112-64h112c21.4 0 32.1-25.9 17-41l-33-31 99.3-99.3c6.2-6.2 6.2-16.4 0-22.6L481.9 4.7c-6.2-6.2-16.4-6.2-22.6 0L360 104l-31.1-33C313.8 55.9 288 66.6 288 88v112c0 13.3 10.7 24 24 24zm96 136l33-31.1c15.1-15.1 4.4-40.9-17-40.9H312c-13.3 0-24 10.7-24 24v112c0 21.4 25.9 32.1 41 17l31-32.9 99.3 99.3c6.2 6.2 16.4 6.2 22.6 0l25.4-25.4c6.2-6.2 6.2-16.4 0-22.6L408 360zM183 71.1L152 104 52.7 4.7c-6.2-6.2-16.4-6.2-22.6 0L4.7 30.1c-6.2 6.2-6.2 16.4 0 22.6L104 152l-33 31.1C55.9 198.2 66.6 224 88 224h112c13.3 0 24-10.7 24-24V88c0-21.3-25.9-32-41-16.9z";
-    var btnPath = null;
-    updateFullscreenBtn = function(fs) {
-      if (btnPath) btnPath.attr("d", fs ? exitFullscreenIcon : fullscreenIcon);
-    };
-    fullscreenBtn = _addIconBackgroundRect(controlLayer).on(
-      "click",
-      function() {
-        isFullscreen = !isFullscreen;
-        if (isFullscreen) {
-          fullscreenFunc();
-        } else {
-          exitFullscreenFunc();
-        }
-        updateFullscreenBtn(isFullscreen);
-      }
-    );
-    btnPath = fullscreenBtn.append("path").attr("d", fullscreenIcon);
-    hoverRed(fullscreenBtn, gettext("Fullscreen on/off"), -150, 25);
-  }
-
   // Set SVG size and position within map.
   var bounds = null;
   var topLeft = null;
