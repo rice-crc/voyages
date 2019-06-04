@@ -126,7 +126,7 @@ polyline {
 
 .timeline_main_g {
     cursor:pointer;
-    pointer-events: all;
+    // pointer-events: all;
 }
 
 .imputed-result {
@@ -143,7 +143,7 @@ polyline {
 
 // for leaflet map
 .leaflet-container {
-  background: white !important;
+  background: #9be1c2 !important;
 }
 
 
@@ -267,10 +267,6 @@ td.header {
   cursor: pointer;
 }
 
-#yearLabel {
-  font-size: 1rem;
-}
-
 .search-menu-singular {
   height: auto !important;
   padding-bottom: 1.5rem !important;
@@ -281,9 +277,9 @@ td.header {
   padding-left: 0;
 }
 
-#map > div.leaflet-control-container > div.leaflet-top.leaflet-left {
-  z-index: 0;
-}
+// #map > div.leaflet-control-container > div.leaflet-top.leaflet-left {
+//   z-index: 0;
+// }
 
 .imputed {
   font-style: italic;
