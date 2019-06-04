@@ -161,7 +161,8 @@ var voyagesMap = {
 		maxBounds: _mapBoundaries,
 		maxBoundsViscosity: 1.0,
 		wheelDebounceTime: 200,
-		wheelPxPerZoomLevel: 120
+		wheelPxPerZoomLevel: 120,
+		zoomControl: false // add customized zoomControl later
 	}).setView([6, -20], 3),
 	_mapLayer: null,
 	_maxPathWidth: 80,
