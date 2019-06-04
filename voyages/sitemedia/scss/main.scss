@@ -13,6 +13,32 @@ html, body {
   color: $text-primary;
 }
 
+// timelapse
+.timelapse-info-container {
+  background: rgba(255, 255, 255, 0.9);
+  font-weight: bold;
+  color: $text-dark-2;
+  position: relative;
+  margin: 0 0 5px 0;
+  max-width: 300px;
+}
+
+.timelapse-title {
+  font-size: $regular-font-size;
+  padding: 0 5px;
+}
+
+#timelapse-year {
+  display: inline-block;
+}
+
+.timelapse-year {
+  font-size: 2rem;
+  // position: absolute;
+  padding: 0 5px;
+  background: rgba(255, 255, 255, 0.9);
+}
+
 table.dataTable thead .sorting:before, table.dataTable thead .sorting:after, table.dataTable thead .sorting_asc:before, table.dataTable thead .sorting_asc:after, table.dataTable thead .sorting_desc:before, table.dataTable thead .sorting_desc:after, table.dataTable thead .sorting_asc_disabled:before, table.dataTable thead .sorting_asc_disabled:after, table.dataTable thead .sorting_desc_disabled:before, table.dataTable thead .sorting_desc_disabled:after {
   bottom: 0;
 }
@@ -361,9 +387,9 @@ footer {
   // border-left: 4px solid #008ca8;
 }
 
-.leaflet-control-container {
-  z-index: 0;
-}
+// .leaflet-control-container {
+//   z-index: 0;
+// }
 
 .leaflet-pane {
   z-index: 0 !important;
@@ -383,6 +409,19 @@ footer {
 .flex {
   display: flex;
   align-items: center;
+}
+
+.flex-end {
+  display: flex;
+  align-items: flex-end;
+}
+
+.margin-h1 {
+  margin: 1rem;
+}
+
+.margin-h-025 {
+  margin: 0 0.25rem;
 }
 
 .space-between {

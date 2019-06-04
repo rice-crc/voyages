@@ -1887,33 +1887,27 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
         // leaflet map control - top left
         var mapTopLeft = L.control();
         mapTopLeft.onAdd = function() {
-          this._div = document.getElementById("timelapse-top-left");
-          if (!L.Browser.touch) {
-            L.DomEvent.disableClickPropagation(
-              this._div
-            ).disableScrollPropagation(this._div);
-          } else {
-            L.DomEvent.on(
-              this._div,
-              "click",
-              L.DomEvent.stopPropagation
-            );
-          }
-          return this._div;
+          var control = document.getElementById("timelapse-top-left");
+          L.DomEvent.disableClickPropagation(control);
+          return control;
         };
         mapTopLeft.setPosition("topleft").addTo(voyagesMap._map);
 
         // leaflet map control - bottom left
         var mapBottomLeft = L.control();
         mapBottomLeft.onAdd = function() {
-          return document.getElementById("timelapse-bottom-left");
+          var control = document.getElementById("timelapse-bottom-left");
+          L.DomEvent.disableClickPropagation(control);
+          return control;
         };
         mapBottomLeft.setPosition("bottomleft").addTo(voyagesMap._map);
 
         // leaflet map control - top right
         var mapTopRight = L.control();
         mapTopRight.onAdd = function() {
-          return document.getElementById("timelapse-top-right");
+          var control = document.getElementById("timelapse-top-right");
+          L.DomEvent.disableClickPropagation(control);
+          return control;
         };
         mapTopRight.setPosition("topright").addTo(voyagesMap._map);
         
@@ -1927,7 +1921,9 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
         // leaflet map control - bottom right
         var mapBottomRight = L.control();
         mapBottomRight.onAdd = function() {
-          return document.getElementById("timelapse-bottom-right");
+          var control = document.getElementById("timelapse-bottom-right");
+          L.DomEvent.disableClickPropagation(control);
+          return control;
         };
         mapBottomRight.setPosition("bottomright").addTo(voyagesMap._map);
 

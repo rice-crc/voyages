@@ -1,0 +1,61 @@
+@import "footer";
+@import "headings";
+@import "variables";
+@import "colors";
+
+
+.voyage-info-container {
+  display: flex;
+  justify-content: space-between;
+}
+
+.voyage-info-title {
+  font-size: $large-font-size;
+  font-weight: bold;
+}
+
+.timelapse-info-card {
+  padding: 10px;
+}
+
+.voyage-nationality-title {
+  color: $text-dark-3;
+  font-size: 1rem;
+}
+
+.voyage-title-container, .voyage-nationality-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.voyage-nationality-flag {
+  height: 25px;
+  max-height: 25px;
+}
+
+.voyage-title-container {
+  padding-bottom: 5px;
+}
+
+.voyage-nationality-container {
+  padding-bottom: 5px;
+}
+
+.voyage-description-container {
+  font-weight: normal;
+  line-height: normal;
+  padding-top: 5px;
+}
+.voyage-info-close {
+  padding: 5px;
+  cursor: pointer;
+  opacity: 0.5;
+  &:hover {
+    opacity: 1;
+  }
+}
+
+#voyage_info_content {
+  padding: 5px;
+}
