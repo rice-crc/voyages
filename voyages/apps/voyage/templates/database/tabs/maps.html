@@ -19,10 +19,7 @@
 <div class="row">
   <div class="col-md-12">
     <div id="map" style="width:100%; min-height: 500px; height: 750px;">
-      <div id="voyage_info_dialog" class="animation_voyage_info animationElement" style="display:none; opacity: 0;">
-        <div id="voyage_info_content"></div>
-        <div class="animation_voyage_info_close_button">x</div>
-      </div>
+
     </div>
   </div>
 </div>
@@ -54,36 +51,37 @@
     </div>
 
     <div id="timelapse-top-left">
+      <v-year ref="timelapse-year"></v-year>
       <div class="timelapse-info-container">
         <div class="timelapse-title">See <span>31,362</span> Slave Voyages Cross the Atlantic</div>
       </div>
+      <v-voyage-info ref="timelapse-voyage-info"></v-voyage-info>
 
-      
-      <v-year ref="timelapse-year"></v-year>
-      
+      <!-- <div id="voyage_info_dialog" class="animation_voyage_info animationElement" style="display:none;">
+        <div id="voyage_info_content"></div>
+        <div class="animation_voyage_info_close_button">x</div>
+      </div> -->
+
+
     </div>
 
-    <button id="timelapse-top-right" type="button" class="btn btn-sm btn-light margin-h-025" data-toggle="modal" data-target=".bd-example-modal-xl"
-      v-b-tooltip.hover title="{% trans 'Learn more about the Timelapse' %}"><i class="fas fa-info-circle"></i></button>
+    <button id="timelapse-top-right" type="button" class="btn btn-sm btn-light margin-h-025" data-toggle="modal"
+      data-target=".bd-example-modal-xl" v-b-tooltip.hover title="{% trans 'Learn more about the Timelapse' %}"><i
+        class="fas fa-info-circle"></i></button>
 
     <div class="col-md-12 flex-container" id="timelapse-bottom-left">
       <div class="flex-end">
         <v-play class="margin-h-025" ref="timelapse-play"></v-play>
 
-        <div class="margin-h-025">
+        <!-- <div class="margin-h-025">
           <div class="collapse" id="collapseExample">
-            <div class="card card-body">
-              Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. Nihil
-              anim
-              keffiyeh
-              helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident.
-            </div>
+            PLACE CHART HERE
           </div>
           <a class="btn btn-sm btn-light" data-toggle="collapse" href="#collapseExample" role="button"
             aria-expanded="false" aria-controls="collapseExample">
-            Analyze Captive Movements by Different Groups on a Timeseries Chart
+            <i class="fa fa-chart"></i>Analyze Captive Movements by Different Groups on a Timeseries Chart
           </a>
-        </div>
+        </div> -->
       </div>
     </div>
 

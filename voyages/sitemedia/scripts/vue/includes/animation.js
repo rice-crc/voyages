@@ -811,8 +811,8 @@ function TimelineControl(data, parent, onChange, ui, geoCache) {
       })
       .on("mouseleave", function() {
         g.transition()
-          .delay(2000)
-          .duration(1500)
+          .delay(1000)
+          .duration(500)
           .style("opacity", INITIAL_OPACITY);
       });
     for (var i = 0; i < ICONS.length; ++i) {
@@ -1315,8 +1315,6 @@ function AnimationHelper(data, networkName, options) {
   var speedDownBtn = _addIconBackgroundRect(controlLayer, SPEED_DOWN_PATH);
 
   var g = svg.append("g").attr("class", "leaflet-zoom-hide");
-  var voyageInfoDialog = $("#voyage_info_dialog");
-  var voyageInfoDialogShown = false;
 
   var hoverRed = function(e, tooltipHtml, tooltipOffsetX, tooltipOffsetY) {
     var colorize = function(sel, c) {
@@ -1431,77 +1429,8 @@ function AnimationHelper(data, networkName, options) {
   };
 
   var closeVoyageInfoDialog = function() {
-    voyageInfoDialog.hide();
-    svg
-      .selectAll(".selected")
-      .style("opacity", 0)
-      .classed("selected", false);
-    voyageInfoDialogShown = false;
-    setSelectedRoute(null);
-  };
-
-  var showVoyageInfoDialog = function(d, rCirc) {
-    // Set dialog content.
-    voyageInfoDialogShown = true;
-    var content = $("#voyage_info_content");
-    content.attr("class", "animation_voyage_content flag_" + d.nat_id);
-    var shipName = (d.ship_name || "").trim();
-    var template =
-      "<h1>" +
-      (shipName != "" ? shipName : gettext("[Unknown ship name]")) +
-      "</h1>";
-    if (d.ship_nationality_name != "") {
-      template += "<h2>" + d.ship_nationality_name + "</h2>";
-    }
-    if (d.ship_ton) {
-      template += gettext(
-        "<p>This {ton}ship left {source} with {embarked} enslaved people and arrived in {destination} with {disembarked}.</p>"
-      );
-      var tonNum = parseInt(d.ship_ton);
-      template = template.replace(
-        "{ton}",
-        tonNum ? tonNum + " " + gettext("ton") + " " : ""
-      );
-    } else {
-      template += gettext(
-        "<p>This ship left {source} with {embarked} enslaved people and arrived in {destination} with {disembarked}.</p>"
-      );
-    }
-    template = template
-      .replace("{source}", gettext(d.source_name))
-      .replace("{destination}", gettext(d.destination_name))
-      .replace("{embarked}", d.embarked)
-      .replace("{disembarked}", d.disembarked);
-    content.html(
-      template +
-        '<span class="animation_voyage_info_moreinfo"><a target="_blank" href="/voyage/' +
-        d.voyage_id +
-        '/variables">' +
-        gettext("More info") +
-        " »</a></span>"
-    );
-    // Position and show dialog.
-    voyageInfoDialog.show();
-    var rSvg = map.getContainer().getBoundingClientRect();
-    var dialogWidth = voyageInfoDialog.width();
-    var dialogHeight = voyageInfoDialog.height();
-    var top = rCirc.bottom - rSvg.top + 100;
-    if (top + dialogHeight + 170 > rSvg.bottom) {
-      top -= dialogHeight + 100;
-    }
-    voyageInfoDialog.animate(
-      {
-        left:
-          (rCirc.left + rCirc.right) / 2 -
-          rSvg.left -
-          dialogWidth / 2 -
-          20 +
-          "px",
-        top: top + "px",
-        opacity: 0.9
-      },
-      800
-    );
+    // notify vue v-voyage-info component to update its prop "isVisible"
+    searchBar.$refs["timelapse-voyage-info"].isVisible = false;
   };
 
   var addInteractiveUI = function() {
@@ -1538,7 +1467,10 @@ function AnimationHelper(data, networkName, options) {
         data.destination_name = geoCache.portSegments["dst"][data.dst].name;
         data.ship_nationality_name =
           (geoCache.nations || {})[data.nat_id] || "";
-        showVoyageInfoDialog(data, this.getBoundingClientRect());
+        
+        // notify vue v-voyage-info component to update its props "data" and "isVisible"
+        searchBar.$refs["timelapse-voyage-info"].data = data;
+        searchBar.$refs["timelapse-voyage-info"].isVisible = true;
       });
   };
 
@@ -1697,8 +1629,10 @@ function AnimationHelper(data, networkName, options) {
 
     // notify vue v-year component to update its prop "currentYear"
     searchBar.$refs["timelapse-year"].currentYear = yearVal;
+    
+
     if (time % (10 * ui.monthsPerSecond) == 0) positionSvg();
-    if (voyageInfoDialogShown) closeVoyageInfoDialog();
+    closeVoyageInfoDialog();
     if (self.control.isPaused()) {
       addInteractiveUI();
     } else if (topLeft) {
