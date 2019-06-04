@@ -1595,6 +1595,11 @@ function AnimationHelper(data, networkName, options) {
     hoverRed(playPauseBtn);
     hoverRed(speedDownBtn, gettext("Slow down the clock"));
     hoverRed(speedUpBtn, gettext("Speed up the clock"));
+
+    // notify vue v-play component to update its props "ui" and "control"
+    searchBar.$refs["timelapse-play"].ui = ui;
+    searchBar.$refs["timelapse-play"].control = control;
+
     playPauseBtn.on("click", function() {
       if (control.isPaused()) {
         ui.play();
@@ -1602,6 +1607,12 @@ function AnimationHelper(data, networkName, options) {
         ui.pause();
       }
     });
+
+    // notify vue v-speed component to update its props "ui" and "options"
+    searchBar.$refs["timelapse-speed"].ui = ui;
+    searchBar.$refs["timelapse-speed"].options = options;
+    searchBar.$refs["timelapse-speed"].control = control;
+
     var updateSpeed = function(speed) {
       speed = Math.min(options.maxSpeed, Math.max(options.minSpeed, speed));
       ui.monthsPerSecond = speed;
@@ -1683,6 +1694,9 @@ function AnimationHelper(data, networkName, options) {
     if (time > maxTime) time = maxTime;
     var yearVal = ~~Math.floor(time / 120);
     yearLabel.text(yearVal);
+
+    // notify vue v-year component to update its prop "currentYear"
+    searchBar.$refs["timelapse-year"].currentYear = yearVal;
     if (time % (10 * ui.monthsPerSecond) == 0) positionSvg();
     if (voyageInfoDialogShown) closeVoyageInfoDialog();
     if (self.control.isPaused()) {
