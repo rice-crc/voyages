@@ -1827,6 +1827,7 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
     $("#sv-loader").removeClass("display-none");
     $("#animation-container").addClass("display-none");
     $("#maps").addClass("display-none");
+    $(".leaflet-control-container").hide();
     // TODO: Map year should be computed based on year range of search.
     // We can do it in the client side (easier).
     // for reference: voyages.apps.assessment.globals.get_map_year
@@ -1863,12 +1864,13 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
     $("#sv-loader").removeClass("display-none");
     $("#animation-container").removeClass("display-none");
 
+    $(".leaflet-control-container").show();
+
     var postData = {
       searchData: currentSearchObj,
       output: 'mapAnimation'
     };
     var mapAnimationSearchCallback = function () {
-      var $map = $('#map');
       $.post(searchUrl, JSON.stringify(postData), function (result) {
         $("#sv-loader").removeClass("display-none");
 
@@ -1912,11 +1914,13 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
         mapTopRight.setPosition("topright").addTo(voyagesMap._map);
         
         // relocate zoom control to the top right
-        L.control
-          .zoom({
-            position: "topright"
-          })
-          .addTo(voyagesMap._map);
+        if (!$(".leaflet-control-zoom")[0]) {
+          L.control
+            .zoom({
+              position: "topright"
+            })
+            .addTo(voyagesMap._map);
+        }
 
         // leaflet map control - bottom right
         var mapBottomRight = L.control();
@@ -2031,7 +2035,6 @@ function LazyLoader() {
   };
   self.loadAnimationScripts = function (done) {
     if (!self.animationScriptsLoaded) {
-      self.loadCss(STATIC_URL + 'scss/legacy/animation.css');
       $.when(
         self.loadScript(STATIC_URL + 'scripts/library/d3.min.js'),
         self.loadScript(STATIC_URL + 'scripts/library/jquery-ui@1.12.1.min.js'),
