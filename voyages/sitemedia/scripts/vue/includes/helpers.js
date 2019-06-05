@@ -946,7 +946,8 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
     var tableId = '#v-summary-statistics';
     destroyPreviousTable(tableId);
     var mainDatatable = $(tableId).DataTable({
-      order: [[0, "desc"]],
+      // order: [[0, "desc"]], // sort by first column
+      order: [], // no sorting on initialization
       ajax: {
         url: searchUrl,
         type: 'POST',
