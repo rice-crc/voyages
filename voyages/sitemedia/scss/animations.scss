@@ -7,7 +7,7 @@
 //   z-index: 400;
 // }
 
-.leaflet-pane {
+.leaflet-pane, .leaflet-top, .leaflet-bottom, .leaflet-control {
   z-index: 0 !important;
 }
 
@@ -63,10 +63,6 @@
   &:hover {
     opacity: 1;
   }
-}
-
-#voyage_info_content {
-  padding: 5px;
 }
 
 // circles around the dots

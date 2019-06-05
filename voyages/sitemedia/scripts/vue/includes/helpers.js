@@ -703,7 +703,7 @@ function destroyPreviousTable(id) {
 function refreshUi(filter, filterData, currentTab, tabData, options) {
   // Update UI after search query was changed,
   // or a tab was selected.
-  $('.animationElement, #map').hide();
+  $('#map').hide();
   var currentSearchObj = {
     items: searchAll(filter, filterData),
     orderBy: []
@@ -1829,6 +1829,8 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
     $("#animation-container").addClass("display-none");
     $("#maps").addClass("display-none");
     $(".leaflet-control-container").hide();
+    $("#timelapse-container").addClass("display-none");
+
     // TODO: Map year should be computed based on year range of search.
     // We can do it in the client side (easier).
     // for reference: voyages.apps.assessment.globals.get_map_year
@@ -1864,7 +1866,7 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
     $("#maps").addClass("display-none");
     $("#sv-loader").removeClass("display-none");
     $("#animation-container").removeClass("display-none");
-
+    $("#timelapse-container").removeClass("display-none");
     $(".leaflet-control-container").show();
 
     var postData = {
@@ -1933,7 +1935,6 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
         mapBottomRight.setPosition("bottomright").addTo(voyagesMap._map);
 
         // Add Timelapse controls
-        $('.animationElement').show();
         if (animationHelper) disposeAnimationHelper();
         animationHelper = new AnimationHelper(
           result,

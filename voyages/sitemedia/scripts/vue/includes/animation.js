@@ -1563,7 +1563,6 @@ function AnimationHelper(data, networkName, options) {
     //     updateSpeed(ui.monthsPerSecond * 2);
     //   }
     // });
-    $(".animation_voyage_info_close_button").click(closeVoyageInfoDialog);
   };
   ui.prerender = function() {
     // When the animation is running, D3.js will be used to

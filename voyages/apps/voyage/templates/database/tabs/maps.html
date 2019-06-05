@@ -6,74 +6,51 @@
 {% endcompress %}
 {% endblock %}
 
-<!-- <div class="row" id="animation-container">
-  <div class="col-md-12">
-    <div id="timeControls">
-      <div class="tab-title">{% trans 'See' %} <span id="tab-map-voyage-value"></span> {% trans 'slave voyages cross the Atlantic in a few minutes' %}
-				<i class="fa fa-question-circle tooltip-pointer" data-toggle="tooltip" data-placement="top" title="{% trans 'Zoom in to see ports of departure and arrival for your selection. Paths reflect the size of the traffic.' %}"></i>
-			</div>
-    </div>
-  </div>
-</div> -->
-
 <div class="row">
   <div class="col-md-12">
     <div id="map" style="width:100%; min-height: 500px; height: 750px;">
-
     </div>
   </div>
 </div>
 
+<div id="timelapse-container">
 
-{% load i18n %}
+  <div class="modal fade bd-example-modal-xl" tabindex="-1" role="dialog" aria-labelledby="myExtraLargeModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+      <div class="modal-content">
 
-<div id="tabs-tables-control">
-
-  <div class="row">
-    <div class="col-md-12">
-      <div class="modal fade bd-example-modal-xl" tabindex="-1" role="dialog" aria-labelledby="myExtraLargeModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog modal-xl">
-          <div class="modal-content">
-
-            <div class="modal-header">
-              <h5 class="modal-title h4" id="myExtraLargeModalLabel">Extra large modal</h5>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">×</span>
-              </button>
-            </div>
-            <div class="modal-body">
-              ...
-            </div>
-          </div>
+        <div class="modal-header">
+          <h5 class="modal-title h4" id="myExtraLargeModalLabel">Extra large modal</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">×</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          ...
         </div>
       </div>
     </div>
+  </div>
 
-    <div id="timelapse-top-left">
-      <v-year ref="timelapse-year"></v-year>
-      <div class="timelapse-info-container">
-        <div class="timelapse-title">See <span>31,362</span> Slave Voyages Cross the Atlantic</div>
-      </div>
-      <v-voyage-info ref="timelapse-voyage-info"></v-voyage-info>
-
-      <!-- <div id="voyage_info_dialog" class="animation_voyage_info animationElement" style="display:none;">
-        <div id="voyage_info_content"></div>
-        <div class="animation_voyage_info_close_button">x</div>
-      </div> -->
-
-
+  <div id="timelapse-top-left">
+    <v-year ref="timelapse-year"></v-year>
+    <div class="timelapse-info-container">
+      <div class="timelapse-title">
+        {% trans 'See <span id="tab-map-voyage-value"></span> Slave Voyages Cross the Atlantic' %}</div>
     </div>
+    <v-voyage-info ref="timelapse-voyage-info"></v-voyage-info>
+  </div>
 
-    <button id="timelapse-top-right" type="button" class="btn btn-sm btn-light margin-h-025" data-toggle="modal"
-      data-target=".bd-example-modal-xl" v-b-tooltip.hover title="{% trans 'Learn more about the Timelapse' %}"><i
-        class="fas fa-info-circle"></i></button>
+  <button id="timelapse-top-right" type="button" class="btn btn-sm btn-light margin-h-025" data-toggle="modal"
+    data-target=".bd-example-modal-xl" v-b-tooltip.hover title="{% trans 'Learn more about the Timelapse' %}"><i
+      class="fas fa-info-circle"></i></button>
 
-    <div class="col-md-12 flex-container" id="timelapse-bottom-left">
-      <div class="flex-end">
-        <v-play class="margin-h-025" ref="timelapse-play"></v-play>
+  <div class="col-md-12 flex-container" id="timelapse-bottom-left">
+    <div class="flex-end">
+      <v-play class="margin-h-025" ref="timelapse-play"></v-play>
 
-        <!-- <div class="margin-h-025">
+      <!-- <div class="margin-h-025">
           <div class="collapse" id="collapseExample">
             PLACE CHART HERE
           </div>
@@ -82,17 +59,15 @@
             <i class="fa fa-chart"></i>Analyze Captive Movements by Different Groups on a Timeseries Chart
           </a>
         </div> -->
-      </div>
     </div>
-
-    <div class="flex" id="timelapse-bottom-right">
-      <v-speed ref="timelapse-speed" class="margin-h-025" :speeds="[0.5, 1, 2, 4]" :multiplier="6" v-b-tooltip.hover
-        title="{% trans 'Play at different speeds' %}">
-      </v-speed>
-      <v-fullscreen type="button" class="btn btn-sm btn-light margin-h-025" v-b-tooltip.hover
-        title="{% trans 'Play in full screen' %}"><i class="fas fa-compress"></i></v-fullscreen>
-    </div>
-
-
   </div>
+
+  <div class="flex" id="timelapse-bottom-right">
+    <v-speed ref="timelapse-speed" class="margin-h-025" :speeds="[0.5, 1, 2, 4]" :multiplier="6" v-b-tooltip.hover
+      title="{% trans 'Play at different speeds' %}">
+    </v-speed>
+    <v-fullscreen type="button" class="btn btn-sm btn-light margin-h-025" v-b-tooltip.hover
+      title="{% trans 'Play in full screen' %}"><i class="fas fa-compress"></i></v-fullscreen>
+  </div>
+
 </div>
