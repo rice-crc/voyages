@@ -3,8 +3,12 @@
 @import "variables";
 @import "colors";
 
-#timelapse_control_layer {
-  z-index: 400;
+// #timelapse_control_layer {
+//   z-index: 400;
+// }
+
+.leaflet-pane {
+  z-index: 0 !important;
 }
 
 .voyage-info-container {
