@@ -179,7 +179,7 @@ Vue.component("v-fullscreen", {
       isFullscreen: false
     };
   },
-  template: `<button type="button" class="btn btn-sm btn-light" :class="{active : isFullscreen}" @click=toggle><i class="fas fa-compress"></i></button>`,
+  template: `<button type="button" class="btn btn-sm btn-light" @click=toggle><i class="fas fa-compress"></i></button>`,
   methods: {
     toggle: function() {
       if (this.isFullscreen) {
