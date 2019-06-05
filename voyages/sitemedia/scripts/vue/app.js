@@ -27,6 +27,7 @@ var searchBar = new Vue({
     options: {
       debug: false,
       errorMessage: null,
+      isTimelapseVisible: false,
     },
     tabs: tabs, // dropdown options for each tab | vue/variables/tabs.js
     row: { // store current row's data; used for displaying entry full details

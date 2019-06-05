@@ -295,42 +295,13 @@ div.permlink-info {
     text-align: center;
 }
 
-.animation_voyage_info {
-    position: absolute;
-    color: white;
-    font-size: medium;
-    background-color: rgba(0, 0, 0, 0.8);
-    border-radius: 6px;
-    padding: 20px;
-}
-
-.animation_voyage_info h1 {
-    color: yellow;
-    padding-right: 72px;
-}
-
 .animation_voyage_content {
     background-repeat: no-repeat;
     background-position: right top;
     max-width: 300px;
 }
 
-.animation_voyage_info h2 {
-    font-variant: small-caps;
-}
-
 .animation_voyage_info_moreinfo {
     font-variant: small-caps;
     font-size: small;
-}
-
-.animation_voyage_info_close_button {
-    position: absolute;
-    top: 5px;
-    right: 8px;
-    cursor: pointer;
-}
-
-.animation_voyage_info_close_button:hover {
-    color: red;
 }
