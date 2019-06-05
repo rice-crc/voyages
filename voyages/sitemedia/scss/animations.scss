@@ -3,6 +3,9 @@
 @import "variables";
 @import "colors";
 
+#timelapse_control_layer {
+  z-index: 400;
+}
 
 .voyage-info-container {
   display: flex;
@@ -23,7 +26,8 @@
   font-size: 1rem;
 }
 
-.voyage-title-container, .voyage-nationality-container {
+.voyage-title-container,
+.voyage-nationality-container {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -58,4 +62,15 @@
 
 #voyage_info_content {
   padding: 5px;
+}
+
+// circles around the dots
+.animation_voyage_inner_circle {
+  fill: black;
+}
+
+.animation_voyage_outer_circle {
+  stroke: gray;
+  stroke-width: 2;
+  fill: transparent;
 }
