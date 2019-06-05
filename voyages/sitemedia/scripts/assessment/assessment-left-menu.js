@@ -86,12 +86,11 @@ function allClicked(clicked_button, action){
         $(div_parent).find("input[name^=dregion-button-]").prop("checked", true);
         $(div_parent).find("input[name^=eregion-button-]").prop("checked", true);
     } else {
-      debugger;
       $(div_parent).find("input[name^=darea-button-]").prop("checked", false);
       $(div_parent).find("input[name^=earea-button-]").prop("checked", false);
       $(div_parent).find("input[name^=dregion-button-]").prop("checked", false);
       $(div_parent).find("input[name^=eregion-button-]").prop("checked", false);
     }
 
-    return false;
+    // return false;
 }
