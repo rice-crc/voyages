@@ -16,7 +16,7 @@
 
 .animation_voyage_pause_button, .animation_voyage_play_button {
     align: center;
-}
+} */
 
 .animation_voyage_inner_circle {
     fill: black;
@@ -27,7 +27,7 @@
     stroke-width: 2;
     fill: transparent;
 }
-
+/* 
 .animation_voyage_controls {
     text-align: center;
     z-index: 999999;
@@ -53,10 +53,10 @@
     background-repeat: no-repeat;
     background-position: right top;
     max-width: 300px;
-} */
+}
 
 
-/* 
+
 .animation_voyage_info h2 {
     font-variant: small-caps;
     font-size: 22px;
