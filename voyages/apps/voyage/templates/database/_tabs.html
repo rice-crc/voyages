@@ -3,27 +3,27 @@
 <!-- Tabs -->
 <ul class="nav nav-tabs trans-tab">
   <li class="nav-item">
-    <a class="nav-link active" @click="setActive('results')" href="#" data-toggle="tab" data-target="#results">{% trans 'Results' %}</a>
+    <a class="nav-link active" @click="setActive('results')" href="#results" data-toggle="tab" data-target="#results">{% trans 'Results' %}</a>
   </li>
   <li class="nav-item">
-    <a class="nav-link" @click="setActive('statistics')" href="#" data-toggle="tab" data-target="#summary-statistics">{% trans 'Summary statistics' %}</a>
+    <a class="nav-link" @click="setActive('statistics')" href="#statistics" data-toggle="tab" data-target="#statistics">{% trans 'Summary statistics' %}</a>
   </li>
   <li class="nav-item">
-    <a class="nav-link" @click="setActive('tables')" href="#" data-toggle="tab" data-target="#tables">{% trans 'Tables' %}</a>
+    <a class="nav-link" @click="setActive('tables')" href="#tables" data-toggle="tab" data-target="#tables">{% trans 'Tables' %}</a>
   </li>
   <li class="nav-item">
-    <a class="nav-link" @click="setActive('visualization')" href="#" data-toggle="tab" data-target="#visualization">{% trans 'Data visualization' %}</a>
+    <a class="nav-link" @click="setActive('visualization')" href="#visualization" data-toggle="tab" data-target="#visualization">{% trans 'Data visualization' %}</a>
   </li>
   <li class="nav-item">
-    <a class="nav-link" @click="setActive('timeline')" href="#" data-toggle="tab" data-target="#timeline">{% trans 'Timeline' %}</a>
+    <a class="nav-link" @click="setActive('timeline')" href="#timeline" data-toggle="tab" data-target="#timeline">{% trans 'Timeline' %}</a>
   </li>
   {% if mode != "intra" %}
   <li class="nav-item">
-    <a class="nav-link" @click="setActive('maps')" href="#" data-toggle="tab" data-target="#maps">{% trans 'Maps' %}</a>
+    <a class="nav-link" @click="setActive('maps')" href="#maps" data-toggle="tab" data-target="#maps">{% trans 'Maps' %}</a>
   </li>
   {% endif %}
   <li class="nav-item">
-    <a class="nav-link" id="animation" @click="setActive('animation')" href="#" data-toggle="tab" data-target="#maps">{% trans 'Timelapse' %}</a>
+    <a class="nav-link" id="timelapse" @click="setActive('timelapse')" href="#timelapse" data-toggle="tab" data-target="#maps">{% trans 'Timelapse' %}</a>
   </li>
 </ul>
 <!-- End of Tabs -->
@@ -31,11 +31,10 @@
 <!-- TabContainers -->
 <div id="tabsJustifiedContent" class="tab-content">
   <div id="results" class="tab-pane fade active show">
-    {% include "database/tabs/results-detail.html" %}
+    {% include "database/tabs/results.html" %}
   </div>
-
-  <div id="summary-statistics" class="tab-pane fade">
-    {% include "database/tabs/summary-statistics.html" %}
+  <div id="statistics" class="tab-pane fade">
+    {% include "database/tabs/statistics.html" %}
   </div>
   <div id="tables" class="tab-pane fade">
     {% include "database/tabs/tables.html" %}
