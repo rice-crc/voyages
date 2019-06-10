@@ -954,7 +954,7 @@ function TimelineControl(data, parent, onChange, ui, geoCache) {
       )
       .range([0, width - PLOT_LEFT_MARGIN - PLOT_RIGHT_MARGIN]);
     var xAxis = d3
-      .axisTop()
+      .axisBottom()
       .scale(x)
       .ticks(20)
       .tickFormat(function(d) {
@@ -966,7 +966,10 @@ function TimelineControl(data, parent, onChange, ui, geoCache) {
     var y = d3
       .scaleLinear()
       .domain([0, yMaxValue])
-      .range([NORMAL_HEIGHT - 2 * PLOT_VERTICAL_MARGIN, PLOT_VERTICAL_MARGIN]);
+      .range([
+        NORMAL_HEIGHT - 2 * PLOT_VERTICAL_MARGIN - 16, // 16 is the offset for the x-axis label
+        PLOT_VERTICAL_MARGIN
+      ]);
     var yAxis = d3
       .axisRight()
       .scale(y)
@@ -1005,6 +1008,7 @@ function TimelineControl(data, parent, onChange, ui, geoCache) {
       });
     // Labels for categories.
     var paddedHeight = NORMAL_HEIGHT - 2 * PLOT_VERTICAL_MARGIN;
+    var paddedHeightLine = paddedHeight - 20; // 25 is the offset for the x-axis label
     categories
       .append("text")
       .datum(function(d) {
@@ -1046,7 +1050,11 @@ function TimelineControl(data, parent, onChange, ui, geoCache) {
       .attr("class", "t_axis")
       .attr(
         "transform",
-        "translate(" + PLOT_LEFT_MARGIN + "," + (NORMAL_HEIGHT - 5) + ")"
+        "translate(" +
+        PLOT_LEFT_MARGIN +
+        "," +
+        (NORMAL_HEIGHT - 25) + // 25 is the offset for the x-axis label
+          ")"
       )
       .attr("color", "black")
       .call(xAxis);
@@ -1078,7 +1086,7 @@ function TimelineControl(data, parent, onChange, ui, geoCache) {
           PLOT_VERTICAL_MARGIN +
           ")"
       )
-      .attr("y2", paddedHeight)
+      .attr("y2", paddedHeightLine)
       .style("stroke-opacity", "0.6");
     var embCirclePos = function(val) {
       if (val > 0) {
@@ -1154,7 +1162,7 @@ function TimelineControl(data, parent, onChange, ui, geoCache) {
         "translate(" + PLOT_LEFT_MARGIN + "," + PLOT_VERTICAL_MARGIN + ")"
       )
       .style("opacity", 0)
-      .attr("y2", paddedHeight);
+      .attr("y2", paddedHeightLine);
     g.on("mousemove", function() {
       var xCoord = d3.mouse(this)[0];
       if (xCoord >= PLOT_LEFT_MARGIN && xCoord <= width - PLOT_RIGHT_MARGIN) {
@@ -1468,7 +1476,7 @@ function AnimationHelper(data, networkName, options) {
         data.destination_name = geoCache.portSegments["dst"][data.dst].name;
         data.ship_nationality_name =
           (geoCache.nations || {})[data.nat_id] || "";
-        
+
         // notify vue v-voyage-info component to update its props "data" and "isVisible"
         searchBar.$refs["timelapse-voyage-info"].data = data;
         searchBar.$refs["timelapse-voyage-info"].isVisible = true;
@@ -1629,7 +1637,6 @@ function AnimationHelper(data, networkName, options) {
 
     // notify vue v-year component to update its prop "currentYear"
     searchBar.$refs["timelapse-year"].currentYear = yearVal;
-    
 
     if (time % (10 * ui.monthsPerSecond) == 0) positionSvg();
     closeVoyageInfoDialog();
