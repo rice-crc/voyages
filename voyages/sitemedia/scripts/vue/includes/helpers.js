@@ -1862,7 +1862,7 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
       });
     };
     loader.loadMap(mapFlowSearchCallback);
-  } else if (currentTab == 'animation') {
+  } else if (currentTab == 'timelapse') {
     $("#maps").addClass("display-none");
     $("#sv-loader").removeClass("display-none");
     $("#animation-container").removeClass("display-none");
@@ -1958,7 +1958,7 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
   }
 
   // Ensure that the animation resources are properly disposed.
-  if (animationHelper && currentTab != 'animation') {
+  if (animationHelper && currentTab != 'timelapse') {
     disposeAnimationHelper();
   }
 }
