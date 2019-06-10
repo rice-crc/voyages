@@ -1022,8 +1022,8 @@ function TimelineControl(data, parent, onChange, ui, geoCache) {
         );
       })
       .attr("dy", "1em")
-      .style("font-size", "10")
       .style("text-anchor", "start")
+      .attr("class", "timelapse-timeline-group-label")
       .text(function(d) {
         return d.key;
       });
@@ -1141,6 +1141,7 @@ function TimelineControl(data, parent, onChange, ui, geoCache) {
         "translate(" + PLOT_LEFT_MARGIN + "," + PLOT_VERTICAL_MARGIN + ")"
       )
       .attr("dy", "1em")
+      .attr("class", "timelapse-timeline-title-label")
       .text(
         gettext("Accumulated captives") +
           " (" +

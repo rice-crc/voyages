@@ -1,4 +1,5 @@
 @import "colors";
+@import "variables";
 
 // for the timelapse jquery ui scroll handle
 .ui-state-active, .ui-widget-content .ui-state-active {
@@ -143,10 +144,21 @@ polyline {
 
 // for leaflet map
 .leaflet-container {
-  background: #9be1c2 !important;
+  background: #8bbec4 !important;
 }
 
+// Timelapse timeline title; SVG element
+.timelapse-timeline-title-label {
+  font-size: $regular-font-size;
+  font-weight: 500;
+  text-transform: capitalize;
+  fill: $text-primary;
+}
 
+// Timelapse timeline group; SVG element
+.timelapse-timeline-group-label {
+  fill: $text-dark-2; 
+}
 
 // table-estimates
 .table-estimates {
