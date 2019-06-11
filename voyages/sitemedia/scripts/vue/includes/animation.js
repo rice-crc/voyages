@@ -1440,7 +1440,7 @@ function AnimationHelper(data, networkName, options) {
 
   var closeVoyageInfoDialog = function() {
     // notify vue v-voyage-info component to update its prop "isVisible"
-    searchBar.$refs["timelapse-voyage-info"].isVisible = false;
+    Vue.set(searchBar.timelapse, "isVisible", false);
   };
 
   var addInteractiveUI = function() {
@@ -1479,8 +1479,8 @@ function AnimationHelper(data, networkName, options) {
           (geoCache.nations || {})[data.nat_id] || "";
 
         // notify vue v-voyage-info component to update its props "data" and "isVisible"
-        searchBar.$refs["timelapse-voyage-info"].data = data;
-        searchBar.$refs["timelapse-voyage-info"].isVisible = true;
+        Vue.set(searchBar.timelapse, "data", data);
+        Vue.set(searchBar.timelapse, "isVisible", true);
       });
   };
 
@@ -1539,8 +1539,8 @@ function AnimationHelper(data, networkName, options) {
     // hoverRed(speedUpBtn, gettext("Speed up the clock"));
 
     // notify vue v-play component to update its props "ui" and "control"
-    searchBar.$refs["timelapse-play"].ui = ui;
-    searchBar.$refs["timelapse-play"].control = control;
+    Vue.set(searchBar.timelapse, "ui", ui);
+    Vue.set(searchBar.timelapse, "control", control);
 
     // playPauseBtn.on("click", function() {
     //   if (control.isPaused()) {
@@ -1551,9 +1551,7 @@ function AnimationHelper(data, networkName, options) {
     // });
 
     // notify vue v-speed component to update its props "ui" and "options"
-    searchBar.$refs["timelapse-speed"].ui = ui;
-    searchBar.$refs["timelapse-speed"].options = options;
-    searchBar.$refs["timelapse-speed"].control = control;
+    Vue.set(searchBar.timelapse, "options", options);
 
     var updateSpeed = function(speed) {
       speed = Math.min(options.maxSpeed, Math.max(options.minSpeed, speed));
@@ -1637,7 +1635,7 @@ function AnimationHelper(data, networkName, options) {
     yearLabel.text(yearVal);
 
     // notify vue v-year component to update its prop "currentYear"
-    searchBar.$refs["timelapse-year"].currentYear = yearVal;
+    Vue.set(searchBar.timelapse, "currentYear", yearVal)
 
     if (time % (10 * ui.monthsPerSecond) == 0) positionSvg();
     closeVoyageInfoDialog();

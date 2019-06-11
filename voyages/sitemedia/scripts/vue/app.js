@@ -37,7 +37,15 @@ var searchBar = new Vue({
     currentQuery: {},
     hasCurrentQuery: false,
     rowModalShow: false,
-    currentTab: "results" // currently active tab
+    currentTab: "results", // currently active tab
+    timelapse: {
+      ui: {},
+      options: {},
+      isVisible: null,
+      data: {},
+      control: {},
+      currentYear: null
+    }
   },
   watch: {
     tabs: {
@@ -316,6 +324,30 @@ var searchBar = new Vue({
   },
 
   methods: {
+    // close timelapse info card
+    closeTimelapseInfo() {
+      this.timelapse.isVisible = false;
+    },
+
+    // show row modal for timelapse
+    showRowModal() {
+      this.rowModalShow = true;
+    },
+
+    // set current query
+    showCurrentQuery(data) {
+      this.currentQuery = data;
+    },
+
+    // toggle timelapse play/pause
+    timelapseTogglePlay(value) {
+      if (value == "play") {
+        searchBar.$refs["timelapse-play"].ui.play();
+      } else if (value == "pause") {
+        searchBar.$refs["timelapse-play"].ui.pause();
+      }
+    },
+
     // toggle whether we'd like to see empty items in the tables
     toggleTableOmitEmpty() {
       this.tabs.tables.options.omitEmpty = !this.tabs.tables.options.omitEmpty;
