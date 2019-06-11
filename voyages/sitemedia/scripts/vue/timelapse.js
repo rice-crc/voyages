@@ -48,9 +48,7 @@ Vue.component("v-voyage-info", {
               </div>
 
               <div class='voyage-actions-container'>
-                <a target="_blank" :href="voyageHref">
-                  <button type="button" class="btn btn-info btn-sm">Read More</button>
-                </a>
+                <button type="button" class="btn btn-info btn-sm" @click="readMore">Read More</button>
               </div>
 
             </div>`,
@@ -74,10 +72,10 @@ Vue.component("v-voyage-info", {
       return this.data.ship_ton ? parseInt(this.data.ship_ton) : false;
     },
 
-    // compute voyage link
-    voyageHref() {
-      return "/voyage/" + this.data.voyage_id + "/variables";
-    },
+    // // compute voyage link
+    // voyageHref() {
+    //   return "/voyage/" + this.data.voyage_id + "/variables";
+    // },
 
     // compute flag
     flag() {
@@ -94,7 +92,25 @@ Vue.component("v-voyage-info", {
   },
   methods: {
     close() {
-      this.isVisible = false;
+      this.$emit("close-timelapse-info");
+    },
+    readMore() {
+      this.$emit('show-row-modal', true);
+      $vm = this;
+      console.log(this.data.voyage_id);
+      var request = buildRequestBody(this.data.voyage_id);
+      axios({
+        method: "POST",
+        url: SEARCH_URL,
+        data: request
+      })
+        .then(function(response) {
+          $vm.$emit("set-current-query", response.data.data[0]);
+          console.log(this.currentQuery);
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
     }
   }
 });
@@ -155,7 +171,7 @@ Vue.component("v-play", {
   props: ["ui", "control"],
   data: function() {
     return {
-      play: false
+      play: false,
     };
   },
   template: `<button type="button" class="btn btn-sm btn-light" @click=toggle v-if="play"><i class="fas fa-play"></i></button>

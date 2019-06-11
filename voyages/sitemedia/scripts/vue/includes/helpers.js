@@ -1,6 +1,7 @@
 // reserved keyword for saved search query identifier
 const SAVED_SEARCH_LABEL = "#searchId=";
 const TRANS_PATH = "voyages/";
+const SEARCH_URL = "api/search";
 
 /**
  * Add space between camelCase text.
@@ -709,7 +710,7 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
     orderBy: []
   };
 
-  var searchUrl = "api/search";
+  
   if (currentTab == 'results') {
     // Results DataTable
     var pageLength = {
@@ -719,16 +720,16 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 
 
 
-    var mainDatatable = $('#results_main_table').DataTable({
+    var mainDatatable = $("#results_main_table").DataTable({
       ajax: {
-        url: searchUrl,
-        type: 'POST',
-        data: function (d) {
+        url: SEARCH_URL,
+        type: "POST",
+        data: function(d) {
           if (d.order) {
-            currentSearchObj.orderBy = $.map(d.order, function (item) {
-              var columnIndex = mainDatatable ?
-                mainDatatable.colReorder.order()[item.column] :
-                item.column;
+            currentSearchObj.orderBy = $.map(d.order, function(item) {
+              var columnIndex = mainDatatable
+                ? mainDatatable.colReorder.order()[item.column]
+                : item.column;
               return {
                 name: allColumns[columnIndex].data.substring(4),
                 direction: item.dir
@@ -739,98 +740,156 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
           // TEMP Yang: I don't think this is the right place for this code...
           // Besides, I think that this is attaching multiple handlers for
           // the click, which is inefficient.
-          $('#results_main_table tbody').on('click', 'tr', function () {
+          $("#results_main_table tbody").on("click", "tr", function() {
             searchBar.row.data = mainDatatable.row(this).data();
           });
 
           return JSON.stringify({
             searchData: currentSearchObj,
             tableParams: d,
-            output: 'resultsTable',
+            output: "resultsTable"
           });
         },
 
         // preprocess the returned data
         // a - to use % instead of decimals (e.g. 30% vs. 0.30)
         // b - to format source into HTML decorated string
-        dataSrc: function (json) {
+        dataSrc: function(json) {
           var keys = null;
           var percentageKeys = [];
           for (var i = 0, ien = json.data.length; i < ien; i++) {
             // percentage vs. decimal
             if (percentageKeys.length <= 0) {
               keys = Object.keys(json.data[i]);
-              keys.forEach(function (key) {
+              keys.forEach(function(key) {
                 if (isPercentageAxis([key])) percentageKeys.push(key);
               });
             }
-            percentageKeys.forEach(function (percentageKey) {
+            percentageKeys.forEach(function(percentageKey) {
               if (json.data[i][percentageKey]) {
-                json.data[i][percentageKey] = roundDecimal(json.data[i][percentageKey] * 100, 1) + "%";
+                json.data[i][percentageKey] =
+                  roundDecimal(json.data[i][percentageKey] * 100, 1) + "%";
               }
             });
 
             // source formatting
             json.data[i]["var_sources_raw"] = json.data[i]["var_sources"];
-            json.data[i]["var_sources"] = getFormattedSourceInTable(json.data[i]["var_sources"]);
-
+            json.data[i]["var_sources"] = getFormattedSourceInTable(
+              json.data[i]["var_sources"]
+            );
           }
           return json.data;
         },
 
-        fail: function (xhr, status, error) {
+        fail: function(xhr, status, error) {
           options.errorMessage = error;
           $("#sv-loader").addClass("display-none");
           $("#sv-loader-error").removeClass("display-none");
-        },
-
+        }
       },
 
       scrollX: true,
       colReorder: {
         order: [
-          1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
-          11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
-          21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 0,
-          31, 32, 33, 34, 35, 36, 37, 38, 39, 40,
-          41, 42, 43, 44, 45, 46, 47, 48, 49, 50,
-          51, 52, 53, 54, 55, 56, 57, 58, 59, 60,
-          61, 62
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          22,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28,
+          29,
+          30,
+          0,
+          31,
+          32,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42,
+          43,
+          44,
+          45,
+          46,
+          47,
+          48,
+          49,
+          50,
+          51,
+          52,
+          53,
+          54,
+          55,
+          56,
+          57,
+          58,
+          59,
+          60,
+          61,
+          62
         ]
       },
 
-      columnDefs: [{
-        width: "1%",
-        targets: 0
-      },
-      {
-        width: "5%",
-        targets: 1
-      },
-      {
-        width: "15%",
-        targets: 62
-      },
-      {
-        width: "5%",
-        targets: 32
-      },
-      {
-        width: "10%",
-        targets: 50
-      },
-      {
-        width: "5%",
-        targets: 33
-      },
-      {
-        width: "5%",
-        targets: 34
-      },
-      {
-        width: "5%",
-        targets: 25
-      },
+      columnDefs: [
+        {
+          width: "1%",
+          targets: 0
+        },
+        {
+          width: "5%",
+          targets: 1
+        },
+        {
+          width: "15%",
+          targets: 62
+        },
+        {
+          width: "5%",
+          targets: 32
+        },
+        {
+          width: "10%",
+          targets: 50
+        },
+        {
+          width: "5%",
+          targets: 33
+        },
+        {
+          width: "5%",
+          targets: 34
+        },
+        {
+          width: "5%",
+          targets: 25
+        }
       ],
 
       order: [[1, "asc"]],
@@ -840,12 +899,13 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
       pageLength: 15,
 
       // dom: 'ifrtBp',
-      dom: "<'flex-container'iB>" +
+      dom:
+        "<'flex-container'iB>" +
         "<'row'<'col-sm-12'tr>>" +
         "<'row'<'col-sm-5'><'col-sm-7'p>>",
       lengthMenu: [
         [15, 50, 100, 200],
-        ['15 rows', '50 rows', '100 rows', '200 rows']
+        ["15 rows", "50 rows", "100 rows", "200 rows"]
       ],
 
       language: dtLanguage,
@@ -854,50 +914,59 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
         columnToggleMenu,
         pageLength,
         {
-          extend: 'collection',
-          text: '<span class="fa fa-columns" style="vertical-align: middle;"></span>',
-          className: 'btn btn-info buttons-collection dropdown-toggle',
-          text: gettext('Download'),
-          titleAttr: gettext('Download results'),
+          extend: "collection",
+          text:
+            '<span class="fa fa-columns" style="vertical-align: middle;"></span>',
+          className: "btn btn-info buttons-collection dropdown-toggle",
+          text: gettext("Download"),
+          titleAttr: gettext("Download results"),
           // Top level: CSV vs. Excel
-          buttons: [{
-            extend: 'collection',
-            text: 'CSV',
-            buttons: [
-              {
-                text: gettext('All results with all columns'),
-                action: makeDownloadFunction(false, false, false)
-              }, {
-                text: gettext('All results with visible columns'),
-                action: makeDownloadFunction(false, false, true)
-              }, {
-                text: gettext('Filtered results with all columns'),
-                action: makeDownloadFunction(false, true, false)
-              }, {
-                text: gettext('Filtered results with visible columns'),
-                action: makeDownloadFunction(false, true, true)
-              }],
-          },
+          buttons: [
+            {
+              extend: "collection",
+              text: "CSV",
+              buttons: [
+                {
+                  text: gettext("All results with all columns"),
+                  action: makeDownloadFunction(false, false, false)
+                },
+                {
+                  text: gettext("All results with visible columns"),
+                  action: makeDownloadFunction(false, false, true)
+                },
+                {
+                  text: gettext("Filtered results with all columns"),
+                  action: makeDownloadFunction(false, true, false)
+                },
+                {
+                  text: gettext("Filtered results with visible columns"),
+                  action: makeDownloadFunction(false, true, true)
+                }
+              ]
+            },
 
-          {
-            extend: 'collection',
-            text: 'Excel',
-            buttons: [
-              {
-                text: gettext('All results with all columns'),
-                action: makeDownloadFunction(true, false, false)
-              }, {
-                text: gettext('All results with visible columns'),
-                action: makeDownloadFunction(true, false, true)
-              }, {
-                text: gettext('Filtered results with all columns'),
-                action: makeDownloadFunction(true, true, false)
-              }, {
-                text: gettext('Filtered results with visible columns'),
-                action: makeDownloadFunction(true, true, true)
-              }
-            ],
-          }
+            {
+              extend: "collection",
+              text: "Excel",
+              buttons: [
+                {
+                  text: gettext("All results with all columns"),
+                  action: makeDownloadFunction(true, false, false)
+                },
+                {
+                  text: gettext("All results with visible columns"),
+                  action: makeDownloadFunction(true, false, true)
+                },
+                {
+                  text: gettext("Filtered results with all columns"),
+                  action: makeDownloadFunction(true, true, false)
+                },
+                {
+                  text: gettext("Filtered results with visible columns"),
+                  action: makeDownloadFunction(true, true, true)
+                }
+              ]
+            }
           ]
         }
       ],
@@ -908,8 +977,8 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
       columns: allColumns,
       stateSave: true,
       stateDuration: -1,
-      initComplete: function () {
-        $('[data-toggle="tooltip"]').tooltip()
+      initComplete: function() {
+        $('[data-toggle="tooltip"]').tooltip();
       }
     });
 
@@ -949,56 +1018,63 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
       // order: [[0, "desc"]], // sort by first column
       order: [], // no sorting on initialization
       ajax: {
-        url: searchUrl,
-        type: 'POST',
-        data: function (d) {
+        url: SEARCH_URL,
+        type: "POST",
+        data: function(d) {
           return JSON.stringify({
             searchData: currentSearchObj,
             tableParams: d,
-            output: 'summaryStats'
+            output: "summaryStats"
           });
         },
 
         // preprocess the returned data to replace * with IMP
-        dataSrc: function (json) {
+        dataSrc: function(json) {
           for (var i = 0, ien = json.data.length; i < ien; i++) {
-            json.data[i][0] = json.data[i][0].includes("*") ? gettext(json.data[i][0].slice(0, -1)).concat(impTooltipString) : gettext(json.data[i][0]);
+            json.data[i][0] = json.data[i][0].includes("*")
+              ? gettext(json.data[i][0].slice(0, -1)).concat(
+                  impTooltipString
+                )
+              : gettext(json.data[i][0]);
           }
           return json.data;
         },
 
-        fail: function (xhr, status, error) {
+        fail: function(xhr, status, error) {
           options.errorMessage = error;
           $("#sv-loader").addClass("display-none");
           $("#sv-loader-error").removeClass("display-none");
         }
       },
-      columnDefs: [{
-        targets: [1, 2], // do not eliminate the HTML parsing in the first column
-        type: 'num-fmt',
-        render: $.fn.dataTable.render.number(",")
-      }],
+      columnDefs: [
+        {
+          targets: [1, 2], // do not eliminate the HTML parsing in the first column
+          type: "num-fmt",
+          render: $.fn.dataTable.render.number(",")
+        }
+      ],
       bFilter: false,
       paging: false,
       // dom: "<'flex-container'>" +
       //   "<'row'<'col-sm-12'tr>>",
-      dom: "<'flex-container'iB>" +
+      dom:
+        "<'flex-container'iB>" +
         "<'row'<'col-sm-12'tr>>" +
         "<'row'<'col-sm-5'><'col-sm-7'p>>",
       language: dtLanguage,
       buttons: [
         {
-          extend: 'collection',
+          extend: "collection",
           text: '<span class="fa fa-columns"></span>',
-          className: 'btn btn-info buttons-collection dropdown-toggle',
-          text: gettext('Download'),
+          className: "btn btn-info buttons-collection dropdown-toggle",
+          text: gettext("Download"),
           // Top level: CSV vs. Excel
-          buttons: ['csvHtml5', 'excelHtml5']
+          buttons: ["csvHtml5", "excelHtml5"]
         }
       ],
       processing: true,
-      initComplete: function () {
-        $('[data-toggle="tooltip"]').tooltip()
+      initComplete: function() {
+        $('[data-toggle="tooltip"]').tooltip();
       }
     });
   } else if (currentTab == 'tables') {
@@ -1033,7 +1109,7 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
     if (postData.row_field && postData.col_field && postData.pivot_functions) {
       $("#sv-loader").removeClass("display-none");
 
-      $.post(searchUrl, JSON.stringify(postData), function (result) {
+      $.post(SEARCH_URL, JSON.stringify(postData), function (result) {
         // Produce a table with data content.
         var table = $('#v-tables');
         destroyPreviousTable('#v-tables');
@@ -1244,7 +1320,7 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
       // if it is a percentage based variable; used to add % to the labels
       var isPercentage = isPercentageAxis([postData.timelineVariable]);
       $("#sv-loader").removeClass("display-none");
-      $.post(searchUrl, JSON.stringify(postData), function (result) {
+      $.post(SEARCH_URL, JSON.stringify(postData), function (result) {
         $("#sv-loader").removeClass("display-none");
 
         var data = [];
@@ -1403,7 +1479,7 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 
         if (postData.graphData.xAxis && postData.graphData.yAxes.length > 0) {
           $("#sv-loader").removeClass("display-none");
-          $.post(searchUrl, JSON.stringify(postData), function (series) {
+          $.post(SEARCH_URL, JSON.stringify(postData), function (series) {
             $("#sv-loader").removeClass("display-none");
             if (chartType[0] == 'scatter') {
               $("#tabs-visualization-xy").empty();
@@ -1841,7 +1917,7 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
     var mapFlowSearchCallback = function () {
       var $map = $('#map');
       voyagesMap.setMaxBounds();
-      $.post(searchUrl, JSON.stringify(postData), function (result) {
+      $.post(SEARCH_URL, JSON.stringify(postData), function (result) {
         $("#sv-loader").removeClass("display-none");
 
         eval(result);
@@ -1874,18 +1950,23 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
       output: 'mapAnimation'
     };
     var mapAnimationSearchCallback = function () {
-      $.post(searchUrl, JSON.stringify(postData), function (result) {
+      $.post(SEARCH_URL, JSON.stringify(postData), function(result) {
         $("#sv-loader").removeClass("display-none");
 
-        if (result) { // add title to the chart
-          $("#tab-map-voyage-value").text(numberWithCommas(result.length));
+        if (result) {
+          // add title to the chart
+          $("#tab-map-voyage-value").text(
+            numberWithCommas(result.length)
+          );
         }
         voyagesMap.clear();
-        if (SV_MODE == "intra") {    
-          voyagesMap.setMaxBounds(new L.LatLngBounds(
-            new L.LatLng(-59.517932, -111.936579),
-            new L.LatLng(63.9, 0)
-          ));
+        if (SV_MODE == "intra") {
+          voyagesMap.setMaxBounds(
+            new L.LatLngBounds(
+              new L.LatLng(-59.517932, -111.936579),
+              new L.LatLng(63.9, 0)
+            )
+          );
           voyagesMap._map.setZoom(4);
         }
 
@@ -1915,7 +1996,7 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
           return control;
         };
         mapTopRight.setPosition("topright").addTo(voyagesMap._map);
-        
+
         // relocate zoom control to the top right
         if (!$(".leaflet-control-zoom")[0]) {
           L.control
@@ -1939,17 +2020,22 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
         animationHelper = new AnimationHelper(
           result,
           SV_MODE == "intra" ? "intra" : "trans",
-          SV_MODE == "intra" ? new AnimationOptions(0.4, 3, 6, 2, 18, 1000) : null);
-      }).done(function () {
-        $("#sv-loader").addClass("display-none");
-        $("#maps").removeClass("display-none");
-        loader.resizeMap();
-        // get title here I'd say
-      }).fail(function (xhr, status, error) {
-        options.errorMessage = error;
-        $("#sv-loader").addClass("display-none");
-        $("#sv-loader-error").removeClass("display-none");
-      });
+          SV_MODE == "intra"
+            ? new AnimationOptions(0.4, 3, 6, 2, 18, 1000)
+            : null
+        );
+      })
+        .done(function() {
+          $("#sv-loader").addClass("display-none");
+          $("#maps").removeClass("display-none");
+          loader.resizeMap();
+          // get title here I'd say
+        })
+        .fail(function(xhr, status, error) {
+          options.errorMessage = error;
+          $("#sv-loader").addClass("display-none");
+          $("#sv-loader-error").removeClass("display-none");
+        });
     };
     // $('#loading').show();
     loader.loadMap(function () {

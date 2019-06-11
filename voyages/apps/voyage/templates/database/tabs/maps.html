@@ -34,12 +34,15 @@
   </div>
 
   <div id="timelapse-top-left">
-    <v-year ref="timelapse-year"></v-year>
+    <v-year :current-year="timelapse.currentYear"></v-year>
     <div class="timelapse-info-container">
       <div class="timelapse-title">
         {% trans 'See <span id="tab-map-voyage-value"></span> Slave Voyages Cross the Atlantic' %}</div>
     </div>
-    <v-voyage-info ref="timelapse-voyage-info"></v-voyage-info>
+    <v-voyage-info :data="timelapse.data" :is-visible="timelapse.isVisible"
+    @show-row-modal="showRowModal"
+    @set-current-query="showCurrentQuery"
+    @close-timelapse-info="closeTimelapseInfo"></v-voyage-info>
   </div>
 
   <button id="timelapse-top-right" type="button" class="btn btn-sm btn-light margin-h-025" data-toggle="modal"
@@ -48,7 +51,7 @@
 
   <div class="col-md-12 flex-container" id="timelapse-bottom-left">
     <div class="flex-end">
-      <v-play class="margin-h-025" ref="timelapse-play"></v-play>
+      <v-play class="margin-h-025" :ui="timelapse.ui" :control="timelapse.control" @toggle-play="timelapse-toggle-play"></v-play>
 
       <!-- <div class="margin-h-025">
           <div class="collapse" id="collapseExample">
@@ -63,7 +66,7 @@
   </div>
 
   <div class="flex" id="timelapse-bottom-right">
-    <v-speed ref="timelapse-speed" class="margin-h-025" :speeds="[0.5, 1, 2, 4]" :multiplier="6" v-b-tooltip.hover
+    <v-speed :ui="timelapse.ui" :options="timelapse.options" :control="timelapse.control"  class="margin-h-025" :speeds="[0.5, 1, 2, 4]" :multiplier="6" v-b-tooltip.hover
       title="{% trans 'Play at different speeds' %}">
     </v-speed>
     <v-fullscreen type="button" class="btn btn-sm btn-light margin-h-025" v-b-tooltip.hover
