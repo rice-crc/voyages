@@ -324,7 +324,9 @@ var searchBar = new Vue({
     // set the current tab to be the active tab
     setActive(tab) {
       this.currentTab = tab;
-      location.href = location.origin + location.pathname + "#" + tab;
+      if (location.href != location.origin + location.pathname + "#" + tab) {
+        location.href = location.origin + location.pathname + "#" + tab;
+      }
     },
 
     // update tab options
@@ -640,7 +642,6 @@ var searchBar = new Vue({
 // Parse URL and activate Animation tab
 
 var readURL = function() {
-  debugger;
   var url = window.location.href;
   if (url.includes("#")) {
     var activeTab = url.substring(url.indexOf("#") + 1);
