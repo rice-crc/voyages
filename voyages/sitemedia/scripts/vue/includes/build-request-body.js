@@ -5,7 +5,7 @@ var buildRequestBody = function(voyageId, isIntraAmerican) {
   var intraAmerican = "";
 
   if (isIntraAmerican) {
-    intraAmerican = `{
+    intraAmerican = `,{
         "op": "equals",
         "searchTerm": [
           "true"
@@ -24,7 +24,7 @@ var buildRequestBody = function(voyageId, isIntraAmerican) {
           null
         ],
         "varName": "voyage_id"
-      },
+      }
       ${intraAmerican}
     ],
     "orderBy": [
