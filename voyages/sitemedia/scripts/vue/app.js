@@ -329,14 +329,9 @@ var searchBar = new Vue({
       this.timelapse.isVisible = false;
     },
 
-    // show row modal for timelapse
-    showRowModal() {
-      this.rowModalShow = true;
-    },
-
     // set current query
-    showCurrentQuery(data) {
-      this.currentQuery = data;
+    setRowData(data) {
+      Vue.set(this.row, "data", data[0]);
     },
 
     // toggle timelapse play/pause

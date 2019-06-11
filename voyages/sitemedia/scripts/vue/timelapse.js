@@ -95,7 +95,6 @@ Vue.component("v-voyage-info", {
       this.$emit("close-timelapse-info");
     },
     readMore() {
-      this.$emit('show-row-modal', true);
       $vm = this;
       console.log(this.data.voyage_id);
       var request = buildRequestBody(this.data.voyage_id);
@@ -105,8 +104,9 @@ Vue.component("v-voyage-info", {
         data: request
       })
         .then(function(response) {
-          $vm.$emit("set-current-query", response.data.data[0]);
-          console.log(this.currentQuery);
+          console.log(response.data.data[0]);
+          var processedResponse = processResponse(response.data);
+          $vm.$emit("set-row-data", processedResponse);
         })
         .catch(function(error) {
           console.log(error);
