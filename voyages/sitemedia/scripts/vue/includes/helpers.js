@@ -3,6 +3,36 @@ const SAVED_SEARCH_LABEL = "#searchId=";
 const TRANS_PATH = "voyages/";
 const SEARCH_URL = "api/search";
 
+
+
+// process search data returned from the API
+function processResponse(json) {
+  var keys = null;
+  var percentageKeys = [];
+  for (var i = 0, ien = json.data.length; i < ien; i++) {
+    // percentage vs. decimal
+    if (percentageKeys.length <= 0) {
+      keys = Object.keys(json.data[i]);
+      keys.forEach(function(key) {
+        if (isPercentageAxis([key])) percentageKeys.push(key);
+      });
+    }
+    percentageKeys.forEach(function(percentageKey) {
+      if (json.data[i][percentageKey]) {
+        json.data[i][percentageKey] =
+          roundDecimal(json.data[i][percentageKey] * 100, 1) + "%";
+      }
+    });
+
+    // source formatting
+    json.data[i]["var_sources_raw"] = json.data[i]["var_sources"];
+    json.data[i]["var_sources"] = getFormattedSourceInTable(
+      json.data[i]["var_sources"]
+    );
+  }
+  return json.data;
+}
+
 /**
  * Add space between camelCase text.
  */
@@ -755,30 +785,7 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
         // a - to use % instead of decimals (e.g. 30% vs. 0.30)
         // b - to format source into HTML decorated string
         dataSrc: function(json) {
-          var keys = null;
-          var percentageKeys = [];
-          for (var i = 0, ien = json.data.length; i < ien; i++) {
-            // percentage vs. decimal
-            if (percentageKeys.length <= 0) {
-              keys = Object.keys(json.data[i]);
-              keys.forEach(function(key) {
-                if (isPercentageAxis([key])) percentageKeys.push(key);
-              });
-            }
-            percentageKeys.forEach(function(percentageKey) {
-              if (json.data[i][percentageKey]) {
-                json.data[i][percentageKey] =
-                  roundDecimal(json.data[i][percentageKey] * 100, 1) + "%";
-              }
-            });
-
-            // source formatting
-            json.data[i]["var_sources_raw"] = json.data[i]["var_sources"];
-            json.data[i]["var_sources"] = getFormattedSourceInTable(
-              json.data[i]["var_sources"]
-            );
-          }
-          return json.data;
+          return processResponse(json);
         },
 
         fail: function(xhr, status, error) {

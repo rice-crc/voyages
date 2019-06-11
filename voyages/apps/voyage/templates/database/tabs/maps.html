@@ -10,6 +10,8 @@
   <div class="col-md-12">
     <div id="map" style="width:100%; min-height: 500px; height: 750px;">
     </div>
+
+    {% include "database/_full_details_modal.html" %}
   </div>
 </div>
 
@@ -40,8 +42,7 @@
         {% trans 'See <span id="tab-map-voyage-value"></span> Slave Voyages Cross the Atlantic' %}</div>
     </div>
     <v-voyage-info :data="timelapse.data" :is-visible="timelapse.isVisible"
-    @show-row-modal="showRowModal"
-    @set-current-query="showCurrentQuery"
+    @set-row-data="setRowData"
     @close-timelapse-info="closeTimelapseInfo"></v-voyage-info>
   </div>
 
