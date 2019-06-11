@@ -25,6 +25,19 @@ html, body {
   border: white solid;
 }
 
+#timeline_slider {
+  fill: white;
+  opacity: 0.5;
+  pointer-events: auto;
+  transition: opacity 0.5s ease-in-out;
+
+  &:hover {
+    opacity: 0.9;
+    fill: white;
+    transition: opacity 0.5s ease-in-out;
+  }
+}
+
 .timelapse-title {
   font-size: $regular-font-size;
   padding: 0 5px;

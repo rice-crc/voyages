@@ -2031,6 +2031,9 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
             ? new AnimationOptions(0.4, 3, 6, 2, 18, 1000)
             : null
         );
+
+        var control = document.getElementById("timelapse_control_layer");
+        L.DomEvent.disableClickPropagation(control);
       })
         .done(function() {
           $("#sv-loader").addClass("display-none");
