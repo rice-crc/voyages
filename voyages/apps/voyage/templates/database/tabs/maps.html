@@ -23,13 +23,31 @@
       <div class="modal-content">
 
         <div class="modal-header">
-          <h5 class="modal-title h4" id="myExtraLargeModalLabel">Extra large modal</h5>
+          <h5 class="modal-title h4" id="myExtraLargeModalLabel">{% trans 'About this Timelapse' %} </h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">×</span>
           </button>
         </div>
         <div class="modal-body">
-          ...
+          <section>
+          <p>
+            {% trans 'This timelapse offers an overall preview as well as demonstration of how the slave movement happened. You may use the database search variables to refine the scope in this timelapse. Addtionally, you may benefit from:' %}
+          </p>
+          </section>
+          <section class="margin-v">
+            <div class="text-bold">{% trans 'Voyage Size' %}</div>
+            <p>{% trans 'Each circle on this timelapse represents a single voyage and is both sized, according to the number of captives on board, and colored, according to the three icons at the bottom left of the graph.' %} </p>
+          </section>
+          <section class="margin-v">
+            <div class="text-bold">{% trans 'Voyage Nationality' %}</div>
+            <p>{% trans 'Each circle is color coded and the color code represents the nationality of the slave vessel, but users can instead choose Region of Embarkation, or Region of Disembarkation by clicking on the appropriate icon in the timeline.' %} </p>
+          </section>
+          <section class="margin-v">
+            <div class="text-bold">{% trans 'Voyage Details' %}</div>
+            <p>
+              {% trans 'To inspect details of an individual voyage, pause and click on a circle.' %}
+            </p>
+          </section>
         </div>
       </div>
     </div>
