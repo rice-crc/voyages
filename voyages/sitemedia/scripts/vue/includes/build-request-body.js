@@ -1,7 +1,18 @@
 // This is a hard coded copy of the request body
 // Intended to load just one variable
 // tableParams are not omittable or no column would be returned
-var buildRequestBody = function(voyageId) {
+var buildRequestBody = function(voyageId, isIntraAmerican) {
+  var intraAmerican = "";
+
+  if (isIntraAmerican) {
+    intraAmerican = `{
+        "op": "equals",
+        "searchTerm": [
+          "true"
+        ],
+        "varName": "intra_american_voyage"
+      }`;
+  }
 
   return `{
   "searchData": {
@@ -13,7 +24,8 @@ var buildRequestBody = function(voyageId) {
           null
         ],
         "varName": "voyage_id"
-      }
+      },
+      ${intraAmerican}
     ],
     "orderBy": [
       {
@@ -671,6 +683,4 @@ var buildRequestBody = function(voyageId) {
   },
   "output": "resultsTable"
 }`;
-
-}
-
+};
