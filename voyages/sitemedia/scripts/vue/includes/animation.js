@@ -749,8 +749,6 @@ function TimelineControl(data, parent, onChange, ui, geoCache) {
     .append("g")
     .attr("id", "timeline_slider")
     .classed("timeline_slider_group", true)
-    .style("opacity", INITIAL_OPACITY)
-    .style("pointer-events", "auto")
     .attr("transform", "translate(" + left + "," + top + ")");
 
   self.resize = function(w, h) {
@@ -801,20 +799,9 @@ function TimelineControl(data, parent, onChange, ui, geoCache) {
     g.append("rect")
       .attr("height", NORMAL_HEIGHT)
       .attr("width", width)
-      .attr("fill", "rgba(255, 255, 255, 0.5)")
       .attr("rx", 4)
       .attr("ry", 4)
-      .on("mouseenter", function() {
-        g.transition()
-          .duration(300)
-          .style("opacity", 1.0);
-      })
-      .on("mouseleave", function() {
-        g.transition()
-          .delay(1000)
-          .duration(500)
-          .style("opacity", INITIAL_OPACITY);
-      });
+      .attr("id", "timelapse-timeline-bg");
     for (var i = 0; i < ICONS.length; ++i) {
       var icon = ICONS[i];
       var btn = _addIconBackgroundRect(g, icon.path)
@@ -1454,11 +1441,11 @@ function AnimationHelper(data, networkName, options) {
       .attr("r", 10)
       .style("opacity", 0)
       .on("mouseover", function() {
-        $(this).animate({ opacity: 1 }, 300);
+        $(this).animate({ opacity: 1 }, 100);
       })
       .on("mouseout", function() {
         if (ui.clickedCircle != this) {
-          $(this).animate({ opacity: 0 }, 300);
+          $(this).animate({ opacity: 0 }, 100);
         }
       })
       .on("click", function() {
