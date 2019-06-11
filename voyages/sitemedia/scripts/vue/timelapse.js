@@ -96,8 +96,7 @@ Vue.component("v-voyage-info", {
     },
     readMore() {
       $vm = this;
-      console.log(this.data.voyage_id);
-      var request = buildRequestBody(this.data.voyage_id);
+      var request = buildRequestBody(this.data.voyage_id, SV_MODE == "intra");
       axios({
         method: "POST",
         url: SEARCH_URL,
