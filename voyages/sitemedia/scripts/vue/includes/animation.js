@@ -1139,17 +1139,24 @@ function TimelineControl(data, parent, onChange, ui, geoCache) {
       );
 
     // Create mouse over bar.
-    var hoverLine = g
-      .append("line")
+    var hoverLine = g.append("g")
       .classed("timelapse_slider_x_axis_hover", true)
-      .attr("stroke", "red")
-      .attr("stroke-width", 2)
-      .style("stroke-dasharray", "2, 2")
       .attr(
         "transform",
         "translate(" + PLOT_LEFT_MARGIN + "," + PLOT_VERTICAL_MARGIN + ")"
       )
-      .style("opacity", 0)
+      .style("opacity", 0);
+    hoverLine
+      .append("rect")
+      .attr("x", -1)
+      .attr("width", 2)
+      .attr("height", paddedHeightLine)
+      .attr("fill", "white");
+    hoverLine
+      .append("line")
+      .attr("stroke", "red")
+      .attr("stroke-width", 2)
+      .style("stroke-dasharray", "2, 2")
       .attr("y2", paddedHeightLine);
     g.on("mousemove", function() {
       var xCoord = d3.mouse(this)[0];
