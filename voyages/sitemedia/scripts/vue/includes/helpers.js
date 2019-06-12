@@ -2247,6 +2247,7 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
           $("#tab-map-voyage-value").text(numberWithCommas(result.length));
         }
         voyagesMap.clear();
+        voyagesMap.loadBaseMap("all", "/static/maps/");
         if (SV_MODE == "intra") {
           voyagesMap.setMaxBounds(
             new L.LatLngBounds(
