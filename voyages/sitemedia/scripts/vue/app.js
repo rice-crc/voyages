@@ -45,7 +45,7 @@ var searchBar = new Vue({
       data: {},
       control: {},
       currentYear: null
-    }
+    },
   },
   watch: {
     tabs: {
@@ -655,6 +655,20 @@ var searchBar = new Vue({
     } else {
       this.refresh();
     }
+
+    // generate a variable map (var -> label)
+    for (key1 in this.filter) {
+      for (key2 in this.filter[key1]) {
+        if (key2 !== "count") {
+          for (key3 in this.filter[key1][key2]) {
+            if (key3 !== "count") {
+              VARIABLE_MAP[key3] = this.filter[key1][key2][key3].label;
+            }
+          }
+        }
+      }
+    }
+
   },
 
   // event loop - update the menuAim everytime after it's re-rendered

@@ -2,6 +2,7 @@
 const SAVED_SEARCH_LABEL = "#searchId=";
 const TRANS_PATH = "voyages/";
 const SEARCH_URL = "api/search";
+const VARIABLE_MAP = {};
 
 // process search data returned from the API
 function processResponse(json) {
