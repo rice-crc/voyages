@@ -197,20 +197,18 @@ Vue.component("v-fullscreen", {
   template: `<button type="button" class="btn btn-sm btn-light" @click=toggle><i class="fas fa-compress"></i></button>`,
   methods: {
     toggle: function() {
-      if (this.isFullscreen) {
+      if (document.fullscreen) {
         this.exitFullscreen();
+        this.isFullscreen = false;
       } else {
         this.enterFullscreen();
+        this.isFullscreen = true;
       }
-      this.isFullscreen = !this.isFullscreen;
     },
 
     // enter fullscreen based on browser
     enterFullscreen: function() {
-      var mapContainer = voyagesMap._map.getContainer();
-      debugger;
       var map = document.getElementById("map");
-
       if (map.requestFullscreen) {
         map.requestFullscreen();
       } else if (map.mozRequestFullScreen) {
@@ -227,7 +225,6 @@ Vue.component("v-fullscreen", {
 
     // exit fullscreen based on browser
     exitFullscreen: function() {
-      var mapContainer = voyagesMap._map.getContainer();
       var map = document.getElementById("map");
       if (map.requestFullscreen) {
         document.exitFullscreen();
