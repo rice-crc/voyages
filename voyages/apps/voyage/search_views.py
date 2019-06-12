@@ -327,71 +327,71 @@ def ajax_search(request):
     return HttpResponseBadRequest('Unkown type of output.')
 
 download_header_map = {
-    "var_captain:" "Captain's name"
-    "var_crew_died_complete_voyage:" "Crew deaths during voyage"
-    "var_crew_first_landing:" "Crew at first landing of slaves"
-    "var_crew_voyage_outset:" "Crew at voyage outset"
-    "var_date_departed_africa:" "Date vessel departed Africa"
-    "var_departure_last_place_of_landing:" "Date vessel departed for homeport"
-    "var_display_settings:" "Display in compact mode"
-    "var_first_dis_of_slaves:" "Date vessel arrived with slaves"
-    "var_first_landing_place_id:" "1st place of slave landing"
-    "var_first_place_slave_purchase_id:" "1st place of slave purchase"
-    "var_guns_mounted:" "Guns mounted"
-    "var_imp_arrival_at_port_of_dis:" "Year of arrival at port of disembarkation"
-    "var_imp_length_home_to_disembark:" "Voyage length, homeport to disembarkation"
-    "var_imp_port_voyage_begin_id:" "Place where voyage began"
-    "var_imp_principal_place_of_slave_purchase_id:" "Principal place of slave purchase"
-    "var_imp_principal_port_slave_dis_id:" "Principal place of slave landing"
-    "var_imp_total_num_slaves_purchased:" "Total embarked"
-    "var_imp_total_slaves_disembarked:" "Total disembarked"
-    "var_imputed_death_middle_passage:" "Slaves died during middle passage"
-    "var_imputed_mortality:" "Mortality rate"
-    "var_imputed_nationality:" "Flag (imputed)"
-    "var_imputed_percentage_boys:" "Percent boys"
-    "var_imputed_percentage_child:" "Percent children"
-    "var_imputed_percentage_girls:" "Percent girls"
-    "var_imputed_percentage_male:" "Percent males"
-    "var_imputed_percentage_men:" "Percent men"
-    "var_imputed_percentage_women:" "Percent women"
-    "var_imputed_sterling_cash:" "Sterling cash price in Jamaica"
-    "var_length_middle_passage_days:" "Middle passage"
-    "var_nationality:" "Flag"
-    "var_num_slaves_carried_first_port:" "Slaves carried from 1st port"
-    "var_num_slaves_carried_second_port:" "Slaves carried from 2nd port"
-    "var_num_slaves_carried_third_port:" "Slaves carried from 3rd port"
-    "var_num_slaves_disembark_first_place:" "Slaves landed at 1st port"
-    "var_num_slaves_disembark_second_place:" "Slaves landed at 2nd port"
-    "var_num_slaves_disembark_third_place:" "Slaves landed at 3rd port"
-    "var_num_slaves_intended_first_port:" "Slaves intended at 1st place"
-    "var_outcome_owner:" "Outcome of voyage for owner"
-    "var_outcome_ship_captured:" "Outcome of voyage if ship captured"
-    "var_outcome_slaves:" "Outcome of voyage for slaves"
-    "var_outcome_voyage:" "Particular outcome of voyage"
-    "var_owner:" "Vessel owner"
-    "var_place_voyage_ended_id:" "Place where voyage ended"
-    "var_port_of_call_before_atl_crossing_id:" "Places of call before Atlantic crossing"
-    "var_registered_place_idnum:" "Place registered"
-    "var_registered_year:" "Year registered"
-    "var_resistance:" "African resistance"
-    "var_rig_of_vessel:" "Rig of vessel"
-    "var_search_settings:" "Show advanced variables in search filters"
-    "var_second_landing_place_id:" "2nd place of slave landing"
-    "var_second_place_slave_purchase_id:" "2nd place of slave purchase"
-    "var_ship_name:" "Vessel name"
-    "var_slave_purchase_began:" "Date trade began in Africa"
-    "var_sources_plaintext:" "Source of data"
-    "var_third_landing_place_id:" "3rd place of slave landing"
-    "var_third_place_slave_purchase_id:" "3rd place of slave purchase"
-    "var_tonnage:" "Tonnage"
-    "var_tonnage_mod:" "Standardized tonnage"
-    "var_total_num_slaves_arr_first_port_embark:" "Slaves arrived at 1st port"
-    "var_total_num_slaves_purchased:" "Total embarked"
-    "var_vessel_construction_place_idnum:" "Place constructed"
-    "var_voyage_began:" "Date that voyage began"
-    "var_voyage_completed:" "Date voyage completed"
-    "var_voyage_id:" "Voyage ID"
-    "var_year_of_construction:" "Year constructed"
+    "var_captain": "Captain's name",
+    "var_crew_died_complete_voyage": "Crew deaths during voyage",
+    "var_crew_first_landing": "Crew at first landing of slaves",
+    "var_crew_voyage_outset": "Crew at voyage outset",
+    "var_date_departed_africa": "Date vessel departed Africa",
+    "var_departure_last_place_of_landing": "Date vessel departed for homeport",
+    "var_display_settings": "Display in compact mode",
+    "var_first_dis_of_slaves": "Date vessel arrived with slaves",
+    "var_first_landing_place_id": "1st place of slave landing",
+    "var_first_place_slave_purchase_id": "1st place of slave purchase",
+    "var_guns_mounted": "Guns mounted",
+    "var_imp_arrival_at_port_of_dis": "Year of arrival at port of disembarkation",
+    "var_imp_length_home_to_disembark": "Voyage length, homeport to disembarkation",
+    "var_imp_port_voyage_begin_id": "Place where voyage began",
+    "var_imp_principal_place_of_slave_purchase_id": "Principal place of slave purchase",
+    "var_imp_principal_port_slave_dis_id": "Principal place of slave landing",
+    "var_imp_total_num_slaves_purchased": "Total embarked",
+    "var_imp_total_slaves_disembarked": "Total disembarked",
+    "var_imputed_death_middle_passage": "Slaves died during middle passage",
+    "var_imputed_mortality": "Mortality rate",
+    "var_imputed_nationality": "Flag (imputed)",
+    "var_imputed_percentage_boys": "Percent boys",
+    "var_imputed_percentage_child": "Percent children",
+    "var_imputed_percentage_girls": "Percent girls",
+    "var_imputed_percentage_male": "Percent males",
+    "var_imputed_percentage_men": "Percent men",
+    "var_imputed_percentage_women": "Percent women",
+    "var_imputed_sterling_cash": "Sterling cash price in Jamaica",
+    "var_length_middle_passage_days": "Middle passage",
+    "var_nationality": "Flag",
+    "var_num_slaves_carried_first_port": "Slaves carried from 1st port",
+    "var_num_slaves_carried_second_port": "Slaves carried from 2nd port",
+    "var_num_slaves_carried_third_port": "Slaves carried from 3rd port",
+    "var_num_slaves_disembark_first_place": "Slaves landed at 1st port",
+    "var_num_slaves_disembark_second_place": "Slaves landed at 2nd port",
+    "var_num_slaves_disembark_third_place": "Slaves landed at 3rd port",
+    "var_num_slaves_intended_first_port": "Slaves intended at 1st place",
+    "var_outcome_owner": "Outcome of voyage for owner",
+    "var_outcome_ship_captured": "Outcome of voyage if ship captured",
+    "var_outcome_slaves": "Outcome of voyage for slaves",
+    "var_outcome_voyage": "Particular outcome of voyage",
+    "var_owner": "Vessel owner",
+    "var_place_voyage_ended_id": "Place where voyage ended",
+    "var_port_of_call_before_atl_crossing_id": "Places of call before Atlantic crossing",
+    "var_registered_place_idnum": "Place registered",
+    "var_registered_year": "Year registered",
+    "var_resistance": "African resistance",
+    "var_rig_of_vessel": "Rig of vessel",
+    "var_search_settings": "Show advanced variables in search filters",
+    "var_second_landing_place_id": "2nd place of slave landing",
+    "var_second_place_slave_purchase_id": "2nd place of slave purchase",
+    "var_ship_name": "Vessel name",
+    "var_slave_purchase_began": "Date trade began in Africa",
+    "var_sources_plaintext": "Source of data",
+    "var_third_landing_place_id": "3rd place of slave landing",
+    "var_third_place_slave_purchase_id": "3rd place of slave purchase",
+    "var_tonnage": "Tonnage",
+    "var_tonnage_mod": "Standardized tonnage",
+    "var_total_num_slaves_arr_first_port_embark": "Slaves arrived at 1st port",
+    "var_total_num_slaves_purchased": "Total embarked",
+    "var_vessel_construction_place_idnum": "Place constructed",
+    "var_voyage_began": "Date that voyage began",
+    "var_voyage_completed": "Date voyage completed",
+    "var_voyage_id": "Voyage ID",
+    "var_year_of_construction": "Year constructed",
 }
 
 def get_download_header(var_name):
