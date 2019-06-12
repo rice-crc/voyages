@@ -2256,7 +2256,7 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
           voyagesMap._map.setZoom(4);
         }
 
-        voyagesMap._map.scrollWheelZoom.disable();
+        // voyagesMap._map.scrollWheelZoom.disable();
         
         // leaflet map control - top left
         var mapTopLeft = L.control();
