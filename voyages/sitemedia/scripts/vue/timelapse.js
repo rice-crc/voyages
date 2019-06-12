@@ -208,32 +208,36 @@ Vue.component("v-fullscreen", {
     // enter fullscreen based on browser
     enterFullscreen: function() {
       var mapContainer = voyagesMap._map.getContainer();
-      if (mapContainer.requestFullscreen) {
-        mapContainer.requestFullscreen();
-      } else if (mapContainer.mozRequestFullScreen) {
+      debugger;
+      var map = document.getElementById("map");
+
+      if (map.requestFullscreen) {
+        map.requestFullscreen();
+      } else if (map.mozRequestFullScreen) {
         /* Firefox */
-        mapContainer.mozRequestFullScreen();
-      } else if (mapContainer.webkitRequestFullscreen) {
+        map.mozRequestFullScreen();
+      } else if (map.webkitRequestFullscreen) {
         /* Chrome, Safari and Opera */
-        mapContainer.webkitRequestFullscreen();
-      } else if (mapContainer.msRequestFullscreen) {
+        map.webkitRequestFullscreen();
+      } else if (map.msRequestFullscreen) {
         /* IE/Edge */
-        mapContainer.msRequestFullscreen();
+        map.msRequestFullscreen();
       }
     },
 
     // exit fullscreen based on browser
     exitFullscreen: function() {
       var mapContainer = voyagesMap._map.getContainer();
-      if (mapContainer.requestFullscreen) {
+      var map = document.getElementById("map");
+      if (map.requestFullscreen) {
         document.exitFullscreen();
-      } else if (mapContainer.mozRequestFullScreen) {
+      } else if (map.mozRequestFullScreen) {
         /* Firefox */
         document.mozCancelFullScreen();
-      } else if (mapContainer.webkitRequestFullscreen) {
+      } else if (map.webkitRequestFullscreen) {
         /* Chrome, Safari and Opera */
         document.webkitExitFullscreen();
-      } else if (mapContainer.msRequestFullscreen) {
+      } else if (map.msRequestFullscreen) {
         /* IE/Edge */
         document.msExitFullscreen();
       }
