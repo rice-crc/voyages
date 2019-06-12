@@ -3,8 +3,6 @@ const SAVED_SEARCH_LABEL = "#searchId=";
 const TRANS_PATH = "voyages/";
 const SEARCH_URL = "api/search";
 
-
-
 // process search data returned from the API
 function processResponse(json) {
   var keys = null;
@@ -37,14 +35,14 @@ function processResponse(json) {
  * Add space between camelCase text.
  */
 function unCamelCase(str) {
-  str = str.replace(/([a-z\xE0-\xFF])([A-Z\xC0\xDF])/g, '$1 $2');
+  str = str.replace(/([a-z\xE0-\xFF])([A-Z\xC0\xDF])/g, "$1 $2");
   str = str.toLowerCase(); //add space between camelCase text
   return str;
 }
 
 /**
-* UPPERCASE first char of each sentence and lowercase other chars.
-*/
+ * UPPERCASE first char of each sentence and lowercase other chars.
+ */
 function sentenceCase(str) {
   // Replace first char of each sentence (new line or after '.\s+') to
   // UPPERCASE
@@ -52,15 +50,15 @@ function sentenceCase(str) {
 }
 
 /**
-* round without decimal (if it's an integer stay at the integer level)
-*/
+ * round without decimal (if it's an integer stay at the integer level)
+ */
 function round(value, precision) {
   var multiplier = Math.pow(10, precision || 0);
   return Math.round(value * multiplier) / multiplier;
 }
 /**
-* round with decimal (keep the decimal even if it is an integer)
-*/
+ * round with decimal (keep the decimal even if it is an integer)
+ */
 function roundDecimal(value, precision) {
   var multiplier = Math.pow(10, precision);
   return (Math.round(value * multiplier) / multiplier).toFixed(precision);
@@ -69,48 +67,56 @@ function roundDecimal(value, precision) {
 // converts camel case into title case
 function camel2title(camelCase) {
   // no side-effects
-  return camelCase
-    // inject space before the upper case letters
-    .replace(/([A-Z])/g, function (match) {
-      return " " + match;
-    })
-    // replace first char with upper case
-    .replace(/^./, function (match) {
-      return match.toUpperCase();
-    });
+  return (
+    camelCase
+      // inject space before the upper case letters
+      .replace(/([A-Z])/g, function(match) {
+        return " " + match;
+      })
+      // replace first char with upper case
+      .replace(/^./, function(match) {
+        return match.toUpperCase();
+      })
+  );
 }
 
 // format a number to become 1,000 (with commas)
-const numberWithCommas = (x) => {
+const numberWithCommas = x => {
   return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-}
+};
 
-const isPercentageAxis = (axes) => {
+const isPercentageAxis = axes => {
   if (Array.isArray(axes)) {
-    return axes.length > 0 && axes.reduce((agg, axis) => agg && isPercentageAxis(axis), true);
+    return (
+      axes.length > 0 &&
+      axes.reduce((agg, axis) => agg && isPercentageAxis(axis), true)
+    );
   }
   let axis = axes;
-  return axis.includes('percentage') ||
-    axis.includes('mortality') ||
-    axis.includes('resistance_idnum') ||
-    axis == 'var_resistance_freq' ||
-    axis == 'var_imputed_mortality_avg';
-}
+  return (
+    axis.includes("percentage") ||
+    axis.includes("mortality") ||
+    axis.includes("resistance_idnum") ||
+    axis == "var_resistance_freq" ||
+    axis == "var_imputed_mortality_avg"
+  );
+};
 
 // a function that generates a random key for saved queries
-var generateRandomKey = function () {
-  var ALPHABET = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+var generateRandomKey = function() {
+  var ALPHABET =
+    "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
   var ID_LENGTH = 8;
-  var rtn = '';
+  var rtn = "";
   for (var i = 0; i < ID_LENGTH; i++) {
     rtn += ALPHABET.charAt(Math.floor(Math.random() * ALPHABET.length));
   }
   return rtn;
-}
+};
 
 // a function that generates a unique key for saved queries
 // it depends on function generateRandomKey
-var generateUniqueRandomKey = function (previous) {
+var generateUniqueRandomKey = function(previous) {
   var UNIQUE_RETRIES = 9999;
   previous = previous || [];
   var retries = 0;
@@ -130,12 +136,12 @@ var generateUniqueRandomKey = function (previous) {
 // get formated source by parsing through the backend response
 function getFormattedSource(sources) {
   var value = ""; // empty value string
-  sources.forEach(function (source) {
+  sources.forEach(function(source) {
     var first = source.split("<>")[0];
     var second = source.split("<>")[1];
     value += "<div><span class='source-title'>" + first + ": </span>";
     value += "<span class='source-content'>" + second + "</span></div>";
-  })
+  });
   return value;
 }
 
@@ -144,11 +150,16 @@ function getFormattedSource(sources) {
 // ABCD - [Tooltip: details]
 function getFormattedSourceInTable(sources) {
   var value = ""; // empty value string
-  sources.forEach(function (source) {
+  sources.forEach(function(source) {
     var first = source.split("<>")[0];
     var second = source.split("<>")[1];
-    value += "<div><span data-toggle='tooltip' data-placement='top' data-html='true' data-original-title='" + second + "'>" + first + "</span>";
-  })
+    value +=
+      "<div><span data-toggle='tooltip' data-placement='top' data-html='true' data-original-title='" +
+      second +
+      "'>" +
+      first +
+      "</span>";
+  });
   return value;
 }
 
@@ -168,7 +179,12 @@ if (LANGUAGE_CODE == "es") {
 }
 
 // IMP tooltip
-var impTooltipString = '<span class="badge badge-pill badge-secondary tooltip-pointer" data-toggle="tooltip" data-placement="top" data-original-title="' + gettext("Imputed results are calculated by an algorithm.") + '"> ' + gettext("IMP") + ' </span>';
+var impTooltipString =
+  '<span class="badge badge-pill badge-secondary tooltip-pointer" data-toggle="tooltip" data-placement="top" data-original-title="' +
+  gettext("Imputed results are calculated by an algorithm.") +
+  '"> ' +
+  gettext("IMP") +
+  " </span>";
 
 // variableMapping
 // used for loading a variable (variables extracted from a saved query ==> variables in the vm filter object)
@@ -189,11 +205,13 @@ var variableMapping = {
   guns_mounted: "var_guns_mounted",
 
   imp_port_voyage_begin_idnum: "var_imp_port_voyage_begin_id",
-  imp_principal_place_of_slave_purchase_idnum: "var_imp_principal_place_of_slave_purchase_id",
+  imp_principal_place_of_slave_purchase_idnum:
+    "var_imp_principal_place_of_slave_purchase_id",
   first_place_slave_purchase_idnum: "var_first_place_slave_purchase_id",
   second_place_slave_purchase_idnum: "var_second_place_slave_purchase_id",
   third_place_slave_purchase_idnum: "var_third_place_slave_purchase_id",
-  port_of_call_before_atl_crossing_idnum: "var_port_of_call_before_atl_crossing_id",
+  port_of_call_before_atl_crossing_idnum:
+    "var_port_of_call_before_atl_crossing_id",
   imp_principal_port_slave_dis_idnum: "var_imp_principal_port_slave_dis_id",
   first_landing_place_idnum: "var_first_landing_place_id",
   second_landing_place_idnum: "var_second_landing_place_id",
@@ -207,7 +225,8 @@ var variableMapping = {
   num_slaves_carried_first_port: "var_num_slaves_carried_first_port",
   num_slaves_carried_second_port: "var_num_slaves_carried_second_port",
   num_slaves_carried_third_port: "var_num_slaves_carried_third_port",
-  total_num_slaves_arr_first_port_embark: "var_total_num_slaves_arr_first_port_embark",
+  total_num_slaves_arr_first_port_embark:
+    "var_total_num_slaves_arr_first_port_embark",
   num_slaves_disembark_first_place: "var_num_slaves_disembark_first_place",
   num_slaves_disembark_second_place: "var_num_slaves_disembark_second_place",
   num_slaves_disembark_third_place: "var_num_slaves_disembark_third_place",
@@ -261,13 +280,19 @@ function activateFilter(filter, group, subGroup, filterValues) {
 function resetFilter(filter, group, subGroup) {
   for (key in filter[group][subGroup]) {
     if (key !== "count") {
-      if (filter[group][subGroup][key].value["searchTerm0"] === undefined) { // has only one search term
-        filter[group][subGroup][key].value["searchTerm"] = filter[group][subGroup][key].default["searchTerm"];
-      } else { // has two search terms
-        filter[group][subGroup][key].value["searchTerm0"] = filter[group][subGroup][key].default["searchTerm0"];
-        filter[group][subGroup][key].value["searchTerm1"] = filter[group][subGroup][key].default["searchTerm1"];
+      if (filter[group][subGroup][key].value["searchTerm0"] === undefined) {
+        // has only one search term
+        filter[group][subGroup][key].value["searchTerm"] =
+          filter[group][subGroup][key].default["searchTerm"];
+      } else {
+        // has two search terms
+        filter[group][subGroup][key].value["searchTerm0"] =
+          filter[group][subGroup][key].default["searchTerm0"];
+        filter[group][subGroup][key].value["searchTerm1"] =
+          filter[group][subGroup][key].default["searchTerm1"];
       }
-      filter[group][subGroup][key].value["op"] = filter[group][subGroup][key].default["op"];
+      filter[group][subGroup][key].value["op"] =
+        filter[group][subGroup][key].default["op"];
       filter[group][subGroup][key].changed = false;
       filter[group][subGroup][key].activated = false;
     }
@@ -281,7 +306,7 @@ function serializeFilter(filter) {
 
 function replaceKey(key) {
   if (key == "is less than") {
-    return "is at most"
+    return "is at most";
   } else if (key == "is more than") {
     return "is at least";
   } else if (key == "is equal to") {
@@ -303,42 +328,55 @@ function searchAll(filter, filterData) {
                 var item = {};
                 var searchTerm = [];
                 item["op"] = replaceKey(filter[key1][key2][key3].value["op"]);
-                if (filter[key1][key2][key3].value["searchTerm0"] === undefined) {
+                if (
+                  filter[key1][key2][key3].value["searchTerm0"] === undefined
+                ) {
                   // if it's a multi-tiered place variable
-                  if (filter[key1][key2][key3].constructor.name === "PlaceVariable") {
-                    var sortedSelections = filter[key1][key2][key3].value["searchTerm"].sort(sortNumber);
+                  if (
+                    filter[key1][key2][key3].constructor.name ===
+                    "PlaceVariable"
+                  ) {
+                    var sortedSelections = filter[key1][key2][key3].value[
+                      "searchTerm"
+                    ].sort(sortNumber);
                     var searchTerm = [];
 
-                    sortedSelections.forEach(function (selection) {
+                    sortedSelections.forEach(function(selection) {
                       var varName = filter[key1][key2][key3]["varName"];
-                      if (selection == filterData.treeselectOptions[varName][0].id) {
+                      if (
+                        selection == filterData.treeselectOptions[varName][0].id
+                      ) {
                         // select all
-                        filterData.treeselectOptions[varName][0].children.forEach(function (broadRegion) {
-                          broadRegion.children.forEach(function (region) {
-                            region.children.forEach(function (subRegion) {
+                        filterData.treeselectOptions[
+                          varName
+                        ][0].children.forEach(function(broadRegion) {
+                          broadRegion.children.forEach(function(region) {
+                            region.children.forEach(function(subRegion) {
                               searchTerm.push(subRegion.id);
-                            })
-                          })
+                            });
+                          });
                         });
                       } else {
                         // broadRegion
-                        filterData.treeselectOptions[varName][0].children.forEach(function (broadRegion) {
+                        filterData.treeselectOptions[
+                          varName
+                        ][0].children.forEach(function(broadRegion) {
                           if (selection == broadRegion.id) {
-                            broadRegion.children.forEach(function (region) {
-                              region.children.forEach(function (subRegion) {
+                            broadRegion.children.forEach(function(region) {
+                              region.children.forEach(function(subRegion) {
                                 searchTerm.push(subRegion.id);
                               });
-                            })
+                            });
                           } else {
-                            broadRegion.children.forEach(function (region) {
+                            broadRegion.children.forEach(function(region) {
                               // region
                               if (selection == region.id) {
-                                region.children.forEach(function (subRegion) {
+                                region.children.forEach(function(subRegion) {
                                   searchTerm.push(subRegion.id);
                                 });
                               } else {
                                 // subRegion
-                                region.children.forEach(function (subRegion) {
+                                region.children.forEach(function(subRegion) {
                                   if (selection == subRegion.id) {
                                     searchTerm.push(subRegion.id);
                                   }
@@ -353,67 +391,121 @@ function searchAll(filter, filterData) {
                     item["searchTerm"] = searchTerm;
 
                     // if it's a TreeselectVariable
-                  } else if (filter[key1][key2][key3].constructor.name === "TreeselectVariable") {
-                    var sortedSelections = filter[key1][key2][key3].value["searchTerm"].sort(sortNumber);
+                  } else if (
+                    filter[key1][key2][key3].constructor.name ===
+                    "TreeselectVariable"
+                  ) {
+                    var sortedSelections = filter[key1][key2][key3].value[
+                      "searchTerm"
+                    ].sort(sortNumber);
                     var searchTerm = [];
-
 
                     if (sortedSelections.includes("0")) {
                       // select all
-                      filterData.treeselectOptions[varName][0].children.forEach(function (options) {
-                        searchTerm.push(options.id);
-                      });
+                      filterData.treeselectOptions[varName][0].children.forEach(
+                        function(options) {
+                          searchTerm.push(options.id);
+                        }
+                      );
                     } else {
                       searchTerm = filter[key1][key2][key3].value["searchTerm"];
                     }
 
                     item["searchTerm"] = searchTerm;
-                  } else if (filter[key1][key2][key3].constructor.name === "PercentageVariable") {
-                    item["searchTerm"] = parseInt(filter[key1][key2][key3].value["searchTerm"]) / 100;
+                  } else if (
+                    filter[key1][key2][key3].constructor.name ===
+                    "PercentageVariable"
+                  ) {
+                    item["searchTerm"] =
+                      parseInt(filter[key1][key2][key3].value["searchTerm"]) /
+                      100;
                   } else {
-                    item["searchTerm"] = filter[key1][key2][key3].value["searchTerm"];
+                    item["searchTerm"] =
+                      filter[key1][key2][key3].value["searchTerm"];
                   }
                 } else {
-                  item["searchTerm"] = [filter[key1][key2][key3].value["searchTerm0"], filter[key1][key2][key3].value["searchTerm1"]];
+                  item["searchTerm"] = [
+                    filter[key1][key2][key3].value["searchTerm0"],
+                    filter[key1][key2][key3].value["searchTerm1"]
+                  ];
 
                   // patch for date variables
-                  if (filter[key1][key2][key3].constructor.name === "DateVariable") {
+                  if (
+                    filter[key1][key2][key3].constructor.name === "DateVariable"
+                  ) {
                     // if user chose to search against a particular day, make sure it is searching against a range
                     // i.e. add 23:59:59 to searchTerm0
                     if (filter[key1][key2][key3].value["op"] == "is equal to") {
                       filter[key1][key2][key3].value["op"] = "is between";
-                      filter[key1][key2][key3].value["searchTerm1"] = filter[key1][key2][key3].value["searchTerm0"].substring(0, 10);
-                      filter[key1][key2][key3].value["searchTerm0"] = filter[key1][key2][key3].value["searchTerm1"].replace("/", "-") + "T00:00:00Z";
-                      filter[key1][key2][key3].value["searchTerm1"] = filter[key1][key2][key3].value["searchTerm1"] + "T23:59:59Z";
+                      filter[key1][key2][key3].value["searchTerm1"] = filter[
+                        key1
+                      ][key2][key3].value["searchTerm0"].substring(0, 10);
+                      filter[key1][key2][key3].value["searchTerm0"] =
+                        filter[key1][key2][key3].value["searchTerm1"].replace(
+                          "/",
+                          "-"
+                        ) + "T00:00:00Z";
+                      filter[key1][key2][key3].value["searchTerm1"] =
+                        filter[key1][key2][key3].value["searchTerm1"] +
+                        "T23:59:59Z";
                     }
                     // make the to date always inclusive (add 23:59:59)
-                    if (filter[key1][key2][key3].value["searchTerm1"] !== null) {
-                      if (filter[key1][key2][key3].value["searchTerm0"].substring(0, 10) != filter[key1][key2][key3].value["searchTerm1"].substring(0, 10)) {
+                    if (
+                      filter[key1][key2][key3].value["searchTerm1"] !== null
+                    ) {
+                      if (
+                        filter[key1][key2][key3].value["searchTerm0"].substring(
+                          0,
+                          10
+                        ) !=
+                        filter[key1][key2][key3].value["searchTerm1"].substring(
+                          0,
+                          10
+                        )
+                      ) {
                         // filter[key1][key2][key3].value["searchTerm1"] = moment(filter[key1][key2][key3].value["searchTerm1"], SOLR_DATE_FORMAT).add(1, "days").subtract(1, "seconds");
-                        filter[key1][key2][key3].value["searchTerm1"] = filter[key1][key2][key3].value["searchTerm1"].replace("/", "-") + "T23:59:59Z";
+                        filter[key1][key2][key3].value["searchTerm1"] =
+                          filter[key1][key2][key3].value["searchTerm1"].replace(
+                            "/",
+                            "-"
+                          ) + "T23:59:59Z";
                       }
                     }
-                    item["searchTerm"] = [filter[key1][key2][key3].value["searchTerm0"], filter[key1][key2][key3].value["searchTerm1"]];
+                    item["searchTerm"] = [
+                      filter[key1][key2][key3].value["searchTerm0"],
+                      filter[key1][key2][key3].value["searchTerm1"]
+                    ];
                     item["op"] = filter[key1][key2][key3].value["op"];
                   }
 
                   // patch for percentage variables
-                  if (filter[key1][key2][key3].constructor.name === "PercentageVariable") {
-                    var searchTerm0 = parseInt(filter[key1][key2][key3].value["searchTerm0"]) / 100;
-                    var searchTerm1 = parseInt(filter[key1][key2][key3].value["searchTerm1"]) / 100;
+                  if (
+                    filter[key1][key2][key3].constructor.name ===
+                    "PercentageVariable"
+                  ) {
+                    var searchTerm0 =
+                      parseInt(filter[key1][key2][key3].value["searchTerm0"]) /
+                      100;
+                    var searchTerm1 =
+                      parseInt(filter[key1][key2][key3].value["searchTerm1"]) /
+                      100;
                     item["searchTerm"] = [searchTerm0, searchTerm1];
                   }
                 }
 
                 // TODO: fix a bug with the backend: it should use _idnum and not _id except for voyage_id
-                if (filter[key1][key2][key3].varName.slice(-3) == "_id" && filter[key1][key2][key3].varName !== "voyage_id") {
+                if (
+                  filter[key1][key2][key3].varName.slice(-3) == "_id" &&
+                  filter[key1][key2][key3].varName !== "voyage_id"
+                ) {
                   item["varName"] = filter[key1][key2][key3].varName + "num";
                 } else {
                   item["varName"] = filter[key1][key2][key3].varName;
                 }
 
                 // TODO: backend patch
-                if (filter[key1][key2][key3].varName == "nationality" ||
+                if (
+                  filter[key1][key2][key3].varName == "nationality" ||
                   filter[key1][key2][key3].varName == "imputed_nationality" ||
                   filter[key1][key2][key3].varName == "rig_of_vessel" ||
                   filter[key1][key2][key3].varName == "outcome_voyage" ||
@@ -436,14 +528,14 @@ function searchAll(filter, filterData) {
 
   // placeholder
   hasYear = false;
-  items.map(function (item) {
+  items.map(function(item) {
     if (item.varName == "imp_arrival_at_port_of_dis") {
       if (item.op == "between") {
         item.op = "is between"; // patch a backend bug
       }
       hasYear = true;
     }
-  })
+  });
 
   if (!hasYear) {
     var item = {};
@@ -454,7 +546,11 @@ function searchAll(filter, filterData) {
   }
 
   if (SV_MODE == "intra") {
-    const intraFlagObject = { "op": "equals", "searchTerm": ["true"], "varName": "intra_american_voyage" };
+    const intraFlagObject = {
+      op: "equals",
+      searchTerm: ["true"],
+      varName: "intra_american_voyage"
+    };
     items.push(intraFlagObject);
   }
   // alert(JSON.stringify(items));
@@ -482,11 +578,11 @@ function processPlacesAjax(data) {
     } else if (item.type == "region") {
       item.broad_region = broadRegions[item.parent];
       item.label = item.region;
-      item.ports = []
+      item.ports = [];
       regions[item.pk] = item;
     } else if (item.type == "broad_region") {
       item.label = item.broad_region;
-      item.ports = []
+      item.ports = [];
       broadRegions[item.pk] = item;
     }
     allDict[item.value] = item;
@@ -513,8 +609,8 @@ function getTreeselectLabel(currentVariable, searchTerms, treeselectOptions) {
 
   if (currentVariable.constructor.name == "TreeselectVariable") {
     treeselectOptions = treeselectOptions["var_" + currentVariable.varName];
-    searchTerms.forEach(function (searchTerm) {
-      treeselectOptions.forEach(function (treeselectOption) {
+    searchTerms.forEach(function(searchTerm) {
+      treeselectOptions.forEach(function(treeselectOption) {
         if (treeselectOption.value == searchTerm) {
           labels.push(treeselectOption.label);
         }
@@ -522,25 +618,30 @@ function getTreeselectLabel(currentVariable, searchTerms, treeselectOptions) {
     });
   } else if (currentVariable.constructor.name == "PlaceVariable") {
     treeselectOptions = treeselectOptions[currentVariable.varName][0];
-    searchTerms.forEach(function (searchTerm) {
-      if (searchTerm == treeselectOptions.id) { // ALL SELECTED
+    searchTerms.forEach(function(searchTerm) {
+      if (searchTerm == treeselectOptions.id) {
+        // ALL SELECTED
         labels.push(treeselectOptions.label);
       } else {
-        if (treeselectOptions.children !== undefined) { // BROARD REGION
+        if (treeselectOptions.children !== undefined) {
+          // BROARD REGION
           broadRegions = treeselectOptions.children;
-          broadRegions.forEach(function (broadRegion) {
+          broadRegions.forEach(function(broadRegion) {
             if (searchTerm == broadRegion.id) {
               labels.push(broadRegion.label);
             } else {
-              if (broadRegion.children !== undefined) { // REGION
+              if (broadRegion.children !== undefined) {
+                // REGION
                 regions = broadRegion.children;
-                regions.forEach(function (region) {
+                regions.forEach(function(region) {
                   if (searchTerm == region.id) {
                     labels.push(region.label);
-                  } else { // SUB REGION
-                    if (region.children !== undefined) { // SUB REGION
+                  } else {
+                    // SUB REGION
+                    if (region.children !== undefined) {
+                      // SUB REGION
                       subRegions = region.children;
-                      subRegions.forEach(function (subRegion) {
+                      subRegions.forEach(function(subRegion) {
                         if (searchTerm == subRegion.id) {
                           labels.push(subRegion.label);
                         }
@@ -566,18 +667,23 @@ function loadTreeselectOptions(vm, vTreeselect, filter, callback) {
 
   // load only once remotely and then local copy
   if (!vm.filterData.treeselectOptions[varName]) {
-
     // load special weird variables
-    if (["registered_place_idnum", "vessel_construction_place_idnum"].indexOf(varName) >= 0) {
-      axios.post('/voyage/filtered-places', {})
-        .then(function (response) {
+    if (
+      ["registered_place_idnum", "vessel_construction_place_idnum"].indexOf(
+        varName
+      ) >= 0
+    ) {
+      axios
+        .post("/voyage/filtered-places", {})
+        .then(function(response) {
           var options = parsePlaces(response);
           vm.filterData.treeselectOptions[varName] = options;
-          vTreeselect.treeselectOptions = vm.filterData.treeselectOptions[varName];
+          vTreeselect.treeselectOptions =
+            vm.filterData.treeselectOptions[varName];
           callback(); // notify vue-treeselect about data population completion
           return;
         })
-        .catch(function (error) {
+        .catch(function(error) {
           options.errorMessage = error;
           $("#sv-loader").addClass("display-none");
           $("#sv-loader-error").removeClass("display-none");
@@ -587,17 +693,19 @@ function loadTreeselectOptions(vm, vTreeselect, filter, callback) {
 
     // load PlaceVariable
     else if (loadType == "place") {
-      axios.post('/voyage/filtered-places', {
-        var_name: varName,
-      })
-        .then(function (response) {
+      axios
+        .post("/voyage/filtered-places", {
+          var_name: varName
+        })
+        .then(function(response) {
           var options = parsePlaces(response);
           vm.filterData.treeselectOptions[varName] = options;
-          vTreeselect.treeselectOptions = vm.filterData.treeselectOptions[varName];
+          vTreeselect.treeselectOptions =
+            vm.filterData.treeselectOptions[varName];
           callback(); // notify vue-treeselect about data population completion
           return;
         })
-        .catch(function (error) {
+        .catch(function(error) {
           options.errorMessage = error;
           $("#sv-loader").addClass("display-none");
           $("#sv-loader-error").removeClass("display-none");
@@ -608,19 +716,21 @@ function loadTreeselectOptions(vm, vTreeselect, filter, callback) {
     // load TreeselectVariable
     else if (loadType == "treeselect") {
       varName = "var_" + varName;
-      axios.post('/voyage/var-options', {
-        var_name: varName,
-      })
-        .then(function (response) {
-          response.data.data.map(function (data) {
+      axios
+        .post("/voyage/var-options", {
+          var_name: varName
+        })
+        .then(function(response) {
+          response.data.data.map(function(data) {
             data["id"] = data["value"];
           });
           vm.filterData.treeselectOptions[varName] = response.data.data;
-          vTreeselect.treeselectOptions = vm.filterData.treeselectOptions[varName];
+          vTreeselect.treeselectOptions =
+            vm.filterData.treeselectOptions[varName];
           callback(); // notify vue-treeselect about data population completion
           return;
         })
-        .catch(function (error) {
+        .catch(function(error) {
           options.errorMessage = error;
           $("#sv-loader").addClass("display-none");
           $("#sv-loader-error").removeClass("display-none");
@@ -639,32 +749,40 @@ function loadTreeselectOptions(vm, vTreeselect, filter, callback) {
 }
 
 // parsePlaces function
-var parsePlaces = function (response) {
+var parsePlaces = function(response) {
   var data = processPlacesAjax(response.data.data);
-  var options = [{
-    id: 0,
-    label: gettext("Select All"),
-    children: null
-  }];
+  var options = [
+    {
+      id: 0,
+      label: gettext("Select All"),
+      children: null
+    }
+  ];
 
   // fill select all
-  options = [{
-    id: 0,
-    code: 0,
-    label: gettext("Select All"),
-    children: [],
-  }];
+  options = [
+    {
+      id: 0,
+      code: 0,
+      label: gettext("Select All"),
+      children: []
+    }
+  ];
 
   // sort regions by order
-  data.regions = Object.keys(data.regions).sort(function (a, b) { return data.regions[a].order - data.regions[b].order }).map(key => data.regions[key]);   // sort data.regions by "order" attribute
+  data.regions = Object.keys(data.regions)
+    .sort(function(a, b) {
+      return data.regions[a].order - data.regions[b].order;
+    })
+    .map(key => data.regions[key]); // sort data.regions by "order" attribute
 
   // fill broad regions
   for (key in data.broadRegions) {
     options[0].children.push({
       id: data.broadRegions[key].order,
       label: data.broadRegions[key].broad_region,
-      children: [],
-    })
+      children: []
+    });
   }
 
   // build regions
@@ -676,13 +794,17 @@ var parsePlaces = function (response) {
           id: data.regions[regionId].code,
           label: data.regions[regionId].region,
           children: []
-        })
+        });
       }
     }
   }
 
   // fill ports
-  data.ports = Object.keys(data.ports).sort(function (a, b) { return data.ports[a].order - data.ports[b].order }).map(key => data.ports[key]);   // sort data.ports by "order" attribute
+  data.ports = Object.keys(data.ports)
+    .sort(function(a, b) {
+      return data.ports[a].order - data.ports[b].order;
+    })
+    .map(key => data.ports[key]); // sort data.ports by "order" attribute
 
   for (portId in data.ports) {
     // get basic information about a port
@@ -692,22 +814,23 @@ var parsePlaces = function (response) {
     var broadRegionId = data.ports[portId].region.broad_region.order;
 
     // locate corresponding location in the options tree
-    options[0].children.map(function (broadRegion) {
+    options[0].children.map(function(broadRegion) {
       if (broadRegion.id == broadRegionId) {
-        broadRegion.children.map(function (region) {
-          if (region.id == regionId) { // in the correct region
-            region.children.push({ // fill port
+        broadRegion.children.map(function(region) {
+          if (region.id == regionId) {
+            // in the correct region
+            region.children.push({
+              // fill port
               id: code,
               label: label
-            })
+            });
           }
-        })
+        });
       }
     });
-
   }
   return options;
-}
+};
 
 function sortNumber(a, b) {
   return a - b;
@@ -724,7 +847,9 @@ function initZeroArray(length) {
 function destroyPreviousTable(id) {
   try {
     if ($.fn.DataTable.isDataTable(id)) {
-      $(id).DataTable().destroy();
+      $(id)
+        .DataTable()
+        .destroy();
     }
   } catch (e) {
     console.log(e);
@@ -734,21 +859,18 @@ function destroyPreviousTable(id) {
 function refreshUi(filter, filterData, currentTab, tabData, options) {
   // Update UI after search query was changed,
   // or a tab was selected.
-  $('#map').hide();
+  $("#map").hide();
   var currentSearchObj = {
     items: searchAll(filter, filterData),
     orderBy: []
   };
 
-  
-  if (currentTab == 'results') {
+  if (currentTab == "results") {
     // Results DataTable
     var pageLength = {
-      extend: 'pageLength',
-      className: 'btn btn-info buttons-collection dropdown-toggle',
+      extend: "pageLength",
+      className: "btn btn-info buttons-collection dropdown-toggle"
     };
-
-
 
     var mainDatatable = $("#results_main_table").DataTable({
       ajax: {
@@ -989,37 +1111,55 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
       }
     });
 
-    mainDatatable.on('draw.dt', function () {
+    mainDatatable.on("draw.dt", function() {
       $('[data-toggle="tooltip"]').tooltip();
     });
 
     // built for the datatable download dropdown menu
     function makeDownloadFunction(isExcel, isFiltered, isVisibleColumns) {
-      return function () {
+      return function() {
         // decides if it's returning visible columns or all columns
-        var visibleColumns = isVisibleColumns ? $.map($.makeArray(mainDatatable.columns().visible()), function (visible, index) {
-          return visible ? allColumns[index].data : undefined;
-        }) : [];
+        var visibleColumns = isVisibleColumns
+          ? $.map($.makeArray(mainDatatable.columns().visible()), function(
+              visible,
+              index
+            ) {
+              return visible ? allColumns[index].data : undefined;
+            })
+          : [];
 
-        var form = $("<form action='api/download' method='post'>{% csrf_token %}</form>");
-        form.append($("<input name='data' type='hidden'></input>").attr('value', JSON.stringify({
+        var form = $(
+          "<form action='api/download' method='post'>{% csrf_token %}</form>"
+        );
+        form.append(
+          $("<input name='data' type='hidden'></input>").attr(
+            "value",
+            JSON.stringify({
+              searchData: isFiltered ? currentSearchObj : { items: [] }, // decides if it's returning filtered data or all data
 
-          searchData: isFiltered ? currentSearchObj : { "items": [] }, // decides if it's returning filtered data or all data
-
-          cols: visibleColumns,
-          excel_mode: !!isExcel, // make sure it's a true boolean variable
-        })));
-        form.appendTo('body').submit().remove();
-      }
+              cols: visibleColumns,
+              excel_mode: !!isExcel // make sure it's a true boolean variable
+            })
+          )
+        );
+        form
+          .appendTo("body")
+          .submit()
+          .remove();
+      };
     }
 
-    mainDatatable.on('column-visibility.dt', function (e, settings, column, state) {
-      $('[data-toggle="tooltip"]').tooltip()
+    mainDatatable.on("column-visibility.dt", function(
+      e,
+      settings,
+      column,
+      state
+    ) {
+      $('[data-toggle="tooltip"]').tooltip();
     });
-
-  } else if (currentTab == 'statistics') {
+  } else if (currentTab == "statistics") {
     // Summary statistics.
-    var tableId = '#v-summary-statistics';
+    var tableId = "#v-summary-statistics";
     destroyPreviousTable(tableId);
     var mainDatatable = $(tableId).DataTable({
       // order: [[0, "desc"]], // sort by first column
@@ -1039,9 +1179,7 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
         dataSrc: function(json) {
           for (var i = 0, ien = json.data.length; i < ien; i++) {
             json.data[i][0] = json.data[i][0].includes("*")
-              ? gettext(json.data[i][0].slice(0, -1)).concat(
-                  impTooltipString
-                )
+              ? gettext(json.data[i][0].slice(0, -1)).concat(impTooltipString)
               : gettext(json.data[i][0]);
           }
           return json.data;
@@ -1084,14 +1222,14 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
         $('[data-toggle="tooltip"]').tooltip();
       }
     });
-  } else if (currentTab == 'tables') {
-    var getTableElement = function (source) {
+  } else if (currentTab == "tables") {
+    var getTableElement = function(source) {
       var id = tabData.tables[source].value;
-      return tabs.tables[source].options.find(function (x) {
+      return tabs.tables[source].options.find(function(x) {
         return x.id == id;
       });
     };
-    var getField = function (source) {
+    var getField = function(source) {
       var el = getTableElement(source);
       return el ? fieldMap[el.label] : null;
     };
@@ -1105,9 +1243,9 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
       row_field: rowElement.varName,
       col_field: colElement.varName,
       pivot_functions: cell ? cell.functions : null,
-      omit_empty: tabData.tables.options.omitEmpty.toString(),
+      omit_empty: tabData.tables.options.omitEmpty.toString()
     };
-    var isRange = rowElement && rowElement.hasOwnProperty('range');
+    var isRange = rowElement && rowElement.hasOwnProperty("range");
     if (isRange) {
       postData.range = rowElement.range;
     }
@@ -1116,73 +1254,104 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
     if (postData.row_field && postData.col_field && postData.pivot_functions) {
       $("#sv-loader").removeClass("display-none");
 
-      $.post(SEARCH_URL, JSON.stringify(postData), function (result) {
+      $.post(SEARCH_URL, JSON.stringify(postData), function(result) {
         // Produce a table with data content.
-        var table = $('#v-tables');
-        destroyPreviousTable('#v-tables');
-        var columnHeaderRows = 1 + (result.col_extra_headers ? result.col_extra_headers.length : 0);
-        var thead = table.find('thead');
+        var table = $("#v-tables");
+        destroyPreviousTable("#v-tables");
+        var columnHeaderRows =
+          1 + (result.col_extra_headers ? result.col_extra_headers.length : 0);
+        var thead = table.find("thead");
         thead.empty();
         // Top-left row is blank.
-        var subCells = $.map(Object.keys(cell.functions), function (key) {
-          return key[0] == '_' ? undefined : key;
+        var subCells = $.map(Object.keys(cell.functions), function(key) {
+          return key[0] == "_" ? undefined : key;
         });
-        var totalsHeader = '<th colspan="' + subCells.length + '" rowspan="' + columnHeaderRows + '">' + gettext('Totals') + '</th>';
-        var tr = '<tr><th rowspan="' + (columnHeaderRows + (subCells.length > 1 ? 1 : 0)) + '">' + gettext('Year Range') + '</th>';
+        var totalsHeader =
+          '<th colspan="' +
+          subCells.length +
+          '" rowspan="' +
+          columnHeaderRows +
+          '">' +
+          gettext("Totals") +
+          "</th>";
+        var tr =
+          '<tr><th rowspan="' +
+          (columnHeaderRows + (subCells.length > 1 ? 1 : 0)) +
+          '">' +
+          gettext("Year Range") +
+          "</th>";
         // Append extra column headers.
         if (columnHeaderRows > 1) {
           for (var i = 0; i < columnHeaderRows - 1; ++i) {
             var headerRow = result.col_extra_headers[i];
             for (var j = 0; j < headerRow.length; ++j) {
               var headerData = headerRow[j];
-              tr += '<th colspan="' + headerData[1] * subCells.length + '">' + headerData[0] + '</th>';
+              tr +=
+                '<th colspan="' +
+                headerData[1] * subCells.length +
+                '">' +
+                headerData[0] +
+                "</th>";
             }
             if (i == 0) {
               tr += totalsHeader;
             }
-            tr += '</tr>';
+            tr += "</tr>";
           }
           thead.append(tr);
-          tr = '<tr>';
+          tr = "<tr>";
         }
         // Append normal column headers.
-        var colTotals = initZeroArray((result.columns.length + 1) * subCells.length);
+        var colTotals = initZeroArray(
+          (result.columns.length + 1) * subCells.length
+        );
         for (var i = 0; i < result.columns.length; ++i) {
-          tr += '<th colspan="' + subCells.length + '">' + result.columns[i] + '</th>';
+          tr +=
+            '<th colspan="' +
+            subCells.length +
+            '">' +
+            result.columns[i] +
+            "</th>";
         }
         if (columnHeaderRows == 1) {
           tr += totalsHeader;
         }
-        tr += '</tr>';
+        tr += "</tr>";
         thead.append(tr);
         if (subCells.length > 1) {
           // Each cell is split into multiple values.
-          tr = '<tr>'
+          tr = "<tr>";
           for (var i = 0; i < result.columns.length + 1; ++i) {
             for (var j = 0; j < subCells.length; ++j) {
-              tr += '<th>' + subCells[j] + '</th>';
+              tr += "<th>" + subCells[j] + "</th>";
             }
           }
-          tr += '</tr>';
+          tr += "</tr>";
           thead.append(tr);
         }
         // Append main data.
-        var tbody = table.find('tbody');
+        var tbody = table.find("tbody");
         tbody.empty();
         // We first create a dense matrix with all the table numbers.
         // The data can then be processed (e.g. for row/col percentages).
         var mx = [];
         var allRowTotals = [];
         var rowCounts = initZeroArray(result.rows.length);
-        var colCounts = initZeroArray((result.columns.length + 1) * subCells.length);
-        var weightByCount = cell.hasOwnProperty('avg');
+        var colCounts = initZeroArray(
+          (result.columns.length + 1) * subCells.length
+        );
+        var weightByCount = cell.hasOwnProperty("avg");
         for (var rowIdx = 0; rowIdx < result.rows.length; ++rowIdx) {
           var currentRowTotals = initZeroArray(subCells.length);
           var allCells = initZeroArray(result.columns.length * subCells.length);
           // The result representation is sparse, so we initially
           // set cell values for the row as Zero and then replace
           // the non-zero entries by reading result.rows[rowIdx].
-          for (var rowCell = 0; rowCell < result.cells[rowIdx].length; ++rowCell) {
+          for (
+            var rowCell = 0;
+            rowCell < result.cells[rowIdx].length;
+            ++rowCell
+          ) {
             var cellData = result.cells[rowIdx][rowCell];
             var colIdx = cellData[0];
             var cellCount = cellData[1].count;
@@ -1214,14 +1383,15 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
             colTotals[j] /= colCounts[j];
           }
         }
-        var format = cell.hasOwnProperty('format') ? cell.format : 'decimal';
-        if (cell.hasOwnProperty('processing')) {
+        var format = cell.hasOwnProperty("format") ? cell.format : "decimal";
+        if (cell.hasOwnProperty("processing")) {
           // We require some processing of the table entries.
-          if ('perc_row_total' == cell.processing) {
-            format = 'percent';
+          if ("perc_row_total" == cell.processing) {
+            format = "percent";
             for (var rowIdx = 0; rowIdx < mx.length; ++rowIdx) {
               for (var colIdx = 0; colIdx < mx[rowIdx].length; ++colIdx) {
-                mx[rowIdx][colIdx] /= allRowTotals[rowIdx][colIdx % subCells.length];
+                mx[rowIdx][colIdx] /=
+                  allRowTotals[rowIdx][colIdx % subCells.length];
               }
               // Row percentages add up to 100%.
               for (var j = 0; j < subCells.length; ++j) {
@@ -1229,10 +1399,13 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
               }
             }
             for (var j = 0; j < colTotals.length; ++j) {
-              colTotals[j] /= colTotals[colTotals.length - subCells.length + (j % subCells.length)];
+              colTotals[j] /=
+                colTotals[
+                  colTotals.length - subCells.length + (j % subCells.length)
+                ];
             }
-          } else if ('perc_col_total' == cell.processing) {
-            format = 'percent';
+          } else if ("perc_col_total" == cell.processing) {
+            format = "percent";
             for (var rowIdx = 0; rowIdx < mx.length; ++rowIdx) {
               for (var colIdx = 0; colIdx < mx[rowIdx].length; ++colIdx) {
                 mx[rowIdx][colIdx] /= colTotals[colIdx];
@@ -1248,11 +1421,11 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
             }
           }
         }
-        var fmtFunc = function (x) {
+        var fmtFunc = function(x) {
           return x.toLocaleString(undefined, {
             style: format,
-            minimumFractionDigits: (format == 'percent' || weightByCount) ? 1 : 0,
-            maximumFractionDigits: 1,
+            minimumFractionDigits: format == "percent" || weightByCount ? 1 : 0,
+            maximumFractionDigits: 1
           });
         };
         for (var rowIdx = 0; rowIdx < mx.length; ++rowIdx) {
@@ -1260,74 +1433,81 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
           if (isRange) {
             // The row header coming from the server contains just the
             // initial element of the range, so we must format it here.
-            rowHeaderText = rowHeaderText + '-' + (parseInt(rowHeaderText) + postData.range.gap - 1);
+            rowHeaderText =
+              rowHeaderText +
+              "-" +
+              (parseInt(rowHeaderText) + postData.range.gap - 1);
           }
-          tr = '<tr><th>' + rowHeaderText + '</th>';
+          tr = "<tr><th>" + rowHeaderText + "</th>";
           for (var colIdx = 0; colIdx < mx[rowIdx].length; ++colIdx) {
-            tr += '<td class="right">' + fmtFunc(mx[rowIdx][colIdx]) + '</td>';
+            tr += '<td class="right">' + fmtFunc(mx[rowIdx][colIdx]) + "</td>";
           }
           // Add row totals.
           for (var j = 0; j < subCells.length; ++j) {
-            tr += '<th class="right">' + fmtFunc(allRowTotals[rowIdx][j], true) + '</th>'
+            tr +=
+              '<th class="right">' +
+              fmtFunc(allRowTotals[rowIdx][j], true) +
+              "</th>";
           }
-          tr += '</tr>';
+          tr += "</tr>";
           tbody.append(tr);
         }
         // Add column totals to the foot.
-        var tfoot = table.find('tfoot');
+        var tfoot = table.find("tfoot");
         tfoot.empty();
-        tr = '<tr><th>' + gettext('Totals') + '</th>';
+        tr = "<tr><th>" + gettext("Totals") + "</th>";
         for (var colIdx = 0; colIdx < colTotals.length; ++colIdx) {
-          tr += '<th class="right">' + fmtFunc(colTotals[colIdx], true) + '</th>';
+          tr +=
+            '<th class="right">' + fmtFunc(colTotals[colIdx], true) + "</th>";
         }
-        tr += '</tr>';
+        tr += "</tr>";
         tfoot.append(tr);
         table.DataTable({
           scrollX: true,
           scrollCollapse: true,
           pageLength: 15,
-          lengthMenu: [
-            [15, 50, 100, 200],
-            ['15', '50', '100', '200']
-          ],
+          lengthMenu: [[15, 50, 100, 200], ["15", "50", "100", "200"]],
           processing: true,
-          dom: "<'flex-container'iB>" +
+          dom:
+            "<'flex-container'iB>" +
             "<'row'<'col-sm-12'tr>>" +
             "<'row'<'col-sm-5'><'col-sm-7'p>>",
           language: dtLanguage,
           buttons: [
             {
-              extend: 'collection',
+              extend: "collection",
               text: '<span class="fa fa-columns"></span>',
-              className: 'btn btn-info buttons-collection dropdown-toggle',
-              text: gettext('Download'),
+              className: "btn btn-info buttons-collection dropdown-toggle",
+              text: gettext("Download"),
               // Top level: CSV vs. Excel
-              buttons: ['csvHtml5', 'excelHtml5']
+              buttons: ["csvHtml5", "excelHtml5"]
             }
-          ],
+          ]
         });
-      }).done(function () {
-        $("#sv-loader").addClass("display-none");
-      }).fail(function (xhr, status, error) {
-        options.errorMessage = error;
-        $("#sv-loader").addClass("display-none");
-        $("#sv-loader-error").removeClass("display-none");
-      });
+      })
+        .done(function() {
+          $("#sv-loader").addClass("display-none");
+        })
+        .fail(function(xhr, status, error) {
+          options.errorMessage = error;
+          $("#sv-loader").addClass("display-none");
+          $("#sv-loader-error").removeClass("display-none");
+        });
     }
-  } else if (currentTab == 'timeline') {
-
+  } else if (currentTab == "timeline") {
     var timelineVariableId = tabs.timeline.chart.value;
-    var timelineVariable = tabs.timeline.chart.options[timelineVariableId]["varName"];
+    var timelineVariable =
+      tabs.timeline.chart.options[timelineVariableId]["varName"];
     var postData = {
       searchData: currentSearchObj,
-      output: 'timeline',
-      timelineVariable: timelineVariable,
+      output: "timeline",
+      timelineVariable: timelineVariable
     };
     if (postData.timelineVariable) {
       // if it is a percentage based variable; used to add % to the labels
       var isPercentage = isPercentageAxis([postData.timelineVariable]);
       $("#sv-loader").removeClass("display-none");
-      $.post(SEARCH_URL, JSON.stringify(postData), function (result) {
+      $.post(SEARCH_URL, JSON.stringify(postData), function(result) {
         $("#sv-loader").removeClass("display-none");
 
         var data = [];
@@ -1352,51 +1532,67 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
         // });
 
         // Let Highcharts paint the chart
-        Highcharts.chart('hc-timeline', {
+        Highcharts.chart("hc-timeline", {
           chart: {
-            zoomType: 'x',
+            zoomType: "x",
             style: {
-              fontFamily: '-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol", serif'
+              fontFamily:
+                '-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol", serif'
             }
           },
           title: {
-            text: ''
+            text: ""
           },
           subtitle: {
-            text: document.ontouchstart === undefined ?
-              gettext('Click and drag in the plot area to zoom in') : gettext('Pinch the chart to zoom in'),
+            text:
+              document.ontouchstart === undefined
+                ? gettext("Click and drag in the plot area to zoom in")
+                : gettext("Pinch the chart to zoom in")
           },
           xAxis: {
-            type: 'datetime',
+            type: "datetime"
           },
           yAxis: {
             title: {
-              text: gettext('Value'),
+              text: gettext("Value")
             },
             min: 0,
             startOnTick: true,
             labels: {
-              formatter: function () {
+              formatter: function() {
                 var postfix = isPercentage ? "%" : ""; // for percentage based charts
                 return this.value + postfix;
               }
-            },
+            }
           },
           legend: {
             enabled: false
           },
           credits: {
-            enabled: false,
+            enabled: false
           },
           tooltip: {
-            formatter: function () {
-              var year = moment.unix(this.x / 1000).utc().format("YYYY");
+            formatter: function() {
+              var year = moment
+                .unix(this.x / 1000)
+                .utc()
+                .format("YYYY");
               var postfix = isPercentage ? "%" : ""; // for percentage based charts
-              return gettext('Year ') + year + ': ' + '<b>' + this.y + postfix + '</b> ';
+              return (
+                gettext("Year ") +
+                year +
+                ": " +
+                "<b>" +
+                this.y +
+                postfix +
+                "</b> "
+              );
             }
           },
           lang: {
-            noData: gettext('We are sorry but there is no data to display or an error has occurred.'),
+            noData: gettext(
+              "We are sorry but there is no data to display or an error has occurred."
+            )
           },
           plotOptions: {
             area: {
@@ -1415,7 +1611,8 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
           exporting: {
             buttons: {
               contextButton: {
-                menuItems: ["printChart",
+                menuItems: [
+                  "printChart",
                   "separator",
                   "downloadPNG",
                   "downloadJPEG",
@@ -1425,70 +1622,81 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
                   "downloadCSV",
                   "downloadXLS",
                   //"viewData",
-                  "openInCloud"]
+                  "openInCloud"
+                ]
               }
             }
           },
-          series: [{
-            type: 'area',
-            name: timelineVariable,
-            data: data,
-            color: HC_THEME_COLOR
-          }]
+          series: [
+            {
+              type: "area",
+              name: timelineVariable,
+              data: data,
+              color: HC_THEME_COLOR
+            }
+          ]
         });
-
-      }).done(function () {
-        $("#sv-loader").addClass("display-none");
-      }).fail(function (xhr, status, error) {
-        options.errorMessage = error;
-        $("#sv-loader").addClass("display-none");
-        $("#sv-loader-error").removeClass("display-none");
-      });
+      })
+        .done(function() {
+          $("#sv-loader").addClass("display-none");
+        })
+        .fail(function(xhr, status, error) {
+          options.errorMessage = error;
+          $("#sv-loader").addClass("display-none");
+          $("#sv-loader-error").removeClass("display-none");
+        });
     }
-
-
-  } else if (currentTab == 'visualization') {
-    loader.loadScript(STATIC_URL + 'scripts/library/d3.min.js')
-      .then(function () {
-
-
+  } else if (currentTab == "visualization") {
+    loader
+      .loadScript(STATIC_URL + "scripts/library/d3.min.js")
+      .then(function() {
         // Ready to plot graphs!
         var allChartTypes = {
           "xy-chart-tab": ["scatter", "x", "y"],
           "bar-chart-tab": ["bar", "x", "y"],
           "donut-chart-tab": ["donut", "sectors", "values"]
         };
-        var chartType = allChartTypes[$('a.active.side-control-tab').attr('id')];
+        var chartType =
+          allChartTypes[$("a.active.side-control-tab").attr("id")];
 
         // map the varName to the ids for Y
         var yIds = tabs.visualization[chartType[0]][chartType[2]].value;
         var yAxes = [];
         if (Array.isArray(yIds)) {
-          yIds.forEach(function (element, index, yIds) {
-            yAxes[index] = tabs.visualization[chartType[0]][chartType[2]].options[yIds[index]]["varName"];
+          yIds.forEach(function(element, index, yIds) {
+            yAxes[index] =
+              tabs.visualization[chartType[0]][chartType[2]].options[
+                yIds[index]
+              ]["varName"];
           });
         } else {
-          yAxes = tabs.visualization[chartType[0]][chartType[2]].options[yIds]["varName"];
+          yAxes =
+            tabs.visualization[chartType[0]][chartType[2]].options[yIds][
+              "varName"
+            ];
         }
 
         // map the varName to the ids for X
         var xId = tabs.visualization[chartType[0]][chartType[1]].value;
-        var xAxes = tabs.visualization[chartType[0]][chartType[1]].options[xId]["varName"];
+        var xAxes =
+          tabs.visualization[chartType[0]][chartType[1]].options[xId][
+            "varName"
+          ];
 
         var postData = {
           searchData: currentSearchObj,
-          output: 'graph',
+          output: "graph",
           graphData: {
             xAxis: xAxes,
-            yAxes: chartType[0] == 'donut' ? [yAxes] : yAxes
+            yAxes: chartType[0] == "donut" ? [yAxes] : yAxes
           }
         };
 
         if (postData.graphData.xAxis && postData.graphData.yAxes.length > 0) {
           $("#sv-loader").removeClass("display-none");
-          $.post(SEARCH_URL, JSON.stringify(postData), function (series) {
+          $.post(SEARCH_URL, JSON.stringify(postData), function(series) {
             $("#sv-loader").removeClass("display-none");
-            if (chartType[0] == 'scatter') {
+            if (chartType[0] == "scatter") {
               $("#tabs-visualization-xy").empty();
               // Compute ordinal scales.
               var xValues = [];
@@ -1502,52 +1710,69 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
                   if (items[i].value > maxValue) maxValue = items[i].value;
                 }
               }
-              xValues = d3.set(xValues).values().map(function (s) {
-                return parseFloat(s);
-              });
+              xValues = d3
+                .set(xValues)
+                .values()
+                .map(function(s) {
+                  return parseFloat(s);
+                });
 
               var margin = {
-                top: 90 + 20 * (seriesNames.length - 2),
-                right: 15,
-                bottom: 110,
-                left: 80
-              },
+                  top: 90 + 20 * (seriesNames.length - 2),
+                  right: 15,
+                  bottom: 110,
+                  left: 80
+                },
                 width = 960 - margin.left - margin.right,
                 height = 460 - margin.top - margin.bottom;
-              var x = d3.scaleLinear()
+              var x = d3
+                .scaleLinear()
                 .domain([d3.min(xValues), d3.max(xValues)])
                 .nice()
                 .range([0, width]);
-              var y = d3.scaleLinear()
+              var y = d3
+                .scaleLinear()
                 .domain([0, maxValue * 1.1])
                 .range([height, 0]);
               var color = d3.scaleOrdinal(d3.schemeCategory10);
-              var xAxis = d3.axisBottom()
+              var xAxis = d3
+                .axisBottom()
                 .scale(x)
                 .tickSize(-height);
-              if (postData.graphData.xAxis == 'var_imp_arrival_at_port_of_dis') {
-                xAxis = xAxis.tickFormat(function (d, i) {
+              if (
+                postData.graphData.xAxis == "var_imp_arrival_at_port_of_dis"
+              ) {
+                xAxis = xAxis.tickFormat(function(d, i) {
                   return d.toString();
                 });
               }
-              var yAxis = d3.axisLeft()
+              var yAxis = d3
+                .axisLeft()
                 .scale(y)
                 .tickSize(-width);
               // If percentage, add to ticks.
               if (isPercentageAxis(postData.graphData.yAxes)) {
-                yAxis.tickFormat(function (d) { return parseInt(d, 10) + "%"; });
+                yAxis.tickFormat(function(d) {
+                  return parseInt(d, 10) + "%";
+                });
               }
-              var svg = d3.select("#tabs-visualization-xy")
+              var svg = d3
+                .select("#tabs-visualization-xy")
                 .append("svg")
                 .attr("width", width + margin.left + margin.right)
                 .attr("height", height + margin.top + margin.bottom)
                 .append("g")
-                .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-              svg.append("g")
+                .attr(
+                  "transform",
+                  "translate(" + margin.left + "," + margin.top + ")"
+                );
+              svg
+                .append("g")
                 .attr("class", "x axis")
                 .attr("transform", "translate(0," + (height + 4) + ")")
                 .call(xAxis);
-              svg.append("g")
+              svg
+                .append("g")
                 .attr("class", "y axis")
                 .call(yAxis)
                 .append("text")
@@ -1555,47 +1780,52 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
                 .attr("y", 0)
                 .attr("dy", "-1em")
                 .style("text-anchor", "end")
-                .text(gettext('Value'));
+                .text(gettext("Value"));
 
-              var legend = svg.selectAll(".legend")
+              var legend = svg
+                .selectAll(".legend")
                 .data(seriesNames)
                 .enter()
                 .append("g")
                 .attr("class", "legend")
-                .attr("transform", function (d, i) {
+                .attr("transform", function(d, i) {
                   return "translate(0," + (i * 20 - margin.top + 30) + ")";
                 });
 
-              legend.append("rect")
+              legend
+                .append("rect")
                 .attr("x", width - 18)
                 .attr("width", 18)
                 .attr("height", 18)
                 .style("fill", color);
 
-              legend.append("text")
+              legend
+                .append("text")
                 .attr("x", width - 24)
                 .attr("y", 9)
                 .attr("dy", ".35em")
                 .style("text-anchor", "end")
-                .text(function (d) {
+                .text(function(d) {
                   return d;
                 });
 
               for (var yid in series) {
-                var line = d3.line()
-                  .x(function (d) {
+                var line = d3
+                  .line()
+                  .x(function(d) {
                     return x(d.x);
                   })
-                  .y(function (d) {
+                  .y(function(d) {
                     return y(d.value);
                   });
-                svg.append('svg:path')
-                  .attr('d', line(series[yid]))
-                  .attr('stroke', color(yid))
-                  .attr('stroke-width', 2)
-                  .attr('fill', 'none');
+                svg
+                  .append("svg:path")
+                  .attr("d", line(series[yid]))
+                  .attr("stroke", color(yid))
+                  .attr("stroke-width", 2)
+                  .attr("fill", "none");
               }
-            } else if (chartType[0] == 'bar') {
+            } else if (chartType[0] == "bar") {
               $("#tabs-visualization-bar").empty();
               // Compute ordinal scales.
               var labels = [];
@@ -1611,72 +1841,90 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
               }
               labels = d3.set(labels).values();
 
-              var wrap = function (text) {
+              var wrap = function(text) {
                 var w = margin.bottom - 10;
-                text.each(function () {
+                text.each(function() {
                   var text = d3.select(this),
-                    words = text.text().split(/\s+/).reverse(),
+                    words = text
+                      .text()
+                      .split(/\s+/)
+                      .reverse(),
                     word,
                     line = [],
                     lineNumber = 0,
                     lineHeight = 1.1, // ems
                     y = text.attr("y"),
                     dy = parseFloat(text.attr("dy")),
-                    tspan = text.text(null).append("tspan").attr("x", 0).attr("y", y).attr("dy", dy + "em");
-                  while (word = words.pop()) {
+                    tspan = text
+                      .text(null)
+                      .append("tspan")
+                      .attr("x", 0)
+                      .attr("y", y)
+                      .attr("dy", dy + "em");
+                  while ((word = words.pop())) {
                     line.push(word);
                     tspan.text(line.join(" "));
                     if (tspan.node().getComputedTextLength() > w) {
                       line.pop();
                       tspan.text(line.join(" "));
                       line = [word];
-                      tspan = text.append("tspan")
+                      tspan = text
+                        .append("tspan")
                         .attr("x", 0)
                         .attr("y", y)
-                        .attr("dy", ++lineNumber * lineHeight + dy + "em").text(word);
+                        .attr("dy", ++lineNumber * lineHeight + dy + "em")
+                        .text(word);
                     }
                   }
                 });
-              }
+              };
               // Create D3js graph. This graph has two X-axes,
               // x0 represents the labels on the data items, while
               // x1 represents the name of the series. This is
               // used in a way that all the data items across different
               // series sharing the same label are grouped together.
               var margin = {
-                top: 90 + 20 * (seriesNames.length - 2),
-                right: 10,
-                bottom: 110,
-                left: 80
-              },
+                  top: 90 + 20 * (seriesNames.length - 2),
+                  right: 10,
+                  bottom: 110,
+                  left: 80
+                },
                 width = 960 - margin.left - margin.right,
                 height = 460 - margin.top - margin.bottom;
-              var x0 = d3.scaleBand()
+              var x0 = d3
+                .scaleBand()
                 .domain(labels)
-                .rangeRound([0, width], .08);
-              var x1 = d3.scaleBand()
+                .rangeRound([0, width], 0.08);
+              var x1 = d3
+                .scaleBand()
                 .domain(seriesNames)
                 .rangeRound([0, x0.bandwidth()]);
-              var y = d3.scaleLinear()
+              var y = d3
+                .scaleLinear()
                 .domain([0, maxValue * 1.1])
                 .range([height, 0]);
               var color = d3.scaleOrdinal(d3.schemeCategory10);
-              var xAxis = d3.axisBottom()
-                .scale(x0);
-              var yAxis = d3.axisLeft()
-                .scale(y);
+              var xAxis = d3.axisBottom().scale(x0);
+              var yAxis = d3.axisLeft().scale(y);
               // If percentage, add to ticks.
               if (isPercentageAxis(postData.graphData.yAxes)) {
-                yAxis.tickFormat(function (d) { return parseInt(d, 10) + "%"; });
+                yAxis.tickFormat(function(d) {
+                  return parseInt(d, 10) + "%";
+                });
               }
-              var svg = d3.select("#tabs-visualization-bar")
+              var svg = d3
+                .select("#tabs-visualization-bar")
                 .append("svg")
                 .attr("width", width + margin.left + margin.right)
                 .attr("height", height + margin.top + margin.bottom)
                 .append("g")
-                .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+                .attr(
+                  "transform",
+                  "translate(" + margin.left + "," + margin.top + ")"
+                );
               // X axis with rotated labels.
-              svg.append("g")
+              svg
+                .append("g")
                 .attr("class", "x axis")
                 .attr("transform", "translate(0," + height + ")")
                 .call(xAxis)
@@ -1684,11 +1932,12 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
                 .style("text-anchor", "end")
                 .attr("dx", "-.8em")
                 .attr("dy", ".15em")
-                .attr("transform", function (d) {
-                  return "rotate(-45)"
+                .attr("transform", function(d) {
+                  return "rotate(-45)";
                 })
                 .call(wrap);
-              svg.append("g")
+              svg
+                .append("g")
                 .attr("class", "y axis")
                 .call(yAxis)
                 .append("text")
@@ -1698,37 +1947,41 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
                 .style("text-anchor", "end")
                 .text("Value");
 
-              var legend = svg.selectAll(".legend")
+              var legend = svg
+                .selectAll(".legend")
                 .data(seriesNames)
                 .enter()
                 .append("g")
                 .attr("class", "legend")
-                .attr("transform", function (d, i) {
+                .attr("transform", function(d, i) {
                   return "translate(0," + (i * 20 - margin.top + 30) + ")";
                 });
 
-              legend.append("rect")
+              legend
+                .append("rect")
                 .attr("x", width - 18)
                 .attr("width", 18)
                 .attr("height", 18)
                 .style("fill", color);
 
-              legend.append("text")
+              legend
+                .append("text")
                 .attr("x", width - 24)
                 .attr("y", 9)
                 .attr("dy", ".35em")
                 .style("text-anchor", "end")
-                .text(function (d) {
+                .text(function(d) {
                   return d;
                 });
 
               // Add label groups.
-              var gLabels = svg.selectAll(".label")
+              var gLabels = svg
+                .selectAll(".label")
                 .data(labels)
                 .enter()
                 .append("g")
                 .attr("class", "g")
-                .attr("transform", function (d) {
+                .attr("transform", function(d) {
                   return "translate(" + x0(d) + ",0)";
                 });
               gLabels
@@ -1737,11 +1990,12 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
                 .attr("x2", x0.bandwidth())
                 .attr("y1", height)
                 .attr("y2", height)
-                .style('stroke-width', 0.5)
-                .style('stroke', 'black');
+                .style("stroke-width", 0.5)
+                .style("stroke", "black");
               // Add bars to all label groups.
-              gLabels.selectAll("rect")
-                .data(function (d) {
+              gLabels
+                .selectAll("rect")
+                .data(function(d) {
                   // Filter by label.
                   var res = [];
                   for (var yid in series) {
@@ -1760,154 +2014,179 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
                 .enter()
                 .append("rect")
                 .attr("width", x1.bandwidth())
-                .attr("x", function (d) {
+                .attr("x", function(d) {
                   return x1(d.series);
                 })
-                .attr("y", function (d) {
+                .attr("y", function(d) {
                   return y(d.value);
                 })
-                .attr("height", function (d) {
+                .attr("height", function(d) {
                   return height - y(d.value);
                 })
-                .style("fill", function (d) {
+                .style("fill", function(d) {
                   return color(d.series);
                 });
-            } else if (chartType[0] == 'donut') {
+            } else if (chartType[0] == "donut") {
               $("#tabs-visualization-donut").empty();
               var label = Object.keys(series)[0];
               var data = series[label];
-              data.sort(function (a, b) {
+              data.sort(function(a, b) {
                 return a.value - b.value;
               });
-              var sum = d3.sum(data, function (d) {
+              var sum = d3.sum(data, function(d) {
                 return d.value;
               });
               var margin = {
-                top: 20,
-                right: 10,
-                bottom: 50,
-                left: 20
-              },
+                  top: 20,
+                  right: 10,
+                  bottom: 50,
+                  left: 20
+                },
                 width = 960 - margin.left - margin.right,
                 height = 460 - margin.top - margin.bottom;
               var color = d3.scaleOrdinal(d3.schemeAccent);
               var radius = Math.min(width, height) / 2 - margin.top;
 
-              var arc = d3.arc()
+              var arc = d3
+                .arc()
                 .outerRadius(radius * 0.8)
                 .innerRadius(radius * 0.4);
 
-              var outerArc = d3.arc()
+              var outerArc = d3
+                .arc()
                 .outerRadius(radius * 0.9)
                 .innerRadius(radius * 0.9);
 
-              var angleShift = Math.min(-0.1, -Math.min(0.25, data[data.length - 1].value / sum));
-              var pie = d3.pie()
+              var angleShift = Math.min(
+                -0.1,
+                -Math.min(0.25, data[data.length - 1].value / sum)
+              );
+              var pie = d3
+                .pie()
                 .startAngle(angleShift * Math.PI)
                 .endAngle((2 + angleShift) * Math.PI)
-                .value(function (d) {
+                .value(function(d) {
                   return d.value;
                 });
-              var svg = d3.select("#tabs-visualization-donut")
+              var svg = d3
+                .select("#tabs-visualization-donut")
                 .append("svg")
                 .attr("width", width)
                 .attr("height", height)
                 .append("g")
-                .attr("transform", "translate(" + (margin.left + width / 2) + "," + (margin.top + height / 2) + ")");
+                .attr(
+                  "transform",
+                  "translate(" +
+                    (margin.left + width / 2) +
+                    "," +
+                    (margin.top + height / 2) +
+                    ")"
+                );
 
-              svg.append("text")
+              svg
+                .append("text")
                 .attr("left", margin.left + width / 2)
                 .attr("text-anchor", "middle")
                 .attr("y", 10 - height / 2)
                 .attr("font-size", 20)
                 .text(label);
 
-              var g = svg.selectAll(".arc")
+              var g = svg
+                .selectAll(".arc")
                 .data(pie(data))
-                .enter().append("g")
+                .enter()
+                .append("g")
                 .attr("class", "arc");
 
-              var key = function (d) {
+              var key = function(d) {
                 return d.data.x;
               };
               g.append("path")
                 .attr("d", arc)
-                .style("fill", function (d) {
+                .style("fill", function(d) {
                   return color(key(d));
                 });
 
-              svg.append("g")
-                .attr("class", "labels");
-              svg.append("g")
-                .attr("class", "lines");
+              svg.append("g").attr("class", "labels");
+              svg.append("g").attr("class", "lines");
               // Text labels.
-              var labelTransform = function (d) {
+              var labelTransform = function(d) {
                 // effectively computes the centre of the slice.
                 // see https://github.com/d3/d3-shape/blob/master/README.md#arc_centroid
                 var pos = outerArc.centroid(d);
 
                 // changes the point to be on left or right depending on where label is.
                 pos[0] = radius * 0.95 * (midAngle(d) < Math.PI ? 1 : -1);
-                return 'translate(' + pos + ')';
+                return "translate(" + pos + ")";
               };
-              var text = svg.select(".labels").selectAll("text")
+              var text = svg
+                .select(".labels")
+                .selectAll("text")
                 .data(pie(data), key);
 
-              var opacityFn = function (d) {
+              var opacityFn = function(d) {
                 var x = Math.sin(d.endAngle - d.startAngle);
                 return Math.min(0.5, Math.pow(x, 1.5) * 15);
               };
 
-              var midAngle = function (d) {
+              var midAngle = function(d) {
                 return d.startAngle + (d.endAngle - d.startAngle) / 2;
               };
               var isPercentage = isPercentageAxis(postData.graphData.yAxes);
-              text.enter()
+              text
+                .enter()
                 .append("text")
-                .style('opacity', opacityFn)
+                .style("opacity", opacityFn)
                 .attr("dy", ".35em")
-                .text(function (d) {
-                  return key(d) + " = " + d.value.toLocaleString() +
-                    (isPercentage ? '%' : '');
+                .text(function(d) {
+                  return (
+                    key(d) +
+                    " = " +
+                    d.value.toLocaleString() +
+                    (isPercentage ? "%" : "")
+                  );
                 })
-                .attr('transform', labelTransform)
-                .style('text-anchor', function (d) {
+                .attr("transform", labelTransform)
+                .style("text-anchor", function(d) {
                   // if slice centre is on the left, anchor text to start, otherwise anchor to end
-                  return (midAngle(d)) < Math.PI ? 'start' : 'end';
+                  return midAngle(d) < Math.PI ? "start" : "end";
                 });
 
-              text.exit()
-                .remove();
+              text.exit().remove();
 
               // Polylines to labels.
-              var polyline = svg.select(".lines").selectAll("polyline")
+              var polyline = svg
+                .select(".lines")
+                .selectAll("polyline")
                 .data(pie(data), key);
 
-              polyline.enter()
+              polyline
+                .enter()
                 .append("polyline")
-                .style('opacity', opacityFn)
-                .attr("points", function (d) {
+                .style("opacity", opacityFn)
+                .attr("points", function(d) {
                   // see label transform function for explanations of these three lines.
                   var pos = outerArc.centroid(d);
                   pos[0] = radius * 0.95 * (midAngle(d) < Math.PI ? 1 : -1);
                   return [arc.centroid(d), outerArc.centroid(d), pos];
                 });
 
-              polyline.exit()
-                .remove();
+              polyline.exit().remove();
             }
-          }).done(function () {
-            $("#sv-loader").addClass("display-none");
-          }).fail(function (xhr, status, error) {
-            options.errorMessage = error;
-            $("#sv-loader").addClass("display-none");
-            $("#sv-loader-error").removeClass("display-none");
-          });
+          })
+            .done(function() {
+              $("#sv-loader").addClass("display-none");
+            })
+            .fail(function(xhr, status, error) {
+              options.errorMessage = error;
+              $("#sv-loader").addClass("display-none");
+              $("#sv-loader-error").removeClass("display-none");
+            });
         } else {
           // TODO: Clear existing chart?
         }
       });
-  } else if (currentTab == 'maps') {
+  } else if (currentTab == "maps") {
     $("#sv-loader").removeClass("display-none");
     $("#animation-container").addClass("display-none");
     $("#maps").addClass("display-none");
@@ -1919,33 +2198,35 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
     // for reference: voyages.apps.assessment.globals.get_map_year
     var postData = {
       searchData: currentSearchObj,
-      output: 'mapFlow'
+      output: "mapFlow"
     };
-    var mapFlowSearchCallback = function () {
-      var $map = $('#map');
+    var mapFlowSearchCallback = function() {
+      var $map = $("#map");
       voyagesMap.setMaxBounds();
-      $.post(SEARCH_URL, JSON.stringify(postData), function (result) {
+      $.post(SEARCH_URL, JSON.stringify(postData), function(result) {
         $("#sv-loader").removeClass("display-none");
 
         eval(result);
         voyagesMap.clear();
-      }).done(function () {
-        $("#sv-loader").addClass("display-none");
-        $("#maps").removeClass("display-none");
-        loader.resizeMap(); // resize first before adding the networkflow
-        try {
-          voyagesMap.setNetworkFlow(ports, flows);
-        } catch (e) {
-          console.log(e);
-        }
-      }).fail(function (xhr, status, error) {
-        options.errorMessage = error;
-        $("#sv-loader").addClass("display-none");
-        $("#sv-loader-error").removeClass("display-none");
-      });
+      })
+        .done(function() {
+          $("#sv-loader").addClass("display-none");
+          $("#maps").removeClass("display-none");
+          loader.resizeMap(); // resize first before adding the networkflow
+          try {
+            voyagesMap.setNetworkFlow(ports, flows);
+          } catch (e) {
+            console.log(e);
+          }
+        })
+        .fail(function(xhr, status, error) {
+          options.errorMessage = error;
+          $("#sv-loader").addClass("display-none");
+          $("#sv-loader-error").removeClass("display-none");
+        });
     };
     loader.loadMap(mapFlowSearchCallback);
-  } else if (currentTab == 'timelapse') {
+  } else if (currentTab == "timelapse") {
     $("#maps").addClass("display-none");
     $("#sv-loader").removeClass("display-none");
     $("#animation-container").removeClass("display-none");
@@ -1954,17 +2235,15 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 
     var postData = {
       searchData: currentSearchObj,
-      output: 'mapAnimation'
+      output: "mapAnimation"
     };
-    var mapAnimationSearchCallback = function () {
+    var mapAnimationSearchCallback = function() {
       $.post(SEARCH_URL, JSON.stringify(postData), function(result) {
         $("#sv-loader").removeClass("display-none");
 
         if (result) {
           // add title to the chart
-          $("#tab-map-voyage-value").text(
-            numberWithCommas(result.length)
-          );
+          $("#tab-map-voyage-value").text(numberWithCommas(result.length));
         }
         voyagesMap.clear();
         if (SV_MODE == "intra") {
@@ -1977,6 +2256,8 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
           voyagesMap._map.setZoom(4);
         }
 
+        voyagesMap._map.scrollWheelZoom.disable();
+        
         // leaflet map control - top left
         var mapTopLeft = L.control();
         mapTopLeft.onAdd = function() {
@@ -2034,6 +2315,16 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 
         var control = document.getElementById("timelapse_control_layer");
         L.DomEvent.disableClickPropagation(control);
+
+        $(".modal").each(function() {
+          var modal = $(this);
+          if (!L.Browser.touch) {
+            L.DomEvent.disableClickPropagation(modal);
+            L.DomEvent.on(modal, "mousewheel", L.DomEvent.stopPropagation);
+          } else {
+            L.DomEvent.on(modal, "click", L.DomEvent.stopPropagation);
+          }
+        });
       })
         .done(function() {
           $("#sv-loader").addClass("display-none");
@@ -2048,13 +2339,13 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
         });
     };
     // $('#loading').show();
-    loader.loadMap(function () {
+    loader.loadMap(function() {
       loader.loadAnimationScripts(mapAnimationSearchCallback);
     });
   }
 
   // Ensure that the animation resources are properly disposed.
-  if (animationHelper && currentTab != 'timelapse') {
+  if (animationHelper && currentTab != "timelapse") {
     disposeAnimationHelper();
   }
 }
@@ -2065,7 +2356,7 @@ var loader = new LazyLoader();
 
 var animationHelper = null;
 
-var disposeAnimationHelper = function () {
+var disposeAnimationHelper = function() {
   animationHelper.dispose();
   animationHelper = null;
 };
@@ -2074,73 +2365,79 @@ var disposeAnimationHelper = function () {
 function LazyLoader() {
   var self = this;
   self.loadedFiles = {};
-  self.loadCss = function (url) {
-    $('head').append('<link rel="stylesheet" href="' + url + '" type="text/css" />');
+  self.loadCss = function(url) {
+    $("head").append(
+      '<link rel="stylesheet" href="' + url + '" type="text/css" />'
+    );
   };
-  self.loadScript = function (url) {
+  self.loadScript = function(url) {
     var dfd = new $.Deferred();
-    var callback = function () {
-      dfd.resolve('script loaded');
+    var callback = function() {
+      dfd.resolve("script loaded");
       self.loadedFiles[url] = true;
     };
     if (self.loadedFiles.hasOwnProperty(url)) {
       callback();
     } else {
-      var script = document.createElement('script');
-      script.type = 'text/javascript';
+      var script = document.createElement("script");
+      script.type = "text/javascript";
       script.async = false;
       script.onreadystatechange = callback;
       script.onload = callback;
       script.src = url;
-      document.getElementsByTagName('head')[0].appendChild(script);
+      document.getElementsByTagName("head")[0].appendChild(script);
     }
     return dfd;
   };
   self.animationScriptsLoaded = false;
   self.mapLoaded = false;
-  self.resizeMap = function () {
+  self.resizeMap = function() {
     $("#map").height($(window).height() - 200);
     voyagesMap._map.invalidateSize();
   };
-  self.loadMap = function (done) {
-    $('#map').show();
+  self.loadMap = function(done) {
+    $("#map").show();
     if (!self.mapLoaded) {
-      self.loadCss(STATIC_URL + 'maps/css/leaflet.css');
-      self.loadCss(STATIC_URL + 'maps/css/MarkerCluster.css');
-      self.loadCss(STATIC_URL + 'maps/css/MarkerCluster.Default.css');
-      self.loadScript(STATIC_URL + 'maps/js/leaflet.js')
-        .then(self.loadScript(STATIC_URL + 'maps/js/leaflet.markercluster.js'))
-        .then(self.loadScript(STATIC_URL + 'maps/js/leaflet.polylineDecorator.js'))
-        .then(function () {
+      self.loadCss(STATIC_URL + "maps/css/leaflet.css");
+      self.loadCss(STATIC_URL + "maps/css/MarkerCluster.css");
+      self.loadCss(STATIC_URL + "maps/css/MarkerCluster.Default.css");
+      self
+        .loadScript(STATIC_URL + "maps/js/leaflet.js")
+        .then(self.loadScript(STATIC_URL + "maps/js/leaflet.markercluster.js"))
+        .then(
+          self.loadScript(STATIC_URL + "maps/js/leaflet.polylineDecorator.js")
+        )
+        .then(function() {
           $.when(
-            self.loadScript(STATIC_URL + 'maps/js/routeNodes.js'),
-            self.loadScript(STATIC_URL + 'maps/js/voyagesMap.js'),
-          )
-            .then(function () {
-              voyagesMap.
-                init('1750', STATIC_URL + 'maps/', routeNodes, links).
-                setMaxPathWidth(20).
-                setPathOpacity(0.75);
-              $(window).on("resize", self.resizeMap).trigger("resize");
-              voyagesMap._map.invalidateSize();
-              self.mapLoaded = true;
-              done();
-            });
+            self.loadScript(STATIC_URL + "maps/js/routeNodes.js"),
+            self.loadScript(STATIC_URL + "maps/js/voyagesMap.js")
+          ).then(function() {
+            voyagesMap
+              .init("1750", STATIC_URL + "maps/", routeNodes, links)
+              .setMaxPathWidth(20)
+              .setPathOpacity(0.75);
+            $(window)
+              .on("resize", self.resizeMap)
+              .trigger("resize");
+            voyagesMap._map.invalidateSize();
+            self.mapLoaded = true;
+            done();
+          });
         });
     } else {
       done();
     }
   };
-  self.loadAnimationScripts = function (done) {
+  self.loadAnimationScripts = function(done) {
     if (!self.animationScriptsLoaded) {
       $.when(
-        self.loadScript(STATIC_URL + 'scripts/library/d3.min.js'),
-        self.loadScript(STATIC_URL + 'scripts/library/jquery-ui@1.12.1.min.js'),
-        self.loadScript(STATIC_URL + 'maps/js/arc.js'),
-        self.loadScript(STATIC_URL + 'maps/js/leaflet.geodesic.min.js')
+        self.loadScript(STATIC_URL + "scripts/library/d3.min.js"),
+        self.loadScript(STATIC_URL + "scripts/library/jquery-ui@1.12.1.min.js"),
+        self.loadScript(STATIC_URL + "maps/js/arc.js"),
+        self.loadScript(STATIC_URL + "maps/js/leaflet.geodesic.min.js")
       )
-        .then(self.loadScript(STATIC_URL + 'scripts/vue/includes/animation.js'))
-        .then(function () {
+        .then(self.loadScript(STATIC_URL + "scripts/vue/includes/animation.js"))
+        .then(function() {
           self.animationScriptsLoaded = true;
           done();
         });
