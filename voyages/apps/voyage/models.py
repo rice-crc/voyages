@@ -1395,6 +1395,11 @@ class Voyage(models.Model):
     def natural_key(self):
         return (self.voyage_id,)
 
+    def save(self, *args, **kwargs):
+        if self.pk is None:
+            self.pk = self.voyage_id
+        super(Voyage, self).save(*args, **kwargs)
+
     class Meta:
         ordering = ['voyage_id',]
         verbose_name = 'Voyage'
