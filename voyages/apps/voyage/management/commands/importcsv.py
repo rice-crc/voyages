@@ -219,6 +219,7 @@ class Command(BaseCommand):
                     if id in voyages:
                         sys.stderr.write('Duplicate voyage found: ' + str(id) + '\n')
                         return
+                    voyage.pk = id
                     voyage.voyage_id = id
                     voyages[id] = voyage
                     # Next we set up voyage direct and nested members
