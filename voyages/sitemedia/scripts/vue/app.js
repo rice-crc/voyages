@@ -56,6 +56,10 @@ var searchBar = new Vue({
       deep: true
     },
 
+    rowModalShow: function(val) {
+      voyagesMap.setMouseInteraction(!val);
+    },
+
     filter: {
       handler: function(val) {
         var activated = false;
