@@ -346,6 +346,26 @@ var voyagesMap = {
 	    return this;
 	},
 
+	/*!
+	 *  Enables or disable map mouse 
+	 */
+	setMouseInteraction: function(bEnable) {
+		var modules = [
+			this._map.dragging,
+			this._map.touchZoom,
+			this._map.doubleClickZoom,
+			this._map.scrollWheelZoom
+		];
+		for (var i = 0; i < modules.length; ++i) {
+			var m = modules[i];
+			if (bEnable) {
+				m.enable();
+			} else { 
+				m.disable();
+			}
+		}
+	},
+
 	/*! Compute the global network flow and route paths
 	 * that correspond to these flows that will be displayed
 	 * on top of the map.
@@ -532,6 +552,20 @@ var voyagesMap = {
 		this._pathOpacity = opacity;
 		this.draw();
 		return this;
+	},
+
+	/*!
+	 *  Show a bootstrap modal with the given id disabling and
+	 *  later re-enabling the mouse interaction on the map
+	 *  automatically.
+	 */
+	showModal: function(modalId) {
+		var m = $(modalId);
+		m.modal();
+		voyagesMap.setMouseInteraction(false);
+		m.on('hidden.bs.modal', function() {
+			voyagesMap.setMouseInteraction(true);
+		});
 	},
 
 	/*!

@@ -41,9 +41,9 @@ Vue.component("v-voyage-info", {
 
               <div class='voyage-description-container'>
                 <p>
-                  This <span v-if="shipTonnage">{{shipTonnage}} ton(s)</span> ship 
-                  left {{data.source}} with {{data.embarked}} enslaved people and 
-                  arrived in {{data.destination}} with {{data.disembarked}}.
+                  This <span v-if="shipTonnage">{{shipTonnage}} tons</span> ship 
+                  left {{source}} with {{data.embarked}} enslaved people and 
+                  arrived in {{destination}} with {{data.disembarked}}.
                 </p>
               </div>
 
@@ -72,10 +72,13 @@ Vue.component("v-voyage-info", {
       return this.data.ship_ton ? parseInt(this.data.ship_ton) : false;
     },
 
-    // // compute voyage link
-    // voyageHref() {
-    //   return "/voyage/" + this.data.voyage_id + "/variables";
-    // },
+    source() {
+      return gettext(this.data.source_name);
+    },
+
+    destination() {
+      return gettext(this.data.destination_name);
+    },
 
     // compute flag
     flag() {
