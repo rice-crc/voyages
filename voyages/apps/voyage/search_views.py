@@ -22,6 +22,7 @@ from voyages.apps.voyage.tables import *
 import csv
 import itertools
 import json
+import os
 import re
 import unicodecsv
 
@@ -222,6 +223,22 @@ def get_results_map_animation(results, allow_no_numbers = False):
                 "ship_name": unicode(voyage.ship_name) if voyage.ship_name is not None else '',
             })
     return JsonResponse(items, safe=False)
+
+@cache_page(3600)
+def get_compiled_routes(request):
+    networkName = request.GET.get('networkName')
+    routeType = request.GET.get('routeType')
+    names = ['trans', 'intra']
+    if networkName is None or not networkName in names:
+        return JsonResponse({ "error": "Value of 'networkName' parameter should be in " + str(names) })
+    routeTypes = ['port', 'regional']
+    if routeType is None or not routeType in routeTypes:
+        return JsonResponse({ "error": "Value of 'routeType' parameter should be in " + str(routeTypes) })
+    fpath = os.path.join(
+        settings.STATIC_ROOT, "maps/js",
+        networkName,
+        routeType + "_routes.json")
+    return HttpResponse(content=open(fpath, 'rb'), content_type='application/json')
 
 @cache_page(3600)
 def get_timelapse_port_regions(request):

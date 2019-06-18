@@ -523,7 +523,7 @@ var _fetchGeoData = function(networkName) {
   // Load cached data using AJAX.
   if (!self.regionSegments) {
     $.getJSON(
-      STATIC_URL + "maps/js/" + networkName + "/regional_routes.json",
+      "/voyage/get-compiled-routes?routeType=regional&networkName=" + networkName,
       function(data) {
         self.regionSegments = data;
         loaded();
@@ -532,7 +532,7 @@ var _fetchGeoData = function(networkName) {
   }
   if (!self.portSegments) {
     $.getJSON(
-      STATIC_URL + "maps/js/" + networkName + "/port_routes.json",
+      "/voyage/get-compiled-routes?routeType=port&networkName=" + networkName,
       function(data) {
         self.portSegments = data;
         loaded();
