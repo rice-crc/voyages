@@ -26,7 +26,7 @@
             <div class="modal-body">
               <section>
                 <p>
-                  {% trans 'This timelapse offers an overall preview as well as demonstration of how the slave movement happened. You may use the database search variables to refine the scope in this timelapse. Addtionally, you may benefit from:' %}
+                  {% trans 'This timelapse offers an overall preview as well as demonstration of how the slave movement happened. The results of any user query will display in this timelapse feature. Also, please note the following:' %}
                 </p>
               </section>
               <section class="margin-v">
@@ -38,7 +38,7 @@
               <section class="margin-v">
                 <div class="text-bold">{% trans 'Voyage Nationality' %}</div>
                 <p>
-                  {% trans 'Each circle is color coded and the color code represents the nationality of the slave vessel, but users can instead choose Region of Embarkation, or Region of Disembarkation by clicking on the appropriate icon in the timeline.' %}
+                  {% trans 'Each circle is color coded and the color code represents the nationality of the slave vessel, but users can instead choose Region of Embarkation, or Region of Disembarkation by clicking on the icons to the left of the graph.' %}
                 </p>
               </section>
               <section class="margin-v">
@@ -63,7 +63,7 @@
     <v-year :current-year="timelapse.currentYear"></v-year>
     <div class="timelapse-info-container">
       <div class="timelapse-title">
-        {% trans 'See <span id="tab-map-voyage-value"></span> Slave Voyages Cross the Atlantic' %}</div>
+        {% trans 'View the Movement of <span id="tab-map-voyage-value"></span> Slave Ships' %}</div>
     </div>
     <v-voyage-info :data="timelapse.data" :is-visible="timelapse.isVisible"
     @set-row-data="setRowData"
