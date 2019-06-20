@@ -7,7 +7,7 @@ import re
 import sys
 import unicodecsv
 
-empty = re.compile(r"^\s*$")
+empty = re.compile(r"^\s*\.?$")
 
 class Command(BaseCommand):
     help = 'Imports a CSV file with the full data-set and converts the data to the Django models.'
@@ -146,7 +146,7 @@ class Command(BaseCommand):
                 return None
             if val is None: return None
             try:
-                return int(val)
+                return int(round(float(val)))
             except:
                 if allow_null: return None
                 raise Exception("Invalid value for int: " + str(val))
@@ -203,7 +203,7 @@ class Command(BaseCommand):
 
         import itertools
         def lower_headers(iterator):
-            return itertools.chain([next(iterator).lower()], iterator)
+            return itertools.chain([next(iterator).lower().replace("_", "")], iterator)
 
         count_tast = 0
         count_iam = 0
@@ -468,7 +468,7 @@ class Command(BaseCommand):
                     for key in 'abc':
                         captain_name = row.get(u'captain' + key)
                         if captain_name is None or empty.match(captain_name):
-                            break
+                            continue
                         captain_model = captains.get(captain_name)
                         if captain_model is None:
                             captain_model = VoyageCaptain()
@@ -485,7 +485,7 @@ class Command(BaseCommand):
                     for key in 'abcdefghijklmnop':
                         owner_name = row.get(u'owner' + key)
                         if owner_name is None or empty.match(owner_name):
-                            break
+                            continue
                         owner_model = ship_owners.get(owner_name)
                         if owner_model is None:
                             owner_model = VoyageShipOwner()
