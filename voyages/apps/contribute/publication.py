@@ -53,7 +53,9 @@ _exported_spss_fields = \
     'VOYAGE', 'VYMRTIMP', 'VYMRTRAT', 'WOMEN1', 'WOMEN2', 'WOMEN3',
     'WOMEN4', 'WOMEN5', 'WOMEN6', 'WOMEN7', 'WOMRAT7',
     'XMIMPFLAG', 'YEAR10', 'YEAR100', 'YEAR25', 'YEAR5', 'YEARAF', 'YEARAM',
-    'YEARDEP', 'YRCONS', 'YRREG', 'VOYAGEID2', 'INTRAAMER']
+    'YEARDEP', 'YRCONS', 'YRREG', 'VOYAGEID2', 'INTRAAMER',
+    "BOYRAT1", "CHILRAT1", "GIRLRAT1", "MALRAT1", "MENRAT1", "WOMRAT1",
+    "BOYRAT3", "CHILRAT3", "GIRLRAT3", "MALRAT3", "MENRAT3", "WOMRAT3"]
 
 # TODO: Some variables are not an exact match to any field in or models,
 # so they either have some correspondence with a computed value from those
@@ -367,7 +369,7 @@ def _map_voyage_to_spss(voyage):
     data['DATEDEP'] = dates.voyage_began
     data['DATEEND'] = dates.voyage_completed
     data['DATEBUY'] = dates.slave_purchase_began
-    data['DATELEFTAFR'] = dates.vessel_left_port
+    data['DATELEFTAFR'] = dates.date_departed_africa
     data['DATELAND1'] = dates.first_dis_of_slaves
     data['DATELAND2'] = dates.arrival_at_second_place_landing
     data['DATELAND3'] = dates.third_dis_of_slaves
