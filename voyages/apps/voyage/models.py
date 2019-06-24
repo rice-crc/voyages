@@ -1347,9 +1347,9 @@ class Voyage(models.Model):
     related to: :class:`~voyages.apps.voyage.models.VoyageShipOwner`
     related to: :class:`~voyages.apps.voyage.models.VoyageSources`
     """
+    both_objects = models.Manager()
     objects = VoyageManager()
     intra_american_objects = IntraAmericanVoyageManager()
-    both_objects = models.Manager()
 
     voyage_id = models.IntegerField("Voyage ID", unique=True)
 
@@ -1399,6 +1399,9 @@ class Voyage(models.Model):
         if self.pk is None:
             self.pk = self.voyage_id
         super(Voyage, self).save(*args, **kwargs)
+
+    class Admin:
+        manager = models.Manager()
 
     class Meta:
         ordering = ['voyage_id',]
