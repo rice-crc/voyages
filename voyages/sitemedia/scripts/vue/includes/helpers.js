@@ -1116,13 +1116,6 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
       $('[data-toggle="tooltip"]').tooltip();
     });
 
-    $.makeArray(mainDatatable.columns().visible()), function(
-              visible,
-              index
-            ) {
-              return visible ? allColumns[index].data : undefined;
-            }
-
     // built for the datatable download dropdown menu
     function makeDownloadFunction(isExcel, isFiltered, isVisibleColumns) {
       return function() {
