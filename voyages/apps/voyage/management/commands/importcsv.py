@@ -117,8 +117,8 @@ class Command(BaseCommand):
                 if reg_pk:
                     breg_pk = broad_region.pk if broad_region else None
                     if breg_pk != region.broad_region.pk:
-                    sys.stderr.write("Broad region mismatch for voyage_id " + voyage_id + " on field '" + field + "'")
-                    self.errors += 1
+                        sys.stderr.write("Broad region mismatch for voyage_id " + voyage_id + " on field '" + field + "'")
+                        self.errors += 1
 
         # Prefetch data: Sources
         all_sources = VoyageSources.objects.all()
