@@ -112,12 +112,12 @@ class Command(BaseCommand):
             if place is not None:
                 reg_pk = region.pk if region else None
                 if place.region.pk != reg_pk:
-                    sys.stderr.write("Region mismatch for voyage_id " + voyage_id + " on field '" + field + "'")
+                    sys.stderr.write("Region mismatch for voyage_id " + str(voyage_id) + " on field '" + str(field) + "'\n")
                     self.errors += 1
                 if reg_pk:
                     breg_pk = broad_region.pk if broad_region else None
                     if breg_pk != region.broad_region.pk:
-                        sys.stderr.write("Broad region mismatch for voyage_id " + voyage_id + " on field '" + field + "'")
+                        sys.stderr.write("Broad region mismatch for voyage_id " + str(voyage_id) + " on field '" + str(field) + "'\n")
                         self.errors += 1
 
         # Prefetch data: Sources
@@ -196,25 +196,42 @@ class Command(BaseCommand):
                    get_component(suffixes[0]) + ',' + \
                    get_component(suffixes[2])
 
-        def date_iso_csv(iso_value):
+        def date_from_sep_values(value):
             """
-            Converts a date in the ISO format YYYY-MM-DD to the
+            Converts a date with the format MM[sep]DD[sep]YYYY or YYYY[sep]MM[sep]DD---
+            where sep can be '-' or '/' or ','---into
             CSV format MM,DD,YYYY
-            :param iso_value: the iso formatted date
+            :param value: the formatted date
             :return: the CSV date
             """
-            if iso_value is None or empty.match(iso_value):
+            if value is None or empty.match(value):
                 return ''
-            components = iso_value.split('-')
+            components = value.split('-')
             if len(components) != 3:
-                components = iso_value.split(',')
+                components = value.split(',')
             if len(components) != 3:
-                components = iso_value.split('/')
+                components = value.split('/')
             if len(components) != 3:
                 self.errors += 1
-                sys.stderr.write('Error with date ' + iso_value + '\n')
+                sys.stderr.write('Error with date ' + value + '\n')
                 return ''
-            return components[1].strip() + ',' + components[2].strip() + ',' + components[0].strip()
+            try:
+                coords = [2, 0, 1]
+                if len(components[0].strip()) == 4:
+                    # This date format starts with year, so we assume YYYY[sep]MM[sep]DD
+                    coords = [0, 1, 2]
+                year = int(components[coords[0]].strip())
+                month = int(components[coords[1]].strip())
+                day = int(components[coords[2]].strip())
+                if day <= 0 or day > 31 or month <= 0 or month > 12 or year < 1000 or year > 1900:
+                    self.errors += 1
+                    sys.stderr.write('Invalid date ' + value + '\n')
+                    return ''
+                return str(month) + ',' + str(day) + ',' + str(year)
+            except:
+                self.errors += 1
+                sys.stderr.write('Invalid date ' + value + '\n')
+            return ''
 
         import itertools
         def lower_headers(iterator):
@@ -333,7 +350,7 @@ class Command(BaseCommand):
                     dates.slave_purchase_began = date_csv('d1slatr')
                     dates.vessel_left_port = date_csv('dlslatr')
                     dates.first_dis_of_slaves = date_csv('datarr', ['32', '33', '34'])
-                    dates.date_departed_africa = date_iso_csv(row.get(u'dateleftafr'))
+                    dates.date_departed_africa = date_from_sep_values(row.get(u'dateleftafr'))
                     dates.arrival_at_second_place_landing = date_csv('datarr', ['36', '37', '38'])
                     dates.third_dis_of_slaves = date_csv('datarr', ['39', '40', '41'])
                     dates.departure_last_place_of_landing = date_csv('ddepam', ['', 'b', 'c'])
