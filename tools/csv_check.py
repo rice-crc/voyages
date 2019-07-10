@@ -27,9 +27,12 @@ def get_set_from_prefix(row, prefix):
     return set([o for o in row_set if o is not None and o.strip() != '' and o.strip() != "."])
 
 def compare_csv(r1, r2, default_values={}, ignore_keys=default_ignore_keys, key_map=None):
-    pairs = itertools.zip_longest(r1, r2)
+    pairs = itertools.izip_longest(r1, r2)
+    warning = {}
     bad = []
+    count = 0
     for (a, b) in pairs:
+        count += 1
         if a is None or b is None: 
             bad.append((a, b, { "__row__": "Missing" }))
         else:
@@ -52,7 +55,11 @@ def compare_csv(r1, r2, default_values={}, ignore_keys=default_ignore_keys, key_
                     fy = float(y if y != "" else "0")
                     delta = abs(fx - fy)
                     if (delta < 0.001): continue
-                    if k in integral_fields and delta < 0.51: continue
+                    if k in integral_fields and delta < 0.51:
+                        if delta > 0.05:
+                            w = warning.setdefault(a["voyageid"], {})
+                            w[str(k)] = "Integral field with fractional value import"
+                        continue
                 except: pass
                 try:
                     # Boolean comparisson
@@ -72,7 +79,8 @@ def compare_csv(r1, r2, default_values={}, ignore_keys=default_ignore_keys, key_
                     if prefix_set_a != prefix_set_b:
                         diffs[prefix + "_set"] = "Set of " + prefix + " is different: " + str(prefix_set_a) + " vs. " + str(prefix_set_b)
             if len(diffs) > 0: bad.append((a, b, diffs))
-    return bad
+    print("Row count " + str(count) + ". Issues " + str(len(bad)) + ". Warnings: " + str(len(warning)) + ".")
+    return (bad, warning)
 
 def check_files(name, imported_csv_file, exported_csv_file, default_values, ignore_keys, key_map=None):
     imported_csv_data = get_csv_data(imported_csv_file)
@@ -113,23 +121,37 @@ def check_tast(imported_csv_file, exported_csv_file):
 
 def get_fields_affected(delta):
     all = set()
-    for x in delta:
+    for x in delta[0]:
         all = all | set(x[2].keys())
     return all
 
 def print_delta(delta):
-    if len(delta) > 0:
+    if len(delta[0]) > 0:
         print("Check failed!")
-        for item in delta:
+        for item in delta[0]:
             voyage_id = item[0]["voyageid"]
             if item[1]["voyageid"] != voyage_id:
                 print("- Voyage id mismatch " + voyage_id + "/" + item[0]["voyageid"])
             else:
                 print("- Voyage id: " + voyage_id)
             print(str(item[2]))
+    if len(delta[1]) > 0:
+        print("Warnings:")
+        for voyage_id, w in delta[1].items():
+            print("Voyage id " + str(voyage_id) + " has warnings: ")
+            for k, wt in w.items():
+                print("    Field '" + str(k) + "': " + str(wt))
 
-# Example test
-# delta = check_intra("path/to/imported.csv", "path/to/exported.csv")
-# get_fields_affected(delta)
-# ...
-# print_delta(delta)
+# Usage sample.
+# 1. Import CSV files using the manage.py importcsv command
+# 2. Run export CSV from Editorial Platform. Make sure to export
+#    only published voyages and select a single DataSet (TAST/I-Am)
+#    for each file download.
+# 3. With both imported/exported CSV file pairings at hand, run
+#    a Django Shell session: $ manage.py shell
+# 4. Copy & paste code above into the shell.
+# 5. Run the check_intra, check_tast functions as foolows:
+#    delta = check_intra("path/to/imported.csv", "path/to/exported.csv")
+#    get_fields_affected(delta)
+#    ...
+#    print_delta(delta)

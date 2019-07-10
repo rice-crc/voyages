@@ -105,6 +105,21 @@ class Command(BaseCommand):
         def filter_out_source_letter(letter):
             return letter == ' ' or letter == ','
 
+        def check_hierarchy(voyage_id, field, place, region, broad_region):
+            """
+            Checks that the imported values match the geo database.
+            """
+            if place is not None:
+                reg_pk = region.pk if region else None
+                if place.region.pk != reg_pk:
+                    sys.stderr.write("Region mismatch for voyage_id " + voyage_id + " on field '" + field + "'")
+                    self.errors += 1
+                if reg_pk:
+                    breg_pk = broad_region.pk if broad_region else None
+                    if breg_pk != region.broad_region.pk:
+                    sys.stderr.write("Broad region mismatch for voyage_id " + voyage_id + " on field '" + field + "'")
+                    self.errors += 1
+
         # Prefetch data: Sources
         all_sources = VoyageSources.objects.all()
         trie = {}
@@ -293,6 +308,24 @@ class Command(BaseCommand):
                     itinerary.imp_broad_region_slave_dis = get_by_value('broad_regions', 'mjselimp1')
                     itinerary.voyage = voyage
                     itineraries.append(itinerary)
+                    check_hierarchy(
+                        id,
+                        'ptdepimp',
+                        itinerary.imp_port_voyage_begin,
+                        itinerary.imp_region_voyage_begin,
+                        itinerary.imp_broad_region_voyage_begin)
+                    check_hierarchy(
+                        id,
+                        'mjbyptimp',
+                        itinerary.imp_principal_place_of_slave_purchase,
+                        itinerary.imp_principal_region_of_slave_purchase,
+                        itinerary.imp_broad_region_of_slave_purchase)
+                    check_hierarchy(
+                        id,
+                        'mjslptimp',
+                        itinerary.imp_principal_port_slave_dis,
+                        itinerary.imp_principal_region_slave_dis,
+                        itinerary.imp_broad_region_slave_dis)
                     # voyage.voyage_itinerary = itinerary
                     # Dates
                     dates = VoyageDates()
