@@ -3,6 +3,18 @@
 const LEAFLET_TIMELAPSE_ZOOM = 4; // default leaflet zoom level for timelapse
 const DEFAULT_START_YEAR = 1660; // default start year
 
+const GROUP_COLORS = { // colors are either mixed or adopted based on national flag colors
+  "Portugal / Brazil": "#009c3b", // brazil - green
+  "Great Britain": "#cf142b", // uk - red
+  "France": "#00209F", // france - blue
+  "Netherlands": "#FF4F00", // netherlands orange
+  "Spain / Uruguay": "#FFC400", // spain - yellow
+  "U.S.A.":  "#FFFFFF", // usa - white
+  "Denmark / Baltic":  "#E07A8E", // denmark mix
+  "Portugal": "#5D4100", // portugal mix
+  "Other": "#999999" // grey
+}
+
 // Represents a route on the globe using lat/lng coordinates.
 function Route(points) {
   var self = this;
@@ -880,10 +892,9 @@ function TimelineControl(data, parent, onChange, ui, geoCache) {
         return grp.key;
       })
       .values();
-    var color = d3
-      .scaleOrdinal()
-      .domain(keys)
-      .range(d3.schemeSet1);
+    var color = function(key) {
+      return GROUP_COLORS[key];
+    }
     // Update color for voyages.
     for (var i = 0; i < data.length; ++i) {
       var item = data[i];
