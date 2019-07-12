@@ -1,5 +1,7 @@
 // Scripts for the timelapse animation of voyages in the map v1.0.0.
 
+const LEAFLET_TIMELAPSE_ZOOM = 4; // default leaflet zoom level for timelapse
+
 // Represents a route on the globe using lat/lng coordinates.
 function Route(points) {
   var self = this;
@@ -1230,6 +1232,7 @@ function AnimationHelper(data, networkName, options) {
   // the code and render the ship's circles on each target with
   // only minor changes.
   var map = voyagesMap._map;
+  map.setZoom(LEAFLET_TIMELAPSE_ZOOM); // default zoom level for timelapse
   var svg = d3.select(map.getPanes().overlayPane).append("svg");
   var canvas = d3.select(map.getPanes().overlayPane).append("canvas");
   canvas.attr("id", "timelapse_animation_canvas");
