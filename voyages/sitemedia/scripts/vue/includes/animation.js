@@ -1,7 +1,7 @@
 // Scripts for the timelapse animation of voyages in the map v1.0.0.
 
 const LEAFLET_TIMELAPSE_ZOOM = 4; // default leaflet zoom level for timelapse
-const DEFAULT_START_YEAR = 1600; // default start year
+const DEFAULT_START_YEAR = 1660; // default start year
 
 // Represents a route on the globe using lat/lng coordinates.
 function Route(points) {
@@ -595,6 +595,7 @@ function d3MapTimelapse(
 
   var render = function(simTime, items) {
     if (!initialized) return;
+
     ui.prerender();
     ui.setSelectedRoute(null);
     for (var i = 0; i < items.length; ++i) {
@@ -631,6 +632,7 @@ function d3MapTimelapse(
     updatePos(selection, true);
     updatePos(enterSel, false);
     selection.exit().remove();
+
     ui.setTime(simTime);
   };
   var init = function() {
@@ -1487,6 +1489,9 @@ function AnimationHelper(data, networkName, options) {
       ui,
       geoCache
     );
+
+    control.jumpTo(DEFAULT_START_YEAR * 120); // set a default start year
+    
     // hoverRed(playPauseBtn);
     // hoverRed(speedDownBtn, gettext("Slow down the clock"));
     // hoverRed(speedUpBtn, gettext("Speed up the clock"));
