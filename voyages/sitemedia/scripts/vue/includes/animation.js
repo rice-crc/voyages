@@ -1,6 +1,7 @@
 // Scripts for the timelapse animation of voyages in the map v1.0.0.
 
 const LEAFLET_TIMELAPSE_ZOOM = 4; // default leaflet zoom level for timelapse
+const DEFAULT_START_YEAR = 1600; // default start year
 
 // Represents a route on the globe using lat/lng coordinates.
 function Route(points) {
@@ -898,9 +899,11 @@ function TimelineControl(data, parent, onChange, ui, geoCache) {
         yearData[item.year] = yearObj;
       }
     }
+
     var start = d3.min(data, function(d) {
       return d.year;
     });
+
     var end = d3.max(data, function(d) {
       return d.year;
     });
