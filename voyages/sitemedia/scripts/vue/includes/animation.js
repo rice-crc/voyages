@@ -1306,33 +1306,6 @@ function AnimationHelper(data, networkName, options) {
 
   var g = svg.append("g").attr("class", "leaflet-zoom-hide");
 
-  var hoverRed = function(e, tooltipHtml, tooltipOffsetX, tooltipOffsetY) {
-    var colorize = function(sel, c) {
-      sel
-        .transition()
-        .duration(300)
-        .style("fill", c);
-    };
-    return e
-      .on("mouseenter", function() {
-        var self = d3.select(this);
-        if (self.classed("timelapse_btn_disabled")) return;
-        colorize(self, "red");
-        colorize(self.selectAll("path"), "red");
-        if (tooltipHtml) {
-          showTooltip(tooltipHtml, tooltipOffsetX, tooltipOffsetY);
-        }
-      })
-      .on("mouseleave", function() {
-        var self = d3.select(this);
-        colorize(self, "black");
-        colorize(self.selectAll("path"), "black");
-        if (tooltipHtml) {
-          hideTooltip();
-        }
-      });
-  };
-
   // Set SVG size and position within map.
   var bounds = null;
   var topLeft = null;
@@ -1532,24 +1505,6 @@ function AnimationHelper(data, networkName, options) {
 
     // notify vue v-speed component to update its props "ui" and "options"
     Vue.set(searchBar.timelapse, "options", options);
-
-    var updateSpeed = function(speed) {
-      speed = Math.min(options.maxSpeed, Math.max(options.minSpeed, speed));
-      ui.monthsPerSecond = speed;
-      control.setStepPerSec(speed * 10, Math.max(1.0, 12 / speed));
-      // speedDownBtn.classed("timelapse_btn_disabled", speed == options.minSpeed);
-      // speedUpBtn.classed("timelapse_btn_disabled", speed == options.maxSpeed);
-    };
-    // speedDownBtn.on("click", function() {
-    //   if (ui.monthsPerSecond > options.minSpeed) {
-    //     updateSpeed(ui.monthsPerSecond / 2);
-    //   }
-    // });
-    // speedUpBtn.on("click", function() {
-    //   if (ui.monthsPerSecond < options.maxSpeed) {
-    //     updateSpeed(ui.monthsPerSecond * 2);
-    //   }
-    // });
   };
   ui.prerender = function() {
     // When the animation is running, D3.js will be used to
