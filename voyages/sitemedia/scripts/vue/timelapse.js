@@ -130,12 +130,22 @@ Vue.component("v-speed", {
   props: ["speeds", "multiplier", "ui", "options", "control"],
   data: function() {
     return {
-      currentIndex: 1
+      currentIndex: 2
     };
   },
   template:
     '<button type="button" class="btn btn-sm btn-light margin" :class="{ active: isActive }" @click=shift>{{currentSpeed}}x</button>',
   methods: {
+    setSpeed: function() {
+      var multipliedSpeed = this.speeds[this.currentIndex] * this.multiplier;
+      // console.log("multiplied speed is: " + multipliedSpeed);
+      this.ui.monthsPerSecond = multipliedSpeed;
+      this.control.setStepPerSec(
+        multipliedSpeed * 10,
+        Math.max(1.0, 12 / multipliedSpeed)
+      );
+    },
+
     shift: function() {
       // update UI display
       var next = this.currentIndex + 1;
@@ -146,13 +156,7 @@ Vue.component("v-speed", {
       }
 
       // update animation speed
-      var multipliedSpeed = this.speeds[this.currentIndex] * this.multiplier;
-      console.log("multiplied speed is: " + multipliedSpeed);
-      this.ui.monthsPerSecond = multipliedSpeed;
-      this.control.setStepPerSec(
-        multipliedSpeed * 10,
-        Math.max(1.0, 12 / multipliedSpeed)
-      );
+      this.setSpeed();
     }
   },
   computed: {
@@ -161,10 +165,13 @@ Vue.component("v-speed", {
       return this.speeds[this.currentIndex];
     },
 
-    // set this to active whenever it is not the default speed (1x)
+    // set this to active whenever it is not the default speed (2x)
     isActive: function() {
-      return this.currentIndex != 1;
+      return this.currentIndex != 2;
     }
+  },
+  updated: function() {
+    this.setSpeed();
   }
 });
 
