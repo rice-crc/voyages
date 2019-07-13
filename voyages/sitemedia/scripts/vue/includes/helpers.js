@@ -4,6 +4,23 @@ const TRANS_PATH = "voyages/";
 const SEARCH_URL = "api/search";
 const VARIABLE_MAP = {};
 
+// reserved const for timelapse
+const LEAFLET_TIMELAPSE_ZOOM = 4; // default leaflet zoom level for timelapse
+const DEFAULT_START_YEAR = 1660; // default start year
+
+const GROUP_COLORS = {
+  // colors are either mixed or adopted based on national flag colors
+  "Portugal / Brazil": "#009c3b", // brazil - green
+  "Great Britain": "#cf142b", // uk - red
+  France: "#00209F", // france - blue
+  Netherlands: "#FF4F00", // netherlands orange
+  "Spain / Uruguay": "#FFC400", // spain - yellow
+  "U.S.A.": "#FFFFFF", // usa - white
+  "Denmark / Baltic": "#E07A8E", // denmark mix
+  Portugal: "#5D4100", // portugal mix
+  Other: "#999999" // grey
+};
+
 // process search data returned from the API
 function processResponse(json) {
   var keys = null;
