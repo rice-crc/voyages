@@ -15,7 +15,7 @@ const GROUP_COLORS = {
   France: "#00209F", // france - blue
   Netherlands: "#FF4F00", // netherlands orange
   "Spain / Uruguay": "#FFC400", // spain - yellow
-  "U.S.A.": "#FFFFFF", // usa - white
+  "U.S.A.": "#00A0D1", // usa - blend of blue and white
   "Denmark / Baltic": "#E07A8E", // denmark mix
   Portugal: "#5D4100", // portugal mix
   Other: "#999999" // grey
