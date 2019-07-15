@@ -2433,7 +2433,7 @@ function LazyLoader() {
             self.loadScript(STATIC_URL + "maps/js/voyagesMap.js")
           ).then(function() {
             voyagesMap
-              .init("1750", STATIC_URL + "maps/", routeNodes, links)
+              .init("all", STATIC_URL + "maps/", routeNodes, links)
               .setMaxPathWidth(20)
               .setPathOpacity(0.75);
             $(window)
