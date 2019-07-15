@@ -733,7 +733,7 @@ function TimelineControl(data, parent, onChange, ui, geoCache) {
     {
       key: "destinationRegion",
       path: ui.disembarkationIcon,
-      tooltip: gettext("Group by disembarkation broad region")
+      tooltip: gettext("Group by broad disembarkation region")
     }
   ];
 
