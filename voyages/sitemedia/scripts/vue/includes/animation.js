@@ -1063,6 +1063,36 @@ function TimelineControl(data, parent, onChange, ui, geoCache) {
     d3.selectAll("g.tick>text").style("font-size", "10px");
 
     // Create time indicator bar.
+    // add a filter to achieve glow effect on the timelapse control
+    var defs = g.append("defs");
+    var filter = defs
+      .append("filter")
+      .attr(
+        "transform",
+        "translate(" +
+          (PLOT_LEFT_MARGIN + lastTickPos) +
+          "," +
+          PLOT_VERTICAL_MARGIN +
+          ")"
+      )
+      .attr("y1", 0)
+      .attr("y2", paddedHeightLine+30)
+      .attr("filterUnits", "userSpaceOnUse");
+    var feMerge = filter.append("feMerge");
+    filter
+      .append("feOffset")
+      .attr("in", "blur")
+      .attr("dx", 2)
+      .attr("dy", 2)
+      .attr("result", "offsetBlur");
+    feMerge.append("feMergeNode").attr("in", "coloredBlur");
+    feMerge.append("feMergeNode").attr("in", "SourceGraphic");
+    filter
+      .append("feGaussianBlur")
+      .attr("in", "SourceAlpha")
+      .attr("stdDeviation", 3)
+      .attr("result", "coloredBlur"); // add a filter to achieve glow effect on the timelapse control
+    
     var tickLine = g
       .append("line")
       .classed("timelapse_slider_x_axis_bar", true)
@@ -1077,8 +1107,11 @@ function TimelineControl(data, parent, onChange, ui, geoCache) {
           ")"
       )
       .attr("y2", paddedHeightLine)
-      .style("stroke-opacity", "0.6");
-    var embCirclePos = function(val) {
+      .attr("y1", 0)
+      .attr("filter", "url(#glow)")
+      .style("stroke-opacity", "1");
+    
+      var embCirclePos = function(val) {
       if (val > 0) {
         // Convert a year value to the embarked count value for that year.
         if (val < table[0].year || val > table[table.length - 1].year) {
@@ -1253,6 +1286,7 @@ function AnimationHelper(data, networkName, options) {
     .classed("leaflet-control", true)
     .attr("width", 0)
     .style("pointer-events", "none");
+
   var ctrlBackground = controlLayer
     .on("mouseenter", function() {
       map.doubleClickZoom.disable();
