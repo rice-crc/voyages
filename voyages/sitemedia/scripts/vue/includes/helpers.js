@@ -1482,6 +1482,7 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
         tr += "</tr>";
         tfoot.append(tr);
         table.DataTable({
+          destroy: true,
           scrollX: true,
           scrollCollapse: true,
           pageLength: 15,
@@ -1496,7 +1497,8 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
             {
               extend: "collection",
               text: '<span class="fa fa-columns"></span>',
-              className: "btn btn-info buttons-collection dropdown-toggle",
+              className:
+                "btn btn-info buttons-collection dropdown-toggle",
               text: gettext("Download"),
               // Top level: CSV vs. Excel
               buttons: ["csvHtml5", "excelHtml5"]
