@@ -28,11 +28,14 @@ number_prefix = 'interim_slave_number_'
 def full_contribution_id(contribution_type, contribution_id):
     return contribution_type + '/' + str(contribution_id)
 
+def get_contrib_default_query(model):
+    return model.objects.select_related('contributor')
+
 def get_filtered_contributions(filter_args):
-    return [{'type': 'edit', 'id': x.pk, 'contribution': x} for x in EditVoyageContribution.objects.filter(**filter_args)] +\
-            [{'type': 'merge', 'id': x.pk, 'contribution': x} for x in MergeVoyagesContribution.objects.filter(**filter_args)] +\
-            [{'type': 'delete', 'id': x.pk, 'contribution': x} for x in DeleteVoyageContribution.objects.filter(**filter_args)] +\
-            [{'type': 'new', 'id': x.pk, 'contribution': x} for x in NewVoyageContribution.objects.filter(**filter_args)]
+    return [{'type': 'edit', 'id': x.pk, 'contribution': x} for x in get_contrib_default_query(EditVoyageContribution).filter(**filter_args)] +\
+            [{'type': 'merge', 'id': x.pk, 'contribution': x} for x in get_contrib_default_query(MergeVoyagesContribution).filter(**filter_args)] +\
+            [{'type': 'delete', 'id': x.pk, 'contribution': x} for x in get_contrib_default_query(DeleteVoyageContribution).filter(**filter_args)] +\
+            [{'type': 'new', 'id': x.pk, 'contribution': x} for x in get_contrib_default_query(NewVoyageContribution).filter(**filter_args)]
 
 def index(request):
     """
@@ -733,11 +736,54 @@ def get_reviews_by_status(statuses, display_interim_data=False):
     def get_place_str(place):
         if place is None: return ''
         return place.region.region + '/' + place.place
+
+    # Load all necessary voyage id data in a single query for better efficiency.
+    all_voyage_ids = set([id for ids in [x['contribution'].get_related_voyage_ids() for x in contributions] for id in ids])
+    fetched_voyages = Voyage.both_objects \
+        .filter(voyage_id__in=all_voyage_ids) \
+        .select_related('voyage_ship') \
+        .select_related('voyage_ship__imputed_nationality') \
+        .select_related('voyage_dates') \
+        .select_related('voyage_slaves_numbers') \
+        .select_related('voyage_itinerary__imp_principal_place_of_slave_purchase') \
+        .select_related('voyage_itinerary__imp_principal_place_of_slave_purchase__region') \
+        .select_related('voyage_itinerary__imp_principal_port_slave_dis') \
+        .select_related('voyage_itinerary__imp_principal_port_slave_dis__region')
+    fetched_voyages_dict = {v.id: v for v in fetched_voyages}
+
+    # Load all review requests that will be needed.
+    review_requests_dict = {}
+    review_requests_filtered = ReviewRequest.objects \
+        .select_related('suggested_reviewer') \
+        .filter(
+            contribution_id__in=[full_contribution_id(info['type'], info['id']) for info in contributions],
+            archived=False)
+    for req in review_requests_filtered:
+        if req.contribution_id in review_requests_dict:
+            raise Exception('Invalid state: more than one review request is active')
+        review_requests_dict[req.contribution_id] = req
     
+    # Load all interim voyages and editor contributions.
+    editor_contributions = EditorVoyageContribution.objects \
+        .filter(request__id__in=[r.pk for r in review_requests_dict.values()])
+    editor_contributions_req_dict = {}
+    for e in editor_contributions:
+        if e.request_id in editor_contributions_req_dict:
+            continue
+        editor_contributions_req_dict[e.request_id] = e
+
+    interim_ids = [info['contribution'].interim_voyage_id for info in contributions] + \
+        [e.interim_voyage_id for e in editor_contributions_req_dict.values()]
+    interim_voyages_dict = {interim.pk: interim for interim in InterimVoyage.objects \
+        .select_related('imputed_national_carrier') \
+        .select_related('imputed_principal_place_of_slave_purchase__region') \
+        .select_related('imputed_principal_port_of_slave_disembarkation__region') \
+        .filter(pk__in=interim_ids)}
+
     def get_contribution_info(info):
         contrib = info['contribution']
         voyage_ids = contrib.get_related_voyage_ids()
-        voyages = list(Voyage.both_objects.filter(voyage_id__in=voyage_ids))
+        voyages = [fetched_voyages_dict[id] for id in voyage_ids]
         voyage_ship = [v.voyage_ship.ship_name for v in voyages]
         voyage_years = [VoyageDates.get_date_year(v.voyage_dates.imp_arrival_at_port_of_dis) for v in voyages]
         voyage_nation = [get_nation_label(v.voyage_ship.imputed_nationality) for v in voyages]
@@ -748,19 +794,16 @@ def get_reviews_by_status(statuses, display_interim_data=False):
         voyage_info = [unicode(v.voyage_ship.ship_name) + u' (' + unicode(VoyageDates.get_date_year(v.voyage_dates.imp_arrival_at_port_of_dis)) + ')'
                        for v in voyages]
         # Fetch review info.
-        reqs = list(ReviewRequest.objects.filter(contribution_id=full_contribution_id(info['type'], info['id']), archived=False))
-        if len(reqs) > 1:
-            raise Exception('Invalid state: more than one review request is active')
-        active_request = reqs[0] if len(reqs) == 1 else None
+        active_request = review_requests_dict.get(full_contribution_id(info['type'], info['id']))
         if active_request and active_request.created_voyage_id and active_request.requires_created_voyage_id():
             voyage_ids = [active_request.created_voyage_id]
         if (display_interim_data and not isinstance(contrib, DeleteVoyageContribution)) or isinstance(contrib, NewVoyageContribution):
             # Must fill elements above with interim data.
-            interim = contrib.interim_voyage
+            interim = interim_voyages_dict.get(contrib.interim_voyage_id)
             if active_request:
-                editor_contrib = active_request.editor_contribution.first()
+                editor_contrib = editor_contributions_req_dict.get(active_request.id)
                 if editor_contrib:
-                    interim = editor_contrib.interim_voyage
+                    interim = interim_voyages_dict.get(editor_contrib.interim_voyage_id)
             voyage_ship = [interim.name_of_vessel]
             voyage_years = [interim.imputed_year_voyage_began]
             voyage_nation = [get_nation_label(interim.imputed_national_carrier)]
@@ -792,7 +835,7 @@ def get_reviews_by_status(statuses, display_interim_data=False):
             res['reviewer_final_decision'] = active_request.get_status_msg()
             if active_request.final_decision:
                 # Fetch if of the editor's contribution.
-                res['editor_contribution_id'] = active_request.editor_contribution.first().pk
+                res['editor_contribution_id'] = editor_contributions_req_dict[active_request.pk].pk
         else:
             res['review_request_id'] = 0
             res['reviewer'] = ''
