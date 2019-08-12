@@ -1659,6 +1659,7 @@
 <script type="text/javascript" src="{{ STATIC_URL }}scripts/library/js.cookie@2.1.0.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}scripts/contribute/common.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}scripts/legacy/utils.js"></script>
+<script type="text/javascript" src="//cdn.tiny.cloud/1/evau54786a4pxb62mp84sjc26h72hrpdu9b5ht3zzn8oisd5/tinymce/5/tinymce.min.js"></script>
 <script type="text/javascript">
     var MODIFY_REFERENCE_TEXT = '{% trans "Modify reference" %}';
     var submit_val = '';
@@ -1706,6 +1707,7 @@
 
     {% if mode == 'editorial_review' %}
     var createdNewSource = null;
+    var tinymceEditor = null;
     function createOrEditReference(item) {
         var data = {};
         var original_ref = $(item).data('originalref');
@@ -1733,12 +1735,24 @@
                 if (result.errors) {
                     alert(result.errors);
                 } else {
-                    $('#create_ref_dialog_body').html(result);
-                    $('#create_ref_dialog_body script').appendTo($('head'));
+                    // Use parseHTML to remove scripts from form since we run our own init script here.
+                    $('#create_ref_dialog_body').html($.parseHTML(result));
                     $('#create_ref_dialog_body textarea, #create_ref_dialog_body select').addClass('form-control');
-                    window.tinymce.dom.Event.domLoaded = true;
-                    tinymce.init({ resize: false, selector:'#id_full_ref' });
-                    $('#create_ref_dialog').modal('show');
+                    if (!window.tinymce) {
+                        alert('Failed to load rich text editor!');
+                    } else {
+                        if (!!tinymceEditor) {
+                            tinymceEditor.destroy();
+                        }
+                        tinymce.init({ 
+                            resize: false,
+                            target: $('#id_full_ref')[0],
+                            setup: function (editor) {
+                                tinymceEditor = editor;
+                                $('#create_ref_dialog').modal('show');
+                            }
+                        });
+                    }
                 }
             }
         });
@@ -1750,7 +1764,7 @@
         var data = {
             interim_pk: {{ interim.pk }},
             short_ref: $('#id_short_ref').val(),
-            full_ref: tinyMCE.activeEditor.getContent(),
+            full_ref: tinymceEditor.getContent(),
             source_type: $('#id_source_type').val(),
             connection_ref: $('#id_connection_ref').val()
         }
