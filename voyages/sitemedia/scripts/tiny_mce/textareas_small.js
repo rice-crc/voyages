@@ -1,7 +1,6 @@
 tinymce.init({
     mode : "specific_textareas",
     editor_selector : "tinymcetextarea",
-    elements : "id_answer",
 	width: "600px",
 	height: "200px",
     plugins: [

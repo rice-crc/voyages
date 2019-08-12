@@ -5,7 +5,7 @@ from haystack.utils import Highlighter
 
 class AdvancedEditor(forms.Textarea):
     class Media:
-      js = ('scripts/tiny_mce/tinymce.min.js', 'scripts/tiny_mce/textareas_small.js',)
+      js = ('//cdn.tiny.cloud/1/evau54786a4pxb62mp84sjc26h72hrpdu9b5ht3zzn8oisd5/tinymce/5/tinymce.min.js', 'scripts/tiny_mce/textareas_small.js')
      
     def __init__(self, language=None, attrs=None):
         self.language = language or settings.LANGUAGE_CODE[:2]
