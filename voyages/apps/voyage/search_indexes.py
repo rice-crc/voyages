@@ -350,6 +350,7 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
     var_date_departed_africa = indexes.DateField(null=True)
     var_date_departed_africa_month = indexes.IntegerField(null=True)
     var_first_dis_of_slaves = indexes.DateField(null=True)
+    var_first_dis_of_slaves_partial = indexes.CharField(null=True, model_attr='voyage_dates__first_dis_of_slaves', indexed=True)
     var_first_dis_of_slaves_month = indexes.IntegerField(null=True)
     var_departure_last_place_of_landing = indexes.DateField(null=True)
     var_departure_last_place_of_landing_month = indexes.IntegerField(null=True)
@@ -499,6 +500,7 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
                 return getDate(data)
         except (AttributeError, TypeError):
             return None
+
     def prepare_var_first_dis_of_slaves_month(self, obj):
         try:
             data = getMonth(obj.voyage_dates.first_dis_of_slaves)

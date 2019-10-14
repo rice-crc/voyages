@@ -519,6 +519,8 @@
 
     <field name="var_date_departed_africa_month" type="long" indexed="true" stored="true" multiValued="false" />
 
+    <field name="var_first_dis_of_slaves_partial" type="text" indexed="true" stored="true" multiValued="false" />
+
     <field name="var_imp_region_voyage_begin_lang_pt_exact" type="text_pt" indexed="true" stored="true" multiValued="false" />
 
     <field name="var_imp_region_voyage_begin_lang_es_exact" type="text_es" indexed="true" stored="true" multiValued="false" />

@@ -223,6 +223,7 @@
   <field name="var_departure_last_place_of_landing_month" type="long" multiValued="false" indexed="true" stored="true"/>
   <field name="var_first_dis_of_slaves" type="date" multiValued="false" indexed="true" stored="true"/>
   <field name="var_first_dis_of_slaves_month" type="long" multiValued="false" indexed="true" stored="true"/>
+  <field name="var_first_dis_of_slaves_partial" type="text_en" multiValued="false" indexed="true" stored="true"/>
   <field name="var_first_landing_place" type="text_en" multiValued="false" indexed="true" stored="true"/>
   <field name="var_first_landing_place_idnum" type="long" multiValued="false" indexed="true" stored="true"/>
   <field name="var_first_landing_place_lang_en" type="string" multiValued="false" indexed="true" stored="true"/>
