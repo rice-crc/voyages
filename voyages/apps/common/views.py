@@ -209,16 +209,19 @@ def get_datatable_json_result(results, post, field_filter=lambda _: True,
     The argument results should be a SearchQuerySet and post should be a dict that
     contains a key tableParams with the DataTable corresponding parameters.
     """
-    table_params = post['tableParams']
-    rows_per_page = int(table_params['length'])
-    current_page_num = 1 + int(table_params['start']) / rows_per_page
-    paginator = Paginator(results, rows_per_page)
-    page = paginator.page(current_page_num)
+    try:
+        table_params = post['tableParams']
+        rows_per_page = int(table_params['length'])
+        current_page_num = 1 + int(table_params['start']) / rows_per_page
+        paginator = Paginator(results, rows_per_page)
+        page = paginator.page(current_page_num)
+    except:
+        page = results
     reponse_data = {}
     total_results = results.count()
     reponse_data['recordsTotal'] = total_results
     reponse_data['recordsFiltered'] = total_results
-    reponse_data['draw'] = int(table_params['draw'])
+    reponse_data['draw'] = int(table_params.get('draw', 0))
     reponse_data['data'] = [{key_adapter((k, v)): value_adapter((k, v))
         for k, v in x.get_stored_fields().items() if field_filter(k)}
         for x in page]
