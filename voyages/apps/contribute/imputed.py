@@ -170,10 +170,10 @@ def year_mod(the_year, mod, start):
         return None
     return 1 + ((the_year - start - 1) // mod)
 
-def compute_imputed_vars(_interim):
+def compute_imputed_vars(_interim, is_iam=False):
     """
     This method will calculate all imputed variables.
-    :return a triple (imputed_model_vars, imputed__numbers, imputed_dict)
+    :return a triple (imputed_model_vars, imputed_numbers, imputed_dict)
     
     The first is a dictionary with keys corresponding to InterimVoyage
     model fields and corresponding values.
@@ -208,6 +208,10 @@ def compute_imputed_vars(_interim):
     
     # YEARAM Year of arrival at port of disembarkation (imputed)
     _yearam_sources = ['datarr34', 'dlslatrc', 'd1slatrc', 'datedepc', 'ddepamc', 'datedepc', 'datarr45']
+    if is_iam:
+        _yearam_sources.remove('ddepamc')
+        _yearam_sources.remove('datarr45')
+        _yearam_sources.push('datarr38')
     yearam = _extract_year_from_sources(_yearam_sources)
     
     year5 = year_mod(yearam, 5, 1500)
@@ -229,9 +233,10 @@ def compute_imputed_vars(_interim):
         _interim_length = int(_interim.length_of_middle_passage)
     except:
         _interim_length = 0
-    if voy2imp is None or (voy2imp < 20 and _interim_length and _interim_length - voy2imp > 10):
+    if voy2imp is None or (voy2imp < (0 if is_iam else 20) and _interim_length and _interim_length - voy2imp > (0 if is_iam else 10)):
         voy2imp = _interim_length
-    voy2imp = threshold(voy2imp, 39)
+    if not is_iam:
+        voy2imp = threshold(voy2imp, 39)
     
     natinimp = get_obj_value(_interim.national_carrier)
     natinimp = recode_var({
@@ -380,9 +385,11 @@ def compute_imputed_vars(_interim):
     ncar13 = _numbers.get('NCAR13', 0)
     ncar15 = _numbers.get('NCAR15', 0)
     ncar17 = _numbers.get('NCAR17', 0)
+    if is_iam: ncar17 = 0
     ncartot = ncar13 + ncar15 + ncar17
     tslavesd = _numbers.get('TSLAVESD')
     tslavesp = _numbers.get('TSLAVESP')
+    if is_iam: tslavesp = None
     pctemb = ncartot / tslavesd if tslavesd else None
     if pctemb == None and tslavesp:
         pctemb = ncartot / tslavesp
