@@ -263,7 +263,7 @@ def interim_main(request, contribution, interim):
     src_pks = {}
     if request.method == 'POST':
         form = InterimVoyageForm(request.POST, instance=interim)
-        prefix = 'interim_slave_number_'
+        prefix = number_prefix
         numbers = {k: float(v) for k, v in request.POST.items() if k.startswith(prefix) and v != ''}
         sources_post = request.POST.get('sources', '[]')
         sources = [(create_source(x, interim), x.get('__index'))

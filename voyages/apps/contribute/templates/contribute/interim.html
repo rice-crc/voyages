@@ -1931,6 +1931,7 @@
 
     var regions = {};
     var broad_regions = {};
+    var numbers = {};
 
     $(document).ready(function() {
         $('.form-horizontal .form-group>label').addClass('control-label col-sm-12 col-md-12 col-lg-12');
@@ -1939,7 +1940,7 @@
             $return_btn.appendTo($('#decision_btn_group'));
         }
         // Store numbers in an object.
-        var numbers = {
+        numbers = {
         {% for k, v in numbers.items %}
             {% if v %}
             {% localize off %}
@@ -2517,6 +2518,17 @@
                             !confirm(validation.toString() + "\n" + gettext('Do you want to submit this voyage anyway?'))) {
                         return false;
                     }
+                }
+            }
+            // Ensure that any variable numbers that do not have a visible field in the UI are also set.
+            var nkeys = Object.keys(numbers);
+            for (var i = 0; i < nkeys.length; ++i)
+            {
+                var k = nkeys[i];
+                if (form.children('#' + k).length == 0) {
+                    var num_field = $('<input class="' + APPENDED_FIELD_CLASS + '" type="hidden" id="' + k + '" name="' + k + '" />');
+                    num_field.val(numbers[k]);
+                    form.append(num_field);
                 }
             }
             return true;
