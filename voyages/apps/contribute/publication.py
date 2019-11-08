@@ -241,20 +241,22 @@ def publish_accepted_contributions(log_file, skip_backup=False):
         log_file.flush()
         os.fsync(log_file.fileno())
 
-    # Step 1 - Backup database
-    if not skip_backup:        
-        log('Backing up all data.\n')
-        with open(settings.MEDIA_ROOT  + '/db.json', 'w') as f:
-            management.call_command('dumpdata', stdout=f)
-        log('Finished backup.\n')
-    
-    log('Fetching contributions...\n')
-    (review_requests, _) = _fetch_active_reviews_by_status([ContributionStatus.approved])
-    log('Publishing...\n')
-    # Step 2 - Publish database
     transaction_finished = False
+    transaction_started = False
     try:
+        # Step 1 - Backup database
+        if not skip_backup:        
+            log('Backing up all data.\n')
+            with open(settings.MEDIA_ROOT  + '/db.json', 'w') as f:
+                management.call_command('dumpdata', stdout=f)
+            log('Finished backup.\n')
+        
+        log('Fetching contributions...\n')
+        (review_requests, _) = _fetch_active_reviews_by_status([ContributionStatus.approved])
+        log('Publishing...\n')
+        # Step 2 - Publish database
         all_deleted_ids = []
+        transaction_started = True
         with transaction.atomic():
             count = 0
             for req in review_requests:
@@ -312,7 +314,7 @@ def publish_accepted_contributions(log_file, skip_backup=False):
         return True
     except Exception as exception:
         log('An error occurred.\n')
-        if not transaction_finished:
+        if transaction_started and not transaction_finished:
             transaction.rollback()
             log('Database transaction was rolledback.\n')
         log(str(exception))
@@ -335,9 +337,10 @@ def _fetch_active_reviews_by_status(statuses):
     review_requests = []
     notreviewed_contributions = []
     for info in contribution_info:
-        reqs = list(ReviewRequest.objects.filter(contribution_id=full_contribution_id(info['type'], info['id']), archived=False))
+        contrib_id = full_contribution_id(info['type'], info['id'])
+        reqs = list(ReviewRequest.objects.filter(contribution_id=contrib_id, archived=False))
         if len(reqs) != 1 and info['contribution'].status == ContributionStatus.approved:
-            raise Exception('Expected a single active review request for approved contributions')
+            raise Exception('Expected a single active review request for approved contributions [' + str(contrib_id) + '], found: ' + str(len(reqs)))
         if len(reqs) == 0:
             notreviewed_contributions.append(info['contribution'])
         else:
