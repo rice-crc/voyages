@@ -62,15 +62,18 @@ def perform_search(search, lang):
             term = term[0]
         skip = False
         if operator.front_end_op_str == _op_contains.front_end_op_str:
-            m = re.match(u'^\s*["\u201c](.*)["\u201d]\s*$', term)
+            m = re.match(u'^\s*["\u201c](\*?)([^\*]*)(\*?)["\u201d]\s*$', term)
             if m:   
                 # Change to exact match and remove quotes.
                 # Make sure we sanitize the input.
-                term = sqs.query.clean(m.group(1))
+                term = sqs.query.clean(m.group(2))
                 operator = _op_eq
                 # Here we are using Solr's format, which is not very portable,
                 # but at this stage this project is very dependent on Solr anyway.
-                custom_terms.append(u'var_' + unicode(item['varName']) + '_plaintext:("' + term + '")')
+                # If the search is really for a full exact match, then we search 
+                # on the plaintext_exact variant of the field. If it is a "contains"
+                # the exact search terms, then we use the plaintext variant instead.
+                custom_terms.append(u'var_' + unicode(item['varName']) + '_plaintext' + ('_exact' if len(m.group(1)) + len(m.group(3)) == 0 else '') + ':("' + term + '")')
                 skip = True
         if not skip:
             search_terms[u'var_' + unicode(item['varName']) + u'__' + unicode(operator.back_end_op_str)] = term
