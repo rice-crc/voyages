@@ -103,6 +103,7 @@ class VoyageSlavesNumbersForm(autocomplete_light.ModelForm):
     class Meta:
         model = VoyageSlavesNumbers
         fields = '__all__'
+        exclude = ['percentage_adult', 'percentage_female']
 
 
 # Voyage Sources
