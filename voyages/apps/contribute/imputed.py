@@ -223,7 +223,7 @@ def compute_imputed_vars(_interim, is_iam=False):
         _interim.date_first_slave_disembarkation,
         _interim.date_departure
     )
-    voy1imp = threshold(voy1imp, 11)
+    voy1imp = threshold(voy1imp, 39)
     # VOY2IMP = DATEDIF(DATE_LAND1, DATE_LEFTAFR, "days").
     voy2imp = date_diff(
         _interim.date_first_slave_disembarkation,
@@ -236,7 +236,7 @@ def compute_imputed_vars(_interim, is_iam=False):
     if voy2imp is None or (voy2imp < (0 if is_iam else 20) and _interim_length and _interim_length - voy2imp > (0 if is_iam else 10)):
         voy2imp = _interim_length
     if not is_iam:
-        voy2imp = threshold(voy2imp, 39)
+        voy2imp = threshold(voy2imp, 10)
     
     natinimp = get_obj_value(_interim.national_carrier)
     natinimp = recode_var({
@@ -315,15 +315,15 @@ def compute_imputed_vars(_interim, is_iam=False):
                     51, 52, 54, 58, 68, 70, 71, 72, 76, 78, 79, 80, 81, 82, 85, 88, 92, 95, 97, 104, 108,
                     109, 122, 123, 124, 125, 132, 134, 135, 142, 144, 148, 154, 157, 159, 161, 162, 163,
                     170, 171,172,173, 174, 176,177, 178, 179, 180, 181, 182, 183, 184, 185, 187, 189, 201,
-                    203, 205],
+                    203, 205, 304, 305, 306, 307, 309, 311, 313],
                 2: [2, 6, 10, 14, 18, 22, 25, 27, 31, 41, 45, 50, 57, 74, 90, 93, 94, 96, 102, 103, 106,
                     110, 111, 112, 118, 121, 126, 127, 128, 130, 138, 141, 153, 155, 156, 160, 192, 193,
                     198, 202],
-                3: [42, 44, 69, 73, 114, 120, 206, 207],
+                3: [42, 44, 69, 73, 114, 120, 206, 207, 310],
                 4: [3, 66, 99],
                 5: [13, 21, 23, 43, 53, 55, 56, 59, 67, 77, 86, 87, 113, 164, 165, 166, 188, 191, 194, 195,
                     196, 199],
-                6: [208],
+                6: [208, 308],
                 7: [28, 75, 89, 91, 98]
             }, 
             _outcome_value
@@ -332,21 +332,21 @@ def compute_imputed_vars(_interim, is_iam=False):
         fate3 = recode_var(
             {
                 1: [2, 3, 4, 5, 27, 28, 29, 30, 75, 85, 86, 91, 94, 95, 97],
-                2: [6, 7, 8, 9, 31, 48, 96, 159, 192, 193],
+                2: [6, 7, 8, 9, 31, 48, 96, 159, 192, 193, 306, 307],
                 3: [10, 11, 12, 13, 54, 58, 102, 103, 104, 106, 108, 109, 110, 111, 112, 113, 114, 118,
                     120, 121, 122, 123, 124, 125, 126, 127, 128, 130, 132, 134, 135, 138, 141, 144, 148,
                     155, 156, 194, 196, 198, 202, 203, 205],
-                4: [14, 15, 16, 17],
+                4: [14, 15, 16, 17, 309],
                 5: [18, 19, 20, 21, 187, 188, 189, 191, 195],
                 6: [22, 23, 24, 25, 55],
                 8: [43, 50, 51, 52, 53, 164, 165, 166, 170, 171, 172, 173, 174, 176, 177, 178, 179, 180,
                     181, 182, 183, 184],
                 9: [160, 161, 162, 163, 185],
-                10: [42, 56, 66, 69, 73, 76, 80, 81, 82, 87, 99],
+                10: [42, 56, 66, 69, 73, 76, 80, 81, 82, 87, 99, 310],
                 11: [57, 74, 79, 89, 90, 98],
                 12: [142, 199],
                 13: [26, 39, 45, 46, 47, 67, 71, 72, 78, 153, 154, 157],
-                14: [1, 40,41,44,49, 59, 68, 70, 77, 88, 92, 93, 206, 207],
+                14: [1, 40,41,44,49, 59, 68, 70, 77, 88, 92, 93, 206, 207, 304, 305, 308, 311, 313],
                 15: [208],
                 16: [201],
                 17: [211],
@@ -357,16 +357,17 @@ def compute_imputed_vars(_interim, is_iam=False):
         # fate4 - Outcome of voyage for owner
         fate4 = recode_var(
             {
-                1: [1, 49, 68, 77, 79, 88, 92, 135, 203, 205, 206, 207, 208],
-                2: [2, 3, 4, 5, 27, 28, 29, 30, 54, 58, 59, 85, 86, 91, 94, 95, 97],
+                1: [1, 49, 68, 77, 79, 88, 92, 135, 203, 205, 206, 207, 208, 304, 308],
+                2: [2, 3, 4, 5, 27, 28, 29, 30, 54, 58, 59, 85, 86, 91, 94, 95, 97, 311, 313],
                 3: [6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 31,
                     39, 41, 42, 43, 44, 45, 46, 47, 48, 50, 51, 52, 53, 55, 56, 57, 66, 67, 69, 71, 72,
                     73, 74, 75, 76, 78, 80, 81, 82, 87, 89, 90, 93, 98, 99, 102, 103, 104, 106, 108, 109,
                     110, 111, 112, 113, 114, 118, 120, 121, 122, 123, 124, 125, 126, 127, 128, 130, 132,
                     134, 138, 141, 142, 144, 148, 153, 154, 155, 156, 157, 159, 160, 161, 162, 163, 164,
                     165, 166, 170, 171, 172, 173, 174, 176, 177, 178, 179, 180, 181, 182, 183, 184, 185,
-                    187, 188, 189, 191, 192, 193, 194, 195, 196, 198, 199, 201, 202],
-                4: [40,70,96,208]
+                    187, 188, 189, 191, 192, 193, 194, 195, 196, 198, 199, 201, 202, 305, 306, 307, 309,
+                    310],
+                4: [40, 70, 96, 208]
             }, 
             _outcome_value
         )
@@ -467,6 +468,16 @@ def compute_imputed_vars(_interim, is_iam=False):
     
     majbuypt = get_obj_value(_interim.principal_place_of_slave_purchase)
     if not mjbyptimp and majbuypt >= 1: mjbyptimp = majbuypt
+
+    if is_iam:
+        # For I-Am use a simpler routine (Greg)
+        plac1tra = interim.first_place_of_slave_purchase
+        plac2tra = interim.second_place_of_slave_purchase
+        if plac1tra >= 1 and (plac2tra is None or ncar13 > ncar15): mjbyptimp = plac1tra
+        if ncar15 > ncar13: mjbyptimp = plac2tra
+        if ncar13 == ncar15 and regem1 == regem2: mjbyptimp = regem1 + 99
+        if ncar13 == ncar15 and regem1 != regem2: mjbyptimp = 80299
+        if mjbyptimp is None and majbuypt >= 1: mjbyptimp = majbuypt
     
     # mjslptimp - Principal port of slave disembarkation
     
@@ -475,6 +486,7 @@ def compute_imputed_vars(_interim, is_iam=False):
     adpsale2 = get_obj_value(_interim.third_place_of_landing)
     arrport = get_obj_value(_interim.first_port_intended_disembarkation)
     arrport2 = get_obj_value(_interim.second_port_intended_disembarkation)
+    if is_iam: arrport2 = None
     mjslptimp = None
     if sla1port and not adpsale1 and not adpsale2: mjslptimp = sla1port
     if adpsale1 and not sla1port and not adpsale2: mjslptimp = adpsale1
@@ -729,19 +741,20 @@ def compute_imputed_vars(_interim, is_iam=False):
     
     slaximp = None
     slamimp = None
+    captive_threshold = 0 if is_iam else 50
     if tslavesd >= 1: slaximp = tslavesd
     if not tslavesd and tslavesp >= 1: slaximp = tslavesp
     if not tslavesd and not tslavesp and ncartot > slaarriv and slaarriv: slaximp = ncartot
     if not tslavesd and not tslavesp and not slaarriv and ncartot > slastot and slastot: slaximp = ncartot
-    if not tslavesd and not tslavesp and not slaarriv and not slastot and ncartot < 50: ncartot = None
-    if not tslavesd and not tslavesp and not slaarriv and not slastot and ncartot >= 50: slaximp = ncartot
+    if not tslavesd and not tslavesp and not slaarriv and not slastot and ncartot < captive_threshold: ncartot = None
+    if not tslavesd and not tslavesp and not slaarriv and not slastot and ncartot >= captive_threshold: slaximp = ncartot
     
     if slaarriv >= 1: slamimp = slaarriv
     if not slaarriv and slastot <= tslavesd: slamimp = slastot
     if not slaarriv and not tslavesd and slastot <= tslavesp: slamimp = slastot
     if not slaarriv and not tslavesd and not tslavesp and slastot <= ncartot: slamimp = slastot
-    if not tslavesd and not tslavesp and not slaarriv and not ncartot and slastot < 50: slastot = None
-    if not slaarriv and not tslavesd and not tslavesd and not ncartot and slastot >= 50: slamimp = slastot
+    if not tslavesd and not tslavesp and not slaarriv and not ncartot and slastot < captive_threshold: slastot = None
+    if not slaarriv and not tslavesd and not tslavesd and not ncartot and slastot >= captive_threshold: slamimp = slastot
     
     if xmimpflag == 127 and slaximp >= 1 and not slaarriv and not slastot: slamimp = slaximp - (slaximp * 0.165107561642471)
     if xmimpflag == 127 and slamimp >= 1 and not tslavesd and not tslavesp and not ncartot: slaximp = slamimp / (1 - 0.165107561642471)
@@ -1661,5 +1674,19 @@ def compute_imputed_vars(_interim, is_iam=False):
     imputed_field_values = {v[0]: v[1](local_vars[k]) for k, v in imputed_vars_model_map.items()}
     # Generate imputed number values.
     imputed_numbers = {k: float(local_vars[k]) if local_vars[k] else None for k in slave_number_var_names}
+
+    # Fields that are not available/present in I-Am and should be removed from the output.
+    iam_rem = ['yeardep', 'yearaf', 'voy1imp', 'tonmod', 'ptdepimp', 'deptregimp', 'deptregimp1',
+        'retrnreg1', 'embport', 'embport2', 'embreg', 'embreg2', 'plac3tra', 'regem3', 'arrport2',
+        'regarr2', 'portret', 'retrnreg', 'xmimpflag']
+    iam_sex_rem = ['men$', 'women$', 'adult$', 'girl$', 'boy$', 'child$', 'male$', 'female$', 'adlt$imp', 'chil$imp', 'male$imp', 'feml$imp']
+    
+    if is_iam:
+        for d in [imputed_field_values, imputed_numbers, local_vars]
+            for k in iam_rem:
+                d.pop(k, None)
+            for k in iam_sex_rem:
+                for num in [2, 4, 5, 6]
+                    d.pop(k.replace('$', num), None)
 
     return (imputed_field_values, imputed_numbers, local_vars)
