@@ -3,7 +3,7 @@ var_captain = new TextVariable({
     label: gettext("Captain's name"),
     description: "",
   },{
-    op: "is equal to",
+    op: "contains",
     searchTerm: null,
   },{
     isImputed: false,
