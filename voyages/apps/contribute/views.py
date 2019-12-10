@@ -263,7 +263,7 @@ def interim_main(request, contribution, interim):
     src_pks = {}
     if request.method == 'POST':
         form = InterimVoyageForm(request.POST, instance=interim)
-        prefix = 'interim_slave_number_'
+        prefix = number_prefix
         numbers = {k: float(v) for k, v in request.POST.items() if k.startswith(prefix) and v != ''}
         sources_post = request.POST.get('sources', '[]')
         sources = [(create_source(x, interim), x.get('__index'))
@@ -772,7 +772,8 @@ def get_reviews_by_status(statuses, display_interim_data=False):
             continue
         editor_contributions_req_dict[e.request_id] = e
 
-    interim_ids = [info['contribution'].interim_voyage_id for info in contributions] + \
+    contribs = [info['contribution'] for info in contributions]
+    interim_ids = [c.interim_voyage_id for c in contribs if hasattr(c, 'interim_voyage_id')] + \
         [e.interim_voyage_id for e in editor_contributions_req_dict.values()]
     interim_voyages_dict = {interim.pk: interim for interim in InterimVoyage.objects \
         .select_related('imputed_national_carrier') \

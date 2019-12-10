@@ -11,6 +11,7 @@ from django.views.decorators.http import require_POST
 from graphs import *
 from globals import voyage_timeline_variables, table_columns, table_rows, table_functions
 from haystack.query import SearchQuerySet
+from haystack.inputs import Raw
 from search_indexes import VoyageIndex
 from voyages.apps.common.export import download_xls
 from voyages.apps.common.models import get_pks_from_haystack_results, SavedQuery
@@ -32,15 +33,14 @@ class SearchOperator():
         self.back_end_op_str = back_end_op_str
         self.list_type = list_type
 
+_op_eq = SearchOperator('equals', 'exact', False)
+_op_at_most = SearchOperator('is at most', 'lte', False)
+_op_at_least = SearchOperator('is at least', 'gte', False)
+_op_between = SearchOperator('is between', 'range', True)
+_op_contains = SearchOperator('contains', 'contains', False)
+_op_one_of = SearchOperator('is one of', 'in', True)
 # A list of operators used with Solr/Haystack to perform searches.
-_operators_list = [
-    SearchOperator('equals', 'exact', False),
-    SearchOperator('is at most', 'lte', False),
-    SearchOperator('is at least', 'gte', False),
-    SearchOperator('is between', 'range', True),
-    SearchOperator('contains', 'contains', False),
-    SearchOperator('is one of', 'in', True),
-]
+_operators_list = [_op_eq, _op_at_most, _op_at_least, _op_between, _op_contains, _op_one_of]
 _operators_dict = {op.front_end_op_str: op for op in _operators_list}
 
 index = VoyageIndex()
@@ -52,15 +52,35 @@ translated_field_list = [f[:-len(translate_suffix)] for f in index.fields.keys()
 def perform_search(search, lang):
     items = search['items']
     search_terms = {}
+    custom_terms = []
+    sqs = SearchQuerySet()
     for item in items:
         term = item['searchTerm']
         operator = _operators_dict[item['op']]
         is_list = isinstance(term, list)
         if is_list and not operator.list_type:
             term = term[0]
-        search_terms[u'var_' + unicode(item['varName']) + u'__' + unicode(operator.back_end_op_str)] = term
+        skip = False
+        if operator.front_end_op_str == _op_contains.front_end_op_str:
+            m = re.match(u'^\s*["\u201c](\*?)([^\*]*)(\*?)["\u201d]\s*$', term)
+            if m:   
+                # Change to exact match and remove quotes.
+                # Make sure we sanitize the input.
+                term = sqs.query.clean(m.group(2))
+                operator = _op_eq
+                # Here we are using Solr's format, which is not very portable,
+                # but at this stage this project is very dependent on Solr anyway.
+                # If the search is really for a full exact match, then we search 
+                # on the plaintext_exact variant of the field. If it is a "contains"
+                # the exact search terms, then we use the plaintext variant instead.
+                custom_terms.append(u'var_' + unicode(item['varName']) + '_plaintext' + ('_exact' if len(m.group(1)) + len(m.group(3)) == 0 else '') + ':("' + term + '")')
+                skip = True
+        if not skip:
+            search_terms[u'var_' + unicode(item['varName']) + u'__' + unicode(operator.back_end_op_str)] = term
     search_terms[u'var_intra_american_voyage__exact'] = json.loads(search_terms.get(u'var_intra_american_voyage__exact', 'false'))
-    result = SearchQuerySet().models(Voyage).filter(**search_terms)
+    result = sqs.models(Voyage).filter(**search_terms)
+    for ct in custom_terms:
+        result = result.filter(content=Raw(ct, clean=True))
     order_fields = search.get('orderBy')
     if order_fields:
         remaped_fields = []

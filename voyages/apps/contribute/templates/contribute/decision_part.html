@@ -145,12 +145,16 @@
                         data: $('form').serialize(),
                         success: function (response) {
                             if (response.result == 'OK') {
-                                var dict = response.imputed_vars;
+                                var dict = response.imputed_numbers;
                                 var sorted_keys = Object.keys(dict).sort();
                                 var text = '';
+                                numbers = {}
                                 for (var i = 0; i < sorted_keys.length; ++i) {
                                     var key = sorted_keys[i];
                                     text += '\n' + key + ': ' + dict[key];
+                                    if (dict[key] != undefined && dict[key] != null) {
+                                        numbers['interim_slave_number_' + key.toUpperCase()] = dict[key];
+                                    }
                                 }
                                 alert('{% trans "Impute variables computed as follows" %}: ' + text);
                                 // Reload page and expand all sections.
