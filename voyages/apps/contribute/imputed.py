@@ -211,7 +211,7 @@ def compute_imputed_vars(_interim, is_iam=False):
     if is_iam:
         _yearam_sources.remove('ddepamc')
         _yearam_sources.remove('datarr45')
-        _yearam_sources.push('datarr38')
+        _yearam_sources.append('datarr38')
     yearam = _extract_year_from_sources(_yearam_sources)
     
     year5 = year_mod(yearam, 5, 1500)
@@ -471,8 +471,8 @@ def compute_imputed_vars(_interim, is_iam=False):
 
     if is_iam:
         # For I-Am use a simpler routine (Greg)
-        plac1tra = interim.first_place_of_slave_purchase
-        plac2tra = interim.second_place_of_slave_purchase
+        plac1tra = get_obj_value(_interim.first_place_of_slave_purchase)
+        plac2tra = get_obj_value(_interim.second_place_of_slave_purchase)
         if plac1tra >= 1 and (plac2tra is None or ncar13 > ncar15): mjbyptimp = plac1tra
         if ncar15 > ncar13: mjbyptimp = plac2tra
         if ncar13 == ncar15 and regem1 == regem2: mjbyptimp = regem1 + 99
@@ -1682,11 +1682,11 @@ def compute_imputed_vars(_interim, is_iam=False):
     iam_sex_rem = ['men$', 'women$', 'adult$', 'girl$', 'boy$', 'child$', 'male$', 'female$', 'adlt$imp', 'chil$imp', 'male$imp', 'feml$imp']
     
     if is_iam:
-        for d in [imputed_field_values, imputed_numbers, local_vars]
+        for d in [imputed_field_values, imputed_numbers, local_vars]:
             for k in iam_rem:
                 d.pop(k, None)
             for k in iam_sex_rem:
-                for num in [2, 4, 5, 6]
+                for num in ['2', '4', '5', '6']:
                     d.pop(k.replace('$', num), None)
 
     return (imputed_field_values, imputed_numbers, local_vars)

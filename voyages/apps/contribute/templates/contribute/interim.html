@@ -2598,6 +2598,9 @@
         if (pageParams.expandAllSections) {
             expandAll();
         }
+        if (pageParams.isIntraAm) {
+            $("#is_intra_american").prop("checked", true);
+        }
     });
 
     // Special handling of port/region/broad region selection.

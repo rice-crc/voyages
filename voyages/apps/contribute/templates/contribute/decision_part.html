@@ -158,7 +158,8 @@
                                 }
                                 alert('{% trans "Impute variables computed as follows" %}: ' + text);
                                 // Reload page and expand all sections.
-                                window.location.href = window.location.href + '?expandAllSections=true';
+                                window.location.href = window.location.href + '?expandAllSections=true' +
+                                    ($("#is_intra_american").prop("checked") ? '&isIntraAm=true' : '');
                             } else {
                                 alert(response.result);
                             }
