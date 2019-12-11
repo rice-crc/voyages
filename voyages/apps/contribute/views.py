@@ -1357,9 +1357,10 @@ def impute_contribution(request, editor_contribution_id):
     interim_voyage_id = contribution.interim_voyage_id
     # Reload the interim voyage from database, just in case.
     interim = get_object_or_404(InterimVoyage, pk=interim_voyage_id)
-    tuple = imputed.compute_imputed_vars(interim)
-    result = tuple[0]
-    imputed_numbers = tuple[1]
+    is_iam = request.POST.get('is_intra_american', None) is not None
+    impute_tuple = imputed.compute_imputed_vars(interim, is_iam)
+    result = impute_tuple[0]
+    imputed_numbers = impute_tuple[1]
     with transaction.atomic():
         contribution.ran_impute = True
         contribution.save()
@@ -1376,7 +1377,10 @@ def impute_contribution(request, editor_contribution_id):
             number.var_name = k.upper()
             number.number = v
             number.save()
-    return JsonResponse({'result': 'OK', 'imputed_vars': tuple[2], 'imputed_numbers': imputed_numbers})
+    return JsonResponse({'result': 'OK',
+        'is_iam': is_iam, 
+        'imputed_vars': impute_tuple[2],
+        'imputed_numbers': imputed_numbers})
     
 @login_required()
 @require_POST
