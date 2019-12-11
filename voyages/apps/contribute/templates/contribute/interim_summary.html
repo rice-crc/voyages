@@ -683,6 +683,11 @@
 <script type="text/javascript" src="{{ STATIC_URL }}scripts/contribute/interim.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}scripts/library/js.cookie@2.1.0.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}scripts/contribute/common.js"></script>
+<!-- I18n of javascript text -->
+<script type="text/javascript" src="{% url 'javascript-catalog' %}"></script>
+<!-- Use a global JS constant to specify the root of static urls -->
+<script language="javascript">var STATIC_URL = "{{ STATIC_URL|escapejs }}";</script>
+<script language="javascript">var LANGUAGE_CODE = "{{ LANGUAGE_CODE|escapejs }}";</script>
 <script type="text/javascript">
     "use strict";
     $('#print_button').click(function() {
