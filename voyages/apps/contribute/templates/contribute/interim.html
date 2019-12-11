@@ -1660,6 +1660,11 @@
 <script type="text/javascript" src="{{ STATIC_URL }}scripts/contribute/common.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}scripts/legacy/utils.js"></script>
 <script type="text/javascript" src="//cdn.tiny.cloud/1/evau54786a4pxb62mp84sjc26h72hrpdu9b5ht3zzn8oisd5/tinymce/5/tinymce.min.js"></script>
+<!-- I18n of javascript text -->
+<script type="text/javascript" src="{% url 'javascript-catalog' %}"></script>
+<!-- Use a global JS constant to specify the root of static urls -->
+<script language="javascript">var STATIC_URL = "{{ STATIC_URL|escapejs }}";</script>
+<script language="javascript">var LANGUAGE_CODE = "{{ LANGUAGE_CODE|escapejs }}";</script>
 <script type="text/javascript">
     var MODIFY_REFERENCE_TEXT = '{% trans "Modify reference" %}';
     var submit_val = '';
