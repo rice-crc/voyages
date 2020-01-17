@@ -4,7 +4,7 @@
   <uniqueKey>id</uniqueKey>
   <fieldType name="binary" class="solr.BinaryField"/>
   <fieldType name="booleans" class="solr.BoolField" omitNorms="true" sortMissingLast="true"/>
-  <fieldType name="date" class="solr.TrieDateField" omitNorms="true" positionIncrementGap="0" precisionStep="0"/>
+  <fieldType name="date" class="solr.TrieDateField" omitNorms="true" positionIncrementGap="0" precisionStep="0"  sortMissingLast="true"/>
   <fieldType name="double" class="solr.TrieDoubleField" omitNorms="true" positionIncrementGap="0" sortMissingLast="true" precisionStep="0"/>
   <fieldType name="edge_ngram" class="solr.TextField" positionIncrementGap="1">
     <analyzer type="index">
@@ -43,7 +43,7 @@
   <fieldType name="string" class="solr.StrField" omitNorms="true" sortMissingLast="true"/>
   <fieldType name="tdates" class="solr.TrieDateField" omitNorms="true" positionIncrementGap="0" precisionStep="6"/>
   <fieldType name="tdoubles" class="solr.TrieDoubleField" omitNorms="true" positionIncrementGap="0" precisionStep="8"/>
-  <fieldType name="text_en" class="solr.TextField" positionIncrementGap="100">
+  <fieldType name="text_en" class="solr.TextField" positionIncrementGap="100" sortMissingLast="true">
     <analyzer type="index">
       <tokenizer class="solr.StandardTokenizerFactory"/>
       <filter class="solr.StopFilterFactory" words="lang/stopwords_en.txt" ignoreCase="true"/>
@@ -62,7 +62,7 @@
       <filter class="solr.PorterStemFilterFactory"/>
     </analyzer>
   </fieldType>
-  <fieldType name="text_es" class="solr.TextField" positionIncrementGap="100">
+  <fieldType name="text_es" class="solr.TextField" positionIncrementGap="100" sortMissingLast="true">
     <analyzer type="index">
       <tokenizer class="solr.StandardTokenizerFactory"/>
       <filter class="solr.StopFilterFactory" words="lang/stopwords_es.txt" ignoreCase="true"/>
@@ -81,7 +81,7 @@
       <filter class="solr.PorterStemFilterFactory"/>
     </analyzer>
   </fieldType>
-  <fieldType name="text_general" class="solr.TextField" positionIncrementGap="100">
+  <fieldType name="text_general" class="solr.TextField" positionIncrementGap="100" sortMissingLast="true">
     <analyzer type="index">
       <tokenizer class="solr.StandardTokenizerFactory"/>
       <filter class="solr.StopFilterFactory" words="stopwords.txt" ignoreCase="true"/>
@@ -94,7 +94,7 @@
       <filter class="solr.LowerCaseFilterFactory"/>
     </analyzer>
   </fieldType>
-  <fieldType name="text_pt" class="solr.TextField" positionIncrementGap="100">
+  <fieldType name="text_pt" class="solr.TextField" positionIncrementGap="100" sortMissingLast="true">
     <analyzer type="index">
       <tokenizer class="solr.StandardTokenizerFactory"/>
       <filter class="solr.StopFilterFactory" words="lang/stopwords_pt.txt" ignoreCase="true"/>
@@ -222,8 +222,13 @@
   <field name="var_departure_last_place_of_landing" type="date" multiValued="false" indexed="true" stored="true"/>
   <field name="var_departure_last_place_of_landing_month" type="long" multiValued="false" indexed="true" stored="true"/>
   <field name="var_first_dis_of_slaves" type="date" multiValued="false" indexed="true" stored="true"/>
-  <field name="var_first_dis_of_slaves_month" type="long" multiValued="false" indexed="true" stored="true"/>
-  <field name="var_first_dis_of_slaves_partial" type="text_en" multiValued="false" indexed="true" stored="true"/>
+  <field name="var_first_dis_of_slaves_month" type="long" multiValued="false" indexed="true" stored="true"/>/>
+  <field name="var_voyage_began_partial" type="text_en" indexed="true" stored="true" multiValued="false" />
+  <field name="var_slave_purchase_began_partial" type="text_en" indexed="true" stored="true" multiValued="false" />
+  <field name="var_date_departed_africa_partial" type="text_en" indexed="true" stored="true" multiValued="false" />
+  <field name="var_first_dis_of_slaves_partial" type="text_en" indexed="true" stored="true" multiValued="false" />
+  <field name="var_departure_last_place_of_landing_partial" type="text_en" indexed="true" stored="true" multiValued="false" />
+  <field name="var_voyage_completed_partial" type="text_en" indexed="true" stored="true" multiValued="false" />
   <field name="var_first_landing_place" type="text_en" multiValued="false" indexed="true" stored="true"/>
   <field name="var_first_landing_place_idnum" type="long" multiValued="false" indexed="true" stored="true"/>
   <field name="var_first_landing_place_lang_en" type="string" multiValued="false" indexed="true" stored="true"/>

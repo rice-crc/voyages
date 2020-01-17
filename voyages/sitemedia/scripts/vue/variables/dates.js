@@ -36,7 +36,8 @@ var_voyage_began = new DateVariable({
   },{
     isImputed: false,
     isadvanced: false
-  });
+  },
+  true);
 
 var_slave_purchase_began = new DateVariable({
     varName: "slave_purchase_began",
@@ -49,7 +50,8 @@ var_slave_purchase_began = new DateVariable({
   },{
     isImputed: false,
     isadvanced: false
-  });
+  },
+  true);
 
 var_date_departed_africa = new DateVariable({
     varName: "date_departed_africa",
@@ -62,12 +64,13 @@ var_date_departed_africa = new DateVariable({
   },{
     isImputed: false,
     isadvanced: false
-  });
+  },
+  true);
 
 var_first_dis_of_slaves = new DateVariable({
     varName: "first_dis_of_slaves",
     label: gettext("Date vessel arrived with slaves"),
-    description: "",
+    description: ""
   },{
     op: "is equal to",
     searchTerm0: null,
@@ -75,7 +78,8 @@ var_first_dis_of_slaves = new DateVariable({
   },{
     isImputed: false,
     isadvanced: false
-  });
+  },
+  true);
 
 var_departure_last_place_of_landing = new DateVariable({
     varName: "departure_last_place_of_landing",
@@ -88,7 +92,8 @@ var_departure_last_place_of_landing = new DateVariable({
   },{
     isImputed: false,
     isadvanced: false
-  });
+  },
+  true);
 
 var_voyage_completed = new DateVariable({
     varName: "voyage_completed",
@@ -101,7 +106,8 @@ var_voyage_completed = new DateVariable({
   },{
     isImputed: false,
     isadvanced: false
-  });
+  },
+  true);
 
 var_imp_length_home_to_disembark = new NumberVariable({
     varName: "imp_length_home_to_disembark",

@@ -237,6 +237,9 @@ var searchBar = new Vue({
                 if (variable !== "count" && variable != "changed") {
                   var item = this.filter[group][subGroup][variable];
                   var varName = "var_" + item["varName"];
+                  if (!!item.isPartial) {
+                    varName += '_partial';
+                  }
                   var value = this.row.data[varName];
                   var isImputed = item.options ? item.options.isImputed : false;
 
