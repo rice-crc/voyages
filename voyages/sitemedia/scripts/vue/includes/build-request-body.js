@@ -508,7 +508,7 @@ var buildRequestBody = function(voyageId, isIntraAmerican) {
         }
       },
       {
-        "data": "var_voyage_began",
+        "data": "var_voyage_began_partial",
         "name": "",
         "searchable": true,
         "orderable": true,
@@ -518,7 +518,7 @@ var buildRequestBody = function(voyageId, isIntraAmerican) {
         }
       },
       {
-        "data": "var_slave_purchase_began",
+        "data": "var_slave_purchase_began_partial",
         "name": "",
         "searchable": true,
         "orderable": true,
@@ -528,7 +528,7 @@ var buildRequestBody = function(voyageId, isIntraAmerican) {
         }
       },
       {
-        "data": "var_date_departed_africa",
+        "data": "var_date_departed_africa_partial",
         "name": "",
         "searchable": true,
         "orderable": true,
@@ -538,7 +538,7 @@ var buildRequestBody = function(voyageId, isIntraAmerican) {
         }
       },
       {
-        "data": "var_first_dis_of_slaves",
+        "data": "var_first_dis_of_slaves_partial",
         "name": "",
         "searchable": true,
         "orderable": true,
@@ -548,7 +548,7 @@ var buildRequestBody = function(voyageId, isIntraAmerican) {
         }
       },
       {
-        "data": "var_departure_last_place_of_landing",
+        "data": "var_departure_last_place_of_landing_partial",
         "name": "",
         "searchable": true,
         "orderable": true,
@@ -558,7 +558,7 @@ var buildRequestBody = function(voyageId, isIntraAmerican) {
         }
       },
       {
-        "data": "var_voyage_completed",
+        "data": "var_voyage_completed_partial",
         "name": "",
         "searchable": true,
         "orderable": true,

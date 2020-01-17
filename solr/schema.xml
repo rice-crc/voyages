@@ -36,7 +36,7 @@
     <fieldType name="tlong" class="solr.TrieLongField" precisionStep="8" omitNorms="true" positionIncrementGap="0"/>
     <fieldType name="tdouble" class="solr.TrieDoubleField" precisionStep="8" omitNorms="true" positionIncrementGap="0"/>
 
-    <fieldType name="date" class="solr.TrieDateField" omitNorms="true" precisionStep="0" positionIncrementGap="0"/>
+    <fieldType name="date" class="solr.TrieDateField" omitNorms="true" precisionStep="0" positionIncrementGap="0" sortMissingLast="true" />
     <!-- A Trie based date field for faster date range queries and date faceting. -->
     <fieldType name="tdate" class="solr.TrieDateField" omitNorms="true" precisionStep="6" positionIncrementGap="0"/>
 
@@ -44,7 +44,7 @@
     <fieldType name="location" class="solr.LatLonType" subFieldSuffix="_coordinate"/>
     <fieldtype name="geohash" class="solr.GeoHashField"/>
 
-    <fieldType name="text_general" class="solr.TextField" positionIncrementGap="100">
+    <fieldType name="text_general" class="solr.TextField" positionIncrementGap="100" sortMissingLast="true">
       <analyzer type="index">
         <tokenizer class="solr.StandardTokenizerFactory"/>
         <filter class="solr.StopFilterFactory" ignoreCase="true" words="stopwords.txt" />
@@ -61,7 +61,7 @@
       </analyzer>
     </fieldType>
 
-    <fieldType name="text_en" class="solr.TextField" positionIncrementGap="100">
+    <fieldType name="text_en" class="solr.TextField" positionIncrementGap="100" sortMissingLast="true">
       <analyzer type="index">
         <tokenizer class="solr.StandardTokenizerFactory"/>
         <filter class="solr.StopFilterFactory"
@@ -93,7 +93,7 @@
       </analyzer>
     </fieldType>
 
-    <fieldType name="text_pt" class="solr.TextField" positionIncrementGap="100">
+    <fieldType name="text_pt" class="solr.TextField" positionIncrementGap="100" sortMissingLast="true">
       <analyzer type="index">
         <tokenizer class="solr.StandardTokenizerFactory"/>
         <filter class="solr.StopFilterFactory"
@@ -125,7 +125,7 @@
       </analyzer>
     </fieldType>
 
-    <fieldType name="text_es" class="solr.TextField" positionIncrementGap="100">
+    <fieldType name="text_es" class="solr.TextField" positionIncrementGap="100" sortMissingLast="true">
       <analyzer type="index">
         <tokenizer class="solr.StandardTokenizerFactory"/>
         <filter class="solr.StopFilterFactory"
@@ -157,7 +157,7 @@
       </analyzer>
     </fieldType>
 
-    <fieldType name="text_ws" class="solr.TextField" positionIncrementGap="100">
+    <fieldType name="text_ws" class="solr.TextField" positionIncrementGap="100" sortMissingLast="true">
       <analyzer>
         <tokenizer class="solr.WhitespaceTokenizerFactory"/>
       </analyzer>
@@ -519,7 +519,17 @@
 
     <field name="var_date_departed_africa_month" type="long" indexed="true" stored="true" multiValued="false" />
 
+    <field name="var_voyage_began_partial" type="text" indexed="true" stored="true" multiValued="false" />
+
+    <field name="var_slave_purchase_began_partial" type="text" indexed="true" stored="true" multiValued="false" />
+
+    <field name="var_date_departed_africa_partial" type="text" indexed="true" stored="true" multiValued="false" />
+
     <field name="var_first_dis_of_slaves_partial" type="text" indexed="true" stored="true" multiValued="false" />
+
+    <field name="var_departure_last_place_of_landing_partial" type="text" indexed="true" stored="true" multiValued="false" />
+    
+    <field name="var_voyage_completed_partial" type="text" indexed="true" stored="true" multiValued="false" />
 
     <field name="var_imp_region_voyage_begin_lang_pt_exact" type="text_pt" indexed="true" stored="true" multiValued="false" />
 
