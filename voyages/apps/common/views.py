@@ -202,8 +202,32 @@ def _get_flatpage(url, lang):
         pass
     return page
 
+def _default_solr_value_adapter(tuple):
+    key = tuple[0]
+    val = tuple[1]
+    if val == '[]': val = ''
+    if key.endswith('_partial') and val is not None:
+        # This is a partial date so we map from [MM],[DD],[YYYY] to [YYYY]-[MM]-[DD]
+        comps = str(val).split(',')
+        if len(comps) == 3:
+            try:
+                month = int(comps[0]) if comps[0] != '' else None
+                day = int(comps[1]) if comps[1] != '' else None
+                year = int(comps[2]) if comps[2] != '' else None
+                if year is None: 
+                    val = ''
+                else:
+                    val = str(year)
+                    if month:
+                        val = val + '-' + str(month)
+                    if day:
+                        val = val + '-' + str(day)
+            except:
+                pass
+    return val
+
 def get_datatable_json_result(results, post, field_filter=lambda _: True,
-        key_adapter=lambda t: t[0], value_adapter=lambda t: t[1] if t[1] != '[]' else ''):
+        key_adapter=lambda t: t[0], value_adapter=_default_solr_value_adapter):
     """
     Produce a JSON output that can be parsed by a paginated DataTable in the front-end.
     The argument results should be a SearchQuerySet and post should be a dict that

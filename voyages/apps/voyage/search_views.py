@@ -87,6 +87,10 @@ def perform_search(search, lang):
         for field in order_fields:
             # Remap field names if they are plain text or language dependent.
             order_by_field = u'var_' + unicode(field['name'])
+            if order_by_field.endswith('_partial'):
+                # Partial dates are encoded in a way that is terrible for sorting MM,DD,YYYY.
+                # Therefore we use the original Date value (which defaults month, day to 1).
+                order_by_field = order_by_field[0:-8]
             if order_by_field.endswith('_lang'):
                 order_by_field += '_' + lang + '_exact'
             elif order_by_field in translated_field_list:
@@ -95,6 +99,8 @@ def perform_search(search, lang):
                 order_by_field += '_plaintext_exact'
             if field['direction'] == 'desc':
                 order_by_field = '-' + order_by_field
+            elif order_by_field.endswith('_exact'):
+                remaped_fields.append('eq(' + order_by_field + ', \' \')')
             remaped_fields.append(order_by_field)
         result = result.order_by(*remaped_fields)
     return result
