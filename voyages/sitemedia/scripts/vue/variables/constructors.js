@@ -71,7 +71,7 @@ function PercentageVariable(varInfo, searchTerms, options) {
   this.activated = false;
 }
 
-function DateVariable(varInfo, searchTerms, options) {
+function DateVariable(varInfo, searchTerms, options, isPartial) {
   this.type = "number";
   this.varName = varInfo["varName"];
   this.label = varInfo["label"];
@@ -92,6 +92,7 @@ function DateVariable(varInfo, searchTerms, options) {
   };
   this.changed = false;
   this.activated = false;
+  this.isPartial = !!isPartial;
 }
 
 function YearVariable(varInfo, searchTerms, options) {

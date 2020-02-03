@@ -72,12 +72,12 @@ var allColumns = [
   // dates
   { data: "var_length_middle_passage_days", category: 4, header: gettext("Middle passage (days)"), visible: false, isImputed: false },
   { data: "var_imp_length_home_to_disembark", category: 4, header: gettext("Voyage length, homeport to landing (days)"), visible: false, isImputed: false },
-  { data: "var_voyage_began", category: 4, header: gettext("Date that voyage began"), visible: false, isImputed: false },
-  { data: "var_slave_purchase_began", category: 4, header: gettext("Date trade began in Africa"), visible: false, isImputed: false },
-  { data: "var_date_departed_africa", category: 4, header: gettext("Date vessel departed Africa"), visible: false, isImputed: false },
-  { data: "var_first_dis_of_slaves", category: 4, header: gettext("Date vessel arrived with slaves"), visible: false, isImputed: false },
-  { data: "var_departure_last_place_of_landing", category: 4, header: gettext("Date vessel departed for homeport"), visible: false, isImputed: false },
-  { data: "var_voyage_completed", category: 4, header: gettext("Date voyage completed"), visible: false, isImputed: false },
+  { data: "var_voyage_began_partial", category: 4, header: gettext("Date that voyage began"), visible: false, isImputed: false },
+  { data: "var_slave_purchase_began_partial", category: 4, header: gettext("Date trade began in Africa"), visible: false, isImputed: false },
+  { data: "var_date_departed_africa_partial", category: 4, header: gettext("Date vessel departed Africa"), visible: false, isImputed: false },
+  { data: "var_first_dis_of_slaves_partial", category: 4, header: gettext("Date vessel arrived with slaves"), visible: false, isImputed: false },
+  { data: "var_departure_last_place_of_landing_partial", category: 4, header: gettext("Date vessel departed for homeport"), visible: false, isImputed: false },
+  { data: "var_voyage_completed_partial", category: 4, header: gettext("Date voyage completed"), visible: false, isImputed: false },
 
   // captain and crew
   { data: "var_captain", category: 5, header: gettext("Captain's name"), isImputed: false },
