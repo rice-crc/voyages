@@ -59,8 +59,9 @@
 
 				<li class="nav-item dropdown" id="link-about">
 					<a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false" >{% trans 'About' %}</a>
-					<div class="dropdown-menu">
+					<div class="dropdown-menu dropdown-menu-right">
 						<a class="dropdown-item" href="{% url 'about:about' %}">{% trans "About" %}</a>
+						<a class="dropdown-item" href="/about/about#news/10/en/">{% trans "News" %}</a>
 						<a class="dropdown-item" href="https://docs.google.com/forms/d/e/1FAIpQLSc2xoG0_OpkW--hZUXAvwTB6ZuNYDze1MDre1c5gyH0MrS8Jw/viewform" rel="noopener noreferrer" target="_blank">{% trans "Provide User Feedback" %}</a>
 					</div>
 				</li>
