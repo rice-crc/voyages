@@ -79,13 +79,28 @@ var flatpage = new Vue({
       .then(function (response) {
         // vm.content = response.data;
         $("#center-content-inner").html(response.data)
-        vm.updateNav();
+        // vm.updateNav();
+        // use a hash system to determine a particular page
         var hashURL = vm.extractURL(currentURL, vm.pathname, true);
-        // console.log(hashURL);
+        if (window.location.href.match(/[^#]*/i)) {
+          window.location.href = window.location.href.match(/[^#]*/i)[0] + hashURL;
+        } else {
+          window.location.href = window.location.href + hashURL;
+        }
       })
       .catch(function (error) {
         console.log(error);
       });
+    },
+
+    getArticleIndex(url) {
+      var index = 0;
+      this.articles.forEach(function(article, currentArticleIdx) {
+        if (article.url.includes(url.slice(0, -3))) { // trim off language tag
+          index = currentArticleIdx;
+        }
+      });
+      return index;
     },
 
     updateNav() {
@@ -139,10 +154,11 @@ var flatpage = new Vue({
 
   created: function() {
     var vm = this;
-    var href = window.location.href;
     var host = window.location.origin;
     var prefix = "/common/flatpagehierarchy/";
+    var pathname = window.location.pathname;
     var url = host + prefix + this.pathname;
+
     axios.get(url)
     .then(function (response) {
       vm.response = response.data;
@@ -161,8 +177,15 @@ var flatpage = new Vue({
         articles.push(article);
       }
       vm.articles = articles;
-      vm.navigate("0"); // load initial page
-      vm.updateNav();
+
+      var hashURL = window.location.href.match(/\#(.*)/); // get the URL with the #
+      if (hashURL != null && hashURL.length > 0) { // if the URL with the # is matched
+        var articleIndex = vm.getArticleIndex(hashURL[1]); 
+        vm.navigate(articleIndex); // load a page from URL
+      } else {
+        vm.navigate("0"); // load initial page
+      }
+      // vm.updateNav();
     })
     .catch(function (error) {
       console.log(error);
