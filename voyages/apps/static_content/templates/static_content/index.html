@@ -64,7 +64,8 @@
 						</div>
 					</a>
 
-					<a href="/voyage/database#timelapse" data-aos="fade-up" data-aos-easing="ease" data-aos-delay="1500" data-aos-duration="500" data-aos-anchor="#bgvid-container">
+					<a data-toggle="modal" data-target="#timelapse-modal"
+						href="#" data-aos="fade-up" data-aos-easing="ease" data-aos-delay="1500" data-aos-duration="500" data-aos-anchor="#bgvid-container">
 						<div class="special-feature-flex-item">
 							<div class="special-feature-title">{% trans 'Timelapse' %}</div>
 							<div class="special-feature-desc">{% trans 'View the movement of slave ships across the Atlantic' %} </div>
@@ -83,21 +84,18 @@
 							alt="Slave Voyages - Legacy Site"
 							data-toggle="tooltip" data-placement="top"
 							title="{% trans 'The Slave Voyages 1.0 is now available as a read-only archive until late 2019.' %}">
-							<img class="legacy-icon" src="{{STATIC_URL}}images/site/social-media/legacy.svg" alt="Legacy Site Button"></img>
+							<img class="legacy-icon" src="{{STATIC_URL}}images/site/social-media/legacy.svg" alt="Legacy Site Button">
 							<span>{% trans 'visit legacy site' %}</span>
-							</span>
 						</a>
-						<span class='separator'>|</span>
+						<span class="separator">|</span>
 						<a href="https://securelb.imodules.com/s/1705/giving/index.aspx?sid=1705&gid=3&pgid=600&cid=1358&bledit=1&dids=11428&appealcode=8WLSV" class="social-icon lazy" target="_blank" rel="noopener" alt="Donate to Slave Voyages">
-							<img class="donate-icon" src="{{STATIC_URL}}images/site/social-media/love.svg" alt="Donate Button"></img>
+							<img class="donate-icon" src="{{STATIC_URL}}images/site/social-media/love.svg" alt="Donate Button">
 							<span>{% trans 'donate to this project' %}</span>
-							</span>
 						</a>
-						<span class='separator'>|</span>
+						<span class="separator">|</span>
 						<a href="https://docs.google.com/forms/d/e/1FAIpQLSc2xoG0_OpkW--hZUXAvwTB6ZuNYDze1MDre1c5gyH0MrS8Jw/viewform" class="social-icon lazy" target="_blank" rel="noopener" alt="Provide user feedback">
-							<img class="legacy-icon" src="{{STATIC_URL}}images/site/feedback.svg" alt="Feedback Button"></img>
+							<img class="legacy-icon" src="{{STATIC_URL}}images/site/feedback.svg" alt="Feedback Button">
 							<span>{% trans 'provide user feedback' %}</span>
-							</span>
 						</a>
 						<div class="scroll"> {% trans 'scroll down to learn more' %}</div>
 					</div>
@@ -119,6 +117,81 @@
 
 </div>
 		
+
+<!-- Modal -->
+<div class="modal fade" id="timelapse-modal" tabindex="-1" role="dialog" aria-labelledby="timelapse-modal-label"
+	aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title timelapse-modal-title" id="timelapse-modal-label">Choose how to continue</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body row">
+				
+				<div class="col-md-6 d-flex align-items-stretch">
+					<div class="card card-btn">
+						<a href="/voyage/database#timelapse">
+							<div class="card-body">
+								<h5 class="card-title-btn">Watch Intro Video</h5>
+								<p class="card-text-btn">View an introductory video that describes the historical context and features of the timelapse.
+								</p>
+							</div>
+						</a>
+					</div>
+				</div>
+				<div class="col-md-6 d-flex align-items-stretch">
+					<div class="card card-btn">
+						<a href="/voyage/database#timelapse">
+							<div class="card-body">
+								<h5 class="card-title-btn">View Timelapse</h5>
+								<p class="card-text-btn">View the movement of slaveships across the Atlantic on an interactive map.
+								</p>
+							</div>
+						</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<div class="aos-container news-container" data-aos="fade-in" data-aos-easing="ease" data-aos-duration="500">
+	<div class="container">
+	<div class="news-container-title">
+		Recent News
+	</div>
+
+	<div class="news-grid-container">
+		
+		<div class="news-grid">
+			<a href="/about/about#news/10/news/0/en/" target="_blank" rel="noopener"
+				alt="Emory University Center for Digital Scholarship (US)">
+				<div class="news-grid-item fade-in">
+					<div class="news-grid-title">
+						<span>Information Release on the Future of Slave Voyages</span>
+						<span class="news-grid-title-date">January 2020</span>
+					</div>
+					<p class="news-grid-body">
+					A few months ago, www.slavevoyages.org capped ten years of delivering basic information on the size and direction of the
+					Atlantic slave trade by undergoing a complete recode and re-design and uploading a new database of intra-American slave
+					voyages. As is well-known, the site and its data are freely available, but while free to users, maintenance is
+					expensive. Since the project began in 1992 the organizers have raised $3 million in grants to cover development.
+					However, this figure does not take into account the costs of hosting the site all of which Emory University has absorbed
+					since 2008.
+					</p>
+				</div>
+			</a>
+
+		</div>
+	</div>
+	</div>
+
+</div>
+
 <div class="container">
 	<div class="row">
 
@@ -202,6 +275,7 @@
 						The African Names Database provides personal details of 91,491 Africans taken from captured slave ships or from African trading sites. It displays the African name, age, gender, origin, country, and places of embarkation and disembarkation
 						of each individual.
 						{% endblocktrans %}
+					</p>
 				</div>
 				<div class="align-self-end band-buttons">
 					<a class="" href="{% url 'resources:about' %}">
@@ -221,7 +295,7 @@
 		</div>
 
 		<div class="row band" data-aos="fade-up" data-aos-easing="ease" data-aos-duration="500">
-			<div class='col-md-12 band-story'>
+			<div class="col-md-12 band-story">
 				<div class="align-self-start">
 					<h1 class="uppercase gallery-color weight-700 db-title">{% trans 'Image Galleries' %}</h1>
 				</div>
@@ -231,6 +305,7 @@
 						Explore several hundred images of the people, places, vessels and manuscripts of the Trans-Atlantic and Intra-American slave trades. Where available, each image contains a link to a corresponding slave voyage in the databases and a reference to the
 						original source.
 						{% endblocktrans %}
+					</p>
 				</div>
 			</div>
 
