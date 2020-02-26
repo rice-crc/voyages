@@ -1108,7 +1108,7 @@ function TimelineControl(data, parent, onChange, ui, geoCache) {
       )
       .attr("y2", paddedHeightLine)
       .attr("y1", 0)
-      .attr("filter", "url(#glow)")
+      // .attr("filter", "url(#glow)")
       .style("stroke-opacity", "1");
     
       var embCirclePos = function(val) {
