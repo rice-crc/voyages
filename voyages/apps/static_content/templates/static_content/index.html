@@ -128,10 +128,9 @@
 				</button>
 			</div>
 			<div class="modal-body row">
-				
 				<div class="col-md-6 d-flex align-items-stretch">
 					<div class="card card-btn">
-						<a href="/voyage/database#timelapse">
+						<a href="#" id="timelapse-video-btn" data-dismiss="modal">
 							<div class="card-body">
 								<h5 class="card-title-btn">Watch Intro Video</h5>
 								<p class="card-text-btn">View an introductory video that describes the historical context and features of the timelapse.
@@ -159,33 +158,26 @@
 
 <div class="aos-container news-container" data-aos="fade-in" data-aos-easing="ease" data-aos-duration="500">
 	<div class="container">
-	<div class="news-container-title">
-		Recent News
-	</div>
-
-	<div class="news-grid-container">
-		
-		<div class="news-grid">
-			<a href="/about/about#news/10/news/0/en/" target="_blank" rel="noopener"
-				alt="Emory University Center for Digital Scholarship (US)">
-				<div class="news-grid-item fade-in">
-					<div class="news-grid-title">
-						<span>Information Release on the Future of Slave Voyages</span>
-						<span class="news-grid-title-date">January 2020</span>
-					</div>
-					<p class="news-grid-body">
-					A few months ago, www.slavevoyages.org capped ten years of delivering basic information on the size and direction of the
-					Atlantic slave trade by undergoing a complete recode and re-design and uploading a new database of intra-American slave
-					voyages. As is well-known, the site and its data are freely available, but while free to users, maintenance is
-					expensive. Since the project began in 1992 the organizers have raised $3 million in grants to cover development.
-					However, this figure does not take into account the costs of hosting the site all of which Emory University has absorbed
-					since 2008.
-					</p>
-				</div>
-			</a>
-
+		<div class="news-container-title">
+			Recent News
 		</div>
-	</div>
+
+		<div class="news-grid-container" id="recent-news">
+			<div class="news-grid" v-for="article in news" :key="article.id">
+				<a :href="article.url" target="_blank" rel="noopener"
+					alt="Emory University Center for Digital Scholarship (US)" v-once>
+					<div class="news-grid-item fade-in">
+						<div class="news-grid-title">
+							<span>[[article.title]]</span>
+							<span class="news-grid-title-date">[[article.timestamp]]</span>
+						</div>
+						<p class="news-grid-body">
+							[[article.text]]
+						</p>
+					</div>
+				</a>
+			</div>
+		</div>
 	</div>
 
 </div>
@@ -402,8 +394,11 @@
 </div>
 
 {% compress js %}
+<script src="{{ STATIC_URL }}scripts/library/axios@0.18.0.min.js" type="text/javascript"></script>
+<script src="{{ STATIC_URL }}scripts/library/vue@2.6.7.js" type="text/javascript"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}scripts/vue/includes/homepage-reflow.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}scripts/vue/includes/video-player.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}scripts/vue/recent-news.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}scripts/library/aos@2.1.1.min.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}scripts/library/lazyload@8.10.0.min.js"></script>
 <script>
