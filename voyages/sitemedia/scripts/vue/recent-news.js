@@ -31,6 +31,7 @@ var recentNews = new Vue({
       for (var i = 0; i < response.data.items.length; i++) {
         if (response.data.items[i].url.match(/\/about\/news\/[0-9]+\/news\//)) {
           articleURL = response.data.items[i].url;
+          articleURL = articleURL.replace(/^http:\/\//i, 'https://');
           var title, timestamp;
           axios.get(articleURL)
           .then(function (artileResponse) {
