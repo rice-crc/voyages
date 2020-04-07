@@ -1290,11 +1290,11 @@ class VoyageSources(models.Model):
     """
 
     short_ref = models.CharField(_('Short reference'),
-                                 max_length=255, null=True, blank=True, unique=True)
+                                 max_length=255, null=False, blank=True, unique=True)
     # Might contain HTML text formatting
     full_ref = models.CharField(_('Full reference'),
-                                max_length=2550, null=True, blank=True)
-    source_type = models.ForeignKey('VoyageSourcesType', null=True)
+                                max_length=2550, null=False, blank=True)
+    source_type = models.ForeignKey('VoyageSourcesType', null=False)
 
     class Meta:
         verbose_name = 'Source'
@@ -1313,11 +1313,11 @@ class VoyageSourcesConnection(models.Model):
     related to: :class:`~voyages.apps.voyage.models.Voyage`
     """
     source = models.ForeignKey('VoyageSources', related_name="source",
-                               null=True, blank=True)
+                               null=False, blank=True)
     group = models.ForeignKey('Voyage', related_name="group")
     source_order = models.IntegerField()
     text_ref = models.CharField(_('Text reference(citation)'),
-                                max_length=255, null=True, blank=True)
+                                max_length=255, null=False, blank=True)
 
 class VoyageManager(models.Manager):
     def get_queryset(self):
