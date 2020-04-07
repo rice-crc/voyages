@@ -2431,6 +2431,8 @@ function LazyLoader() {
         )
         .then(function() {
           $.when(
+            self.loadScript("https://unpkg.com/tangram/dist/tangram.min.js"),
+            //self.loadScript("https://unpkg.com/leaflet.vectorgrid@latest/dist/Leaflet.VectorGrid.bundled.js"),
             self.loadScript(STATIC_URL + "maps/js/routeNodes.js"),
             self.loadScript(STATIC_URL + "maps/js/voyagesMap.js")
           ).then(function() {

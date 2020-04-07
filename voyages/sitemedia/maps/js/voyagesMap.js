@@ -292,6 +292,7 @@ var voyagesMap = {
 	loadBaseMap: function(mapId, prefix) {
 	    prefix = prefix || '';
 		if (this._mapLayer) this._map.removeLayer(this._mapLayer);
+		/*
         var options = {
             minZoom: 2,
             maxZoom: 8,
@@ -302,6 +303,13 @@ var voyagesMap = {
             bounds: this._bounds,
         };
 		this._mapLayer = L.tileLayer(prefix + 'img/map_{id}/{z}/{x}/{y}.png', options);
+		*/
+		var tangramLayer = Tangram.leafletLayer({
+            scene: STATIC_URL + 'maps/js/scene.yaml',
+            attribution: '<a href="https://mapzen.com/tangram" target="_blank">Tangram</a> | &copy; OSM contributors',
+			maxZoom: 20
+        });
+        this._mapLayer = tangramLayer;
 		this._map.addLayer(this._mapLayer);
 		return this._mapLayer;
 	},
