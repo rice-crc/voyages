@@ -1280,6 +1280,11 @@ class VoyageSourcesType(models.Model):
     def __unicode__(self):
         return self.group_name
 
+# TODO: Apply models.IntegerChoices when we migrate to Django 3+
+class VoyageDataset:
+    Transatlantic = 0,
+    IntraAmerican = 1,
+    IntraAfrican = 2
 
 # Voyage Sources
 class VoyageSources(models.Model):
@@ -1321,11 +1326,11 @@ class VoyageSourcesConnection(models.Model):
 
 class VoyageManager(models.Manager):
     def get_queryset(self):
-        return super(VoyageManager, self).get_queryset().filter(is_intra_american=False)
+        return super(VoyageManager, self).get_queryset().filter(dataset=VoyageDataset.Transatlantic)
 
 class IntraAmericanVoyageManager(models.Manager):
     def get_queryset(self):
-        return super(IntraAmericanVoyageManager, self).get_queryset().filter(is_intra_american=True)
+        return super(IntraAmericanVoyageManager, self).get_queryset().filter(dataset=VoyageDataset.IntraAmerican)
 
 class LinkedVoyages(models.Model):
     """
@@ -1389,7 +1394,9 @@ class Voyage(models.Model):
              related_name='voyage_sources', blank=True)
 
     last_update = models.DateTimeField(auto_now=True)
-    is_intra_american = models.BooleanField("IntraAmerican Voyage", default=False, null=False)
+    dataset = models.IntegerField(null=False,
+            default=VoyageDataset.Transatlantic,
+            help_text='Which dataset the voyage belongs to (e.g. Transatlantic, IntraAmerican)')
 
     # generate natural key
     def natural_key(self):

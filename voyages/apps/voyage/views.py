@@ -51,7 +51,7 @@ reset_fields = ['voyages_tables_columns', 'voyages_tables_rows',
                'tab_graphs_pie_defs_x_ind', 'tab_graphs_pie_defs_y_ind',]
 
 def get_voyages_search_query_set():
-    return SearchQuerySet().models(Voyage).filter(var_intra_american_voyage=False)
+    return SearchQuerySet().models(Voyage).filter(var_dataset=0)
 
 def get_page(request, chapternum, sectionnum, pagenum):
     """

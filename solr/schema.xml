@@ -845,7 +845,7 @@
 
     <field name="var_third_place_slave_purchase_lang_es_exact" type="text_es" indexed="true" stored="true" multiValued="false" />
     
-    <field name="var_intra_american_voyage" type="boolean" indexed="true" stored="true" multiValued="false" />
+    <field name="var_dataset" type="long" indexed="true" stored="true" multiValued="false" />
 
     <!-- Pivot Fields -->
     <field name="var_imp_region_voyage_begin_pivot" type="string" indexed="true" stored="true" multiValued="false" />

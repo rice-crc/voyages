@@ -786,7 +786,7 @@ def _save_editorial_version(review_request, contrib_type, in_cd_rom_override=Non
         voyage.voyage_ship_owner.clear()
         voyage.voyage_sources.clear()
     
-    voyage.is_intra_american = review_request.is_intra_american
+    voyage.dataset = VoyageDataset.IntraAmerican if review_request.is_intra_american else VoyageDataset.Transatlantic
     # Save voyage so that the database generates a primary key for it.
     voyage.voyage_groupings = interim.imputed_voyage_groupings_for_estimating_imputed_slaves
     voyage.save()
