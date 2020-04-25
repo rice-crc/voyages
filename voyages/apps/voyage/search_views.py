@@ -82,6 +82,10 @@ def perform_search(search, lang):
     try:
         if json.loads(search_terms.get(u'var_intra_american_voyage__exact', 'false')):
             dataset = VoyageDataset.IntraAmerican
+        rem_keys = [k for k in search_terms.keys() if k.startswith(u'var_intra_american_voyage')]
+        print(rem_keys)
+        for k in rem_keys:
+            search_terms.pop(k)
     except:
         pass
     search_terms[u'var_dataset__exact'] = dataset
