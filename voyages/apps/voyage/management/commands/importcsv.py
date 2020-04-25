@@ -259,7 +259,8 @@ class Command(BaseCommand):
                     voyage.voyage_in_cd_rom = in_cd_room == '1' or in_cd_room.lower() == 'true'
                     voyage.voyage_groupings = get_by_value('groupings', 'xmimpflag')
                     intra_american = cint(row.get(u'intraamer')) == 1
-                    voyage.is_intra_american = intra_american
+                    # NOTE: if we implement other datasets, there should be a field to specify which
+                    voyage.dataset = VoyageDataset.IntraAmerican if intra_american else VoyageDataset.Transatlantic
                     if intra_american:
                         count_iam += 1
                     else:

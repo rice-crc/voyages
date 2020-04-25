@@ -1286,7 +1286,8 @@ def submit_editorial_decision(request, editor_contribution_id):
         # Fetch decision.
         review_request.final_decision = decision
         review_request.created_voyage_id = created_voyage_id
-        review_request.is_intra_american = request.POST.get('is_intra_american', None) is not None
+        is_iam = request.POST.get('is_intra_american', None) is not None
+        review_request.dataset = VoyageDataset.IntraAmerican if is_iam else VoyageDataset.Transatlantic
         msg = request.POST.get('decision_message')
         msg = 'Editor: ' + msg if msg else ''
         msg = escape(msg)

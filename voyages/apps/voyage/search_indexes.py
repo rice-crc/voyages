@@ -402,8 +402,8 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
     # Links
     var_voyage_links = indexes.MultiValueField(indexed=True, stored=True, null=True)
 
-    # Intra-American vs Trans-Atlantic.
-    var_intra_american_voyage = indexes.BooleanField(null=False, indexed=True, model_attr='is_intra_american')
+    # Dataset: Transatlantic, Intra-American etc.
+    var_dataset = indexes.IntegerField(null=False, indexed=True, model_attr='dataset')
 
     def get_model(self):
         return Voyage

@@ -339,7 +339,7 @@
   <field name="var_imputed_percentage_men" type="float" multiValued="false" indexed="true" stored="true"/>
   <field name="var_imputed_percentage_women" type="float" multiValued="false" indexed="true" stored="true"/>
   <field name="var_imputed_sterling_cash" type="float" multiValued="false" indexed="true" stored="true"/>
-  <field name="var_intra_american_voyage" type="booleans" multiValued="false" indexed="true" stored="true"/>
+  <field name="var_dataset" type="long" multiValued="false" indexed="true" stored="true"/>
   <field name="var_length_middle_passage_days" type="long" multiValued="false" indexed="true" stored="true"/>
   <field name="var_length_middle_passage_days_exact" type="long" multiValued="false" indexed="true" stored="true"/>
   <field name="var_long_ref" type="text_en" multiValued="false" indexed="true" stored="true"/>

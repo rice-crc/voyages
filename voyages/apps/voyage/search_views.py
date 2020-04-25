@@ -77,7 +77,14 @@ def perform_search(search, lang):
                 skip = True
         if not skip:
             search_terms[u'var_' + unicode(item['varName']) + u'__' + unicode(operator.back_end_op_str)] = term
-    search_terms[u'var_intra_american_voyage__exact'] = json.loads(search_terms.get(u'var_intra_american_voyage__exact', 'false'))
+    # Map I-Am searches to the appropriate dataset.
+    dataset = VoyageDataset.Transatlantic
+    try:
+        if json.loads(search_terms.get(u'var_intra_american_voyage__exact', 'false')):
+            dataset = VoyageDataset.IntraAmerican
+    except:
+        pass
+    search_terms[u'var_dataset__exact'] = dataset
     result = sqs.models(Voyage).filter(**search_terms)
     for ct in custom_terms:
         result = result.filter(content=Raw(ct, clean=True))

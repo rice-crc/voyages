@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from django.core.validators import validate_comma_separated_integer_list, MinLengthValidator
 from django.utils.translation import ugettext as _
 from voyages.apps import voyage
+from voyages.apps.voyage.models import VoyageDataset
 from voyages.apps.common.validators import date_csv_field_validator
 import itertools
 
@@ -272,7 +273,7 @@ class ReviewRequestResponse:
     accepted = 1
     rejected = 2
     begun_editorial_review = 1000
-    
+
 class ReviewRequest(models.Model):
     """
     A request made to a reviewer for a contribution.
@@ -288,7 +289,9 @@ class ReviewRequest(models.Model):
     final_decision = models.IntegerField(default=0)
     archived = models.BooleanField(default=False)
     created_voyage_id = models.IntegerField(null=True, help_text='The voyage id that should be used for the newly created voyage (in case of new or merged contributions)')
-    is_intra_american = models.BooleanField(default=False, help_text='The resulting voyage is IntraAmerican')
+    dataset = models.IntegerField(null=False, 
+        default=VoyageDataset.Transatlantic,
+        help_text='Which dataset the voyage belongs to (e.g. Transatlantic, IntraAmerican)')
     
     def contribution(self):
         return get_contribution_from_id(self.contribution_id)
