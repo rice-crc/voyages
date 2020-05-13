@@ -233,6 +233,7 @@ def get_datatable_json_result(results, post, field_filter=lambda _: True,
     The argument results should be a SearchQuerySet and post should be a dict that
     contains a key tableParams with the DataTable corresponding parameters.
     """
+    table_params = {}
     try:
         table_params = post['tableParams']
         rows_per_page = int(table_params['length'])

@@ -1,20 +1,81 @@
 from django.db import models
+from voyages.apps.voyage.models import VoyageSources
 from name_search import NameSearchCache
 
 class EnslaverIdentity(models.Model):
     principal_alias = models.CharField(max_length=255)
 
+    # Personal info.
+    birth_year = models.IntegerField(null=True)
+    birth_month = models.IntegerField(null=True)
+    birth_day = models.IntegerField(null=True)
+    birth_place = models.CharField(max_length=255, null=True)
+
+    death_year = models.IntegerField(null=True)
+    death_month = models.IntegerField(null=True)
+    death_day = models.IntegerField(null=True)
+    death_place = models.CharField(max_length=255, null=True)
+
+    father_name = models.CharField(max_length=255, null=True)
+    father_occupation = models.CharField(max_length=255, null=True)
+    mother_name = models.CharField(max_length=255, null=True)
+    
+    first_spouse_name = models.CharField(max_length=255, null=True)
+    first_marriage_date = models.CharField(max_length=12, null=True)
+    second_spouse_name = models.CharField(max_length=255, null=True)
+    second_marriage_date = models.CharField(max_length=12, null=True)
+
+    probate_date = models.CharField(max_length=12, null=True)
+    will_value_pounds = models.CharField(max_length=12, null=True)
+    will_value_dollars = models.CharField(max_length=12, null=True)
+    will_court = models.CharField(max_length=12, null=True)
+
     class Meta:
-        verbose_name = 'Enslaver unique identity'
+        verbose_name = 'Enslaver unique identity and personal info'
+
+class EnslaverIdentitySourceConnection(models.Model):
+    identity = models.ForeignKey('EnslaverIdentity', on_delete=models.CASCADE)
+    # Sources are shared with Voyages.
+    source = models.ForeignKey('VoyageSources', related_name="source", null=False)
+    source_order = models.IntegerField()
+    text_ref = models.CharField(max_length=255, null=False, blank=True)
 
 class EnslaverAlias(models.Model):
+    """
+    An alias represents a name appearing in a record that is mapped to
+    a consolidated identity. The same individual may appear in multiple
+    records under different names (aliases).
+    """
+
     identity = models.ForeignKey('EnslaverIdentity', on_delete=models.CASCADE)
     alias = models.CharField(max_length=255)
 
     class Meta:
         verbose_name = 'Enslaver alias'
 
-class EnslaverVoyage(models.Model):
+class EnslaverMerger(EnslaverIdentity):
+    """
+    Represents a merger of two or more identities.
+    We inherit from identity so that all personal fields
+    are also contained in the merger.
+    """
+    comments = models.CharField(max_length=1024)
+
+class EnslaverMergerItem(models.Model):
+    """
+    Represents a single identity that is part of a merger.
+    """
+    merger = models.ForeignKey('EnslaverMerger', null=False, on_delete=models.CASCADE)
+    # We do not use a foreign key to the identity since if the merger
+    # is accepted, some/all of the records may be deleted and the keys
+    # would either be invalid or set to null.
+    enslaver_identity_id = models.IntegerField(null=False)
+
+class EnslaverVoyageConnection(models.Model):
+    """
+    Associates an enslaver with a voyage at some particular role.
+    """
+
     class Role:
         CAPTAIN = 1
         OWNER = 2
@@ -24,6 +85,9 @@ class EnslaverVoyage(models.Model):
     enslaver_alias = models.ForeignKey('EnslaverAlias', null=False, on_delete=models.CASCADE)
     voyage = models.ForeignKey('Voyage', null=False, on_delete=models.CASCADE)
     role = models.IntegerField(null=False)
+    # There might be multiple persons with the same role for the same voyage
+    # and they can be ordered (ranked) using the following field.
+    order = models.IntegerField(null=True)
     # NOTE: we will have to substitute VoyageShipOwner and VoyageCaptain
     # models/tables by this entity.
 
@@ -106,13 +170,17 @@ class EnslavedSearch:
         self.language_groups = language_groups
         self.ship_name = ship_name
 
-    def search(self):
+    def execute(self):
         """
         Execute the search. If we require fuzzy name search, then this is done
         outside of the database on our special search data structure and then
         filter the ids on the db query.
         """
-        q = Enslaved.objects.all()
+        q = Enslaved.objects \
+            .select_related('ethnicity') \
+            .select_related('language_group') \
+            .select_related('country') \
+            .all()
         if not self.exact_name_search and self.searched_name and len(self.searched_name):
             NameSearchCache.load()
             ids = list(NameSearchCache.search(self.searched_name))
