@@ -148,6 +148,7 @@ INSTALLED_APPS = (
     #'i18n_helper',
 
     'voyages.apps.common',
+    'voyages.apps.past',
     'voyages.apps.voyage',
     'voyages.apps.american',
     'voyages.apps.assessment',
