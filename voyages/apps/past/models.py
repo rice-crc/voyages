@@ -46,7 +46,6 @@ class EnslaverAlias(models.Model):
     a consolidated identity. The same individual may appear in multiple
     records under different names (aliases).
     """
-
     identity = models.ForeignKey('EnslaverIdentity', on_delete=models.CASCADE)
     alias = models.CharField(max_length=255)
 
@@ -91,17 +90,21 @@ class EnslaverVoyageConnection(models.Model):
     # NOTE: we will have to substitute VoyageShipOwner and VoyageCaptain
     # models/tables by this entity.
 
-class Ethnicity(models.Model):
+class NamedModel(models.Model):
     id = models.IntegerField(primary_key=True)
     name = models.CharField(max_length=255)
 
-class LanguageGroup(models.Model):
-    id = models.IntegerField(primary_key=True)
-    name = models.CharField(max_length=255)
+class Ethnicity(NamedModel):
+    pass
 
-class ModernCountry(models.Model):
-    id = models.IntegerField(primary_key=True)
-    name = models.CharField(max_length=255)
+class LanguageGroup(NamedModel):
+    pass
+
+class ModernCountry(NamedModel):
+    pass
+
+class RegisterCountry(NamedModel):
+    pass
 
 # TODO: this model will replace resources.AfricanName
 class Enslaved(models.Model):
@@ -115,9 +118,10 @@ class Enslaved(models.Model):
     """
     enslaved_id = models.IntegerField(primary_key=True)
 
-    modern_name_first = models.CharField(max_length=25, blank=True)
-    modern_name_second = models.CharField(max_length=25, blank=True)
-    modern_name_third = models.CharField(max_length=25, blank=True)
+    documented_name = models.CharField(max_length=25, blank=True)
+    name_first = models.CharField(max_length=25, blank=True)
+    name_second = models.CharField(max_length=25, blank=True)
+    name_third = models.CharField(max_length=25, blank=True)
 
     # Personal data
     age = models.IntegerField(null=True)
@@ -130,7 +134,12 @@ class Enslaved(models.Model):
     # proposed and discarded.
     ethnicity = models.ForeignKey('LanguageGroup', null=True)
     language_group = models.ForeignKey('LanguageGroup', null=True)
-    country = models.ForeignKey('ModernCountry', null=True)
+    register_country = models.ForeignKey('RegisterCountry', null=True)
+    modern_country = models.ForeignKey('ModernCountry', null=True)
+
+    occupation = models.CharField(max_length=40)
+    # term = ??
+    # location = ??
 
     voyage = models.ForeignKey('Voyage', null=False)
 
@@ -148,7 +157,9 @@ class EnslavedSearch:
     Search parameters for enslaved persons.
     """
 
-    def __init__(self, searched_name=None, exact_name_search=False, gender=None, age_range=None, year_range=None, embarkation_ports=None, language_groups=None, ship_name=None):
+    def __init__(self, searched_name=None, exact_name_search=False, gender=None, \
+            age_range=None, year_range=None, embarkation_ports=None, disembarkation_ports=None, \
+            language_groups=None, ship_name=None):
         """
         Search the Enslaved database. If a parameter is set to None, it will not
         be included in the search.
@@ -157,7 +168,8 @@ class EnslavedSearch:
         @param: gender The gender of the enslaved
         @param: age_range A pair (a, b) where a is the min and b is maximum age.
         @param: year_range A pair (a, b) where a is the min voyage year and b the max
-        @param: embarkation_ports A list of embarkation ports where the enslaved embarked
+        @param: embarkation_ports A list of ports where the enslaved embarked
+        @param: disembarkation_ports A list of ports where the enslaved disembarked
         @param: language_groups A list of language groups for the enslaved
         @param: ship_name The ship name that the enslaved embarked
         """
@@ -167,6 +179,7 @@ class EnslavedSearch:
         self.age_range = age_range
         self.year_range = year_range
         self.embarkation_ports = embarkation_ports
+        self.disembarkation_ports = disembarkation_ports
         self.language_groups = language_groups
         self.ship_name = ship_name
 
@@ -179,7 +192,8 @@ class EnslavedSearch:
         q = Enslaved.objects \
             .select_related('ethnicity') \
             .select_related('language_group') \
-            .select_related('country') \
+            .select_related('modern_country') \
+            .select_related('register_country') \
             .all()
         if not self.exact_name_search and self.searched_name and len(self.searched_name):
             NameSearchCache.load()
@@ -190,11 +204,14 @@ class EnslavedSearch:
         if self.age_range:
             q = q.filter(age__range=self.age_range)
         if self.year_range:
-            # TODO: check that we are using the correct field
+            # Search on YEARAM field.
             q = q.filter(voyage__voyage_dates__imp_arrival_at_port_of_dis__range=self.year_range)
         if self.embarkation_ports:
-            # TODO: check that we are using the correct field
+            # Search on MJBYPTIMP field.
             q = q.filter(voyage__voyage_itinerary__imp_principal_place_of_slave_purchase__pk__in=self.embarkation_ports)
+        if self.disembarkation_ports:
+            # Search on MJSLPTIMP field.
+            q = q.filter(voyage__voyage_itinerary__imp_principal_port_slave_dis__pk__in=self.disembarkation_ports)
         if self.language_groups:
             q = q.filter(language_group__pk__in=self.language_groups)
         if self.ship_name:
