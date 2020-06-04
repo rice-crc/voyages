@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models import Q
 from voyages.apps.voyage.models import VoyageSources
 from name_search import NameSearchCache
 
@@ -36,7 +37,7 @@ class EnslaverIdentity(models.Model):
 class EnslaverIdentitySourceConnection(models.Model):
     identity = models.ForeignKey('EnslaverIdentity', on_delete=models.CASCADE)
     # Sources are shared with Voyages.
-    source = models.ForeignKey('VoyageSources', related_name="source", null=False)
+    source = models.ForeignKey('voyage.VoyageSources', related_name="+", null=False)
     source_order = models.IntegerField()
     text_ref = models.CharField(max_length=255, null=False, blank=True)
 
@@ -82,7 +83,7 @@ class EnslaverVoyageConnection(models.Model):
         SELLER = 4
 
     enslaver_alias = models.ForeignKey('EnslaverAlias', null=False, on_delete=models.CASCADE)
-    voyage = models.ForeignKey('Voyage', null=False, on_delete=models.CASCADE)
+    voyage = models.ForeignKey('voyage.Voyage', null=False, on_delete=models.CASCADE)
     role = models.IntegerField(null=False)
     # There might be multiple persons with the same role for the same voyage
     # and they can be ordered (ranked) using the following field.
@@ -108,11 +109,6 @@ class RegisterCountry(NamedModel):
 
 # TODO: this model will replace resources.AfricanName
 class Enslaved(models.Model):
-    # TODO: Apply models.IntegerChoices when we migrate to Django 3+
-    class Gender:
-        MALE = 1
-        FEMALE = 2
-
     """
     Enslaved person.
     """
@@ -125,6 +121,9 @@ class Enslaved(models.Model):
 
     # Personal data
     age = models.IntegerField(null=True)
+    # For some records, the exact age may be unknown and only
+    # an adult/child status is determined.
+    is_adult = models.NullBooleanField(null=True)
     gender = models.IntegerField(null=True)
     height = models.FloatField(null=True, verbose_name="Height in inches")
 
@@ -132,25 +131,27 @@ class Enslaved(models.Model):
     # The possibility of including 'Unknown' values in the
     # reference tables and using them instead of null was
     # proposed and discarded.
-    ethnicity = models.ForeignKey('LanguageGroup', null=True)
+    ethnicity = models.ForeignKey('Ethnicity', null=True)
     language_group = models.ForeignKey('LanguageGroup', null=True)
     register_country = models.ForeignKey('RegisterCountry', null=True)
     modern_country = models.ForeignKey('ModernCountry', null=True)
 
     occupation = models.CharField(max_length=40)
-    # term = ??
-    # location = ??
+    post_disembark_location = models.ForeignKey('voyage.Place', null=True)
 
-    voyage = models.ForeignKey('Voyage', null=False)
+    voyage = models.ForeignKey('voyage.Voyage', null=False)
+    sources = models.ManyToManyField \
+        ('voyage.VoyageSources', through='EnslavedSourceConnection', related_name='+')
 
-class EnslavedRevision(Enslaved):
-    # Enslaved model will have a revision mechanism so we can
-    # use inheritance to produce an identical table for Enslaved with
-    # an additional revision/timestamp field.
-    revision = models.IntegerField()
-    # Note: a revision should be saved only once. If changes are made
-    # to a revision, a new entry should be created.
-    timestamp = models.DateField(auto_now_add=True)
+class EnslavedSourceConnection(models.Model):
+    enslaved = models.ForeignKey('Enslaved', on_delete=models.CASCADE)
+    # Sources are shared with Voyages.
+    source = models.ForeignKey('voyage.VoyageSources', on_delete=models.CASCADE, related_name='+', null=False)
+    source_order = models.IntegerField()
+    text_ref = models.CharField(max_length=255, null=False, blank=True)
+
+class EnslavedContribution(models.Model):
+    enslaved = models.ForeignKey('Enslaved', on_delete=models.CASCADE)
 
 class EnslavedSearch:
     """
@@ -158,30 +159,41 @@ class EnslavedSearch:
     """
 
     def __init__(self, searched_name=None, exact_name_search=False, gender=None, \
-            age_range=None, year_range=None, embarkation_ports=None, disembarkation_ports=None, \
-            language_groups=None, ship_name=None):
+            age_range=None, is_adult=None, year_range=None, embarkation_ports=None, disembarkation_ports=None, \
+            post_disembark_location=None, language_groups=None, modern_country=None, 
+            ship_name=None, voyage_id=None, source=None):
         """
         Search the Enslaved database. If a parameter is set to None, it will not
         be included in the search.
         @param: searched_name A name string to be searched
         @param: exact_name_search Boolean indicating whether the search is exact or fuzzy
         @param: gender The gender of the enslaved
-        @param: age_range A pair (a, b) where a is the min and b is maximum age.
+        @param: age_range A pair (a, b) where a is the min and b is maximum age
+        @param: is_adult Whether the search is for adults or children only
         @param: year_range A pair (a, b) where a is the min voyage year and b the max
-        @param: embarkation_ports A list of ports where the enslaved embarked
-        @param: disembarkation_ports A list of ports where the enslaved disembarked
-        @param: language_groups A list of language groups for the enslaved
+        @param: embarkation_ports A list of port ids where the enslaved embarked
+        @param: disembarkation_ports A list of port ids where the enslaved disembarked
+        @param: post_disembark_location A list of place ids where the enslaved was located after disembarkation
+        @param: language_groups A list of language groups ids for the enslaved
+        @param: modern_country A list of country ids
         @param: ship_name The ship name that the enslaved embarked
+        @param: voyage_id A pair (a, b) where the a <= voyage_id <= b
+        @param: source A text fragment that should match Source's text_ref or full_ref
         """
         self.searched_name = searched_name
         self.exact_name_search = exact_name_search
         self.gender = gender
         self.age_range = age_range
+        self.is_adult = is_adult
         self.year_range = year_range
         self.embarkation_ports = embarkation_ports
         self.disembarkation_ports = disembarkation_ports
+        self.post_disembark_location = post_disembark_location
         self.language_groups = language_groups
+        self.modern_country = modern_country
         self.ship_name = ship_name
+        self.voyage_id = voyage_id
+        self.source = source
 
     def execute(self):
         """
@@ -195,14 +207,30 @@ class EnslavedSearch:
             .select_related('modern_country') \
             .select_related('register_country') \
             .all()
-        if not self.exact_name_search and self.searched_name and len(self.searched_name):
-            NameSearchCache.load()
-            ids = list(NameSearchCache.search(self.searched_name))
-            q = q.filter(pk__in=ids)
+        if self.searched_name and len(self.searched_name):
+            if self.exact_name_search:
+                q = q.filter(Q(documented_name=self.searched_name) | Q(name_first=self.searched_name) | \
+                    Q(name_second=self.searched_name) | Q(name_third=self.searched_name))
+            else:
+                # Perform a fuzzy search on our cached Trie and query with
+                # the ids matched by the fuzzy search.
+                NameSearchCache.load()
+                ids = list(NameSearchCache.search(self.searched_name))
+                q = q.filter(pk__in=ids)
         if self.gender:
             q = q.filter(gender=self.gender)
         if self.age_range:
             q = q.filter(age__range=self.age_range)
+        if self.is_adult is not None:
+            q = q.filter(is_adult=self.is_adult)
+        if self.modern_country:
+            q = q.filter(modern_country__pk__in=self.modern_country)
+        if self.post_disembark_location:
+            q = q.filter(post_disembark_location__pk__in=self.post_disembark_location)
+        if self.source:
+            q = q.filter(Q(sources__text_ref__contains=self.source) | Q(sources__source__full_ref__contains=self.source))
+        if self.voyage_id:
+            q = q.filter(voyage__pk__range=self.voyage_id)
         if self.year_range:
             # Search on YEARAM field.
             q = q.filter(voyage__voyage_dates__imp_arrival_at_port_of_dis__range=self.year_range)
@@ -216,4 +244,6 @@ class EnslavedSearch:
             q = q.filter(language_group__pk__in=self.language_groups)
         if self.ship_name:
             q = q.filter(voyage__voyage_ship__ship_name__icontains=self.ship_name)
+        if self.source:
+            q = q.filter()
         return q

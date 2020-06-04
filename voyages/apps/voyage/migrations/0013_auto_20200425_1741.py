@@ -17,7 +17,7 @@ class Migration(migrations.Migration):
         migrations.AlterModelManagers(
             name='voyage',
             managers=[
-                ('both_objects', django.db.models.manager.Manager()),
+                ('all_dataset_objects', django.db.models.manager.Manager()),
             ],
         ),
         migrations.RemoveField(

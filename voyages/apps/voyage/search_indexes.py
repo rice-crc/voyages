@@ -111,32 +111,6 @@ class TranslatedTextField(indexes.SearchField):
             from unidecode import unidecode
             return unidecode(translated)
 
-class RelatedModelIndexMixin(object):
-    def __init__(self, related_model, *args, **kwargs):
-        super(RelatedModelIndexMixin, self).__init__(*args, **kwargs)
-        self.related_model = related_model
-
-    def prepare(self, obj):
-        try:
-            related = self.related_model.objects.filter(voyage=obj)
-            if len(related) == 1:
-                return super(RelatedModelIndexMixin, self).prepare(related[0])
-        except Exception:
-            pass
-        if self.has_default():
-            return self.default
-        else:
-            return None
-
-class RelatedCharField(RelatedModelIndexMixin, indexes.CharField):
-    pass
-
-class RelatedIntegerField(RelatedModelIndexMixin, indexes.IntegerField):
-    pass
-
-class RelatedTranslatedTextField(RelatedModelIndexMixin, TranslatedTextField):
-    pass
-
 # Index for Voyage
 class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
     """
@@ -191,32 +165,32 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
     var_rig_of_vessel_idnum = indexes.IntegerField(null=True, model_attr='voyage_ship__rig_of_vessel__value')
 
     # Voyage Outcome
-    var_outcome_voyage = RelatedCharField(null=True, related_model=VoyageOutcome, model_attr='particular_outcome__label')
-    var_outcome_voyage_lang_en = RelatedTranslatedTextField(null=True, related_model=VoyageOutcome, model_attr='particular_outcome__label')
-    var_outcome_voyage_lang_pt = RelatedTranslatedTextField(null=True, related_model=VoyageOutcome, model_attr='particular_outcome__label')
-    var_outcome_voyage_lang_es = RelatedTranslatedTextField(null=True, related_model=VoyageOutcome, model_attr='particular_outcome__label')
-    var_outcome_slaves = RelatedCharField(null=True, related_model=VoyageOutcome, model_attr='outcome_slaves__label')
-    var_outcome_slaves_lang_en = RelatedTranslatedTextField(null=True, related_model=VoyageOutcome, model_attr='outcome_slaves__label')
-    var_outcome_slaves_lang_pt = RelatedTranslatedTextField(null=True, related_model=VoyageOutcome, model_attr='outcome_slaves__label')
-    var_outcome_slaves_lang_es = RelatedTranslatedTextField(null=True, related_model=VoyageOutcome, model_attr='outcome_slaves__label')
-    var_outcome_ship_captured = RelatedCharField(null=True, related_model=VoyageOutcome, model_attr='vessel_captured_outcome__label')
-    var_outcome_ship_captured_lang_en = RelatedTranslatedTextField(null=True, related_model=VoyageOutcome, model_attr='vessel_captured_outcome__label')
-    var_outcome_ship_captured_lang_pt = RelatedTranslatedTextField(null=True, related_model=VoyageOutcome, model_attr='vessel_captured_outcome__label')
-    var_outcome_ship_captured_lang_es = RelatedTranslatedTextField(null=True, related_model=VoyageOutcome, model_attr='vessel_captured_outcome__label')
-    var_outcome_owner = RelatedCharField(null=True, related_model=VoyageOutcome, model_attr='outcome_owner__label')
-    var_outcome_owner_lang_en = RelatedTranslatedTextField(null=True, related_model=VoyageOutcome, model_attr='outcome_owner__label')
-    var_outcome_owner_lang_pt = RelatedTranslatedTextField(null=True, related_model=VoyageOutcome, model_attr='outcome_owner__label')
-    var_outcome_owner_lang_es = RelatedTranslatedTextField(null=True, related_model=VoyageOutcome, model_attr='outcome_owner__label')
-    var_resistance = RelatedCharField(null=True, related_model=VoyageOutcome, model_attr='resistance__label')
-    var_resistance_lang_en = RelatedTranslatedTextField(null=True, related_model=VoyageOutcome, model_attr='resistance__label')
-    var_resistance_lang_pt = RelatedTranslatedTextField(null=True, related_model=VoyageOutcome, model_attr='resistance__label')
-    var_resistance_lang_es = RelatedTranslatedTextField(null=True, related_model=VoyageOutcome, model_attr='resistance__label')
+    var_outcome_voyage = indexes.CharField(null=True, model_attr='voyage_name_outcome__particular_outcome__label')
+    var_outcome_voyage_lang_en = TranslatedTextField(null=True, model_attr='voyage_name_outcome__particular_outcome__label')
+    var_outcome_voyage_lang_pt = TranslatedTextField(null=True, model_attr='voyage_name_outcome__particular_outcome__label')
+    var_outcome_voyage_lang_es = TranslatedTextField(null=True, model_attr='voyage_name_outcome__particular_outcome__label')
+    var_outcome_slaves = indexes.CharField(null=True, model_attr='voyage_name_outcome__outcome_slaves__label')
+    var_outcome_slaves_lang_en = TranslatedTextField(null=True, model_attr='voyage_name_outcome__outcome_slaves__label')
+    var_outcome_slaves_lang_pt = TranslatedTextField(null=True, model_attr='voyage_name_outcome__outcome_slaves__label')
+    var_outcome_slaves_lang_es = TranslatedTextField(null=True, model_attr='voyage_name_outcome__outcome_slaves__label')
+    var_outcome_ship_captured = indexes.CharField(null=True, model_attr='voyage_name_outcome__vessel_captured_outcome__label')
+    var_outcome_ship_captured_lang_en = TranslatedTextField(null=True, model_attr='voyage_name_outcome__vessel_captured_outcome__label')
+    var_outcome_ship_captured_lang_pt = TranslatedTextField(null=True, model_attr='voyage_name_outcome__vessel_captured_outcome__label')
+    var_outcome_ship_captured_lang_es = TranslatedTextField(null=True, model_attr='voyage_name_outcome__vessel_captured_outcome__label')
+    var_outcome_owner = indexes.CharField(null=True, model_attr='voyage_name_outcome__outcome_owner__label')
+    var_outcome_owner_lang_en = TranslatedTextField(null=True, model_attr='voyage_name_outcome__outcome_owner__label')
+    var_outcome_owner_lang_pt = TranslatedTextField(null=True, model_attr='voyage_name_outcome__outcome_owner__label')
+    var_outcome_owner_lang_es = TranslatedTextField(null=True, model_attr='voyage_name_outcome__outcome_owner__label')
+    var_resistance = indexes.CharField(null=True, model_attr='voyage_name_outcome__resistance__label')
+    var_resistance_lang_en = TranslatedTextField(null=True, model_attr='voyage_name_outcome__resistance__label')
+    var_resistance_lang_pt = TranslatedTextField(null=True, model_attr='voyage_name_outcome__resistance__label')
+    var_resistance_lang_es = TranslatedTextField(null=True, model_attr='voyage_name_outcome__resistance__label')
 
-    var_outcome_voyage_idnum = RelatedIntegerField(null=True, related_model=VoyageOutcome, model_attr='particular_outcome__value')
-    var_outcome_slaves_idnum = RelatedIntegerField(null=True, related_model=VoyageOutcome, model_attr='outcome_slaves__value')
-    var_outcome_ship_captured_idnum = RelatedIntegerField(null=True, related_model=VoyageOutcome, model_attr='vessel_captured_outcome__value')
-    var_outcome_owner_idnum = RelatedIntegerField(null=True, related_model=VoyageOutcome, model_attr='outcome_owner__value')
-    var_resistance_idnum = RelatedIntegerField(null=True, related_model=VoyageOutcome, model_attr='resistance__value')
+    var_outcome_voyage_idnum = indexes.IntegerField(null=True, model_attr='voyage_name_outcome__particular_outcome__value')
+    var_outcome_slaves_idnum = indexes.IntegerField(null=True, model_attr='voyage_name_outcome__outcome_slaves__value')
+    var_outcome_ship_captured_idnum = indexes.IntegerField(null=True, model_attr='voyage_name_outcome__vessel_captured_outcome__value')
+    var_outcome_owner_idnum = indexes.IntegerField(null=True, model_attr='voyage_name_outcome__outcome_owner__value')
+    var_resistance_idnum = indexes.IntegerField(null=True, model_attr='voyage_name_outcome__resistance__value')
 
     # Voyage itinerary
     var_imp_port_voyage_begin = indexes.CharField(null=True, model_attr='voyage_itinerary__imp_port_voyage_begin__place')
@@ -413,7 +387,8 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
 
     def index_queryset(self, using=None):
         """Used when the entire index for model is updated."""
-        return Voyage.both_objects.all()
+        helper = VoyagesFullQueryHelper()
+        return helper.get_query()
 
     def prepare_var_imp_voyage_began(self, obj):
         try:
@@ -424,7 +399,7 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
     def prepare_var_owner(self, obj):
         try:
             return '<br/> '.join(
-                [connection.owner.name for connection in VoyageShipOwnerConnection.objects.filter(voyage=obj)])
+                [o.name for o in obj.voyage_ship_owner.all()])
         except AttributeError:
             return None
 
@@ -569,20 +544,14 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
     # Voyage crew
     def prepare_var_captain(self, obj):
         return '<br/> '.join(
-            [connection.captain.name for connection in VoyageCaptainConnection.objects.filter(voyage=obj)])
+            [captain.name for captain in obj.voyage_captain.all()])
 
     def prepare_var_captain_plaintext(self, obj):
         return self.prepare_var_captain(obj)
 
     # Voyage sources
     def prepare_var_sources(self, obj):
-        result = []
-        for connection in VoyageSourcesConnection.objects.filter(group=obj):
-            fr = ""
-            if connection.source is not None:
-                fr = connection.source.full_ref
-            result.append(connection.text_ref + "<>" + fr)
-        return result
+        return [conn.text_ref + "<>" + ("" if conn.source is None else conn.source.full_ref) for conn in obj.group.all()]
 
     def prepare_var_sources_plaintext(self, obj):
         return ", ".join(self.prepare_var_sources(obj))
@@ -592,5 +561,5 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
         mangle_method = globals.search_mangle_methods.get('var_sources', globals.no_mangle)
         return mangle_method(unidecode.unidecode(self.prepare_var_sources_plaintext(obj)))
 
-    def prepare_var_voyage_links(self, obj):
-        return [str(link.mode) + ': ' + str(link.second.voyage_id) for link in LinkedVoyages.objects.filter(first=obj)]
+    def prepare_var_voyage_links(self, obj):    
+        return [str(link.mode) + ': ' + str(link.second.voyage_id) for link in obj.links_to_other_voyages.all()]
