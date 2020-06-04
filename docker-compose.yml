@@ -3,7 +3,6 @@ version: '3.4'
 services:
   voyages-mysql-service:
     container_name: voyages-mysql # change localsettings.py db host to this name
-    restart: always
     image: mysql:latest
     ports:
      - "3306:3306"

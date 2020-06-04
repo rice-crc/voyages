@@ -43,6 +43,7 @@
 					<a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false" >{% trans 'African Names' %}<!--People of the Atlantic Slave Trade--></a>
 					<div class="dropdown-menu">
 						<a class="dropdown-item" href="{% url 'resources:about' %}">Understanding the Database</a>
+						<a class="dropdown-item" href="{% url 'resources:names-database-new' %}">New Database</a>
 						<a class="dropdown-item" href="{% url 'resources:origins' %}">{% trans "Database" %}</a>
 						<a class="dropdown-item" href="{% url 'resources:downloads' %}">{% trans "Downloads" %}</a>
 					</div>
@@ -94,9 +95,7 @@
 		document.getElementById("link-trans-atlantic").classList.add("active-link");
 	} else if (urlElements[1] == "american") {
 		document.getElementById("link-american").classList.add("active-link");
-	} else if (urlElements[1] == "resources" && urlElements[2] == "about") {
-		document.getElementById("link-past").classList.add("active-link");
-	} else if ((urlElements[1] == "resources" && urlElements[2] == "names-database") || (urlElements[1] == "resources" && urlElements[2] == "downloads")) {
+	} else if (urlElements[1] == "resources" && (urlElements[2] == "about" || urlElements[2] == "names-database" || urlElements[2] == "names-database-new" || urlElements[2] == "downloads")) {
 		document.getElementById("link-past").classList.add("active-link");
 	} else if (urlElements[1] == "resources" || urlElements[1] == "education") {
 		document.getElementById("link-resources").classList.add("active-link");

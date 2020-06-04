@@ -3,6 +3,7 @@ from django.views.generic import TemplateView
 
 import voyages.apps.static_content.views
 import voyages.apps.resources.views
+import voyages.apps.resources.search_views
 
 urlpatterns = [
     url(r'^$', voyages.apps.static_content.views.get_static_content, {'group': 'Resources'},
@@ -33,6 +34,9 @@ urlpatterns = [
         name='images-search'),
     url(r'^images/', voyages.apps.resources.views.get_all_images,
         name='images'),
+    url(r'^api/search', voyages.apps.resources.search_views.ajax_search, name='search'),
+    url(r'^names-database-new', TemplateView.as_view(template_name='names-database.html'), name='names-database-new'),
     url(r'^names-database',
         voyages.apps.resources.views.get_all_slaves,
-        name='origins')]
+        name='origins'),
+    ]

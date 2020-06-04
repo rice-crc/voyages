@@ -2,13 +2,6 @@
 @import "variables";
 
 // 
-.nav-header {
-  color: white;
-  background: $past-secondary-color !important;
-  padding: 0.5rem 4rem 0;
-  font-size: 1rem;
-  font-weight: bold;
-}
 
 .pagination.pagination-sm {
 	float: right;
@@ -117,6 +110,24 @@ a {
   padding-left: 25px;
   border-left: 4px solid $past-color;
   font-weight: bold;
+}
+
+.nav-header {
+  color: white;
+  background: $past-secondary-color !important;
+  padding: 0.5rem 4rem 0;
+  font-size: 1rem;
+  font-weight: bold;
+}
+
+.past-search-bar {
+  z-index: 1;
+  background: $past-secondary-color !important;
+  @media (min-width: 1199px) {
+    .nav-item {
+      padding-top: 0;
+    }
+  }
 }
 
 .datatable-options {
