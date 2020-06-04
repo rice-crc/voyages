@@ -646,7 +646,7 @@ class TestEditorialPlatform(TransactionTestCase):
         self.assertTrue(text.find('new/' + str(original_contribution_pk)) >= 0)
         
         # Check that the voyage is indeed published and that fields match (just a sample of all fields).
-        pub_voyage = Voyage.both_objects.filter(voyage_id=999999).first()
+        pub_voyage = Voyage.all_dataset_objects.filter(voyage_id=999999).first()
         from django.core import serializers
         error_dump = serializers.serialize("json", [pub_voyage.voyage_ship, pub_voyage.voyage_itinerary, pub_voyage.voyage_slaves_numbers, pub_voyage.voyage_dates])
         print error_dump

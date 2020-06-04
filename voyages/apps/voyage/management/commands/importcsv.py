@@ -641,7 +641,7 @@ class Command(BaseCommand):
             return None if attr_key is None else \
                 {getattr(x, attr_key): x for x in manager.all()}
 
-        voyages = bulk_insert(Voyage, voyages.values(), 'voyage_id', Voyage.both_objects)
+        voyages = bulk_insert(Voyage, voyages.values(), 'voyage_id', Voyage.all_dataset_objects)
         captains = bulk_insert(VoyageCaptain, captains.values(), 'name')
         ship_owners = bulk_insert(VoyageShipOwner, ship_owners.values(), 'name')
         # At this point we have primary keys for voyages.
