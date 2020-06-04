@@ -1,0 +1,142 @@
+{% extends "_base.html" %} {% load sass_tags %} {% load compress %}
+
+<!-- Basic template for pages in the Voyage section -->
+{% load i18n %}
+{% block csslist %}
+	{% compress css %}
+	<link href="{% sass_src 'scss/navbar-site.scss' %}" rel="stylesheet" type="text/css" />
+	<link href="{% sass_src 'scss/main.scss' %}" rel="stylesheet" type="text/css" />
+	{% endcompress %}
+	<link href="{% sass_src 'scss/past.scss' %}" rel="stylesheet" type="text/css" />
+	{% compress css %}
+	<link href="{% sass_src 'scss/off-canvas.scss' %}" rel="stylesheet" type="text/css" />
+	<link href="{% sass_src 'scss/search-ui.scss' %}" rel="stylesheet" type="text/css" />
+	<link href="{% sass_src 'scss/v-component.scss' %}" rel="stylesheet" type="text/css" />
+	<link href="{% sass_src 'scss/trans-search.scss' %}" rel="stylesheet" type="text/css" />
+	<link href="{% sass_src 'scss/animations.scss' %}" rel="stylesheet" type="text/css" />
+	<link href="{% sass_src 'scss/sidebar.scss' %}" rel="stylesheet" type="text/css" />
+	<link href="{% sass_src 'scss/library/loading.css' %}" rel="stylesheet" type="text/css" />
+	<link href="{% sass_src 'scss/library/vue-treeselect@0.0.37.min.css' %}" rel="stylesheet" type="text/css" />
+	{% endcompress %}
+{% endblock %}
+
+
+{% block title %}
+	{% trans 'African Names - Database' %}
+{% endblock %}
+
+{% block content %}
+
+<div id="search-bar" v-cloak>
+	<div class="nav-header">{% trans 'African Names - Database' %}</div>
+	<nav class="navbar navbar-expand-xl navbar-dark bg-dark past-search-bar">
+		<div class="nav-container">
+			<button class="navbar-toggler float-right" type="button" data-toggle="collapse" data-target="#searchNav">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+			<div class="navbar-collapse collapse" id="searchNav">
+				<ul class="navbar-nav">
+					{% include "resources/_african-name.html" %}
+				</ul>
+				<ul class="navbar-nav ml-auto">
+					{% include "database/_settings.html" %}
+				</ul>
+			</div>
+		</div>
+	</nav>
+	<!-- End of SearchNav -->
+
+	<div id="sv-loader" class="sv-loader-bg display-none">
+		<img class="ld ld-spin sv-loader-img" src="{{ STATIC_URL }}images/site/rudder.svg">
+	</div>
+
+	<div id="sv-loader-error" class="sv-loader-bg display-none">
+		<div class="sv-loader-error-container">
+			<img class="sv-loader-error-image" src="{{ STATIC_URL }}images/site/pirate.svg">
+			<div class="sv-loader-error-message-container">
+				<div class="v-panel-title">{% trans 'Ooops' %}</div>
+				<div class="v-panel-description">{% trans 'We may have sailed off course and an error has occurred.' %}</div>
+				<div class="sv-loader-error-btns">
+					<button type="button" class="btn btn-info btn-sm" @click="reportError">{% trans 'Report' %}</button>
+					<button type="button" class="btn btn-outline-secondary btn-sm" @click="refreshPage">{% trans 'Reload' %}</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	{% include "resources/_panel.html" %}
+	<div class="trans-container">
+		<div class="row">
+			<div class="col-md-12">
+				<div id="center-content-inner">
+					{% include "resources/_tabs.html" %}
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+{% endblock %} {% block jslist %}
+
+{% include '_scripts.html' %}
+
+<!-- Highcharts -->
+<script>
+	const SV_MODE = "past";
+</script>
+
+{% compress js %}
+
+<script src="{{ STATIC_URL }}scripts/library/highcharts@6.1.1.min.js" type="text/javascript"></script>
+<script src="{{ STATIC_URL }}scripts/library/highcharts/exporting@6.1.2.min.js" type="text/javascript"></script>
+<script src="{{ STATIC_URL }}scripts/library/highcharts/export-data@6.1.2.min.js" type="text/javascript"></script>
+<script src="{{ STATIC_URL }}scripts/library/highcharts/no-data-to-display@6.1.2.min.js" type="text/javascript"></script>
+<script src="{{ STATIC_URL }}scripts/library/moment@2.22.2.min.js" type="text/javascript"></script>
+
+<script src="{{ STATIC_URL }}scripts/library/vue-treeselect@0.0.37.min.js" type="text/javascript"></script>
+<script src="{{ STATIC_URL }}scripts/library/vuejs-datepicker@1.5.3.min.js" type="text/javascript"></script>
+<script src="{{ STATIC_URL }}scripts/library/string-utils.js" type="text/javascript"></script>
+<script src="{{ STATIC_URL }}scripts/library/jquery.qtip@2.1.1.min.js" type="text/javascript" ></script>
+<script src="{{ STATIC_URL }}scripts/library/menu-aim.js" type="text/javascript"></script>
+<script src="{{ STATIC_URL }}scripts/library/vue-clipboard2.min.js" type="text/javascript"></script>
+
+<script src="{{ STATIC_URL }}maps/js/leaflet.js"></script>
+<script src="{{ STATIC_URL }}scripts/vue/includes/animation.js"></script>
+<script src="{{ STATIC_URL }}scripts/vue/includes/build-request-body.js"></script>
+
+<script src="{{ STATIC_URL }}scripts/vue/includes/helpers-resources.js" type="text/javascript"></script>
+<script src="{{ STATIC_URL }}scripts/vue/includes/menu-aim.js" type="text/javascript"></script>
+<script src="{{ STATIC_URL }}scripts/vue/includes/sidebar.js" type="text/javascript"></script>
+<script src="{{ STATIC_URL }}scripts/vue/includes/search_term.js" type="text/javascript"></script>
+<script src="{{ STATIC_URL }}scripts/vue/includes/form-data.js" type="text/javascript"></script>
+
+<script src="{{ STATIC_URL }}scripts/vue/variables/constructors.js"></script>
+<script src="{{ STATIC_URL }}scripts/vue/variables/african-name.js"></script>
+
+<script src="{{ STATIC_URL }}scripts/vue/variables/tabs.js"></script>
+<script src="{{ STATIC_URL }}scripts/vue/variables/settings.js"></script>
+
+{% endcompress %}
+
+<!-- vue components -->
+<script src="{{ STATIC_URL }}scripts/vue/components/v-menu-title.js"></script>
+<script src="{{ STATIC_URL }}scripts/vue/components/v-textbox.js"></script>
+<script src="{{ STATIC_URL }}scripts/vue/components/v-select.js"></script>
+<script src="{{ STATIC_URL }}scripts/vue/components/v-treeselect.js"></script>
+<script src="{{ STATIC_URL }}scripts/vue/components/v-datepicker.js"></script>
+<script src="{{ STATIC_URL }}scripts/vue/components/v-panel.js"></script>
+<script src="{{ STATIC_URL }}scripts/vue/components/v-panel-singular.js"></script>
+<script src="{{ STATIC_URL }}scripts/vue/components/v-panel-header.js"></script>
+<script src="{{ STATIC_URL }}scripts/vue/components/v-save-search.js"></script>
+<script src="{{ STATIC_URL }}scripts/vue/components/v-saved-searches.js"></script>
+<script src="{{ STATIC_URL }}scripts/vue/components/v-toggle.js"></script>
+<script src="{{ STATIC_URL }}scripts/vue/components/v-number.js"></script>
+<script src="{{ STATIC_URL }}scripts/vue/components/v-text.js"></script>
+<script src="{{ STATIC_URL }}scripts/vue/components/v-placeholder.js"></script>
+<script src="{{ STATIC_URL }}scripts/vue/components/v-dropdown.js"></script>
+<!-- vue components -->
+
+<script src="{{ STATIC_URL }}scripts/vue/search-resources.js" type="text/javascript"></script>
+<script src="{{ STATIC_URL }}scripts/vue/app-resources.js" type="text/javascript"></script>
+
+{% endblock %}

@@ -1,4 +1,4 @@
-FROM ubuntu AS base
+FROM ubuntu:18.04 AS base
 RUN apt-get update && apt-get install python python-pip python-dev libmysqlclient-dev git libxslt-dev gcc libxml2-dev mysql-client -y
 
 FROM base AS voyages-dev

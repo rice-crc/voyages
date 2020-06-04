@@ -1,0 +1,31 @@
+{% load i18n %}
+
+{% verbatim %}
+<div class="collapse" id="panelCollapse">
+  <div class="panel-list" v-if="hasCurrentQuery">
+    <span class="panel-list-item-wrapper">
+      <span class="panel-list-item" v-for="variable in currentQuery">
+        <span class="text-bold panel-variable-label">{{variable.label}}</span>
+        <span class="panel-variable-op">{{variable.op | opLabelize}}</span>
+        <span class="panel-variable-value" v-if="variable.searchTerm">{{variable.searchTerm | termLabelize}}.</span>
+        <span v-else>
+          <span class="panel-variable-value">{{variable.searchTerm0 | termLabelize}}<span v-if="!variable.searchTerm1">.</span></span>
+          <span v-if="variable.searchTerm1">
+            {% endverbatim %} and {% verbatim %}
+            <span class="panel-variable-value">{{variable.searchTerm1 | termLabelize}}.</span>
+          </span>
+        </span>
+      </span>
+    </span>
+    <a data-toggle="collapse" href="#panelCollapse" role="button" aria-expanded="true" aria-controls="panelCollapse">
+      <div class="btn-panel"><i class="fa fa-times-circle"></i> {% endverbatim %} {% trans 'Hide' %} {% verbatim %}</div>
+    </a>
+  </div>
+  <div class="panel-list" v-else>
+    <div class="text-bold panel-variable-label">{% endverbatim %} {% trans 'No variables are selected' %} {% verbatim %}</div>
+    <a data-toggle="collapse" href="#panelCollapse" role="button" aria-expanded="true" aria-controls="panelCollapse">
+      <div class="btn-panel"><i class="fa fa-times-circle"></i> {% endverbatim %} {% trans 'Hide' %} {% verbatim %}</div>
+    </a>
+  </div>
+</div>
+{% endverbatim %}
