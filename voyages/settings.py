@@ -148,6 +148,7 @@ INSTALLED_APPS = (
     #'i18n_helper',
 
     'voyages.apps.common',
+    'voyages.apps.past',
     'voyages.apps.voyage',
     'voyages.apps.american',
     'voyages.apps.assessment',
@@ -237,10 +238,3 @@ except Exception as e:
     print >>sys.stderr, '''*** HAYSTACK settings not modified because something went wrong %s ***''' % e.message
 
 del sys
-
-# TODO: TEMPORARY HACK TO SUPPORT INCOMPATIBLE HAYSTACK VERSION (remove these lines once the django-haystack package is fixed)
-# We are commenting out so let us make sure that
-#from django.db import models
-#from haystack.utils.app_loading import haystack_get_model
-#models.get_model = haystack_get_model
-# TODO: END OF HACK
