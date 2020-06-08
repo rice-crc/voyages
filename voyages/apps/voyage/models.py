@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils.translation import ugettext as _
 from voyages.apps.common.validators import date_csv_field_validator
+from django.db.models import Prefetch
 
 # Voyage Regions and Places
 class BroadRegion(models.Model):
@@ -1282,8 +1283,8 @@ class VoyageSourcesType(models.Model):
 
 # TODO: Apply models.IntegerChoices when we migrate to Django 3+
 class VoyageDataset:
-    Transatlantic = 0,
-    IntraAmerican = 1,
+    Transatlantic = 0
+    IntraAmerican = 1
     IntraAfrican = 2
 
 # Voyage Sources
@@ -1324,13 +1325,13 @@ class VoyageSourcesConnection(models.Model):
     text_ref = models.CharField(_('Text reference(citation)'),
                                 max_length=255, null=False, blank=True)
 
-class VoyageManager(models.Manager):
-    def get_queryset(self):
-        return super(VoyageManager, self).get_queryset().filter(dataset=VoyageDataset.Transatlantic)
+class VoyageDatasetManager(models.Manager):
+    def __init__(self, dataset):
+        self.dataset = int(dataset)
+        super(VoyageDatasetManager, self).__init__()
 
-class IntraAmericanVoyageManager(models.Manager):
     def get_queryset(self):
-        return super(IntraAmericanVoyageManager, self).get_queryset().filter(dataset=VoyageDataset.IntraAmerican)
+        return Voyage.all_dataset_objects.filter(dataset=self.dataset)
 
 class LinkedVoyages(models.Model):
     """
@@ -1352,9 +1353,11 @@ class Voyage(models.Model):
     related to: :class:`~voyages.apps.voyage.models.VoyageShipOwner`
     related to: :class:`~voyages.apps.voyage.models.VoyageSources`
     """
-    both_objects = models.Manager()
-    objects = VoyageManager()
-    intra_american_objects = IntraAmericanVoyageManager()
+    all_dataset_objects = models.Manager()
+
+    # For legacy reasons, the default manager should only yield TAST voyages.
+    objects = VoyageDatasetManager(VoyageDataset.Transatlantic)
+    intra_american_objects = VoyageDatasetManager(VoyageDataset.IntraAmerican)
 
     voyage_id = models.IntegerField("Voyage ID", unique=True)
 
@@ -1417,3 +1420,87 @@ class Voyage(models.Model):
 
     def __unicode__(self):
         return "Voyage #%s" % str(self.voyage_id)
+
+class VoyagesFullQueryHelper:
+    def __init__(self):
+        # Here we prefetch lots of relations to avoid generating
+        # thousands of requests to the database when we essentially
+        # need to de-normalize all of voyages data.
+        self.related_models = {
+            'voyage_dates': VoyageDates,
+            'voyage_groupings': VoyageGroupings,
+            'voyage_crew': VoyageCrew,
+            'voyage_slaves_numbers': VoyageSlavesNumbers}
+
+        self.itinerary_fields = ['broad_region_of_return', 
+            'first_landing_place',
+            'first_landing_region',
+            'first_place_slave_purchase',
+            'first_region_slave_emb',
+            'imp_broad_region_of_slave_purchase',
+            'imp_broad_region_slave_dis',
+            'imp_broad_region_voyage_begin',
+            'imp_port_voyage_begin',
+            'imp_principal_place_of_slave_purchase',
+            'imp_principal_place_of_slave_purchase__region',
+            'imp_principal_place_of_slave_purchase__region__broad_region',
+            'imp_principal_port_slave_dis',
+            'imp_principal_port_slave_dis__region',
+            'imp_principal_port_slave_dis__region__broad_region',
+            'imp_principal_region_of_slave_purchase',
+            'imp_principal_region_slave_dis',
+            'imp_region_voyage_begin',
+            'int_first_port_dis',
+            'int_first_port_emb',
+            'int_first_region_purchase_slaves',
+            'int_first_region_slave_landing',
+            'int_second_place_region_slave_landing',
+            'int_second_port_dis',
+            'int_second_port_emb',
+            'int_second_region_purchase_slaves',
+            'place_voyage_ended',
+            'port_of_call_before_atl_crossing',
+            'port_of_departure',
+            'principal_place_of_slave_purchase',
+            'principal_port_of_slave_dis',
+            'region_of_return',
+            'second_landing_place',
+            'second_landing_region',
+            'second_place_slave_purchase',
+            'second_region_slave_emb',
+            'third_landing_place',
+            'third_landing_region',
+            'third_place_slave_purchase',
+            'third_region_slave_emb']
+
+        self.prefetch_fields = [
+            Prefetch('voyage_captain', queryset=VoyageCaptain.objects.order_by('captain_name__captain_order')),
+            Prefetch('voyage_ship__nationality_ship'),
+            Prefetch('voyage_ship__imputed_nationality'),
+            Prefetch('voyage_ship__ton_type'),
+            Prefetch('voyage_ship__rig_of_vessel'),
+            Prefetch('voyage_ship__vessel_construction_place'),
+            Prefetch('voyage_ship__vessel_construction_region'),
+            Prefetch('voyage_ship__registered_place'),
+            Prefetch('voyage_ship__registered_region'),        
+            Prefetch('voyage_ship_owner', queryset=VoyageShipOwner.objects.order_by('owner_name__owner_order')),
+            Prefetch('group', queryset=VoyageSourcesConnection.objects.prefetch_related('source').order_by('source_order')),
+            Prefetch('voyage_itinerary', queryset=VoyageItinerary.objects.prefetch_related(*self.itinerary_fields).all()),
+            Prefetch(
+            'voyage_name_outcome', 
+            queryset=VoyageOutcome.objects.prefetch_related(
+                    'particular_outcome',
+                    'resistance',
+                    'outcome_slaves',
+                    'vessel_captured_outcome',
+                    'outcome_owner').all()),
+            Prefetch('links_to_other_voyages', queryset=LinkedVoyages.objects.select_related('second').only('first_id', 'second_id', 'second__voyage_id'))]
+
+        for k, v in self.related_models.items():
+            self.prefetch_fields += [Prefetch(k + '__' + f.name, queryset=f.related_model.objects.only('value')) for f in v._meta.get_fields() if f.many_to_one and f.name != 'voyage']
+
+    def get_manager(self, dataset=None):
+        return VoyageDatasetManager(dataset) if dataset else Voyage.all_dataset_objects
+
+    def get_query(self, dataset=None):
+        return self.get_manager(dataset).select_related(*self.related_models.keys()).prefetch_related(*self.prefetch_fields).all()
