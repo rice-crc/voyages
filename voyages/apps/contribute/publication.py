@@ -109,7 +109,7 @@ def export_from_review_requests(review_requests):
             contrib.interim_voyage if hasattr(contrib, 'interim_voyage') else None,
             req.created_voyage_id if req.requires_created_voyage_id() else None,
             status_text,
-            req.is_intra_american)
+            req.dataset == VoyageDataset.IntraAmerican)
         for data in items:
             yield data
 
@@ -719,7 +719,7 @@ def _save_editorial_version(review_request, contrib_type, in_cd_rom_override=Non
         voyage.voyage_ship_owner.clear()
         voyage.voyage_sources.clear()
     
-    voyage.dataset = VoyageDataset.IntraAmerican if review_request.is_intra_american else VoyageDataset.Transatlantic
+    voyage.dataset = review_request.dataset
     # Save voyage so that the database generates a primary key for it.
     voyage.voyage_groupings = interim.imputed_voyage_groupings_for_estimating_imputed_slaves
     voyage.save()
