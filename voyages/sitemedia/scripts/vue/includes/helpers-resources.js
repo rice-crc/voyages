@@ -897,11 +897,8 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
         data: function(d) {
           if (d.order) {
             currentSearchObj.orderBy = $.map(d.order, function(item) {
-              var columnIndex = mainDatatable
-                ? mainDatatable.colReorder.order()[item.column]
-                : item.column;
               return {
-                name: allColumns[columnIndex].data.substring(4),
+                name: allColumns[item.column].data.substring(4),
                 direction: item.dir
               };
             });
@@ -936,7 +933,9 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
       },
 
       scrollX: true,
-      
+
+      // colReorder: true,
+
       // columnDefs: [
       //   {
       //     width: "25%",
@@ -2196,7 +2195,7 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
         }
 
         // voyagesMap._map.scrollWheelZoom.disable();
-        
+
         // leaflet map control - top left
         var mapTopLeft = L.control();
         mapTopLeft.onAdd = function() {
