@@ -24,5 +24,15 @@ def ajax_search(request):
     reponse_data['recordsTotal'] = total_results
     reponse_data['recordsFiltered'] = total_results
     reponse_data['draw'] = 1
-    reponse_data['data'] = [{"var_documented_name":"Name 1"},{"var_documented_name":"Name 2"},{"var_documented_name":"Name 3"},{"var_documented_name":"Name 4"},{"var_documented_name":"Name 5"},{"var_documented_name":"Name 6"},{"var_documented_name":"Name 7"},{"var_documented_name":"Name 8"},{"var_documented_name":"Name 9"},{"var_documented_name":"Name 10"}]
+    reponse_data['data'] = [
+    	{"var_documented_name":"Name 1", "var_age":"21", "var_genre": "male", "var_stature": "60"},
+    	{"var_documented_name":"Name 2", "var_age":"22", "var_genre": "female", "var_stature": "61"},
+    	{"var_documented_name":"Name 3", "var_age":"23", "var_genre": "male", "var_stature": "62"},
+    	{"var_documented_name":"Name 4", "var_age":"24", "var_genre": "female", "var_stature": "63"},
+    	{"var_documented_name":"Name 5", "var_age":"25", "var_genre": "male", "var_stature": "64"},
+    	{"var_documented_name":"Name 6", "var_age":"26", "var_genre": "female", "var_stature": "65"},
+    	{"var_documented_name":"Name 7", "var_age":"27", "var_genre": "male", "var_stature": "66"},
+    	{"var_documented_name":"Name 8", "var_age":"28", "var_genre": "female", "var_stature": "67"},
+    	{"var_documented_name":"Name 9", "var_age":"29", "var_genre": "male", "var_stature": "68"},
+    	{"var_documented_name":"Name 10", "var_age":"30", "var_genre": "female", "var_stature": "69"}]
     return JsonResponse(reponse_data)

@@ -9,6 +9,7 @@ var searchBar = new Vue({
     isAdvanced: false,
     filter: {
       africanName: africanName,
+      personalData: personalData,
       settings: settings
     },
     filterData: {
