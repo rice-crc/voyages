@@ -1,11 +1,17 @@
 var categoryNames = [
   gettext("African Name"),
+  gettext("Personal Data"),
 ];
 
 var allColumns = [
 
   // name
   { data: "var_documented_name", category: 0, header: gettext("Documented name"), isImputed: false },
+
+  // personal data
+  { data: "var_age", category: 1, header: gettext("Age"), isImputed: false },
+  { data: "var_genre", category: 1, header: gettext("Genre"), isImputed: false },
+  { data: "var_stature", category: 1, header: gettext("Stature"), isImputed: false },
 ];
 
 

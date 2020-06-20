@@ -1,23 +1,31 @@
 {% load i18n %}
 
 <li class="nav-item dropdown">
-  <v-menu-title :count="filter.shipNationOwner.count" title="{% trans 'Personal Data' %}"></v-menu-title>
+  <v-menu-title :count="filter.personalData.count" title="{% trans 'Personal Data' %}"></v-menu-title>
 
   <div class="">
-    <ul class="dropdown-menu search-menu" id="shipNationOwner" role="menu">
+    <ul class="dropdown-menu search-menu" id="personalData" role="menu">
 
-      <v-panel @apply="apply" @reset="reset" group="shipNationOwner" sub-group="voyagesAndVessels" title="{% trans 'Sub Group Name 2' %}" :filters="filter.shipNationOwner.voyagesAndVessels">
+      <v-panel @apply="apply" @reset="reset" group="personalData" sub-group="name" title="{% trans 'Personal Data' %}" :filters="filter.personalData.name">
         <div slot="v-panel-header">
-          <v-panel-header title="{% trans 'Label 2' %}" description="{% trans 'Filter 2' %}">
+          <v-panel-header title="{% trans 'Personal Data' %}" description="{% trans 'Description' %}">
             <div slot="v-modal-content"></div>
           </v-panel-header>
         </div>
 
         <div slot="v-panel-content" slot-scope="scope">
-          <span>(CHANGE variables on the file (shipNationOwner, voyagesAndVessels, etc...))</span>
-          <v-text @change="changed"
-            :filter="scope.filters.var_ship_name"
-          ></v-text>
+          <v-number @change="changed"
+            :filter="scope.filters.var_age">
+          </v-number>
+
+          <v-treeselect
+            :filter="scope.filters.var_genre"
+            @change="changed">
+          </v-treeselect>
+
+          <v-number @change="changed"
+            :filter="scope.filters.var_stature">
+          </v-number>
         </div>
       </v-panel>
       </ul>
