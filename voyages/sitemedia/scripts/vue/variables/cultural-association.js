@@ -1,4 +1,17 @@
-var_age = new NumberVariable({
+var_register_country = new PlaceVariable({
+    varName: "age",
+    label: gettext("Age"),
+    description: "",
+  },{
+    op: "is between",
+    searchTerm0: 0,
+    searchTerm1: 80
+  },{
+    isImputed: false,
+    isAdvanced: false
+  });
+
+var_modern_country = new PlaceVariable({
     varName: "age",
     label: gettext("Age"),
     description: "",
@@ -37,11 +50,12 @@ var_stature = new NumberVariable({
   });
 
 // all
-personalData = {
+culturalAssociation = {
   name: {
-    var_age: var_age,
-    var_gender: var_gender,
-    var_stature: var_stature,
+    var_register_country: var_register_country,
+    var_modern_country: var_modern_country,
+    var_ethnicity: var_ethnicity,
+    var_language_group: var_language_group,
 
     count: {
       changed: 0,

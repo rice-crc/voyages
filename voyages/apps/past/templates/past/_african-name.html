@@ -1,0 +1,28 @@
+{% load i18n %}
+
+<li class="nav-item dropdown">
+  <v-menu-title :count="filter.africanName.count" title="{% trans 'African Name' %}"></v-menu-title>
+
+  <v-panel-singular @apply="apply" @reset="reset"
+    group="africanName" title="{% trans 'Name' %}" sub-group="name"
+    :filters="filter.africanName.name" align="left">
+    <div slot="v-panel-header">
+      <v-panel-header title="{% trans 'Name' %}" description="{% trans 'Possible modern counterpart' %}">
+        <div slot="v-modal-content"></div>
+      </v-panel-header>
+    </div>
+
+    <div slot="v-panel-content" slot-scope="scope">
+      <v-text @change="changed"
+        :filter="scope.filters.var_searched_name"
+      ></v-text>
+
+      <v-toggle @change="changed"
+        :filter="scope.filters.var_exact_name_search">
+      </v-toggle>
+
+    </div>
+  </v-panel-singular>
+</li>
+
+

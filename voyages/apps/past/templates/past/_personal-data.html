@@ -1,0 +1,33 @@
+{% load i18n %}
+
+<li class="nav-item dropdown">
+  <v-menu-title :count="filter.personalData.count" title="{% trans 'Personal Data' %}"></v-menu-title>
+
+  <div class="">
+    <ul class="dropdown-menu search-menu" id="personalData" role="menu">
+
+      <v-panel @apply="apply" @reset="reset" group="personalData" sub-group="name" title="{% trans 'Personal Data' %}" :filters="filter.personalData.name">
+        <div slot="v-panel-header">
+          <v-panel-header title="{% trans 'Personal Data' %}" description="{% trans 'Description' %}">
+            <div slot="v-modal-content"></div>
+          </v-panel-header>
+        </div>
+
+        <div slot="v-panel-content" slot-scope="scope">
+          <v-number @change="changed"
+            :filter="scope.filters.var_age">
+          </v-number>
+
+          <v-treeselect
+            :filter="scope.filters.var_gender"
+            @change="changed">
+          </v-treeselect>
+
+          <v-number @change="changed"
+            :filter="scope.filters.var_stature">
+          </v-number>
+        </div>
+      </v-panel>
+      </ul>
+  </div>
+</li>
