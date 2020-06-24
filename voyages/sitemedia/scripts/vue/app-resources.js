@@ -10,10 +10,19 @@ var searchBar = new Vue({
     filter: {
       africanName: africanName,
       personalData: personalData,
+      // culturalAssociation: culturalAssociation,
       settings: settings
     },
     filterData: {
-      treeselectOptions: {}
+      treeselectOptions: {
+        gender: [{
+          id: "male",
+          label: gettext("Male")
+        },{
+          id: "female",
+          label: gettext("Female")
+        }]
+      }
     },
     activated: false,
     saved: [],
@@ -462,7 +471,7 @@ var searchBar = new Vue({
           } else {
             query = JSON.parse(response.data.items);
           }
-          
+
           var mappedVarNames = query.map(
             variable => variableMapping[variable.varName]
           );

@@ -6,11 +6,11 @@ var categoryNames = [
 var allColumns = [
 
   // name
-  { data: "var_documented_name", category: 0, header: gettext("Documented name"), isImputed: false },
+  { data: "var_searched_name", category: 0, header: gettext("Name"), isImputed: false },
 
   // personal data
   { data: "var_age", category: 1, header: gettext("Age"), isImputed: false },
-  { data: "var_genre", category: 1, header: gettext("Genre"), isImputed: false },
+  { data: "var_gender", category: 1, header: gettext("Gender"), isImputed: false },
   { data: "var_stature", category: 1, header: gettext("Stature"), isImputed: false },
 ];
 

@@ -36,11 +36,14 @@
 			</button>
 			<div class="navbar-collapse collapse" id="searchNav">
 				<ul class="navbar-nav">
-					{% include "resources/_african-name.html" %}
+					{% include "past/_african-name.html" %}
 				</ul>
 				<ul class="navbar-nav">
-					{% include "resources/_personal-data.html" %}
+					{% include "past/_personal-data.html" %}
 				</ul>
+				<!-- <ul class="navbar-nav">
+					{% include "past/_cultural-association.html" %}
+				</ul> -->
 				<ul class="navbar-nav ml-auto">
 					{% include "database/_settings.html" %}
 				</ul>
@@ -67,12 +70,12 @@
 		</div>
 	</div>
 
-	{% include "resources/_panel.html" %}
+	{% include "past/_panel.html" %}
 	<div class="trans-container">
 		<div class="row">
 			<div class="col-md-12">
 				<div id="center-content-inner">
-					{% include "resources/_tabs.html" %}
+					{% include "past/_tabs.html" %}
 				</div>
 			</div>
 		</div>
@@ -116,6 +119,7 @@
 <script src="{{ STATIC_URL }}scripts/vue/variables/constructors.js"></script>
 <script src="{{ STATIC_URL }}scripts/vue/variables/african-name.js"></script>
 <script src="{{ STATIC_URL }}scripts/vue/variables/personal-data.js"></script>
+<!-- <script src="{{ STATIC_URL }}scripts/vue/variables/cultural-association.js"></script> -->
 
 <script src="{{ STATIC_URL }}scripts/vue/variables/tabs.js"></script>
 <script src="{{ STATIC_URL }}scripts/vue/variables/settings.js"></script>

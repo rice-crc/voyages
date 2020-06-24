@@ -544,34 +544,6 @@ function searchAll(filter, filterData) {
     }
   }
 
-  // placeholder
-  hasYear = false;
-  items.map(function(item) {
-    if (item.varName == "imp_arrival_at_port_of_dis") {
-      if (item.op == "between") {
-        item.op = "is between"; // patch a backend bug
-      }
-      hasYear = true;
-    }
-  });
-
-  if (!hasYear) {
-    var item = {};
-    item["op"] = "is between";
-    item["searchTerm"] = [1514, 1866];
-    item["varName"] = "imp_arrival_at_port_of_dis";
-    items.push(item);
-  }
-
-  if (SV_MODE == "intra") {
-    const intraFlagObject = {
-      op: "equals",
-      searchTerm: ["true"],
-      varName: "intra_american_voyage"
-    };
-    items.push(intraFlagObject);
-  }
-  // alert(JSON.stringify(items));
   return items;
 }
 
@@ -626,7 +598,7 @@ function getTreeselectLabel(currentVariable, searchTerms, treeselectOptions) {
   labels = [];
 
   if (currentVariable.constructor.name == "TreeselectVariable") {
-    treeselectOptions = treeselectOptions["var_" + currentVariable.varName];
+    treeselectOptions = treeselectOptions[currentVariable.varName];
     searchTerms.forEach(function(searchTerm) {
       treeselectOptions.forEach(function(treeselectOption) {
         if (treeselectOption.value == searchTerm) {
