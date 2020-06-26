@@ -1,6 +1,7 @@
 var categoryNames = [
   gettext("African Name"),
   gettext("Personal Data"),
+  gettext("Cultural Association"),
 ];
 
 var allColumns = [
@@ -12,6 +13,10 @@ var allColumns = [
   { data: "var_age", category: 1, header: gettext("Age"), isImputed: false },
   { data: "var_gender", category: 1, header: gettext("Gender"), isImputed: false },
   { data: "var_stature", category: 1, header: gettext("Stature"), isImputed: false },
+
+  // cultural association
+  { data: "var_register_country", category: 2, header: gettext("Register Country"), isImputed: false },
+  { data: "var_modern_country", category: 2, header: gettext("Modern Country"), isImputed: false },
 ];
 
 
