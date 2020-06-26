@@ -207,76 +207,7 @@ var impTooltipString =
 // variableMapping
 // used for loading a variable (variables extracted from a saved query ==> variables in the vm filter object)
 var variableMapping = {
-  imp_arrival_at_port_of_dis: "var_imp_arrival_at_port_of_dis",
-  voyage_id: "var_voyage_id",
-  ship_name: "var_ship_name",
-  owner: "var_owner",
-  nationality_idnum: "var_nationality",
-  imputed_nationality_idnum: "var_imputed_nationality",
-  vessel_construction_place_idnum: "var_vessel_construction_place_idnum",
-  year_of_construction: "var_year_of_construction",
-  registered_place_idnum: "var_registered_place_idnum",
-  registered_year: "var_registered_year",
-  rig_of_vessel_idnum: "var_rig_of_vessel",
-  tonnage: "var_tonnage",
-  tonnage_mod: "var_tonnage_mod",
-  guns_mounted: "var_guns_mounted",
-
-  imp_port_voyage_begin_idnum: "var_imp_port_voyage_begin_id",
-  imp_principal_place_of_slave_purchase_idnum:
-    "var_imp_principal_place_of_slave_purchase_id",
-  first_place_slave_purchase_idnum: "var_first_place_slave_purchase_id",
-  second_place_slave_purchase_idnum: "var_second_place_slave_purchase_id",
-  third_place_slave_purchase_idnum: "var_third_place_slave_purchase_id",
-  port_of_call_before_atl_crossing_idnum:
-    "var_port_of_call_before_atl_crossing_id",
-  imp_principal_port_slave_dis_idnum: "var_imp_principal_port_slave_dis_id",
-  first_landing_place_idnum: "var_first_landing_place_id",
-  second_landing_place_idnum: "var_second_landing_place_id",
-  third_landing_place_idnum: "var_third_landing_place_id",
-  place_voyage_ended_idnum: "var_place_voyage_ended_id",
-
-  imp_total_num_slaves_purchased: "var_imp_total_num_slaves_purchased",
-  total_num_slaves_purchased: "var_total_num_slaves_purchased",
-  imp_total_slaves_disembarked: "var_imp_total_slaves_disembarked",
-  num_slaves_intended_first_port: "var_num_slaves_intended_first_port",
-  num_slaves_carried_first_port: "var_num_slaves_carried_first_port",
-  num_slaves_carried_second_port: "var_num_slaves_carried_second_port",
-  num_slaves_carried_third_port: "var_num_slaves_carried_third_port",
-  total_num_slaves_arr_first_port_embark:
-    "var_total_num_slaves_arr_first_port_embark",
-  num_slaves_disembark_first_place: "var_num_slaves_disembark_first_place",
-  num_slaves_disembark_second_place: "var_num_slaves_disembark_second_place",
-  num_slaves_disembark_third_place: "var_num_slaves_disembark_third_place",
-  imputed_percentage_men: "var_imputed_percentage_men",
-  imputed_percentage_women: "var_imputed_percentage_women",
-  imputed_percentage_boys: "var_imputed_percentage_boys",
-  imputed_percentage_girls: "var_imputed_percentage_girls",
-  imputed_percentage_male: "var_imputed_percentage_male",
-  imputed_percentage_child: "var_imputed_percentage_child",
-  imputed_sterling_cash: "var_imputed_sterling_cash",
-  imputed_death_middle_passage: "var_imputed_death_middle_passage",
-  imputed_mortality: "var_imputed_mortality",
-
-  imp_length_home_to_disembark: "var_imp_length_home_to_disembark",
-  length_middle_passage_days: "var_length_middle_passage_days",
-  voyage_began: "var_voyage_began",
-  slave_purchase_began: "var_slave_purchase_began",
-  date_departed_africa: "var_date_departed_africa",
-  first_dis_of_slaves: "var_first_dis_of_slaves",
-  departure_last_place_of_landing: "var_departure_last_place_of_landing",
-  voyage_completed: "var_voyage_completed",
-
-  outcome_voyage_idnum: "var_outcome_voyage",
-  outcome_slaves_idnum: "var_outcome_slaves",
-  outcome_ship_captured_idnum: "var_outcome_ship_captured",
-  outcome_owner_idnum: "var_outcome_owner",
-  resistance_idnum: "var_resistance",
-  captain: "var_captain",
-  crew_voyage_outset: "var_crew_voyage_outset",
-  crew_first_landing: "var_crew_first_landing",
-  crew_died_complete_voyage: "var_crew_died_complete_voyage",
-  sources_plaintext: "var_sources_plaintext"
+  
 };
 
 // mark a variable as changed and activated state
@@ -683,9 +614,14 @@ function loadTreeselectOptions(vm, vTreeselect, filter, callback) {
 
     // load PlaceVariable
     else if (loadType == "place") {
+      var varNameAux = varName;
+      if (varName == 'register_country' || varName == 'modern_country') {
+        varNameAux = 'third_place_slave_purchase_id';
+      }
+
       axios
         .post("/voyage/filtered-places", {
-          var_name: varName
+          var_name: varNameAux
         })
         .then(function(response) {
           var options = parsePlaces(response);
