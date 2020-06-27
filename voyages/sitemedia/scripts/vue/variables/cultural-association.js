@@ -22,13 +22,46 @@ var_modern_country = new PlaceVariable({
     isAdvanced: false
   });
 
+var_ethnicity = new TreeselectVariable({
+    varName: "ethnicity",
+    label: gettext("Ethnicity"),
+    description: "",
+  },{
+    op: "is one of",
+    searchTerm: [],
+  },{
+    isImputed: false,
+    isadvanced: false
+  });
+
+
+var_language_group = new TreeselectVariable({
+    varName: "language_group",
+    label: gettext("Language Group"),
+    description: "",
+  },{
+    op: "is one of",
+    searchTerm: [],
+  },{
+    isImputed: false,
+    isadvanced: false
+  });
+
 // all
 culturalAssociation = {
-  name: {
+  country: {
     var_register_country: var_register_country,
     var_modern_country: var_modern_country,
-    // var_ethnicity: var_ethnicity,
-    // var_language_group: var_language_group,
+
+    count: {
+      changed: 0,
+      activated: 0,
+    }
+  },
+
+  ethnicityAndLanguage: {
+    var_ethnicity: var_ethnicity,
+    var_language_group: var_language_group,
 
     count: {
       changed: 0,

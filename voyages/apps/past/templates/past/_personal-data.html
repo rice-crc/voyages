@@ -4,8 +4,8 @@
   <v-menu-title :count="filter.personalData.count" title="{% trans 'Personal Data' %}"></v-menu-title>
 
   <v-panel-singular @apply="apply" @reset="reset"
-    group="personalData" title="{% trans 'Name' %}" sub-group="name"
-    :filters="filter.personalData.name" align="left">
+    group="personalData" title="{% trans 'Name' %}" sub-group="personalData"
+    :filters="filter.personalData.personalData" align="left">
     <div slot="v-panel-header">
       <v-panel-header title="{% trans 'Personal Data' %}" description="{% trans 'Description' %}">
         <div slot="v-modal-content"></div>
@@ -21,14 +21,6 @@
         :filter="scope.filters.var_gender"
         @change="changed">
       </v-treeselect>
-
-      <v-number @change="changed"
-        :filter="scope.filters.var_stature">
-      </v-number>
-
-      <v-number @change="changed"
-        :filter="scope.filters.var_stature">
-      </v-number>
 
       <v-number @change="changed"
         :filter="scope.filters.var_stature">

@@ -615,6 +615,7 @@ function loadTreeselectOptions(vm, vTreeselect, filter, callback) {
     // load PlaceVariable
     else if (loadType == "place") {
       var varNameAux = varName;
+
       if (varName == 'register_country' || varName == 'modern_country') {
         varNameAux = 'third_place_slave_purchase_id';
       }
@@ -641,10 +642,16 @@ function loadTreeselectOptions(vm, vTreeselect, filter, callback) {
 
     // load TreeselectVariable
     else if (loadType == "treeselect") {
-      varName = "var_" + varName;
+      var varNameAux = varName;
+
+      if (varName == 'ethnicity' || varName == 'language_group') {
+        varNameAux = 'nationality';
+      }
+
+      // varName = "var_" + varName;
       axios
         .post("/voyage/var-options", {
-          var_name: varName
+          var_name: 'var_' + varNameAux
         })
         .then(function(response) {
           response.data.data.map(function(data) {
