@@ -7,18 +7,19 @@ var categoryNames = [
 var allColumns = [
 
   // name
-  { data: "var_searched_name", category: 0, header: gettext("Name"), isImputed: false },
+  { data: "searched_name", category: 0, header: gettext("Name"), isImputed: false },
 
   // personal data
-  { data: "var_age", category: 1, header: gettext("Age"), isImputed: false },
-  { data: "var_gender", category: 1, header: gettext("Gender"), isImputed: false },
-  { data: "var_stature", category: 1, header: gettext("Stature"), isImputed: false },
+  { data: "age", category: 1, header: gettext("Age"), isImputed: false },
+  { data: "gender", category: 1, header: gettext("Gender"), isImputed: false },
+  { data: "stature", category: 1, header: gettext("Stature"), isImputed: false },
 
   // cultural association
-  { data: "var_register_country", category: 2, header: gettext("Register Country"), isImputed: false },
-  { data: "var_modern_country", category: 2, header: gettext("Modern Country"), isImputed: false },
+  { data: "register_country", category: 2, header: gettext("Register Country"), isImputed: false },
+  { data: "modern_country", category: 2, header: gettext("Modern Country"), isImputed: false },
+  { data: "ethnicity", category: 2, header: gettext("Ethnicity"), isImputed: false },
+  { data: "language_group", category: 2, header: gettext("Language Group"), isImputed: false },
 ];
-
 
 var categories = $.map(categoryNames, function(name) {
   return {

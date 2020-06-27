@@ -25,14 +25,14 @@ def ajax_search(request):
     reponse_data['recordsFiltered'] = total_results
     reponse_data['draw'] = 1
     reponse_data['data'] = [
-    	{"var_searched_name":"Name 1", "var_age":"21", "var_gender": "male", "var_stature": "60", "var_register_country" : "Gambia", "var_modern_country" : "South Africa"},
-    	{"var_searched_name":"Name 2", "var_age":"22", "var_gender": "female", "var_stature": "61", "var_register_country" : "Ivory Coast", "var_modern_country" : "Nigeria"},
-    	{"var_searched_name":"Name 3", "var_age":"23", "var_gender": "male", "var_stature": "62", "var_register_country" : "Gambia", "var_modern_country" : "Nigeria"},
-    	{"var_searched_name":"Name 4", "var_age":"24", "var_gender": "female", "var_stature": "63", "var_register_country" : "Ivory Coast", "var_modern_country" : "Nigeria"},
-    	{"var_searched_name":"Name 5", "var_age":"25", "var_gender": "male", "var_stature": "64", "var_register_country" : "Gambia", "var_modern_country" : "Nigeria"},
-    	{"var_searched_name":"Name 6", "var_age":"26", "var_gender": "female", "var_stature": "65", "var_register_country" : "Ivory Coast", "var_modern_country" : "Nigeria"},
-    	{"var_searched_name":"Name 7", "var_age":"27", "var_gender": "male", "var_stature": "66", "var_register_country" : "Gambia", "var_modern_country" : "Nigeria"},
-    	{"var_searched_name":"Name 8", "var_age":"28", "var_gender": "female", "var_stature": "67", "var_register_country" : "Ivory Coast", "var_modern_country" : "Nigeria"},
-    	{"var_searched_name":"Name 9", "var_age":"29", "var_gender": "male", "var_stature": "68", "var_register_country" : "Gambia", "var_modern_country" : "Nigeria"},
-    	{"var_searched_name":"Name 10", "var_age":"30", "var_gender": "female", "var_stature": "69", "var_register_country" : "Ivory Coast", "var_modern_country" : "Nigeria"}]
+    	{"searched_name":"Name 1", "age":"21", "gender": "male", "stature": "60", "register_country" : "Gambia", "modern_country" : "South Africa", "ethnicity" : "Ethnicity E1", "language_group" : "Language Group LG1"},
+    	{"searched_name":"Name 2", "age":"22", "gender": "female", "stature": "61", "register_country" : "Ivory Coast", "modern_country" : "Nigeria", "ethnicity" : "Ethnicity E2", "language_group" : "Language Group LG2"},
+    	{"searched_name":"Name 3", "age":"23", "gender": "male", "stature": "62", "register_country" : "Gambia", "modern_country" : "South Africa", "ethnicity" : "Ethnicity E1", "language_group" : "Language Group LG1"},
+    	{"searched_name":"Name 4", "age":"24", "gender": "female", "stature": "63", "register_country" : "Ivory Coast", "modern_country" : "Nigeria", "ethnicity" : "Ethnicity E2", "language_group" : "Language Group LG2"},
+    	{"searched_name":"Name 5", "age":"25", "gender": "male", "stature": "64", "register_country" : "Gambia", "modern_country" : "South Africa", "ethnicity" : "Ethnicity E1", "language_group" : "Language Group LG1"},
+    	{"searched_name":"Name 6", "age":"26", "gender": "female", "stature": "65", "register_country" : "Ivory Coast", "modern_country" : "Nigeria", "ethnicity" : "Ethnicity E2", "language_group" : "Language Group LG2"},
+    	{"searched_name":"Name 7", "age":"27", "gender": "male", "stature": "66", "register_country" : "Gambia", "modern_country" : "South Africa", "ethnicity" : "Ethnicity E1", "language_group" : "Language Group LG1"},
+    	{"searched_name":"Name 8", "age":"28", "gender": "female", "stature": "67", "register_country" : "Ivory Coast", "modern_country" : "Nigeria", "ethnicity" : "Ethnicity E2", "language_group" : "Language Group LG2"},
+    	{"searched_name":"Name 9", "age":"29", "gender": "male", "stature": "68", "register_country" : "Gambia", "modern_country" : "South Africa", "ethnicity" : "Ethnicity E1", "language_group" : "Language Group LG1"},
+    	{"searched_name":"Name 10", "age":"30", "gender": "female", "stature": "69", "register_country" : "Ivory Coast", "modern_country" : "Nigeria", "ethnicity" : "Ethnicity E2", "language_group" : "Language Group LG2"}]
     return JsonResponse(reponse_data)

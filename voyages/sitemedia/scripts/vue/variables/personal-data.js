@@ -38,7 +38,7 @@ var_stature = new NumberVariable({
 
 // all
 personalData = {
-  name: {
+  personalData: {
     var_age: var_age,
     var_gender: var_gender,
     var_stature: var_stature,
