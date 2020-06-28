@@ -10,7 +10,9 @@ var searchBar = new Vue({
     filter: {
       africanName: africanName,
       personalData: personalData,
+      itinerary: itinerary,
       culturalAssociation: culturalAssociation,
+      fate: fate,
       settings: settings
     },
     filterData: {

@@ -620,6 +620,10 @@ function loadTreeselectOptions(vm, vTreeselect, filter, callback) {
         varNameAux = 'third_place_slave_purchase_id';
       }
 
+      // if (varName == 'post_disembarkation_location') {
+      //   varNameAux = 'imp_principal_port_slave_dis_id';
+      // }
+
       axios
         .post("/voyage/filtered-places", {
           var_name: varNameAux
@@ -648,7 +652,6 @@ function loadTreeselectOptions(vm, vTreeselect, filter, callback) {
         varNameAux = 'nationality';
       }
 
-      // varName = "var_" + varName;
       axios
         .post("/voyage/var-options", {
           var_name: 'var_' + varNameAux
