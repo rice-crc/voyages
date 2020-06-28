@@ -42,7 +42,13 @@
 					{% include "past/_personal-data.html" %}
 				</ul>
 				<ul class="navbar-nav">
+					{% include "past/_itinerary.html" %}
+				</ul>
+				<ul class="navbar-nav">
 					{% include "past/_cultural-association.html" %}
+				</ul>
+				<ul class="navbar-nav">
+					{% include "past/_fate.html" %}
 				</ul>
 				<ul class="navbar-nav ml-auto">
 					{% include "database/_settings.html" %}
@@ -117,9 +123,11 @@
 <script src="{{ STATIC_URL }}scripts/vue/includes/form-data.js" type="text/javascript"></script>
 
 <script src="{{ STATIC_URL }}scripts/vue/variables/constructors.js"></script>
-<script src="{{ STATIC_URL }}scripts/vue/variables/african-name.js"></script>
-<script src="{{ STATIC_URL }}scripts/vue/variables/personal-data.js"></script>
-<script src="{{ STATIC_URL }}scripts/vue/variables/cultural-association.js"></script>
+<script src="{{ STATIC_URL }}scripts/vue/variables/past/african-name.js"></script>
+<script src="{{ STATIC_URL }}scripts/vue/variables/past/personal-data.js"></script>
+<script src="{{ STATIC_URL }}scripts/vue/variables/past/itinerary.js"></script>
+<script src="{{ STATIC_URL }}scripts/vue/variables/past/cultural-association.js"></script>
+<script src="{{ STATIC_URL }}scripts/vue/variables/past/fate.js"></script>
 
 <script src="{{ STATIC_URL }}scripts/vue/variables/tabs.js"></script>
 <script src="{{ STATIC_URL }}scripts/vue/variables/settings.js"></script>

@@ -1,0 +1,36 @@
+{% load i18n %}
+
+<li class="nav-item dropdown">
+  <v-menu-title :count="filter.itinerary.count" title="{% trans 'Itinerary' %}"></v-menu-title>
+
+  <div class="">
+    <ul class="dropdown-menu search-menu" id="itinerary" role="menu">
+
+      <v-panel @apply="apply" @reset="reset" group="itinerary" sub-group="voyageId" title="{% trans 'Itinerary' %}" :filters="filter.itinerary.voyageId">
+        <div slot="v-panel-header">
+          <v-panel-header title="{% trans 'Voyage Id' %}" description="{% trans 'Description' %}">
+            <div slot="v-modal-content"></div>
+          </v-panel-header>
+        </div>
+
+        <div slot="v-panel-content" slot-scope="scope">
+          <v-number @change="changed"
+            :filter="scope.filters.var_voyage_id">
+          </v-number>
+        </div>
+      </v-panel>
+
+      <v-panel @apply="apply" @reset="reset" group="itinerary" sub-group="shipAndPorts" title="{% trans 'Ship and Ports' %}" :filters="filter.itinerary.shipAndPorts">
+        <div slot="v-panel-header">
+          <v-panel-header title="{% trans 'Ship and Ports' %}" description="{% trans 'Description' %}">
+            <div slot="v-modal-content"></div>
+          </v-panel-header>
+        </div>
+
+        <div slot="v-panel-content" slot-scope="scope">
+          
+        </div>
+      </v-panel>
+      </ul>
+  </div>
+</li>
