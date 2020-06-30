@@ -4,7 +4,7 @@
 import threading
 import unicodedata
 import heapq
-from voyages.apps.past.models import *
+from voyages.apps.past.models import Enslaved
 
 # function obtained from https://stackoverflow.com/questions/517923/what-is-the-best-way-to-remove-accents-in-a-python-unicode-string
 def strip_accents(text):
@@ -127,8 +127,8 @@ class NameSearchCache:
     @classmethod
     def load(cls, force_reload=False):
         def process_row(row):
-            (id, name_1, name_2, name_3) = row
-            names = []
+            (id, documented_name, name_1, name_2, name_3) = row
+            names = [documented_name]
             if name_1:
                 names.append(name_1)
             if name_2:
@@ -140,7 +140,7 @@ class NameSearchCache:
         with cls._lock:
             if not force_reload and cls._loaded: return
             # Fetch all names and index them.
-            all_names = [process_row(r) for r in Enslaved.objects.values_list('slave_id', 'name_first', 'name_second', 'name_third')]
+            all_names = [process_row(r) for r in Enslaved.objects.values_list('enslaved_id', 'documented_name', 'name_first', 'name_second', 'name_third')]
             index = NameSearchIndex()
             map = {}
             for (id, names) in all_names:

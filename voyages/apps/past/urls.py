@@ -1,0 +1,10 @@
+from django.conf.urls import url
+from django.views.generic import TemplateView
+
+import voyages.apps.static_content.views
+import voyages.apps.past.views
+
+urlpatterns = [
+    url(r'^api/search', voyages.apps.past.views.search_enslaved, name='search'),
+    url(r'^database', TemplateView.as_view(template_name='past/database.html'), name='database')
+    ]
