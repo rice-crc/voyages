@@ -13,9 +13,11 @@ def _generate_table(query, table_params):
         page = paginator.page(current_page_num)
     except:
         page = query
-    pass
     response_data = {}
-    total_results = query.count()
+    try:
+        total_results = query.count()
+    except:
+        total_results = len(query)
     response_data['recordsTotal'] = total_results
     response_data['recordsFiltered'] = total_results
     response_data['draw'] = int(table_params.get('draw', 0))
@@ -35,7 +37,10 @@ def search_enslaved(request):
         'voyage__id', 'voyage__voyage_ship__ship_name', 'voyage__voyage_dates__imp_arrival_at_port_of_dis',
         'voyage__voyage_itinerary__imp_principal_place_of_slave_purchase',
         'voyage__voyage_itinerary__imp_principal_port_slave_dis']
-    query = search.execute().values(*_fields)
+    query, ranking = search.execute()
+    query = query.values(*_fields)
+    if ranking:
+        query = sorted(query, key=lambda x: ranking[x['enslaved_id']])
     output_type = data.get('output', 'resultsTable')
     # For now we only support outputing the results to DataTables.
     if output_type == 'resultsTable':

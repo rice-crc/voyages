@@ -241,17 +241,18 @@ class EnslavedSearch:
             .select_related('language_group__modern_country') \
             .select_related('register_country') \
             .all()
+        ranking = None
         if self.searched_name and len(self.searched_name):
             if self.exact_name_search:
                 q = q.filter(Q(documented_name=self.searched_name) | Q(name_first=self.searched_name) | \
                     Q(name_second=self.searched_name) | Q(name_third=self.searched_name))
             else:
                 from name_search import NameSearchCache
-                # Perform a fuzzy search on our cached Trie and query with
-                # the ids matched by the fuzzy search.
+                # Perform a fuzzy search on our cached names.
                 NameSearchCache.load()
-                ids = list(NameSearchCache.search(self.searched_name))
-                q = q.filter(pk__in=ids)
+                fuzzy_ids = NameSearchCache.search(self.searched_name)
+                ranking = {x[1]: x[0] for x in enumerate(fuzzy_ids)}
+                q = q.filter(pk__in=fuzzy_ids)
         if self.age_gender:
             conditions = [Q(is_adult=a, gender=g) for (a, g) in self.age_gender]
             q = q.filter(reduce(operator.or_, conditions))
@@ -280,4 +281,4 @@ class EnslavedSearch:
             q = q.filter(voyage__voyage_ship__ship_name__icontains=self.ship_name)
         if self.source:
             q = q.filter()
-        return q
+        return q, ranking
