@@ -26,3 +26,4 @@ boto3
 six==1.10.0
 ijson
 requests
+Levenshtein_search

@@ -20,15 +20,38 @@
         </div>
       </v-panel>
 
-      <v-panel @apply="apply" @reset="reset" group="itinerary" sub-group="shipAndPorts" title="{% trans 'Ship and Ports' %}" :filters="filter.itinerary.shipAndPorts">
+      <v-panel @apply="apply" @reset="reset" group="itinerary" sub-group="shipPortsAndDate" title="{% trans 'Ship, Ports and Date' %}" :filters="filter.itinerary.shipPortsAndDate">
         <div slot="v-panel-header">
-          <v-panel-header title="{% trans 'Ship and Ports' %}" description="{% trans 'Description' %}">
+          <v-panel-header title="{% trans 'Ship, Ports and Date' %}" description="{% trans 'Description' %}">
             <div slot="v-modal-content"></div>
           </v-panel-header>
         </div>
 
         <div slot="v-panel-content" slot-scope="scope">
-          
+          <v-text @change="changed"
+            :filter="scope.filters.var_ship_name"
+          ></v-text>
+
+          <v-text @change="changed"
+            :filter="scope.filters.var_embarkation_port"
+          ></v-text>
+
+          <v-text @change="changed"
+            :filter="scope.filters.var_disembarkation_port"
+          ></v-text>
+
+          <v-text @change="changed"
+            :filter="scope.filters.var_geocode"
+          ></v-text>
+
+          <v-datepicker
+            :filter="scope.filters.var_voyage_arrived"
+            @change="changed">
+          </v-datepicker>
+
+          <v-text @change="changed"
+            :filter="scope.filters.var_intended_disembarkation_port"
+          ></v-text>
         </div>
       </v-panel>
       </ul>

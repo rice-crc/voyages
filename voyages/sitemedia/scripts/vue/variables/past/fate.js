@@ -1,12 +1,12 @@
 var_post_disembarkation_location = new PlaceVariable({
     varName: "post_disembarkation_location",
-    label: gettext("Place where voyage began"),
+    label: gettext("Post Disembarkation Location"),
     description: "",
   },{
     op: "is one of",
     searchTerm: [],
   },{
-    isImputed: true,
+    isImputed: false,
     isAdvanced: false
   });
 

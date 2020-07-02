@@ -3,9 +3,7 @@
 <li class="nav-item dropdown">
   <v-menu-title :count="filter.fate.count" title="{% trans 'Fate' %}"></v-menu-title>
 
-  <v-panel-singular @apply="apply" @reset="reset"
-    group="fate" title="{% trans 'Name' %}" sub-group="fate"
-    :filters="filter.fate.name" align="left">
+  <v-panel-singular @apply="apply" @reset="reset" group="fate" title="{% trans 'Fate' %}" sub-group="fate" :filters="filter.fate.fate" align="left">
     <div slot="v-panel-header">
       <v-panel-header title="{% trans 'Post Disembarkation Location' %}" description="{% trans 'Description' %}">
         <div slot="v-modal-content"></div>
@@ -13,10 +11,10 @@
     </div>
 
     <div slot="v-panel-content" slot-scope="scope">
-      <!-- <v-treeselect
+      <v-treeselect
         :filter="scope.filters.var_post_disembarkation_location"
         @change="changed">
-      </v-treeselect> -->
+      </v-treeselect>
     </div>
   </v-panel-singular>
 </li>

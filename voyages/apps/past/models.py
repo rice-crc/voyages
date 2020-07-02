@@ -2,7 +2,6 @@ from django.db import models
 from django.db.models import Q
 from django.contrib.auth.models import User
 from voyages.apps.voyage.models import Place, Voyage, VoyageSources
-from name_search import NameSearchCache
 
 class EnslaverInfoAbstractBase(models.Model):
     principal_alias = models.CharField(max_length=255)
@@ -103,17 +102,29 @@ class NamedModelAbstractBase(models.Model):
     class Meta:
         abstract = True
 
-class Ethnicity(NamedModelAbstractBase):
-    pass
-
-class LanguageGroup(NamedModelAbstractBase):
-    pass
-
 class ModernCountry(NamedModelAbstractBase):
     pass
 
 class RegisterCountry(NamedModelAbstractBase):
     pass
+
+class LanguageGroup(NamedModelAbstractBase):
+    longitude = models.DecimalField("Longitude of point",
+                                     max_digits=10, decimal_places=7,
+                                     null=False)
+    latitude = models.DecimalField("Latitude of point",
+                                     max_digits=10, decimal_places=7,
+                                     null=False)
+    modern_country = models.ForeignKey(ModernCountry, null=False, related_name='language_groups')
+
+class AltLanguageGroupName(NamedModelAbstractBase):
+    language_group = models.ForeignKey(LanguageGroup, null=False, related_name='alt_names')
+
+class Ethnicity(NamedModelAbstractBase):
+    language_group = models.ForeignKey(LanguageGroup, null=False, related_name='ethnicities')
+
+class AltEthnicityName(NamedModelAbstractBase):
+    ethnicity = models.ForeignKey(Ethnicity, null=False, related_name='alt_names')
 
 # TODO: this model will replace resources.AfricanName
 class Enslaved(models.Model):
@@ -123,9 +134,9 @@ class Enslaved(models.Model):
     enslaved_id = models.IntegerField(primary_key=True)
 
     documented_name = models.CharField(max_length=25, blank=True)
-    name_first = models.CharField(max_length=25, blank=True)
-    name_second = models.CharField(max_length=25, blank=True)
-    name_third = models.CharField(max_length=25, blank=True)
+    name_first = models.CharField(max_length=25, null=True, blank=True)
+    name_second = models.CharField(max_length=25, null=True, blank=True)
+    name_third = models.CharField(max_length=25, null=True, blank=True)
 
     # Personal data
     age = models.IntegerField(null=True)
@@ -142,9 +153,7 @@ class Enslaved(models.Model):
     ethnicity = models.ForeignKey(Ethnicity, null=True)
     language_group = models.ForeignKey(LanguageGroup, null=True)
     register_country = models.ForeignKey(RegisterCountry, null=True)
-    modern_country = models.ForeignKey(ModernCountry, null=True)
 
-    occupation = models.CharField(max_length=40)
     post_disembark_location = models.ForeignKey(Place, null=True)
 
     voyage = models.ForeignKey(Voyage, null=False)
@@ -161,6 +170,7 @@ class EnslavedSourceConnection(models.Model):
 class EnslavedContribution(models.Model):
     enslaved = models.ForeignKey(Enslaved, on_delete=models.CASCADE)
     contributor = models.ForeignKey(User, null=True, related_name='+')
+    date = models.DateField(auto_now_add=True)
     notes = models.CharField(max_length=255, null=True, blank=True)
     
 class EnslavedContributionNameEntry(models.Model):
@@ -184,7 +194,7 @@ class EnslavedSearch:
     def __init__(self, searched_name=None, exact_name_search=False, age_gender=None, \
             age_range=None, year_range=None, embarkation_ports=None, disembarkation_ports=None, \
             post_disembark_location=None, language_groups=None, modern_country=None, 
-            ship_name=None, voyage_id=None, source=None):
+            ship_name=None, voyage_id=None, source=None, order_by=None):
         """
         Search the Enslaved database. If a parameter is set to None, it will not
         be included in the search.
@@ -203,6 +213,7 @@ class EnslavedSearch:
         @param: ship_name The ship name that the enslaved embarked
         @param: voyage_id A pair (a, b) where the a <= voyage_id <= b
         @param: source A text fragment that should match Source's text_ref or full_ref
+        @param: order_by TODO: Spec/impl.
         """
         self.searched_name = searched_name
         self.exact_name_search = exact_name_search
@@ -227,19 +238,21 @@ class EnslavedSearch:
         q = Enslaved.objects \
             .select_related('ethnicity') \
             .select_related('language_group') \
-            .select_related('modern_country') \
+            .select_related('language_group__modern_country') \
             .select_related('register_country') \
             .all()
+        ranking = None
         if self.searched_name and len(self.searched_name):
             if self.exact_name_search:
                 q = q.filter(Q(documented_name=self.searched_name) | Q(name_first=self.searched_name) | \
                     Q(name_second=self.searched_name) | Q(name_third=self.searched_name))
             else:
-                # Perform a fuzzy search on our cached Trie and query with
-                # the ids matched by the fuzzy search.
+                from name_search import NameSearchCache
+                # Perform a fuzzy search on our cached names.
                 NameSearchCache.load()
-                ids = list(NameSearchCache.search(self.searched_name))
-                q = q.filter(pk__in=ids)
+                fuzzy_ids = NameSearchCache.search(self.searched_name)
+                ranking = {x[1]: x[0] for x in enumerate(fuzzy_ids)}
+                q = q.filter(pk__in=fuzzy_ids)
         if self.age_gender:
             conditions = [Q(is_adult=a, gender=g) for (a, g) in self.age_gender]
             q = q.filter(reduce(operator.or_, conditions))
@@ -268,4 +281,4 @@ class EnslavedSearch:
             q = q.filter(voyage__voyage_ship__ship_name__icontains=self.ship_name)
         if self.source:
             q = q.filter()
-        return q
+        return q, ranking

@@ -11,6 +11,80 @@ var_voyage_id = new NumberVariable({
     isAdvanced: false
   });
 
+var_ship_name = new TextVariable({
+    varName: "ship_name",
+    label: gettext("Ship Name"),
+    description: "",
+  },{
+    op: "contains",
+    searchTerm: null,
+  },{
+    isImputed: false,
+    isAdvanced: false
+  });
+
+var_embarkation_port = new TextVariable({
+    varName: "embarkation_port",
+    label: gettext("Embarkation Port"),
+    description: "",
+  },{
+    op: "contains",
+    searchTerm: null,
+  },{
+    isImputed: false,
+    isAdvanced: false
+  });
+
+var_disembarkation_port = new TextVariable({
+    varName: "disembarkation_port",
+    label: gettext("Disembarkation Port"),
+    description: "",
+  },{
+    op: "contains",
+    searchTerm: null,
+  },{
+    isImputed: false,
+    isAdvanced: false
+  });
+
+var_geocode = new TextVariable({
+    varName: "geocode",
+    label: gettext("Geocode"),
+    description: "",
+  },{
+    op: "contains",
+    searchTerm: null,
+  },{
+    isImputed: false,
+    isAdvanced: false
+  });
+
+var_voyage_arrived = new DateVariable({
+    varName: "voyage_arrived",
+    label: gettext("Date that voyage arrived"),
+    description: "",
+  },{
+    op: "is equal to",
+    searchTerm0: null,
+    searchTerm1: null
+  },{
+    isImputed: false,
+    isadvanced: false
+  },
+  true);
+
+var_intended_disembarkation_port = new TextVariable({
+    varName: "intended_disembarkation_port",
+    label: gettext("Intended Disembarkation Port"),
+    description: "",
+  },{
+    op: "contains",
+    searchTerm: null,
+  },{
+    isImputed: false,
+    isAdvanced: false
+  });
+
 // all
 itinerary = {
   voyageId: {
@@ -22,8 +96,13 @@ itinerary = {
     }
   },
 
-  shipAndPorts: {
-    
+  shipPortsAndDate: {
+    var_ship_name: var_ship_name,
+    var_embarkation_port: var_embarkation_port,
+    var_disembarkation_port: var_disembarkation_port,
+    var_geocode: var_geocode,
+    var_voyage_arrived: var_voyage_arrived,
+    var_intended_disembarkation_port: var_intended_disembarkation_port,
 
     count: {
       changed: 0,

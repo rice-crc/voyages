@@ -13,6 +13,7 @@ var searchBar = new Vue({
       itinerary: itinerary,
       culturalAssociation: culturalAssociation,
       fate: fate,
+      sources: sources,
       settings: settings
     },
     filterData: {

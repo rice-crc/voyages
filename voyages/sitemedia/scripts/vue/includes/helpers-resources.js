@@ -620,9 +620,9 @@ function loadTreeselectOptions(vm, vTreeselect, filter, callback) {
         varNameAux = 'third_place_slave_purchase_id';
       }
 
-      // if (varName == 'post_disembarkation_location') {
-      //   varNameAux = 'imp_principal_port_slave_dis_id';
-      // }
+      if (varName == 'post_disembarkation_location') {
+        varNameAux = 'place_voyage_ended_id';
+      }
 
       axios
         .post("/voyage/filtered-places", {

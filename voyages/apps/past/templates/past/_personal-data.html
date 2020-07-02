@@ -3,8 +3,7 @@
 <li class="nav-item dropdown">
   <v-menu-title :count="filter.personalData.count" title="{% trans 'Personal Data' %}"></v-menu-title>
 
-  <v-panel-singular @apply="apply" @reset="reset"
-    group="personalData" title="{% trans 'Name' %}" sub-group="personalData"
+  <v-panel-singular @apply="apply" @reset="reset" group="personalData" title="{% trans 'Personal Data' %}" sub-group="personalData"
     :filters="filter.personalData.personalData" align="left">
     <div slot="v-panel-header">
       <v-panel-header title="{% trans 'Personal Data' %}" description="{% trans 'Description' %}">

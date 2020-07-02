@@ -4,6 +4,7 @@ var categoryNames = [
   gettext("Itinerary"),
   gettext("Cultural Association"),
   gettext("Fate"),
+  gettext("Sources"),
 ];
 
 var allColumns = [
@@ -18,6 +19,12 @@ var allColumns = [
 
   // itinerary
   { data: "voyage_id", category: 2, header: gettext("Voyage ID"), isImputed: false },
+  { data: "ship_name", category: 2, header: gettext("Ship Name"), isImputed: false },
+  { data: "embarkation_port", category: 2, header: gettext("Embarkation Port"), isImputed: false },
+  { data: "disembarkation_port", category: 2, header: gettext("Disembarkation Port"), isImputed: false },
+  { data: "geocode", category: 2, header: gettext("Geocode"), isImputed: false },
+  { data: "voyage_arrived", category: 2, header: gettext("Voyage Arrived"), isImputed: false },
+  { data: "intended_disembarkation_port", category: 2, header: gettext("Intended Disembarkation Port"), isImputed: false },
 
   // cultural association
   { data: "register_country", category: 3, header: gettext("Register Country"), isImputed: false },
@@ -27,6 +34,9 @@ var allColumns = [
 
   //fate
   { data: "post_disembarkation_location", category: 4, header: gettext("Post Disembarkation Location"), isImputed: false },
+
+  // sources
+  { data: "source", category: 5, header: gettext("Source"), isImputed: false },
 
 ];
 
