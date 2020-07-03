@@ -442,30 +442,6 @@ function searchAll(filter, filterData) {
                   }
                 }
 
-                // TODO: fix a bug with the backend: it should use _idnum and not _id except for voyage_id
-                if (
-                  filter[key1][key2][key3].varName.slice(-3) == "_id" &&
-                  filter[key1][key2][key3].varName !== "voyage_id"
-                ) {
-                  item["varName"] = filter[key1][key2][key3].varName + "num";
-                } else {
-                  item["varName"] = filter[key1][key2][key3].varName;
-                }
-
-                // TODO: backend patch
-                if (
-                  filter[key1][key2][key3].varName == "nationality" ||
-                  filter[key1][key2][key3].varName == "imputed_nationality" ||
-                  filter[key1][key2][key3].varName == "rig_of_vessel" ||
-                  filter[key1][key2][key3].varName == "outcome_voyage" ||
-                  filter[key1][key2][key3].varName == "outcome_slaves" ||
-                  filter[key1][key2][key3].varName == "outcome_ship_captured" ||
-                  filter[key1][key2][key3].varName == "outcome_owner" ||
-                  filter[key1][key2][key3].varName == "resistance"
-                ) {
-                  item["varName"] = filter[key1][key2][key3].varName + "_idnum";
-                }
-
                 items.push(item);
               }
             }
@@ -590,15 +566,14 @@ function loadTreeselectOptions(vm, vTreeselect, filter, callback) {
   if (!vm.filterData.treeselectOptions[varName]) {
     if (loadType == "place") {
       switch (varName) {
-        case 'register_country':
-        case 'modern_country':
-          var apiUrl = '/past/api/modern-countries';
-          var params = {};
-          break;
+        case 'embarkation_port':
+        case 'disembarkation_port':
+        case 'intended_disembarkation_port':
         case 'post_disembarkation_location':
           var apiUrl = '/voyage/filtered-places';
           var params = {var_name: 'place_voyage_ended_id'};
           break;
+
         default:
           callback("Error: varName " + varName + " is not acceptable");
           return false;
@@ -624,7 +599,14 @@ function loadTreeselectOptions(vm, vTreeselect, filter, callback) {
 
     // load TreeselectVariable
     else if (loadType == "treeselect") {
+      var countryVar = false;
       switch (varName) {
+        case 'register_country':
+        case 'modern_country':
+          countryVar = true
+          var apiUrl = '/past/api/modern-countries';
+          var params = {};
+          break;
         case 'ethnicity':
           var apiUrl = '/past/api/ethnicities';
           break;
@@ -639,12 +621,23 @@ function loadTreeselectOptions(vm, vTreeselect, filter, callback) {
       axios
         .post(apiUrl)
         .then(function(response) {
-          response.data.data.map(function(data) {
-            data["id"] = data["value"];
-          });
-          vm.filterData.treeselectOptions[varName] = response.data.data;
-          vTreeselect.treeselectOptions =
-            vm.filterData.treeselectOptions[varName];
+          if (countryVar) {
+            var countries = [];
+            $.each(response.data, function(id, country) {
+              countries.push({'id': id, 'label' : country})
+            });
+            vm.filterData.treeselectOptions[varName] = countries;
+          } else {
+
+            console.log(varName, response);
+
+            response.data.data.map(function(data) {
+              data["id"] = data["value"];
+            });
+            vm.filterData.treeselectOptions[varName] = response;
+          }
+          vTreeselect.treeselectOptions = vm.filterData.treeselectOptions[varName];
+
           callback(); // notify vue-treeselect about data population completion
           return;
         })
@@ -812,7 +805,9 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
           });
 
           return JSON.stringify({
-            searchData: currentSearchObj,
+            // searchData: currentSearchObj,
+            search_query: {},
+            // search_query: {'searched_name' : 'Name searched'},
             tableParams: d,
             output: "resultsTable"
           });
