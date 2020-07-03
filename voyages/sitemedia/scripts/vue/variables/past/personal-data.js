@@ -23,9 +23,9 @@ var_gender = new TreeselectVariable({
     isAdvanced: false,
   });
 
-var_stature = new NumberVariable({
-    varName: "stature",
-    label: gettext("Stature"),
+var_height = new NumberVariable({
+    varName: "height",
+    label: gettext("Height"),
     description: "",
   },{
     op: "is between",
@@ -41,7 +41,7 @@ personalData = {
   personalData: {
     var_age: var_age,
     var_gender: var_gender,
-    var_stature: var_stature,
+    var_height: var_height,
 
     count: {
       changed: 0,

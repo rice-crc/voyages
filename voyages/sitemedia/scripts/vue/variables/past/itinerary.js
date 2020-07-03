@@ -23,25 +23,25 @@ var_ship_name = new TextVariable({
     isAdvanced: false
   });
 
-var_embarkation_port = new TextVariable({
+var_embarkation_port = new PlaceVariable({
     varName: "embarkation_port",
     label: gettext("Embarkation Port"),
     description: "",
   },{
-    op: "contains",
-    searchTerm: null,
+    op: "is one of",
+    searchTerm: [],
   },{
     isImputed: false,
     isAdvanced: false
   });
 
-var_disembarkation_port = new TextVariable({
+var_disembarkation_port = new PlaceVariable({
     varName: "disembarkation_port",
     label: gettext("Disembarkation Port"),
     description: "",
   },{
-    op: "contains",
-    searchTerm: null,
+    op: "is one of",
+    searchTerm: [],
   },{
     isImputed: false,
     isAdvanced: false
@@ -73,13 +73,13 @@ var_voyage_arrived = new DateVariable({
   },
   true);
 
-var_intended_disembarkation_port = new TextVariable({
+var_intended_disembarkation_port = new PlaceVariable({
     varName: "intended_disembarkation_port",
     label: gettext("Intended Disembarkation Port"),
     description: "",
   },{
-    op: "contains",
-    searchTerm: null,
+    op: "is one of",
+    searchTerm: [],
   },{
     isImputed: false,
     isAdvanced: false

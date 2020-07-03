@@ -1,4 +1,4 @@
-var_register_country = new PlaceVariable({
+var_register_country = new TreeselectVariable({
     varName: "register_country",
     label: gettext("Register Country"),
     description: "",
@@ -10,7 +10,7 @@ var_register_country = new PlaceVariable({
     isAdvanced: false
   });
 
-var_modern_country = new PlaceVariable({
+var_modern_country = new TreeselectVariable({
     varName: "modern_country",
     label: gettext("Modern Country"),
     description: "",
