@@ -588,46 +588,24 @@ function loadTreeselectOptions(vm, vTreeselect, filter, callback) {
 
   // load only once remotely and then local copy
   if (!vm.filterData.treeselectOptions[varName]) {
-    // load special weird variables
-    if (
-      ["registered_place_idnum", "vessel_construction_place_idnum"].indexOf(
-        varName
-      ) >= 0
-    ) {
-      axios
-        .post("/voyage/filtered-places", {})
-        .then(function(response) {
-          var options = parsePlaces(response);
-          vm.filterData.treeselectOptions[varName] = options;
-          vTreeselect.treeselectOptions =
-            vm.filterData.treeselectOptions[varName];
-          callback(); // notify vue-treeselect about data population completion
-          return;
-        })
-        .catch(function(error) {
-          options.errorMessage = error;
-          $("#sv-loader").addClass("display-none");
-          $("#sv-loader-error").removeClass("display-none");
-          return error;
-        });
-    }
-
-    // load PlaceVariable
-    else if (loadType == "place") {
-      var varNameAux = varName;
-
-      if (varName == 'register_country' || varName == 'modern_country') {
-        varNameAux = 'third_place_slave_purchase_id';
-      }
-
-      if (varName == 'post_disembarkation_location') {
-        varNameAux = 'place_voyage_ended_id';
+    if (loadType == "place") {
+      switch (varName) {
+        case 'register_country':
+        case 'modern_country':
+          var apiUrl = '/past/api/modern-countries';
+          var params = {};
+          break;
+        case 'post_disembarkation_location':
+          var apiUrl = '/voyage/filtered-places';
+          var params = {var_name: 'place_voyage_ended_id'};
+          break;
+        default:
+          callback("Error: varName " + varName + " is not acceptable");
+          return false;
       }
 
       axios
-        .post("/voyage/filtered-places", {
-          var_name: varNameAux
-        })
+        .post(apiUrl, params)
         .then(function(response) {
           var options = parsePlaces(response);
           vm.filterData.treeselectOptions[varName] = options;
@@ -646,16 +624,20 @@ function loadTreeselectOptions(vm, vTreeselect, filter, callback) {
 
     // load TreeselectVariable
     else if (loadType == "treeselect") {
-      var varNameAux = varName;
-
-      if (varName == 'ethnicity' || varName == 'language_group') {
-        varNameAux = 'nationality';
+      switch (varName) {
+        case 'ethnicity':
+          var apiUrl = '/past/api/ethnicities';
+          break;
+        case 'language_group':
+          var apiUrl = '/past/api/language-groups';
+          break;
+        default:
+          callback("Error: varName " + varName + " is not acceptable");
+          return false;
       }
 
       axios
-        .post("/voyage/var-options", {
-          var_name: 'var_' + varNameAux
-        })
+        .post(apiUrl)
         .then(function(response) {
           response.data.data.map(function(data) {
             data["id"] = data["value"];
