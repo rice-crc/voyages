@@ -599,11 +599,9 @@ function loadTreeselectOptions(vm, vTreeselect, filter, callback) {
 
     // load TreeselectVariable
     else if (loadType == "treeselect") {
-      var countryVar = false;
       switch (varName) {
         case 'register_country':
         case 'modern_country':
-          countryVar = true
           var apiUrl = '/past/api/modern-countries';
           var params = {};
           break;
@@ -621,21 +619,21 @@ function loadTreeselectOptions(vm, vTreeselect, filter, callback) {
       axios
         .post(apiUrl)
         .then(function(response) {
-          if (countryVar) {
-            var countries = [];
-            $.each(response.data, function(id, country) {
-              countries.push({'id': id, 'label' : country})
-            });
-            vm.filterData.treeselectOptions[varName] = countries;
-          } else {
-
-            console.log(varName, response);
-
-            response.data.data.map(function(data) {
-              data["id"] = data["value"];
-            });
-            vm.filterData.treeselectOptions[varName] = response;
+          var options = [];
+          switch (varName) {
+            case 'register_country':
+            case 'modern_country':
+              var options = parseCountries(response);
+              break;
+            case 'ethnicity':
+              var options = parseEthnicities(response);
+              break;
+            case 'language_group':
+              var options = parseLanguageGroups(response);
+              break;
           }
+
+          vm.filterData.treeselectOptions[varName] = options;
           vTreeselect.treeselectOptions = vm.filterData.treeselectOptions[varName];
 
           callback(); // notify vue-treeselect about data population completion
@@ -742,6 +740,64 @@ var parsePlaces = function(response) {
   }
   return options;
 };
+
+// parseCountries function
+var parseCountries = function(response) {
+  var options = [];
+  $.each(response.data, function(id, country) {
+    options.push({'id': id, 'label' : country});
+  });
+  return options;
+}
+
+// parseLanguageGroups function
+var parseLanguageGroups = function(response) {
+  var options = [];
+  $.each(response.data, function(id, languageGroup) {
+    var label = languageGroup.name;
+    if (languageGroup.alts.length > 0) {
+      var altNames = [];
+      $.each(languageGroup.alts, function(id, altName) {
+        altName = altName.trim();
+        if (altName != languageGroup.name) {
+          altNames.push(altName); 
+        }
+      });
+      if (altNames.length > 0) {
+        label += ' (' + altNames.join(', ') + ')';
+      }
+    }
+    options.push({'id': id, 'label' : label});
+  });
+  return options;
+}
+
+// parseLanguageGroups function
+var parseEthnicities = function(response) {
+  var options = [];
+  $.each(response.data, function(id, ethnicity) {
+    var label = ethnicity.name;
+
+    /*
+      ethnicity.language_group_id is not been used yet
+    */
+
+    if (ethnicity.alts.length > 0) {
+      var altNames = [];
+      $.each(ethnicity.alts, function(id, altName) {
+        altName = altName.trim();
+        if (altName != ethnicity.name) {
+          altNames.push(altName); 
+        }
+      });
+      if (altNames.length > 0) {
+        label += ' (' + altNames.join(', ') + ')';
+      }
+    }
+    options.push({'id': id, 'label' : label});
+  });
+  return options;
+}
 
 function sortNumber(a, b) {
   return a - b;
