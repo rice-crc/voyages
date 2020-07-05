@@ -35,8 +35,8 @@ var_ethnicity = new TreeselectVariable({
   });
 
 
-var_language_group = new TreeselectVariable({
-    varName: "language_group",
+var_language_groups = new TreeselectVariable({
+    varName: "language_groups",
     label: gettext("Language Group"),
     description: "",
   },{
@@ -61,7 +61,7 @@ culturalAssociation = {
 
   ethnicityAndLanguage: {
     var_ethnicity: var_ethnicity,
-    var_language_group: var_language_group,
+    var_language_groups: var_language_groups,
 
     count: {
       changed: 0,

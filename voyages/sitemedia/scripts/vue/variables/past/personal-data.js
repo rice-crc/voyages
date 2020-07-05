@@ -1,5 +1,5 @@
-var_age = new NumberVariable({
-    varName: "age",
+var_age_range = new NumberVariable({
+    varName: "age_range",
     label: gettext("Age"),
     description: "",
   },{
@@ -23,25 +23,11 @@ var_gender = new TreeselectVariable({
     isAdvanced: false,
   });
 
-var_height = new NumberVariable({
-    varName: "height",
-    label: gettext("Height"),
-    description: "",
-  },{
-    op: "is between",
-    searchTerm0: 60,
-    searchTerm1: 80
-  },{
-    isImputed: false,
-    isAdvanced: false
-  });
-
 // all
 personalData = {
   personalData: {
-    var_age: var_age,
+    var_age_range: var_age_range,
     var_gender: var_gender,
-    var_height: var_height,
 
     count: {
       changed: 0,

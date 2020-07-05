@@ -1,6 +1,5 @@
 // reserved keyword for saved search query identifier
 const SAVED_SEARCH_LABEL = "#searchId=";
-const TRANS_PATH = "voyages/";
 const SEARCH_URL = "api/search";
 const VARIABLE_MAP = {};
 
@@ -23,30 +22,35 @@ const GROUP_COLORS = {
 
 // process search data returned from the API
 function processResponse(json) {
-  var keys = null;
-  var percentageKeys = [];
-  for (var i = 0, ien = json.data.length; i < ien; i++) {
-    // percentage vs. decimal
-    if (percentageKeys.length <= 0) {
-      keys = Object.keys(json.data[i]);
-      keys.forEach(function(key) {
-        if (isPercentageAxis([key])) percentageKeys.push(key);
-      });
-    }
-    percentageKeys.forEach(function(percentageKey) {
-      if (json.data[i][percentageKey]) {
-        json.data[i][percentageKey] =
-          roundDecimal(json.data[i][percentageKey] * 100, 1) + "%";
-      }
-    });
+  var data = [];
+  json.data.forEach(function(row) {
+    var arrivalDateArray = row.voyage__voyage_dates__imp_arrival_at_port_of_dis.split([',']);
+    var arrivalDate = '';
+    var arrivalYear = '';
+    var arrivalMonth = '';
+    var arrivalDay = '';
 
-    // source formatting
-    json.data[i]["var_sources_raw"] = json.data[i]["var_sources"];
-    // json.data[i]["var_sources"] = getFormattedSourceInTable(
-    //   json.data[i]["var_sources"]
-    // );
-  }
-  return json.data;
+    if (arrivalDateArray.length == 3) {
+      arrivalMonth = arrivalDateArray[0];
+      arrivalDay = arrivalDateArray[1];
+      arrivalYear = arrivalDateArray[2];
+      if (arrivalMonth && arrivalDay) {
+        arrivalDate = arrivalMonth + '/' + arrivalDay + '/' + arrivalYear;
+      } else {
+        arrivalDate = arrivalYear;
+      }
+    } else if (arrivalDateArray.length == 1) {
+      arrivalDate = arrivalDateArray[0];
+    }
+    row.voyage__voyage_dates__imp_arrival_at_port_of_dis = arrivalDate;
+    row.gender += ' (change to name in API response)';
+    row.voyage__voyage_itinerary__imp_principal_place_of_slave_purchase += ' (change to name in API response)';
+    row.voyage__voyage_itinerary__imp_principal_port_slave_dis += ' (change to name in API response)';
+
+    data.push(row);
+  });
+
+  return data;
 }
 
 /**
@@ -101,23 +105,6 @@ function camel2title(camelCase) {
 // format a number to become 1,000 (with commas)
 const numberWithCommas = x => {
   return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-};
-
-const isPercentageAxis = axes => {
-  if (Array.isArray(axes)) {
-    return (
-      axes.length > 0 &&
-      axes.reduce((agg, axis) => agg && isPercentageAxis(axis), true)
-    );
-  }
-  let axis = axes;
-  return (
-    axis.includes("percentage") ||
-    axis.includes("mortality") ||
-    axis.includes("resistance_idnum") ||
-    axis == "var_resistance_freq" ||
-    axis == "var_imputed_mortality_avg"
-  );
 };
 
 // a function that generates a random key for saved queries
@@ -266,7 +253,7 @@ function replaceKey(key) {
 }
 
 function searchAll(filter, filterData) {
-  var items = [];
+  var items = {};
   for (key1 in filter) {
     if (key1 !== "count") {
       for (key2 in filter[key1]) {
@@ -276,7 +263,6 @@ function searchAll(filter, filterData) {
               if (filter[key1][key2][key3].activated) {
                 var item = {};
                 var searchTerm = [];
-                item["op"] = replaceKey(filter[key1][key2][key3].value["op"]);
                 if (
                   filter[key1][key2][key3].value["searchTerm0"] === undefined
                 ) {
@@ -385,7 +371,6 @@ function searchAll(filter, filterData) {
                     // if user chose to search against a particular day, make sure it is searching against a range
                     // i.e. add 23:59:59 to searchTerm0
                     if (filter[key1][key2][key3].value["op"] == "is equal to") {
-                      filter[key1][key2][key3].value["op"] = "is between";
                       filter[key1][key2][key3].value["searchTerm1"] = filter[
                         key1
                       ][key2][key3].value["searchTerm0"].substring(0, 10);
@@ -424,7 +409,6 @@ function searchAll(filter, filterData) {
                       filter[key1][key2][key3].value["searchTerm0"],
                       filter[key1][key2][key3].value["searchTerm1"]
                     ];
-                    item["op"] = filter[key1][key2][key3].value["op"];
                   }
 
                   // patch for percentage variables
@@ -440,9 +424,32 @@ function searchAll(filter, filterData) {
                       100;
                     item["searchTerm"] = [searchTerm0, searchTerm1];
                   }
+
+                  if (
+                    filter[key1][key2][key3].constructor.name ===
+                    "NumberVariable"
+                  ) {
+                    switch (filter[key1][key2][key3].value["op"]){
+                      case "is equal to":
+                        filter[key1][key2][key3].value["searchTerm1"] = filter[key1][key2][key3].value["searchTerm0"];
+                      break;
+                      case "is at most":
+                        filter[key1][key2][key3].value["searchTerm1"] = filter[key1][key2][key3].value["searchTerm0"];
+                        filter[key1][key2][key3].value["searchTerm0"] = 0;
+                      break;
+                      case "is at least":
+                        filter[key1][key2][key3].value["searchTerm1"] = 999999;
+                      break;
+                    }
+
+                    item["searchTerm"] = [
+                      filter[key1][key2][key3].value["searchTerm0"],
+                      filter[key1][key2][key3].value["searchTerm1"]
+                    ];
+                  }
                 }
 
-                items.push(item);
+                items[filter[key1][key2][key3].varName] = item["searchTerm"];
               }
             }
           }
@@ -565,13 +572,15 @@ function loadTreeselectOptions(vm, vTreeselect, filter, callback) {
   // load only once remotely and then local copy
   if (!vm.filterData.treeselectOptions[varName]) {
     if (loadType == "place") {
+      var apiUrl = '/voyage/filtered-places';
       switch (varName) {
-        case 'embarkation_port':
-        case 'disembarkation_port':
+        case 'embarkation_ports':
+          var params = {var_name: 'imp_principal_place_of_slave_purchase_id'};
+          break;
+        case 'disembarkation_ports':
         case 'intended_disembarkation_port':
         case 'post_disembarkation_location':
-          var apiUrl = '/voyage/filtered-places';
-          var params = {var_name: 'place_voyage_ended_id'};
+          var params = {var_name: 'imp_principal_port_slave_dis_id'};
           break;
 
         default:
@@ -584,8 +593,7 @@ function loadTreeselectOptions(vm, vTreeselect, filter, callback) {
         .then(function(response) {
           var options = parsePlaces(response);
           vm.filterData.treeselectOptions[varName] = options;
-          vTreeselect.treeselectOptions =
-            vm.filterData.treeselectOptions[varName];
+          vTreeselect.treeselectOptions = vm.filterData.treeselectOptions[varName];
           callback(); // notify vue-treeselect about data population completion
           return;
         })
@@ -603,12 +611,11 @@ function loadTreeselectOptions(vm, vTreeselect, filter, callback) {
         case 'register_country':
         case 'modern_country':
           var apiUrl = '/past/api/modern-countries';
-          var params = {};
           break;
         case 'ethnicity':
           var apiUrl = '/past/api/ethnicities';
           break;
-        case 'language_group':
+        case 'language_groups':
           var apiUrl = '/past/api/language-groups';
           break;
         default:
@@ -628,7 +635,7 @@ function loadTreeselectOptions(vm, vTreeselect, filter, callback) {
             case 'ethnicity':
               var options = parseEthnicities(response);
               break;
-            case 'language_group':
+            case 'language_groups':
               var options = parseLanguageGroups(response);
               break;
           }
@@ -717,7 +724,7 @@ var parsePlaces = function(response) {
 
   for (portId in data.ports) {
     // get basic information about a port
-    var code = data.ports[portId].code;
+    var value = data.ports[portId].value;
     var label = data.ports[portId].port;
     var regionId = data.ports[portId].region.code;
     var broadRegionId = data.ports[portId].region.broad_region.order;
@@ -730,7 +737,7 @@ var parsePlaces = function(response) {
             // in the correct region
             region.children.push({
               // fill port
-              id: code,
+              id: value,
               label: label
             });
           }
@@ -772,7 +779,7 @@ var parseLanguageGroups = function(response) {
   return options;
 }
 
-// parseLanguageGroups function
+// parseEthnicities function
 var parseEthnicities = function(response) {
   var options = [];
   $.each(response.data, function(id, ethnicity) {
@@ -827,10 +834,8 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
   // Update UI after search query was changed,
   // or a tab was selected.
   $("#map").hide();
-  var currentSearchObj = {
-    items: searchAll(filter, filterData),
-    orderBy: []
-  };
+
+  var currentSearchObj = searchAll(filter, filterData);
 
   if (currentTab == "results") {
     // Results DataTable
@@ -844,15 +849,6 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
         url: SEARCH_URL,
         type: "POST",
         data: function(d) {
-          if (d.order) {
-            currentSearchObj.orderBy = $.map(d.order, function(item) {
-              return {
-                name: allColumns[item.column].data.substring(4),
-                direction: item.dir
-              };
-            });
-          }
-
           // TEMP Yang: I don't think this is the right place for this code...
           // Besides, I think that this is attaching multiple handlers for
           // the click, which is inefficient.
@@ -861,9 +857,7 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
           });
 
           return JSON.stringify({
-            // searchData: currentSearchObj,
-            search_query: {},
-            // search_query: {'searched_name' : 'Name searched'},
+            search_query: currentSearchObj,
             tableParams: d,
             output: "resultsTable"
           });
@@ -1043,1212 +1037,13 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
     ) {
       $('[data-toggle="tooltip"]').tooltip();
     });
-  } else if (currentTab == "statistics") {
-    // Summary statistics.
-    var tableId = "#v-summary-statistics";
-    destroyPreviousTable(tableId);
-    var mainDatatable = $(tableId).DataTable({
-      // order: [[0, "desc"]], // sort by first column
-      order: [], // no sorting on initialization
-      ajax: {
-        url: SEARCH_URL,
-        type: "POST",
-        data: function(d) {
-          return JSON.stringify({
-            searchData: currentSearchObj,
-            tableParams: d,
-            output: "summaryStats"
-          });
-        },
-
-        // preprocess the returned data to replace * with IMP
-        dataSrc: function(json) {
-          for (var i = 0, ien = json.data.length; i < ien; i++) {
-            json.data[i][0] = json.data[i][0].includes("*")
-              ? gettext(json.data[i][0].slice(0, -1)).concat(impTooltipString)
-              : gettext(json.data[i][0]);
-          }
-          return json.data;
-        },
-
-        fail: function(xhr, status, error) {
-          options.errorMessage = error;
-          $("#sv-loader").addClass("display-none");
-          $("#sv-loader-error").removeClass("display-none");
-        }
-      },
-      columnDefs: [
-        {
-          targets: [1, 2], // do not eliminate the HTML parsing in the first column
-          type: "num-fmt",
-          render: $.fn.dataTable.render.number(",")
-        }
-      ],
-      bFilter: false,
-      paging: false,
-      // dom: "<'flex-container'>" +
-      //   "<'row'<'col-sm-12'tr>>",
-      dom:
-        "<'flex-container'iB>" +
-        "<'row'<'col-sm-12'tr>>" +
-        "<'row'<'col-sm-5'><'col-sm-7'p>>",
-      language: dtLanguage,
-      buttons: [
-        {
-          extend: "collection",
-          text: '<span class="fa fa-columns"></span>',
-          className: "btn btn-info buttons-collection dropdown-toggle",
-          text: gettext("Download"),
-          // Top level: CSV vs. Excel
-          buttons: ["csvHtml5", "excelHtml5"]
-        }
-      ],
-      processing: true,
-      initComplete: function() {
-        $('[data-toggle="tooltip"]').tooltip();
-      }
-    });
-  } else if (currentTab == "tables") {
-    var getTableElement = function(source) {
-      var id = tabData.tables[source].value;
-      return tabs.tables[source].options.find(function(x) {
-        return x.id == id;
-      });
-    };
-    var getField = function(source) {
-      var el = getTableElement(source);
-      return el ? fieldMap[el.label] : null;
-    };
-    var cell = getTableElement("cell");
-    var rowElement = getTableElement("row");
-    var colElement = getTableElement("column");
-
-    var postData = {
-      searchData: currentSearchObj,
-      output: "pivotTable",
-      row_field: rowElement.varName,
-      col_field: colElement.varName,
-      pivot_functions: cell ? cell.functions : null,
-      omit_empty: tabData.tables.options.omitEmpty.toString()
-    };
-    var isRange = rowElement && rowElement.hasOwnProperty("range");
-    if (isRange) {
-      postData.range = rowElement.range;
-    }
-    // Validate post before issuing AJAX call.
-
-    if (postData.row_field && postData.col_field && postData.pivot_functions) {
-      $("#sv-loader").removeClass("display-none");
-
-      $.post(SEARCH_URL, JSON.stringify(postData), function(result) {
-        // Produce a table with data content.
-        var table = $("#v-tables");
-        destroyPreviousTable("#v-tables");
-        var columnHeaderRows =
-          1 + (result.col_extra_headers ? result.col_extra_headers.length : 0);
-        var thead = table.find("thead");
-        thead.empty();
-        // Top-left row is blank.
-        var subCells = $.map(Object.keys(cell.functions), function(key) {
-          return key[0] == "_" ? undefined : key;
-        });
-        var totalsHeader =
-          '<th colspan="' +
-          subCells.length +
-          '" rowspan="' +
-          columnHeaderRows +
-          '">' +
-          gettext("Totals") +
-          "</th>";
-        var tr =
-          '<tr><th rowspan="' +
-          (columnHeaderRows + (subCells.length > 1 ? 1 : 0)) +
-          '">' +
-          gettext("Year Range") +
-          "</th>";
-        // Append extra column headers.
-        if (columnHeaderRows > 1) {
-          for (var i = 0; i < columnHeaderRows - 1; ++i) {
-            var headerRow = result.col_extra_headers[i];
-            for (var j = 0; j < headerRow.length; ++j) {
-              var headerData = headerRow[j];
-              tr +=
-                '<th colspan="' +
-                headerData[1] * subCells.length +
-                '">' +
-                headerData[0] +
-                "</th>";
-            }
-            if (i == 0) {
-              tr += totalsHeader;
-            }
-            tr += "</tr>";
-          }
-          thead.append(tr);
-          tr = "<tr>";
-        }
-        // Append normal column headers.
-        var colTotals = initZeroArray(
-          (result.columns.length + 1) * subCells.length
-        );
-        for (var i = 0; i < result.columns.length; ++i) {
-          tr +=
-            '<th colspan="' +
-            subCells.length +
-            '">' +
-            result.columns[i] +
-            "</th>";
-        }
-        if (columnHeaderRows == 1) {
-          tr += totalsHeader;
-        }
-        tr += "</tr>";
-        thead.append(tr);
-        if (subCells.length > 1) {
-          // Each cell is split into multiple values.
-          tr = "<tr>";
-          for (var i = 0; i < result.columns.length + 1; ++i) {
-            for (var j = 0; j < subCells.length; ++j) {
-              tr += "<th>" + subCells[j] + "</th>";
-            }
-          }
-          tr += "</tr>";
-          thead.append(tr);
-        }
-        // Append main data.
-        var tbody = table.find("tbody");
-        tbody.empty();
-        // We first create a dense matrix with all the table numbers.
-        // The data can then be processed (e.g. for row/col percentages).
-        var mx = [];
-        var allRowTotals = [];
-        var rowCounts = initZeroArray(result.rows.length);
-        var colCounts = initZeroArray(
-          (result.columns.length + 1) * subCells.length
-        );
-        var weightByCount = cell.hasOwnProperty("avg");
-        for (var rowIdx = 0; rowIdx < result.rows.length; ++rowIdx) {
-          var currentRowTotals = initZeroArray(subCells.length);
-          var allCells = initZeroArray(result.columns.length * subCells.length);
-          // The result representation is sparse, so we initially
-          // set cell values for the row as Zero and then replace
-          // the non-zero entries by reading result.rows[rowIdx].
-          for (
-            var rowCell = 0;
-            rowCell < result.cells[rowIdx].length;
-            ++rowCell
-          ) {
-            var cellData = result.cells[rowIdx][rowCell];
-            var colIdx = cellData[0];
-            var cellCount = cellData[1].count;
-            rowCounts[rowIdx] += cellCount;
-            for (var j = 0; j < subCells.length; ++j) {
-              var cellValue = cellData[1][subCells[j]];
-              var computedIdx = colIdx * subCells.length + j;
-              allCells[computedIdx] = cellValue;
-              colCounts[computedIdx] += cellCount;
-              var aggValue = weightByCount ? cellValue * cellCount : cellValue;
-              currentRowTotals[j] += aggValue;
-              colTotals[computedIdx] += aggValue;
-            }
-          }
-          mx.push(allCells);
-          for (var j = 0; j < subCells.length; ++j) {
-            colCounts[allCells.length + j] += rowCounts[rowIdx];
-            colTotals[allCells.length + j] += currentRowTotals[j];
-          }
-          if (weightByCount) {
-            for (var j = 0; j < currentRowTotals.length; ++j) {
-              currentRowTotals[j] /= rowCounts[rowIdx];
-            }
-          }
-          allRowTotals.push(currentRowTotals);
-        }
-        if (weightByCount) {
-          for (var j = 0; j < colTotals.length; ++j) {
-            colTotals[j] /= colCounts[j];
-          }
-        }
-        var format = cell.hasOwnProperty("format") ? cell.format : "decimal";
-        if (cell.hasOwnProperty("processing")) {
-          // We require some processing of the table entries.
-          if ("perc_row_total" == cell.processing) {
-            format = "percent";
-            for (var rowIdx = 0; rowIdx < mx.length; ++rowIdx) {
-              for (var colIdx = 0; colIdx < mx[rowIdx].length; ++colIdx) {
-                mx[rowIdx][colIdx] /=
-                  allRowTotals[rowIdx][colIdx % subCells.length];
-              }
-              // Row percentages add up to 100%.
-              for (var j = 0; j < subCells.length; ++j) {
-                allRowTotals[rowIdx][j] = 1.0;
-              }
-            }
-            for (var j = 0; j < colTotals.length; ++j) {
-              colTotals[j] /=
-                colTotals[
-                  colTotals.length - subCells.length + (j % subCells.length)
-                ];
-            }
-          } else if ("perc_col_total" == cell.processing) {
-            format = "percent";
-            for (var rowIdx = 0; rowIdx < mx.length; ++rowIdx) {
-              for (var colIdx = 0; colIdx < mx[rowIdx].length; ++colIdx) {
-                mx[rowIdx][colIdx] /= colTotals[colIdx];
-              }
-              // Set row totals as a percentage of the global total.
-              for (var j = 0; j < subCells.length; ++j) {
-                allRowTotals[rowIdx][j] /= colTotals[mx[rowIdx].length + j];
-              }
-            }
-            // Column totals now should be 100%.
-            for (var j = 0; j < colTotals.length; ++j) {
-              colTotals[j] = 1.0;
-            }
-          }
-        }
-        var fmtFunc = function(x) {
-          return x.toLocaleString(undefined, {
-            style: format,
-            minimumFractionDigits: format == "percent" || weightByCount ? 1 : 0,
-            maximumFractionDigits: 1
-          });
-        };
-        for (var rowIdx = 0; rowIdx < mx.length; ++rowIdx) {
-          var rowHeaderText = result.rows[rowIdx];
-          if (isRange) {
-            // The row header coming from the server contains just the
-            // initial element of the range, so we must format it here.
-            rowHeaderText =
-              rowHeaderText +
-              "-" +
-              (parseInt(rowHeaderText) + postData.range.gap - 1);
-          }
-          tr = "<tr><th>" + rowHeaderText + "</th>";
-          for (var colIdx = 0; colIdx < mx[rowIdx].length; ++colIdx) {
-            tr += '<td class="right">' + fmtFunc(mx[rowIdx][colIdx]) + "</td>";
-          }
-          // Add row totals.
-          for (var j = 0; j < subCells.length; ++j) {
-            tr +=
-              '<th class="right">' +
-              fmtFunc(allRowTotals[rowIdx][j], true) +
-              "</th>";
-          }
-          tr += "</tr>";
-          tbody.append(tr);
-        }
-        // Add column totals to the foot.
-        var tfoot = table.find("tfoot");
-        tfoot.empty();
-        tr = "<tr><th>" + gettext("Totals") + "</th>";
-        for (var colIdx = 0; colIdx < colTotals.length; ++colIdx) {
-          tr +=
-            '<th class="right">' + fmtFunc(colTotals[colIdx], true) + "</th>";
-        }
-        tr += "</tr>";
-        tfoot.append(tr);
-        table.DataTable({
-          destroy: true,
-          scrollX: true,
-          scrollCollapse: true,
-          pageLength: 15,
-          lengthMenu: [[15, 50, 100, 200], ["15", "50", "100", "200"]],
-          processing: true,
-          dom:
-            "<'flex-container'iB>" +
-            "<'row'<'col-sm-12'tr>>" +
-            "<'row'<'col-sm-5'><'col-sm-7'p>>",
-          language: dtLanguage,
-          buttons: [
-            {
-              extend: "collection",
-              text: '<span class="fa fa-columns"></span>',
-              className:
-                "btn btn-info buttons-collection dropdown-toggle",
-              text: gettext("Download"),
-              // Top level: CSV vs. Excel
-              buttons: ["csvHtml5", "excelHtml5"]
-            }
-          ]
-        });
-      })
-        .done(function() {
-          $("#sv-loader").addClass("display-none");
-        })
-        .fail(function(xhr, status, error) {
-          options.errorMessage = error;
-          $("#sv-loader").addClass("display-none");
-          $("#sv-loader-error").removeClass("display-none");
-        });
-    }
-  } else if (currentTab == "timeline") {
-    var timelineVariableId = tabs.timeline.chart.value;
-    var timelineVariable =
-      tabs.timeline.chart.options[timelineVariableId]["varName"];
-    var postData = {
-      searchData: currentSearchObj,
-      output: "timeline",
-      timelineVariable: timelineVariable
-    };
-    if (postData.timelineVariable) {
-      // if it is a percentage based variable; used to add % to the labels
-      var isPercentage = isPercentageAxis([postData.timelineVariable]);
-      $("#sv-loader").removeClass("display-none");
-      $.post(SEARCH_URL, JSON.stringify(postData), function(result) {
-        $("#sv-loader").removeClass("display-none");
-
-        var data = [];
-
-        var current_year = result.data[0].year;
-
-        for (var i = 0; i < result.data.length; i++) {
-          var element = result.data[i];
-          for (var j = current_year; j < element.year; j++) {
-            var time = Date.parse(j.toString());
-            data.push([time, 0]);
-          }
-          current_year = element.year + 1;
-          var time = Date.parse(element.year.toString());
-          data.push([time, element.value]);
-        }
-
-        // // Convert into HighCharts data format
-        // result.data.forEach(function(element){
-        //   var time = Date.parse(element.year.toString());
-        //   data.push([time, element.value]);
-        // });
-
-        // Let Highcharts paint the chart
-        Highcharts.chart("hc-timeline", {
-          chart: {
-            zoomType: "x",
-            style: {
-              fontFamily:
-                '-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol", serif'
-            }
-          },
-          title: {
-            text: ""
-          },
-          subtitle: {
-            text:
-              document.ontouchstart === undefined
-                ? gettext("Click and drag in the plot area to zoom in")
-                : gettext("Pinch the chart to zoom in")
-          },
-          xAxis: {
-            type: "datetime"
-          },
-          yAxis: {
-            title: {
-              text: gettext("Value")
-            },
-            min: 0,
-            startOnTick: true,
-            labels: {
-              formatter: function() {
-                var postfix = isPercentage ? "%" : ""; // for percentage based charts
-                return this.value + postfix;
-              }
-            }
-          },
-          legend: {
-            enabled: false
-          },
-          credits: {
-            enabled: false
-          },
-          tooltip: {
-            formatter: function() {
-              var year = moment
-                .unix(this.x / 1000)
-                .utc()
-                .format("YYYY");
-              var postfix = isPercentage ? "%" : ""; // for percentage based charts
-              return (
-                gettext("Year ") +
-                year +
-                ": " +
-                "<b>" +
-                this.y +
-                postfix +
-                "</b> "
-              );
-            }
-          },
-          lang: {
-            noData: gettext(
-              "We are sorry but there is no data to display or an error has occurred."
-            )
-          },
-          plotOptions: {
-            area: {
-              marker: {
-                radius: 2
-              },
-              lineWidth: 2,
-              states: {
-                hover: {
-                  lineWidth: 2
-                }
-              },
-              threshold: null
-            }
-          },
-          exporting: {
-            buttons: {
-              contextButton: {
-                menuItems: [
-                  "printChart",
-                  "separator",
-                  "downloadPNG",
-                  "downloadJPEG",
-                  "downloadPDF",
-                  "downloadSVG",
-                  "separator",
-                  "downloadCSV",
-                  "downloadXLS",
-                  //"viewData",
-                  "openInCloud"
-                ]
-              }
-            }
-          },
-          series: [
-            {
-              type: "area",
-              name: timelineVariable,
-              data: data,
-              color: HC_THEME_COLOR
-            }
-          ]
-        });
-      })
-        .done(function() {
-          $("#sv-loader").addClass("display-none");
-        })
-        .fail(function(xhr, status, error) {
-          options.errorMessage = error;
-          $("#sv-loader").addClass("display-none");
-          $("#sv-loader-error").removeClass("display-none");
-        });
-    }
-  } else if (currentTab == "visualization") {
-    loader
-      .loadScript(STATIC_URL + "scripts/library/d3.min.js")
-      .then(function() {
-        // Ready to plot graphs!
-        var allChartTypes = {
-          "xy-chart-tab": ["scatter", "x", "y"],
-          "bar-chart-tab": ["bar", "x", "y"],
-          "donut-chart-tab": ["donut", "sectors", "values"]
-        };
-        var chartType =
-          allChartTypes[$("a.active.side-control-tab").attr("id")];
-
-        // map the varName to the ids for Y
-        var yIds = tabs.visualization[chartType[0]][chartType[2]].value;
-        var yAxes = [];
-        if (Array.isArray(yIds)) {
-          yIds.forEach(function(element, index, yIds) {
-            yAxes[index] =
-              tabs.visualization[chartType[0]][chartType[2]].options[
-                yIds[index]
-              ]["varName"];
-          });
-        } else {
-          yAxes =
-            tabs.visualization[chartType[0]][chartType[2]].options[yIds][
-              "varName"
-            ];
-        }
-
-        // map the varName to the ids for X
-        var xId = tabs.visualization[chartType[0]][chartType[1]].value;
-        var xAxes =
-          tabs.visualization[chartType[0]][chartType[1]].options[xId][
-            "varName"
-          ];
-
-        var postData = {
-          searchData: currentSearchObj,
-          output: "graph",
-          graphData: {
-            xAxis: xAxes,
-            yAxes: chartType[0] == "donut" ? [yAxes] : yAxes
-          }
-        };
-
-        if (postData.graphData.xAxis && postData.graphData.yAxes.length > 0) {
-          $("#sv-loader").removeClass("display-none");
-          $.post(SEARCH_URL, JSON.stringify(postData), function(series) {
-            $("#sv-loader").removeClass("display-none");
-            if (chartType[0] == "scatter") {
-              $("#tabs-visualization-xy").empty();
-              // Compute ordinal scales.
-              var xValues = [];
-              var seriesNames = [];
-              var maxValue = 0;
-              for (var yid in series) {
-                seriesNames.push(yid);
-                var items = series[yid];
-                for (var i = 0; i < items.length; ++i) {
-                  xValues.push(items[i].x);
-                  if (items[i].value > maxValue) maxValue = items[i].value;
-                }
-              }
-              xValues = d3
-                .set(xValues)
-                .values()
-                .map(function(s) {
-                  return parseFloat(s);
-                });
-
-              var margin = {
-                  top: 90 + 20 * (seriesNames.length - 2),
-                  right: 15,
-                  bottom: 110,
-                  left: 80
-                },
-                width = 960 - margin.left - margin.right,
-                height = 460 - margin.top - margin.bottom;
-              var x = d3
-                .scaleLinear()
-                .domain([d3.min(xValues), d3.max(xValues)])
-                .nice()
-                .range([0, width]);
-              var y = d3
-                .scaleLinear()
-                .domain([0, maxValue * 1.1])
-                .range([height, 0]);
-              var color = d3.scaleOrdinal(d3.schemeCategory10);
-              var xAxis = d3
-                .axisBottom()
-                .scale(x)
-                .tickSize(-height);
-              if (
-                postData.graphData.xAxis == "var_imp_arrival_at_port_of_dis"
-              ) {
-                xAxis = xAxis.tickFormat(function(d, i) {
-                  return d.toString();
-                });
-              }
-              var yAxis = d3
-                .axisLeft()
-                .scale(y)
-                .tickSize(-width);
-              // If percentage, add to ticks.
-              if (isPercentageAxis(postData.graphData.yAxes)) {
-                yAxis.tickFormat(function(d) {
-                  return parseInt(d, 10) + "%";
-                });
-              }
-              var svg = d3
-                .select("#tabs-visualization-xy")
-                .append("svg")
-                .attr("width", width + margin.left + margin.right)
-                .attr("height", height + margin.top + margin.bottom)
-                .append("g")
-                .attr(
-                  "transform",
-                  "translate(" + margin.left + "," + margin.top + ")"
-                );
-              svg
-                .append("g")
-                .attr("class", "x axis")
-                .attr("transform", "translate(0," + (height + 4) + ")")
-                .call(xAxis);
-              svg
-                .append("g")
-                .attr("class", "y axis")
-                .call(yAxis)
-                .append("text")
-                .attr("x", 0)
-                .attr("y", 0)
-                .attr("dy", "-1em")
-                .style("text-anchor", "end")
-                .text(gettext("Value"));
-
-              var legend = svg
-                .selectAll(".legend")
-                .data(seriesNames)
-                .enter()
-                .append("g")
-                .attr("class", "legend")
-                .attr("transform", function(d, i) {
-                  return "translate(0," + (i * 20 - margin.top + 30) + ")";
-                });
-
-              legend
-                .append("rect")
-                .attr("x", width - 18)
-                .attr("width", 18)
-                .attr("height", 18)
-                .style("fill", color);
-
-              legend
-                .append("text")
-                .attr("x", width - 24)
-                .attr("y", 9)
-                .attr("dy", ".35em")
-                .style("text-anchor", "end")
-                .text(function(d) {
-                  return d;
-                });
-
-              for (var yid in series) {
-                var line = d3
-                  .line()
-                  .x(function(d) {
-                    return x(d.x);
-                  })
-                  .y(function(d) {
-                    return y(d.value);
-                  });
-                svg
-                  .append("svg:path")
-                  .attr("d", line(series[yid]))
-                  .attr("stroke", color(yid))
-                  .attr("stroke-width", 2)
-                  .attr("fill", "none");
-              }
-            } else if (chartType[0] == "bar") {
-              $("#tabs-visualization-bar").empty();
-              // Compute ordinal scales.
-              var labels = [];
-              var seriesNames = [];
-              var maxValue = 0;
-              for (var yid in series) {
-                seriesNames.push(yid);
-                var items = series[yid];
-                for (var i = 0; i < items.length; ++i) {
-                  labels.push(items[i].x);
-                  if (items[i].value > maxValue) maxValue = items[i].value;
-                }
-              }
-              labels = d3.set(labels).values();
-
-              var wrap = function(text) {
-                var w = margin.bottom - 10;
-                text.each(function() {
-                  var text = d3.select(this),
-                    words = text
-                      .text()
-                      .split(/\s+/)
-                      .reverse(),
-                    word,
-                    line = [],
-                    lineNumber = 0,
-                    lineHeight = 1.1, // ems
-                    y = text.attr("y"),
-                    dy = parseFloat(text.attr("dy")),
-                    tspan = text
-                      .text(null)
-                      .append("tspan")
-                      .attr("x", 0)
-                      .attr("y", y)
-                      .attr("dy", dy + "em");
-                  while ((word = words.pop())) {
-                    line.push(word);
-                    tspan.text(line.join(" "));
-                    if (tspan.node().getComputedTextLength() > w) {
-                      line.pop();
-                      tspan.text(line.join(" "));
-                      line = [word];
-                      tspan = text
-                        .append("tspan")
-                        .attr("x", 0)
-                        .attr("y", y)
-                        .attr("dy", ++lineNumber * lineHeight + dy + "em")
-                        .text(word);
-                    }
-                  }
-                });
-              };
-              // Create D3js graph. This graph has two X-axes,
-              // x0 represents the labels on the data items, while
-              // x1 represents the name of the series. This is
-              // used in a way that all the data items across different
-              // series sharing the same label are grouped together.
-              var margin = {
-                  top: 90 + 20 * (seriesNames.length - 2),
-                  right: 10,
-                  bottom: 110,
-                  left: 80
-                },
-                width = 960 - margin.left - margin.right,
-                height = 460 - margin.top - margin.bottom;
-              var x0 = d3
-                .scaleBand()
-                .domain(labels)
-                .rangeRound([0, width], 0.08);
-              var x1 = d3
-                .scaleBand()
-                .domain(seriesNames)
-                .rangeRound([0, x0.bandwidth()]);
-              var y = d3
-                .scaleLinear()
-                .domain([0, maxValue * 1.1])
-                .range([height, 0]);
-              var color = d3.scaleOrdinal(d3.schemeCategory10);
-              var xAxis = d3.axisBottom().scale(x0);
-              var yAxis = d3.axisLeft().scale(y);
-              // If percentage, add to ticks.
-              if (isPercentageAxis(postData.graphData.yAxes)) {
-                yAxis.tickFormat(function(d) {
-                  return parseInt(d, 10) + "%";
-                });
-              }
-              var svg = d3
-                .select("#tabs-visualization-bar")
-                .append("svg")
-                .attr("width", width + margin.left + margin.right)
-                .attr("height", height + margin.top + margin.bottom)
-                .append("g")
-                .attr(
-                  "transform",
-                  "translate(" + margin.left + "," + margin.top + ")"
-                );
-              // X axis with rotated labels.
-              svg
-                .append("g")
-                .attr("class", "x axis")
-                .attr("transform", "translate(0," + height + ")")
-                .call(xAxis)
-                .selectAll("text")
-                .style("text-anchor", "end")
-                .attr("dx", "-.8em")
-                .attr("dy", ".15em")
-                .attr("transform", function(d) {
-                  return "rotate(-45)";
-                })
-                .call(wrap);
-              svg
-                .append("g")
-                .attr("class", "y axis")
-                .call(yAxis)
-                .append("text")
-                .attr("x", 0)
-                .attr("y", 0)
-                .attr("dy", "-1em")
-                .style("text-anchor", "end")
-                .text("Value");
-
-              var legend = svg
-                .selectAll(".legend")
-                .data(seriesNames)
-                .enter()
-                .append("g")
-                .attr("class", "legend")
-                .attr("transform", function(d, i) {
-                  return "translate(0," + (i * 20 - margin.top + 30) + ")";
-                });
-
-              legend
-                .append("rect")
-                .attr("x", width - 18)
-                .attr("width", 18)
-                .attr("height", 18)
-                .style("fill", color);
-
-              legend
-                .append("text")
-                .attr("x", width - 24)
-                .attr("y", 9)
-                .attr("dy", ".35em")
-                .style("text-anchor", "end")
-                .text(function(d) {
-                  return d;
-                });
-
-              // Add label groups.
-              var gLabels = svg
-                .selectAll(".label")
-                .data(labels)
-                .enter()
-                .append("g")
-                .attr("class", "g")
-                .attr("transform", function(d) {
-                  return "translate(" + x0(d) + ",0)";
-                });
-              gLabels
-                .append("line")
-                .attr("x1", 0)
-                .attr("x2", x0.bandwidth())
-                .attr("y1", height)
-                .attr("y2", height)
-                .style("stroke-width", 0.5)
-                .style("stroke", "black");
-              // Add bars to all label groups.
-              gLabels
-                .selectAll("rect")
-                .data(function(d) {
-                  // Filter by label.
-                  var res = [];
-                  for (var yid in series) {
-                    var items = series[yid];
-                    for (var i = 0; i < items.length; ++i) {
-                      if (d == items[i].x) {
-                        res.push({
-                          series: yid,
-                          value: items[i].value
-                        });
-                      }
-                    }
-                  }
-                  return res;
-                })
-                .enter()
-                .append("rect")
-                .attr("width", x1.bandwidth())
-                .attr("x", function(d) {
-                  return x1(d.series);
-                })
-                .attr("y", function(d) {
-                  return y(d.value);
-                })
-                .attr("height", function(d) {
-                  return height - y(d.value);
-                })
-                .style("fill", function(d) {
-                  return color(d.series);
-                });
-            } else if (chartType[0] == "donut") {
-              $("#tabs-visualization-donut").empty();
-              var label = Object.keys(series)[0];
-              var data = series[label];
-              data.sort(function(a, b) {
-                return a.value - b.value;
-              });
-              var sum = d3.sum(data, function(d) {
-                return d.value;
-              });
-              var margin = {
-                  top: 20,
-                  right: 10,
-                  bottom: 50,
-                  left: 20
-                },
-                width = 960 - margin.left - margin.right,
-                height = 460 - margin.top - margin.bottom;
-              var color = d3.scaleOrdinal(d3.schemeAccent);
-              var radius = Math.min(width, height) / 2 - margin.top;
-
-              var arc = d3
-                .arc()
-                .outerRadius(radius * 0.8)
-                .innerRadius(radius * 0.4);
-
-              var outerArc = d3
-                .arc()
-                .outerRadius(radius * 0.9)
-                .innerRadius(radius * 0.9);
-
-              var angleShift = Math.min(
-                -0.1,
-                -Math.min(0.25, data[data.length - 1].value / sum)
-              );
-              var pie = d3
-                .pie()
-                .startAngle(angleShift * Math.PI)
-                .endAngle((2 + angleShift) * Math.PI)
-                .value(function(d) {
-                  return d.value;
-                });
-              var svg = d3
-                .select("#tabs-visualization-donut")
-                .append("svg")
-                .attr("width", width)
-                .attr("height", height)
-                .append("g")
-                .attr(
-                  "transform",
-                  "translate(" +
-                    (margin.left + width / 2) +
-                    "," +
-                    (margin.top + height / 2) +
-                    ")"
-                );
-
-              svg
-                .append("text")
-                .attr("left", margin.left + width / 2)
-                .attr("text-anchor", "middle")
-                .attr("y", 10 - height / 2)
-                .attr("font-size", 20)
-                .text(label);
-
-              var g = svg
-                .selectAll(".arc")
-                .data(pie(data))
-                .enter()
-                .append("g")
-                .attr("class", "arc");
-
-              var key = function(d) {
-                return d.data.x;
-              };
-              g.append("path")
-                .attr("d", arc)
-                .style("fill", function(d) {
-                  return color(key(d));
-                });
-
-              svg.append("g").attr("class", "labels");
-              svg.append("g").attr("class", "lines");
-              // Text labels.
-              var labelTransform = function(d) {
-                // effectively computes the centre of the slice.
-                // see https://github.com/d3/d3-shape/blob/master/README.md#arc_centroid
-                var pos = outerArc.centroid(d);
-
-                // changes the point to be on left or right depending on where label is.
-                pos[0] = radius * 0.95 * (midAngle(d) < Math.PI ? 1 : -1);
-                return "translate(" + pos + ")";
-              };
-              var text = svg
-                .select(".labels")
-                .selectAll("text")
-                .data(pie(data), key);
-
-              var opacityFn = function(d) {
-                var x = Math.sin(d.endAngle - d.startAngle);
-                return Math.min(0.5, Math.pow(x, 1.5) * 15);
-              };
-
-              var midAngle = function(d) {
-                return d.startAngle + (d.endAngle - d.startAngle) / 2;
-              };
-              var isPercentage = isPercentageAxis(postData.graphData.yAxes);
-              text
-                .enter()
-                .append("text")
-                .style("opacity", opacityFn)
-                .attr("dy", ".35em")
-                .text(function(d) {
-                  return (
-                    key(d) +
-                    " = " +
-                    d.value.toLocaleString() +
-                    (isPercentage ? "%" : "")
-                  );
-                })
-                .attr("transform", labelTransform)
-                .style("text-anchor", function(d) {
-                  // if slice centre is on the left, anchor text to start, otherwise anchor to end
-                  return midAngle(d) < Math.PI ? "start" : "end";
-                });
-
-              text.exit().remove();
-
-              // Polylines to labels.
-              var polyline = svg
-                .select(".lines")
-                .selectAll("polyline")
-                .data(pie(data), key);
-
-              polyline
-                .enter()
-                .append("polyline")
-                .style("opacity", opacityFn)
-                .attr("points", function(d) {
-                  // see label transform function for explanations of these three lines.
-                  var pos = outerArc.centroid(d);
-                  pos[0] = radius * 0.95 * (midAngle(d) < Math.PI ? 1 : -1);
-                  return [arc.centroid(d), outerArc.centroid(d), pos];
-                });
-
-              polyline.exit().remove();
-            }
-          })
-            .done(function() {
-              $("#sv-loader").addClass("display-none");
-            })
-            .fail(function(xhr, status, error) {
-              options.errorMessage = error;
-              $("#sv-loader").addClass("display-none");
-              $("#sv-loader-error").removeClass("display-none");
-            });
-        } else {
-          // TODO: Clear existing chart?
-        }
-      });
-  } else if (currentTab == "maps") {
-    $("#sv-loader").removeClass("display-none");
-    $("#animation-container").addClass("display-none");
-    $("#maps").addClass("display-none");
-    $(".leaflet-control-container").hide();
-    $("#timelapse-container").addClass("display-none");
-
-    // TODO: Map year should be computed based on year range of search.
-    // We can do it in the client side (easier).
-    // for reference: voyages.apps.assessment.globals.get_map_year
-    var postData = {
-      searchData: currentSearchObj,
-      output: "mapFlow"
-    };
-    var mapFlowSearchCallback = function() {
-      var $map = $("#map");
-      voyagesMap.setMaxBounds();
-      $.post(SEARCH_URL, JSON.stringify(postData), function(result) {
-        $("#sv-loader").removeClass("display-none");
-
-        eval(result);
-        voyagesMap.clear();
-      })
-        .done(function() {
-          $("#sv-loader").addClass("display-none");
-          $("#maps").removeClass("display-none");
-          loader.resizeMap(); // resize first before adding the networkflow
-          try {
-            voyagesMap.setNetworkFlow(ports, flows);
-          } catch (e) {
-            console.log(e);
-          }
-        })
-        .fail(function(xhr, status, error) {
-          options.errorMessage = error;
-          $("#sv-loader").addClass("display-none");
-          $("#sv-loader-error").removeClass("display-none");
-        });
-    };
-    loader.loadMap(mapFlowSearchCallback);
-  } else if (currentTab == "timelapse") {
-    $("#maps").addClass("display-none");
-    $("#sv-loader").removeClass("display-none");
-    $("#animation-container").removeClass("display-none");
-    $("#timelapse-container").removeClass("display-none");
-    $(".leaflet-control-container").show();
-
-    var postData = {
-      searchData: currentSearchObj,
-      output: "mapAnimation"
-    };
-    var mapAnimationSearchCallback = function() {
-      $.post(SEARCH_URL, JSON.stringify(postData), function(result) {
-        $("#sv-loader").removeClass("display-none");
-
-        if (result) {
-          // add title to the chart
-          $("#tab-map-voyage-value").text(numberWithCommas(result.length));
-        }
-        voyagesMap.clear();
-        voyagesMap.loadBaseMap("all", "/static/maps/");
-        if (SV_MODE == "intra") {
-          voyagesMap.setMaxBounds(
-            new L.LatLngBounds(
-              new L.LatLng(-59.517932, -111.936579),
-              new L.LatLng(63.9, 0)
-            )
-          );
-          voyagesMap._map.setZoom(4);
-        }
-
-        // voyagesMap._map.scrollWheelZoom.disable();
-
-        // leaflet map control - top left
-        var mapTopLeft = L.control();
-        mapTopLeft.onAdd = function() {
-          var control = document.getElementById("timelapse-top-left");
-          L.DomEvent.disableClickPropagation(control);
-          return control;
-        };
-        mapTopLeft.setPosition("topleft").addTo(voyagesMap._map);
-
-        // leaflet map control - bottom left
-        var mapBottomLeft = L.control();
-        mapBottomLeft.onAdd = function() {
-          var control = document.getElementById("timelapse-bottom-left");
-          L.DomEvent.disableClickPropagation(control);
-          return control;
-        };
-        mapBottomLeft.setPosition("bottomleft").addTo(voyagesMap._map);
-
-        // leaflet map control - top right
-        var mapTopRight = L.control();
-        mapTopRight.onAdd = function() {
-          var control = document.getElementById("timelapse-top-right");
-          L.DomEvent.disableClickPropagation(control);
-          return control;
-        };
-        mapTopRight.setPosition("topright").addTo(voyagesMap._map);
-
-        // relocate zoom control to the top right
-        if (!$(".leaflet-control-zoom")[0]) {
-          L.control
-            .zoom({
-              position: "topright"
-            })
-            .addTo(voyagesMap._map);
-        }
-
-        // leaflet map control - bottom right
-        var mapBottomRight = L.control();
-        mapBottomRight.onAdd = function() {
-          var control = document.getElementById("timelapse-bottom-right");
-          L.DomEvent.disableClickPropagation(control);
-          return control;
-        };
-        mapBottomRight.setPosition("bottomright").addTo(voyagesMap._map);
-
-        // Add Timelapse controls
-        if (animationHelper) disposeAnimationHelper();
-        animationHelper = new AnimationHelper(
-          result,
-          SV_MODE == "intra" ? "intra" : "trans",
-          SV_MODE == "intra"
-            ? new AnimationOptions(0.4, 3, 6, 2, 18, 1000)
-            : null
-        );
-
-        var control = document.getElementById("timelapse_control_layer");
-        L.DomEvent.disableClickPropagation(control);
-
-        $(".modal").each(function() {
-          var modal = $(this);
-          if (!L.Browser.touch) {
-            L.DomEvent.disableClickPropagation(modal);
-            L.DomEvent.on(modal, "mousewheel", L.DomEvent.stopPropagation);
-          } else {
-            L.DomEvent.on(modal, "click", L.DomEvent.stopPropagation);
-          }
-        });
-      })
-        .done(function() {
-          $("#sv-loader").addClass("display-none");
-          $("#maps").removeClass("display-none");
-          loader.resizeMap();
-          // get title here I'd say
-        })
-        .fail(function(xhr, status, error) {
-          options.errorMessage = error;
-          $("#sv-loader").addClass("display-none");
-          $("#sv-loader-error").removeClass("display-none");
-        });
-    };
-    // $('#loading').show();
-    loader.loadMap(function() {
-      loader.loadAnimationScripts(mapAnimationSearchCallback);
-    });
   }
 
-  // Ensure that the animation resources are properly disposed.
-  if (animationHelper && currentTab != "timelapse") {
-    disposeAnimationHelper();
-  }
 }
 
 // helpers
 
 var loader = new LazyLoader();
-
-var animationHelper = null;
-
-var disposeAnimationHelper = function() {
-  animationHelper.dispose();
-  animationHelper = null;
-};
 
 // Helper to load CSS files and scripts on demand.
 function LazyLoader() {
