@@ -33,30 +33,30 @@
           ></v-text>
 
           <v-treeselect
-            :filter="scope.filters.var_embarkation_port"
+            :filter="scope.filters.var_embarkation_ports"
             @change="changed">
           </v-treeselect>
 
           <v-treeselect
-            :filter="scope.filters.var_disembarkation_port"
+            :filter="scope.filters.var_disembarkation_ports"
             @change="changed">
           </v-treeselect>
 
-          <v-text @change="changed"
+          <!-- <v-text @change="changed"
             :filter="scope.filters.var_geocode"
-          ></v-text>
+          ></v-text> -->
 
-          <v-datepicker
-            :filter="scope.filters.var_voyage_arrived"
+          <v-number
+            :filter="scope.filters.var_year_range"
             @change="changed">
-          </v-datepicker>
+          </v-number>
 
-          <v-treeselect
+          <!-- <v-treeselect
             :filter="scope.filters.var_intended_disembarkation_port"
             @change="changed">
-          </v-treeselect>
+          </v-treeselect> -->
         </div>
       </v-panel>
-      </ul>
+    </ul>
   </div>
 </li>
