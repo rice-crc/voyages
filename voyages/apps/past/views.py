@@ -1,4 +1,5 @@
 from django.core.paginator import Paginator
+from django.db.models import Prefetch
 from django.http import JsonResponse
 from django.views.decorators.cache import cache_page
 from django.views.decorators.csrf import csrf_exempt
@@ -27,10 +28,9 @@ def _generate_table(query, table_params):
     return response_data
 
 def _get_alt_named(altModel, parent_fk, parent_map):
-    q = altModel.prefetch_related(parent_fk).all()
     key_fn = lambda x: getattr(x, parent_fk + '_id')
     res = {}
-    for k, g in itertools.groupby(sorted(q, key=key_fn), key=key_fn):
+    for k, g in itertools.groupby(sorted(altModel.all(), key=key_fn), key=key_fn):
         alts = list(g)
         parent = getattr(alts[0], parent_fk)
         item = parent_map(parent)
@@ -48,13 +48,15 @@ def get_modern_countries(request):
 @cache_page(3600)
 def get_ethnicities(request):
     parent_map = lambda e: {'name': e.name, 'language_group_id': e.language_group_id }
-    return JsonResponse(_get_alt_named(AltEthnicityName.objects, 'ethnicity', parent_map))
+    models = AltEthnicityName.objects.prefetch_related('ethnicity')
+    return JsonResponse(_get_alt_named(models, 'ethnicity', parent_map))
 
 @csrf_exempt
 @cache_page(3600)
 def get_language_groups(request):
-    parent_map = lambda lg: {'name': lg.name, 'lat': lg.latitude, 'lng': lg.longitude}
-    return JsonResponse(_get_alt_named(AltLanguageGroupName.objects, 'language_group', parent_map))
+    parent_map = lambda lg: {'name': lg.name, 'lat': lg.latitude, 'lng': lg.longitude, 'country': lg.modern_country.name}
+    models = AltLanguageGroupName.objects.prefetch_related(Prefetch('language_group', queryset=LanguageGroup.objects.select_related('modern_country')))
+    return JsonResponse(_get_alt_named(models, 'language_group', parent_map))
 
 @require_POST
 @csrf_exempt
@@ -66,9 +68,10 @@ def search_enslaved(request):
     search = EnslavedSearch(**data['search_query'])
     _fields = ['enslaved_id', 'documented_name', 'name_first', 'name_second', 'name_third',
         'age', 'gender', 'height', 'ethnicity__name', 'language_group__name', 'language_group__modern_country__name',
-        'voyage__id', 'voyage__voyage_ship__ship_name', 'voyage__voyage_dates__imp_arrival_at_port_of_dis',
-        'voyage__voyage_itinerary__imp_principal_place_of_slave_purchase',
-        'voyage__voyage_itinerary__imp_principal_port_slave_dis']
+        'voyage__id', 'voyage__voyage_ship__ship_name', 'voyage__voyage_dates__first_dis_of_slaves',
+        'voyage__voyage_itinerary__int_first_port_dis__place',
+        'voyage__voyage_itinerary__imp_principal_place_of_slave_purchase__place',
+        'voyage__voyage_itinerary__imp_principal_port_slave_dis__place']
     query, ranking = search.execute()
     query = query.values(*_fields)
     if ranking:
