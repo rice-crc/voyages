@@ -2,6 +2,7 @@ from django.db import models
 from django.db.models import Q
 from django.contrib.auth.models import User
 from voyages.apps.voyage.models import Place, Voyage, VoyageSources
+import operator
 
 class EnslaverInfoAbstractBase(models.Model):
     principal_alias = models.CharField(max_length=255)
@@ -161,7 +162,7 @@ class Enslaved(models.Model):
         (VoyageSources, through='EnslavedSourceConnection', related_name='+')
 
 class EnslavedSourceConnection(models.Model):
-    enslaved = models.ForeignKey(Enslaved, on_delete=models.CASCADE)
+    enslaved = models.ForeignKey(Enslaved, on_delete=models.CASCADE, related_name='sources_conn')
     # Sources are shared with Voyages.
     source = models.ForeignKey(VoyageSources, on_delete=models.CASCADE, related_name='+', null=False)
     source_order = models.IntegerField()
@@ -239,6 +240,11 @@ class EnslavedSearch:
             .select_related('ethnicity') \
             .select_related('language_group') \
             .select_related('language_group__modern_country') \
+            .select_related('voyage__voyage_dates') \
+            .select_related('voyage__voyage_ship') \
+            .select_related('voyage__voyage_itinerary__int_first_port_dis') \
+            .select_related('voyage__voyage_itinerary__imp_principal_place_of_slave_purchase') \
+            .select_related('voyage__voyage_itinerary__imp_principal_port_slave_dis') \
             .select_related('register_country') \
             .all()
         ranking = None
@@ -254,21 +260,37 @@ class EnslavedSearch:
                 ranking = {x[1]: x[0] for x in enumerate(fuzzy_ids)}
                 q = q.filter(pk__in=fuzzy_ids)
         if self.age_gender:
-            conditions = [Q(is_adult=a, gender=g) for (a, g) in self.age_gender]
+            def get_ag_query(x):
+                if x == 'male':
+                    return Q(gender=1)
+                if x == 'female':
+                    return Q(gender=2)
+                if x == 'man':
+                    return Q(is_adult=True, gender=1)
+                if x == 'woman':
+                    return Q(is_adult=True, gender=2)
+                if x == 'boy':
+                    return Q(is_adult=False, gender=1)
+                if x == 'girl':
+                    return Q(is_adult=False, gender=2)
+                raise Exception('Invalid AgeGender value')
+
+            conditions = [get_ag_query(x) for x in self.age_gender]
             q = q.filter(reduce(operator.or_, conditions))
         if self.age_range:
             q = q.filter(age__range=self.age_range)
         if self.modern_country:
-            q = q.filter(modern_country__pk__in=self.modern_country)
+            q = q.filter(language_group__modern_country__pk__in=self.modern_country)
         if self.post_disembark_location:
             q = q.filter(post_disembark_location__pk__in=self.post_disembark_location)
         if self.source:
-            q = q.filter(Q(sources__text_ref__contains=self.source) | Q(sources__source__full_ref__contains=self.source))
+            q = q.filter(Q(sources_conn__text_ref__contains=self.source) | Q(sources__full_ref__contains=self.source))
         if self.voyage_id:
             q = q.filter(voyage__pk__range=self.voyage_id)
         if self.year_range:
-            # Search on YEARAM field.
-            q = q.filter(voyage__voyage_dates__imp_arrival_at_port_of_dis__range=self.year_range)
+            # Search on YEARAM field. Note that we have a 'MM,DD,YYYY' format even though the
+            # only year should be present.
+            q = q.filter(voyage__voyage_dates__imp_arrival_at_port_of_dis__range=[',,' + str(y) for y in self.year_range])
         if self.embarkation_ports:
             # Search on MJBYPTIMP field.
             q = q.filter(voyage__voyage_itinerary__imp_principal_place_of_slave_purchase__pk__in=self.embarkation_ports)
@@ -279,6 +301,4 @@ class EnslavedSearch:
             q = q.filter(language_group__pk__in=self.language_groups)
         if self.ship_name:
             q = q.filter(voyage__voyage_ship__ship_name__icontains=self.ship_name)
-        if self.source:
-            q = q.filter()
         return q, ranking
