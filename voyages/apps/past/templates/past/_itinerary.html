@@ -3,60 +3,46 @@
 <li class="nav-item dropdown">
   <v-menu-title :count="filter.itinerary.count" title="{% trans 'Itinerary' %}"></v-menu-title>
 
-  <div class="">
-    <ul class="dropdown-menu search-menu" id="itinerary" role="menu">
+  <v-panel-singular @apply="apply" @reset="reset" group="itinerary" title="{% trans 'Personal Data' %}" sub-group="itinerary"
+    :filters="filter.itinerary.itinerary" align="left">
+    <div slot="v-panel-header">
+      <v-panel-header title="{% trans 'Itinerary' %}" description="{% trans 'Description' %}">
+        <div slot="v-modal-content"></div>
+      </v-panel-header>
+    </div>
 
-      <v-panel @apply="apply" @reset="reset" group="itinerary" sub-group="voyageId" title="{% trans 'Itinerary' %}" :filters="filter.itinerary.voyageId">
-        <div slot="v-panel-header">
-          <v-panel-header title="{% trans 'Voyage Id' %}" description="{% trans 'Description' %}">
-            <div slot="v-modal-content"></div>
-          </v-panel-header>
-        </div>
+    <div slot="v-panel-content" slot-scope="scope">
+      <v-number @change="changed"
+        :filter="scope.filters.var_voyage_id">
+      </v-number>
 
-        <div slot="v-panel-content" slot-scope="scope">
-          <v-number @change="changed"
-            :filter="scope.filters.var_voyage_id">
-          </v-number>
-        </div>
-      </v-panel>
+      <v-text @change="changed"
+        :filter="scope.filters.var_ship_name"
+      ></v-text>
 
-      <v-panel @apply="apply" @reset="reset" group="itinerary" sub-group="shipPortsAndDate" title="{% trans 'Ship, Ports and Date' %}" :filters="filter.itinerary.shipPortsAndDate">
-        <div slot="v-panel-header">
-          <v-panel-header title="{% trans 'Ship, Ports and Date' %}" description="{% trans 'Description' %}">
-            <div slot="v-modal-content"></div>
-          </v-panel-header>
-        </div>
+      <v-treeselect
+        :filter="scope.filters.var_embarkation_ports"
+        @change="changed">
+      </v-treeselect>
 
-        <div slot="v-panel-content" slot-scope="scope">
-          <v-text @change="changed"
-            :filter="scope.filters.var_ship_name"
-          ></v-text>
+      <v-treeselect
+        :filter="scope.filters.var_disembarkation_ports"
+        @change="changed">
+      </v-treeselect>
 
-          <v-treeselect
-            :filter="scope.filters.var_embarkation_ports"
-            @change="changed">
-          </v-treeselect>
+      <!-- <v-text @change="changed"
+        :filter="scope.filters.var_geocode"
+      ></v-text> -->
 
-          <v-treeselect
-            :filter="scope.filters.var_disembarkation_ports"
-            @change="changed">
-          </v-treeselect>
+      <v-number
+        :filter="scope.filters.var_year_range"
+        @change="changed">
+      </v-number>
 
-          <!-- <v-text @change="changed"
-            :filter="scope.filters.var_geocode"
-          ></v-text> -->
-
-          <v-number
-            :filter="scope.filters.var_year_range"
-            @change="changed">
-          </v-number>
-
-          <!-- <v-treeselect
-            :filter="scope.filters.var_intended_disembarkation_port"
-            @change="changed">
-          </v-treeselect> -->
-        </div>
-      </v-panel>
-    </ul>
-  </div>
+      <!-- <v-treeselect
+        :filter="scope.filters.var_intended_disembarkation_port"
+        @change="changed">
+      </v-treeselect> -->
+    </div>
+  </v-panel-singular>
 </li>

@@ -11,8 +11,8 @@ var_age_range = new NumberVariable({
     isAdvanced: false
   });
 
-var_gender = new TreeselectVariable({
-    varName: "gender",
+var_age_gender = new TreeselectVariable({
+    varName: "age_gender",
     label: gettext("Gender"),
     description: "",
   },{
@@ -27,7 +27,7 @@ var_gender = new TreeselectVariable({
 personalData = {
   personalData: {
     var_age_range: var_age_range,
-    var_gender: var_gender,
+    var_age_gender: var_age_gender,
 
     count: {
       changed: 0,

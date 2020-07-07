@@ -3,48 +3,34 @@
 <li class="nav-item dropdown">
   <v-menu-title :count="filter.culturalAssociation.count" title="{% trans 'Cultural Association' %}"></v-menu-title>
 
-  <div class="">
-    <ul class="dropdown-menu search-menu" id="culturalAssociation" role="menu">
+  <v-panel-singular @apply="apply" @reset="reset" group="culturalAssociation" title="{% trans 'Personal Data' %}" sub-group="culturalAssociation"
+    :filters="filter.culturalAssociation.culturalAssociation" align="left">
+    <div slot="v-panel-header">
+      <v-panel-header title="{% trans 'Cultural Association' %}" description="{% trans 'Description' %}">
+        <div slot="v-modal-content"></div>
+      </v-panel-header>
+    </div>
 
-      <v-panel @apply="apply" @reset="reset" group="culturalAssociation" sub-group="country" title="{% trans 'Country' %}" :filters="filter.culturalAssociation.country">
-        <div slot="v-panel-header">
-          <v-panel-header title="{% trans 'Country' %}" description="{% trans 'Description' %}">
-            <div slot="v-modal-content"></div>
-          </v-panel-header>
-        </div>
+    <div slot="v-panel-content" slot-scope="scope">
+      <!-- <v-treeselect
+        :filter="scope.filters.var_register_country"
+        @change="changed">
+      </v-treeselect> -->
 
-        <div slot="v-panel-content" slot-scope="scope">
-          <v-treeselect
-            :filter="scope.filters.var_register_country"
-            @change="changed">
-          </v-treeselect>
+      <v-treeselect
+        :filter="scope.filters.var_modern_country"
+        @change="changed">
+      </v-treeselect>
 
-          <v-treeselect
-            :filter="scope.filters.var_modern_country"
-            @change="changed">
-          </v-treeselect>
-        </div>
-      </v-panel>
+      <!-- <v-treeselect
+        :filter="scope.filters.var_ethnicity"
+        @change="changed">
+      </v-treeselect> -->
 
-      <v-panel @apply="apply" @reset="reset" group="culturalAssociation" sub-group="ethnicityAndLanguage" title="{% trans 'Ethnicity and Language' %}" :filters="filter.culturalAssociation.ethnicityAndLanguage">
-        <div slot="v-panel-header">
-          <v-panel-header title="{% trans 'Ethnicity and Language' %}" description="{% trans 'Description' %}">
-            <div slot="v-modal-content"></div>
-          </v-panel-header>
-        </div>
-
-        <div slot="v-panel-content" slot-scope="scope">
-          <v-treeselect
-            :filter="scope.filters.var_ethnicity"
-            @change="changed">
-          </v-treeselect>
-
-          <v-treeselect
-            :filter="scope.filters.var_language_groups"
-            @change="changed">
-          </v-treeselect>
-        </div>
-      </v-panel>
-    </ul>
-  </div>
+      <v-treeselect
+        :filter="scope.filters.var_language_groups"
+        @change="changed">
+      </v-treeselect>
+    </div>
+  </v-panel-singular>
 </li>
