@@ -527,9 +527,6 @@ function loadTreeselectOptions(vm, vTreeselect, filter, callback) {
               var options = parseEthnicities(response);
               break;
             case 'language_groups':
-
-              console.log(response);
-
               var options = parseLanguageGroups(response);
               break;
           }
@@ -561,16 +558,8 @@ function loadTreeselectOptions(vm, vTreeselect, filter, callback) {
 // parsePlaces function
 var parsePlaces = function(response) {
   var data = processPlacesAjax(response.data.data);
-  var options = [
-    {
-      id: 0,
-      label: gettext("Select All"),
-      children: null
-    }
-  ];
-
   // fill select all
-  options = [
+  var options = [
     {
       id: 0,
       code: 0,
@@ -653,7 +642,30 @@ var parseCountries = function(response) {
 
 // parseLanguageGroups function
 var parseLanguageGroups = function(response) {
-  var options = [];
+  // fill select all
+  var options = [
+    {
+      id: 0,
+      code: 0,
+      label: gettext("Select All"),
+      children: []
+    }
+  ];
+
+  // fill countries
+  var countries = {};
+  $.each(response.data, function(id, languageGroup) {
+    countries[languageGroup.country] = languageGroup.country;
+  });
+  $.each(countries, function(key, country) {
+    options[0].children.push({
+      id: country,
+      label: country,
+      children: []
+    });
+  });
+
+  // fill languageGroups
   $.each(response.data, function(id, languageGroup) {
     var label = languageGroup.name;
     if (languageGroup.alts.length > 0) {
@@ -668,8 +680,13 @@ var parseLanguageGroups = function(response) {
         label += ' (' + altNames.join(', ') + ')';
       }
     }
-    options.push({'id': id, 'label' : label});
+    $.each(options[0].children, function(key, country) {
+      if (languageGroup.country == country.label) {
+        options[0].children[key].children.push({'id': id, 'label' : label});
+      }
+    });
   });
+  
   return options;
 }
 
@@ -705,10 +722,6 @@ function sortNumber(a, b) {
 }
 
 function refreshUi(filter, filterData, currentTab, tabData, options) {
-  // Update UI after search query was changed,
-  // or a tab was selected.
-  $("#map").hide();
-
   var currentSearchObj = searchAll(filter, filterData);
 
   if (currentTab == "results") {
@@ -722,6 +735,14 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
         url: SEARCH_URL,
         type: "POST",
         data: function(d) {
+          if (d.order[0] != undefined) {
+            var order = d.order[0];
+            currentSearchObj['order_by'] = {
+              'column' : d.columns[order['column']].data,
+              'dir' : order['dir']
+            };
+          }
+
           return JSON.stringify({
             search_query: currentSearchObj,
             tableParams: d,
@@ -856,10 +877,6 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
       }
     });
 
-    mainDatatable.on("draw.dt", function() {
-      $('[data-toggle="tooltip"]').tooltip();
-    });
-
     // built for the datatable download dropdown menu
     function makeDownloadFunction(isExcel, isFiltered, isVisibleColumns) {
       return function() {
@@ -894,15 +911,6 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
           .remove();
       };
     }
-
-    mainDatatable.on("column-visibility.dt", function(
-      e,
-      settings,
-      column,
-      state
-    ) {
-      $('[data-toggle="tooltip"]').tooltip();
-    });
   }
 
 }
