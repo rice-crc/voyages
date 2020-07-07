@@ -1,30 +1,12 @@
 // reserved keyword for saved search query identifier
 const SAVED_SEARCH_LABEL = "#searchId=";
 const SEARCH_URL = "api/search";
-const VARIABLE_MAP = {};
-
-// reserved const for timelapse
-const LEAFLET_TIMELAPSE_ZOOM = 4; // default leaflet zoom level for timelapse
-const DEFAULT_START_YEAR = 1660; // default start year
-
-const GROUP_COLORS = {
-  // colors are either mixed or adopted based on national flag colors
-  "Portugal / Brazil": "#009c3b", // brazil - green
-  "Great Britain": "#cf142b", // uk - red
-  France: "#00209F", // france - blue
-  Netherlands: "#FF4F00", // netherlands orange
-  "Spain / Uruguay": "#FFC400", // spain - yellow
-  "U.S.A.": "#00A0D1", // usa - blend of blue and white
-  "Denmark / Baltic": "#E07A8E", // denmark mix
-  Portugal: "#5D4100", // portugal mix
-  Other: "#999999" // grey
-};
 
 // process search data returned from the API
 function processResponse(json) {
   var data = [];
   json.data.forEach(function(row) {
-    var arrivalDateArray = row.voyage__voyage_dates__imp_arrival_at_port_of_dis.split([',']);
+    var arrivalDateArray = row.voyage__voyage_dates__first_dis_of_slaves.split([',']);
     var arrivalDate = '';
     var arrivalYear = '';
     var arrivalMonth = '';
@@ -42,10 +24,17 @@ function processResponse(json) {
     } else if (arrivalDateArray.length == 1) {
       arrivalDate = arrivalDateArray[0];
     }
-    row.voyage__voyage_dates__imp_arrival_at_port_of_dis = arrivalDate;
-    row.gender += ' (change to name in API response)';
-    row.voyage__voyage_itinerary__imp_principal_place_of_slave_purchase += ' (change to name in API response)';
-    row.voyage__voyage_itinerary__imp_principal_port_slave_dis += ' (change to name in API response)';
+    row.voyage__voyage_dates__first_dis_of_slaves = arrivalDate;
+    
+    var gender = '';
+    if (row.gender == 1) {
+      gender = gettext("Male");
+    } else if (row.gender == 2) {
+      gender = gettext("Female");
+    }
+    row.gender = gender;
+
+    // row.source = getFormattedSourceInTable(row.source);
 
     data.push(row);
   });
@@ -69,85 +58,6 @@ function sentenceCase(str) {
   // Replace first char of each sentence (new line or after '.\s+') to
   // UPPERCASE
   return unCamelCase(str).replace(/(^\w)|\.\s+(\w)/gm, upperCase);
-}
-
-/**
- * round without decimal (if it's an integer stay at the integer level)
- */
-function round(value, precision) {
-  var multiplier = Math.pow(10, precision || 0);
-  return Math.round(value * multiplier) / multiplier;
-}
-/**
- * round with decimal (keep the decimal even if it is an integer)
- */
-function roundDecimal(value, precision) {
-  var multiplier = Math.pow(10, precision);
-  return (Math.round(value * multiplier) / multiplier).toFixed(precision);
-}
-
-// converts camel case into title case
-function camel2title(camelCase) {
-  // no side-effects
-  return (
-    camelCase
-      // inject space before the upper case letters
-      .replace(/([A-Z])/g, function(match) {
-        return " " + match;
-      })
-      // replace first char with upper case
-      .replace(/^./, function(match) {
-        return match.toUpperCase();
-      })
-  );
-}
-
-// format a number to become 1,000 (with commas)
-const numberWithCommas = x => {
-  return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-};
-
-// a function that generates a random key for saved queries
-var generateRandomKey = function() {
-  var ALPHABET =
-    "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
-  var ID_LENGTH = 8;
-  var rtn = "";
-  for (var i = 0; i < ID_LENGTH; i++) {
-    rtn += ALPHABET.charAt(Math.floor(Math.random() * ALPHABET.length));
-  }
-  return rtn;
-};
-
-// a function that generates a unique key for saved queries
-// it depends on function generateRandomKey
-var generateUniqueRandomKey = function(previous) {
-  var UNIQUE_RETRIES = 9999;
-  previous = previous || [];
-  var retries = 0;
-  var id;
-  // Try to generate a unique ID,
-  // i.e. one that isn't in the previous.
-  while (!id && retries < UNIQUE_RETRIES) {
-    id = generateRandomKey();
-    if (previous.indexOf(id) !== -1) {
-      id = null;
-      retries++;
-    }
-  }
-  return id;
-};
-
-// get formated source by parsing through the backend response
-function getFormattedSource(sources) {
-  var value = ""; // empty value string
-  sources.forEach(function(source) {
-    var first = source.split("<>")[0];
-    var second = source.split("<>")[1];
-    value += "<div><span class='source-title'>" + first + ": </span>";
-    value += "<span class='source-content'>" + second + "</span></div>";
-  });
-  return value;
 }
 
 // get formated source by parsing through the backend response
@@ -182,14 +92,6 @@ if (LANGUAGE_CODE == "es") {
     url: "//cdn.datatables.net/plug-ins/1.10.19/i18n/Portuguese.json"
   };
 }
-
-// IMP tooltip
-var impTooltipString =
-  '<span class="badge badge-pill badge-secondary tooltip-pointer" data-toggle="tooltip" data-placement="top" data-original-title="' +
-  gettext("Imputed results are calculated by an algorithm.") +
-  '"> ' +
-  gettext("IMP") +
-  " </span>";
 
 // variableMapping
 // used for loading a variable (variables extracted from a saved query ==> variables in the vm filter object)
@@ -238,18 +140,6 @@ function resetFilter(filter, group, subGroup) {
 // serialize a filter
 function serializeFilter(filter) {
   return JSON.stringify(filter);
-}
-
-function replaceKey(key) {
-  if (key == "is less than") {
-    return "is at most";
-  } else if (key == "is more than") {
-    return "is at least";
-  } else if (key == "is equal to") {
-    return "equals";
-  } else {
-    return key;
-  }
 }
 
 function searchAll(filter, filterData) {
@@ -577,6 +467,7 @@ function loadTreeselectOptions(vm, vTreeselect, filter, callback) {
         case 'embarkation_ports':
           var params = {var_name: 'imp_principal_place_of_slave_purchase_id'};
           break;
+
         case 'disembarkation_ports':
         case 'intended_disembarkation_port':
         case 'post_disembarkation_location':
@@ -636,6 +527,9 @@ function loadTreeselectOptions(vm, vTreeselect, filter, callback) {
               var options = parseEthnicities(response);
               break;
             case 'language_groups':
+
+              console.log(response);
+
               var options = parseLanguageGroups(response);
               break;
           }
@@ -810,26 +704,6 @@ function sortNumber(a, b) {
   return a - b;
 }
 
-function initZeroArray(length) {
-  var arr = [];
-  while (length--) {
-    arr.push(0);
-  }
-  return arr;
-}
-
-function destroyPreviousTable(id) {
-  try {
-    if ($.fn.DataTable.isDataTable(id)) {
-      $(id)
-        .DataTable()
-        .destroy();
-    }
-  } catch (e) {
-    console.log(e);
-  }
-}
-
 function refreshUi(filter, filterData, currentTab, tabData, options) {
   // Update UI after search query was changed,
   // or a tab was selected.
@@ -843,19 +717,11 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
       extend: "pageLength",
       className: "btn btn-info buttons-collection dropdown-toggle"
     };
-
     var mainDatatable = $("#results_main_table").DataTable({
       ajax: {
         url: SEARCH_URL,
         type: "POST",
         data: function(d) {
-          // TEMP Yang: I don't think this is the right place for this code...
-          // Besides, I think that this is attaching multiple handlers for
-          // the click, which is inefficient.
-          $("#results_main_table tbody").on("click", "tr", function() {
-            searchBar.row.data = mainDatatable.row(this).data();
-          });
-
           return JSON.stringify({
             search_query: currentSearchObj,
             tableParams: d,
@@ -921,62 +787,62 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
       buttons: [
         columnToggleMenu,
         pageLength,
-        {
-          extend: "collection",
-          text:
-            '<span class="fa fa-columns" style="vertical-align: middle;"></span>',
-          className: "btn btn-info buttons-collection dropdown-toggle",
-          text: gettext("Download"),
-          titleAttr: gettext("Download results"),
-          // Top level: CSV vs. Excel
-          buttons: [
-            {
-              extend: "collection",
-              text: "CSV",
-              buttons: [
-                {
-                  text: gettext("All results with all columns"),
-                  action: makeDownloadFunction(false, false, false)
-                },
-                {
-                  text: gettext("All results with visible columns"),
-                  action: makeDownloadFunction(false, false, true)
-                },
-                {
-                  text: gettext("Filtered results with all columns"),
-                  action: makeDownloadFunction(false, true, false)
-                },
-                {
-                  text: gettext("Filtered results with visible columns"),
-                  action: makeDownloadFunction(false, true, true)
-                }
-              ]
-            },
+        // {
+        //   extend: "collection",
+        //   text:
+        //     '<span class="fa fa-columns" style="vertical-align: middle;"></span>',
+        //   className: "btn btn-info buttons-collection dropdown-toggle",
+        //   text: gettext("Download"),
+        //   titleAttr: gettext("Download results"),
+        //   // Top level: CSV vs. Excel
+        //   buttons: [
+        //     {
+        //       extend: "collection",
+        //       text: "CSV",
+        //       buttons: [
+        //         {
+        //           text: gettext("All results with all columns"),
+        //           action: makeDownloadFunction(false, false, false)
+        //         },
+        //         {
+        //           text: gettext("All results with visible columns"),
+        //           action: makeDownloadFunction(false, false, true)
+        //         },
+        //         {
+        //           text: gettext("Filtered results with all columns"),
+        //           action: makeDownloadFunction(false, true, false)
+        //         },
+        //         {
+        //           text: gettext("Filtered results with visible columns"),
+        //           action: makeDownloadFunction(false, true, true)
+        //         }
+        //       ]
+        //     },
 
-            {
-              extend: "collection",
-              text: "Excel",
-              buttons: [
-                {
-                  text: gettext("All results with all columns"),
-                  action: makeDownloadFunction(true, false, false)
-                },
-                {
-                  text: gettext("All results with visible columns"),
-                  action: makeDownloadFunction(true, false, true)
-                },
-                {
-                  text: gettext("Filtered results with all columns"),
-                  action: makeDownloadFunction(true, true, false)
-                },
-                {
-                  text: gettext("Filtered results with visible columns"),
-                  action: makeDownloadFunction(true, true, true)
-                }
-              ]
-            }
-          ]
-        }
+        //     {
+        //       extend: "collection",
+        //       text: "Excel",
+        //       buttons: [
+        //         {
+        //           text: gettext("All results with all columns"),
+        //           action: makeDownloadFunction(true, false, false)
+        //         },
+        //         {
+        //           text: gettext("All results with visible columns"),
+        //           action: makeDownloadFunction(true, false, true)
+        //         },
+        //         {
+        //           text: gettext("Filtered results with all columns"),
+        //           action: makeDownloadFunction(true, true, false)
+        //         },
+        //         {
+        //           text: gettext("Filtered results with visible columns"),
+        //           action: makeDownloadFunction(true, true, true)
+        //         }
+        //       ]
+        //     }
+        //   ]
+        // }
       ],
       //pagingType: "input",
       bFilter: false,
@@ -1073,69 +939,5 @@ function LazyLoader() {
     }
     return dfd;
   };
-  self.animationScriptsLoaded = false;
-  self.mapLoaded = false;
-  self.resizeMap = function() {
-    $("#map").height($(window).height() - 200);
-    voyagesMap._map.invalidateSize();
-  };
-  self.loadMap = function(done) {
-    $("#map").show();
-    if (!self.mapLoaded) {
-      self.loadCss(STATIC_URL + "maps/css/leaflet.css");
-      self.loadCss(STATIC_URL + "maps/css/MarkerCluster.css");
-      self.loadCss(STATIC_URL + "maps/css/MarkerCluster.Default.css");
-      self
-        .loadScript(STATIC_URL + "maps/js/leaflet.js")
-        .then(self.loadScript(STATIC_URL + "maps/js/leaflet.markercluster.js"))
-        .then(
-          self.loadScript(STATIC_URL + "maps/js/leaflet.polylineDecorator.js")
-        )
-        .then(function() {
-          $.when(
-            self.loadScript(STATIC_URL + "maps/js/routeNodes.js"),
-            self.loadScript(STATIC_URL + "maps/js/voyagesMap.js")
-          ).then(function() {
-            voyagesMap
-              .init("all", STATIC_URL + "maps/", routeNodes, links)
-              .setMaxPathWidth(20)
-              .setPathOpacity(0.75);
-            $(window)
-              .on("resize", self.resizeMap)
-              .trigger("resize");
-            voyagesMap._map.invalidateSize();
-            self.mapLoaded = true;
-            done();
-          });
-        });
-    } else {
-      done();
-    }
-  };
-  self.loadAnimationScripts = function(done) {
-    if (!self.animationScriptsLoaded) {
-      $.when(
-        self.loadScript(STATIC_URL + "scripts/library/d3.min.js"),
-        self.loadScript(STATIC_URL + "scripts/library/jquery-ui@1.12.1.min.js"),
-        self.loadScript(STATIC_URL + "maps/js/arc.js"),
-        self.loadScript(STATIC_URL + "maps/js/leaflet.geodesic.min.js")
-      )
-        .then(self.loadScript(STATIC_URL + "scripts/vue/includes/animation.js"))
-        .then(function() {
-          self.animationScriptsLoaded = true;
-          done();
-        });
-    } else {
-      done();
-    }
-  };
   return self;
-}
-
-// check if it is loading an intra-american search
-function redirectToIntraAmerican(query) {
-  var varNames = query.map(variable => variable["varName"]);
-  var isIntraAmericanQuery = varNames.includes("intra_american_voyage");
-  var isTransAtlanticURL = window.location.href.includes("voyage/database");
-  return isIntraAmericanQuery && isTransAtlanticURL;
 }

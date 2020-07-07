@@ -31,7 +31,7 @@ var_embarkation_ports = new PlaceVariable({
     op: "is one of",
     searchTerm: [],
   },{
-    isImputed: true,
+    isImputed: false,
     isAdvanced: false
   });
 
@@ -43,7 +43,7 @@ var_disembarkation_ports = new PlaceVariable({
     op: "is one of",
     searchTerm: [],
   },{
-    isImputed: true,
+    isImputed: false,
     isAdvanced: false
   });
 
@@ -61,7 +61,7 @@ var_geocode = new TextVariable({
 
 var_year_range = new NumberVariable({
     varName: "year_range",
-    label: gettext("Date that voyage arrived"),
+    label: gettext("Arrival Year"),
     description: "",
   },{
     op: "is between",
@@ -80,22 +80,14 @@ var_intended_disembarkation_port = new PlaceVariable({
     op: "is one of",
     searchTerm: [],
   },{
-    isImputed: true,
+    isImputed: false,
     isAdvanced: false
   });
 
 // all
 itinerary = {
-  voyageId: {
+  itinerary: {
     var_voyage_id: var_voyage_id,
-
-    count: {
-      changed: 0,
-      activated: 0,
-    }
-  },
-
-  shipPortsAndDate: {
     var_ship_name: var_ship_name,
     var_embarkation_ports: var_embarkation_ports,
     var_disembarkation_ports: var_disembarkation_ports,

@@ -49,17 +49,9 @@ var_language_groups = new TreeselectVariable({
 
 // all
 culturalAssociation = {
-  country: {
+  culturalAssociation: {
     var_register_country: var_register_country,
     var_modern_country: var_modern_country,
-
-    count: {
-      changed: 0,
-      activated: 0,
-    }
-  },
-
-  ethnicityAndLanguage: {
     var_ethnicity: var_ethnicity,
     var_language_groups: var_language_groups,
 

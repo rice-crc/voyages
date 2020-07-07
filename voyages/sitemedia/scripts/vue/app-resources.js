@@ -18,12 +18,24 @@ var searchBar = new Vue({
     },
     filterData: {
       treeselectOptions: {
-        gender: [{
+        age_gender: [{
           id: "male",
           label: gettext("Male")
         },{
           id: "female",
           label: gettext("Female")
+        },{
+          id: "man",
+          label: gettext("Man")
+        },{
+          id: "boy",
+          label: gettext("Boy")
+        },{
+          id: "woman",
+          label: gettext("Woman")
+        },{
+          id: "girl",
+          label: gettext("Girl")
         }]
       }
     },
@@ -60,10 +72,6 @@ var searchBar = new Vue({
         this.refresh();
       },
       deep: true
-    },
-
-    rowModalShow: function(val) {
-      voyagesMap.setMouseInteraction(!val);
     },
 
     filter: {
@@ -228,9 +236,7 @@ var searchBar = new Vue({
     // row in a datatable
     row: {
       handler: function() {
-        this.rowModalShow = true;
         var results = [];
-        // console.log(JSON.stringify(this.row.data));
         for (group in this.filter) {
           if (group !== "year" && group !== "settings") {
             var datum = {
@@ -249,32 +255,9 @@ var searchBar = new Vue({
                   var value = this.row.data[varName];
                   var isImputed = item.options ? item.options.isImputed : false;
 
-                  // Patch source variable
-                  if (varName == "var_sources_plaintext") {
-                    value = ""; // empty value string
-                    var sources = this.row.data["var_sources_raw"];
-                    value = getFormattedSource(sources);
-                  }
-
-                  // Patch outcome
-                  if (
-                    varName.includes("outcome") ||
-                    varName.includes("resistance")
-                  ) {
-                    value = this.row.data[varName + "_lang"];
-                  }
-
                   // Patch place variables
                   if (item.type == "place") {
                     value = this.row.data[varName.slice(0, -3) + "_lang"];
-                  }
-
-                  // Patch two special place variables (after generic)
-                  if (
-                    varName == "var_vessel_construction_place_idnum" ||
-                    varName == "var_registered_place_idnum"
-                  ) {
-                    value = this.row.data[varName.slice(0, -6) + "_lang"];
                   }
 
                   datum.variables[varName] = {
@@ -460,9 +443,6 @@ var searchBar = new Vue({
     },
 
     load(value) {
-
-      console.log("CHANGE url...");
-
       var url = "/resources/get-saved-query/" + value;
       var vm = this;
       axios
@@ -663,20 +643,6 @@ var searchBar = new Vue({
     } else {
       this.refresh();
     }
-
-    // generate a variable map (var -> label)
-    for (key1 in this.filter) {
-      for (key2 in this.filter[key1]) {
-        if (key2 !== "count") {
-          for (key3 in this.filter[key1][key2]) {
-            if (key3 !== "count") {
-              VARIABLE_MAP[key3] = this.filter[key1][key2][key3].label;
-            }
-          }
-        }
-      }
-    }
-
   },
 
   // event loop - update the menuAim everytime after it's re-rendered
@@ -696,12 +662,6 @@ var readURL = function() {
     var activeTab = url.substring(url.indexOf("#") + 1);
     var presetTabs = [
       "results",
-      "tables",
-      "visualization",
-      "statistics",
-      "timelapse",
-      "maps",
-      "timeline"
     ];
 
     if (presetTabs.includes(activeTab)) {
