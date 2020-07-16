@@ -36,7 +36,6 @@ urlpatterns = [
     url(r'^common/', include('voyages.apps.common.urls', namespace='common')),
     url(r'^past/', include('voyages.apps.past.urls', namespace='past')),
     url(r'^resources/', include('voyages.apps.resources.urls', namespace='resources')),
-    url(r'^past/', include('voyages.apps.past.urls', namespace='past')),
     url(r'^i18n/', include('django.conf.urls.i18n')),
     url(r'^contribute/', include('voyages.apps.contribute.urls', namespace='contribute')),
     url(r'^search/', include('haystack.urls', namespace='search')),

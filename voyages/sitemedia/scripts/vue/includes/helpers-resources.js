@@ -6,7 +6,7 @@ const SEARCH_URL = "api/search";
 function processResponse(json) {
   var data = [];
   json.data.forEach(function(row) {
-    var arrivalDateArray = row.voyage__voyage_dates__first_dis_of_slaves.split([',']);
+    var arrivalDateArray = row.voyage__voyage_dates__first_dis_of_slaves ? row.voyage__voyage_dates__first_dis_of_slaves.split([',']) : '';
     var arrivalDate = '';
     var arrivalYear = '';
     var arrivalMonth = '';
@@ -25,7 +25,7 @@ function processResponse(json) {
       arrivalDate = arrivalDateArray[0];
     }
     row.voyage__voyage_dates__first_dis_of_slaves = arrivalDate;
-    
+
     var gender = '';
     if (row.gender == 1) {
       gender = gettext("Male");
@@ -96,7 +96,7 @@ if (LANGUAGE_CODE == "es") {
 // variableMapping
 // used for loading a variable (variables extracted from a saved query ==> variables in the vm filter object)
 var variableMapping = {
-  
+
 };
 
 // mark a variable as changed and activated state
@@ -673,7 +673,7 @@ var parseLanguageGroups = function(response) {
       $.each(languageGroup.alts, function(id, altName) {
         altName = altName.trim();
         if (altName != languageGroup.name) {
-          altNames.push(altName); 
+          altNames.push(altName);
         }
       });
       if (altNames.length > 0) {
@@ -686,7 +686,7 @@ var parseLanguageGroups = function(response) {
       }
     });
   });
-  
+
   return options;
 }
 
@@ -705,7 +705,7 @@ var parseEthnicities = function(response) {
       $.each(ethnicity.alts, function(id, altName) {
         altName = altName.trim();
         if (altName != ethnicity.name) {
-          altNames.push(altName); 
+          altNames.push(altName);
         }
       });
       if (altNames.length > 0) {
