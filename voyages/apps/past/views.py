@@ -75,7 +75,10 @@ def search_enslaved(request):
     query, ranking = search.execute()
     query = query.values(*_fields)
     if ranking:
-        query = sorted(query, key=lambda x: ranking[x['enslaved_id']])
+        query = list(query)
+        for x in query:
+            x['ranking'] = ranking[x['enslaved_id']]
+        query = sorted(query, key=lambda x: x['ranking'])
     output_type = data.get('output', 'resultsTable')
     # For now we only support outputing the results to DataTables.
     if output_type == 'resultsTable':
