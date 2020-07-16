@@ -1527,7 +1527,7 @@ def download_voyages(request):
             'log_file': re.sub('^.*/', '', log_file.name),
             'csv_file': re.sub('^.*/', '', csv_file.name)})
     except Exception as exception:
-        return JsonResponse({'result': 'Failed', 'error': exception.message})
+        return JsonResponse({'result': 'Failed', 'error': repr(exception)})
 
 def generate_voyage_csv_file(statuses, published, csv_file, log_file, remove_linebreaks=False, intra_american_flag=None):
     def log(message):
@@ -1612,7 +1612,7 @@ def publish_pending(request):
         thread.start_new_thread(publish_accepted_contributions, (log_file, request.POST.get('skip_backup', False)))
         return JsonResponse({'result': 'OK', 'log_file': re.sub('^.*/', '', log_file.name)})
     except Exception as exception:
-        return JsonResponse({'result': 'Failed', 'error': exception.message})
+        return JsonResponse({'result': 'Failed', 'error': repr(exception)})
       
 @login_required()
 @require_POST
