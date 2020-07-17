@@ -5,6 +5,7 @@ from django.views.decorators.cache import cache_page
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 from voyages.apps.past.models import *
+from name_search import NameSearchCache
 import itertools
 import json
 
@@ -66,12 +67,13 @@ def search_enslaved(request):
     # constructor.
     data = json.loads(request.body)
     search = EnslavedSearch(**data['search_query'])
-    _fields = ['enslaved_id', 'documented_name', 'name_first', 'name_second', 'name_third',
+    _name_fields = ['documented_name', 'name_first', 'name_second', 'name_third']
+    _fields = ['enslaved_id',
         'age', 'gender', 'height', 'ethnicity__name', 'language_group__name', 'language_group__modern_country__name',
         'voyage__id', 'voyage__voyage_ship__ship_name', 'voyage__voyage_dates__first_dis_of_slaves',
         'voyage__voyage_itinerary__int_first_port_dis__place',
         'voyage__voyage_itinerary__imp_principal_place_of_slave_purchase__place',
-        'voyage__voyage_itinerary__imp_principal_port_slave_dis__place']
+        'voyage__voyage_itinerary__imp_principal_port_slave_dis__place'] + _name_fields
     query, ranking = search.execute()
     query = query.values(*_fields)
     if ranking:
@@ -82,5 +84,10 @@ def search_enslaved(request):
     output_type = data.get('output', 'resultsTable')
     # For now we only support outputing the results to DataTables.
     if output_type == 'resultsTable':
-        return JsonResponse(_generate_table(query, data.get('tableParams', {})))
+        table = _generate_table(query, data.get('tableParams', {}))
+        page = table.get('data', [])
+        NameSearchCache.load()
+        for x in page:
+            x['recordings'] = NameSearchCache.get_recordings([x[f] for f in _name_fields if f in x])
+        return JsonResponse(table)
     return JsonResponse({'error': 'Unsupported'})
