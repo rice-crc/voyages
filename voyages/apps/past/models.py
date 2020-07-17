@@ -187,6 +187,14 @@ class EnslavedContributionLanguageEntry(models.Model):
     order = models.IntegerField()
     notes = models.CharField(max_length=255, null=True, blank=True)
 
+class EnslavedName(models.Model):
+    name = models.CharField(max_length=255, null=False, blank=False)
+    language = models.CharField(max_length=3, null=False, blank=False)
+    recordings_count = models.IntegerField()
+    
+    class Meta:
+        unique_together = ('name', 'language')
+
 class EnslavedSearch:
     """
     Search parameters for enslaved persons.

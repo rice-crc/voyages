@@ -5,7 +5,7 @@ import threading
 import unicodedata
 import heapq
 import Levenshtein_search
-from voyages.apps.past.models import Enslaved
+from voyages.apps.past.models import Enslaved, EnslavedName
 
 # function obtained from https://stackoverflow.com/questions/517923/what-is-the-best-way-to-remove-accents-in-a-python-unicode-string
 def strip_accents(text):
@@ -31,6 +31,12 @@ class NameSearchCache:
     _lock = threading.Lock()
     _index = None
     _name_key = {}
+    _sound_recordings = {}
+
+    @classmethod
+    def get_recordings(cls, names):
+        rec = cls._sound_recordings
+        return {name: rec[name] for name in names if name is not None and name in rec}
 
     @classmethod
     def search(cls, name, max_cost = 3, max_results = 100):
@@ -58,4 +64,10 @@ class NameSearchCache:
                     ids = cls._name_key.setdefault(name, [])
                     ids.append(id)
             Levenshtein_search.populate_wordset(0, list(all_names))
+            q = EnslavedName.objects.values_list('id', 'name', 'language', 'recordings_count')
+            for item in q:
+                current = cls._sound_recordings.setdefault(item[1], {})
+                current['lang'] = item[2]
+                current['id'] = item[0]
+                current['records'] = ['0' + str(item[0]) + '.' + item[2] + '.' + str(index) + '.mp3' for index in range(1, 1 + item[3])]
             cls._loaded = True
