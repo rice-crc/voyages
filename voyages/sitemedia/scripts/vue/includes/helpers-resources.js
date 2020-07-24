@@ -319,22 +319,23 @@ function searchAll(filter, filterData) {
                     filter[key1][key2][key3].constructor.name ===
                     "NumberVariable"
                   ) {
+                    var searchTerm0 = 0;
+                    var searchTerm1 = 999999;
                     switch (filter[key1][key2][key3].value["op"]){
                       case "is equal to":
-                        filter[key1][key2][key3].value["searchTerm1"] = filter[key1][key2][key3].value["searchTerm0"];
+                        searchTerm0 = searchTerm1 = filter[key1][key2][key3].value["searchTerm0"];
                       break;
                       case "is at most":
-                        filter[key1][key2][key3].value["searchTerm1"] = filter[key1][key2][key3].value["searchTerm0"];
-                        filter[key1][key2][key3].value["searchTerm0"] = 0;
+                        searchTerm1 = filter[key1][key2][key3].value["searchTerm0"];
                       break;
                       case "is at least":
-                        filter[key1][key2][key3].value["searchTerm1"] = 999999;
+                        searchTerm0 = filter[key1][key2][key3].value["searchTerm0"];
                       break;
                     }
 
                     item["searchTerm"] = [
-                      filter[key1][key2][key3].value["searchTerm0"],
-                      filter[key1][key2][key3].value["searchTerm1"]
+                      searchTerm0,
+                      searchTerm1
                     ];
                   }
                 }
