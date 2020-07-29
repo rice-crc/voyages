@@ -67,7 +67,10 @@ class NameSearchCache:
             q = EnslavedName.objects.values_list('id', 'name', 'language', 'recordings_count')
             for item in q:
                 current = cls._sound_recordings.setdefault(item[1], {})
-                current['lang'] = item[2]
-                current['id'] = item[0]
-                current['records'] = ['0' + str(item[0]) + '.' + item[2] + '.' + str(index) + '.mp3' for index in range(1, 1 + item[3])]
+                langs = current.setdefault('langs', [])
+                lang = {}
+                lang['lang'] = item[2]
+                lang['id'] = item[0]
+                lang['records'] = ['0' + str(item[0]) + '.' + item[2] + '.' + str(index) + '.mp3' for index in range(1, 1 + item[3])]
+                langs.append(lang)
             cls._loaded = True
