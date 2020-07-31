@@ -1,7 +1,7 @@
 @import "colors";
 @import "variables";
 
-// 
+//
 
 .pagination.pagination-sm {
 	float: right;
@@ -234,4 +234,21 @@ input.button-save:hover {
   cursor: pointer;
   font-size: $regular-font-size !important;
   font-weight: 500;
+}
+
+.btn-transparent {
+  color: #212529;
+  background-color: transparent;
+}
+.btn-transparent.active.focus,
+.btn-transparent.active:focus,
+.btn-transparent.focus,
+.btn-transparent.focus:active,
+.btn-transparent:active:focus,
+.btn-transparent:focus {
+  outline: 0;
+  outline-offset: 0;
+  background-image: none;
+  -webkit-box-shadow: none;
+  box-shadow: none;
 }
