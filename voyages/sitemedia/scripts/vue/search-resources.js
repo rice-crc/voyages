@@ -5,6 +5,7 @@ var categoryNames = [
   gettext("Cultural Association"),
   gettext("Fate"),
   gettext("Sources"),
+  gettext("Recordings"),
 ];
 
 var allColumns = [
@@ -41,6 +42,7 @@ var allColumns = [
   // sources
   // { data: "source", category: 5, header: gettext("Source"), isImputed: false },
 
+  { data: "recordings", category: 6, header: '<i class="fa fa-volume-up" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></i>', isImputed: false, isAudible: true },
 ];
 
 var categories = $.map(categoryNames, function(name) {
@@ -48,6 +50,13 @@ var categories = $.map(categoryNames, function(name) {
     name: name,
     columns: []
   };
+});
+
+$(function(){
+  $("#results_main_table").on( 'page.dt', function () {
+      $('audio').remove();
+  } );
+
 });
 
 allColumns.forEach(function(c, index) {
@@ -70,7 +79,42 @@ allColumns.forEach(function(c, index) {
   c.render = function (data) {
     var formattedString = "";
     if (data !== null) {
-      formattedString = "<span class='imputed-result'>" + data + "</span>";
+      if (c.isAudible) {
+        if (!jQuery.isEmptyObject(data)) {
+          var audiosList = $('<div></div>');
+          $.each(data, function (key, item) {
+            $.each(item.langs, function (langKey, langItem) {
+              $.each(langItem.records, function (recordKey, recordItem) {
+                var elementId = (''+recordItem).replace(/\./g, '_');
+
+                var audioItem = $('#'+elementId);
+                if (audioItem.length === 0) {
+                  audioItem = $('<audio id="'+elementId+'" src="'+STATIC_URL+'recordings/'+recordItem+'">'+
+                                gettext("Your browser doesn't support <code>audio</code> tags.")+
+                              '</audio>');
+                  $('body').append(audioItem);
+                }
+
+                var recordVersion = '';
+                if (langItem.records.length > 1) {
+                  recordVersion = ' - v'+recordItem.split('.')[2];
+                }
+
+                var itemList = $("<div></div>", {
+                    "text": '<button data-audio-id=\'' + elementId + '\' class=\'btn btn-transparent far fa-play-circle mr-1 audio-player px-1\'></button>' +
+                    key + ' (' + langItem.lang + ')' + recordVersion
+                });
+                audiosList.append(itemList);
+              });
+            });
+          });
+
+          formattedString = ''+
+              '<button type="button" class="fa fa-volume-up btn btn-transparent" data-toggle="popover" data-html="true" data-content="'+audiosList.html()+'"></button>';
+        }
+      } else {
+        formattedString = "<span class='imputed-result'>" + data + "</span>";
+      }
     } else {
       formattedString = data
     }
@@ -109,3 +153,14 @@ var pageLength = {
   extend: 'pageLength',
   className: 'btn btn-info buttons-collection dropdown-toggle',
 };
+
+$('body').on('click', function (e) {
+  console.log($(e.target));
+  //did not click a popover toggle, or icon in popover toggle, or popover
+  if ($(e.target).parents('.popover').length === 0) {
+    $('[data-toggle="popover"]').popover('hide');
+  }
+  if ($(e.target).data('toggle')) {
+    $(e.target).popover('show');
+  }
+});

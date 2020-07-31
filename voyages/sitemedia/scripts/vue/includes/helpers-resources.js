@@ -331,6 +331,10 @@ function searchAll(filter, filterData) {
                       case "is at least":
                         searchTerm0 = filter[key1][key2][key3].value["searchTerm0"];
                       break;
+                      case "is between":
+                        searchTerm0 = filter[key1][key2][key3].value["searchTerm0"];
+                        searchTerm1 = filter[key1][key2][key3].value["searchTerm1"];
+                      break;
                     }
 
                     item["searchTerm"] = [
@@ -875,6 +879,24 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
       stateDuration: -1,
       initComplete: function() {
         $('[data-toggle="tooltip"]').tooltip();
+      },
+      drawCallback: function (e) {
+        $('[data-toggle="popover"]').popover({
+              container: 'body',
+              placement: 'left',
+        });
+        $('[data-toggle="popover"]').on('shown.bs.popover', function () {
+          $(".audio-player").click(function () {
+            $(this).removeClass('far fa-play-circle').addClass('fa fa-spinner fa-spin').attr('disabled', 'disabled');
+
+            document.getElementById($(this).data('audio-id')).play();
+          });
+
+        })
+        $('audio').on('ended', function(){
+          var audioId = $(this)[0].id;
+          $('[data-audio-id="'+audioId+'"]').removeClass('fa fa-spinner fa-spin').addClass('far fa-play-circle').removeAttr('disabled');
+        });
       }
     });
 
