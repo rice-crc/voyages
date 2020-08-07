@@ -71,9 +71,9 @@ allColumns.forEach(function(c, index) {
 
   // add render function to customize the display of imputed variables
   if (c.isImputed) {
-    c.title = "<span class='imputed-result'>" + c.header + "</span>" + ' <span class="badge badge-pill badge-secondary tooltip-pointer" data-toggle="tooltip" data-placement="top" title="' + gettext("Imputed results are calculated by an algorithm.") + '"> IMP </span>'; // italicized column title
+    c.title = "<span class='imputed-result'><span class='column-header'>" + c.header + "</span></span>" + ' <span class="badge badge-pill badge-secondary tooltip-pointer" data-toggle="tooltip" data-placement="top" title="' + gettext("Imputed results are calculated by an algorithm.") + '"> IMP </span>'; // italicized column title
   } else {
-    c.title = c.header;
+    c.title = "<span class='column-header'>" + c.header + "</span>";
   }
 
   c.render = function (data) {
@@ -155,7 +155,6 @@ var pageLength = {
 };
 
 $('body').on('click', function (e) {
-  console.log($(e.target));
   //did not click a popover toggle, or icon in popover toggle, or popover
   if ($(e.target).parents('.popover').length === 0) {
     $('[data-toggle="popover"]').popover('hide');

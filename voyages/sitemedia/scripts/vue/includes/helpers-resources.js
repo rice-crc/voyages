@@ -726,6 +726,24 @@ function sortNumber(a, b) {
   return a - b;
 }
 
+function displayColumnOrder(order) {
+  if ($('#display-column-order').length > 0) {
+    $('#display-column-order').remove();
+  }
+
+  if (order.length > 1) {
+    var styleElem = document.head.appendChild(document.createElement("style"));
+    $(styleElem).attr("id", "display-column-order");
+
+    var innerHTML = '';
+    $.each(order, function(index, value){
+      innerHTML += '[data-column-index="'+value.column+'"] span.column-header:after {content: " ('+(index+1)+')";}';
+    });
+
+    styleElem.innerHTML = innerHTML;
+  }
+}
+
 function refreshUi(filter, filterData, currentTab, tabData, options) {
   var currentSearchObj = searchAll(filter, filterData);
 
@@ -740,13 +758,19 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
         url: SEARCH_URL,
         type: "POST",
         data: function(d) {
-          if (d.order[0] != undefined) {
-            var order = d.order[0];
-            currentSearchObj['order_by'] = {
-              'column' : d.columns[order['column']].data,
-              'dir' : order['dir']
-            };
+          if (d.order) {
+            currentSearchObj.order_by = $.map(d.order, function(item) {
+              var columnIndex = mainDatatable
+                ? mainDatatable.colReorder.order()[item.column]
+                : item.column;
+              return {
+                columnName: allColumns[columnIndex].data,
+                direction: item.dir
+              };
+            });
           }
+
+          displayColumnOrder(d.order);
 
           return JSON.stringify({
             search_query: currentSearchObj,
@@ -771,7 +795,7 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 
       scrollX: true,
 
-      // colReorder: true,
+      colReorder: true,
 
       // columnDefs: [
       //   {
@@ -898,6 +922,13 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
           $('[data-audio-id="'+audioId+'"]').removeClass('fa fa-spinner fa-spin').addClass('far fa-play-circle').removeAttr('disabled');
         });
       }
+    });
+
+    mainDatatable.on("column-reorder", function(e, settings, details) {
+      var order = $.map(settings.aaSorting, function(item) {
+        return {column: item[0]};
+      });
+      displayColumnOrder(order);
     });
 
     // built for the datatable download dropdown menu
