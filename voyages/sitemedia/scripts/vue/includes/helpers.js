@@ -874,6 +874,24 @@ function destroyPreviousTable(id) {
   }
 }
 
+function displayColumnOrder(order) {
+  if ($('#display-column-order').length > 0) {
+    $('#display-column-order').remove();
+  }
+
+  if (order.length > 1) {
+    var styleElem = document.head.appendChild(document.createElement("style"));
+    $(styleElem).attr("id", "display-column-order");
+
+    var innerHTML = '';
+    $.each(order, function(index, value){
+      innerHTML += '[data-column-index="'+value.column+'"] span.column-header:after {content: " ('+(index+1)+')";}';
+    });
+
+    styleElem.innerHTML = innerHTML;
+  }
+}
+
 function refreshUi(filter, filterData, currentTab, tabData, options) {
   // Update UI after search query was changed,
   // or a tab was selected.
@@ -906,6 +924,8 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
               };
             });
           }
+
+          displayColumnOrder(d.order);
 
           // TEMP Yang: I don't think this is the right place for this code...
           // Besides, I think that this is attaching multiple handlers for
@@ -1124,13 +1144,25 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
       columns: allColumns,
       stateSave: true,
       stateDuration: -1,
-      initComplete: function() {
+      initComplete: function(settings, json) {
         $('[data-toggle="tooltip"]').tooltip();
+
+        var order = $.map(settings.aaSorting, function(item) {
+          return {column: item[0]};
+        });
+        displayColumnOrder(order);
       }
     });
 
     mainDatatable.on("draw.dt", function() {
       $('[data-toggle="tooltip"]').tooltip();
+    });
+
+    mainDatatable.on("column-reorder", function(e, settings, details) {
+      var order = $.map(settings.aaSorting, function(item) {
+        return {column: item[0]};
+      });
+      displayColumnOrder(order);
     });
 
     // built for the datatable download dropdown menu
@@ -2279,7 +2311,7 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
         }
 
         // voyagesMap._map.scrollWheelZoom.disable();
-        
+
         // leaflet map control - top left
         var mapTopLeft = L.control();
         mapTopLeft.onAdd = function() {
