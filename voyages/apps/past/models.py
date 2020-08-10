@@ -1,5 +1,6 @@
 from django.db import models
-from django.db.models import Q
+from django.db.models import F, Q, Case, When, Value, IntegerField
+from django.db.models.functions import Length, Substr
 from django.contrib.auth.models import User
 from voyages.apps.voyage.models import Place, Voyage, VoyageSources
 import operator
@@ -195,6 +196,8 @@ class EnslavedName(models.Model):
     class Meta:
         unique_together = ('name', 'language')
 
+_special_empty_string_fields = {'voyage__voyage_ship__ship_name': 1, 'voyage__voyage_dates__first_dis_of_slaves': '2'}
+
 class EnslavedSearch:
     """
     Search parameters for enslaved persons.
@@ -222,7 +225,9 @@ class EnslavedSearch:
         @param: ship_name The ship name that the enslaved embarked
         @param: voyage_id A pair (a, b) where the a <= voyage_id <= b
         @param: source A text fragment that should match Source's text_ref or full_ref
-        @param: order_by TODO: Spec/impl.
+        @param: order_by An array of dicts { 'columnName': 'NAME', 'direction': 'ASC or DESC' }.
+                Note that if the search is fuzzy, then the fallback value of order_by is the
+                ranking of the fuzzy search.
         """
         self.searched_name = searched_name
         self.exact_name_search = exact_name_search
@@ -237,12 +242,13 @@ class EnslavedSearch:
         self.ship_name = ship_name
         self.voyage_id = voyage_id
         self.source = source
+        self.order_by = order_by
 
-    def execute(self):
+    def execute(self, fields):
         """
-        Execute the search. If we require fuzzy name search, then this is done
-        outside of the database on our special search data structure and then
-        filter the ids on the db query.
+        Execute the search and output an enumerable of dictionaries, each
+        representing an Enslaved record.
+        @param: fields A list of fields that are fetched.
         """
         q = Enslaved.objects \
             .select_related('ethnicity') \
@@ -256,6 +262,7 @@ class EnslavedSearch:
             .select_related('register_country') \
             .all()
         ranking = None
+        is_fuzzy = False
         if self.searched_name and len(self.searched_name):
             if self.exact_name_search:
                 q = q.filter(Q(documented_name=self.searched_name) | Q(name_first=self.searched_name) | \
@@ -267,6 +274,7 @@ class EnslavedSearch:
                 fuzzy_ids = NameSearchCache.search(self.searched_name)
                 ranking = {x[1]: x[0] for x in enumerate(fuzzy_ids)}
                 q = q.filter(pk__in=fuzzy_ids)
+                is_fuzzy = True
         if self.age_gender:
             def get_ag_query(x):
                 if x == 'male':
@@ -309,4 +317,54 @@ class EnslavedSearch:
             q = q.filter(language_group__pk__in=self.language_groups)
         if self.ship_name:
             q = q.filter(voyage__voyage_ship__ship_name__icontains=self.ship_name)
-        return q, ranking
+        order_by_ranking = is_fuzzy
+        if isinstance(self.order_by, list):
+            order_by_ranking = False
+            for x in self.order_by:
+                if x['columnName'] == 'ranking':
+                    order_by_ranking = True
+                    break
+            orm_orderby = []
+            for x in self.order_by:
+                colName = x['columnName']
+                if colName == 'ranking': continue
+                is_desc = x['direction'].lower() == 'desc'
+                order_field = F(colName)
+                empty_string_field_min_char_len = _special_empty_string_fields.get(colName)
+                if empty_string_field_min_char_len:
+                    # Add a "length > min_char_len_for_field" field and sort it first.
+                    # Note that we use a non-zero value for min_char_len_for_field because
+                    # some fields uses a string ' ' to represent blank entries while some
+                    # date fields use ',,' to represent a blank date.
+                    count_field = 'count_' + colName
+                    isempty_field = 'isempty_' + colName
+                    q = q.annotate(**{count_field: Length(order_field)})
+                    q = q.annotate(**{isempty_field: Case(
+                        When(**{ 'then': Value(1), count_field + '__gt': empty_string_field_min_char_len }),
+                        default=Value(0),
+                        output_field=IntegerField()
+                    )})
+                    orm_orderby.append('-' + isempty_field)
+                    if 'date' in colName:
+                        # The date formats MM,DD,YYYY with possible blank values are
+                        # very messy to sort. Here we add sorting by the last 4 characters
+                        # to first sort by year (which is always present for non blank dates).
+                        year_field = 'yearof_' + colName
+                        q = q.annotate(**{year_field: Substr(order_field, 4 * Value(-1), 4)})
+                        orm_orderby.append(('-' if is_desc else '') + year_field)
+                if is_desc:
+                    order_field = order_field.desc(nulls_last=empty_string_field_min_char_len is None)
+                else:
+                    order_field = order_field.asc(nulls_last=empty_string_field_min_char_len is None)
+                orm_orderby.append(order_field)
+            q = q.order_by(*orm_orderby)
+        q = q.values(*fields)
+        if is_fuzzy:
+            # Convert the QuerySet to a concrete list and include the ranking as a member of
+            # each object in that list.
+            q = list(q)
+            for x in q:
+                x['ranking'] = ranking[x['enslaved_id']]
+            if order_by_ranking:
+                q = sorted(q, key=lambda x: x['ranking'])
+        return q
