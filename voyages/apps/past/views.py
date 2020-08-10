@@ -74,13 +74,7 @@ def search_enslaved(request):
         'voyage__voyage_itinerary__int_first_port_dis__place',
         'voyage__voyage_itinerary__imp_principal_place_of_slave_purchase__place',
         'voyage__voyage_itinerary__imp_principal_port_slave_dis__place'] + _name_fields
-    query, ranking = search.execute()
-    query = query.values(*_fields)
-    if ranking:
-        query = list(query)
-        for x in query:
-            x['ranking'] = ranking[x['enslaved_id']]
-        query = sorted(query, key=lambda x: x['ranking'])
+    query = search.execute(_fields)
     output_type = data.get('output', 'resultsTable')
     # For now we only support outputing the results to DataTables.
     if output_type == 'resultsTable':
