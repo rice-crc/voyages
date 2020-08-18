@@ -9,7 +9,7 @@ from name_search import NameSearchCache
 import itertools
 import json
 
-def _generate_table(query, table_params):
+def _generate_table(query, table_params, data_adapter=None):
     try:
         rows_per_page = int(table_params.get('length', 10))
         current_page_num = 1 + int(table_params.get('start', 0)) / rows_per_page
@@ -25,6 +25,10 @@ def _generate_table(query, table_params):
     response_data['recordsTotal'] = total_results
     response_data['recordsFiltered'] = total_results
     response_data['draw'] = int(table_params.get('draw', 0))
+    if data_adapter:
+        changed = data_adapter(page)
+        if changed:
+            page = changed
     response_data['data'] = list(page)
     return response_data
 
@@ -67,7 +71,7 @@ def search_enslaved(request):
     # constructor.
     data = json.loads(request.body)
     search = EnslavedSearch(**data['search_query'])
-    _name_fields = ['documented_name', 'name_first', 'name_second', 'name_third']
+    from voyages.apps.past.models import _name_fields
     _fields = ['enslaved_id',
         'age', 'gender', 'height', 'ethnicity__name', 'language_group__name', 'language_group__modern_country__name',
         'voyage__id', 'voyage__voyage_ship__ship_name', 'voyage__voyage_dates__first_dis_of_slaves',
@@ -78,7 +82,16 @@ def search_enslaved(request):
     output_type = data.get('output', 'resultsTable')
     # For now we only support outputing the results to DataTables.
     if output_type == 'resultsTable':
-        table = _generate_table(query, data.get('tableParams', {}))
+        def adapter(page):
+            for row in page:
+                row['names'] = list(set([row[name_field] for name_field in _name_fields if row[name_field]]))
+                keys = list(row.keys())
+                for k in keys:
+                    if k.startswith('_'):
+                        row.pop(k)
+            return page
+
+        table = _generate_table(query, data.get('tableParams', {}), adapter)
         page = table.get('data', [])
         NameSearchCache.load()
         for x in page:

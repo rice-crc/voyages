@@ -1,6 +1,6 @@
 from django.db import models
-from django.db.models import F, Q, Case, When, Value, IntegerField
-from django.db.models.functions import Length, Substr
+from django.db.models import Func, F, Q, Case, When, Value, CharField, IntegerField
+from django.db.models.functions import Coalesce, Concat, Length, Substr
 from django.contrib.auth.models import User
 from voyages.apps.voyage.models import Place, Voyage, VoyageSources
 import operator
@@ -198,6 +198,8 @@ class EnslavedName(models.Model):
 
 _special_empty_string_fields = {'voyage__voyage_ship__ship_name': 1, 'voyage__voyage_dates__first_dis_of_slaves': '2'}
 
+_name_fields = ['documented_name', 'name_first', 'name_second', 'name_third']
+
 class EnslavedSearch:
     """
     Search parameters for enslaved persons.
@@ -329,9 +331,11 @@ class EnslavedSearch:
                 colName = x['columnName']
                 if colName == 'ranking': continue
                 is_desc = x['direction'].lower() == 'desc'
+                nulls_last = True
                 order_field = F(colName)
                 empty_string_field_min_char_len = _special_empty_string_fields.get(colName)
                 if empty_string_field_min_char_len:
+                    nulls_last = True
                     # Add a "length > min_char_len_for_field" field and sort it first.
                     # Note that we use a non-zero value for min_char_len_for_field because
                     # some fields uses a string ' ' to represent blank entries while some
@@ -352,10 +356,22 @@ class EnslavedSearch:
                         year_field = 'yearof_' + colName
                         q = q.annotate(**{year_field: Substr(order_field, 4 * Value(-1), 4)})
                         orm_orderby.append(('-' if is_desc else '') + year_field)
-                if is_desc:
-                    order_field = order_field.desc(nulls_last=empty_string_field_min_char_len is None)
+                if colName == 'names':
+                    colName = '_names_sort'
+                    names_sep = Value(';')
+                    names_concat = [names_sep] * (2 * len(_name_fields) - 1)
+                    names_concat[0::2] = _name_fields
+                    fallback_name_val = Value('AAAAA' if is_desc else 'ZZZZZ')
+                    expressions = [Coalesce(F(name_field), fallback_name_val, output_field=CharField()) for name_field in _name_fields]
+                    q = q.annotate(**{colName: Func(*expressions, function='GREATEST' if is_desc else 'LEAST')})
+                    nulls_last = False # We already use fallback values so no NULL will never appear.
+                    order_field = F(colName)
+                    order_field = order_field.desc() if is_desc else order_field.asc()
+                    fields = fields + [colName]
+                elif is_desc:
+                    order_field = order_field.desc(nulls_last=nulls_last)
                 else:
-                    order_field = order_field.asc(nulls_last=empty_string_field_min_char_len is None)
+                    order_field = order_field.asc(nulls_last=nulls_last)
                 orm_orderby.append(order_field)
             q = q.order_by(*orm_orderby)
         q = q.values(*fields)
