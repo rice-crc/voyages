@@ -117,7 +117,7 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
     Index method for class Voyage.
     """
 
-    # NOTE: To add support for a new language, a simple regular expression seach-and replace
+    # NOTE: To add support for a new language, a simple regular expression search-and replace
     # can be used to create a variable with the additional language. For instance, the following
     # regular expression adds a language "es" for each variable with language "pt":
     #
