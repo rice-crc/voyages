@@ -114,9 +114,13 @@ allColumns.forEach(function(c, index) {
         }
       } else {
         formattedString = "<span class='imputed-result'>" + data + "</span>";
+        var column = c.data;
+        if (column == 'voyage__id') {
+          formattedString = '<a href="javascript:void(0)" onclick="openVoyageModal(' + data + ');">' + formattedString + '</a>'
+        }
       }
     } else {
-      formattedString = data
+      formattedString = data;
     }
     return formattedString;
   };

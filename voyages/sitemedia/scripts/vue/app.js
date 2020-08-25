@@ -224,7 +224,6 @@ var searchBar = new Vue({
       handler: function() {
         this.rowModalShow = true;
         var results = [];
-        // console.log(JSON.stringify(this.row.data));
         for (group in this.filter) {
           if (group !== "year" && group !== "settings") {
             var datum = {

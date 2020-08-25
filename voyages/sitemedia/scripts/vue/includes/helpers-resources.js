@@ -2,6 +2,114 @@
 const SAVED_SEARCH_LABEL = "#searchId=";
 const SEARCH_URL = "api/search";
 
+var voyageColumns = [
+  { 
+    group : 'ship_nation_owner',
+    groupName : gettext('Ship, Nation, Owners'),
+    fields : [
+      { data: "var_voyage_id", label: gettext("Voyage ID"), isImputed: false },
+      { data: "var_ship_name", label: gettext("Vessel name"), isImputed: false },
+      { data: "var_owner", label: gettext("Vessel owner"), isImputed: false },
+      { data: "var_nationality", label: gettext("Flag"), isImputed: false },
+      { data: "var_imputed_nationality", label: gettext("Flag (imputed)"), isImputed: true },
+      { data: "var_vessel_construction_place_lang", label: gettext("Place constructed"), isImputed: false },
+      { data: "var_year_of_construction", label: gettext("Year constructed"), isImputed: false },
+      { data: "var_registered_place_lang", label: gettext("Place registered"), isImputed: false },
+      { data: "var_registered_year", label: gettext("Year registered"), isImputed: false },
+      { data: "var_rig_of_vessel", label: gettext("Rig of vessel"), isImputed: false },
+      { data: "var_tonnage", label: gettext("Tonnage"), isImputed: false },
+      { data: "var_tonnage_mod", label: gettext("Standardized tonnage"), isImputed: true },
+      { data: "var_guns_mounted", label: gettext("Guns mounted"), isImputed: false }
+    ]
+  },
+  { 
+    group : 'outcome',
+    groupName : gettext('Outcome'),
+    fields : [
+      { data: "var_outcome_voyage_lang", label: gettext("Particular outcome of voyage"), isImputed: false },
+      { data: "var_outcome_slaves_lang", label: gettext("Outcome of voyage for slaves"), isImputed: false },
+      { data: "var_outcome_ship_captured_lang", label: gettext("Outcome of voyage if ship captured"), isImputed: false },
+      { data: "var_outcome_owner_lang", label: gettext("Outcome of voyage for owner"), isImputed: false },
+      { data: "var_resistance_lang", label: gettext("African resistance"), isImputed: false }
+    ]
+  },
+  { 
+    group : 'itinerary',
+    groupName : gettext('Itinerary'),
+    fields : [
+      { data: "var_imp_port_voyage_begin_lang", label: gettext("Place where voyage began"), isImputed: true },
+      { data: "var_imp_principal_place_of_slave_purchase_lang", label: gettext("Principal place of slave purchase"), isImputed: true },
+      { data: "var_first_place_slave_purchase_lang", label: gettext("1st place of slave purchase"), isImputed: false },
+      { data: "var_second_place_slave_purchase_lang", label: gettext("2nd place of slave purchase"), isImputed: false },
+      { data: "var_third_place_slave_purchase_lang", label: gettext("3rd place of slave purchase"), isImputed: false },
+      { data: "var_port_of_call_before_atl_crossing_lang", label: gettext("Places of call before Atlantic crossing"), isImputed: false },
+      { data: "var_imp_principal_port_slave_dis_lang", label: gettext("Principal place of slave landing"), isImputed: true },
+      { data: "var_first_landing_place_lang", label: gettext("1st place of slave landing"), isImputed: false },
+      { data: "var_second_landing_place_lang", label: gettext("2nd place of slave landing"), isImputed: false },
+      { data: "var_third_landing_place_lang", label: gettext("3rd place of slave landing"), isImputed: false },
+      { data: "var_place_voyage_ended_lang", label: gettext("Place where voyage ended"), isImputed: false }
+    ]
+  },
+  { 
+    group : 'dates',
+    groupName : gettext('Dates'),
+    fields : [
+      { data: "var_imp_length_home_to_disembark", label: gettext("Voyage length, homeport to disembarkation"), isImputed: false },
+      { data: "var_length_middle_passage_days", label: gettext("Middle passage (days)"), isImputed: false },
+      { data: "var_imp_arrival_at_port_of_dis", label: gettext("Year of arrival at port of disembarkation "), isImputed: true },
+      { data: "var_voyage_began_partial", label: gettext("Date that voyage began"), isImputed: false },
+      { data: "var_slave_purchase_began_partial", label: gettext("Date trade began in Africa"), isImputed: false },
+      { data: "var_date_departed_africa_partial", label: gettext("Date vessel departed Africa"), isImputed: false },
+      { data: "var_first_dis_of_slaves_partial", label: gettext("Date vessel arrived with slaves"), isImputed: false },
+      { data: "var_departure_last_place_of_landing_partial", label: gettext("Date vessel departed for homeport"), isImputed: false },
+      { data: "var_voyage_completed_partial", label: gettext("Date voyage completed"), isImputed: false }  
+    ]
+  },
+  { 
+    group : 'captain_and_crew',
+    groupName : gettext('Captain and Crew'),
+    fields : [
+      { data: "var_captain", label: gettext("Captain's name"), isImputed: false },
+      { data: "var_crew_voyage_outset", label: gettext("Crew at voyage outset"), isImputed: false },
+      { data: "var_crew_first_landing", label: gettext("Crew at first landing of slaves"), isImputed: false },
+      { data: "var_crew_died_complete_voyage", label: gettext("Crew deaths during voyage"), isImputed: false }
+    ]
+  },
+  { 
+    group : 'slaves',
+    groupName : gettext('Slaves'),
+    fields : [
+      { data: "var_imp_total_num_slaves_purchased", label: gettext("Total embarked"), isImputed: true },
+      { data: "var_total_num_slaves_purchased", label: gettext("Total embarked"), isImputed: false },
+      { data: "var_imp_total_slaves_disembarked", label: gettext("Total disembarked"), isImputed: true },
+      { data: "var_num_slaves_intended_first_port", label: gettext("Slaves intended at 1st place"), isImputed: false },
+      { data: "var_num_slaves_carried_first_port", label: gettext("Slaves carried from 1st port"), isImputed: false },
+      { data: "var_num_slaves_carried_second_port", label: gettext("Slaves carried from 2nd port"), isImputed: false },
+      { data: "var_num_slaves_carried_third_port", label: gettext("Slaves carried from 3rd port"), isImputed: false },
+      { data: "var_total_num_slaves_arr_first_port_embark", label: gettext("Slaves arrived at 1st port"), isImputed: false },
+      { data: "var_num_slaves_disembark_first_place", label: gettext("Slaves landed at 1st port"), isImputed: false },
+      { data: "var_num_slaves_disembark_second_place", label: gettext("Slaves landed at 2nd port"), isImputed: false },
+      { data: "var_num_slaves_disembark_third_place", label: gettext("Slaves landed at 3rd port"), isImputed: false },
+      { data: "var_imputed_percentage_men", label: gettext("Percent men"), isImputed: false },
+      { data: "var_imputed_percentage_women", label: gettext("Percent women"), isImputed: false },
+      { data: "var_imputed_percentage_boys", label: gettext("Percent boys"), isImputed: false },
+      { data: "var_imputed_percentage_girls", label: gettext("Percent girls"), isImputed: false },
+      { data: "var_imputed_percentage_male", label: gettext("Percent males"), isImputed: false },
+      { data: "var_imputed_percentage_child", label: gettext("Percent children"), isImputed: false },
+      { data: "var_imputed_sterling_cash", label: gettext("Sterling cash price in Jamaica"), isImputed: false },
+      { data: "var_imputed_death_middle_passage", label: gettext("Slaves died during middle passage"), isImputed: false },
+      { data: "var_imputed_mortality", label: gettext("Mortality rate"), isImputed: false }
+    ]
+  },
+  { 
+    group : 'sources',
+    groupName : gettext('Source'),
+    fields : [
+      { data: "var_sources", label: gettext("Source of data"), isImputed: false }
+    ]
+  }
+];
+
 // process search data returned from the API
 function processResponse(json) {
   var data = [];
@@ -34,8 +142,6 @@ function processResponse(json) {
     }
     row.gender = gender;
 
-    // row.source = getFormattedSourceInTable(row.source);
-
     data.push(row);
   });
 
@@ -60,20 +166,22 @@ function sentenceCase(str) {
   return unCamelCase(str).replace(/(^\w)|\.\s+(\w)/gm, upperCase);
 }
 
+/**
+ * round with decimal (keep the decimal even if it is an integer)
+ */
+function roundDecimal(value, precision) {
+  var multiplier = Math.pow(10, precision);
+  return (Math.round(value * multiplier) / multiplier).toFixed(precision);
+}
+
 // get formated source by parsing through the backend response
-// returns the format for table display
-// ABCD - [Tooltip: details]
-function getFormattedSourceInTable(sources) {
+function getVoyageFormattedSource(sources) {
   var value = ""; // empty value string
   sources.forEach(function(source) {
     var first = source.split("<>")[0];
     var second = source.split("<>")[1];
-    value +=
-      "<div><span data-toggle='tooltip' data-placement='top' data-html='true' data-original-title='" +
-      second +
-      "'>" +
-      first +
-      "</span>";
+    value += "<div><span class='source-title'>" + first + ": </span>";
+    value += "<span class='source-content'>" + second + "</span></div>";
   });
   return value;
 }
@@ -1002,4 +1110,39 @@ function LazyLoader() {
     return dfd;
   };
   return self;
+}
+
+function openVoyageModal(voyageId) {
+  var columns = [];
+  voyageColumns.forEach(function(group, key){
+    group.fields.forEach(function(field, key){
+      columns.push(field);
+    });
+  });
+  var params = {
+    "searchData": {
+      "items": [{
+        "op": "equals",
+        "searchTerm": voyageId,
+        "varName": "voyage_id"
+      }]
+    },
+    "tableParams": {
+      "columns": columns
+    }, 
+    "output" : "resultsTable"
+  };
+
+  axios
+    .post('/voyage/api/search', params)
+    .then(function(response) {
+      if (response.data.data[0]) {
+        searchBar.row.data = response.data.data[0];
+        searchBar.rowModalShow = true;
+      }
+      return;
+    })
+    .catch(function(error) {
+      return error;
+    });
 }
