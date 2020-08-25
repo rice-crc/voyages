@@ -11,7 +11,9 @@
 <!-- TabContainers -->
 <div id="tabsJustifiedContent" class="tab-content">
   <div id="results" class="tab-pane fade active show">
-    {% include "database/tabs/results.html" %}
+    <table id="results_main_table" class="table table-striped table-bordered"></table>
+
+	{% include "database/_full_details_modal.html" %}
   </div>
 </div>
 <!-- End of TabContainers -->

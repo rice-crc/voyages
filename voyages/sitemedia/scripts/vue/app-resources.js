@@ -237,41 +237,37 @@ var searchBar = new Vue({
     row: {
       handler: function() {
         var results = [];
-        for (group in this.filter) {
-          if (group !== "year" && group !== "settings") {
+        var rowData = this.row.data;
+        voyageColumns.forEach(function(group, key){
+          if (group.group !== "year") {
             var datum = {
-              group: group,
-              groupName: sentenceCase(group),
+              group: group.group,
+              groupName: group.groupName,
               variables: {}
             };
-            for (subGroup in this.filter[group]) {
-              for (variable in this.filter[group][subGroup]) {
-                if (variable !== "count" && variable != "changed") {
-                  var item = this.filter[group][subGroup][variable];
-                  var varName = "var_" + item["varName"];
-                  if (!!item.isPartial) {
-                    varName += '_partial';
-                  }
-                  var value = this.row.data[varName];
-                  var isImputed = item.options ? item.options.isImputed : false;
+            group.fields.forEach(function(field, key){
+              var varName = field.data;
+              var label = field.label !== undefined ? field.label : field.data;
+              var value = rowData[varName];
+              var isImputed = field.isImputed !== undefined ? field.isImputed : false;
 
-                  // Patch place variables
-                  if (item.type == "place") {
-                    value = this.row.data[varName.slice(0, -3) + "_lang"];
-                  }
-
-                  datum.variables[varName] = {
-                    varName: varName,
-                    label: item["label"],
-                    value: value,
-                    isImputed: isImputed
-                  };
-                }
+              if (varName.indexOf('percentage') != -1 || varName.indexOf('mortality') != -1) {
+                value = roundDecimal(value * 100, 1) + "%";
               }
-            }
+              else if (varName == 'var_sources') {
+                value = getVoyageFormattedSource(value);
+              }
+
+              datum.variables[varName] = {
+                varName: varName,
+                label: label,
+                value: value,
+                isImputed: isImputed
+              };
+            });
             results.push(datum);
           }
-        }
+        });
         this.row.results = results;
 
         // collect ids for the group collapse. there might be a better way
