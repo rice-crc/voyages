@@ -11,10 +11,8 @@ var categoryNames = [
 var allColumns = [
 
   // name
-  { data: "documented_name", category: 0, header: gettext("Documented Name"), isImputed: false },
-  { data: "name_first", category: 0, header: gettext("Name First"), isImputed: false },
-  { data: "name_second", category: 0, header: gettext("Name Second"), isImputed: false },
-  { data: "name_third", category: 0, header: gettext("Name Third"), isImputed: false },
+  { data: "names", category: 0, header: gettext("Names"), isImputed: false },
+  { data: "ranking", category: 0, header: gettext("Ranking"), visible: false, isImputed: true },
 
   // personal data
   { data: "age", category: 1, header: gettext("Age"), isImputed: false },

@@ -110,10 +110,25 @@ var voyageColumns = [
   }
 ];
 
+function getColumnIndex(column) {
+  var index = null;
+  allColumns.forEach(function(columnItem, columnIndex) {
+    if (columnItem.data == column) {
+      index = columnIndex;
+      return true;
+    }
+  });
+  return index;
+}
+
 // process search data returned from the API
-function processResponse(json) {
+function processResponse(json, mainDatatable) {
   var data = [];
+  var rankingIndex = getColumnIndex('ranking');
+
   json.data.forEach(function(row) {
+    row.names = row.names.join('<br>');
+
     var arrivalDateArray = row.voyage__voyage_dates__first_dis_of_slaves ? row.voyage__voyage_dates__first_dis_of_slaves.split([',']) : '';
     var arrivalDate = '';
     var arrivalYear = '';
@@ -141,6 +156,15 @@ function processResponse(json) {
       gender = gettext("Female");
     }
     row.gender = gender;
+
+    if (rankingIndex) {
+      if (row.ranking) {
+        mainDatatable.column(rankingIndex).visible(true);
+      } else {
+        mainDatatable.column(rankingIndex).visible(false);
+        row.ranking = '';
+      }
+    }
 
     data.push(row);
   });
@@ -891,7 +915,7 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
         // a - to use % instead of decimals (e.g. 30% vs. 0.30)
         // b - to format source into HTML decorated string
         dataSrc: function(json) {
-          return processResponse(json);
+          return processResponse(json, mainDatatable);
         },
 
         fail: function(xhr, status, error) {
@@ -904,25 +928,6 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
       scrollX: true,
 
       colReorder: true,
-
-      // columnDefs: [
-      //   {
-      //     width: "25%",
-      //     targets: 0
-      //   },
-      //   {
-      //     width: "25%",
-      //     targets: 1
-      //   },
-      //   {
-      //     width: "25%",
-      //     targets: 2
-      //   },
-      //   {
-      //     width: "25%",
-      //     targets: 3
-      //   }
-      // ],
 
       order: [[0, "asc"]],
       destroy: true,
@@ -945,62 +950,6 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
       buttons: [
         columnToggleMenu,
         pageLength,
-        // {
-        //   extend: "collection",
-        //   text:
-        //     '<span class="fa fa-columns" style="vertical-align: middle;"></span>',
-        //   className: "btn btn-info buttons-collection dropdown-toggle",
-        //   text: gettext("Download"),
-        //   titleAttr: gettext("Download results"),
-        //   // Top level: CSV vs. Excel
-        //   buttons: [
-        //     {
-        //       extend: "collection",
-        //       text: "CSV",
-        //       buttons: [
-        //         {
-        //           text: gettext("All results with all columns"),
-        //           action: makeDownloadFunction(false, false, false)
-        //         },
-        //         {
-        //           text: gettext("All results with visible columns"),
-        //           action: makeDownloadFunction(false, false, true)
-        //         },
-        //         {
-        //           text: gettext("Filtered results with all columns"),
-        //           action: makeDownloadFunction(false, true, false)
-        //         },
-        //         {
-        //           text: gettext("Filtered results with visible columns"),
-        //           action: makeDownloadFunction(false, true, true)
-        //         }
-        //       ]
-        //     },
-
-        //     {
-        //       extend: "collection",
-        //       text: "Excel",
-        //       buttons: [
-        //         {
-        //           text: gettext("All results with all columns"),
-        //           action: makeDownloadFunction(true, false, false)
-        //         },
-        //         {
-        //           text: gettext("All results with visible columns"),
-        //           action: makeDownloadFunction(true, false, true)
-        //         },
-        //         {
-        //           text: gettext("Filtered results with all columns"),
-        //           action: makeDownloadFunction(true, true, false)
-        //         },
-        //         {
-        //           text: gettext("Filtered results with visible columns"),
-        //           action: makeDownloadFunction(true, true, true)
-        //         }
-        //       ]
-        //     }
-        //   ]
-        // }
       ],
       //pagingType: "input",
       bFilter: false,
@@ -1038,41 +987,6 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
       });
       displayColumnOrder(order);
     });
-
-    // built for the datatable download dropdown menu
-    function makeDownloadFunction(isExcel, isFiltered, isVisibleColumns) {
-      return function() {
-        // TODO (20190710): Remove the next few lines when proper column
-        // headers and a canonical order are defined for the download.
-        if (!isVisibleColumns) {
-          alert("The download option with all columns is not available yet.");
-          return;
-        }
-        // decides if it's returning visible columns or all columns
-        var visibleColumns = isVisibleColumns
-          ? mainDatatable.columns().visible().context[0].aoColumns.map(function(variable){if (variable.bVisible) return variable.data }).filter(Boolean)
-          : [];
-
-        var form = $(
-          "<form action='api/download' method='post'>{% csrf_token %}</form>"
-        );
-        form.append(
-          $("<input name='data' type='hidden'></input>").attr(
-            "value",
-            JSON.stringify({
-              searchData: isFiltered ? currentSearchObj : { items: [] }, // decides if it's returning filtered data or all data
-
-              cols: visibleColumns,
-              excel_mode: !!isExcel // make sure it's a true boolean variable
-            })
-          )
-        );
-        form
-          .appendTo("body")
-          .submit()
-          .remove();
-      };
-    }
   }
 
 }
@@ -1121,11 +1035,18 @@ function openVoyageModal(voyageId) {
   });
   var params = {
     "searchData": {
-      "items": [{
-        "op": "equals",
-        "searchTerm": voyageId,
-        "varName": "voyage_id"
-      }]
+      "items": [
+        {
+          "op": "equals",
+          "varName": "voyage_id",
+          "searchTerm": voyageId,
+        },
+        {
+          "op": "equals",
+          "varName": "dataset",
+          "searchTerm": "0",
+        }
+      ]
     },
     "tableParams": {
       "columns": columns
