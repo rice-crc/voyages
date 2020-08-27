@@ -12,7 +12,7 @@ var allColumns = [
 
   // name
   { data: "names", category: 0, header: gettext("Names"), isImputed: false },
-  { data: "ranking", category: 0, header: gettext("Ranking"), visible: false, isImputed: true },
+  { data: "ranking", category: 0, header: gettext("Ranking"), isImputed: false, isUserSearchBased: true, visible: false },
 
   // personal data
   { data: "age", category: 1, header: gettext("Age"), isImputed: false },
@@ -59,7 +59,7 @@ $(function(){
 
 allColumns.forEach(function(c, index) {
 
-  var title = c.isImputed ? "<span class='imputed-result'>" + c.header + "</span> <span class='badge badge-pill badge-secondary' data-toggle='tooltip' data-placement='top' title='" + gettext("Imputed results are calculated by an algorithm.") + "'> IMP </span>" : gettext(c.header);
+  var title = c.isImputed ? "<span>" + c.header + "</span> <span class='badge badge-pill badge-secondary' data-toggle='tooltip' data-placement='top' title='" + gettext("Imputed results are calculated by an algorithm.") + "'> IMP </span>" : gettext(c.header);
 
   categories[c.category].columns.push({
     extend: 'columnToggle',
@@ -67,11 +67,15 @@ allColumns.forEach(function(c, index) {
     columns: index,
   });
 
+  c.title = "<span class='column-header'>" + c.header + "</span>";
+  
   // add render function to customize the display of imputed variables
   if (c.isImputed) {
-    c.title = "<span class='imputed-result'><span class='column-header'>" + c.header + "</span></span>" + ' <span class="badge badge-pill badge-secondary tooltip-pointer" data-toggle="tooltip" data-placement="top" title="' + gettext("Imputed results are calculated by an algorithm.") + '"> IMP </span>'; // italicized column title
-  } else {
-    c.title = "<span class='column-header'>" + c.header + "</span>";
+    c.title += ' <span class="badge badge-pill badge-secondary tooltip-pointer" data-toggle="tooltip" data-placement="top" title="' + gettext("Imputed results are calculated by an algorithm.") + '"> IMP </span>';
+  }
+  // add render function to customize the display of data based on user's search
+  if (c.isUserSearchBased) {
+    c.title += ' <span class="badge badge-pill badge-secondary tooltip-pointer" data-toggle="tooltip" data-placement="top" title="' + gettext("Data based on the user's search and that is not part of the database.") + '"> USER </span>';
   }
 
   c.render = function (data) {
@@ -111,7 +115,7 @@ allColumns.forEach(function(c, index) {
               '<button type="button" class="fa fa-volume-up btn btn-transparent" data-toggle="popover" data-html="true" data-content="'+audiosList.html()+'"></button>';
         }
       } else {
-        formattedString = "<span class='imputed-result'>" + data + "</span>";
+        formattedString = "<span>" + data + "</span>";
         var column = c.data;
         if (column == 'voyage__id') {
           formattedString = '<a href="javascript:void(0)" onclick="openVoyageModal(' + data + ');">' + formattedString + '</a>'

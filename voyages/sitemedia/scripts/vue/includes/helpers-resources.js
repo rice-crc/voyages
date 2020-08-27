@@ -125,8 +125,6 @@ function getColumnIndex(column) {
 // process search data returned from the API
 function processResponse(json, mainDatatable) {
   var data = [];
-  var rankingIndex = getColumnIndex('ranking');
-
   json.data.forEach(function(row) {
     row.names = $.map(row.names, function(s) { return s.replace(' ', '&nbsp;'); }).join('<br>');
 
@@ -158,13 +156,8 @@ function processResponse(json, mainDatatable) {
     }
     row.gender = gender;
 
-    if (rankingIndex) {
-      if (row.ranking) {
-        mainDatatable.column(rankingIndex).visible(true);
-      } else {
-        mainDatatable.column(rankingIndex).visible(false);
-        row.ranking = '';
-      }
+    if (!row.ranking) {
+      row.ranking = '';
     }
 
     data.push(row);
@@ -878,20 +871,37 @@ function displayColumnOrder(order) {
 }
 
 function refreshUi(filter, filterData, currentTab, tabData, options) {
-  var currentSearchObj = searchAll(filter, filterData);
-
   if (currentTab == "results") {
+    var rankingIndex = getColumnIndex('ranking');
+
+    var existsDatatable = $.fn.DataTable.isDataTable('#results_main_table');
+    var rankingVisible = false;
+    if (existsDatatable) {
+      rankingVisible = $('#results_main_table').DataTable().column(rankingIndex).visible();
+    }
+
+    var currentSearchObj = searchAll(filter, filterData);
+    var fuzzySearch = false;
+    if (!currentSearchObj.exact_name_search && currentSearchObj.searched_name) {
+      fuzzySearch = true;
+    }
+
     // Results DataTable
     var pageLength = {
       extend: "pageLength",
       className: "btn btn-info buttons-collection dropdown-toggle"
     };
+
     var mainDatatable = $("#results_main_table").DataTable({
       ajax: {
         url: SEARCH_URL,
         type: "POST",
         data: function(d) {
           if (d.order) {
+            if (fuzzySearch && (!existsDatatable || !rankingVisible)) {
+                d.order[0]['column'] = rankingIndex;
+            }
+
             currentSearchObj.order_by = $.map(d.order, function(item) {
               var columnIndex = mainDatatable
                 ? mainDatatable.colReorder.order()[item.column]
@@ -981,6 +991,17 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
         });
       }
     });
+
+    if (fuzzySearch) {
+      if (!mainDatatable.column(rankingIndex).visible()) {
+        mainDatatable.column(rankingIndex).visible(true);
+      }
+    } else {
+      mainDatatable.column(rankingIndex).visible(false);
+    }
+
+    existsDatatable = $.fn.DataTable.isDataTable('#results_main_table')
+    rankingVisible = mainDatatable.column(rankingIndex).visible();
 
     mainDatatable.on("column-reorder", function(e, settings, details) {
       var order = $.map(settings.aaSorting, function(item) {
