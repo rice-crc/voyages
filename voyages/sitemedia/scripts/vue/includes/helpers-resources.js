@@ -1,5 +1,6 @@
 // reserved keyword for saved search query identifier
 const SAVED_SEARCH_LABEL = "#searchId=";
+const TRANS_PATH = "past/";
 const SEARCH_URL = "api/search";
 
 var voyageColumns = [
@@ -626,7 +627,7 @@ function loadTreeselectOptions(vm, vTreeselect, filter, callback) {
           return;
         })
         .catch(function(error) {
-          options.errorMessage = error;
+          vm.options.errorMessage = error;
           $("#sv-loader").addClass("display-none");
           $("#sv-loader-error").removeClass("display-none");
           return error;
@@ -675,7 +676,7 @@ function loadTreeselectOptions(vm, vTreeselect, filter, callback) {
           return;
         })
         .catch(function(error) {
-          options.errorMessage = error;
+          vm.options.errorMessage = error;
           $("#sv-loader").addClass("display-none");
           $("#sv-loader-error").removeClass("display-none");
           return error;
@@ -919,7 +920,7 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
         },
 
         fail: function(xhr, status, error) {
-          options.errorMessage = error;
+          vm.options.errorMessage = error;
           $("#sv-loader").addClass("display-none");
           $("#sv-loader-error").removeClass("display-none");
         }
