@@ -245,6 +245,13 @@ class EnslavedSearch:
         self.voyage_id = voyage_id
         self.source = source
         self.order_by = order_by
+    
+    def get_order_for_field(self, field):
+        if isinstance(self.order_by, list):
+            for x in self.order_by:
+                if x['columnName'] == field:
+                    return x['direction']
+        return None
 
     def execute(self, fields):
         """
@@ -319,12 +326,12 @@ class EnslavedSearch:
             q = q.filter(language_group__pk__in=self.language_groups)
         if self.ship_name:
             q = q.filter(voyage__voyage_ship__ship_name__icontains=self.ship_name)
-        order_by_ranking = is_fuzzy
+        order_by_ranking = 'asc'
         if isinstance(self.order_by, list):
-            order_by_ranking = False
+            order_by_ranking = None
             for x in self.order_by:
                 if x['columnName'] == 'ranking':
-                    order_by_ranking = True
+                    order_by_ranking = x['direction']
                     break
             orm_orderby = []
             for x in self.order_by:
@@ -364,7 +371,7 @@ class EnslavedSearch:
                     fallback_name_val = Value('AAAAA' if is_desc else 'ZZZZZ')
                     expressions = [Coalesce(F(name_field), fallback_name_val, output_field=CharField()) for name_field in _name_fields]
                     q = q.annotate(**{colName: Func(*expressions, function='GREATEST' if is_desc else 'LEAST')})
-                    nulls_last = False # We already use fallback values so no NULL will never appear.
+                    nulls_last = False # We already use fallback values so no NULL will ever appear.
                     order_field = F(colName)
                     order_field = order_field.desc() if is_desc else order_field.asc()
                     fields = fields + [colName]
@@ -382,5 +389,5 @@ class EnslavedSearch:
             for x in q:
                 x['ranking'] = ranking[x['enslaved_id']]
             if order_by_ranking:
-                q = sorted(q, key=lambda x: x['ranking'])
+                q = sorted(q, key=lambda x: x['ranking'], reverse=('desc' == order_by_ranking))
         return q

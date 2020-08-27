@@ -1,6 +1,6 @@
 // reserved keyword for saved search query identifier
 const SAVED_SEARCH_LABEL = "#searchId=";
-const TRANS_PATH = "past/";
+const TRANS_PATH = "past-db/";
 const SEARCH_URL = "api/search";
 
 var voyageColumns = [
@@ -128,7 +128,7 @@ function processResponse(json, mainDatatable) {
   var rankingIndex = getColumnIndex('ranking');
 
   json.data.forEach(function(row) {
-    row.names = row.names.join('<br>');
+    row.names = $.map(row.names, function(s) { return s.replace(' ', '&nbsp;'); }).join('<br>');
 
     var arrivalDateArray = row.voyage__voyage_dates__first_dis_of_slaves ? row.voyage__voyage_dates__first_dis_of_slaves.split([',']) : '';
     var arrivalDate = '';
@@ -1027,7 +1027,7 @@ function LazyLoader() {
   return self;
 }
 
-function openVoyageModal(voyageId) {
+function openVoyageModal(voyageId, dataset) {
   var columns = [];
   voyageColumns.forEach(function(group, key){
     group.fields.forEach(function(field, key){
@@ -1045,7 +1045,7 @@ function openVoyageModal(voyageId) {
         {
           "op": "equals",
           "varName": "dataset",
-          "searchTerm": "0",
+          "searchTerm": dataset == undefined || dataset == null ? "-1" : dataset,
         }
       ]
     },

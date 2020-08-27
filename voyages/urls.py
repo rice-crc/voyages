@@ -18,6 +18,7 @@ js_info_dict = {
 import voyages.apps.assessment.views
 import voyages.apps.voyage.views
 import voyages.apps.common.views
+import voyages.apps.past.views
 import django.contrib.sitemaps.views
 import django.views.i18n
 import django.views.static
@@ -27,6 +28,7 @@ urlpatterns = [
     # Short permalink
     url(r'^estimates/(?P<link_id>\w+)', voyages.apps.assessment.views.restore_permalink, name='restore_e_permalink'),
     url(r'^voyages/(?P<link_id>\w+)', voyages.apps.voyage.views.restore_permalink, name='restore_v_permalink'),
+    url(r'^past-db/(?P<link_id>\w+)', voyages.apps.past.views.restore_permalink, name='restore_past_permalink'),
 
     #Include url handlers of each section
     url(r'^voyage/', include('voyages.apps.voyage.urls', namespace='voyage')),

@@ -2187,16 +2187,7 @@ def get_permanent_link(request):
     return saved_query.get_link(request, 'restore_v_permalink')
 
 def restore_permalink(request, link_id):
-    """
-    Fetch the query corresponding to the link id and redirect to the
-    search results of that query.
-    :param request: web request
-    :param link_id: the id of the permanent link
-    :return: a Redirect to the Voyages search page after setting the session POST data to match the permalink
-    or an Http404 error if the link is not found.
-    """
-    # from voyages.apps.common.models import SavedQuery
-    # return SavedQuery.restore_link(link_id, request.session, 'voyages_post_data', 'voyage:search')
+    """Redirect the page with a URL param"""
     return redirect("/voyage/database#searchId=" + link_id)
 
 def debug_permalink(request, link_id):
