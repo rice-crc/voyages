@@ -94,7 +94,7 @@ def perform_search(search, lang):
             dataset = int(dataset)
         except:
             dataset = VoyageDataset.Transatlantic
-    if dataset > 0:
+    if dataset >= 0:
         search_terms[u'var_dataset__exact'] = dataset
     result = sqs.models(Voyage).filter(**search_terms)
     for ct in custom_terms:

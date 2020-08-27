@@ -1,5 +1,6 @@
 from django.core.paginator import Paginator
 from django.db.models import Prefetch
+from django.shortcuts import redirect
 from django.http import JsonResponse
 from django.views.decorators.cache import cache_page
 from django.views.decorators.csrf import csrf_exempt
@@ -63,6 +64,10 @@ def get_language_groups(request):
     models = AltLanguageGroupName.objects.prefetch_related(Prefetch('language_group', queryset=LanguageGroup.objects.select_related('modern_country')))
     return JsonResponse(_get_alt_named(models, 'language_group', parent_map))
 
+def restore_permalink(request, link_id):
+    """Redirect the page with a URL param"""
+    return redirect("/past/database#searchId=" + link_id)
+
 @require_POST
 @csrf_exempt
 def search_enslaved(request):
@@ -84,7 +89,9 @@ def search_enslaved(request):
     if output_type == 'resultsTable':
         def adapter(page):
             for row in page:
-                row['names'] = list(set([row[name_field] for name_field in _name_fields if row[name_field]]))
+                all_names = list(set([row[name_field] for name_field in _name_fields if row[name_field]]))
+                all_names.sort(reverse=('desc' == search.get_order_for_field('names')))
+                row['names'] = all_names
                 keys = list(row.keys())
                 for k in keys:
                     if k.startswith('_'):
