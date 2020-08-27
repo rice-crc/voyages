@@ -554,7 +554,6 @@ var searchBar = new Vue({
       axios
         .post("/voyage/save-query", {
           items: serializeFilter(items)
-          // query: serializeFilter({"filter": vm.filter}),
         })
         .then(function(response) {
           var exists = false;
@@ -578,7 +577,7 @@ var searchBar = new Vue({
           }
         })
         .catch(function(error) {
-          options.errorMessage = error;
+          vm.options.errorMessage = error;
           $("#sv-loader").addClass("display-none");
           $("#sv-loader-error").removeClass("display-none");
           console.log(error);

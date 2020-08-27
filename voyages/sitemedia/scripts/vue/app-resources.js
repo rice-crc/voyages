@@ -439,7 +439,7 @@ var searchBar = new Vue({
     },
 
     load(value) {
-      var url = "/resources/get-saved-query/" + value;
+      var url = "/voyage/get-saved-query/" + value;
       var vm = this;
       axios
         .get(url, {})
@@ -530,9 +530,8 @@ var searchBar = new Vue({
       var items = searchAll(this.filter, this.filterData);
       var vm = this;
       axios
-        .post("/resources/save-query", {
+        .post("/voyage/save-query", {
           items: serializeFilter(items)
-          // query: serializeFilter({"filter": vm.filter}),
         })
         .then(function(response) {
           var exists = false;
@@ -556,7 +555,7 @@ var searchBar = new Vue({
           }
         })
         .catch(function(error) {
-          options.errorMessage = error;
+          vm.options.errorMessage = error;
           $("#sv-loader").addClass("display-none");
           $("#sv-loader-error").removeClass("display-none");
           console.log(error);
