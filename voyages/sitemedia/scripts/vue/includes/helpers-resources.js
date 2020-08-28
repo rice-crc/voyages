@@ -123,8 +123,10 @@ function getColumnIndex(column) {
 }
 
 // process search data returned from the API
-function processResponse(json, mainDatatable) {
+function processResponse(json, mainDatatable, fuzzySearch) {
   var data = [];
+  var rankingIndex = getColumnIndex('ranking');
+
   json.data.forEach(function(row) {
     row.names = $.map(row.names, function(s) { return s.replace(' ', '&nbsp;'); }).join('<br>');
 
@@ -162,6 +164,14 @@ function processResponse(json, mainDatatable) {
 
     data.push(row);
   });
+
+  if (fuzzySearch) {
+    if (!mainDatatable.column(rankingIndex).visible()) {
+      mainDatatable.column(rankingIndex).visible(true);
+    }
+  } else {
+    mainDatatable.column(rankingIndex).visible(false);
+  }
 
   return data;
 }
@@ -872,14 +882,6 @@ function displayColumnOrder(order) {
 
 function refreshUi(filter, filterData, currentTab, tabData, options) {
   if (currentTab == "results") {
-    var rankingIndex = getColumnIndex('ranking');
-
-    var existsDatatable = $.fn.DataTable.isDataTable('#results_main_table');
-    var rankingVisible = false;
-    if (existsDatatable) {
-      rankingVisible = $('#results_main_table').DataTable().column(rankingIndex).visible();
-    }
-
     var currentSearchObj = searchAll(filter, filterData);
     var fuzzySearch = false;
     if (!currentSearchObj.exact_name_search && currentSearchObj.searched_name) {
@@ -898,7 +900,10 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
         type: "POST",
         data: function(d) {
           if (d.order) {
-            if (fuzzySearch && (!existsDatatable || !rankingVisible)) {
+            var rankingIndex = getColumnIndex('ranking');
+            var rankingVisible = $('#results_main_table').DataTable().column(rankingIndex).visible();
+
+            if (fuzzySearch && !rankingVisible) {
                 d.order[0]['column'] = rankingIndex;
             }
 
@@ -926,7 +931,7 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
         // a - to use % instead of decimals (e.g. 30% vs. 0.30)
         // b - to format source into HTML decorated string
         dataSrc: function(json) {
-          return processResponse(json, mainDatatable);
+          return processResponse(json, mainDatatable, fuzzySearch);
         },
 
         fail: function(xhr, status, error) {
@@ -991,17 +996,6 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
         });
       }
     });
-
-    if (fuzzySearch) {
-      if (!mainDatatable.column(rankingIndex).visible()) {
-        mainDatatable.column(rankingIndex).visible(true);
-      }
-    } else {
-      mainDatatable.column(rankingIndex).visible(false);
-    }
-
-    existsDatatable = $.fn.DataTable.isDataTable('#results_main_table')
-    rankingVisible = mainDatatable.column(rankingIndex).visible();
 
     mainDatatable.on("column-reorder", function(e, settings, details) {
       var order = $.map(settings.aaSorting, function(item) {
