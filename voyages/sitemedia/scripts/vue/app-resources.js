@@ -445,15 +445,15 @@ var searchBar = new Vue({
         .get(url, {})
         .then(function(response) {
           var query;
-          if (Array.isArray(response.data.items)) {
+          if (Array.isArray(response.data.items) || typeof response.data.items == 'object') {
             query = response.data.items;
           } else {
             query = JSON.parse(response.data.items);
           }
 
-          var mappedVarNames = query.map(
-            variable => variableMapping[variable.varName]
-          );
+          var mappedVarNames = $.map(query, function(value, varName) {
+            return 'var_' + varName;
+          });
 
           vm.clearFilter(vm.filter);
 
@@ -463,46 +463,26 @@ var searchBar = new Vue({
               if (subGroup != "count") {
                 for (varName in vm.filter[group][subGroup]) {
                   if (mappedVarNames.includes(varName)) {
-                    var variable = query.find(obj => {
-                      return variableMapping[obj.varName] == varName;
-                    });
+                    var varNameMapping = varName.replace('var_', '');
+                    var variable = query[varNameMapping];
 
                     vm.filter[group][subGroup][varName].activated = true;
                     vm.filter[group][subGroup][varName].changed = true;
-                    vm.filter[group][subGroup][varName].value.op =
-                      variable.op == "equals" ? "is equal to" : variable.op;
 
-                    if (
-                      vm.filter[group][subGroup][varName] instanceof
-                        PlaceVariable ||
-                      vm.filter[group][subGroup][varName] instanceof
-                        TreeselectVariable
-                    ) {
-                      vm.filter[group][subGroup][varName].value.searchTerm =
-                        variable.searchTerm;
-                    } else if (
-                      vm.filter[group][subGroup][varName] instanceof
-                      PercentageVariable
-                    ) {
-                      vm.filter[group][subGroup][
-                        varName
-                      ].value.searchTerm0 = parseInt(
-                        variable.searchTerm[0] * 100
-                      );
-                      vm.filter[group][subGroup][
-                        varName
-                      ].value.searchTerm1 = parseInt(
-                        variable.searchTerm[1] * 100
-                      );
-                    } else if (Array.isArray(variable.searchTerm)) {
-                      vm.filter[group][subGroup][varName].value.searchTerm0 =
-                        variable.searchTerm[0];
-                      vm.filter[group][subGroup][varName].value.searchTerm1 =
-                        variable.searchTerm[1];
-                    } else {
-                      console.log(variable.searchTerm);
-                      vm.filter[group][subGroup][varName].value.searchTerm =
-                        variable.searchTerm;
+                    if (vm.filter[group][subGroup][varName] instanceof PlaceVariable ||
+                      vm.filter[group][subGroup][varName] instanceof TreeselectVariable)
+                    {
+                      vm.filter[group][subGroup][varName].value.searchTerm = variable;
+                    }
+                    else if (vm.filter[group][subGroup][varName] instanceof PercentageVariable ||
+                      Array.isArray(variable))
+                    {
+                      vm.filter[group][subGroup][varName].value.searchTerm0 = variable[0];
+                      vm.filter[group][subGroup][varName].value.searchTerm1 = variable[1];
+                    }
+                    else
+                    {
+                      vm.filter[group][subGroup][varName].value.searchTerm = variable;
                     }
                   }
                 }
@@ -531,7 +511,7 @@ var searchBar = new Vue({
       var vm = this;
       axios
         .post("/voyage/save-query", {
-          items: serializeFilter(items)
+          items: items
         })
         .then(function(response) {
           var exists = false;

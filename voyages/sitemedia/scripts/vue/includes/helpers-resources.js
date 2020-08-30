@@ -289,28 +289,17 @@ function searchAll(filter, filterData) {
               if (filter[key1][key2][key3].activated) {
                 var item = {};
                 var searchTerm = [];
-                if (
-                  filter[key1][key2][key3].value["searchTerm0"] === undefined
-                ) {
+                if (filter[key1][key2][key3].value["searchTerm0"] === undefined) {
                   // if it's a multi-tiered place variable
-                  if (
-                    filter[key1][key2][key3].constructor.name ===
-                    "PlaceVariable"
-                  ) {
-                    var sortedSelections = filter[key1][key2][key3].value[
-                      "searchTerm"
-                    ].sort(sortNumber);
+                  if (filter[key1][key2][key3].constructor.name === "PlaceVariable") {
+                    var sortedSelections = filter[key1][key2][key3].value["searchTerm"].sort(sortNumber);
                     var searchTerm = [];
 
                     sortedSelections.forEach(function(selection) {
                       var varName = filter[key1][key2][key3]["varName"];
-                      if (
-                        selection == filterData.treeselectOptions[varName][0].id
-                      ) {
+                      if (selection == filterData.treeselectOptions[varName][0].id) {
                         // select all
-                        filterData.treeselectOptions[
-                          varName
-                        ][0].children.forEach(function(broadRegion) {
+                        filterData.treeselectOptions[varName][0].children.forEach(function(broadRegion) {
                           broadRegion.children.forEach(function(region) {
                             region.children.forEach(function(subRegion) {
                               searchTerm.push(subRegion.id);
@@ -319,9 +308,7 @@ function searchAll(filter, filterData) {
                         });
                       } else {
                         // broadRegion
-                        filterData.treeselectOptions[
-                          varName
-                        ][0].children.forEach(function(broadRegion) {
+                        filterData.treeselectOptions[varName][0].children.forEach(function(broadRegion) {
                           if (selection == broadRegion.id) {
                             broadRegion.children.forEach(function(region) {
                               region.children.forEach(function(subRegion) {
@@ -352,13 +339,8 @@ function searchAll(filter, filterData) {
                     item["searchTerm"] = searchTerm;
 
                     // if it's a TreeselectVariable
-                  } else if (
-                    filter[key1][key2][key3].constructor.name ===
-                    "TreeselectVariable"
-                  ) {
-                    var sortedSelections = filter[key1][key2][key3].value[
-                      "searchTerm"
-                    ].sort(sortNumber);
+                  } else if (filter[key1][key2][key3].constructor.name === "TreeselectVariable") {
+                    var sortedSelections = filter[key1][key2][key3].value["searchTerm"].sort(sortNumber);
                     var searchTerm = [];
 
                     if (sortedSelections.includes("0")) {
@@ -373,16 +355,10 @@ function searchAll(filter, filterData) {
                     }
 
                     item["searchTerm"] = searchTerm;
-                  } else if (
-                    filter[key1][key2][key3].constructor.name ===
-                    "PercentageVariable"
-                  ) {
-                    item["searchTerm"] =
-                      parseInt(filter[key1][key2][key3].value["searchTerm"]) /
-                      100;
+                  } else if (filter[key1][key2][key3].constructor.name === "PercentageVariable") {
+                    item["searchTerm"] = parseInt(filter[key1][key2][key3].value["searchTerm"]) / 100;
                   } else {
-                    item["searchTerm"] =
-                      filter[key1][key2][key3].value["searchTerm"];
+                    item["searchTerm"] = filter[key1][key2][key3].value["searchTerm"];
                   }
                 } else {
                   item["searchTerm"] = [
@@ -391,44 +367,19 @@ function searchAll(filter, filterData) {
                   ];
 
                   // patch for date variables
-                  if (
-                    filter[key1][key2][key3].constructor.name === "DateVariable"
-                  ) {
+                  if (filter[key1][key2][key3].constructor.name === "DateVariable") {
                     // if user chose to search against a particular day, make sure it is searching against a range
                     // i.e. add 23:59:59 to searchTerm0
                     if (filter[key1][key2][key3].value["op"] == "is equal to") {
-                      filter[key1][key2][key3].value["searchTerm1"] = filter[
-                        key1
-                      ][key2][key3].value["searchTerm0"].substring(0, 10);
-                      filter[key1][key2][key3].value["searchTerm0"] =
-                        filter[key1][key2][key3].value["searchTerm1"].replace(
-                          "/",
-                          "-"
-                        ) + "T00:00:00Z";
-                      filter[key1][key2][key3].value["searchTerm1"] =
-                        filter[key1][key2][key3].value["searchTerm1"] +
-                        "T23:59:59Z";
+                      filter[key1][key2][key3].value["searchTerm1"] = filter[key1][key2][key3].value["searchTerm0"].substring(0, 10);
+                      filter[key1][key2][key3].value["searchTerm0"] = filter[key1][key2][key3].value["searchTerm1"].replace("/", "-") + "T00:00:00Z";
+                      filter[key1][key2][key3].value["searchTerm1"] = filter[key1][key2][key3].value["searchTerm1"] + "T23:59:59Z";
                     }
                     // make the to date always inclusive (add 23:59:59)
-                    if (
-                      filter[key1][key2][key3].value["searchTerm1"] !== null
-                    ) {
-                      if (
-                        filter[key1][key2][key3].value["searchTerm0"].substring(
-                          0,
-                          10
-                        ) !=
-                        filter[key1][key2][key3].value["searchTerm1"].substring(
-                          0,
-                          10
-                        )
-                      ) {
+                    if (filter[key1][key2][key3].value["searchTerm1"] !== null) {
+                      if (filter[key1][key2][key3].value["searchTerm0"].substring(0, 10) != filter[key1][key2][key3].value["searchTerm1"].substring(0, 10)) {
                         // filter[key1][key2][key3].value["searchTerm1"] = moment(filter[key1][key2][key3].value["searchTerm1"], SOLR_DATE_FORMAT).add(1, "days").subtract(1, "seconds");
-                        filter[key1][key2][key3].value["searchTerm1"] =
-                          filter[key1][key2][key3].value["searchTerm1"].replace(
-                            "/",
-                            "-"
-                          ) + "T23:59:59Z";
+                        filter[key1][key2][key3].value["searchTerm1"] = filter[key1][key2][key3].value["searchTerm1"].replace("/", "-") + "T23:59:59Z";
                       }
                     }
                     item["searchTerm"] = [
@@ -438,23 +389,13 @@ function searchAll(filter, filterData) {
                   }
 
                   // patch for percentage variables
-                  if (
-                    filter[key1][key2][key3].constructor.name ===
-                    "PercentageVariable"
-                  ) {
-                    var searchTerm0 =
-                      parseInt(filter[key1][key2][key3].value["searchTerm0"]) /
-                      100;
-                    var searchTerm1 =
-                      parseInt(filter[key1][key2][key3].value["searchTerm1"]) /
-                      100;
+                  if (filter[key1][key2][key3].constructor.name === "PercentageVariable") {
+                    var searchTerm0 = parseInt(filter[key1][key2][key3].value["searchTerm0"]) / 100;
+                    var searchTerm1 = parseInt(filter[key1][key2][key3].value["searchTerm1"]) / 100;
                     item["searchTerm"] = [searchTerm0, searchTerm1];
                   }
 
-                  if (
-                    filter[key1][key2][key3].constructor.name ===
-                    "NumberVariable"
-                  ) {
+                  if (filter[key1][key2][key3].constructor.name === "NumberVariable") {
                     var searchTerm0 = 0;
                     var searchTerm1 = 999999;
                     switch (filter[key1][key2][key3].value["op"]){

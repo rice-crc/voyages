@@ -31171,8 +31171,7 @@ msgstr "Linha do Tempo e Cronologia"
 
 #~ msgid "Load"
 #~ msgstr ""
-#~ "Um porto onde os navios atracavam para carregar e descarregar cargas, "
-#~ "obter suprimentos e fazer reparos."
+#~ "Carregar"
 
 #~ msgid "is between"
 #~ msgstr "entre "

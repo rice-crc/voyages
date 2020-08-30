@@ -1761,8 +1761,7 @@ msgstr "Nenhuma consulta salva durante esta sessão.</div>"
 #: voyages/sitemedia/scripts/vue/components/v-saved-searches.js:38
 msgid "Load"
 msgstr ""
-"Um porto onde os navios atracavam para carregar e descarregar cargas, obter "
-"suprimentos e fazer reparos."
+"Carregar"
 
 #: voyages/sitemedia/scripts/vue/components/v-year.js:11
 msgid "is between"
