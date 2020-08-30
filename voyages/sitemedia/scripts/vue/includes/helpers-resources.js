@@ -4,7 +4,7 @@ const TRANS_PATH = "past-db/";
 const SEARCH_URL = "api/search";
 
 var voyageColumns = [
-  { 
+  {
     group : 'ship_nation_owner',
     groupName : gettext('Ship, Nation, Owners'),
     fields : [
@@ -23,7 +23,7 @@ var voyageColumns = [
       { data: "var_guns_mounted", label: gettext("Guns mounted"), isImputed: false }
     ]
   },
-  { 
+  {
     group : 'outcome',
     groupName : gettext('Outcome'),
     fields : [
@@ -34,7 +34,7 @@ var voyageColumns = [
       { data: "var_resistance_lang", label: gettext("African resistance"), isImputed: false }
     ]
   },
-  { 
+  {
     group : 'itinerary',
     groupName : gettext('Itinerary'),
     fields : [
@@ -51,7 +51,7 @@ var voyageColumns = [
       { data: "var_place_voyage_ended_lang", label: gettext("Place where voyage ended"), isImputed: false }
     ]
   },
-  { 
+  {
     group : 'dates',
     groupName : gettext('Dates'),
     fields : [
@@ -63,10 +63,10 @@ var voyageColumns = [
       { data: "var_date_departed_africa_partial", label: gettext("Date vessel departed Africa"), isImputed: false },
       { data: "var_first_dis_of_slaves_partial", label: gettext("Date vessel arrived with slaves"), isImputed: false },
       { data: "var_departure_last_place_of_landing_partial", label: gettext("Date vessel departed for homeport"), isImputed: false },
-      { data: "var_voyage_completed_partial", label: gettext("Date voyage completed"), isImputed: false }  
+      { data: "var_voyage_completed_partial", label: gettext("Date voyage completed"), isImputed: false }
     ]
   },
-  { 
+  {
     group : 'captain_and_crew',
     groupName : gettext('Captain and Crew'),
     fields : [
@@ -76,7 +76,7 @@ var voyageColumns = [
       { data: "var_crew_died_complete_voyage", label: gettext("Crew deaths during voyage"), isImputed: false }
     ]
   },
-  { 
+  {
     group : 'slaves',
     groupName : gettext('Slaves'),
     fields : [
@@ -102,7 +102,7 @@ var voyageColumns = [
       { data: "var_imputed_mortality", label: gettext("Mortality rate"), isImputed: false }
     ]
   },
-  { 
+  {
     group : 'sources',
     groupName : gettext('Source'),
     fields : [
@@ -1007,7 +1007,7 @@ function openVoyageModal(voyageId, dataset) {
     },
     "tableParams": {
       "columns": columns
-    }, 
+    },
     "output" : "resultsTable"
   };
 

@@ -40,7 +40,7 @@ var allColumns = [
   // sources
   // { data: "source", category: 5, header: gettext("Source"), isImputed: false },
 
-  { data: "recordings", category: 6, header: '<i class="fa fa-volume-up" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></i>', isImputed: false, isAudible: true },
+  { data: "recordings", category: 6, header: '<i class="fa fa-volume-up" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></i>', isImputed: false, isAudible: true, orderable: false },
 ];
 
 var categories = $.map(categoryNames, function(name) {
@@ -68,7 +68,7 @@ allColumns.forEach(function(c, index) {
   });
 
   c.title = "<span class='column-header'>" + c.header + "</span>";
-  
+
   // add render function to customize the display of imputed variables
   if (c.isImputed) {
     c.title += ' <span class="badge badge-pill badge-secondary tooltip-pointer" data-toggle="tooltip" data-placement="top" title="' + gettext("Imputed results are calculated by an algorithm.") + '"> IMP </span>';
