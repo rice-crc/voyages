@@ -78,7 +78,7 @@ allColumns.forEach(function(c, index) {
     c.title += ' <span class="badge badge-pill badge-secondary tooltip-pointer" data-toggle="tooltip" data-placement="top" title="' + gettext("Data based on the user's search and that is not part of the database.") + '"> USER </span>';
   }
 
-  c.render = function (data) {
+  c.render = function (data, type, row, meta) {
     var formattedString = "";
     if (data !== null) {
       if (c.isAudible) {
@@ -88,14 +88,6 @@ allColumns.forEach(function(c, index) {
             $.each(item.langs, function (langKey, langItem) {
               $.each(langItem.records, function (recordKey, recordItem) {
                 var elementId = (''+recordItem).replace(/\./g, '_');
-
-                var audioItem = $('#'+elementId);
-                if (audioItem.length === 0) {
-                  audioItem = $('<audio id="'+elementId+'" src="'+STATIC_URL+'recordings/'+recordItem+'">'+
-                                gettext("Your browser doesn't support <code>audio</code> tags.")+
-                              '</audio>');
-                  $('body').append(audioItem);
-                }
 
                 var recordVersion = '';
                 if (langItem.records.length > 1) {
@@ -112,7 +104,7 @@ allColumns.forEach(function(c, index) {
           });
 
           formattedString = ''+
-              '<button type="button" class="fa fa-volume-up btn btn-transparent" data-toggle="popover" data-html="true" data-content="'+audiosList.html()+'"></button>';
+              '<button type="button" class="fa fa-volume-up btn btn-transparent" data-toggle="popover" data-html="true" data-content="<div class=\'audios-'+row.enslaved_id+'\'>'+audiosList.html()+'</div>" data-enslaved-id="' + row.enslaved_id + '"></button>';
         }
       } else {
         formattedString = "<span>" + data + "</span>";

@@ -917,25 +917,8 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
       stateDuration: -1,
       initComplete: function() {
         $('[data-toggle="tooltip"]').tooltip();
+        initAudioActions();
       },
-      drawCallback: function (e) {
-        $('[data-toggle="popover"]').popover({
-              container: 'body',
-              placement: 'left',
-        });
-        $('[data-toggle="popover"]').on('shown.bs.popover', function () {
-          $(".audio-player").click(function () {
-            $(this).removeClass('far fa-play-circle').addClass('fa fa-spinner fa-spin').attr('disabled', 'disabled');
-
-            document.getElementById($(this).data('audio-id')).play();
-          });
-
-        })
-        $('audio').on('ended', function(){
-          var audioId = $(this)[0].id;
-          $('[data-audio-id="'+audioId+'"]').removeClass('fa fa-spinner fa-spin').addClass('far fa-play-circle').removeAttr('disabled');
-        });
-      }
     });
 
     mainDatatable.on("column-reorder", function(e, settings, details) {
@@ -944,8 +927,46 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
       });
       displayColumnOrder(order);
     });
-  }
 
+    mainDatatable.on('draw', function(){
+      initAudioActions();
+    });
+  }
+}
+
+function initAudioActions() {
+  $('[data-toggle="popover"]').popover({
+        container: 'body',
+        placement: 'left',
+  });
+  $('[data-toggle="popover"]').on('shown.bs.popover', function () {
+    var enslavedId = $(this).data('enslaved-id');
+
+    var audioButtons = $(".audios-" + enslavedId).find('button');
+
+    $.each(audioButtons, function(){
+      var elementId = $(this).data('audio-id');
+      var recordItem = elementId.replace(/_/g, '.');
+
+      var audioItem = $('#'+elementId);
+      if (audioItem.length === 0) {
+        audioItem = $('<audio id="'+elementId+'" src="'+STATIC_URL+'recordings/'+recordItem+'">'+
+                      gettext("Your browser doesn't support <code>audio</code> tags.")+
+                    '</audio>');
+        audioItem.on('ended', function(){
+          var audioId = $(this)[0].id;
+          $('[data-audio-id="'+audioId+'"]').removeClass('fa fa-spinner fa-spin').addClass('far fa-play-circle').removeAttr('disabled');
+        });
+        $('body').append(audioItem);
+      }
+    });
+
+    $(".audio-player").click(function () {
+      $(this).removeClass('far fa-play-circle').addClass('fa fa-spinner fa-spin').attr('disabled', 'disabled');
+
+      document.getElementById($(this).data('audio-id')).play();
+    });
+  });
 }
 
 // helpers
