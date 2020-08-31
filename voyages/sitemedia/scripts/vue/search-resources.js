@@ -157,7 +157,8 @@ $('body').on('click', function (e) {
   if ($(e.target).parents('.popover').length === 0) {
     $('[data-toggle="popover"]').popover('hide');
   }
-  if ($(e.target).data('toggle')) {
+  var toggle = $(e.target).data('toggle');
+  if (toggle == "popover") {
     $(e.target).popover('show');
   }
 });

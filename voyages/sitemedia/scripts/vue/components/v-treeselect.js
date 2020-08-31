@@ -51,7 +51,7 @@ template = `
     </div>
   </div>
   `;
-  
+
 // v-treeselect
 Vue.component("v-treeselect", {
   props: ['filter'],
