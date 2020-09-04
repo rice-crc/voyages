@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.core.paginator import Paginator
 from django.db.models import Prefetch
 from django.shortcuts import redirect
@@ -47,7 +48,7 @@ def _get_alt_named(altModel, parent_fk, parent_map):
 @csrf_exempt
 @cache_page(3600)
 def get_modern_countries(request):
-    mcs = {mc.id: mc.name for mc in ModernCountry.objects.all()}
+    mcs = {mc.id: { 'name': mc.name, 'longitude': mc.longitude, 'latitude': mc.latitude } for mc in ModernCountry.objects.all()}
     return JsonResponse(mcs)
 
 @csrf_exempt
@@ -105,3 +106,11 @@ def search_enslaved(request):
             x['recordings'] = NameSearchCache.get_recordings([x[f] for f in _name_fields if f in x])
         return JsonResponse(table)
     return JsonResponse({'error': 'Unsupported'})
+
+@require_POST
+@csrf_exempt
+def store_audio(request, id):
+    # TODO: check id against EnslavedContributionNameEntry pk.
+    with open('%s/%s/%s' % (settings.MEDIA_ROOT, 'audio', str(id) + ".webm"), 'wb+') as destination:
+        destination.write(request.body)
+    return JsonResponse({ 'len': len(request.body) })
