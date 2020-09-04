@@ -105,7 +105,12 @@ class NamedModelAbstractBase(models.Model):
         abstract = True
 
 class ModernCountry(NamedModelAbstractBase):
-    pass
+    longitude = models.DecimalField("Longitude of Country",
+                                     max_digits=10, decimal_places=7,
+                                     null=False)
+    latitude = models.DecimalField("Latitude of Country",
+                                     max_digits=10, decimal_places=7,
+                                     null=False)
 
 class RegisterCountry(NamedModelAbstractBase):
     pass
