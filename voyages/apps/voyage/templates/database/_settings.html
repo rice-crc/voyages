@@ -35,10 +35,10 @@
     <i class="fa fa-star tooltip-pointer" aria-hidden="true" slot="menu-title" data-toggle="tooltip" data-placement="top" title="{% trans 'Save a search' %}"></i>
   </v-menu-title>
 
-  <v-panel-singular title="{% trans 'Saved searches' %}" :count="false" :filters="null" group="options" sub-group="saved" align="right" :control-disabled="true" :control-invisible="true">
+  <v-panel-singular title="{% trans 'Current searches' %}" :count="false" :filters="null" group="options" sub-group="saved" align="right" :control-disabled="true" :control-invisible="true">
     <div slot="v-panel-header">
       <v-panel-header
-        title="{% trans 'Saved searches' %}"
+        title="{% trans 'Current searches' %}"
         description="{% trans 'You can save a search by creating a link that can be later used to retreive your particular set of search variables. You may also share your search by sharing the link to this search with other people.' %}"
         :modal-disabled="true">
       </v-panel-header>
@@ -46,7 +46,7 @@
 
     <div slot="v-panel-content">
       <v-saved-searches
-        title="{% trans 'Saved searches' %}"
+        title="{% trans 'Current Searches' %}"
         description="{% trans '' %}"
         :saved="saved"
         @load="load"
