@@ -1,4 +1,4 @@
-Django==1.11.6
+Django==1.11.29
 lxml==3.6.0
 mysql-python==1.2.5
 hurry.filesize==0.9
