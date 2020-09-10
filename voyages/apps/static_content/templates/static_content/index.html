@@ -169,15 +169,14 @@
 			Recent News
 		</div>
 
-		<div class="news-grid-container" id="recent-news">
-			<div class="news-grid" v-for="article in news" :key="article.id">
+
+		<div class="news-grid-container row" id="recent-news">
+			<div class="news-grid col-xs-12 col-sm-12 col-md-6 col-lg-4" v-for="article in news" >
 				<a :href="article.url" target="_blank" rel="noopener"
-					alt="Emory University Center for Digital Scholarship (US)" v-once>
-					<div class="news-grid-item fade-in">
-						<div class="news-grid-title">
-							<span>[[article.title]]</span>
-							<span class="news-grid-title-date">[[article.timestamp]]</span>
-						</div>
+					alt="Emory University Center for Digital Scholarship (US)">
+					<div class="news-grid-item row fade-in ">
+							<div class="news-grid-title col-sm-12 no-padding"> [[article.title]]</div>
+							<div class="news-grid-title-date col-sm-12 no-padding" ><span class="news-grid-title-date-bg">[[article.timestamp]]</span></div>
 						<p class="news-grid-body">
 							[[article.text]]
 						</p>
