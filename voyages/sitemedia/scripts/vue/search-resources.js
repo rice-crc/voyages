@@ -11,6 +11,7 @@ var categoryNames = [
 var allColumns = [
 
   // name
+  { data: "enslaved_id", category: 0, header: gettext("African ID"), isImputed: false },
   { data: "names", category: 0, header: gettext("Names"), isImputed: false },
   { data: "ranking", category: 0, header: gettext("Ranking"), isImputed: false, isUserSearchBased: true, visible: false },
 
@@ -30,8 +31,8 @@ var allColumns = [
 
   // cultural association
   // { data: "register_country", category: 3, header: gettext("Register Country"), isImputed: false },
-  { data: "language_group__modern_country__name", category: 3, header: gettext("Modern Country"), isImputed: false },
-  { data: "ethnicity__name", category: 3, header: gettext("Ethnicity"), isImputed: false },
+  { data: "language_group__modern_country__name", category: 3, header: gettext("Modern Country"), isImputed: false, visible: false },
+  { data: "ethnicity__name", category: 3, header: gettext("Ethnicity"), isImputed: false, visible: false },
   { data: "language_group__name", category: 3, header: gettext("Language Group"), isImputed: false },
 
   //fate
