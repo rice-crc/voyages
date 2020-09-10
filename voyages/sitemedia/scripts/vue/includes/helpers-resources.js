@@ -717,7 +717,7 @@ var parsePlaces = function(response) {
 var parseCountries = function(response) {
   var options = [];
   $.each(response.data, function(id, country) {
-    options.push({'id': id, 'label' : country});
+    options.push({'id': id, 'label' : country.name});
   });
   return options;
 }
