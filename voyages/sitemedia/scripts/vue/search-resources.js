@@ -12,7 +12,7 @@ var allColumns = [
 
   // name
   { data: "enslaved_id", category: 0, header: gettext("African ID"), isImputed: false },
-  { data: "names", category: 0, header: gettext("Names"), isImputed: false },
+  { data: "names", category: 0, header: gettext("Names"), isImputed: false, nameBadge: true },
   { data: "ranking", category: 0, header: gettext("Ranking"), isImputed: false, isUserSearchBased: true, visible: false },
 
   // personal data
@@ -73,6 +73,9 @@ allColumns.forEach(function(c, index) {
   // add render function to customize the display of imputed variables
   if (c.isImputed) {
     c.title += ' <span class="badge badge-pill badge-secondary tooltip-pointer" data-toggle="tooltip" data-placement="top" title="' + gettext("Imputed results are calculated by an algorithm.") + '"> IMP </span>';
+  }
+  else if (c.nameBadge) {
+    c.title += ' <span class="badge badge-pill badge-secondary tooltip-pointer" data-toggle="tooltip" data-placement="top" title="' + gettext("Some individuals had multiple names listed in the historical record.") + '"> NAME </span>';
   }
   // add render function to customize the display of data based on user's search
   if (c.isUserSearchBased) {
