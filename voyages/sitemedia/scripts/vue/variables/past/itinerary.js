@@ -65,7 +65,7 @@ var_year_range = new NumberVariable({
     description: "",
   },{
     op: "is between",
-    searchTerm0: 1514,
+    searchTerm0: minVoyageYear,
     searchTerm1: 1866
   },{
     isImputed: false,

@@ -132,19 +132,9 @@ function processResponse(json, mainDatatable, fuzzySearch) {
 
     var arrivalDateArray = row.voyage__voyage_dates__first_dis_of_slaves ? row.voyage__voyage_dates__first_dis_of_slaves.split([',']) : '';
     var arrivalDate = '';
-    var arrivalYear = '';
-    var arrivalMonth = '';
-    var arrivalDay = '';
 
     if (arrivalDateArray.length == 3) {
-      arrivalMonth = arrivalDateArray[0];
-      arrivalDay = arrivalDateArray[1];
-      arrivalYear = arrivalDateArray[2];
-      if (arrivalMonth && arrivalDay) {
-        arrivalDate = arrivalMonth + '/' + arrivalDay + '/' + arrivalYear;
-      } else {
-        arrivalDate = arrivalYear;
-      }
+      arrivalDate = arrivalDateArray[2];
     } else if (arrivalDateArray.length == 1) {
       arrivalDate = arrivalDateArray[0];
     }

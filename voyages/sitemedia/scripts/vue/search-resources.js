@@ -26,7 +26,7 @@ var allColumns = [
   { data: "voyage__voyage_itinerary__imp_principal_place_of_slave_purchase__place", category: 2, header: gettext("Embarkation Port"), isImputed: false },
   { data: "voyage__voyage_itinerary__imp_principal_port_slave_dis__place", category: 2, header: gettext("Disembarkation Port"), isImputed: false },
   // { data: "geocode", category: 2, header: gettext("Geocode"), isImputed: false },
-  { data: "voyage__voyage_dates__first_dis_of_slaves", category: 2, header: gettext("Arrival Date"), isImputed: false },
+  { data: "voyage__voyage_dates__first_dis_of_slaves", category: 2, header: gettext("Arrival Year"), isImputed: false },
   { data: "voyage__voyage_itinerary__int_first_port_dis__place", category: 2, header: gettext("Intended Disembarkation Port"), isImputed: false },
 
   // cultural association
