@@ -14,6 +14,7 @@ var allColumns = [
   { data: "enslaved_id", category: 0, header: gettext("African ID"), isImputed: false },
   { data: "names", category: 0, header: gettext("Names"), isImputed: false, nameBadge: true },
   { data: "ranking", category: 0, header: gettext("Ranking"), isImputed: false, isUserSearchBased: true, visible: false },
+  { data: "modern_name", category: 0, header: gettext("Modern Name"), isImputed: false },
 
   // personal data
   { data: "age", category: 1, header: gettext("Age"), isImputed: false },
