@@ -3,11 +3,11 @@
 
 // for the timelapse jquery ui scroll handle
 .ui-state-active, .ui-widget-content .ui-state-active {
-  border-color: #6c757d !important; 
-  background-color: #6c757d !important; 
+  border-color: #6c757d !important;
+  background-color: #6c757d !important;
 }
 
-// Map leaftlet marker text 
+// Map leaftlet marker text
 div.leaflet-pane.leaflet-marker-pane > div > div > span {
   color: white;
 }
@@ -157,7 +157,7 @@ polyline {
 
 // Timelapse timeline group; SVG element
 .timelapse-timeline-group-label {
-  fill: $text-dark-2; 
+  fill: $text-dark-2;
 }
 
 // table-estimates
@@ -203,7 +203,7 @@ td.header {
 // loader
 
 .sv-loader-img {
-  animation-duration: 2.5s !important; 
+  animation-duration: 2.5s !important;
   position: fixed;
   top: 50%;
   left: 50%;
@@ -282,7 +282,7 @@ td.header {
 .search-menu-singular {
   height: auto !important;
   padding-bottom: 1.5rem !important;
-  max-height: 600px;
+  overflow: visible;
 }
 
 #searchNav > ul:nth-child(1) > li:nth-child(1) > a {

@@ -12,14 +12,14 @@
     </div>
 
     <div slot="v-panel-content" slot-scope="scope">
-      <v-number @change="changed"
-        :filter="scope.filters.var_age_range">
-      </v-number>
-
       <v-treeselect
         :filter="scope.filters.var_age_gender"
         @change="changed">
       </v-treeselect>
+
+      <v-number @change="changed"
+        :filter="scope.filters.var_age_range">
+      </v-number>
 
       <v-number @change="changed"
         :filter="scope.filters.var_height_range">
