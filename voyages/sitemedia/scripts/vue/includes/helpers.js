@@ -168,16 +168,21 @@ function getFormattedSource(sources) {
 // ABCD - [Tooltip: details]
 function getFormattedSourceInTable(sources) {
   var value = ""; // empty value string
-  sources.forEach(function(source) {
-    var first = source.split("<>")[0];
-    var second = source.split("<>")[1];
-    value +=
-      "<div><span data-toggle='tooltip' data-placement='top' data-html='true' data-original-title='" +
-      second +
-      "'>" +
-      first +
-      "</span>";
-  });
+  try {
+    sources.forEach(function(source) {
+      var first = source.split("<>")[0];
+      var second = source.split("<>")[1];
+      value +=
+        "<div><span data-toggle='tooltip' data-placement='top' data-html='true' data-original-title='" +
+        second +
+        "'>" +
+        first +
+        "</span>";
+    });
+  }
+  catch(err) {
+    console.log(`Error in getFormattedSourceInTable: ${err.message}`);
+  }
   return value;
 }
 
