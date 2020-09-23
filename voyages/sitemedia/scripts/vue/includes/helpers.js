@@ -1537,22 +1537,22 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
         $("#sv-loader").removeClass("display-none");
 
         try {
-
-        var current_year = result.data[0].year;
-
-        var data = [];
-
-        for (var i = 0; i < result.data.length; i++) {
-          var element = result.data[i];
-          for (var j = current_year; j < element.year; j++) {
-            var time = Date.parse(j.toString());
-            data.push([time, 0]);
+          var current_year = result.data[0].year;
+          var data = [];
+          for (var i = 0; i < result.data.length; i++) {
+            var element = result.data[i];
+            for (var j = current_year; j < element.year; j++) {
+              var time = Date.parse(j.toString());
+              data.push([time, 0]);
+            }
+            current_year = element.year + 1;
+            var time = Date.parse(element.year.toString());
+            data.push([time, element.value]);
           }
-          current_year = element.year + 1;
-          var time = Date.parse(element.year.toString());
-          data.push([time, element.value]);
         }
-
+        catch(err) {
+          console.log(err);
+        }
         // // Convert into HighCharts data format
         // result.data.forEach(function(element){
         //   var time = Date.parse(element.year.toString());
@@ -1664,10 +1664,7 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
             }
           ]
         });
-        }
-        catch(err) {
-          console.log(err);
-        }
+        
 
       })
         .done(function() {
