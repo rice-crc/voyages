@@ -1536,9 +1536,11 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
       $.post(SEARCH_URL, JSON.stringify(postData), function(result) {
         $("#sv-loader").removeClass("display-none");
 
-        var data = [];
+        try {
 
         var current_year = result.data[0].year;
+
+        var data = [];
 
         for (var i = 0; i < result.data.length; i++) {
           var element = result.data[i];
@@ -1662,6 +1664,11 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
             }
           ]
         });
+        }
+        catch(err) {
+          console.log(err);
+        }
+
       })
         .done(function() {
           $("#sv-loader").addClass("display-none");
