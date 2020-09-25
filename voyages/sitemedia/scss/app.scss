@@ -697,7 +697,7 @@ margin-bottom: .25rem;
 
 .news-grid-item {
   width: 100%;
-  height: 95px;
+  height: 180px;
   padding: 0 2rem;
   align-items: center;
   color: white;		
@@ -709,10 +709,10 @@ margin-bottom: .25rem;
 .news-grid-title {
   font-weight: bold;
   font-size: 1.25rem;
-  padding-bottom: 1rem;
+  padding-bottom: 0.25rem;
   color: white;
-  display: flex;
-  justify-content: space-between;
+  // display: flex;
+  // justify-content: space-between;
 }
 
 .news-container {
@@ -728,6 +728,9 @@ margin-bottom: .25rem;
   justify-content: center;
   flex-wrap: wrap;
   margin: 1rem 0;
+  &:hover {
+    cursor: pointer;
+  }
 }
 
 .news-container-title {
@@ -735,12 +738,12 @@ margin-bottom: .25rem;
   font-weight: bold;
   font-size: 1.75rem;
   text-align: center;
-  padding-bottom: 2rem;
   opacity: 0.95;
   text-transform: capitalize;
 }
 
 .news-grid-body {
+  padding: 1rem 0;
   color: #dfdfdf;
 }
 
@@ -750,9 +753,13 @@ margin-bottom: .25rem;
 
 .news-grid-title-date {
   font-size: 0.75rem;
+  padding: 0;
+}
+
+.news-grid-title-date-bg {
   background: white;
   color: #454545;
-  padding: 0 1rem;
+  padding: 0 0.25rem;
 }
 
 .card-title-btn {
