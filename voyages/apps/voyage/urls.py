@@ -17,14 +17,10 @@ urlpatterns = [
     url(r'^c(?P<chapternum>\w{2})_s(?P<sectionnum>\w{2})_p(?P<pagenum>\w{2})',
         voyages.apps.voyage.views.get_page, name='get-page'),
     url(r'^$', voyages.apps.static_content.views.get_static_content, {'group': 'Voyage'}, name='index'),
-    url(r'^understanding-db/(?P<name>.*)', voyages.apps.voyage.views.understanding_page, name='understanding-page'),
-    url(r'^understanding-db', voyages.apps.voyage.views.understanding_page, name='guide'),
 
-    url(r'^c01_s01_cover', TemplateView.as_view(template_name='guide.html'), name='voyage-guide-intro'),
     #url(r'^c01_s03_cover', voyages.apps.voyage.views.variable_list, name='variables'),
     url(r'^reload-cache', voyages.apps.voyage.views.reload_cache, name='reload_cache'),
 
-    url(r'^search', voyages.apps.voyage.views.search, name='search'),
     url(r'^permalink', voyages.apps.voyage.views.get_permanent_link, name='permanent-link'),
     url(r'^contribute', RedirectView.as_view(url='/contribute'), name='submission-login'),
 
@@ -33,8 +29,6 @@ urlpatterns = [
     url(r'^(?P<voyage_id>[0-9]+)/images', voyages.apps.voyage.views.voyage_images, name='voyage_images'),
 
     url(r'^csv_stats_download', voyages.apps.voyage.views.csv_stats_download, name='csv_stats_download'),
-    # url(r'^download', voyages.apps.voyage.views.download_flatpage, name='download'),
-    url(r'^download', TemplateView.as_view(template_name='download.html'), name='download'),
     url(r'^database', TemplateView.as_view(template_name='database.html'), name='database'),
     url(r'var-options', voyages.apps.voyage.search_views.get_var_options, name='var-options'),
     url(r'filtered-places', voyages.apps.voyage.search_views.get_filtered_places, name='filtered-places'),
