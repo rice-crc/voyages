@@ -145,6 +145,10 @@ class Enslaved(models.Model):
     name_second = models.CharField(max_length=25, null=True, blank=True)
     name_third = models.CharField(max_length=25, null=True, blank=True)
 
+    modern_name_first = models.CharField(max_length=25, null=True, blank=True)
+    modern_name_second = models.CharField(max_length=25, null=True, blank=True)
+    modern_name_third = models.CharField(max_length=25, null=True, blank=True)
+
     # Personal data
     age = models.IntegerField(null=True)
     # For some records, the exact age may be unknown and only

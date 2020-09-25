@@ -237,6 +237,8 @@ def compute_imputed_vars(_interim, is_iam=False):
         voy2imp = _interim_length
     if not is_iam:
         voy2imp = threshold(voy2imp, 10)
+    else:
+        voy2imp = threshold(voy2imp, 1)
     
     natinimp = get_obj_value(_interim.national_carrier)
     natinimp = recode_var({
