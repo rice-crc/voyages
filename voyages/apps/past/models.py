@@ -22,7 +22,7 @@ class EnslaverInfoAbstractBase(models.Model):
     father_name = models.CharField(max_length=255, null=True)
     father_occupation = models.CharField(max_length=255, null=True)
     mother_name = models.CharField(max_length=255, null=True)
-    
+
     first_spouse_name = models.CharField(max_length=255, null=True)
     first_marriage_date = models.CharField(max_length=12, null=True)
     second_spouse_name = models.CharField(max_length=255, null=True)
@@ -183,7 +183,7 @@ class EnslavedContribution(models.Model):
     contributor = models.ForeignKey(User, null=True, related_name='+')
     date = models.DateField(auto_now_add=True)
     notes = models.CharField(max_length=255, null=True, blank=True)
-    
+
 class EnslavedContributionNameEntry(models.Model):
     contribution = models.ForeignKey(EnslavedContribution, on_delete=models.CASCADE)
     name = models.CharField(max_length=255, null=False, blank=False)
@@ -201,7 +201,7 @@ class EnslavedName(models.Model):
     name = models.CharField(max_length=255, null=False, blank=False)
     language = models.CharField(max_length=3, null=False, blank=False)
     recordings_count = models.IntegerField()
-    
+
     class Meta:
         unique_together = ('name', 'language')
 
@@ -215,9 +215,9 @@ class EnslavedSearch:
     """
 
     def __init__(self, searched_name=None, exact_name_search=False, age_gender=None, \
-            age_range=None, year_range=None, embarkation_ports=None, disembarkation_ports=None, \
-            post_disembark_location=None, language_groups=None, modern_country=None, 
-            ship_name=None, voyage_id=None, source=None, order_by=None):
+            age_range=None, height_range=None, year_range=None, embarkation_ports=None, disembarkation_ports=None, \
+            post_disembark_location=None, language_groups=None, modern_country=None,
+            ship_name=None, voyage_id=None, enslaved_id=None, source=None, order_by=None):
         """
         Search the Enslaved database. If a parameter is set to None, it will not
         be included in the search.
@@ -226,6 +226,7 @@ class EnslavedSearch:
         @param: age_gender A list of pairs (bool is_adult, male = 1/female = 2) with
                 all combinations filtered.
         @param: age_range A pair (a, b) where a is the min and b is maximum age
+        @param: height_range A pair (a, b) where a is the min and b is maximum height
         @param: is_adult Whether the search is for adults or children only
         @param: year_range A pair (a, b) where a is the min voyage year and b the max
         @param: embarkation_ports A list of port ids where the enslaved embarked
@@ -235,6 +236,7 @@ class EnslavedSearch:
         @param: modern_country A list of country ids
         @param: ship_name The ship name that the enslaved embarked
         @param: voyage_id A pair (a, b) where the a <= voyage_id <= b
+        @param: enslaved_id A pair (a, b) where the a <= enslaved_id <= b
         @param: source A text fragment that should match Source's text_ref or full_ref
         @param: order_by An array of dicts { 'columnName': 'NAME', 'direction': 'ASC or DESC' }.
                 Note that if the search is fuzzy, then the fallback value of order_by is the
@@ -244,6 +246,7 @@ class EnslavedSearch:
         self.exact_name_search = exact_name_search
         self.age_gender = age_gender
         self.age_range = age_range
+        self.height_range = height_range
         self.year_range = year_range
         self.embarkation_ports = embarkation_ports
         self.disembarkation_ports = disembarkation_ports
@@ -252,9 +255,10 @@ class EnslavedSearch:
         self.modern_country = modern_country
         self.ship_name = ship_name
         self.voyage_id = voyage_id
+        self.enslaved_id = enslaved_id
         self.source = source
         self.order_by = order_by
-    
+
     def get_order_for_field(self, field):
         if isinstance(self.order_by, list):
             for x in self.order_by:
@@ -313,6 +317,8 @@ class EnslavedSearch:
             q = q.filter(reduce(operator.or_, conditions))
         if self.age_range:
             q = q.filter(age__range=self.age_range)
+        if self.height_range:
+            q = q.filter(height__range=self.height_range)
         if self.modern_country:
             q = q.filter(language_group__modern_country__pk__in=self.modern_country)
         if self.post_disembark_location:
@@ -321,6 +327,8 @@ class EnslavedSearch:
             q = q.filter(Q(sources_conn__text_ref__contains=self.source) | Q(sources__full_ref__contains=self.source))
         if self.voyage_id:
             q = q.filter(voyage__pk__range=self.voyage_id)
+        if self.enslaved_id:
+            q = q.filter(pk__range=self.enslaved_id)
         if self.year_range:
             # Search on YEARAM field. Note that we have a 'MM,DD,YYYY' format even though the
             # only year should be present.
