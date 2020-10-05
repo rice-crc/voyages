@@ -77,13 +77,13 @@ def search_enslaved(request):
     # constructor.
     data = json.loads(request.body)
     search = EnslavedSearch(**data['search_query'])
-    from voyages.apps.past.models import _name_fields
+    from voyages.apps.past.models import _name_fields, _modern_name_fields
     _fields = ['enslaved_id',
         'age', 'gender', 'height', 'ethnicity__name', 'language_group__name', 'language_group__modern_country__name',
         'voyage__id', 'voyage__voyage_ship__ship_name', 'voyage__voyage_dates__first_dis_of_slaves',
         'voyage__voyage_itinerary__int_first_port_dis__place',
         'voyage__voyage_itinerary__imp_principal_place_of_slave_purchase__place',
-        'voyage__voyage_itinerary__imp_principal_port_slave_dis__place'] + _name_fields
+        'voyage__voyage_itinerary__imp_principal_port_slave_dis__place'] + _name_fields + _modern_name_fields
     query = search.execute(_fields)
     output_type = data.get('output', 'resultsTable')
     # For now we only support outputing the results to DataTables.
@@ -92,7 +92,10 @@ def search_enslaved(request):
             for row in page:
                 all_names = list(set([row[name_field] for name_field in _name_fields if row[name_field]]))
                 all_names.sort(reverse=('desc' == search.get_order_for_field('names')))
+                all_modern_names = list(set([row[name_field] for name_field in _modern_name_fields if row[name_field]]))
+                all_modern_names.sort(reverse=('desc' == search.get_order_for_field('modern_names')))
                 row['names'] = all_names
+                row['modern_names'] = all_modern_names
                 keys = list(row.keys())
                 for k in keys:
                     if k.startswith('_'):

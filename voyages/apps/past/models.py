@@ -149,6 +149,8 @@ class Enslaved(models.Model):
     modern_name_second = models.CharField(max_length=25, null=True, blank=True)
     modern_name_third = models.CharField(max_length=25, null=True, blank=True)
 
+    editor_modern_names_certainty = models.CharField(max_length=255, null=True, blank=True)
+
     # Personal data
     age = models.IntegerField(null=True)
     # For some records, the exact age may be unknown and only
@@ -208,6 +210,7 @@ class EnslavedName(models.Model):
 _special_empty_string_fields = {'voyage__voyage_ship__ship_name': 1, 'voyage__voyage_dates__first_dis_of_slaves': '2'}
 
 _name_fields = ['documented_name', 'name_first', 'name_second', 'name_third']
+_modern_name_fields = ['modern_name_first', 'modern_name_second', 'modern_name_third']
 
 class EnslavedSearch:
     """
@@ -352,20 +355,20 @@ class EnslavedSearch:
                     break
             orm_orderby = []
             for x in self.order_by:
-                colName = x['columnName']
-                if colName == 'ranking': continue
+                col_name = x['columnName']
+                if col_name == 'ranking': continue
                 is_desc = x['direction'].lower() == 'desc'
                 nulls_last = True
-                order_field = F(colName)
-                empty_string_field_min_char_len = _special_empty_string_fields.get(colName)
+                order_field = F(col_name)
+                empty_string_field_min_char_len = _special_empty_string_fields.get(col_name)
                 if empty_string_field_min_char_len:
                     nulls_last = True
                     # Add a "length > min_char_len_for_field" field and sort it first.
                     # Note that we use a non-zero value for min_char_len_for_field because
                     # some fields uses a string ' ' to represent blank entries while some
                     # date fields use ',,' to represent a blank date.
-                    count_field = 'count_' + colName
-                    isempty_field = 'isempty_' + colName
+                    count_field = 'count_' + col_name
+                    isempty_field = 'isempty_' + col_name
                     q = q.annotate(**{count_field: Length(order_field)})
                     q = q.annotate(**{isempty_field: Case(
                         When(**{ 'then': Value(1), count_field + '__gt': empty_string_field_min_char_len }),
@@ -373,25 +376,36 @@ class EnslavedSearch:
                         output_field=IntegerField()
                     )})
                     orm_orderby.append('-' + isempty_field)
-                    if 'date' in colName:
+                    if 'date' in col_name:
                         # The date formats MM,DD,YYYY with possible blank values are
                         # very messy to sort. Here we add sorting by the last 4 characters
                         # to first sort by year (which is always present for non blank dates).
-                        year_field = 'yearof_' + colName
+                        year_field = 'yearof_' + col_name
                         q = q.annotate(**{year_field: Substr(order_field, 4 * Value(-1), 4)})
                         orm_orderby.append(('-' if is_desc else '') + year_field)
-                if colName == 'names':
-                    colName = '_names_sort'
+
+                def add_names_sorting(sorted_name_fields, col_name, q):
+                    # The next lines create a list made of the name fields with
+                    # a separator constant value between each consecutive pair.
                     names_sep = Value(';')
-                    names_concat = [names_sep] * (2 * len(_name_fields) - 1)
-                    names_concat[0::2] = _name_fields
+                    names_concat = [names_sep] * (2 * len(sorted_name_fields) - 1)
+                    names_concat[0::2] = sorted_name_fields
+                    # We now properly handle 
                     fallback_name_val = Value('AAAAA' if is_desc else 'ZZZZZ')
-                    expressions = [Coalesce(F(name_field), fallback_name_val, output_field=CharField()) for name_field in _name_fields]
-                    q = q.annotate(**{colName: Func(*expressions, function='GREATEST' if is_desc else 'LEAST')})
-                    nulls_last = False # We already use fallback values so no NULL will ever appear.
-                    order_field = F(colName)
+                    expressions = [Coalesce(F(name_field), fallback_name_val, output_field=CharField()) for name_field in sorted_name_fields]
+                    q = q.annotate(**{col_name: Func(*expressions, function='GREATEST' if is_desc else 'LEAST')})
+                    order_field = F(col_name)
                     order_field = order_field.desc() if is_desc else order_field.asc()
-                    fields = fields + [colName]
+                    return q, order_field
+                        
+                if col_name == 'names':
+                    col_name = '_names_sort'
+                    (q, order_field) = add_names_sorting(_name_fields, col_name, q)
+                    fields = fields + [col_name]
+                elif col_name == 'modern_names':
+                    col_name = '_modern_names_sort'
+                    (q, order_field) = add_names_sorting(_modern_name_fields, col_name, q)
+                    fields = fields + [col_name]
                 elif is_desc:
                     order_field = order_field.desc(nulls_last=nulls_last)
                 else:
