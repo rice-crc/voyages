@@ -3,28 +3,12 @@
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
-#: voyages/apps/voyage/templates/database/_captain_and_crew.html:10
-#: voyages/apps/voyage/templates/database/_itinerary.html:64
-#: voyages/apps/voyage/templates/database/_itinerary.html:115
-#: voyages/apps/voyage/templates/database/_settings.html:50
-#: voyages/apps/voyage/templates/database/_source.html:6
-#: voyages/apps/voyage/templates/database/_source.html:8
-#: voyages/apps/voyage/templates/database/tabs/tables.html:6
-#: voyages/apps/voyage/templates/database/tabs/tables.html:9
-#: voyages/apps/voyage/templates/database/tabs/tables.html:12
-#: voyages/apps/voyage/templates/database/tabs/timeline.html:5
-#: voyages/apps/voyage/templates/database/tabs/visualization.html:16
-#: voyages/apps/voyage/templates/database/tabs/visualization.html:19
-#: voyages/apps/voyage/templates/database/tabs/visualization.html:32
-#: voyages/apps/voyage/templates/database/tabs/visualization.html:35
-#: voyages/apps/voyage/templates/database/tabs/visualization.html:47
-#: voyages/apps/voyage/templates/database/tabs/visualization.html:50
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-03-11 01:29-0400\n"
-"PO-Revision-Date: 2015-10-30 09:56-0300\n"
+"PO-Revision-Date: 2020-10-07 14:16-0400\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: pt\n"
@@ -32,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Poedit 2.2.1\n"
+"X-Generator: Poedit 2.4.1\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 1.7.5\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
@@ -1155,6 +1139,11 @@ msgid ""
 "become part of the Voyages: The Trans-Atlantic Slave Trade Database website "
 "and will be governed by any applicable licenses."
 msgstr ""
+"A versão em português desta página (Contribuir) está em desenvolvimento. "
+"Caso encontre traduções incorretas ou confusas, habilite a versão em Inglês "
+"ou Espanhol no menu acima. \n"
+"\n"
+"\n"
 "Garanto que tenho o direito de contribuir com os seguintes dados para o "
 "Banco de Dados de Viagens e sua inclusão no Banco de Dados de Viagens não "
 "infringirá os direitos de propriedade intelectual de ninguém. Também "
@@ -1233,20 +1222,6 @@ msgstr ""
 #: voyages/apps/contribute/forms.py:141
 msgid "Name of vessel"
 msgstr ""
-"Os típicos nomes ibéricos compostos — sejam de navios, comandantes ou "
-"proprietários — são problemáticos para os pesquisadores. Os nomes espanhóis "
-"e portugueses muitas vezes incorporam os sobrenomes do pai e da mãe. No caso "
-"dos nomes dos navios, eles por vezes são compridos devido ao hábito de "
-"incluir no nome do navio nomes múltiplos de santos e objetos de veneração "
-"religiosa — pelo menos até 1800. O comprimento é um problema neste contexto "
-"porque o registro oficial do navio (e pessoa), bem como os nomes comumente "
-"usados por marinheiros e proprietários, muitas vezes só utilizam fragmentos "
-"do nome completo, e infelizmente nem sempre os mesmos fragmentos. Os "
-"usuários são consequentemente advertidos de que muitas vezes é mais difícil "
-"controlar e eliminar a contagem duplicada de pessoas e navios ibéricos do "
-"que os de outros países. Um viés de alta advindo da contagem repetida é "
-"portanto mais provável nos registros da península Ibérica do que nos não-"
-"ibéricos."
 
 #: voyages/apps/contribute/forms.py:142
 msgid "Year of ship construction"
@@ -1460,13 +1435,6 @@ msgstr "Nenhum resultado"
 #: voyages/apps/contribute/models.py:309
 msgid "Will review"
 msgstr ""
-"A seção Colaborar do website Viagens contém formulários de entrada de dados "
-"através dos quais os usuários do website podem revisar as informações "
-"existentes no Banco de Dados Viagens ou fornecer novos dados. Uma equipe de "
-"estudiosos do tráfico de escravos analisará cada contribuição como parte do "
-"processo da revisão por pares. Uma vez confirmada, a informação nova ou "
-"revista será incorporada na próxima versão do Banco de Dados Viagens. "
-"Prevemos lançar uma nova versão a cada três anos."
 
 #: voyages/apps/contribute/models.py:310
 msgid "Cannot review"
@@ -1512,10 +1480,6 @@ msgstr ""
 #: voyages/apps/contribute/models.py:446
 msgid "New voyage"
 msgstr ""
-"#-#-#-#-#  0catalog.po  #-#-#-#-#\n"
-"Número de viagens\n"
-"#-#-#-#-#  0catalog.po  #-#-#-#-#\n"
-"Incluir vazio"
 
 #: voyages/apps/contribute/templates/contribute/assign_reviewer_dialog.html:9
 #: voyages/apps/contribute/templates/contribute/preview_editor_commands.html:5
@@ -1570,21 +1534,6 @@ msgstr "Mensagem para o editor"
 #: voyages/apps/contribute/templates/contribute/decision_part.html:194
 msgid "Decision"
 msgstr ""
-"Um problema importante que os pesquisadores do tráfico de escravos precisam "
-"resolver é saber se as embarcações que constam nas fontes como destinadas à "
-"“África” são navios negreiros. No final do século XVII, os escravos ainda "
-"representavam, em termos pecuniários, menos da metade do tráfico entre o "
-"mundo Atlântico e a África. Muitos capitães navegavam para a África para "
-"comprar ouro, marfim, madeiras corantes ou especiarias. Numerosos navios de "
-"guerra, de transporte de tropas ou de carga partiam de Lisboa para os fortes "
-"portugueses em Benguela ou Luanda, e outras potências europeias também "
-"precisavam abastecer seus entrepostos. No caso da maioria das viagens "
-"francesas, portuguesas e holandesas para a África, foram outros "
-"pesquisadores que decidiram se as classificavam como negreiras ou não, "
-"embora tenhamos descoberto algumas viagens adicionais partindo desses países "
-"cujo objetivo ainda não está claro. É relevante observar que os registros de "
-"partidas de navios costumam sobreviver melhor no registro histórico do que "
-"os registros de chegadas."
 
 #: voyages/apps/contribute/templates/contribute/decision_part.html:21
 #: voyages/apps/contribute/templates/contribute/decision_part.html:55
@@ -1762,7 +1711,7 @@ msgstr "Por favor, selecione a viagem que deseja editar."
 #: voyages/apps/contribute/templates/contribute/edit.html:21
 #: voyages/apps/contribute/templates/contribute/merge.html:21
 msgid "Begin"
-msgstr "Início das exportações de açúcar do Caribe Oriental"
+msgstr ""
 
 #: voyages/apps/contribute/templates/contribute/editor_main.html:38
 msgid "Voyages"
@@ -1775,18 +1724,6 @@ msgstr "Solicitações"
 #: voyages/apps/contribute/templates/contribute/editor_main.html:40
 msgid "Users"
 msgstr ""
-"O segundo grupo de variáveis é o das variáveis imputadas. Na interface do "
-"Banco de Dados Viagens, os usuários podem escolher 22 dessas variáveis "
-"imputadas para facilitar as buscas. As variáveis imputadas são derivadas "
-"diretamente do conjunto de dados. Os pressupostos dessas derivações são "
-"explicados mais detalhadamente abaixo, mas em sua maior parte as variáveis "
-"derivadas são fusões ou reagrupamentos de dados históricos do primeiro grupo "
-"de variáveis. Para tornar as variáveis imputadas tão transparentes quanto "
-"possível e facilitar os refinamentos, as avaliações alternativas e as "
-"correções que os usuários possam achar necessárias, incluímos uma página que "
-"pode ser baixada, a qual torna o banco de dados disponível para os usuários "
-"em vários formatos. Na verdade, ele fornece aos usuários os dados "
-"necessários para a criação de suas próprias variáveis imputadas."
 
 #: voyages/apps/contribute/templates/contribute/editor_main.html:41
 msgid "Source Codes"
@@ -1931,10 +1868,6 @@ msgstr "Admin ao vivo"
 #: voyages/templates/account/base.html:66
 msgid "New Voyage"
 msgstr ""
-"#-#-#-#-#  0catalog.po  #-#-#-#-#\n"
-"Número de viagens\n"
-"#-#-#-#-#  0catalog.po  #-#-#-#-#\n"
-"Incluir vazio"
 
 #: voyages/apps/contribute/templates/contribute/index.html:22
 #: voyages/templates/account/base.html:69
@@ -2467,13 +2400,6 @@ msgstr "Salvar"
 #: voyages/apps/contribute/templates/contribute/interim.html:1384
 msgid "Review"
 msgstr ""
-"A seção Colaborar do website Viagens contém formulários de entrada de dados "
-"através dos quais os usuários do website podem revisar as informações "
-"existentes no Banco de Dados Viagens ou fornecer novos dados. Uma equipe de "
-"estudiosos do tráfico de escravos analisará cada contribuição como parte do "
-"processo da revisão por pares. Uma vez confirmada, a informação nova ou "
-"revista será incorporada na próxima versão do Banco de Dados Viagens. "
-"Prevemos lançar uma nova versão a cada três anos."
 
 #: voyages/apps/contribute/templates/contribute/interim.html:1385
 #: voyages/apps/contribute/templates/contribute/interim_summary.html:669
@@ -2598,30 +2524,6 @@ msgstr "Título do ensaio/capítulo"
 #: voyages/apps/contribute/templates/contribute/interim.html:1510
 msgid "Editors"
 msgstr ""
-"Embora as fontes sejam relativamente ricas, a diversidade traz um novo "
-"conjunto de problemas. Não se pode querer que relatórios sobre viagens que "
-"cobriam milhares de quilômetros — e que duravam vários meses —, muitas "
-"envolvendo línguas diversas e diferentes burocracias, cada um com um "
-"conjunto distinto de procedimentos oficiais a seguir, sempre gerem "
-"informações perfeitamente congruentes. Por exemplo, 216 viagens do conjunto "
-"de dados aparentemente chegaram às Américas com mais escravos a bordo do que "
-"havia quando deixaram a África. Outras partiram do mesmo porto mais de uma "
-"vez na mesma viagem, e alguns navios teriam mudado sua tonelagem e até mesmo "
-"a armação no decorrer da viagem. O mesmo navio aparece ocasionalmente com "
-"mais de um nome na mesma viagem. Aqueles acostumados a trabalhar com uma "
-"única fonte por viagem e a gerar conjuntos de dados sem qualquer informação "
-"conflitante devem ter em mente que os editores não tentaram corrigir todos "
-"esses problemas. O conjunto de dados oferecido aqui não é de nenhuma maneira "
-"“limpo”, no sentido de ser ter consistência interna absoluta. Tentamos e "
-"conseguimos eliminar muitas das incongruências, mas se eliminássemos todas "
-"teríamos que impor ao registro histórico uma ordem que qualquer um que tenha "
-"visitado os arquivos (ou mesmo examinado as fontes publicadas, tais como "
-"Mettas ou Richardson) sabe que não existe. Os editores anotaram apenas um "
-"valor por variável quando confrontados com alguma informação alternativa. Ao "
-"fazer tais escolhas, seguimos certas regras que os pesquisadores podem mudar "
-"depois de voltar às fontes. Se os usuários optarem por fazer isso, no "
-"entanto, eles também terão um conjunto que não é “limpo”, e que além disso "
-"não reflete necessariamente os registros históricos de onde foi retirado."
 
 #: voyages/apps/contribute/templates/contribute/interim.html:1522
 msgid "Publisher"
@@ -2645,21 +2547,6 @@ msgstr "Nome alternativo"
 #: voyages/apps/contribute/templates/contribute/interim.html:1561
 msgid "City"
 msgstr ""
-"São Tomé, juntamente com outras ilhas do golfo de Biafra, formaram um "
-"arquipélago que esteve profundamente envolvido no tráfico de escravos "
-"transatlântico. A imagem é de dois mapas publicados pelo comandante "
-"português José Joaquim Lopes de Lima na década de 1840. O mapa à esquerda "
-"mostra toda a ilha de São Tomé, indicando seus principais rios, a "
-"profundidade do mar em torno da ilha e sua disposição topográfica. O mapa à "
-"direita mostra a baía de Ana de Chaves, onde se localizavam o porto e a "
-"cidade de São Tomé. Este segundo mapa fornece detalhes sobre a profundidade "
-"da baía e situa os fortes portugueses que protegem a barra. A ilustração "
-"inserida acima dos dois mapas é uma vista da ilha a uma légua de distância "
-"da cidade de São Tomé, ao nordeste. Na década de 1840, São Tomé recebia "
-"escravos traficados ilegalmente em mercados do Atlântico, bem como africanos "
-"livres que vinham das possessões portuguesas localizadas na África Centro-"
-"Ocidental. Imagem reproduzida com autorização da Manuscript, Archives and "
-"Rare Book Library, Emory University. "
 
 #: voyages/apps/contribute/templates/contribute/interim.html:1565
 msgid "Country"
@@ -2669,9 +2556,6 @@ msgstr "País"
 #: voyages/apps/contribute/templates/contribute/interim.html:1607
 msgid "Authors"
 msgstr ""
-"Estes materiais foram criados para fins de currículo e instrução e não se "
-"destinam a republicação comercial. Entre em contato com os autores "
-"individuais para obter permissões adicionais."
 
 #: voyages/apps/contribute/templates/contribute/interim.html:1588
 #: voyages/apps/contribute/templates/contribute/interim.html:1615
@@ -4360,11 +4244,6 @@ msgstr "Upload novo arquivo"
 #: voyages/apps/voyage/templates/upload.html:17
 msgid "Size"
 msgstr ""
-"<p>Miniaturas de imagens que correspondem aos critérios de pesquisa (um "
-"termo-chave, um período de tempo ou uma das categorias com base nas quais as "
-"imagens estão organizadas) aparecerão na parte principal da janela. O "
-"usuário pode clicar em qualquer uma delas para obter uma imagem grande e "
-"comentários sobre ela.</p>"
 
 #: voyages/apps/voyage/templates/upload.html:18
 msgid "Last Modified"
