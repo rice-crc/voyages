@@ -1,0 +1,296 @@
+@import "colors";
+@import "variables";
+
+//
+
+.pagination.pagination-sm {
+	float: right;
+}
+
+// variable panel
+#panelCollapse {
+  background-color: #efefef;
+}
+
+.panel-list {
+  margin-bottom: 0;
+  list-style: none;
+  font-size: 0.85rem;
+  padding: 0.5rem 4rem;
+  display: flex;
+  justify-content: space-between;
+}
+
+.panel-list-item {
+  padding-right: 1rem;
+}
+
+.btn-panel {
+  color: $past-contribute-secondary-color;
+  border: 1px $past-contribute-secondary-color solid;
+  border-radius: 3px;
+  padding: 0 0.5rem 0 0.5rem;
+  cursor: pointer;
+  white-space: nowrap;
+}
+// end of variable panel
+
+table {
+	font-size: $regular-font-size;
+}
+
+.table thead th {
+  color: $past-contribute-color !important;
+  span.column-header:after {
+    color: black;
+  }
+}
+
+// past database table padding override
+
+.table td, .table th {
+  padding: 0 .25rem !important;
+}
+
+// datatables past
+.table-past {
+  font-size: 0.8rem;
+}
+
+// datatables bootstrap 4 pagination
+.page-item.active .page-link {
+  background-color: $past-contribute-color;
+  border-color: $past-contribute-color;
+}
+.page-link {
+  color: $past-contribute-color;
+}
+.page-link:focus, .page-link:hover {
+  color: $past-contribute-color;
+}
+
+// btn colors
+.btn-solid {
+  background-color: $past-contribute-color;
+	border-color: $past-contribute-color;
+  color: #fff;
+	&:hover {
+		background-color: $past-hover-color;
+		border-color: $past-hover-color;
+	}
+}
+
+.btn-outline {
+	color: $past-contribute-color;
+	background-color: white;
+	border-color: $past-contribute-color;
+	&:hover {
+		background-color: $past-contribute-color;
+		border-color: $past-contribute-color;
+    color: white;
+	}
+}
+
+.btn-info {
+    background-color: $past-contribute-color;
+    border-color: $past-contribute-color;
+
+    &:hover, &:active, &:focus, &:not(:disabled):not(.disabled):active {
+      background-color: $past-hover-color;
+      border-color: $past-hover-color;
+    }
+}
+
+.navbar {
+  background: $past-contribute-color !important;
+}
+
+.footer-flex-container {
+  background-color: $past-contribute-color;
+}
+
+.dropdown-item.active, .dropdown-item:active {
+    background-color: $past-contribute-color;
+    opacity: 1;
+}
+
+a {
+  color: $past-contribute-color;
+
+  &:hover {
+    color: $past-contribute-color;
+    text-decoration: none;
+  }
+}
+
+.secondary-menu-item-1-selected, .assessment_selected {
+  padding-left: 25px;
+  border-left: 4px solid $past-contribute-color;
+  font-weight: bold;
+}
+
+.nav-header {
+  color: white;
+  background: $past-contribute-secondary-color !important;
+  padding: 0.5rem 4rem 0;
+  font-size: 1rem;
+  font-weight: bold;
+}
+
+.past-search-bar {
+  z-index: 1;
+  background: $past-contribute-secondary-color !important;
+  @media (min-width: 1199px) {
+    .nav-item {
+      padding-top: 0;
+    }
+  }
+}
+
+.datatable-options {
+	display: flex;
+	justify-content: space-between;
+	margin: 1rem 0;
+}
+
+.box-main-text {
+		margin-bottom: 1rem;
+}
+
+td.td-main-panel {
+	vertical-align: top;
+	background-image: none;
+	padding: 10px; }
+
+td.slaves-query-variable-title {
+	width: 80px;
+	font-weight: normal; }
+
+td.slaves-query-variable-controls {
+	}
+
+td.slaves-query-spacer {
+	height: 3px; }
+
+td.lookup-checkbox-list-item-1,
+td.lookup-checkbox-list-item-2 {
+	white-space: nowrap; }
+
+div.slaves-query-section {
+	margin-bottom: 10px;
+	padding-bottom: 10px;
+	border-bottom: 1px solid $past-contribute-color;}
+
+td.box-upper-row-middle,
+td.box-middle-row-middle,
+td.box-set-lower-row-upper-middle,
+td.box-set-upper-row-upper-middle,
+td.box-upper-row-middle-collapsed,
+td.box-set-upper-row-upper-middle-collapsed,
+td.box-set-upper-row-upper-middle,
+td.box-set-upper-row-middle-middle-collapsed,
+td.box-set-upper-row-middle-middle,
+td.box-set-upper-row-bottom-middle-collapsed,
+td.box-set-upper-row-bottom-middle {
+	width: 250px; }
+
+td.box-middle-row-middle-collapsed,
+td.box-middle-row-left-collapsed,
+td.box-middle-row-right-collapsed {
+    display: none;
+}
+
+td.lookup-checkbox-list-quicksearch-input input {
+	width: 100px; }
+
+div.lookup-checkbox-list {
+	border: 1px solid $past-contribute-color;
+	height: 200px;
+	padding: 0 1rem;
+	overflow: scroll; }
+
+table.lookup-checkbox-list-buttons {
+	margin-top: 5px; }
+
+table.lookup-checkbox-list-buttons td {
+	padding-right: 5px; }
+
+div.lookup-checkbox-list-item-collapsed {
+	background-image: url(/static/images/site/resources/resources-icon-arrow-right.png);
+	background-repeat: no-repeat;
+	width: 11px;
+	height: 11px; }
+
+div.lookup-checkbox-list-item-expanded {
+	background-image: url(/static/images/site/resources/resources-icon-arrow-down.png);
+	background-repeat: no-repeat;
+	width: 11px;
+	height: 11px; }
+
+span.query-summary-variable {
+	font-weight: bold; }
+
+input.button-save {
+	border:1px solid;
+	text-decoration:none;
+	background-color: white;
+	border-color: #165B31;
+	background-color: white;}
+
+input.button-save:hover {
+	background-color: $past-contribute-color;}
+
+.article-list-item {
+  color: $past-contribute-color !important;
+}
+
+.card {
+  border-radius: .50rem;
+}
+.card-header:first-child {
+  border-radius: calc(.50rem - 1px) calc(.50rem - 1px) 0 0;
+}
+
+.past-card-header {
+  background: $past-contribute-secondary-color !important;
+  color: white;
+  font-size: $regular-font-size !important;
+  font-weight: bold;
+  .main-card {
+    font-size: $sidebar-header-font-size !important;
+  }
+}
+
+.btn-transparent {
+  color: #212529;
+  background-color: transparent;
+}
+.btn-transparent.active.focus,
+.btn-transparent.active:focus,
+.btn-transparent.focus,
+.btn-transparent.focus:active,
+.btn-transparent:active:focus,
+.btn-transparent:focus {
+  outline: 0;
+  outline-offset: 0;
+  background-image: none;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+}
+
+.enslaved-data {
+  .value {
+    color: $text-dark-2;
+    font-size: $normalized-font-size;
+    font-weight: bold;
+    display: block;
+  }
+  .description {
+    color: $text-dark-2;
+    font-size: $reduced-font-size;
+  }
+}
+
+.sidebar-section {
+  margin: auto;
+}

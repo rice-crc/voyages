@@ -10,5 +10,6 @@ urlpatterns = [
     url(r'^api/language-groups', voyages.apps.past.views.get_language_groups, name='language-groups'),
     url(r'^api/ethnicities', voyages.apps.past.views.get_ethnicities, name='ethnicities'),
     url(r'^database', TemplateView.as_view(template_name='past/database.html'), name='database'),
+    url(r'^contribute/(?P<id>.*)', TemplateView.as_view(template_name='past/contribute.html'), name='contribute'),
     url(r'^store-audio/(?P<id>.*)', voyages.apps.past.views.store_audio)
     ]
