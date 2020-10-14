@@ -1,0 +1,98 @@
+{% load i18n %}
+
+<div role="tablist" class="enslaved-data">
+
+  <div class="card mb-3">
+
+    <div class="card-header past-card-header px-4">
+      <span class="card-title main-card">
+        [[ enslaved.documented_name ]]
+      </span>
+    </div>
+
+    <div class="card-body sidebar-card-body px-4" data-parent="">
+      <div class="row">
+        <div class="col-sm-6 mt-2">
+          <span class="value">[[ enslaved.documented_name ]]</span>
+          <span class="value" v-if="enslaved.name_first">[[ enslaved.name_first ]]</span>
+          <span class="value" v-if="enslaved.name_second">[[ enslaved.name_second ]]</span>
+          <span class="value" v-if="enslaved.name_third">[[ enslaved.name_third ]]</span>
+          <span class="description">{% trans 'In Register' %}</span>
+        </div>
+        <div class="col-sm-6 mt-2" v-if="enslaved.modern_name_first || enslaved.modern_name_second || enslaved.modern_name_third">
+          <span class="value" v-if="enslaved.modern_name_first">[[ enslaved.modern_name_first ]]</span>
+          <span class="value" v-if="enslaved.modern_name_second">[[ enslaved.modern_name_second ]]</span>
+          <span class="value" v-if="enslaved.modern_name_third">[[ enslaved.modern_name_third ]]</span>
+          <span class="description">{% trans 'Modern Counterpart' %}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card mb-3">
+
+    <div class="card-header past-card-header px-4">
+      <span class="card-title">
+        {% trans 'Geographical Profile' %}
+      </span>
+    </div>
+
+    <div class="card-body sidebar-card-body px-4" data-parent="">
+      <div class="row">
+        <div class="col-sm-6 mt-2">
+          <span class="value">[[ enslaved.language_group__name ]]</span>
+          <span class="description">{% trans 'Language Group' %}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card mb-3">
+
+    <div class="card-header past-card-header px-4">
+      <span class="card-title">
+        {% trans 'Physical Profile' %}
+      </span>
+    </div>
+
+    <div class="card-body sidebar-card-body px-4" data-parent="">
+      <div class="row">
+        <div class="col-sm-6 mt-2">
+          <span class="value">[[ enslaved.age ]]</span>
+          <span class="description">{% trans 'Age' %}</span>
+        </div>
+        <div class="col-sm-6 mt-2">
+          <span class="value" v-if="enslaved.gender === 1">{% trans 'Male' %}</span>
+          <span class="value" v-if="enslaved.gender === 2">{% trans 'Female' %}</span>
+          <span class="description">{% trans 'Gender' %}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card mb-3">
+
+    <div class="card-header past-card-header px-4">
+      <span class="card-title">
+        {% trans 'Voyages' %}
+      </span>
+    </div>
+
+    <div class="card-body sidebar-card-body px-4" data-parent="">
+      <div class="row">
+        <div class="col-sm-6 mt-2">
+          <span class="value">[[ enslaved.voyage__voyage_ship__ship_name ]]</span>
+          <span class="description">{% trans 'Ship Name' %}</span>
+        </div>
+        <div class="col-sm-6 mt-2">
+          <span class="value">[[ enslaved.voyage__voyage_itinerary__imp_principal_place_of_slave_purchase__place ]]</span>
+          <span class="description">{% trans 'Port' %}</span>
+        </div>
+        <div class="col-sm-6 mt-2">
+          <span class="value">[[ enslaved.voyage_year ]]</span>
+          <span class="description">{% trans 'Voyage Year' %}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
