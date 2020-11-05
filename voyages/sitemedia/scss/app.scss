@@ -458,6 +458,10 @@ video#bgvid {
   font-size: 1.15rem;
 }
 
+.sv-logo {
+  height: 5rem;
+}
+
 /* original large device */
 @media (max-width: 1199px) {
   .navbar-collapse {
@@ -470,6 +474,10 @@ video#bgvid {
 
   .site-headline {
     font-size: 1.75rem;
+  }
+
+  .sv-logo {
+    height: 4rem;
   }
 }
 
