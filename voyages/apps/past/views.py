@@ -1,6 +1,9 @@
+from datetime import date
 from django.conf import settings
 from django.core.paginator import Paginator
+from django.db import transaction
 from django.db.models import Prefetch
+from django.http.response import HttpResponseBadRequest
 from django.shortcuts import redirect
 from django.http import JsonResponse
 from django.views.decorators.cache import cache_page
@@ -10,6 +13,7 @@ from voyages.apps.past.models import *
 from name_search import NameSearchCache
 import itertools
 import json
+import uuid
 
 def _generate_table(query, table_params, data_adapter=None):
     try:
@@ -111,9 +115,80 @@ def search_enslaved(request):
     return JsonResponse({'error': 'Unsupported'})
 
 @require_POST
+def enslaved_contribution(request):
+    """
+    Create a contribution for an enslaved name.
+    """
+    data = json.loads(request.body)
+    enslaved_id = data.get('enslaved_id')
+    enslaved = Enslaved.objects.get(pk=enslaved_id) if enslaved_id else None
+    if enslaved is None:
+        return HttpResponseBadRequest('A valid enslaved id is required')    
+    names = data.get('contrib_names', [])
+    languages = data.get('contrib_languages', [])
+    # TODO: Check if this is enough validation.
+    if len(names) == 0 and len(languages) == 0:
+        return HttpResponseBadRequest('Contribution must specify at least a name or a language')
+    token = uuid.uuid4().hex
+    contrib = EnslavedContribution()
+    contrib.date = date.today()
+    contrib.enslaved = enslaved
+    contrib.notes = str(data.get('notes', '')) # Optional notes
+    # TODO: Do we require the user to be authenticated in order to contribute?
+    contrib.contributor = request.user if request.user.is_authenticated() else None
+    contrib.is_multilingual = bool(data.get('is_multilingual', False))
+    contrib.token = token
+    result = {}
+    with transaction.atomic():
+        contrib.save()
+        result['contrib_id'] = contrib.pk
+        name_ids = []
+        for i, item in enumerate(names):
+            name_entry = EnslavedContributionNameEntry()
+            name_entry.contribution = contrib
+            name_entry.order = i + 1
+            contrib_name = strip(item['name'])
+            if len(contrib_name) < 2:
+                transaction.rollback()
+                return HttpResponseBadRequest('Invalid name in contribution')
+            name_entry.name = contrib_name
+            name_entry.notes = item.get('notes', '')
+            name_entry.save()
+            name_ids.append(name_entry.pk)
+        result['name_ids'] = name_ids
+        language_ids = []
+        for i, lang in enumerate(languages):
+            lang_entry = EnslavedContributionLanguageEntry()
+            lang_entry.contribution = contrib
+            lang_entry.order = i + 1
+            ethnicity_id = lang.get('ethnicity_id', None)
+            lang_group_id = lang.get('lang_group_id', None)
+            if ethnicity_id is None and lang_group_id is None:
+                transaction.rollback()
+                return HttpResponseBadRequest('Invalid language entry in contribution')
+            lang_entry.ethnicity = Ethnicity.objects.get(pk=ethnicity_id) if ethnicity_id else None
+            lang_entry.language_group = LanguageGroup.objects.get(pk=lang_group_id) if lang_group_id else None
+            lang_entry.notes = lang.get('notes', '')
+            lang_entry.save()
+            language_ids.append(lang_entry.pk)
+        result['language_ids'] = language_ids
+    # The audio token is used so that the client can upload audio files for storage.
+    # The token is used to avoid overwriting any files by accident and to prevent
+    # malicious players from storing arbitrary data in our servers.
+    result['audio_token'] = token
+    return JsonResponse(result)
+
+@require_POST
 @csrf_exempt
-def store_audio(request, id):
-    # TODO: check id against EnslavedContributionNameEntry pk.
-    with open('%s/%s/%s' % (settings.MEDIA_ROOT, 'audio', str(id) + ".webm"), 'wb+') as destination:
+def store_audio(request, contrib_pk, name_pk, token):
+    if len(request.body) > 1000000:
+        return HttpResponseBadRequest('Audio file is too large')
+    contrib_pk = int(contrib_pk)
+    contrib = EnslavedContribution.get(pk=contrib_pk)
+    if contrib is None or contrib.token != token:
+        return HttpResponseBadRequest('Contribution not found')
+    name_pk = int(name_pk)
+    file_name = str(contrib_pk) + "_" + str(name_pk) + ".webm"
+    with open('%s/%s/%s' % (settings.MEDIA_ROOT, 'audio', file_name), 'wb+') as destination:
         destination.write(request.body)
     return JsonResponse({ 'len': len(request.body) })
