@@ -43,6 +43,7 @@ var allColumns = [
   // { data: "source", category: 5, header: gettext("Source"), isImputed: false },
 
   { data: "recordings", category: 6, header: '<i class="fa fa-volume-up" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></i>', isImputed: false, isAudible: true, orderable: false },
+  { data: "enslaved_id", category: 6, header: gettext("Contribute"), isImputed: false, isContribute: true, orderable: false  },
 ];
 
 var categories = $.map(categoryNames, function(name) {
@@ -86,7 +87,9 @@ allColumns.forEach(function(c, index) {
   c.render = function (data, type, row, meta) {
     var formattedString = "";
     if (data !== null) {
-      if (c.isAudible) {
+      if (c.isContribute) {
+          formattedString = '<a href="contribute/' + data + '"><i class="fas fa-microphone-alt btn btn-transparent"></i></a>';
+      } else if (c.isAudible) {
         if (!jQuery.isEmptyObject(data)) {
           var audiosList = $('<div></div>');
           $.each(data, function (key, item) {

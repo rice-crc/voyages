@@ -26,7 +26,7 @@
 {% block content %}
 <div id="past-contribute" v-cloak>
     <div class="nav-header">
-      <div>{% trans "People of Atlantic Slave Trade - Database of the Enslavers" %}</div>
+      <div>{% trans "People of Atlantic Slave Trade - Database of the Enslaved" %}</div>
       <div class="navbar-subtitle flex">
         <div class="navbar-subitem">
           <a data-toggle="collapse" href="{% url 'past:database' %}" role="button" aria-expanded="false" aria-controls="panelCollapse">
@@ -37,7 +37,7 @@
           </a>
         </div>
         <div class="navbar-subitem">
-          {% trans 'Contribute to ' %} "[[ enslaved.documented_name ]]"
+          {% trans 'Contribute to origins of the name of this person' %}
         </div>
 
       </div>
@@ -50,6 +50,40 @@
                 <div class='col-md-4 col-xs-12 col-lg-3 sidebar-offcanvas' id="sidebar">
                     {% include "past-contribute/_left-menu.html" %}
                 </div>
+                <div class="col-md-8 col-xs-12 col-lg-9 ">
+                    <div class="row">
+                      <div>
+                        <ul class="nav nav-pills mb-3 contribute-navbar" id="pills-tab" role="tablist">
+                            <li class="nav-item">
+                                <span class="navbar-text font-weight-bold text-secondary" >{% trans 'Select to contribute' %}:</span>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link active" id="pills-home-tab" data-toggle="pill" href="#pills-home" role="tab" aria-controls="pills-home" aria-selected="true">{% trans 'Names & Pronunciation' %}<span v-if="total_names > 0"> ([[ total_names ]])</span></a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="pills-profile-tab" data-toggle="pill" href="#pills-profile" role="tab" aria-controls="pills-profile" aria-selected="false">{% trans 'Ethnics and Language Groups' %}</a>
+                            </li>
+                        </ul>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="tab-content" id="pills-tabContent">
+                        <!-- {% include "past-contribute/_name_pronunciation.html" %} -->
+                        <!-- {% include "past-contribute/_ethnics_language_group.html" %} -->
+                      </div>
+                      </div>
+
+
+
+
+
+
+
+
+
+
+
+                  </div>
             </div>
     </form>
 </div>
