@@ -294,3 +294,25 @@ input.button-save:hover {
 .sidebar-section {
   margin: auto;
 }
+
+.contribute-navbar {
+  .nav-link {
+    color: $past-contribute-color;
+    background-color: white;
+    border: solid 2px $past-contribute-color;
+    font-size: 12pt;
+    font-weight: bold;
+    border-radius: .5rem;
+    padding: 4px 60px;
+    margin: auto 10px;
+
+    &.active {
+      color: white;
+      background-color: $past-contribute-color;
+    }
+  }
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
