@@ -115,6 +115,7 @@ def search_enslaved(request):
     return JsonResponse({'error': 'Unsupported'})
 
 @require_POST
+@csrf_exempt
 def enslaved_contribution(request):
     """
     Create a contribution for an enslaved name.
@@ -123,7 +124,7 @@ def enslaved_contribution(request):
     enslaved_id = data.get('enslaved_id')
     enslaved = Enslaved.objects.get(pk=enslaved_id) if enslaved_id else None
     if enslaved is None:
-        return HttpResponseBadRequest('A valid enslaved id is required')    
+        return HttpResponseBadRequest('A valid enslaved id is required')
     names = data.get('contrib_names', [])
     languages = data.get('contrib_languages', [])
     # TODO: Check if this is enough validation.
@@ -147,7 +148,7 @@ def enslaved_contribution(request):
             name_entry = EnslavedContributionNameEntry()
             name_entry.contribution = contrib
             name_entry.order = i + 1
-            contrib_name = strip(item['name'])
+            contrib_name = item['name'].strip()
             if len(contrib_name) < 2:
                 transaction.rollback()
                 return HttpResponseBadRequest('Invalid name in contribution')

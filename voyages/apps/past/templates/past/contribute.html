@@ -7,6 +7,7 @@
     <link href="{% sass_src 'scss/main.scss' %}" rel="stylesheet" type="text/css" />
     {% endcompress %}
     <link href="{% sass_src 'scss/past_contribute.scss' %}" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="{{ STATIC_URL }}maps/css/leaflet.css" />
     {% compress css %}
     <link href="{% sass_src 'scss/off-canvas.scss' %}" rel="stylesheet" type="text/css" />
     <link href="{% sass_src 'scss/search-ui.scss' %}" rel="stylesheet" type="text/css" />
@@ -50,7 +51,7 @@
                 <div class='col-md-4 col-xs-12 col-lg-3 sidebar-offcanvas' id="sidebar">
                     {% include "past-contribute/_left-menu.html" %}
                 </div>
-                <div class="col-md-8 col-xs-12 col-lg-9 ">
+                <div class="col-md-8 col-xs-12 col-lg-9 pl-5">
                     <div class="row">
                       <div>
                         <ul class="nav nav-pills mb-3 contribute-navbar" id="pills-tab" role="tablist">
@@ -67,22 +68,13 @@
                       </div>
                     </div>
                     <div class="row">
-                      <div class="tab-content" id="pills-tabContent">
-                        <!-- {% include "past-contribute/_name_pronunciation.html" %} -->
-                        <!-- {% include "past-contribute/_ethnics_language_group.html" %} -->
-                      </div>
-                      </div>
-
-
-
-
-
-
-
-
-
-
-
+                      <form>
+                        <div class="tab-content container-fluid p-0" id="pills-tabContent">
+                          {% include "past-contribute/_name_pronunciation.html" %}
+                          {% include "past-contribute/_ethnics_language_group.html" %}
+                        </div>
+                      </form>
+                    </div>
                   </div>
             </div>
     </form>
@@ -118,6 +110,7 @@
 <script src="{{ STATIC_URL }}scripts/vue/includes/animation.js"></script>
 <script src="{{ STATIC_URL }}scripts/vue/includes/build-request-body.js"></script>
 
+<script src="{{ STATIC_URL }}scripts/vue/variables/constructors.js"></script>
 <script src="{{ STATIC_URL }}scripts/vue/includes/menu-aim.js" type="text/javascript"></script>
 <script src="{{ STATIC_URL }}scripts/vue/includes/sidebar.js" type="text/javascript"></script>
 <script src="{{ STATIC_URL }}scripts/vue/includes/search_term.js" type="text/javascript"></script>
@@ -127,9 +120,10 @@
 {% endcompress %}
 
 <!-- vue components -->
-<!-- <script src="{{ STATIC_URL }}scripts/vue/components/v-dropdown.js"></script> -->
+<script src="{{ STATIC_URL }}scripts/vue/components/v-treeselect.js"></script>
 <!-- vue components -->
 
+<script src="{{ STATIC_URL }}scripts/vue/past/includes/helpers.js" type="text/javascript"></script>
 <script src="{{ STATIC_URL }}scripts/vue/past-contribute/app.js" type="text/javascript"></script>
 
 {% endblock %}

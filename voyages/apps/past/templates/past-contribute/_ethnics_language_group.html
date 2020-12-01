@@ -1,0 +1,40 @@
+{% load i18n %}
+
+<div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="card language-group-card">
+                <div class="card-body p-4">
+                    <h5 class="card-title font-weight-bold text-secondary">{% trans 'Country - Language Group - Ethnicity' %}</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">{% trans 'You may select a country to narrow down Language Group/Ethnicity options. If your suggested Language Group/Ehnicity is not listed, you may leave your contribution in the comments.' %}</h6>
+                    <p class="card-text">
+                        <div class="form-group">
+                            <v-treeselect
+                                :filter="language_groups"
+                            >
+                            </v-treeselect>
+                        </div>
+                    </p>
+                </div>
+            </div>
+            <div class="card comments-card mt-3">
+                <div class="card-body p-4">
+                    <h5 class="card-title font-weight-bold text-secondary">{% trans 'Comments' %}</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">{% trans 'Add any comments to your contribution.' %}</h6>
+                    <p class="card-text">
+                        <div class="form-group">
+                            <textarea class="form-control" id="language-group-comments"></textarea>
+                        </div>
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div id="mapid"></div>
+        </div>
+    </div>
+    <div class="navigation-buttons mt-5">
+        <button class="btn btn-previous-section"><i class="fas fa-angle-double-left"></i> {% trans 'Previous Section' %}</button>
+        <button class="btn btn-submit float-right">{% trans 'Submit' %}</button>
+    </div>
+</div>

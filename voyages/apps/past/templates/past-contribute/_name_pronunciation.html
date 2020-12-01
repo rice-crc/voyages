@@ -1,0 +1,59 @@
+{% load i18n %}
+
+<div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
+    <div class="card suggestion-card">
+      <div class="card-body p-4">
+        <h5 class="card-title font-weight-bold text-secondary">{% trans 'Suggestion ' %} 1</h5>
+        <h6 class="card-subtitle mb-2 text-muted">{% trans 'Suggest a modern version of the name. If there are multiple spellings, you may also "Add Another Suggestion".' %}</h6>
+        <p class="card-text">
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="form-group">
+                        <label for="spelling">{% trans 'Spelling' %} *</label>
+                        <input type="text" class="form-control" id="spelling-1">
+                    </div>
+                    <div class="form-group">
+                        <label for="comments">{% trans 'Comments' %}</label>
+                        <textarea class="form-control" id="spelling-comments-1"></textarea>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="form-group">
+                        <label for="recording">{% trans 'Recording' %}</label>
+                        <div class="btn btn-light btn-lg btn-block recording-button">
+                            <div class="container ml-0">
+                                <div class="align-items-center">
+                                    <i class="fas fa-microphone-alt cursor-pointer fa-lg d-block"></i>
+                                    <span class="description">{% trans 'Click to record a pronunciation for this name' %}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="btn btn-light btn-lg btn-block stop-recording-button d-none">
+                            <div class="container ml-0">
+                                <div class="align-items-center">
+                                    <i class="fas fa-stop cursor-pointer fa-lg d-block"></i>
+                                    <span class="description">{% trans 'Click again to stop the recording' %}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="review-recording bg-light rounded d-none">
+                            <div class="col-lg-12 p-0">
+                                <audio id="audio-recording-1" src=""></audio>
+                                <div class="audio-controls">
+                                    <button class='play-button btn btn-transparent fas fa-play-circle mr-1 px-1'></button>
+                                    <span class="duration"></span>
+                                    <button class='delete-button btn btn-transparent fas fa-trash-alt mr-1 px-1 float-right'></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </p>
+      </div>
+    </div>
+    <div class="navigation-buttons mt-5">
+        <!-- <button class="btn btn-previous-section"><i class="fas fa-plus-circle"></i> {% trans 'Add Another Suggestion' %}</button> -->
+        <button class="btn btn-next-section float-right">{% trans 'Next Section' %} <i class="fas fa-angle-double-right"></i></button>
+    </div>
+</div>
