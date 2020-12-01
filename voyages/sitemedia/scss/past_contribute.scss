@@ -316,3 +316,53 @@ input.button-save:hover {
 .cursor-pointer {
   cursor: pointer;
 }
+
+.suggestion-card, .language-group-card, .comments-card {
+  .card-title {
+    font-size: $large-font-size;
+  }
+  .card-subtitle {
+    font-size: $regular-font-size;
+  }
+}
+
+.recording-button, .stop-recording-button {
+  color: $past-contribute-secondary-color;
+  height: 130px;
+  &:hover {
+    color: $past-contribute-secondary-color;
+  }
+  &:not(:disabled):not(.disabled):active {
+    color: $past-contribute-secondary-color;
+  }
+  .description {
+    font-size: $small-font-size;
+  }
+}
+
+/* Specifies the size of the audio container */
+.review-recording {
+  .play-button, .delete-button {
+    color: $past-contribute-secondary-color;
+  }
+}
+
+.navigation-buttons {
+  .btn {
+    color: $past-contribute-color;
+    background-color: white;
+    border: solid 2px $past-contribute-color;
+    font-size: 10pt;
+    font-weight: bold;
+    border-radius: .5rem;
+    padding: 4px 20px;
+    &.btn-next-section, &.btn-submit {
+      color: white;
+      background-color: $past-contribute-color;
+    }
+  }
+}
+
+#mapid {
+  height: 500px;
+}
