@@ -2,25 +2,88 @@
 var pastContribute = new Vue({
     el: "#past-contribute",
     delimiters: ["[[", "]]"],
-    data: {
-        enslaved: {},
-        total_names: 0,
-        recordings_content: '',
-        audioList: {},
-        language_groups: new TreeselectVariable({
-            varName: "language_groups",
-            label: gettext("Language Group"),
-            description: "",
-        },{
-            op: "is one of",
-            searchTerm: [],
-        },{
-            isImputed: false,
-            isadvanced: false
-        }),
-        filterData: {
-          treeselectOptions: {
-          }
+    data: function(){
+        return {
+            enslaved: {},
+            total_names: 0,
+            recordings_content: '',
+            audioList: [],
+            language_groups: new TreeselectVariable({
+                    varName: "language_groups",
+                    label: gettext("Language Group"),
+                    description: "",
+                },{
+                    op: "is one of",
+                    searchTerm: [],
+                },{
+                    isImputed: false,
+                    isadvanced: false,
+                    disableBranchNodes: true,
+                }),
+            contrib_names: {
+                name: '',
+                notes: '',
+            },
+            notes: '',
+            filterData: {
+              treeselectOptions: {
+              }
+            }
+        };
+    },
+    methods: {
+        // toggle whether language group is multilingual
+        toggleIsMultilingual() {
+          this.language_groups.options.isMultiple = !this.language_groups.options.isMultiple;
+        },
+
+        sendContribution() {
+            var contrib_languages = [];
+            if (Array.isArray(this.language_groups.value.searchTerm)) {
+                $.each(this.language_groups.value.searchTerm, function(key, value){
+                    contrib_languages.push({
+                        ethnicity_id: "1",
+                        lang_group_id: value,
+                    });
+                });
+            } else {
+                contrib_languages.push({
+                    ethnicity_id: "1",
+                    lang_group_id: this.language_groups.value.searchTerm,
+                });
+            }
+
+            var params = {
+                enslaved_id: this.enslaved.enslaved_id,
+                contrib_names: [this.contrib_names],
+                contrib_languages: contrib_languages,
+                notes: this.notes,
+                is_multilingual: !this.language_groups.options.isMultiple
+            }
+
+
+            axios
+            .post('/past/enslaved_contribution', params)
+            .then(function(response) {
+                $.each(response.data.name_ids, function(key, value){
+                    fetch('http://localhost:8000/past/store-audio/'+response.data.contrib_id+'/'+value+'/'+response.data.audio_token, { method:"POST", body: pastContribute.audioList[key] }).
+                    then(response => console.log(response));
+                });
+
+                alert("Contribution saved with success");
+                document.location.reload();
+
+                return;
+            })
+            .catch(function(error) {
+                return error;
+            });
+        },
+
+        changed(variable, changed) {
+            this.language_groups.changed = changed;
+            this.language_groups.value["searchTerm"] = variable["searchTerm"];
+            this.language_groups.value["op"] = variable["op"];
         },
     },
     created: function() {
@@ -253,7 +316,6 @@ $(function(){
 const req = { audio: true, video: false };
 let stopAction = null;
 let chunks = [];
-let blobs = [];
 
 const soundClips = document.querySelector('.sound-clips');
 
@@ -271,6 +333,7 @@ function start() {
                 var audio = document.getElementById('audio-recording-1');
 
                 const blob = new Blob(chunks, { 'type' : chunks[0].type });
+                pastContribute.audioList.push(blob);
                 chunks = [];
                 const audioURL = window.URL.createObjectURL(blob);
                 audio.src = audioURL;
