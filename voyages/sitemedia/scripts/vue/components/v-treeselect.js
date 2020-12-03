@@ -23,12 +23,13 @@ template = `
       <div class="col-md-12">
         <treeselect
           :load-options="loadOptions"
-          :multiple="true"
+          :multiple=filter.options.isMultiple
           :loading="true"
           :options=treeselectOptions
           :auto-load-root-options=isAutoLoaded
           :default-expand-level="1"
           :placeholder=filter.options.caption
+          :disable-branch-nodes=filter.options.disableBranchNodes
           v-model="item.searchTerm"
         />
       </div>
@@ -103,7 +104,7 @@ Vue.component("v-treeselect", {
     item: {
       handler: function(){
         // control visibility
-        if (this.item.searchTerm !== null && this.item.searchTerm.length > 0) {
+        if (typeof this.item.searchTerm !== 'undefined' && this.item.searchTerm !== null && this.item.searchTerm.length > 0) {
           this.options.changed = true;
           this.$emit('change', this.item, true);
         } else {
@@ -118,9 +119,20 @@ Vue.component("v-treeselect", {
     filter: {
       handler: function(value){
         // fill filter values to UI element
-        this.item.searchTerm = this.filter.value.searchTerm;
+        if (typeof this.filter.value.searchTerm !== 'undefined' && this.filter.value.searchTerm !== null && this.filter.value.searchTerm.length){
+          this.item.searchTerm = this.filter.value.searchTerm;
+        }
       },
       deep: true,
+    },
+    'filter.options.isMultiple': {
+      handler: function(value) {
+        if (Array.isArray(this.filter.value.searchTerm)) {
+          this.item.searchTerm = this.filter.value.searchTerm[0];
+        } else {
+          this.item.searchTerm = this.filter.value.searchTerm;
+        }
+      }
     }
   },
 

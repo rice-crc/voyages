@@ -185,7 +185,7 @@ def store_audio(request, contrib_pk, name_pk, token):
     if len(request.body) > 1000000:
         return HttpResponseBadRequest('Audio file is too large')
     contrib_pk = int(contrib_pk)
-    contrib = EnslavedContribution.get(pk=contrib_pk)
+    contrib = EnslavedContribution.objects.get(pk=contrib_pk)
     if contrib is None or contrib.token != token:
         return HttpResponseBadRequest('Contribution not found')
     name_pk = int(name_pk)

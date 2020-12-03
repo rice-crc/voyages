@@ -9,9 +9,19 @@
                     <h6 class="card-subtitle mb-2 text-muted">{% trans 'You may select a country to narrow down Language Group/Ethnicity options. If your suggested Language Group/Ehnicity is not listed, you may leave your contribution in the comments.' %}</h6>
                     <p class="card-text">
                         <div class="form-group">
+                            <div class="v-title">{% trans 'Multilingual (Language Group)' %}</div>
+                            <div class="v-description"></div>
+                            <div class="flex">
+                                <span class="fa toggle fa-control padding-right-05" v-bind:class="{'fa-toggle-on': !this.language_groups.options.isMultiple, 'fa-toggle-off': this.language_groups.options.isMultiple, 'primary-color': !this.language_groups.options.isMultiple, 'text-muted': this.language_groups.options.isMultiple}"
+                                @click="toggleIsMultilingual">
+                                </span><!-- reserved for right aligned content -->
+                                <div class="v-description no-margin">{% trans 'Check Multilingual if there are more than one Language Group associated with this name. Then identify <b>one Primary Language Group</b> from the list below.' %}</div>
+                            </div>
+                        </div>
+                        <div class="form-group">
                             <v-treeselect
                                 :filter="language_groups"
-                            >
+                                @change="changed">>
                             </v-treeselect>
                         </div>
                     </p>
@@ -23,7 +33,7 @@
                     <h6 class="card-subtitle mb-2 text-muted">{% trans 'Add any comments to your contribution.' %}</h6>
                     <p class="card-text">
                         <div class="form-group">
-                            <textarea class="form-control" id="language-group-comments"></textarea>
+                            <textarea class="form-control" id="language-group-comments" v-model="notes"></textarea>
                         </div>
                     </p>
                 </div>
@@ -34,7 +44,7 @@
         </div>
     </div>
     <div class="navigation-buttons mt-5">
-        <button class="btn btn-previous-section"><i class="fas fa-angle-double-left"></i> {% trans 'Previous Section' %}</button>
-        <button class="btn btn-submit float-right">{% trans 'Submit' %}</button>
+        <b-button variant="previous-section" size="sm"><i class="fas fa-angle-double-left"></i> {% trans 'Previous Section' %}</b-button>
+        <b-button class="float-right" variant="submit" size="sm" @click="sendContribution">{% trans 'Submit' %}</b-button>
     </div>
 </div>
