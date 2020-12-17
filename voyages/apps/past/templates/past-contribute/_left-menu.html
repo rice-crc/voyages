@@ -79,9 +79,12 @@
 
   <div class="card mb-3">
 
-    <div class="card-header past-card-header px-4">
+    <div class="card-header past-card-header px-4 cursor-pointer" @click="openVoyageModal">
       <span class="card-title">
         {% trans 'Voyages' %}
+        <span class="float-sm-right">
+          <i class="fas fa-external-link-square-alt"></i>
+        </span>
       </span>
     </div>
 

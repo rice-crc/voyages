@@ -28,8 +28,62 @@ var pastContribute = new Vue({
             filterData: {
               treeselectOptions: {
               }
-            }
+            },
+            row: {
+              // store current row's data; used for displaying entry full details
+              data: null,
+              collapseVisible: true
+            },
+            rowModalShow: false
         };
+    },
+    watch: {
+        // row in a datatable
+        row: {
+          handler: function() {
+            var results = [];
+            var rowData = this.row.data;
+            voyageColumns.forEach(function(group, key){
+              if (group.group !== "year") {
+                var datum = {
+                  group: group.group,
+                  groupName: group.groupName,
+                  variables: {}
+                };
+                group.fields.forEach(function(field, key){
+                  var varName = field.data;
+                  var label = field.label !== undefined ? field.label : field.data;
+                  var value = rowData[varName];
+                  var isImputed = field.isImputed !== undefined ? field.isImputed : false;
+
+                  if (varName.indexOf('percentage') != -1 || varName.indexOf('mortality') != -1) {
+                    value = roundDecimal(value * 100, 1) + "%";
+                  }
+                  else if (varName == 'var_sources') {
+                    value = getVoyageFormattedSource(value);
+                  }
+
+                  datum.variables[varName] = {
+                    varName: varName,
+                    label: label,
+                    value: value,
+                    isImputed: isImputed
+                  };
+                });
+                results.push(datum);
+              }
+            });
+            this.row.results = results;
+
+            // collect ids for the group collapse. there might be a better way
+            var ids = "";
+            for (group in this.row.results) {
+              ids = ids + this.row.results[group]["group"] + ".";
+            }
+            this.row.ids = ids.slice(0, -1);
+          },
+          deep: true
+        },
     },
     methods: {
         // toggle whether language group is multilingual
@@ -66,7 +120,7 @@ var pastContribute = new Vue({
             .post('/past/enslaved_contribution', params)
             .then(function(response) {
                 $.each(response.data.name_ids, function(key, value){
-                    fetch('http://localhost:8000/past/store-audio/'+response.data.contrib_id+'/'+value+'/'+response.data.audio_token, { method:"POST", body: pastContribute.audioList[key] }).
+                    fetch('/past/store-audio/'+response.data.contrib_id+'/'+value+'/'+response.data.audio_token, { method:"POST", body: pastContribute.audioList[key] }).
                     then(response => console.log(response));
                 });
 
@@ -85,6 +139,47 @@ var pastContribute = new Vue({
             this.language_groups.value["searchTerm"] = variable["searchTerm"];
             this.language_groups.value["op"] = variable["op"];
         },
+        openVoyageModal() {
+          var columns = [];
+          voyageColumns.forEach(function(group, key){
+            group.fields.forEach(function(field, key){
+              columns.push(field);
+            });
+          });
+          var params = {
+            "searchData": {
+              "items": [
+                {
+                  "op": "equals",
+                  "varName": "voyage_id",
+                  "searchTerm": this.enslaved.voyage__id,
+                },
+                {
+                  "op": "equals",
+                  "varName": "dataset",
+                  "searchTerm": "-1",
+                }
+              ]
+            },
+            "tableParams": {
+              "columns": columns
+            },
+            "output" : "resultsTable"
+          };
+
+          axios
+            .post('/voyage/api/search', params)
+            .then(function(response) {
+              if (response.data.data[0]) {
+                pastContribute.row.data = response.data.data[0];
+                pastContribute.rowModalShow = true;
+              }
+              return;
+            })
+            .catch(function(error) {
+              return error;
+            });
+        }
     },
     created: function() {
         var params = {
@@ -360,6 +455,7 @@ function start() {
                 reviewRecording.find('.delete-button').on('click', function(){
                     $(this).closest('.review-recording').addClass('d-none');
                     $(this).closest('.review-recording').siblings('.recording-button').removeClass('d-none');
+                    pastContribute.audioList.pop();
                     return false;
                 });
 
