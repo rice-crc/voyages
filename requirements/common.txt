@@ -1,5 +1,5 @@
 Django==1.11.6
-lxml==3.6.0
+lxml==4.6.2
 mysql-python==1.2.5
 hurry.filesize==0.9
 pysolr==3.6.0
