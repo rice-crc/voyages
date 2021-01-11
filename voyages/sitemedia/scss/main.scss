@@ -11,6 +11,11 @@ html, body {
   height: 2rem;
 }
 
+.logo-on-timelapse {
+  filter: drop-shadow( 1px 1px rgba(91, 91, 91, 0.4));
+  height: 40px;
+}
+
 // body text
 .body-text {
   font-size: $regular-font-size;
