@@ -469,29 +469,24 @@ function searchAll(filter, filterData) {
                           "-"
                         ) + "T00:00:00Z";
                       filter[key1][key2][key3].value["searchTerm1"] =
-                        filter[key1][key2][key3].value["searchTerm1"] +
-                        "T23:59:59Z";
+                        filter[key1][key2][key3].value["searchTerm1"].substring(
+                          0,
+                          10
+                        ) + "T23:59:59Z";
                     }
                     // make the to date always inclusive (add 23:59:59)
                     if (
                       filter[key1][key2][key3].value["searchTerm1"] !== null
                     ) {
                       if (
-                        filter[key1][key2][key3].value["searchTerm0"].substring(
-                          0,
-                          10
-                        ) !=
-                        filter[key1][key2][key3].value["searchTerm1"].substring(
-                          0,
-                          10
-                        )
+                        filter[key1][key2][key3].value["searchTerm0"].substring(0, 10) !=
+                        filter[key1][key2][key3].value["searchTerm1"].substring(0, 10)
                       ) {
                         // filter[key1][key2][key3].value["searchTerm1"] = moment(filter[key1][key2][key3].value["searchTerm1"], SOLR_DATE_FORMAT).add(1, "days").subtract(1, "seconds");
                         filter[key1][key2][key3].value["searchTerm1"] =
-                          filter[key1][key2][key3].value["searchTerm1"].replace(
-                            "/",
-                            "-"
-                          ) + "T23:59:59Z";
+                          filter[key1][key2][key3].value["searchTerm1"]
+                            .substring(0, 10)
+                            .replace("/", "-") + "T23:59:59Z";
                       }
                     }
                     item["searchTerm"] = [

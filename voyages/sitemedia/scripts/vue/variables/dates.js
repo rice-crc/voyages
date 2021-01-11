@@ -1,7 +1,7 @@
 // this is included but not used in the search; primarily for the full detail to display
 var var_imp_arrival_at_port_of_dis = new YearVariable({
     varName: "imp_arrival_at_port_of_dis",
-    label: gettext("Year of arrival at port of disembarkation"),
+    label: gettext("Year of arrival at port of disembarkation (YYYY)"),
     description: "",
   },{
     op: "is equal to",
