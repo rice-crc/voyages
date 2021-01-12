@@ -36,6 +36,16 @@ var searchBar = new Vue({
         },{
           id: "girl",
           label: gettext("Girl")
+        }],
+        dataset: [{
+          id: "trans",
+          label: gettext("Transatlantic")
+        },{
+          id: "intra",
+          label: gettext("Intra-American")
+        },{
+          id: "all",
+          label: gettext("All")
         }]
       }
     },
