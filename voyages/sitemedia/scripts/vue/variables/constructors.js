@@ -157,6 +157,8 @@ function PlaceVariable(varInfo, searchTerms, options) {
   this.options = {
     isImputed: options["isImputed"],
     isAdvanced: options["isAdvanced"],
+    isMultiple: typeof options["isMultiple"] !== 'undefined' ? options["isMultiple"] : true,
+    disableBranchNodes: typeof options["disableBranchNodes"] !== 'undefined' ? options["disableBranchNodes"] : false,
     caption: options["caption"]
   };
   this.changed = false;
