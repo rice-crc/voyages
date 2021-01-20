@@ -222,7 +222,7 @@ class EnslavedSearch:
     def __init__(self, searched_name=None, exact_name_search=False, age_gender=None, \
             age_range=None, height_range=None, year_range=None, embarkation_ports=None, disembarkation_ports=None, \
             post_disembark_location=None, language_groups=None, modern_country=None,
-            ship_name=None, voyage_id=None, enslaved_id=None, source=None, order_by=None):
+            ship_name=None, voyage_id=None, enslaved_id=None, source=None, order_by=None, dataset=None):
         """
         Search the Enslaved database. If a parameter is set to None, it will not
         be included in the search.
@@ -231,6 +231,7 @@ class EnslavedSearch:
         @param: age_gender A list of pairs (bool is_adult, male = 1/female = 2) with
                 all combinations filtered.
         @param: age_range A pair (a, b) where a is the min and b is maximum age
+        @param: dataset A list of datasets
         @param: height_range A pair (a, b) where a is the min and b is maximum height
         @param: is_adult Whether the search is for adults or children only
         @param: year_range A pair (a, b) where a is the min voyage year and b the max
@@ -263,6 +264,7 @@ class EnslavedSearch:
         self.enslaved_id = enslaved_id
         self.source = source
         self.order_by = order_by
+        self.dataset = dataset
 
     def get_order_for_field(self, field):
         if isinstance(self.order_by, list):
@@ -319,6 +321,18 @@ class EnslavedSearch:
                 raise Exception('Invalid AgeGender value')
 
             conditions = [get_ag_query(x) for x in self.age_gender]
+            q = q.filter(reduce(operator.or_, conditions))
+        if self.dataset:
+            def get_dataset_query(x):
+                if x == 'trans':
+                    return Q(voyage__dataset=0)
+                if x == 'intra':
+                    return Q(voyage__dataset=1)
+                if x == 'african':
+                    return Q(voyage__dataset=2)
+                raise Exception('Invalid Dataset value')
+
+            conditions = [get_dataset_query(x) for x in self.dataset]
             q = q.filter(reduce(operator.or_, conditions))
         if self.age_range:
             q = q.filter(age__range=self.age_range)
@@ -392,14 +406,14 @@ class EnslavedSearch:
                     names_sep = Value(';')
                     names_concat = [names_sep] * (2 * len(sorted_name_fields) - 1)
                     names_concat[0::2] = sorted_name_fields
-                    # We now properly handle 
+                    # We now properly handle
                     fallback_name_val = Value('AAAAA' if is_desc else 'ZZZZZ')
                     expressions = [Coalesce(F(name_field), fallback_name_val, output_field=CharField()) for name_field in sorted_name_fields]
                     q = q.annotate(**{col_name: Func(*expressions, function='GREATEST' if is_desc else 'LEAST')})
                     order_field = F(col_name)
                     order_field = order_field.desc() if is_desc else order_field.asc()
                     return q, order_field
-                        
+
                 if col_name == 'names':
                     col_name = '_names_sort'
                     (q, order_field) = add_names_sorting(_name_fields, col_name, q)

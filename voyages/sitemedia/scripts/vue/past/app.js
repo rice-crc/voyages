@@ -44,8 +44,8 @@ var searchBar = new Vue({
           id: "intra",
           label: gettext("Intra-American")
         },{
-          id: "all",
-          label: gettext("All")
+          id: "african",
+          label: gettext("Intra-African")
         }]
       }
     },

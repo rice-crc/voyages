@@ -44,7 +44,8 @@ var_show_only_african_names = new BooleanVariable({
     searchTerm: false,
   },{
     isImputed: false,
-    isAdvanced: false
+    isAdvanced: false,
+    isToDo: true
   });
 
 // all
