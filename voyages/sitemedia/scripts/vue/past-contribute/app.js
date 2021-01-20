@@ -5,8 +5,12 @@ var pastContribute = new Vue({
     data: function(){
         return {
             enslaved: {},
-            total_names: 0,
             recordings_content: '',
+            names_suggestions: [{
+                name: '',
+                notes: '',
+                recording: null,
+            }],
             audioList: [],
             language_groups: new TreeselectVariable({
                     varName: "language_groups",
@@ -20,10 +24,6 @@ var pastContribute = new Vue({
                     isadvanced: false,
                     disableBranchNodes: true,
                 }),
-            contrib_names: {
-                name: '',
-                notes: '',
-            },
             notes: '',
             filterData: {
               treeselectOptions: {
@@ -36,6 +36,16 @@ var pastContribute = new Vue({
             },
             rowModalShow: false
         };
+    },
+    computed: {
+        filledNamesSuggestions() {
+            return this.names_suggestions.filter(function(name_suggestion){
+                return name_suggestion.name != '';
+            });
+        },
+        hasMoreThanOneSuggestion() {
+            return this.names_suggestions.length > 1;
+        }
     },
     watch: {
         // row in a datatable
@@ -109,25 +119,29 @@ var pastContribute = new Vue({
 
             var params = {
                 enslaved_id: this.enslaved.enslaved_id,
-                contrib_names: [this.contrib_names],
+                contrib_names: this.filledNamesSuggestions.map(({name, notes}) => ({name, notes})),
                 contrib_languages: contrib_languages,
                 notes: this.notes,
                 is_multilingual: !this.language_groups.options.isMultiple
             }
 
-
             axios
             .post('/past/enslaved_contribution', params)
-            .then(function(response) {
-                $.each(response.data.name_ids, function(key, value){
-                    fetch('/past/store-audio/'+response.data.contrib_id+'/'+value+'/'+response.data.audio_token, { method:"POST", body: pastContribute.audioList[key] }).
-                    then(response => console.log(response));
+            .then((response) => {
+                var promises = response.data.name_ids.map((value, key) => {
+                    var recording = this.filledNamesSuggestions[key].recording;
+                    if (recording instanceof Blob) {
+                        return axios
+                        .post('/past/store-audio/'+response.data.contrib_id+'/'+value+'/'+response.data.audio_token, recording);
+                    }
                 });
+                var filteredPromises = promises.filter((value) => value);
 
+                return Promise.all(filteredPromises);
+            })
+            .then((response) => {
                 alert("Contribution saved with success");
                 document.location.reload();
-
-                return;
             })
             .catch(function(error) {
                 return error;
@@ -179,6 +193,12 @@ var pastContribute = new Vue({
             .catch(function(error) {
               return error;
             });
+        },
+        addSuggestion(){
+            this.names_suggestions.push( { name: '', notes: '', recording: null} );
+        },
+        removeSuggestion(index){
+            this.names_suggestions.splice(index, 1);
         }
     },
     created: function() {
@@ -288,16 +308,18 @@ var africaCountriesData = (function() {
     });
     return json;
 })();
+
+var geoJsonAddMarker = function() {
+    var marker = L.marker({
+        lat: pastContribute.enslaved.voyage__voyage_itinerary__imp_principal_place_of_slave_purchase__latitude,
+        lng: pastContribute.enslaved.voyage__voyage_itinerary__imp_principal_place_of_slave_purchase__longitude
+    });
+    marker.addTo(mymap);
+};
 var geojson;
 var mymap;
 
 $(function(){
-    $($('.review-recording').find('audio')[0]).on("canplay", function () {
-        $('.duration').html(secondsTimeSpanToMS(this.duration));
-    }).on('ended', function(){
-        $(this).siblings('.audio-controls').find('.play-button').removeClass('fas fa-stop').addClass('fas fa-play-circle');
-    });
-
     $('body').on('click', function (e) {
         //did not click a popover toggle, or icon in popover toggle, or popover
         if ($(e.target).parents('.popover').length === 0) {
@@ -348,37 +370,16 @@ $(function(){
         });
     });
 
-    $(".recording-button").click(function(){
-        start();
-        $(".recording-button").addClass('d-none');
-        $(".stop-recording-button").removeClass('d-none');
+    mymap = L.map('mapid', {
+        maxBounds: [
+            [37.901314, -31.447038],
+            [-37.665391, 60.728849]
+        ],
+        maxBoundsViscosity: 1.0,
+        center: [0.57128, 15.829786],
+        zoom: 3,
+        minZoom: 3,
     });
-
-    $(".stop-recording-button").click(function(){
-        stop();
-        $(".stop-recording-button").addClass('d-none');
-    });
-
-    $(".play-button").click(function(){
-        var audio = $(this).parent().siblings('audio')[0]
-
-        if ($(this).hasClass('fa-play-circle')) {
-            $(this).removeClass('fa-play-circle');
-            $(this).addClass('fa-stop');
-            audio.play();
-        } else {
-            $(this).removeClass('fa-stop');
-            $(this).addClass('fa-play-circle');
-            audio.pause();
-            audio.currentTime = 0;
-        }
-
-        // Prevent Default Action
-        return false;
-    });
-
-    mymap = L.map('mapid').setView([0.57128, 15.829786], 3);
-
     $(".btn-next-section").click(function(){
         $('#pills-profile-tab').tab('show');
         return false;
@@ -405,81 +406,6 @@ $(function(){
         style: style,
         onEachFeature: onEachFeature
     }).addTo(mymap);
-
 });
 
-const req = { audio: true, video: false };
-let stopAction = null;
-let chunks = [];
-
-const soundClips = document.querySelector('.sound-clips');
-
-// THIS IS SAMPLE CODE TO TEST AUDIO RECORDINGS!
-function start() {
-    navigator.mediaDevices.getUserMedia(req)
-        .then(stream => {
-            mediaRecorder = new MediaRecorder(stream);
-            mediaRecorder.start();
-            mediaRecorder.ondataavailable = function(e) {
-                chunks.push(e.data);
-            };
-            mediaRecorder.onstop = function(e) {
-                var reviewRecording = $('.review-recording');
-                var audio = document.getElementById('audio-recording-1');
-
-                const blob = new Blob(chunks, { 'type' : chunks[0].type });
-                pastContribute.audioList.push(blob);
-                chunks = [];
-                const audioURL = window.URL.createObjectURL(blob);
-                audio.src = audioURL;
-                audio.addEventListener("loadedmetadata", function () {
-                    if(this.duration === Infinity) {
-                        this.currentTime = 1e101;
-                        this.ontimeupdate = function() {
-                            this.ontimeupdate = () => {
-                                return;
-                            }
-                            $(this).siblings('.audio-controls').find('.duration').html(secondsTimeSpanToMS(this.duration));
-                            audio.currentTime = 0.1;
-                            audio.currentTime = 0;
-                        }
-                    } else {
-                        $(this).siblings('.audio-controls').find('.duration').html(secondsTimeSpanToMS(this.duration));
-                    }
-                });
-
-                audio.addEventListener('ended', function(){
-                    $(this).siblings('.audio-controls').find('.play-button').removeClass('fas fa-stop').addClass('fas fa-play-circle');
-                });
-
-                reviewRecording.find('.delete-button').on('click', function(){
-                    $(this).closest('.review-recording').addClass('d-none');
-                    $(this).closest('.review-recording').siblings('.recording-button').removeClass('d-none');
-                    pastContribute.audioList.pop();
-                    return false;
-                });
-
-                reviewRecording.removeClass('d-none');
-            };
-
-            stopAction = function() {
-                var track = stream.getTracks()[0];
-                track.stop();
-                mediaRecorder.stop();
-            };
-        })
-        .catch(err => alert('Cannot start mic'));
-}
-
-function stop() {
-    if (stopAction) {
-        stopAction();
-    }
-}
-
-function secondsTimeSpanToMS(s) {
-    s = parseInt(s, 10);
-    var m = Math.floor(s/60); //Get remaining minutes
-    s -= m*60;
-    return (m < 10 ? '0'+m : m)+":"+(s < 10 ? '0'+s : s); //zero padding on minutes and seconds
-}
+window.addEventListener("load", geoJsonAddMarker);

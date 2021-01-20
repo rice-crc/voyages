@@ -180,6 +180,7 @@ function BooleanVariable(varInfo, searchTerms, options) {
   this.options = {
     isImputed: options["isImputed"],
     isAdvanced: options["isAdvanced"],
+    isToDo: typeof options["isToDo"] !== 'undefined' ? options["isToDo"] : false,
   };
   this.changed = false;
   this.activated = false;
