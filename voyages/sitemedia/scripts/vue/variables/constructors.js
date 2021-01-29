@@ -16,6 +16,7 @@ function TreeselectVariable(varInfo, searchTerms, options) {
     isAdvanced: options["isAdvanced"],
     isMultiple: typeof options["isMultiple"] !== 'undefined' ? options["isMultiple"] : true,
     disableBranchNodes: typeof options["disableBranchNodes"] !== 'undefined' ? options["disableBranchNodes"] : false,
+    maxLength: typeof options["maxLength"] !== 'undefined' ? options["maxLength"] : 0,
     caption: options["caption"],
     data: [{
       id: "0",
@@ -159,6 +160,7 @@ function PlaceVariable(varInfo, searchTerms, options) {
     isAdvanced: options["isAdvanced"],
     isMultiple: typeof options["isMultiple"] !== 'undefined' ? options["isMultiple"] : true,
     disableBranchNodes: typeof options["disableBranchNodes"] !== 'undefined' ? options["disableBranchNodes"] : false,
+    maxLength: typeof options["maxLength"] !== 'undefined' ? options["maxLength"] : 0,
     caption: options["caption"]
   };
   this.changed = false;

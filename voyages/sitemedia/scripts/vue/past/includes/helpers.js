@@ -754,7 +754,7 @@ var parseLanguageGroups = function(response) {
     }
     $.each(options[0].children, function(key, country) {
       if (languageGroup.country == country.label) {
-        options[0].children[key].children.push({'id': id, 'label' : label});
+        options[0].children[key].children.push({'id': id, 'label' : label, 'isDisabled': false});
       }
     });
   });
