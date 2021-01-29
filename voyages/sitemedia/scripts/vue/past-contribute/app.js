@@ -23,6 +23,7 @@ var pastContribute = new Vue({
                     isImputed: false,
                     isadvanced: false,
                     disableBranchNodes: true,
+                    maxLength: 2,
                 }),
             notes: '',
             filterData: {
@@ -99,6 +100,11 @@ var pastContribute = new Vue({
         // toggle whether language group is multilingual
         toggleIsMultilingual() {
           this.language_groups.options.isMultiple = !this.language_groups.options.isMultiple;
+          if (!this.language_groups.options.isMultiple) {
+              this.language_groups.label = gettext("Primary language group (Optional)");
+          } else {
+              this.language_groups.label = gettext("Language Group");
+          }
         },
 
         sendContribution() {
@@ -141,7 +147,7 @@ var pastContribute = new Vue({
             })
             .then((response) => {
                 alert("Contribution saved with success");
-                document.location.reload();
+                document.location = '/past/database';
             })
             .catch(function(error) {
                 return error;
