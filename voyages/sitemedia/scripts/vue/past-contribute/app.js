@@ -261,8 +261,10 @@ var pastContribute = new Vue({
 });
 
 function highlightFeature(e) {
-    var layer = e.target;
+    highlightLayer(e.target);
+}
 
+function highlightLayer(layer) {
     layer.setStyle({
         weight: 5,
         color: '#666',
@@ -276,7 +278,11 @@ function highlightFeature(e) {
 }
 
 function resetHighlight(e) {
-    geojson.resetStyle(e.target);
+    resetLayer(e.target);
+}
+
+function resetLayer(layer) {
+    geojson.resetStyle(layer);
 }
 
 function zoomToFeature(e) {
@@ -294,6 +300,7 @@ function style(feature) {
 }
 
 function onEachFeature(feature, layer) {
+    layer._leaflet_id = feature.properties.name;
     layer.on({
         mouseover: highlightFeature,
         mouseout: resetHighlight,
@@ -326,6 +333,28 @@ var geojson;
 var mymap;
 
 $(function(){
+    $(".vue-treeselect").on("mouseover", ".vue-treeselect__indent-level-1 > .vue-treeselect__option", function(){
+        var name = $($(this)[0]).text();
+        var layer = geojson.getLayer(name);
+        highlightLayer(layer);
+    });
+
+    $(".vue-treeselect").on("mouseleave", ".vue-treeselect__indent-level-1 > .vue-treeselect__option", function(){
+        var name = $($(this)[0]).text();
+        var layer = geojson.getLayer(name);
+        resetLayer(layer);
+    });
+
+    $(".vue-treeselect").on("mouseover", ".vue-treeselect__indent-level-2 > .vue-treeselect__option", function(){
+        var layer = geojson.getLayer($(this).closest('.vue-treeselect__indent-level-1').find('.vue-treeselect__option').data('id'));
+        highlightLayer(layer);
+    });
+
+    $(".vue-treeselect").on("mouseleave", ".vue-treeselect__indent-level-2 > .vue-treeselect__option", function(){
+        var layer = geojson.getLayer($(this).closest('.vue-treeselect__indent-level-1').find('.vue-treeselect__option').data('id'));
+        resetLayer(layer);
+    });
+
     $('body').on('click', function (e) {
         //did not click a popover toggle, or icon in popover toggle, or popover
         if ($(e.target).parents('.popover').length === 0) {
