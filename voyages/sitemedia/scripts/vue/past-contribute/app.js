@@ -254,6 +254,9 @@ var pastContribute = new Vue({
             pastContribute.recordings_content = content.html();
             return;
         })
+        .then(function() {
+            geoJsonAddMarker();
+        })
         .catch(function(error) {
             return error;
         });
@@ -442,5 +445,3 @@ $(function(){
         onEachFeature: onEachFeature
     }).addTo(mymap);
 });
-
-window.addEventListener("load", geoJsonAddMarker);
