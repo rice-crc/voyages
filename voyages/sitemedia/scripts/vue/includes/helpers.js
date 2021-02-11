@@ -168,16 +168,21 @@ function getFormattedSource(sources) {
 // ABCD - [Tooltip: details]
 function getFormattedSourceInTable(sources) {
   var value = ""; // empty value string
-  sources.forEach(function(source) {
-    var first = source.split("<>")[0];
-    var second = source.split("<>")[1];
-    value +=
-      "<div><span data-toggle='tooltip' data-placement='top' data-html='true' data-original-title='" +
-      second +
-      "'>" +
-      first +
-      "</span>";
-  });
+  try {
+    sources.forEach(function(source) {
+      var first = source.split("<>")[0];
+      var second = source.split("<>")[1];
+      value +=
+        "<div><span data-toggle='tooltip' data-placement='top' data-html='true' data-original-title='" +
+        second +
+        "'>" +
+        first +
+        "</span>";
+    });
+  }
+  catch(err) {
+    console.log(`Error in getFormattedSourceInTable: ${err.message}`);
+  }
   return value;
 }
 
@@ -464,29 +469,24 @@ function searchAll(filter, filterData) {
                           "-"
                         ) + "T00:00:00Z";
                       filter[key1][key2][key3].value["searchTerm1"] =
-                        filter[key1][key2][key3].value["searchTerm1"] +
-                        "T23:59:59Z";
+                        filter[key1][key2][key3].value["searchTerm1"].substring(
+                          0,
+                          10
+                        ) + "T23:59:59Z";
                     }
                     // make the to date always inclusive (add 23:59:59)
                     if (
                       filter[key1][key2][key3].value["searchTerm1"] !== null
                     ) {
                       if (
-                        filter[key1][key2][key3].value["searchTerm0"].substring(
-                          0,
-                          10
-                        ) !=
-                        filter[key1][key2][key3].value["searchTerm1"].substring(
-                          0,
-                          10
-                        )
+                        filter[key1][key2][key3].value["searchTerm0"].substring(0, 10) !=
+                        filter[key1][key2][key3].value["searchTerm1"].substring(0, 10)
                       ) {
                         // filter[key1][key2][key3].value["searchTerm1"] = moment(filter[key1][key2][key3].value["searchTerm1"], SOLR_DATE_FORMAT).add(1, "days").subtract(1, "seconds");
                         filter[key1][key2][key3].value["searchTerm1"] =
-                          filter[key1][key2][key3].value["searchTerm1"].replace(
-                            "/",
-                            "-"
-                          ) + "T23:59:59Z";
+                          filter[key1][key2][key3].value["searchTerm1"]
+                            .substring(0, 10)
+                            .replace("/", "-") + "T23:59:59Z";
                       }
                     }
                     item["searchTerm"] = [
@@ -1563,21 +1563,23 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
       $.post(SEARCH_URL, JSON.stringify(postData), function(result) {
         $("#sv-loader").removeClass("display-none");
 
-        var data = [];
-
-        var current_year = result.data[0].year;
-
-        for (var i = 0; i < result.data.length; i++) {
-          var element = result.data[i];
-          for (var j = current_year; j < element.year; j++) {
-            var time = Date.parse(j.toString());
-            data.push([time, 0]);
+        try {
+          var current_year = result.data[0].year;
+          var data = [];
+          for (var i = 0; i < result.data.length; i++) {
+            var element = result.data[i];
+            for (var j = current_year; j < element.year; j++) {
+              var time = Date.parse(j.toString());
+              data.push([time, 0]);
+            }
+            current_year = element.year + 1;
+            var time = Date.parse(element.year.toString());
+            data.push([time, element.value]);
           }
-          current_year = element.year + 1;
-          var time = Date.parse(element.year.toString());
-          data.push([time, element.value]);
         }
-
+        catch(err) {
+          console.log(err);
+        }
         // // Convert into HighCharts data format
         // result.data.forEach(function(element){
         //   var time = Date.parse(element.year.toString());
@@ -1689,6 +1691,8 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
             }
           ]
         });
+        
+
       })
         .done(function() {
           $("#sv-loader").addClass("display-none");
