@@ -91,11 +91,18 @@
   </div>
 
   <div class="flex" id="timelapse-bottom-right">
-    <v-speed :ui="timelapse.ui" :options="timelapse.options" :control="timelapse.control"  class="margin-h-025" :speeds="[0.5, 1, 2, 4]" :multiplier="6" v-b-tooltip.hover
-      title="{% trans 'Play at different speeds' %}">
-    </v-speed>
-    <v-fullscreen type="button" class="btn btn-sm btn-light margin-h-025" v-b-tooltip.hover
-      title="{% trans 'Play in full screen' %}"><i class="fas fa-compress"></i></v-fullscreen>
+
+    <div style="text-align: right;">
+      <img src="/static/images/site/sv-logo.svg" class="logo-on-timelapse">
+      <div>
+        <v-speed :ui="timelapse.ui" :options="timelapse.options" :control="timelapse.control" class="margin-h-025"
+          :speeds="[0.5, 1, 2, 4]" :multiplier="6" v-b-tooltip.hover title="{% trans 'Play at different speeds' %}">
+        </v-speed>
+        <v-fullscreen type="button" class="btn btn-sm btn-light margin-h-025" v-b-tooltip.hover
+          title="{% trans 'Play in full screen' %}"><i class="fas fa-compress"></i></v-fullscreen>
+      </div>
+    </div>
+    
   </div>
 
 </div>
