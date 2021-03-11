@@ -186,6 +186,7 @@ class EnslavedContribution(models.Model):
     date = models.DateField(auto_now_add=True)
     notes = models.CharField(max_length=255, null=True, blank=True)
     is_multilingual = models.BooleanField(default=False)
+    status = models.IntegerField()
     token = models.CharField(max_length=40, null=True, blank=True)
 
 class EnslavedContributionNameEntry(models.Model):
