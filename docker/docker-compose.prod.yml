@@ -1,0 +1,56 @@
+---
+version: "3.7"
+
+services:
+  voyages-django-blue:
+    restart: always
+    container_name: voyages-django-blue
+    hostname: voyages-django-blue
+    image: voyages-django
+    build:
+      context: .
+      dockerfile: ./docker/django/Dockerfile
+      args:
+        - GUNICORN_PORT=8000
+    ports:
+      - 8000:8000
+    volumes:
+      - /mnt/sv_share/documents:/mnt/sv_share/documents
+      - /mnt/sv_share/sitemedia:/mnt/sv_share/sitemedia
+      - /mnt/sv_share/static:/mnt/sv_share/static
+
+  voyages-django-green:
+    restart: always
+    container_name: voyages-django-green
+    hostname: voyages-django-green
+    image: voyages-django
+    build:
+      context: .
+      dockerfile: ./docker/django/Dockerfile
+      args:
+        - GUNICORN_PORT=8001
+    ports:
+      - 8001:8001
+    volumes:
+      - /mnt/sv_share/documents:/mnt/sv_share/documents
+      - /mnt/sv_share/sitemedia:/mnt/sv_share/sitemedia
+      - /mnt/sv_share/static:/mnt/sv_share/static
+
+  voyages-nginx:
+    restart: on-failure
+    container_name: voyages-nginx
+    hostname: voyages-nginx
+    image: nginx:1.19.8-alpine
+    build:
+      context: ./docker/nginx/
+      dockerfile: ./Dockerfile
+      args:
+        - NGINX_UPSTREAM=voyages-django-blue
+    ports:
+      - 80:80
+    depends_on:
+      - voyages-django-blue
+    volumes:
+      - /mnt/sv_share/documents:/mnt/sv_share/documents
+      - /mnt/sv_share/sitemedia:/mnt/sv_share/sitemedia
+      - /mnt/sv_share/static:/mnt/sv_share/static

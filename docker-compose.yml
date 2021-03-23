@@ -1,46 +1,105 @@
-version: '3.4'
+---
+version: "3.7"
 
 services:
-  voyages-mysql-service:
-    container_name: voyages-mysql # change localsettings.py db host to this name
-    restart: always
-    image: mysql:latest
+  voyages-mysql:
+    restart: on-failure
+    container_name: voyages-mysql
+    hostname: voyages-mysql
+    image: mysql:8.0.23
     ports:
-     - "3306:3306"
+      - 3306:3306
+    volumes:
+      - "mysql_volume:/var/lib/mysql"
+      - "./docker/mysql/conf:/etc/mysql/conf.d"
     environment:
       MYSQL_ROOT_PASSWORD: 'voyages'
-      MYSQL_USER: 'voyages'
-      MYSQL_PASS: 'voyages'
-    volumes:
-      - ./data/db:/var/lib/mysql
-  voyages-solr-service:
-    container_name: voyages-solr # change localsettings.py solr host http://{container_name}:8983/solr/voyages
-    image: solr:latest
-    ports:
-     - "8983:8983"
-    volumes:
-      - ./solr:/config
-      - ./data/solr:/var/solr/data
-    entrypoint:
-      - docker-entrypoint.sh
-      - solr-precreate
+    networks:
       - voyages
-      - /config
-  voyages-django-service:
-    container_name: voyages-django
-    image: voyages-django-dev
+
+  voyages-solr:
+    restart: on-failure
+    container_name: voyages-solr
+    hostname: voyages-solr
+    image: solr:8.5.2
+    ports:
+      - 8983:8983
+    volumes:
+      - "solr_volume:/var/solr"
+      - "./solr:/srv/voyages/solr"
+    networks:
+      - voyages
+    environment:
+      SOLR_JAVA_MEM: "-Xms1g -Xmx1g"
+
+  voyages-redis:
+    restart: on-failure
+    container_name: voyages-redis
+    hostname: voyages-redis
+    image: redis:3.2.12-alpine
     build:
       context: .
-      dockerfile: Dockerfile-dev
-    depends_on:
-      - voyages-mysql-service
-      - voyages-solr-service
+      dockerfile: ./docker/redis/Dockerfile
     ports:
-      - "8000:8000"
+      - 6379:6379
     volumes:
-      - .:/src/voyages
-    entrypoint:
-      - python
-      - /src/voyages/manage.py
-      - runserver
-      - 0.0.0.0:8000
+      - "redis_volume:/data"
+    networks:
+      - voyages
+
+  voyages-django:
+    restart: on-failure
+    container_name: voyages-django
+    hostname: voyages-django
+    image: voyages-django
+    build:
+      context: .
+      dockerfile: ./docker/django/Dockerfile
+      args:
+        - GUNICORN_PORT=8000
+        - GUNICORN_OPTS=--reload
+    depends_on:
+      - voyages-mysql
+      - voyages-solr
+      - voyages-redis
+    ports:
+      - 8000:8000
+    volumes:
+      - "python_volume:/root/.local"
+      - ".:/srv/voyages"
+      - "./documents:/mnt/sv_share/documents"
+      - "./voyages/sitemedia:/mnt/sv_share/sitemedia"
+      - "./voyages/static:/mnt/sv_share/static"
+    networks:
+      - voyages
+
+  voyages-nginx:
+    restart: on-failure
+    container_name: voyages-nginx
+    hostname: voyages-nginx
+    image: nginx:1.19.8-alpine
+    build:
+      context: ./docker/nginx/
+      dockerfile: ./Dockerfile
+      args:
+        - NGINX_UPSTREAM=voyages-django
+    ports:
+      - 80:80
+    depends_on:
+      - voyages-django
+    volumes:
+      - "./documents:/mnt/sv_share/documents"
+      - "./voyages/sitemedia:/mnt/sv_share/sitemedia"
+      - "./voyages/static:/mnt/sv_share/static"
+    networks:
+      - voyages
+
+networks:
+  voyages:
+    driver: bridge
+
+volumes:
+  mysql_volume: {}
+  solr_volume: {}
+  redis_volume: {}
+  python_volume: {}
