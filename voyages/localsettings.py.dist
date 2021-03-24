@@ -63,10 +63,6 @@ CACHES = {
     }
 }
 
-# bitly generic oauth token
-# Replace this with a valid bitly oauth token
-BITLY_OAUTH_TOKEN = '[40 digit hex bitly oauth token here]'
-
 EMAIL_HOST = 'smtp.service.emory.edu' #should only be set on dev machine
 DEFAULT_FROM_EMAIL = 'admin@slavevoyages.org'
 
