@@ -1,4 +1,12 @@
+from __future__ import print_function
+from __future__ import absolute_import
+from __future__ import unicode_literals
 # Create your views here.
+from future import standard_library
+standard_library.install_aliases()
+from builtins import str
+from builtins import range
+from builtins import object
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.cache import never_cache
 from django.core.urlresolvers import reverse
@@ -18,7 +26,7 @@ from django.utils.html import escape
 from django.utils.translation import ugettext as _
 from django.core.mail import send_mail
 from django.conf import settings
-import imputed
+from . import imputed
 import json
 import re
 import six
@@ -55,8 +63,8 @@ def index(request):
         return HttpResponseRedirect(reverse('account_login'))
 
 def legal(request):
-    from forms import legal_terms_title
-    from forms import legal_terms_paragraph
+    from .forms import legal_terms_title
+    from .forms import legal_terms_paragraph
     return render(request, 'contribute/legal.html',
                   {'title': legal_terms_title, 'paragraph': legal_terms_paragraph})
 
@@ -229,7 +237,7 @@ def create_source(source_values, interim_voyage):
     type = source_values['type']
     model = interim_source_model(type)
     source = model()
-    for k, v in source_values.items():
+    for k, v in list(source_values.items()):
         if v == '': continue
         if hasattr(source, k):
             setattr(source, k, v)
@@ -264,7 +272,7 @@ def interim_main(request, contribution, interim):
     if request.method == 'POST':
         form = InterimVoyageForm(request.POST, instance=interim)
         prefix = number_prefix
-        numbers = {k: float(v) for k, v in request.POST.items() if k.startswith(prefix) and v != ''}
+        numbers = {k: float(v) for k, v in list(request.POST.items()) if k.startswith(prefix) and v != ''}
         sources_post = request.POST.get('sources', '[]')
         sources = [(create_source(x, interim), x.get('__index'))
                    for x in json.loads(sources_post)]
@@ -291,7 +299,7 @@ def interim_main(request, contribution, interim):
                 interim.persisted_form_data = json.dumps(persistedDict) if len(persistedDict) > 0 else None
                 # Reparse notes safely.
                 try:
-                    note_dict = {k: escape(v) for k, v in json.loads(interim.notes).items()}
+                    note_dict = {k: escape(v) for k, v in list(json.loads(interim.notes).items())}
                 except:
                     note_dict = {'parse_error': interim.notes}
                 interim.notes = json.dumps(note_dict)
@@ -303,7 +311,7 @@ def interim_main(request, contribution, interim):
                     if view_item_index is not None:
                         src_pks[view_item_index] = src.pk
                 # Clear previous numbers and save new ones.
-                for k, v in numbers.items():
+                for k, v in list(numbers.items()):
                     number = InterimSlaveNumber()
                     number.interim_voyage = interim
                     number.var_name = k[len(prefix):]
@@ -447,8 +455,8 @@ def init_interim_voyage(interim, contribution):
     # If this is a merger or edit, initialize fields when there is consensus.
     previous_data = contribution_related_data(contribution)
     if len(previous_data) > 0:
-        values = previous_data.values()
-        for k, v in values[0].items():
+        values = list(previous_data.values())
+        for k, v in list(values[0].items()):
             if v is None: continue
             equal = True
             for i in range(1, len(previous_data)):
@@ -475,7 +483,7 @@ def init_interim_voyage(interim, contribution):
         for conn in VoyageSourcesConnection.objects.filter(group=voyage):
             current = source_to_voyage.setdefault(conn.text_ref, [])
             current.append((voyage, conn))
-    for tuples in source_to_voyage.values():
+    for tuples in list(source_to_voyage.values()):
         conn = tuples[0][1]
         ps = InterimPreExistingSource()
         ps.interim_voyage = interim
@@ -694,7 +702,7 @@ def voyage_to_dict(voyage):
         dict['length_of_middle_passage'] = dates.length_middle_passage_days
     numbers = voyage.voyage_slaves_numbers
     if numbers is not None:
-        for k, v in slave_number_var_map.items():
+        for k, v in list(slave_number_var_map.items()):
             dict[number_prefix + k] = getattr(numbers, v)
     
     # Captains
@@ -765,7 +773,7 @@ def get_reviews_by_status(statuses, display_interim_data=False):
     
     # Load all interim voyages and editor contributions.
     editor_contributions = EditorVoyageContribution.objects \
-        .filter(request__id__in=[r.pk for r in review_requests_dict.values()])
+        .filter(request__id__in=[r.pk for r in list(review_requests_dict.values())])
     editor_contributions_req_dict = {}
     for e in editor_contributions:
         if e.request_id in editor_contributions_req_dict:
@@ -774,7 +782,7 @@ def get_reviews_by_status(statuses, display_interim_data=False):
 
     contribs = [info['contribution'] for info in contributions]
     interim_ids = [c.interim_voyage_id for c in contribs if hasattr(c, 'interim_voyage_id')] + \
-        [e.interim_voyage_id for e in editor_contributions_req_dict.values()]
+        [e.interim_voyage_id for e in list(editor_contributions_req_dict.values())]
     interim_voyages_dict = {interim.pk: interim for interim in InterimVoyage.objects \
         .select_related('imputed_national_carrier') \
         .select_related('imputed_principal_place_of_slave_purchase__region') \
@@ -792,7 +800,7 @@ def get_reviews_by_status(statuses, display_interim_data=False):
         voyage_imported = [v.voyage_slaves_numbers.imp_total_num_slaves_disembarked for v in voyages]
         voyage_purchase_place = [get_place_str(v.voyage_itinerary.imp_principal_place_of_slave_purchase) for v in voyages]
         voyage_landing_place = [get_place_str(v.voyage_itinerary.imp_principal_port_slave_dis) for v in voyages]
-        voyage_info = [unicode(v.voyage_ship.ship_name) + u' (' + unicode(VoyageDates.get_date_year(v.voyage_dates.imp_arrival_at_port_of_dis)) + ')'
+        voyage_info = [str(v.voyage_ship.ship_name) + u' (' + str(VoyageDates.get_date_year(v.voyage_dates.imp_arrival_at_port_of_dis)) + ')'
                        for v in voyages]
         # Fetch review info.
         active_request = review_requests_dict.get(full_contribution_id(info['type'], info['id']))
@@ -882,7 +890,7 @@ def override_empty_fields_with_single_value(interim_voyage, review_request):
     # the previous interim/voyage data records, we override
     # the null value with that single value.
     def get_dict_from_interim(interim):
-        data = {k: v for k, v in interim.__dict__.items() if not k.startswith('_') and v}
+        data = {k: v for k, v in list(interim.__dict__.items()) if not k.startswith('_') and v}
         # Now we must load numbers
         numbers = {number_prefix + n.var_name: n.number for n in interim.slave_numbers.all()}
         data.update(numbers)      
@@ -906,8 +914,8 @@ def override_empty_fields_with_single_value(interim_voyage, review_request):
     foreign_keys = {f.name: f.name + '_id' for f in InterimVoyage._meta.get_fields()
                     if isinstance(f, Field) and f.get_internal_type() == 'ForeignKey'}
     single_values = {}
-    for data in existing_data.values():
-        for k, v in data.items():
+    for data in list(existing_data.values()):
+        for k, v in list(data.items()):
             if v is None or v == '': continue
             if k.startswith('date') and v == ',,': continue 
             k = foreign_keys.get(k, k)
@@ -917,7 +925,7 @@ def override_empty_fields_with_single_value(interim_voyage, review_request):
                 single_values[k] = v
     # Second pass, set values of interim_voyage.
     numbers = []
-    for k, v in single_values.items():
+    for k, v in list(single_values.items()):
         if not v: continue
         if k.startswith(number_prefix):
             num = InterimSlaveNumber()
@@ -1082,7 +1090,7 @@ def clone_interim_voyage(contribution, contributor_comment_prefix):
         note_dict = json.loads(interim.notes) if interim.notes else {}
     except:
         note_dict = {'parse_error': interim.notes}
-    for key, note in note_dict.items():
+    for key, note in list(note_dict.items()):
         changed[key] = escape(contributor_comment_prefix + note)
         
     with transaction.atomic():
@@ -1365,12 +1373,12 @@ def impute_contribution(request, editor_contribution_id):
         contribution.ran_impute = True
         contribution.save()
         # Delete old numeric values.
-        InterimSlaveNumber.objects.filter(interim_voyage__id=interim.pk, var_name__in=imputed_numbers.keys()).delete()
+        InterimSlaveNumber.objects.filter(interim_voyage__id=interim.pk, var_name__in=list(imputed_numbers.keys())).delete()
         # Map imputed fields back to the contribution, save it and yield response.
-        for k, v in result.items():
+        for k, v in list(result.items()):
             setattr(interim, k, v)
         interim.save()
-        for k, v in imputed_numbers.items():
+        for k, v in list(imputed_numbers.items()):
             if not v: continue
             number = InterimSlaveNumber()
             number.interim_voyage = interim
@@ -1399,7 +1407,7 @@ def editorial_sources(request):
         source = VoyageSources()
     prefix = 'interim_source['
     plen = len(prefix)
-    interim_source_dict = {k[plen:-1]: v for k, v in request.POST.items() if k.startswith(prefix) and v is not None}
+    interim_source_dict = {k[plen:-1]: v for k, v in list(request.POST.items()) if k.startswith(prefix) and v is not None}
     created_source_pk = interim_source_dict.get('created_voyage_sources_id')
     if conn is None and created_source_pk:
         source = VoyageSources.objects.get(pk=created_source_pk)
@@ -1512,14 +1520,14 @@ def download_voyages(request):
     intra_american_flag = request.POST.get('intra_american_flag')
     if intra_american_flag: intra_american_flag = int(intra_american_flag)
 
-    import os, tempfile, thread
+    import os, tempfile, _thread
     try:
         dir = settings.MEDIA_ROOT + '/csv_downloads/'
         if not os.path.exists(dir):
             os.makedirs(dir)
         csv_file = tempfile.NamedTemporaryFile(dir=dir, mode='w', delete=False)
         log_file = tempfile.NamedTemporaryFile(dir=dir, mode='w', delete=False)
-        thread.start_new_thread(
+        _thread.start_new_thread(
             generate_voyage_csv_file,
             (statuses, include_published, csv_file, log_file, remove_linebreaks, intra_american_flag))
         return JsonResponse({'result': 'OK', 
@@ -1547,7 +1555,7 @@ def generate_voyage_csv_file(statuses, published, csv_file, log_file, remove_lin
     except:
         import traceback
         error_message = 'ERROR occurred after ' + str(count) + ' rows processed: ' + traceback.format_exc()
-        print error_message
+        print(error_message)
         log(error_message)
     csv_file.flush()
     csv_file.close()
@@ -1587,7 +1595,7 @@ def get_voyages_csv_rows(statuses, published, buffer=None, remove_linebreaks=Fal
     yield header
     buffer.write(header)
     row_processor = lambda x: x if not remove_linebreaks else \
-        {k: re.sub('\r?\n', ' ', v) if isinstance(v, six.string_types) else v for k, v in x.items()}
+        {k: re.sub('\r?\n', ' ', v) if isinstance(v, six.string_types) else v for k, v in list(x.items())}
     for item in export_contributions(statuses):
         yield safe_writerow(writer, row_processor(item))
     if published:
@@ -1601,14 +1609,14 @@ def publish_pending(request):
     # Here we are using a lightweight approach at background processing by starting
     # a thread and logging the progress to a file whose name is returned in the
     # response.
-    import os, re, tempfile, thread
+    import os, re, tempfile, _thread
     from voyages.apps.contribute.publication import publish_accepted_contributions
     try:
         dir = settings.MEDIA_ROOT + '/publication_logs/'
         if not os.path.exists(dir):
             os.makedirs(dir)
         log_file = tempfile.NamedTemporaryFile(dir=dir, mode='w', delete=False)
-        thread.start_new_thread(publish_accepted_contributions, (log_file, request.POST.get('skip_backup', False)))
+        _thread.start_new_thread(publish_accepted_contributions, (log_file, request.POST.get('skip_backup', False)))
         return JsonResponse({'result': 'OK', 'log_file': re.sub('^.*/', '', log_file.name)})
     except Exception as exception:
         return JsonResponse({'result': 'Failed', 'error': exception.message})

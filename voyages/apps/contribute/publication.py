@@ -1,3 +1,6 @@
+from __future__ import absolute_import
+from __future__ import unicode_literals
+from builtins import str
 from django.conf import settings
 from django.core import management
 from django.db import transaction
@@ -214,14 +217,14 @@ def export_from_voyages(intra_american_flag=None):
                 'vessel_captured_outcome',
                 'outcome_owner').all()),
         Prefetch('links_to_other_voyages', queryset=LinkedVoyages.objects.select_related('second').only('first_id', 'second_id', 'second__voyage_id'))]
-    for k, v in related_models.items():
+    for k, v in list(related_models.items()):
         prefetch_fields += [Prefetch(k + '__' + f.name, queryset=f.related_model.objects.only('value')) for f in v._meta.get_fields() if f.many_to_one and f.name != 'voyage']
     voyage_model_source = Voyage.both_objects
     if intra_american_flag == 0:
         voyage_model_source = Voyage.objects
     elif intra_american_flag == 1:
         voyage_model_source = Voyage.intra_american_objects
-    voyages = voyage_model_source.select_related(*related_models.keys()).prefetch_related(*prefetch_fields).all()
+    voyages = voyage_model_source.select_related(*list(related_models.keys())).prefetch_related(*prefetch_fields).all()
     for v in voyages:
         yield _map_voyage_to_spss(v)
     voyages.prefetch_related(None)
@@ -393,7 +396,7 @@ def _map_voyage_to_spss(voyage):
     data['YEARAM'] = yearam
     data['VOY1IMP'] = dates.imp_length_home_to_disembark
     data['VOY2IMP'] = dates.imp_length_leaving_africa_to_disembark
-    from imputed import year_mod
+    from .imputed import year_mod
     data['YEAR5'] = year_mod(yearam, 5, 1500)
     data['YEAR10'] = year_mod(yearam, 10, 1500)
     data['YEAR25'] = year_mod(yearam, 25, 1500)
