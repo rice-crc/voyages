@@ -1,10 +1,16 @@
+from __future__ import division
+from __future__ import absolute_import
+from __future__ import unicode_literals
+from builtins import str
+from builtins import object
+from past.utils import old_div
 from django.utils.translation import ugettext_lazy as _
 from itertools import groupby
 from voyages.apps.common.models import get_values_from_haystack_results
-from models import *
+from .models import *
 import calendar
 
-class Axis:
+class Axis(object):
     AVERAGE_MODE = 'avg'
     COUNT_MODE = 'count'
     # Determines the frequency of non-null values in a list.
@@ -48,9 +54,9 @@ class Axis:
         if self.mode == Axis.SUM_MODE:
             return sum([0.0 if x is None else float(x) for x in values])
         if self.mode == Axis.AVERAGE_MODE:
-            return sum([0.0 if x is None else float(x) for x in values]) / count
+            return old_div(sum([0.0 if x is None else float(x) for x in values]), count)
         if self.mode == Axis.FREQUENCY_MODE:
-            return 100.0 * count / len(lst)
+            return old_div(100.0 * count, len(lst))
         raise Exception
 
     def get_value(self, d):

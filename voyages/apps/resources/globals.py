@@ -1,3 +1,4 @@
+from __future__ import unicode_literals
 from .models import Country, AfricanName
 
 names_search_strict_text = ['slave_name', 'slave_ship_name', 'slave_voyage_number', 'slave_date_arrived__gte',

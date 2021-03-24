@@ -1,3 +1,7 @@
+from __future__ import unicode_literals
+from future import standard_library
+standard_library.install_aliases()
+from builtins import range
 from django.db import models
 from django.shortcuts import get_object_or_404
 
@@ -40,10 +44,10 @@ class SavedQuery(models.Model):
         with the original post that generated the permalink.
         :return: dict with stored POST data.
         """
-        from urlparse import parse_qs
+        from urllib.parse import parse_qs
         src = parse_qs(self.query, keep_blank_values=True)
         post = {}
-        for name, value in src.items():
+        for name, value in list(src.items()):
             # This is an ugly HACK to detect entries which should be lists
             # even though there is only one entry in said list.
             # This method is now being deprecated as we move in with a JSON

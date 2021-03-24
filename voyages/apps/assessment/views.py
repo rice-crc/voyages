@@ -1,4 +1,9 @@
+from __future__ import division
+from __future__ import unicode_literals
 # Create your views here.
+from builtins import str
+from builtins import range
+from past.utils import old_div
 from django.http import Http404
 from django.template import TemplateDoesNotExist, Context, loader, RequestContext
 from django.shortcuts import render
@@ -101,7 +106,7 @@ def get_estimates_timeline(request):
     if post is None or "download" not in post:
         return render(request, 'assessment/estimates.html', data)
     else:
-        rows = [[k, int(round(t[0])), int(round(t[1]))] for k, t in timeline.iteritems()]
+        rows = [[k, int(round(t[0])), int(round(t[1]))] for k, t in timeline.items()]
         rows = sorted(rows, key=lambda a: a[0])
         return download_xls([[('Year', 1), ('Embarked Slaves', 1), ('Disembarked Slaves', 1)]], rows)
 
@@ -123,7 +128,7 @@ def get_estimates_table(request):
         :return: A pair (mod, index of year interval).
         """
         year -= 1
-        return mod, (year - (year % mod)) / mod
+        return mod, old_div((year - (year % mod)), mod)
 
     # key_functions dictionary specifies grouping functions.
     key_functions = {
@@ -196,7 +201,7 @@ def get_estimates_table(request):
         }
         row_filter = filter_functions[row_key_index]
         col_filter = filter_functions[col_key_index]
-        estimates = cache.values()
+        estimates = list(cache.values())
         all_row_keys = set([row_key_function(e) for e in estimates if row_filter(e)])
         all_col_keys = set([col_key_function(e) for e in estimates if col_filter(e)])
         table_dict = {(rk, ck): (0, 0) for rk in all_row_keys for ck in all_col_keys}
@@ -237,8 +242,8 @@ def get_estimates_table(request):
     # Order columns and rows by their respective headers.
     default_sort_fun = lambda x: x.order_num
     row_sort_fun = default_sort_fun if int(row_key_index) < 4 else row_header_function
-    row_set = sorted(set([k[0] for k in table_dict.keys()]), key=row_sort_fun)
-    column_set = sorted(set([k[1] for k in table_dict.keys()]), key=default_sort_fun)
+    row_set = sorted(set([k[0] for k in list(table_dict.keys())]), key=row_sort_fun)
+    column_set = sorted(set([k[1] for k in list(table_dict.keys())]), key=default_sort_fun)
 
     # How many cells a single piece of data spans
     # (1 for either embarked or disembarked only and 2 for both).
@@ -400,13 +405,13 @@ def get_estimates_common(request, data):
     EstimateManager.cache()
     # Check which Flags (nations) are selected and include the selection in the query.
     nations = [[x.name, x.pk, is_checked("checkbox_nation_", x, "submit_nation")]
-               for x in EstimateManager.nations.values()]
+               for x in list(EstimateManager.nations.values())]
     data['nations'] = nations
     query["nation__in"] = [nation[0] for nation in nations if nation[2] == 1]
     data['all_nations_selected'] = len(nations) == len(query["nation__in"])
 
     export_regions = {}
-    for area, regions in EstimateManager.export_hierarchy.iteritems():
+    for area, regions in EstimateManager.export_hierarchy.items():
         children = [[[x.name, x.pk], is_checked("eregion-button-", x, "submit_regions")] for x in regions]
         checked = is_checked("earea-button-", area, "submit_regions")
         if len(regions) == 1:
@@ -414,15 +419,15 @@ def get_estimates_common(request, data):
         export_regions[(area, checked)] = children
 
     import_regions = {}
-    for area, regions in EstimateManager.import_hierarchy.iteritems():
+    for area, regions in EstimateManager.import_hierarchy.items():
         children = [[[x.name, x.pk], is_checked("dregion-button-", x, "submit_regions")] for x in regions]
         checked = is_checked("darea-button-", area, "submit_regions")
         if len(regions) == 1:
             children[0][1] = checked
         import_regions[(area, checked)] = children
 
-    data['export_regions'] = collections.OrderedDict(sorted(export_regions.items(), key=lambda x: x[0][0].name))
-    data['import_regions'] = collections.OrderedDict(sorted(import_regions.items(), key=lambda x: x[0][0].name))
+    data['export_regions'] = collections.OrderedDict(sorted(list(export_regions.items()), key=lambda x: x[0][0].name))
+    data['import_regions'] = collections.OrderedDict(sorted(list(import_regions.items()), key=lambda x: x[0][0].name))
 
     def query_region(query_key, regions_dict, all_selected_key):
         """
@@ -438,7 +443,7 @@ def get_estimates_common(request, data):
         """
         from itertools import chain
         # Flatten the regions so that we may generate the corresponding query term.
-        flat = list(chain.from_iterable(regions_dict.values()))
+        flat = list(chain.from_iterable(list(regions_dict.values())))
         query[query_key] = [region[0][0] for region in flat if region[1] == 1]
         data[all_selected_key] = len(flat) == len(query[query_key])
 

@@ -1,4 +1,10 @@
 from __future__ import division
+from __future__ import print_function
+from __future__ import absolute_import
+from __future__ import unicode_literals
+from builtins import str
+from builtins import range
+from builtins import object
 from haystack import indexes
 from .models import *
 from datetime import date
@@ -105,7 +111,7 @@ class TranslatedTextField(indexes.SearchField):
         if original is None:
             return None
         with translation.override(self.language_code):
-            translated = _(unicode(original).replace('\n', '').replace('\r', ''))
+            translated = _(str(original).replace('\n', '').replace('\r', ''))
             if not self.unidecode:
                 return translated
             from unidecode import unidecode
@@ -418,7 +424,7 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
     def prepare_var_imp_voyage_began(self, obj):
         try:
             return getYear(obj.voyage_dates.imp_voyage_began)
-        except AttributeError, TypeError:
+        except AttributeError as TypeError:
             return None
 
     def prepare_var_owner(self, obj):
@@ -588,7 +594,7 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
         return ", ".join(self.prepare_var_sources(obj))
 
     def prepare_var_sources_plaintext_search(self, obj):
-        import globals
+        from . import globals
         mangle_method = globals.search_mangle_methods.get('var_sources', globals.no_mangle)
         return mangle_method(unidecode.unidecode(self.prepare_var_sources_plaintext(obj)))
 

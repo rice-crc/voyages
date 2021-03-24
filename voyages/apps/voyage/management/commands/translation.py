@@ -1,3 +1,5 @@
+from __future__ import print_function
+from __future__ import unicode_literals
 from django.core.management.base import BaseCommand
 from voyages.apps.voyage.models import *
 from datetime import datetime
@@ -18,7 +20,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         data = []
-        for k, fields in self.fieldsets.items():
+        for k, fields in list(self.fieldsets.items()):
             for field in fields:
                 data += k.objects.values_list(field, flat=True)
         data = sorted(set(data))
