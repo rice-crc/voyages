@@ -94,6 +94,33 @@ services:
     networks:
       - voyages
 
+  voyages-adminer:
+    image: "adminer:latest"
+    container_name: "voyages-adminer"
+    hostname: "voyages-adminer"
+    restart: "on-failure"
+    depends_on:
+      - "voyages-mysql"
+    ports:
+      - "8080:8080"
+    networks:
+      - "voyages"
+
+  voyages-mailhog:
+    image: "mailhog/mailhog:latest"
+    container_name: "voyages-mailhog"
+    hostname: "voyages-mailhog"
+    restart: "on-failure"
+    logging:
+      driver: "none"
+    ports:
+      - "1025:1025"
+      - "8025:8025"
+    networks:
+      - "voyages"
+    depends_on:
+      - "voyages-django"
+
 networks:
   voyages:
     driver: bridge
