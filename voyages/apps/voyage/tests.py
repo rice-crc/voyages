@@ -1,11 +1,17 @@
+from __future__ import absolute_import
+from __future__ import unicode_literals
+from future import standard_library
+standard_library.install_aliases()
+from builtins import str
+from builtins import range
 from django.test import TestCase
 from django.test.utils import override_settings
 from django.test import Client
 from .models import VoyageDates
 from django.core.urlresolvers import reverse
 from mock import patch
-import globals
-import urllib2
+from . import globals
+import urllib.request, urllib.error, urllib.parse
 from datetime import date
 
 @override_settings(LANGUAGE_CODE='en')
@@ -32,7 +38,7 @@ class ReportingTest(TestCase):
                   (1601, 1625), (1626, 1650), (1651, 1675), (1676, 1700),
                   (1701, 1725), (1726, 1750), (1751, 1775), (1776, 1800),
                   (1801, 1825), (1826, 1850), (1851, 1875)]
-        flist25 = map(lambda x: ([(str(x[0]) + '-' + str(x[1]), 1)], {'var_imp_arrival_at_port_of_dis__range': [x[0], x[1]]}), list25)
+        flist25 = [([(str(x[0]) + '-' + str(x[1]), 1)], {'var_imp_arrival_at_port_of_dis__range': [x[0], x[1]]}) for x in list25]
         self.assertEqual(globals.get_incremented_year_tuples(25, 1514, 1866), flist25)
 @override_settings(LANGUAGE_CODE='en')
 class SearchTest(TestCase):
@@ -95,7 +101,7 @@ class SearchTest(TestCase):
         self.assertIn('var_voyage_began__range', qdict)
         self.assertIn('var_voyage_began_month__in', qdict)
         self.assertEqual([1,3,5,6,7,9,10,11,12], qdict['var_voyage_began_month__in'], "Incorrect months filter")
-        self.assertEqual([date(1514,01,01), date(1867,1,1)], qdict['var_voyage_began__range'], "Incorrect date range")
+        self.assertEqual([date(1514,0o1,0o1), date(1867,1,1)], qdict['var_voyage_began__range'], "Incorrect date range")
     @patch('voyages.apps.voyage.views.perform_search')
     def test_search_boolean(self, perform_search_func):
         response = self.client.get('/voyage/search?time_span_to_year=1866&used_variable_names=var_voyage_in_cd_rom&var_voyage_in_cd_rom_choice_field=1&time_span_from_year=1514')

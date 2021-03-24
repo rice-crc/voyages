@@ -1,3 +1,4 @@
+from __future__ import unicode_literals
 from autocomplete_light import shortcuts as autocomplete_light
 from .models import *
 

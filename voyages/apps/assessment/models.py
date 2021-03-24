@@ -1,3 +1,5 @@
+from __future__ import unicode_literals
+from builtins import str
 from django.db import models
 from itertools import groupby
 
@@ -129,10 +131,10 @@ class EstimateManager(models.Manager):
 
                 # Build hierarchies
                 keyfunc = lambda r: r.export_area
-                sorted_regions = sorted(cls.export_regions.values(), key=keyfunc)
+                sorted_regions = sorted(list(cls.export_regions.values()), key=keyfunc)
                 cls.export_hierarchy = {k: list(g) for k, g in groupby(sorted_regions, key=keyfunc)}
                 keyfunc = lambda r: r.import_area
-                sorted_regions = sorted(cls.import_regions.values(), key=keyfunc)
+                sorted_regions = sorted(list(cls.import_regions.values()), key=keyfunc)
                 cls.import_hierarchy = {k: list(g) for k, g in groupby(sorted_regions, key=keyfunc)}
 
                 cls.nations = {n.pk: n for n in Nation.objects.all()}

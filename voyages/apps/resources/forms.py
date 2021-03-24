@@ -1,3 +1,5 @@
+from __future__ import unicode_literals
+from builtins import object
 from django import forms
 from .models import *
 
@@ -8,7 +10,7 @@ class ImageAdminForm(forms.ModelForm):
     """
     description = forms.CharField(widget=forms.Textarea(attrs={'rows':6, 'cols':60}))
 
-    class Meta:
+    class Meta(object):
         model = Image
         fields = '__all__'
 
