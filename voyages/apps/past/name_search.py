@@ -1,6 +1,9 @@
+from __future__ import unicode_literals
 # Levenshtein-distance based search with ranked results.
 # https://en.wikipedia.org/wiki/Levenshtein_distance
 
+from builtins import str
+from builtins import object
 import threading
 import unicodedata
 import heapq
@@ -17,7 +20,7 @@ def strip_accents(text):
     :rtype: String.
     """
     try:
-        text = unicode(text, 'utf-8')
+        text = str(text, 'utf-8')
     except (TypeError, NameError): # unicode is a default on python 3 
         pass
     text = unicodedata.normalize('NFD', text)
@@ -27,7 +30,7 @@ def strip_accents(text):
 
 LEAF_CHAR = '\0'
 
-class _Node:
+class _Node(object):
     def __init__(self, parent, char):
         self.map = {}
         self.parent = parent
@@ -57,7 +60,7 @@ class _Node:
 def process_name(name):
     return strip_accents(name).lower()
 
-class NameSearchIndex:
+class NameSearchIndex(object):
     def __init__(self):
         self._root = _Node(None, LEAF_CHAR)
     
@@ -88,7 +91,7 @@ class NameSearchIndex:
             if cost > max_cost: break
             if pos < len(name):
                 c = name[pos]
-                for char, child in node.map.items():
+                for char, child in list(node.map.items()):
                     if char == LEAF_CHAR: continue
                     # Substitution of a character from the search, or match when char == c.
                     match = 1 if char != c else 0
@@ -105,11 +108,11 @@ class NameSearchIndex:
                         results.add(val)
                         yield val
                 # Expand children of the node.
-                for char, child in node.map.items():
+                for char, child in list(node.map.items()):
                     if char == LEAF_CHAR: continue
                     add_to_queue(cost + 1, pos, trie_del + 1, child)
 
-class NameSearchCache:
+class NameSearchCache(object):
     _loaded = False
     _lock = threading.Lock()
     _index = None

@@ -1,7 +1,16 @@
 # -*- coding: utf-8 -*-
 # List of basic variables
+from __future__ import division
+from __future__ import absolute_import
+from __future__ import unicode_literals
+from builtins import zip
+from builtins import map
+from builtins import str
+from past.builtins import basestring
+from past.utils import old_div
+from builtins import object
 from voyages.apps.common.models import get_values_from_haystack_results
-import models
+from . import models
 from django.db.models import Max, Min
 import re
 from datetime import date
@@ -35,7 +44,7 @@ def structure_places(place_list):
             region_list[reg] = []
         region_list[reg].append(place)
     broad_region_list = {}
-    for region, list_of_places in sorted(region_list.items(), key=lambda r: r[0].value):
+    for region, list_of_places in sorted(list(region_list.items()), key=lambda r: r[0].value):
         broad_reg = region.broad_region
         if broad_reg not in broad_region_list:
             broad_region_list[broad_reg] = OrderedDict()
@@ -57,7 +66,7 @@ def structure_places_all(place_list):
             region_list[reg] = []
         region_list[reg].append(place)
     broad_region_list = {}
-    for region, list_of_places in sorted(region_list.items(), key=lambda r: r[0].value):
+    for region, list_of_places in sorted(list(region_list.items()), key=lambda r: r[0].value):
         broad_reg = region.broad_region
         if broad_reg not in broad_region_list:
             broad_region_list[broad_reg] = {}
@@ -107,13 +116,13 @@ def unmangle_percent(value, voyageid=None):
         return str(value * 100) + "%"
 def unmangle_date(value, voyageid=None):
     if isinstance(value, date):
-        return unicode(value.month) + u'/' + unicode(value.day) + u'/' + unicode(value.year)
+        return str(value.month) + u'/' + str(value.day) + u'/' + str(value.year)
     splitstr = str(value).split(',')
     splitstr.reverse()
     return '/'.join(splitstr)
 def unmangle_datem(value, voyageid=None):
     if isinstance(value, date):
-        return unicode(value.month) + u'/' + unicode(value.year)
+        return str(value.month) + u'/' + str(value.year)
     splitstr = str(value).split(',')
     splitstr.reverse()
     return '/'.join(splitstr)
@@ -128,36 +137,36 @@ def no_mangle(value, voyageid=None):
 # This will perform a lot of db queries, so all option tables should probably be stored into a dict on startup/every so often
 def unmangle_place(value, voyageid=None):
     if isinstance(value, (list, tuple)):
-        return map(unmangle_place, value)
-    return unicode(_(models.Place.objects.get(value=int(value)).place))
+        return list(map(unmangle_place, value))
+    return str(_(models.Place.objects.get(value=int(value)).place))
 def unmangle_nationality(value, voyageid=None):
     if isinstance(value, (list, tuple)):
-        return map(unmangle_nationality, value)
-    return unicode(_(models.Nationality.objects.get(value=int(value)).label))
+        return list(map(unmangle_nationality, value))
+    return str(_(models.Nationality.objects.get(value=int(value)).label))
 def unmangle_rig(value, voyageid=None):
     if isinstance(value, (list, tuple)):
-        return map(unmangle_rig, value)
-    return unicode(models.RigOfVessel.objects.get(value=int(value)).label)
+        return list(map(unmangle_rig, value))
+    return str(models.RigOfVessel.objects.get(value=int(value)).label)
 def unmangle_outcome_particular(value, voyageid=None):
     if isinstance(value, (list, tuple)):
-        return map(unmangle_outcome_particular, value)
-    return unicode(_(models.ParticularOutcome.objects.get(value=int(value)).label))
+        return list(map(unmangle_outcome_particular, value))
+    return str(_(models.ParticularOutcome.objects.get(value=int(value)).label))
 def unmangle_outcome_slaves(value, voyageid=None):
     if isinstance(value, (list, tuple)):
-        return map(unmangle_outcome_slaves, value)
-    return unicode(_(models.SlavesOutcome.objects.get(value=int(value)).label))
+        return list(map(unmangle_outcome_slaves, value))
+    return str(_(models.SlavesOutcome.objects.get(value=int(value)).label))
 def unmangle_outcome_owner(value, voyageid=None):
     if isinstance(value, (list, tuple)):
-        return map(unmangle_outcome_owner, value)
-    return unicode(_(models.OwnerOutcome.objects.get(value=int(value)).label))
+        return list(map(unmangle_outcome_owner, value))
+    return str(_(models.OwnerOutcome.objects.get(value=int(value)).label))
 def unmangle_outcome_ship(value, voyageid=None):
     if isinstance(value, (list, tuple)):
-        return map(unmangle_outcome_ship, value)
-    return unicode(_(models.VesselCapturedOutcome.objects.get(value=int(value)).label))
+        return list(map(unmangle_outcome_ship, value))
+    return str(_(models.VesselCapturedOutcome.objects.get(value=int(value)).label))
 def unmangle_resistance(value, voyageid=None):
     if isinstance(value, (list, tuple)):
-        return map(unmangle_resistance, value)
-    return unicode(_(models.Resistance.objects.get(value=int(value)).label))
+        return list(map(unmangle_resistance, value))
+    return str(_(models.Resistance.objects.get(value=int(value)).label))
 
 def voyage_by_id(voyageid):
     fil = models.Voyage.objects.filter(voyage_id=voyageid)
@@ -395,7 +404,7 @@ def formatYear(year, month=0):
     """
     return "%s,%s" % (str(year).zfill(4), str(month).zfill(2))
 
-class VoyageDateCache:
+class VoyageDateCache(object):
     cached_voyage_fist_year = None
     cached_voyage_last_year = None
 
@@ -439,7 +448,7 @@ def get_incremented_year_tuples(interval, first_year=mfirst_year, last_year=mlas
     return get_each_from_list(years, 'var_imp_arrival_at_port_of_dis__range', year_labeler)
 
 # Returns filter definition (list of tuples of (label_list, query_dict))
-def get_each_from_list(lst, qdictkey, lmblbl=lambda x: unicode(x), lmbval=lambda x: x):
+def get_each_from_list(lst, qdictkey, lmblbl=lambda x: str(x), lmbval=lambda x: x):
     result = []
     for i in lst:
         lbl = lmblbl(i)
@@ -494,7 +503,7 @@ def make_places_filter(varname):
     label_list = []
     try:
         for broad in models.BroadRegion.objects.order_by('value').all():
-            label_list.append((broad.broad_region, sum(map(lambda x: x.place_set.count(), list(broad.region_set.all()))),))
+            label_list.append((broad.broad_region, sum([x.place_set.count() for x in list(broad.region_set.all())]),))
             for reg in broad.region_set.order_by('value').all():
                 label_list.append((reg.region, reg.place_set.count(),))
                 for place in reg.place_set.order_by('value').all():
@@ -526,7 +535,7 @@ def make_places_col_filter(filter_name, varname):
     labels = [[], [], []]
     try:
         for broad in models.BroadRegion.objects.order_by('value').all():
-            labels[0].append((broad.broad_region, sum(map(lambda x: x.place_set.count(), list(broad.region_set.all()))),))
+            labels[0].append((broad.broad_region, sum([x.place_set.count() for x in list(broad.region_set.all())]),))
             for reg in broad.region_set.order_by('value').all():
                 labels[1].append((reg.region, reg.place_set.count(),))
                 for place in reg.place_set.order_by('value').all():
@@ -536,17 +545,17 @@ def make_places_col_filter(filter_name, varname):
         pass
     return (filter_name, results, labels,)
 
-def get_each_from_list_col(filter_name, lst, qkey, lmblbl=lambda x: unicode(x), lmbval=lambda x: x):
-    uziped = zip(*get_each_from_list(lst, qkey, lmblbl, lmbval))
+def get_each_from_list_col(filter_name, lst, qkey, lmblbl=lambda x: str(x), lmbval=lambda x: x):
+    uziped = list(zip(*get_each_from_list(lst, qkey, lmblbl, lmbval)))
     if len(uziped) > 1:
-        return (filter_name, uziped[1], [map(lambda x: x[0], uziped[0])],)
+        return (filter_name, uziped[1], [[x[0] for x in uziped[0]]],)
     else:
         return (filter_name, [], [])
 
 def get_each_from_table_col(filter_name, table, qkey, lmblbl=lambda x: x.label, lmbval=lambda x: x.value):
-    uziped = zip(*get_each_from_table(table, qkey, lmblbl))
+    uziped = list(zip(*get_each_from_table(table, qkey, lmblbl)))
     if len(uziped) > 1:
-        return (filter_name, uziped[1], [map(lambda x: x[0], uziped[0])],)
+        return (filter_name, uziped[1], [[x[0] for x in uziped[0]]],)
     else:
         return (filter_name, [], [])
 
@@ -629,7 +638,7 @@ def make_avg_nopretty_fun(varname):
     prettifier = graph_display_methods.get(varname, no_mangle)
     def avg_nopretty_fun(queryset, rowset=None, colset=None, allset=None):
         values = list([float(b) for b in [a.get(varname) for a in queryset] if b is not None])
-        return sum(values) / len(values)
+        return old_div(sum(values), len(values))
         #stats = queryset.stats(varname).stats_results()
         #if stats and stats[varname]:
         #    return prettifier(stats[varname]['mean'])
@@ -744,7 +753,7 @@ table_functions = [(_('Number of Voyages'), lambda x, y, z, a: x.count(),),
 double_functions = [_('Sum of embarked/disembarked slaves'), _('Average number of embarked/disembarked slaves'), _('Number of voyages - embarked/disembarked slaves')]
 
 # Convert a list of nationality objects into a list of tuples of (label, filterdef)
-imp_nat_pos_bar = map(lambda x: (x.label, {'var_imputed_nationality_idnum__exact': x.value}), imputed_nationality_possibilities)
+imp_nat_pos_bar = [(x.label, {'var_imputed_nationality_idnum__exact': x.value}) for x in imputed_nationality_possibilities]
 
 placelblr = lambda x: x.place
 regionlblr = lambda x: x.region
@@ -1624,7 +1633,7 @@ def get_average_set_timeline(query_dict, var_name):
     """
     lst = []
     for year, values in get_time_aggregate_data(query_dict, var_name):
-        average = sum([x[1] for x in values]) / (len(values) + 0.0)
+        average = old_div(sum([x[1] for x in values]), (len(values) + 0.0))
         lst.append([year, round(average, 1)])
     return lst
 
@@ -1657,7 +1666,7 @@ def get_exist_set_timeline(query_dict, var_name):
     for year, g in groupby(data, key=sorting):
         values = list(g)
         count = sum([0.0 if x[1] is None else 1.0 for x in values])
-        lst.append([year, round(100.0 * count / len(values), 1)])
+        lst.append([year, round(old_div(100.0 * count, len(values)), 1)])
     return lst
 
 def get_percentage_set_timeline(query_dict, var_name):
@@ -1670,7 +1679,7 @@ def get_percentage_set_timeline(query_dict, var_name):
     """
     lst = []
     for year, values in get_time_aggregate_data(query_dict, var_name):
-        average = sum([x[1] for x in values]) / (len(values) + 0.0)
+        average = old_div(sum([x[1] for x in values]), (len(values) + 0.0))
         lst.append([year, round(100 * average, 1)])
     return lst
 

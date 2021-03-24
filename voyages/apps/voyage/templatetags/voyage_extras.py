@@ -1,3 +1,5 @@
+from __future__ import unicode_literals
+from builtins import str
 from django.template import Template, Context
 from django.template.defaultfilters import stringfilter
 from voyages.apps.common.filters import *

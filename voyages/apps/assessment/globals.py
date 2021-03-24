@@ -1,3 +1,4 @@
+from __future__ import unicode_literals
 from haystack.query import SearchQuerySet
 from .models import *
 from django.utils.translation import ugettext_lazy as _
@@ -89,7 +90,7 @@ def update_regions_labels(regions, search_configuration, area_prefix, region_pre
     new_regions = {}
     query = []
 
-    for area, regions in regions.iteritems():
+    for area, regions in regions.items():
         new_region_list = []
         count_checked = 0
         for region in regions:

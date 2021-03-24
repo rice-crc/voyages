@@ -1,3 +1,6 @@
+from __future__ import unicode_literals
+from builtins import str
+from builtins import object
 from django.db import models
 from os.path import basename
 from voyages.apps.voyage.models import Voyage, Place
@@ -26,7 +29,7 @@ class Image(models.Model):
     category = models.ForeignKey('ImageCategory', verbose_name="Image category")
     voyage = models.ForeignKey(Voyage, to_field='voyage_id', null=True, blank=True)
 
-    class Meta:
+    class Meta(object):
         verbose_name = "Image"
         verbose_name_plural = "Images"
 
@@ -53,7 +56,7 @@ class ImageCategory(models.Model):
                                              "if there is at least one image to display.)",
                                              default=True)
 
-    class Meta:
+    class Meta(object):
         verbose_name = "Image Category"
         verbose_name_plural = "Image Categories"
         ordering = ['value', ]
@@ -70,7 +73,7 @@ class Country(models.Model):
     country_id = models.IntegerField("Country id", unique=True)
     name = models.CharField(max_length=100)
 
-    class Meta:
+    class Meta(object):
         verbose_name = "Country"
         verbose_name_plural = "Countries"
         ordering = ['country_id', ]
@@ -87,7 +90,7 @@ class SexAge(models.Model):
     sex_age_id = models.IntegerField("SexAge Id", unique=True)
     name = models.CharField(max_length=50, blank=True, null=True)
 
-    class Meta:
+    class Meta(object):
         verbose_name = "Sex Age"
         verbose_name_plural = "Sex Ages"
         ordering = ['sex_age_id', ]
@@ -122,7 +125,7 @@ class AfricanName(models.Model):
                                     related_name="embarkation_port", blank=True, null=True)
     voyage = models.ForeignKey(Voyage, verbose_name="Voyage", to_field='voyage_id', blank=True, null=True)
 
-    class Meta:
+    class Meta(object):
         verbose_name = "African Name"
         verbose_name_plural = "African Names"
         ordering = ['slave_id', ]
