@@ -19,7 +19,6 @@ import re
 from .forms import *
 from haystack.query import SearchQuerySet
 import globals
-import bitly_api
 import requests
 import json
 import xlwt
