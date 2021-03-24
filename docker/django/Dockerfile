@@ -62,8 +62,7 @@ ENV PYTHONUNBUFFERED 1
 ENV PATH=/root/.local/bin:$PATH
 
 COPY --from=build /root/.local /root/.local
-COPY . .
 
 EXPOSE $GUNICORN_PORT
 
-CMD gunicorn --bind 0.0.0.0:$GUNICORN_PORT $GUNICORN_OPTS --workers 9 --threads 2 --worker-class gthread voyages.wsgi
+CMD gunicorn --bind 0.0.0.0:$GUNICORN_PORT $GUNICORN_OPTS --workers 3 --threads 2 --worker-class gthread voyages.wsgi
