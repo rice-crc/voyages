@@ -1,9 +1,14 @@
+from __future__ import absolute_import
+from __future__ import unicode_literals
+from builtins import map
+from builtins import str
+from builtins import object
 from django import forms
 from autocomplete_light import shortcuts as autocomplete_light
 from .models import *
 from voyages.extratools import AdvancedEditor
-import globals
-import graphs
+from . import globals
+from . import graphs
 from django.utils.translation import ugettext_lazy as _
 
 class UploadFileForm(forms.Form):
@@ -32,7 +37,7 @@ class VoyageShipForm(autocomplete_light.ModelForm):
     """
     Form for Voyage Ship (this is inline).
     """
-    class Meta:
+    class Meta(object):
         model = VoyageShip
         fields = '__all__'
 
@@ -41,7 +46,7 @@ class VoyageShipOwnerConnectionForm(autocomplete_light.ModelForm):
     """
     Form for Ship Owner Outcome (this is inline).
     """
-    class Meta:
+    class Meta(object):
         model = VoyageShipOwnerConnection
         fields = '__all__'
 
@@ -51,7 +56,7 @@ class VoyageOutcomeForm(autocomplete_light.ModelForm):
     """
     Form for Voyage Outcome (this is inline).
     """
-    class Meta:
+    class Meta(object):
         model = VoyageOutcome
         fields = '__all__'
 
@@ -61,7 +66,7 @@ class VoyageItineraryForm(autocomplete_light.ModelForm):
     """
     Form for Voyage Itinerary (this is inline).
     """
-    class Meta:
+    class Meta(object):
         model = VoyageItinerary
         fields = '__all__'
 
@@ -71,7 +76,7 @@ class VoyageDatesForm(autocomplete_light.ModelForm):
     """
     Form for Voyage Dates (this is inline).
     """
-    class Meta:
+    class Meta(object):
         model = VoyageDates
         fields = '__all__'
 
@@ -81,7 +86,7 @@ class VoyageCaptainConnectionForm(autocomplete_light.ModelForm):
     """
     Form for Captain Connection (this is inline).
     """
-    class Meta:
+    class Meta(object):
         model = VoyageCaptainConnection
         fields = '__all__'
 
@@ -90,7 +95,7 @@ class VoyageCrewForm(autocomplete_light.ModelForm):
     """
     Form for Voyage Crew (this is inline).
     """
-    class Meta:
+    class Meta(object):
         model = VoyageCrew
         fields = '__all__'
 
@@ -100,7 +105,7 @@ class VoyageSlavesNumbersForm(autocomplete_light.ModelForm):
     """
     Form for Voyage Characteristics (this is inline).
     """
-    class Meta:
+    class Meta(object):
         model = VoyageSlavesNumbers
         fields = '__all__'
         exclude = ['percentage_adult', 'percentage_female']
@@ -111,7 +116,7 @@ class VoyageSourcesConnectionForm(autocomplete_light.ModelForm):
     """
     Form for Voyage Characteristics (this is inline).
     """
-    class Meta:
+    class Meta(object):
         model = VoyageSourcesConnection
         fields = '__all__'
 
@@ -123,7 +128,7 @@ class VoyagesSourcesAdminForm(forms.ModelForm):
     short_ref = forms.CharField(widget=forms.Textarea(attrs={'rows': 4, 'cols': 60}))
     full_ref = forms.CharField(widget=AdvancedEditor(attrs={'class': 'tinymcetextarea'}))
 
-    class Meta:
+    class Meta(object):
         fields = '__all__'
         model = VoyageSources
 
@@ -173,7 +178,7 @@ class SimpleDateSearchForm(VoyageBaseForm):
     threshold_year = forms.CharField(required=False, initial="YYYY",widget=forms.TextInput(
         attrs={'class': "date_field_long", 'size': '4', 'maxlength': '4'}))
 
-    months = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple(), choices=globals.list_months, initial=map(lambda x: x[0], globals.list_months))
+    months = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple(), choices=globals.list_months, initial=[x[0] for x in globals.list_months])
 
 
 class SimpleSelectSearchForm(VoyageBaseForm):
@@ -219,13 +224,13 @@ class ResultsPerPageOptionForm(forms.Form):
 
 class TableSelectionForm(forms.Form):
     lmbd = lambda x: (str(x[0]), x[1][0])
-    rowchoices = map(lmbd, enumerate(globals.table_rows))
+    rowchoices = list(map(lmbd, enumerate(globals.table_rows)))
     rows = forms.ChoiceField(label='Rows', choices=rowchoices, initial=[rowchoices[12][1]])#globals.table_rows[12])
     rows.initial = [rowchoices[12][0]]
-    colchoices = map(lmbd, enumerate(globals.table_columns))
+    colchoices = list(map(lmbd, enumerate(globals.table_columns)))
     columns = forms.ChoiceField(label='Columns', choices=colchoices, initial=[colchoices[7][1]])#globals.table_columns[1])
     columns.initial = [colchoices[1][0]]
-    cellchoices = map(lmbd, enumerate(globals.table_functions))
+    cellchoices = list(map(lmbd, enumerate(globals.table_functions)))
     cells = forms.ChoiceField(label='Cells', choices=cellchoices, initial=[cellchoices[1][1]])#globals.table_functions[1])
     cells.initial = [cellchoices[1][0]]
     omit_empty = forms.BooleanField(label='Omit empty', required=False, initial=True)
@@ -239,7 +244,7 @@ class GraphRemovePlotForm(forms.Form):
     def get_to_del(self):
         result = []
         if self.is_valid():
-            for i, field in self.fields.items():
+            for i, field in list(self.fields.items()):
                 if self.cleaned_data[i]:
                     result.append(int(i))
         return result
@@ -255,7 +260,7 @@ class GraphSelectionForm(forms.Form):
         super(forms.Form, self).__init__(*args, **kwargs)
         lmbd = lambda x: (str(x[0]), x[1].description)
         self.xchoices = [lmbd(x) for x in enumerate(xfunctions)]
-        self.ychoices = map(lmbd, enumerate(graphs.graphs_y_axes))
+        self.ychoices = list(map(lmbd, enumerate(graphs.graphs_y_axes)))
         self.fields['xselect'] = forms.ChoiceField(label=_(xfield_label), choices=self.xchoices)
         self.fields['yselect'] = forms.ChoiceField(label=_(yfield_label), choices=self.ychoices)
 

@@ -2,6 +2,7 @@
 # encoding: utf-8
 from __future__ import absolute_import, division, print_function, unicode_literals
 
+from builtins import object
 import re
 
 from django.template import Context, loader
@@ -13,7 +14,7 @@ from haystack.utils import get_model_ct_tuple
 from inspect import ismethod
 
 
-class NOT_PROVIDED:
+class NOT_PROVIDED(object):
     pass
 
 # Note that dates in the full ISO 8601 format will be accepted as long as the hour/minute/second components
