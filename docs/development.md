@@ -1,18 +1,19 @@
 # Development
 
-[Home](/)
+[Home](../README.md)
 
 ## Table of Contents
 
 * [Getting Started](#getting-started)
-   * [System Requirements](#system-requirements)
-   * [Fork and Clone the Project](#fork-and-clone-the-project)
-   * [Installation](#installation)
+  * [System Requirements](#system-requirements)
+  * [Fork and Clone the Project](#fork-and-clone-the-project)
+  * [Installation](#installation)
+* [TLDR Workflow](#tldr-workflow)
 * [Development Workflow](#development-workflow)
   * [Update Your Fork](#update-your-fork)
-   * [Do Your Work](#do-your-work)
-   * [Make a Pull Request](#make-a-pull-request)
-   * [Clean Up Your Work](#clean-up-your-work)
+  * [Do Your Work](#do-your-work)
+  * [Make a Pull Request](#make-a-pull-request)
+  * [Clean Up Your Work](#clean-up-your-work)
 * [Deployment Workflow](#deployment-workflow)
 * [Frequently Asked Questions](#frequently-asked-questions)
 * [Miscellanious Tasks](#miscellanious-tasks)
@@ -23,7 +24,9 @@ To set up your local environment and begin developing for this project, complete
 
 ### System Requirements
 
-*Note: Parts of this development document were written targeting MacOS.*
+*Note: This document is geared toward MacOS but can be easily applied to Linux. Contribution for Windows users is welcome.*
+
+For reference, this document was written while testing on a 2018 MacBook Pro running MacOS Big Sur and Docker Desktop 3.2.2.
 
 Make sure the Xcode Command Line Tools are installed.
 
@@ -43,6 +46,10 @@ Install Docker Desktop.
 ```bash
 host:~$ brew install --cask docker
 ```
+
+Due to resource utilization in the application, it is recommended to increase memory available to containers.
+
+In Docker Desktop, visit Settings > Resources > Advanced. Set "Memory" to at least 4GB.
 
 [Return to Top](#table-of-contents)
 
@@ -91,7 +98,7 @@ host:~/Projects/voyages$ docker exec -i voyages-mysql mysql -uroot -pvoyages -e 
 host:~/Projects/voyages$ docker exec -i voyages-mysql mysql -uroot -pvoyages -e "grant all on voyages.* to 'voyages'@'%'"
 ```
 
-Download the `emory-voyages_prod-*.sql.tgz` MySQL dump from the Google Drive share and expand to the `data/voyages_prod.sql` file.
+Download the latest `emory-voyages_prod-*.sql.tgz` MySQL dump from the Google Drive share and expand to the `data/voyages_prod.sql` file.
 
 Import the database dump to MySQL.
 
@@ -129,7 +136,56 @@ host:~/Projects/voyages$ docker exec -i voyages-django bash -c 'python manage.py
 host:~/Projects/voyages$ docker exec -i voyages-django bash -c 'python manage.py thumbnail cleanup'
 ```
 
-Access the local Voyages site at [http://127.0.0.1/](http://127.0.0.1/).
+Note the following project resources:
+
+* Voyages app: [http://127.0.0.1/](http://127.0.0.1/).
+* Solr: [http://127.0.0.1:8983](http://127.0.0.1:8983)
+
+[Return to Top](#table-of-contents)
+
+## TLDR Workflow
+
+The following is meant to be a concise reference for the development process.
+
+For more details, check the full [Development Workflow](#development-workflow) section below.
+
+```bash
+# Setup.
+
+git clone https://github.com/<username>/voyages.git
+cd voyages
+
+# Any time you start new work, make sure your develop branch is up-to-date
+# with the remote on GitHub.
+
+git checkout develop
+git fetch upstream && git rebase upstream/develop
+
+# Create a working branch to isolate your changes and begin your work.
+
+git checkout -b short-desc
+
+# Before any commit, always make sure your branch is up-to-date with the remote.
+
+# When your work is complete, pull the latest changes, resolve any merge
+# conflicts, and then commit your work.
+
+git fetch upstream && git rebase upstream/develop
+git add . && git commit
+
+# When ready, push your branch to your fork. Visit the repository on GitHub
+# and make a Pull Request.
+
+git push origin HEAD
+
+# Once the Pull Request is accepted and merged, clean up your work.
+
+git checkout develop && git branch -D short-desc
+git fetch upstream && git rebase upstream/develop
+git push
+```
+
+Visit the repository on GitHub to make a Pull Request.
 
 [Return to Top](#table-of-contents)
 
