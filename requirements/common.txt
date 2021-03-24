@@ -1,6 +1,6 @@
 django-redis==4.10.0
 redis==2.10.6
-futures==3.3.0
+futures
 gunicorn==19.10.0
 Django==1.11.6
 Django-appconf==1.0.2
