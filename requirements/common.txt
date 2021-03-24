@@ -1,7 +1,7 @@
 django-redis==4.10.0
 redis==2.10.6
 futures
-gunicorn==19.7.1
+gunicorn==19.10.0
 Django==1.11.6
 Django-appconf==1.0.2
 lxml
