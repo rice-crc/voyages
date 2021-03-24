@@ -1,4 +1,9 @@
+from __future__ import division
+from __future__ import print_function
+from __future__ import unicode_literals
 # Pre-compile paths connecting "regions" and link ports to such regions.
+from builtins import str
+from past.utils import old_div
 from voyages.apps.voyage.cache import *
 from voyages.apps.voyage.maps import VoyageRoutes
 from scipy.interpolate import interp1d
@@ -18,12 +23,12 @@ def precompile_paths(datasetName, twoWayLinks):
     links = set(region_network.links)
 
     VoyageCache.load()
-    source_port_pks = set([v.emb_pk for v in VoyageCache.voyages.values() if v.emb_pk])
-    dest_port_pks = set([v.dis_pk for v in VoyageCache.voyages.values() if v.dis_pk])
+    source_port_pks = set([v.emb_pk for v in list(VoyageCache.voyages.values()) if v.emb_pk])
+    dest_port_pks = set([v.dis_pk for v in list(VoyageCache.voyages.values()) if v.dis_pk])
     
     # Map closest point from an origin.
     def get_closest(origin, choices):
-        return min(enumerate(choices), key=lambda (_, pt): hs_dist(pt, origin))[0]
+        return min(enumerate(choices), key=lambda __pt: hs_dist(__pt[1], origin))[0]
 
     region_from_nodes = [get_closest(r, routeNodes) for r in region_from]
     region_to_nodes = [get_closest(r, routeNodes) for r in region_to]
@@ -47,20 +52,20 @@ def precompile_paths(datasetName, twoWayLinks):
         distance = np.cumsum(np.sqrt(np.sum(np.diff(points, axis=0)**2, axis=1)))
         if len(distance) > 1:
             try:
-                distance = np.insert(distance, 0, 0) / distance[-1]
+                distance = old_div(np.insert(distance, 0, 0), distance[-1])
                 # Interpolate curve and evaluate at equidistant points along the curve.
                 interpolated = interp1d(distance, points, kind='quadratic', axis=0)
                 alpha = np.linspace(0, 1, max([20, 5 * len(nodes)]))
                 return interpolated(alpha).tolist()
             except: pass
-        print str(source) + " " + str(target)
+        print(str(source) + " " + str(target))
         return [routeNodes[source], routeNodes[target]]
 
     warnings = []
     
     def connect_port_to_region(regions, threshold=5000):
         proutes = {}
-        for (pk, p) in VoyageCache.ports.items():
+        for (pk, p) in list(VoyageCache.ports.items()):
             pt = get_coords(p)
             if pt is None:
                 # This is an invalid coordinate, try parent coordinates instead.
@@ -89,16 +94,16 @@ def precompile_paths(datasetName, twoWayLinks):
         return None if pdata is None else pdata.get('reg')
 
     reg_route_pairs = [(s, d) for (s, d) in 
-        set([(get_port_reg(v, 'src'), get_port_reg(v, 'dst')) for v in VoyageCache.voyages.values()])
+        set([(get_port_reg(v, 'src'), get_port_reg(v, 'dst')) for v in list(VoyageCache.voyages.values())])
         if s is not None and d is not None and s >= 0 and d >= 0]
 
-    print "Computing " + str(len(reg_route_pairs)) + " smooth paths between routes."
+    print("Computing " + str(len(reg_route_pairs)) + " smooth paths between routes.")
 
     regional_routes = {}
     computed = 0
     for (sind, dind) in reg_route_pairs:
         if computed % 10 == 0:
-            print "Computing path #" + str(computed + 1)
+            print("Computing path #" + str(computed + 1))
         computed += 1
         d = regional_routes.setdefault(sind, {})
         d[dind] = smooth_path(region_from_nodes[sind], region_to_nodes[dind])
@@ -111,7 +116,7 @@ def generate_static_files(datasetName, twoWayLinks=False):
     """
     (regional_routes, port_routes, warnings) = precompile_paths(datasetName, twoWayLinks)
     if len(warnings) > 0:
-        print("Warnings (" + unicode(len(warnings)) + ")")
+        print("Warnings (" + str(len(warnings)) + ")")
         for w in warnings:
             print(w.encode('utf-8'))
     import os, json

@@ -1,3 +1,5 @@
+from __future__ import unicode_literals
+from builtins import object
 from django.db import models
 
 # NOTES:
@@ -8,14 +10,14 @@ from django.db import models
 class EnslaverIdentity(models.Model):
     principal_alias = models.CharField(max_length=255)
 
-    class Meta:
+    class Meta(object):
         verbose_name = 'Enslaver unique identity'
 
 class EnslaverAlias(models.Model):
     identity = models.ForeignKey('EnslaverIdentity', on_delete=models.CASCADE)
     alias = models.CharField(max_length=255)
 
-    class Meta:
+    class Meta(object):
         verbose_name = 'Enslaver alias'
 
 class EnslaverVoyage(models.Model):

@@ -1,9 +1,12 @@
+from __future__ import print_function
+from __future__ import unicode_literals
 # This tool can be used to verify that CSV data was imported without any loss.
 # After running the importcsv command, head to the Contribute section and export
 # CSV files for the datasets (separately for TAST and I-Am). Then the functions
 # below (check_intra, check_tast) can be used to detect any inconsistency or
 # data loss.
 
+from builtins import str
 import itertools
 import re
 import unicodecsv
@@ -27,7 +30,7 @@ def get_set_from_prefix(row, prefix):
     return set([o for o in row_set if o is not None and o.strip() != '' and o.strip() != "."])
 
 def compare_csv(r1, r2, default_values={}, ignore_keys=default_ignore_keys, key_map=None):
-    pairs = itertools.izip_longest(r1, r2)
+    pairs = itertools.zip_longest(r1, r2)
     warning = {}
     bad = []
     count = 0
@@ -36,7 +39,7 @@ def compare_csv(r1, r2, default_values={}, ignore_keys=default_ignore_keys, key_
         if a is None or b is None: 
             bad.append((a, b, { "__row__": "Missing" }))
         else:
-            keys = set(a.keys()).union(b.keys())
+            keys = set(a.keys()).union(list(b.keys()))
             diffs = {}
             for k in keys:
                 if key_map: k = key_map.get(k, k)
@@ -71,7 +74,7 @@ def compare_csv(r1, r2, default_values={}, ignore_keys=default_ignore_keys, key_
             if len(diffs) > 0:
                 # See if it the errors are due to the ordering in a multi-value field (e.g. owner)
                 for prefix in ["owner", "captain"]:
-                    prefix_diffs = [key for key in diffs.keys() if key.startswith(prefix)]
+                    prefix_diffs = [key for key in list(diffs.keys()) if key.startswith(prefix)]
                     for k in prefix_diffs:
                         diffs.pop(k)
                     prefix_set_a = get_set_from_prefix(a, prefix)
@@ -136,9 +139,9 @@ def print_delta(delta):
             print(str(item[2]))
     if len(delta[1]) > 0:
         print("Warnings:")
-        for voyage_id, w in delta[1].items():
+        for voyage_id, w in list(delta[1].items()):
             print("Voyage id " + str(voyage_id) + " has warnings: ")
-            for k, wt in w.items():
+            for k, wt in list(w.items()):
                 print("    Field '" + str(k) + "': " + str(wt))
 
 # Usage sample.

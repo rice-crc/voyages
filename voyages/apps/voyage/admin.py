@@ -1,3 +1,5 @@
+from __future__ import unicode_literals
+from builtins import object
 from django.contrib import admin
 from django.contrib.flatpages.models import FlatPage
 from autocomplete_light import shortcuts as autocomplete_light
@@ -19,7 +21,7 @@ class FlatPageAdmin(FlatPageAdmin):
             ),
         }),
     )
-    class Media:
+    class Media(object):
         js = ('scripts/tiny_mce/tinymce.min.js',
           'scripts/tiny_mce/textareas.js',
           )
@@ -317,7 +319,7 @@ class VoyageAdmin(admin.ModelAdmin):
     search_fields = ['voyage_id']
     exclude = ('voyage_ship', 'voyage_itinerary', 'voyage_dates', 'voyage_crew', 'voyage_slaves_numbers')
 
-    class Meta:
+    class Meta(object):
         fields = '__all__'
 
 

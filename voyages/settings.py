@@ -1,3 +1,6 @@
+from __future__ import print_function
+from __future__ import absolute_import
+from __future__ import unicode_literals
 # Django settings for voyages project.
 
 import os
@@ -216,11 +219,11 @@ import sys
 # import localsettings
 # This will override any previously set value
 try:
-    from localsettings import *
+    from .localsettings import *
 except ImportError:
-    print >>sys.stderr, '''Settings not defined. Please configure a version
+    print('''Settings not defined. Please configure a version
         of localsettings.py for this site. See localsettings.py.dist for
-        setup details.'''
+        setup details.''', file=sys.stderr)
 
 
 # Modify HAYSTACK config for fixture loading durring tests
@@ -234,7 +237,7 @@ try:
         HAYSTACK_SIGNAL_PROCESSOR = ''
         del HAYSTACK_SIGNAL_PROCESSOR
 except Exception as e:
-    print >>sys.stderr, '''*** HAYSTACK settings not modified because something went wrong %s ***''' % e.message
+    print('''*** HAYSTACK settings not modified because something went wrong %s ***''' % e.message, file=sys.stderr)
 
 del sys
 

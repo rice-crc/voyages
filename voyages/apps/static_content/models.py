@@ -1,3 +1,5 @@
+from __future__ import unicode_literals
+from builtins import object
 from django.db import models
 
 
@@ -8,7 +10,7 @@ class ContentGroup(models.Model):
 
     name = models.CharField(max_length=50)
 
-    class Meta:
+    class Meta(object):
         verbose_name = "Static content group"
         verbose_name_plural = "Static content groups"
 
@@ -26,7 +28,7 @@ class ContentPage(models.Model):
     order = models.IntegerField()
     group = models.ForeignKey(ContentGroup)
 
-    class Meta:
+    class Meta(object):
         verbose_name = "Static content page"
         verbose_name_plural = "Static content pages"
 
