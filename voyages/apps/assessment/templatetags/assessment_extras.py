@@ -1,3 +1,5 @@
+from __future__ import unicode_literals
+from builtins import range
 from django import template
 from voyages.apps.common.filters import trans_log
 
@@ -27,7 +29,7 @@ def get_range(value):
 
     Instead of 3 one may use the variable set in the views
     """
-    return range(value)
+    return list(range(value))
 
 
 @register.filter

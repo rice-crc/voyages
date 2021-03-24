@@ -1,3 +1,9 @@
+from __future__ import print_function
+from __future__ import unicode_literals
+from builtins import input
+from builtins import next
+from builtins import str
+from builtins import range
 from django.core.management.base import BaseCommand
 from django.utils.encoding import smart_str
 from voyages.apps.voyage.models import *
@@ -30,7 +36,7 @@ class Command(BaseCommand):
         if target_db != 'mysql' and target_db != 'pgsql':
             sys.stderr.write('Supported dbs are "mysql" and "pgsql". Aborting...\n')
             return
-        print 'Targetting db: ' + target_db
+        print('Targetting db: ' + target_db)
 
         # Store related models that need to be persisted in the following lists/dicts
         voyages = {}
@@ -580,17 +586,17 @@ class Command(BaseCommand):
                     if intra_american and 'voyageid2' in row:
                         voyage_links.append((id, cint(row['voyageid2']), LinkedVoyages.INTRA_AMERICAN_LINK_MODE))
             
-        print 'Constructed ' + str(len(voyages)) + ' voyages from CSV. ' + \
-            str(count_tast) + ' transatlantic and ' + str(count_iam) + ' intra-American.'
+        print('Constructed ' + str(len(voyages)) + ' voyages from CSV. ' + \
+            str(count_tast) + ' transatlantic and ' + str(count_iam) + ' intra-American.')
         if self.errors > 0:
-            print str(self.errors) + ' errors occurred, please check the messages above.'
+            print(str(self.errors) + ' errors occurred, please check the messages above.')
 
-        confirm = raw_input("Are you sure you want to continue? The existing data will be deleted! (yes/[no]): ")
-        print '"' + confirm + '"'
+        confirm = input("Are you sure you want to continue? The existing data will be deleted! (yes/[no]): ")
+        print('"' + confirm + '"')
         if confirm != 'yes':
             return
 
-        print 'Deleting old data...'
+        print('Deleting old data...')
 
         quote_char = '`' if target_db == 'mysql' else '"'
         
@@ -600,13 +606,13 @@ class Command(BaseCommand):
         def clear_fk(fk_field):
             sql = 'UPDATE {0}{1}{0} SET {0}{2}{0}=NULL'
             sql = sql.format(quote_char, Voyage._meta.db_table, fk_field)
-            print sql
+            print(sql)
             cursor.execute(sql)
 
         def delete_all(model):
             sql = 'DELETE FROM {0}' + model._meta.db_table + '{0}'
             sql = sql.format(quote_char)
-            print sql
+            print(sql)
             cursor.execute(sql)
 
         clear_fk('voyage_ship_id')
@@ -630,19 +636,19 @@ class Command(BaseCommand):
         delete_all(Image)
         delete_all(Voyage)
 
-        print 'Inserting new records...'
+        print('Inserting new records...')
 
         def bulk_insert(model, lst, attr_key=None, manager=None):
-            print 'Bulk inserting ' + str(model)
+            print('Bulk inserting ' + str(model))
             if manager is None:
                 manager = model.objects
             manager.bulk_create(lst, batch_size=100)
             return None if attr_key is None else \
                 {getattr(x, attr_key): x for x in manager.all()}
 
-        voyages = bulk_insert(Voyage, voyages.values(), 'voyage_id', Voyage.both_objects)
-        captains = bulk_insert(VoyageCaptain, captains.values(), 'name')
-        ship_owners = bulk_insert(VoyageShipOwner, ship_owners.values(), 'name')
+        voyages = bulk_insert(Voyage, list(voyages.values()), 'voyage_id', Voyage.both_objects)
+        captains = bulk_insert(VoyageCaptain, list(captains.values()), 'name')
+        ship_owners = bulk_insert(VoyageShipOwner, list(ship_owners.values()), 'name')
         # At this point we have primary keys for voyages.
 
         # Create voyage links.
@@ -710,8 +716,8 @@ class Command(BaseCommand):
                 fk_on_related,
                 fk_on_voyages
             )
-            print 'Executing query...'
-            print sql
+            print('Executing query...')
+            print(sql)
             return sql
 
         cursor.execute(get_raw_sql(VoyageShip, 'voyage_ship_id'))
@@ -720,4 +726,4 @@ class Command(BaseCommand):
         cursor.execute(get_raw_sql(VoyageCrew, 'voyage_crew_id'))
         cursor.execute(get_raw_sql(VoyageSlavesNumbers, 'voyage_slaves_numbers_id'))
 
-        print "Completed! Don't forget to rebuild_index on Solr."
+        print("Completed! Don't forget to rebuild_index on Solr.")

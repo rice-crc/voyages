@@ -1,3 +1,4 @@
+from __future__ import unicode_literals
 from django.core.serializers.base import DeserializationError
 from django.core.serializers.json import Serializer as DjangoJsonSerializer
 from django.core.serializers.python import Deserializer as PythonDeserializer

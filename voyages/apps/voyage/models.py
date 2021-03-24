@@ -1,3 +1,6 @@
+from __future__ import unicode_literals
+from builtins import str
+from builtins import object
 from django.db import models
 from django.utils.translation import ugettext as _
 from voyages.apps.common.validators import date_csv_field_validator
@@ -21,7 +24,7 @@ class BroadRegion(models.Model):
     def __unicode__(self):
         return self.broad_region
 
-    class Meta:
+    class Meta(object):
         verbose_name = 'Broad region (area)'
         verbose_name_plural = 'Broad regions (areas)'
         ordering = ['value']
@@ -46,14 +49,14 @@ class Region(models.Model):
     show_on_map = models.BooleanField(default=True)
     show_on_main_map = models.BooleanField(default=True)
 
-    class Meta:
+    class Meta(object):
         verbose_name = 'Region'
         verbose_name_plural = "Regions"
 
     def __unicode__(self):
         return self.region
 
-    class Meta:
+    class Meta(object):
         ordering = ['value']
 
 
@@ -75,7 +78,7 @@ class Place(models.Model):
     show_on_main_map = models.BooleanField(default=True)
     show_on_voyage_map = models.BooleanField(default=True)
 
-    class Meta:
+    class Meta(object):
         verbose_name = 'Place (Port or Location)'
         verbose_name_plural = "Places (Ports or Locations)"
         ordering = ['value']
@@ -92,7 +95,7 @@ class VoyageGroupings(models.Model):
     label = models.CharField(max_length=30)
     value = models.IntegerField()
 
-    class Meta:
+    class Meta(object):
         verbose_name = "Grouping for estimating imputed slaves"
         verbose_name_plural = "Groupings for estimating imputed slaves"
 
@@ -108,7 +111,7 @@ class Nationality(models.Model):
     label = models.CharField(max_length=255)
     value = models.IntegerField()
 
-    class Meta:
+    class Meta(object):
         verbose_name = "Nationality"
         verbose_name_plural = "Nationalities"
         ordering = ['value']
@@ -123,7 +126,7 @@ class TonType(models.Model):
     label = models.CharField(max_length=255)
     value = models.IntegerField()
 
-    class Meta:
+    class Meta(object):
         verbose_name = "Type of tons"
         verbose_name_plural = "Types of tons"
         ordering = ['value']
@@ -138,7 +141,7 @@ class RigOfVessel(models.Model):
     label = models.CharField(max_length=25)
     value = models.IntegerField()
 
-    class Meta:
+    class Meta(object):
         verbose_name = "Rig of vessel"
         verbose_name_plural = "Rigs of vessel"
         ordering = ['value']
@@ -209,7 +212,7 @@ class VoyageShip(models.Model):
     def __unicode__(self):
         return self.ship_name if self.ship_name is not None else "None"
 
-    class Meta:
+    class Meta(object):
         verbose_name = 'Ship'
         verbose_name_plural = "Ships"
 
@@ -250,7 +253,7 @@ class ParticularOutcome(models.Model):
     def __unicode__(self):
         return self.label
 
-    class Meta:
+    class Meta(object):
         ordering = ['value']
         verbose_name = 'Fate (particular outcome of voyage)'
         verbose_name_plural = 'Fates (particular outcomes of voyages)'
@@ -266,7 +269,7 @@ class SlavesOutcome(models.Model):
     def __unicode__(self):
         return self.label
 
-    class Meta:
+    class Meta(object):
         ordering = ['value']
 
 
@@ -280,7 +283,7 @@ class VesselCapturedOutcome(models.Model):
     def __unicode__(self):
         return self.label
 
-    class Meta:
+    class Meta(object):
         ordering = ['value']
 
 
@@ -294,7 +297,7 @@ class OwnerOutcome(models.Model):
     def __unicode__(self):
         return self.label
 
-    class Meta:
+    class Meta(object):
         ordering = ['value']
 
 
@@ -308,7 +311,7 @@ class Resistance(models.Model):
     def __unicode__(self):
         return self.label
 
-    class Meta:
+    class Meta(object):
         ordering = ['value']
 
 
@@ -343,7 +346,7 @@ class VoyageOutcome(models.Model):
         #TODO: We may want to change this.
         return "Outcome"
 
-    class Meta:
+    class Meta(object):
         verbose_name = "Outcome"
         verbose_name_plural = "Outcomes"
 
@@ -531,7 +534,7 @@ class VoyageItinerary(models.Model):
     voyage = models.ForeignKey('Voyage', null=True, blank=True,
                                related_name="voyage_name_itinerary")
 
-    class Meta:
+    class Meta(object):
         verbose_name = "Itinerary"
         verbose_name_plural = "Itineraries"
 
@@ -684,7 +687,7 @@ class VoyageDates(models.Model):
 #        else:
 #            return ((self.get_date_year(self.imp_arrival_at_port_of_dis))/100 * 100)
 
-    class Meta:
+    class Meta(object):
         verbose_name = 'Date'
         verbose_name_plural = 'Dates'
 
@@ -715,12 +718,12 @@ class VoyageCaptainConnection(models.Model):
             ('Voyage', related_name='voyage')
     captain_order = models.IntegerField()
 
-    class Meta:
+    class Meta(object):
         verbose_name = 'Voyage captain information'
         verbose_name_plural = 'Voyage captain information'
 
     def __unicode__(self):
-        return "Captain: %d %s" % (self.captain_order, unicode(self.captain))
+        return "Captain: %d %s" % (self.captain_order, str(self.captain))
 
 
 class VoyageCrew(models.Model):
@@ -772,7 +775,7 @@ class VoyageCrew(models.Model):
     voyage = models.ForeignKey('Voyage', null=True, blank=True,
                                related_name="voyage_name_crew")
 
-    class Meta:
+    class Meta(object):
         verbose_name = 'Crew'
         verbose_name_plural = "Crews"
 
@@ -1258,7 +1261,7 @@ class VoyageSlavesNumbers(models.Model):
     # vymrtrat
     imp_mortality_ratio = models.FloatField("Imputed mortality ratio (VYMRTRAT)", null=True, blank=True)
 
-    class Meta:
+    class Meta(object):
         verbose_name = 'Slaves Characteristic'
         verbose_name_plural = "Slaves Characteristics"
 
@@ -1272,7 +1275,7 @@ class VoyageSourcesType(models.Model):
     group_id = models.IntegerField()
     group_name = models.CharField(max_length=30)
 
-    class Meta:
+    class Meta(object):
         verbose_name = "Sources type"
         verbose_name_plural = "Sources types"
         ordering = ['group_id']
@@ -1296,7 +1299,7 @@ class VoyageSources(models.Model):
                                 max_length=2550, null=False, blank=True)
     source_type = models.ForeignKey('VoyageSourcesType', null=False)
 
-    class Meta:
+    class Meta(object):
         verbose_name = 'Source'
         verbose_name_plural = "Sources"
         ordering = ['short_ref', 'full_ref']
@@ -1400,10 +1403,10 @@ class Voyage(models.Model):
             self.pk = self.voyage_id
         super(Voyage, self).save(*args, **kwargs)
 
-    class Admin:
+    class Admin(object):
         manager = models.Manager()
 
-    class Meta:
+    class Meta(object):
         ordering = ['voyage_id',]
         verbose_name = 'Voyage'
         verbose_name_plural = "Voyages"

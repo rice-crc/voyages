@@ -1,9 +1,13 @@
+from __future__ import print_function
+from __future__ import unicode_literals
 # Script to import AfricanNames csv
 # NOTE: the CSV must be UTF-8 without a BOM prefix otherwise
 # the csv reader might choke on it. Use dos2unix utility to
 # ensure that the file is kosher.
 
 # Import models that will be used in this import script.
+from builtins import input
+from builtins import str
 from django.core.management.base import BaseCommand
 from django.db import transaction
 from unidecode import unidecode
@@ -31,7 +35,7 @@ class Command(BaseCommand):
         countries = {fuzzy_name(c.name): c for c in Country.objects.all()}
         places = {fuzzy_name(p.place): p.value for p in Place.objects.all()}
         insert = []
-        self.next_country_id = 1 + max([c.country_id for c in countries.values()])
+        self.next_country_id = 1 + max([c.country_id for c in list(countries.values())])
 
         def add_blank(d):
             d[''] = None
@@ -48,7 +52,7 @@ class Command(BaseCommand):
             if x is None and len(name) > 0:
                 # Search for exact prefix match.
                 namelen = len(name)
-                for k, v in d.items():
+                for k, v in list(d.items()):
                     length = min(len(k), namelen)
                     if k[0:length] == name[0:length]:
                         if x is not None:
@@ -120,33 +124,33 @@ class Command(BaseCommand):
 
         if errors:
             # Display a summary of errors.
-            for e, l in errors.items():
+            for e, l in list(errors.items()):
                 failed = str([x[0] for x in l[0:3]])
                 if len(l) > 3: failed += ' plus ' + str(len(l) - 3) + ' other rows'
                 print(e + ": " + failed)
         else:
             # At this point any remaining elements in names is no longer present
             # in the CSV so we might delete them.
-            delete = len(names) > 0 and raw_input('Delete pre-existing records (' + str(len(names)) + ') without a match in the CSV? (y/N) ').lower() == 'y'
+            delete = len(names) > 0 and input('Delete pre-existing records (' + str(len(names)) + ') without a match in the CSV? (y/N) ').lower() == 'y'
 
             if len(insert) > 0:
-                ans = raw_input('There are ' + str(len(insert)) + ' country names to insert. Continue? (y/N/q) ').lower()
+                ans = input('There are ' + str(len(insert)) + ' country names to insert. Continue? (y/N/q) ').lower()
                 if ans == 'q':
                     print(sorted([c.name for c in insert]))
-                    ans = raw_input('Continue with insert? (y/N) ').lower()
+                    ans = input('Continue with insert? (y/N) ').lower()
                 if ans != 'y': return
                 
             if len(missing_voyage_ids) > 0:
-                ans = raw_input('There are ' + str(len(missing_voyage_ids)) + ' voyage IDs not found. Continue? (y/N/q) ').lower()
+                ans = input('There are ' + str(len(missing_voyage_ids)) + ' voyage IDs not found. Continue? (y/N/q) ').lower()
                 if ans == 'q':
                     print(sorted(missing_voyage_ids))
-                    ans = raw_input('Continue with db transaction? (y/N) ').lower()
+                    ans = input('Continue with db transaction? (y/N) ').lower()
                 if ans != 'y': return
 
             # Run all DB changes in a single transaction.
             with transaction.atomic():
                 if delete:
-                    for item in names.values():
+                    for item in list(names.values()):
                         item.delete()
                 for c in insert:
                     c.save()

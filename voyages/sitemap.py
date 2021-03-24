@@ -1,3 +1,6 @@
+from __future__ import unicode_literals
+from future import standard_library
+standard_library.install_aliases()
 from django.conf import settings
 import datetime
 import os
@@ -5,7 +8,7 @@ import stat
 from django.core.urlresolvers import reverse
 from django.contrib.sitemaps import Sitemap
 import posixpath
-import urllib
+import urllib.request, urllib.parse, urllib.error
 
 class ViewSitemap(Sitemap):
    # Reverse static views for XML sitemap.
@@ -87,7 +90,7 @@ class StaticSitemap(Sitemap):
         return None
 
     def items(self):
-        return self._items.keys()
+        return list(self._items.keys())
 
     def lastmod(self, obj):
         return self._items[obj]
