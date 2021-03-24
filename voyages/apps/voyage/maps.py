@@ -1,13 +1,18 @@
+from __future__ import absolute_import
+from __future__ import unicode_literals
 # Provide mapping data for voyages (e.g. routes) cached in the server.
 # For convenience, we use the same route nodes and directed links as
 # the javascript client side library.
+from future import standard_library
+standard_library.install_aliases()
+from builtins import object
 from math import sqrt
-from Queue import PriorityQueue
-from cache import VoyageCache, CachedGeo
+from queue import PriorityQueue
+from .cache import VoyageCache, CachedGeo
 from haversine import haversine as dist
 import os, re, threading
 
-class VoyageRoutes():
+class VoyageRoutes(object):
     def __init__(self, nodes, links, twoWay=False):
         self._nodes = nodes
         edges = [[] for _ in self._nodes]
@@ -77,7 +82,7 @@ class VoyageRoutes():
             if g.lat is None or g.lng is None: return None
             return (float(g.lat), float(g.lng)) 
         
-        for v in all_voyages.values():
+        for v in list(all_voyages.values()):
             if v.emb_pk is None or v.dis_pk is None: continue
             idx = (v.emb_pk, v.dis_pk)
             route = voyage_by_ends.get(idx)
@@ -99,7 +104,7 @@ class VoyageRoutes():
             self._voyage_routes[v.pk] = (route, idx)
         return self._voyage_routes
         
-class VoyageRoutesCache:
+class VoyageRoutesCache(object):
     _cache = None
     _lock = threading.Lock()
     

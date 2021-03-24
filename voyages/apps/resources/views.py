@@ -1,3 +1,6 @@
+from __future__ import absolute_import
+from __future__ import unicode_literals
+from builtins import str
 from django.shortcuts import render
 from django.core.cache import cache
 from django.core.urlresolvers import reverse
@@ -8,7 +11,7 @@ from haystack.query import SearchQuerySet
 from haystack.forms import SearchForm
 from .forms import *
 from .globals import *
-from search_indexes import AfricanNamesIndex
+from .search_indexes import AfricanNamesIndex
 from voyages.apps.common.models import get_values_from_haystack_results
 from voyages.apps.common.export import download_xls
 
@@ -552,7 +555,7 @@ def create_query_dict(var_list, embarkation_list, disembarkation_list, countries
 
     # Iterate and collect all options
     # Mark sections as True/False (collapsed/expanded)
-    for key, value in var_list.iteritems():
+    for key, value in var_list.items():
         if key in names_search_strict_text:
             if value != "":
                 query_dict[key] = value
@@ -571,15 +574,15 @@ def create_query_dict(var_list, embarkation_list, disembarkation_list, countries
                 sex_list.append(key.split("_")[1])
                 opened_tabs['section_1'] = True
         elif key.startswith("origin_"):
-            origins.append(long(key.split("_")[1]))
+            origins.append(int(key.split("_")[1]))
             opened_tabs['section_2'] = True
         elif key.startswith("checkbox_"):
-            embarkation.append(long(key.split("_")[-1]))
+            embarkation.append(int(key.split("_")[-1]))
             if len(key.split("_")[-1]) == 4:
                 embarkation_cq.append(key.split("_")[-1])
             opened_tabs['section_3'] = True
         elif key.startswith("disembarkation_"):
-            disembarkation.append(long(key.split("_")[-1]))
+            disembarkation.append(int(key.split("_")[-1]))
             opened_tabs['section_3'] = True
 
     # Include list-like fields if any of these have been chosen
@@ -620,8 +623,8 @@ def create_query_dict(var_list, embarkation_list, disembarkation_list, countries
         value = ""
 
         # Find names of checked disembarkation ports and add to the current query
-        for broad_region, region_list in disembarkation_list.iteritems():
-            for region, ports_list in region_list.iteritems():
+        for broad_region, region_list in disembarkation_list.items():
+            for region, ports_list in region_list.items():
                 for port in ports_list:
                     if port.value in disembarkation:
                         value += port.place + ", "
@@ -661,11 +664,11 @@ def get_embarkation_checked(embarkation_list, checked):
     emb_str = ""
 
     # Iterate through broad regions and their children (regions)
-    for broad_region, region_list in embarkation_list.iteritems():
+    for broad_region, region_list in embarkation_list.items():
         regions_to_add = []
 
         # Iterate through regions and their children (ports)
-        for region, port_list in region_list.iteritems():
+        for region, port_list in region_list.items():
             ports_to_add = []
 
             # Iterate through ports in region and collect ports to add to the current query

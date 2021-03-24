@@ -2,6 +2,12 @@
 # Python code based on original SPSS script.
 
 from __future__ import division # Make the / operator use floating point division.
+from __future__ import print_function
+from __future__ import unicode_literals
+from builtins import next
+from builtins import str
+from builtins import map
+from builtins import range
 from datetime import datetime
 from voyages.apps.voyage.models import *
 from django.core.exceptions import ObjectDoesNotExist
@@ -48,8 +54,8 @@ def fn_from_value(model):
             val = int(val)
             return model.objects.get(value=val)
         except ObjectDoesNotExist:
-            print 'Could not found ' + str(model) + ' with value=' + str(val)
-            print inspect.stack()
+            print('Could not found ' + str(model) + ' with value=' + str(val))
+            print(inspect.stack())
             return None
         except ValueError:
             return None
@@ -157,7 +163,7 @@ def recode_var(dict, value):
                  value.
     :param value: the value to search on the lists indexed by dict
     """
-    for key, lst in dict.items():
+    for key, lst in list(dict.items()):
         if value in lst:
             return key
     return None
@@ -196,7 +202,7 @@ def compute_imputed_vars(_interim, is_iam=False):
     }
     
     def _extract_year_from_sources(sources):
-        return first_valid(map(extract_year, [_named_sources.get(var_name) for var_name in sources]))
+        return first_valid(list(map(extract_year, [_named_sources.get(var_name) for var_name in sources])))
     
     # YEARDEP - Year voyage began (imputed)
     _yeardep_sources = ['datedepc', 'd1slatrc', 'dlslatrc', 'datarr34', 'ddepamc', 'datarr45']
@@ -248,8 +254,8 @@ def compute_imputed_vars(_interim, is_iam=False):
         8: [8],
         9: [9],
         10: [10],
-        15: range(11, 15),
-        30: range(16, 25)
+        15: list(range(11, 15)),
+        30: list(range(16, 25))
     }, natinimp)
     tonnage = _interim.tonnage_of_vessel
     tonmod = None
@@ -1635,7 +1641,7 @@ def compute_imputed_vars(_interim, is_iam=False):
     if sladvoy >= 1 and male2imp >= 1 and feml2imp == 0 and sladvoy > male2imp and male2imp: feml2imp = sladvoy - male2imp
 
     local_vars = locals()
-    local_vars = {k: v for k, v in local_vars.items() if not k.startswith('_')}
+    local_vars = {k: v for k, v in list(local_vars.items()) if not k.startswith('_')}
     
     # Recode zero numerical values to None and vice versa with an 'all or nothing' logic.
     _recode_var_names = [
@@ -1673,7 +1679,7 @@ def compute_imputed_vars(_interim, is_iam=False):
             local_vars[k] = None
     
     # Generate model field values.
-    imputed_field_values = {v[0]: v[1](local_vars[k]) for k, v in imputed_vars_model_map.items()}
+    imputed_field_values = {v[0]: v[1](local_vars[k]) for k, v in list(imputed_vars_model_map.items())}
     # Generate imputed number values.
     imputed_numbers = {k: float(local_vars[k]) if local_vars[k] else None for k in slave_number_var_names}
 
