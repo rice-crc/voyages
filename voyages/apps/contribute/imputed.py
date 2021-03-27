@@ -24,7 +24,7 @@ def all_or_nothing(var_names, value_dict):
     given by var_names. If any of the values is positive,
     set all entries of value_dict equal to None, or any
     keys in var_names missing to ZERO.
-    
+
     Otherwise, set all of the values for var_names to None.
     """
     nonzero = [value_dict[k] for k in var_names if value_dict.get(k)]
@@ -32,14 +32,14 @@ def all_or_nothing(var_names, value_dict):
         for k in var_names:
             if not value_dict.get(k):
                 value_dict[k] = 0
-    else:    
+    else:
         for k in var_names:
             value_dict[k] = None
 
 # Convenience id function
 def id(x):
     return x
-    
+
 def fn_from_value(model):
     def fn(val):
         if val is None or val == '':
@@ -54,7 +54,7 @@ def fn_from_value(model):
         except ValueError:
             return None
     return fn
-        
+
 # Construct a dictionary that will map imputed variable names to
 # _interimVoyage model fields, with an adapter function that converts
 # the value to the expected type (e.g., from numerical code value to
@@ -98,10 +98,10 @@ imputed_vars_model_map = {
 
 def clear_mod(x, mod):
     return x - (x % mod) if x is not None else None
-    
+
 def region_value(x):
     return clear_mod(x, 100)
-    
+
 def broad_value(x):
     return clear_mod(x, 10000) if x <= 80000 else 80000
 
@@ -126,7 +126,7 @@ def extract_datetime(csv_date):
     month = int(split[0])
     day = int(split[1])
     return datetime(year, month, day)
-    
+
 def date_diff(csv_date_one, csv_date_two):
     first = extract_datetime(csv_date_one)
     second = extract_datetime(csv_date_two)
@@ -164,7 +164,7 @@ def recode_var(dict, value):
 
 def threshold(value, min):
     return None if (value is not None and value < min) else value
-    
+
 def year_mod(the_year, mod, start):
     if the_year is None:
         return None
@@ -174,18 +174,18 @@ def compute_imputed_vars(_interim, is_iam=False):
     """
     This method will calculate all imputed variables.
     :return a triple (imputed_model_vars, imputed_numbers, imputed_dict)
-    
+
     The first is a dictionary with keys corresponding to InterimVoyage
     model fields and corresponding values.
-    
+
     The second is a dictionary with keys corresponding to the SPSS
     number variable name and the value being the number (or None).
-    
+
     The third is a dictionary that contains all values indexed
     by SPSS variable names, even those that do not belong to
     the model or numbers.
     """
-    
+
     _named_sources = {
         'd1slatrc': _interim.date_slave_purchase_began,
         'datarr34': _interim.date_first_slave_disembarkation,
@@ -194,18 +194,18 @@ def compute_imputed_vars(_interim, is_iam=False):
         'dlslatrc': _interim.date_vessel_left_last_slaving_port,
         'ddepamc': _interim.date_return_departure,
     }
-    
+
     def _extract_year_from_sources(sources):
         return first_valid(map(extract_year, [_named_sources.get(var_name) for var_name in sources]))
-    
+
     # YEARDEP - Year voyage began (imputed)
     _yeardep_sources = ['datedepc', 'd1slatrc', 'dlslatrc', 'datarr34', 'ddepamc', 'datarr45']
     yeardep = _extract_year_from_sources(_yeardep_sources)
-    
+
     # YEARAF - Year departed Africa (imputed)
     _yearaf_sources = ['dlslatrc', 'd1slatrc', 'datedepc', 'datarr34', 'ddepamc', 'datarr45']
     yearaf = _extract_year_from_sources(_yearaf_sources)
-    
+
     # YEARAM Year of arrival at port of disembarkation (imputed)
     _yearam_sources = ['datarr34', 'dlslatrc', 'd1slatrc', 'datedepc', 'ddepamc', 'datedepc', 'datarr45']
     if is_iam:
@@ -213,7 +213,7 @@ def compute_imputed_vars(_interim, is_iam=False):
         _yearam_sources.remove('datarr45')
         _yearam_sources.append('datarr38')
     yearam = _extract_year_from_sources(_yearam_sources)
-    
+
     year5 = year_mod(yearam, 5, 1500)
     year10 = year_mod(yearam, 10, 1500)
     year25 = year_mod(yearam, 25, 1500)
@@ -239,7 +239,7 @@ def compute_imputed_vars(_interim, is_iam=False):
         voy2imp = threshold(voy2imp, 10)
     else:
         voy2imp = threshold(voy2imp, 1)
-    
+
     natinimp = get_obj_value(_interim.national_carrier)
     natinimp = recode_var({
         3: [1, 2],
@@ -304,7 +304,7 @@ def compute_imputed_vars(_interim, is_iam=False):
             tonmod = 2.3 + (1.8 * tonnage)
         if tontype == 15 or tontype == 14 or tontype == 17:
             tonmod = 52.86 + (1.22 * tonnage)
-    
+
     fate2 = None
     fate3 = None
     fate4 = None
@@ -327,7 +327,7 @@ def compute_imputed_vars(_interim, is_iam=False):
                     196, 199],
                 6: [208, 308],
                 7: [28, 75, 89, 91, 98]
-            }, 
+            },
             _outcome_value
         )
         # fate3 - Outcome of voyage If vessel captured
@@ -353,7 +353,7 @@ def compute_imputed_vars(_interim, is_iam=False):
                 16: [201],
                 17: [211],
                 18: [212]
-            }, 
+            },
             _outcome_value
         )
         # fate4 - Outcome of voyage for owner
@@ -370,21 +370,21 @@ def compute_imputed_vars(_interim, is_iam=False):
                     187, 188, 189, 191, 192, 193, 194, 195, 196, 198, 199, 201, 202, 305, 306, 307, 309,
                     310],
                 4: [40, 70, 96, 208]
-            }, 
+            },
             _outcome_value
         )
-        
+
     # At the equivalent point in SPSS, regions are infered from places.
     # This is probably redundant given our models already connect places
     # to regions, so lines 293-406 of the SPSS script are skipped.
-    
+
     embport = get_obj_value(_interim.first_port_intended_embarkation)
     embport2 = get_obj_value(_interim.second_port_intended_embarkation)
-    
+
     _numbers = {n.var_name: n.number for n in _interim.slave_numbers.all()}
-    
+
     # mjbyptimp - Principal port of slave purchase (replaces majbuypt as imputed variable)
-    
+
     ncar13 = _numbers.get('NCAR13', 0)
     ncar15 = _numbers.get('NCAR15', 0)
     ncar17 = _numbers.get('NCAR17', 0)
@@ -396,12 +396,12 @@ def compute_imputed_vars(_interim, is_iam=False):
     pctemb = ncartot / tslavesd if tslavesd else None
     if pctemb == None and tslavesp:
         pctemb = ncartot / tslavesp
-    
+
     _places = [
         get_obj_value(_interim.first_place_of_slave_purchase),
         get_obj_value(_interim.second_place_of_slave_purchase),
         get_obj_value(_interim.third_place_of_slave_purchase)
-    ]    
+    ]
     regem1 = region_value(_places[0])
     regem2= region_value(_places[1])
     regem3 = region_value(_places[2])
@@ -409,7 +409,7 @@ def compute_imputed_vars(_interim, is_iam=False):
     if _places[0] and not _places[1] and not _places[2]: mjbyptimp = _places[0]
     if _places[1] and not _places[0] and not _places[2]: mjbyptimp = _places[1]
     if _places[2] and not _places[0] and not _places[1]: mjbyptimp = _places[2]
-    
+
     embreg = region_value(embport)
     embreg2 = region_value(embport2)
     if not _places[0] and not _places[1] and not _places[2]:
@@ -417,24 +417,24 @@ def compute_imputed_vars(_interim, is_iam=False):
         if not embport and embport2 >= 1: mjbyptimp = embport2
         if embport >= 1 and embport2 >= 1 and embreg == embreg2: mjbyptimp = embreg + 99
         if embport >= 1 and embport2 >= 1 and embreg != embreg2: mjbyptimp = 60999
-    
+
     if regem1 and regem1 == regem2 and not regem3: mjbyptimp = regem1 + 99
     if regem1 and regem1 == regem3 and not regem2: mjbyptimp = regem1 + 99
     if regem2 and regem2 == regem3 and not regem1: mjbyptimp = regem2 + 99
     if regem1 and regem1 == regem2 and regem1 == regem3: mjbyptimp = regem1 + 99
     if regem1 != regem2 and regem1 != regem3 and regem2 != regem3: mjbyptimp = 60999
-    
+
     if ncar13 > ncar15 and ncar13 > ncar17: mjbyptimp = _places[0]
     if ncar15 > ncar13 and ncar15 > ncar17: mjbyptimp = _places[1]
     if ncar17 > ncar13 and ncar17 > ncar15: mjbyptimp = _places[2]
-    
+
     if ncar13 == ncar15 and ncar13 > ncar17 and regem1 and regem1 == regem2: mjbyptimp = regem1 + 99
     if ncar13 == ncar15 and ncar13 > ncar17 and regem1 != regem2: mjbyptimp = 60999
     if ncar13 == ncar17 and ncar13 > ncar15 and regem1 and regem1 == regem3: mjbyptimp = regem1 + 99
     if ncar13 == ncar17 and ncar13 > ncar15 and regem1 != regem3: mjbyptimp = 60999
     if ncar15 == ncar17 and ncar15 > ncar13 and regem2 and regem2 == regem3: mjbyptimp = regem2 + 99
     if ncar15 == ncar17 and ncar15 > ncar17 and regem2 != regem3: mjbyptimp = 60999
-    
+
     if (pctemb and pctemb < 0.5) or (ncartot < 50 and not tslavesd and not tslavesp):
         if ncar13 == 0 and ncar15 > 0 and ncar17 > 0: mjbyptimp = _places[0]
         if ncar13 > 0 and ncar15 == 0 and ncar17 > 0: mjbyptimp = _places[1]
@@ -459,7 +459,7 @@ def compute_imputed_vars(_interim, is_iam=False):
         if _places[0] >=1 and _places[1] >=1 and _places[2] >= 1 and regem1 and regem1 == regem3: mjbyptimp = regem1 + 99
         if _places[0] >=1 and _places[1] >=1 and _places[2] >= 1 and regem2 and regem2 == regem3: mjbyptimp = regem2 + 99
         if _places[0] >=1 and _places[1] >=1 and _places[2] >= 1 and regem1 != regem2 and regem1 != regem3 and regem2 != regem3: mjbyptimp = 60999
-    
+
     _no_places = _places[0] is None and _places[1] is None and _places[2] is None
     if embport and embport2 is None and _no_places:
         mjbyptimp = embport
@@ -467,7 +467,7 @@ def compute_imputed_vars(_interim, is_iam=False):
         mjbyptimp = embport2
     if not mjbyptimp and get_obj_value(_interim.imputed_outcome_of_voyage_for_slaves) != 2 and (embport or embport2 or ncartot > 0 or _places[0] >= 1 or _places[1] >= 1 or _places[2] >= 1):
         mjbyptimp = 60999
-    
+
     majbuypt = get_obj_value(_interim.principal_place_of_slave_purchase)
     if not mjbyptimp and majbuypt >= 1: mjbyptimp = majbuypt
 
@@ -480,9 +480,9 @@ def compute_imputed_vars(_interim, is_iam=False):
         if ncar13 == ncar15 and regem1 == regem2: mjbyptimp = regem1 + 99
         if ncar13 == ncar15 and regem1 != regem2: mjbyptimp = 80299
         if mjbyptimp is None and majbuypt >= 1: mjbyptimp = majbuypt
-    
+
     # mjslptimp - Principal port of slave disembarkation
-    
+
     sla1port = get_obj_value(_interim.first_place_of_landing)
     adpsale1 = get_obj_value(_interim.second_place_of_landing)
     adpsale2 = get_obj_value(_interim.third_place_of_landing)
@@ -493,45 +493,45 @@ def compute_imputed_vars(_interim, is_iam=False):
     if sla1port and not adpsale1 and not adpsale2: mjslptimp = sla1port
     if adpsale1 and not sla1port and not adpsale2: mjslptimp = adpsale1
     if adpsale2 and not sla1port and not adpsale1: mjslptimp = adpsale2
-    
+
     regarr = region_value(arrport)
     regarr2 = region_value(arrport2)
-    
+
     if not sla1port and not adpsale1 and not adpsale2:
         if arrport >= 1 and not arrport2: mjslptimp = arrport
         if not arrport and arrport2 >= 1: mjslptimp = arrport2
         if arrport >= 1 and arrport2 >= 1 and regarr and regarr == regarr2: mjslptimp = regarr + 99
         if arrport >= 1 and arrport2 >= 1 and regarr != regarr2: mjslptimp = 99801
-        
+
     regdis1 = region_value(sla1port)
     regdis2 = region_value(adpsale1)
     regdis3 = region_value(adpsale2)
-    
+
     if regdis1 and regdis1 == regdis2 and not regdis3: mjslptimp = regdis1 + 99
     if regdis1 and regdis1 == regdis3 and not regdis2: mjslptimp = regdis1 + 99
     if regdis2 and regdis2 == regdis3 and not regdis1: mjslptimp = regdis2 + 99
     if regdis1 and regdis1 == regdis2 and regdis1 == regdis3: mjslptimp = regdis1 + 99
     if regdis1 != regdis2 and regdis1 != regdis3 and regdis2 != regdis3: mjslptimp = 99801
-    
+
     if sla1port and sla1port == adpsale1: mjslptimp = sla1port
     if sla1port and sla1port == adpsale2: mjslptimp = sla1port
     if adpsale1 and adpsale1 == adpsale2: mjslptimp = adpsale1
-    
+
     slas32 = _numbers.get('SLAS32', 0)
     slas36 = _numbers.get('SLAS36', 0)
     slas39 = _numbers.get('SLAS39', 0)
-    
+
     if slas32 > slas36 and slas32 > slas39: mjslptimp = sla1port
     if slas36 > slas32 and slas36 > slas39: mjslptimp = adpsale1
     if slas39 > slas32 and slas39 > slas36: mjslptimp = adpsale2
-    
+
     if slas32 == slas36 and slas32 > slas39 and regdis1 and regdis1 == regdis2: mjslptimp = regdis1 + 99
     if slas32 == slas36 and slas32 > slas39 and regdis1 != regdis2: mjslptimp = 99801
     if slas32 == slas39 and slas32 > slas36 and regdis1 and regdis1 == regdis3: mjslptimp = regdis1 + 99
     if slas32 == slas39 and slas32 > slas36 and regdis1 != regdis3: mjslptimp = 99801
     if slas36 == slas39 and slas36 > slas32 and regdis2 and regdis2 == regdis3: mjslptimp = regdis2 + 99
     if slas36 == slas39 and slas36 > slas39 and regdis2 != regdis3: mjslptimp = 99801
-    
+
     slaarriv = _numbers.get('SLAARRIV', 0)
     slastot = slas32 + slas36 + slas39
     pctdis = slastot / slaarriv if slaarriv else None
@@ -543,7 +543,7 @@ def compute_imputed_vars(_interim, is_iam=False):
             if slas36 == 0 and slas32 >= 1: mjslptimp = adpsale1
             if slas36 >= 1 and slas32 >= 1 and regdis1 == regdis2: mjslptimp = regdis1 + 99
             if slas36 >= 1 and slas32 >= 1 and regdis1 != regdis2: mjslptimp = 99801
-    
+
     if not slastot:
         if sla1port and adpsale1 and not adpsale2 and regdis1 == regdis2: mjslptimp = regdis1 + 99
         if sla1port and adpsale2 and not adpsale1 and regdis1 == regdis3: mjslptimp = regdis1 + 99
@@ -555,22 +555,22 @@ def compute_imputed_vars(_interim, is_iam=False):
         if sla1port and adpsale1 and adpsale2 and regdis1 == regdis3: mjslptimp = regdis1 + 99
         if sla1port and adpsale1 and adpsale2 and regdis2 == regdis3: mjslptimp = regdis2 + 99
         if sla1port and adpsale1 and adpsale2 and regdis1 != regdis2 and regdis1 != regdis3 and regdis2 != regdis3: mjslptimp = 99801
-        
+
     if arrport and not sla1port and not adpsale1 and not adpsale2: mjslptimp = arrport
-    
+
     if not mjslptimp and (fate2 == 1 or fate2 == 3 or fate2 == 5) and \
        (arrport or arrport2 or sla1port or adpsale1 or adpsale2 or slastot > 0): mjslptimp = 99801
-       
+
     majselpt = get_obj_value(_interim.principal_place_of_slave_disembarkation)
     if not mjslptimp and majselpt >= 1: mjslptimp = majselpt
-    
+
     # ptdepimp - Imputed port where voyage began
     portdep = get_obj_value(_interim.port_of_departure)
     ptdepimp = portdep
     if mjslptimp >= 50200 and mjslptimp < 50300 and portdep is None: ptdepimp=50299
     if mjslptimp >= 50300 and mjslptimp < 50400 and portdep is None: ptdepimp=50399
     if mjslptimp >= 50400 and mjslptimp < 50500 and portdep is None: ptdepimp=50422
-        
+
     _region_mod = 100
     deptregimp = clear_mod(ptdepimp, _region_mod)
     majbyimp = clear_mod(mjbyptimp, _region_mod)
@@ -579,168 +579,168 @@ def compute_imputed_vars(_interim, is_iam=False):
     majbyimp1 = broad_value(mjbyptimp)
     mjselimp1 = broad_value(mjslptimp)
     portret = get_obj_value(_interim.port_voyage_ended)
-    retrnreg1 = broad_value(portret)    
-    
+    retrnreg1 = broad_value(portret)
+
     # xmimpflag - Voyage groupings for estimating imputed slaves
     xmimpflag = None
     rig = get_obj_value(_interim.rig_of_vessel)
-    if (rig == 26 or rig == 29 or rig == 42 or rig == 43 or rig == 54 or rig == 59 or rig == 61 or rig == 65 or rig == 80 or rig == 86 or rig is None) and yearam >= 1626 and yearam < 1651: xmimpflag = 127 
-    if (rig == 26 or rig == 29 or rig == 42 or rig == 43 or rig == 54 or rig == 59 or rig == 61 or rig == 65 or rig == 80 or rig == 86 or rig is None) and yearam >= 1651 and yearam < 1676: xmimpflag = 128 
-    if (rig == 26 or rig == 29 or rig == 42 or rig == 43 or rig == 54 or rig == 59 or rig == 61 or rig == 65 or rig == 80 or rig == 86 or rig is None) and yearam >= 1676 and yearam < 1701: xmimpflag = 129 
-    if (rig == 26 or rig == 29 or rig == 42 or rig == 43 or rig == 54 or rig == 59 or rig == 61 or rig == 65 or rig == 80 or rig == 86 or rig is None) and yearam >= 1701 and yearam < 1726: xmimpflag = 130 
-    if (rig == 26 or rig == 29 or rig == 42 or rig == 43 or rig == 54 or rig == 59 or rig == 61 or rig == 65 or rig == 80 or rig == 86 or rig is None) and yearam >= 1726 and yearam < 1751: xmimpflag = 131 
-    if (rig == 26 or rig == 29 or rig == 42 or rig == 43 or rig == 54 or rig == 59 or rig == 61 or rig == 65 or rig == 80 or rig == 86 or rig is None) and yearam >= 1751 and yearam < 1776: xmimpflag = 132 
-    if (rig == 26 or rig == 29 or rig == 42 or rig == 43 or rig == 54 or rig == 59 or rig == 61 or rig == 65 or rig == 80 or rig == 86 or rig is None) and yearam >= 1776 and yearam < 1801: xmimpflag = 133 
-    if (rig == 26 or rig == 29 or rig == 42 or rig == 43 or rig == 54 or rig == 59 or rig == 61 or rig == 65 or rig == 80 or rig == 86 or rig is None) and yearam >= 1801 and yearam < 1826: xmimpflag = 134 
-    if (rig == 26 or rig == 29 or rig == 42 or rig == 43 or rig == 54 or rig == 59 or rig == 61 or rig == 65 or rig == 80 or rig == 86 or rig is None) and yearam >= 1826 and yearam < 1851: xmimpflag = 135 
-    if (rig == 26 or rig == 29 or rig == 42 or rig == 43 or rig == 54 or rig == 59 or rig == 61 or rig == 65 or rig == 80 or rig == 86 or rig is None) and yearam >= 1851 and yearam < 1876: xmimpflag = 136 
-    if yearam and yearam < 1700 and majbyimp == 60100: xmimpflag = 101 
-    if yearam and yearam >= 1700 and yearam < 1801 and majbyimp == 60100: xmimpflag = 102 
-    if yearam and yearam >= 1800 and majbyimp == 60100: xmimpflag = 103 
-    if yearam and yearam < 1700 and majbyimp == 60200: xmimpflag = 104 
-    if yearam and yearam >= 1700 and yearam < 1801 and majbyimp == 60200: xmimpflag = 105 
-    if yearam and yearam >= 1800 and majbyimp == 60200: xmimpflag = 106 
-    if yearam and yearam < 1700 and majbyimp == 60400: xmimpflag = 107 
-    if yearam and yearam >= 1700 and yearam < 1801 and majbyimp == 60400: xmimpflag = 108 
-    if yearam and yearam < 1700 and majbyimp == 60500: xmimpflag = 110 
-    if yearam and yearam >= 1700 and yearam < 1801 and majbyimp == 60500: xmimpflag = 111 
-    if yearam and yearam >= 1800 and majbyimp == 60500: xmimpflag = 112 
-    if yearam and yearam < 1700 and majbyimp == 60600: xmimpflag = 113 
-    if yearam and yearam >= 1700 and yearam < 1801 and majbyimp == 60600: xmimpflag = 114 
-    if yearam and yearam >= 1800 and majbyimp == 60600: xmimpflag = 115 
-    if yearam and yearam < 1700 and majbyimp == 60700: xmimpflag = 116 
-    if yearam and yearam >= 1700 and yearam < 1801 and majbyimp == 60700: xmimpflag = 117 
-    if yearam and yearam >= 1800 and majbyimp == 60700: xmimpflag = 118 
-    if yearam and yearam >= 1700 and yearam < 1801 and majbyimp == 60300: xmimpflag = 120 
-    if yearam and yearam >= 1800 and majbyimp == 60300: xmimpflag = 121 
-    if yearam and yearam < 1700 and majbyimp == 60800: xmimpflag = 122 
-    if yearam and yearam >= 1700 and yearam < 1801 and majbyimp == 60800: xmimpflag = 123 
-    if yearam and yearam >= 1800 and majbyimp == 60800: xmimpflag = 124 
-    if yearam and yearam < 1627: xmimpflag = 1 
-    if (yearam >= 1626 and yearam < 1642) and ((mjselimp >= 31100 and mjselimp < 32000) or mjselimp1 == 40000 or mjselimp == 80400): xmimpflag = 2 
-    if yearam and yearam < 1716 and mjselimp >= 36100 and mjselimp < 37000: xmimpflag = 3 
-    if yearam and yearam < 1701 and mjselimp == 50300: xmimpflag = 4 
-    if yearam and yearam >= 1700 and yearam < 1800 and mjselimp == 50300: xmimpflag = 5 
-    if yearam and yearam > 1799 and mjselimp == 50300: xmimpflag = 6 
-    if yearam and yearam < 1650 and natinimp == 8: xmimpflag = 7 
-    if yearam and yearam >= 1650 and yearam < 1674 and natinimp == 8: xmimpflag = 8 
-    if yearam and yearam >= 1674 and yearam < 1731 and natinimp == 8: xmimpflag = 9 
-    if yearam and yearam > 1730 and natinimp == 8: xmimpflag = 10 
-    if yearam and yearam < 1751 and mjselimp == 50200: xmimpflag = 11 
-    if yearam and yearam >= 1751 and yearam < 1776 and mjselimp == 50200: xmimpflag = 12 
-    if yearam and yearam >= 1776 and yearam < 1801 and mjselimp == 50200: xmimpflag = 13 
-    if yearam and yearam >= 1801 and yearam < 1826 and mjselimp == 50200: xmimpflag = 14 
-    if yearam and yearam > 1825 and mjselimp == 50200: xmimpflag = 15 
-    if yearam and yearam >= 1642 and yearam < 1663 and ((mjselimp >= 31100 and mjselimp < 32000) or mjselimp1 == 40000 or mjselimp == 80400): xmimpflag = 16 
-    if yearam and yearam >= 1794 and yearam < 1807 and natinimp == 15: xmimpflag = 157 
-    if yearam and yearam < 1794 and natinimp == 15: xmimpflag = 159 
-    if yearam and yearam < 1851 and natinimp == 9: xmimpflag = 99 
-    if yearam and yearam >= 1851 and yearam < 1876 and natinimp == 9: xmimpflag = 100 
-    if yearam and yearam < 1751 and rig == 1: xmimpflag = 17 
-    if yearam and yearam >= 1751 and yearam < 1776 and rig == 1: xmimpflag = 98 
-    if yearam and yearam >= 1776 and yearam < 1801 and rig == 1: xmimpflag = 18 
-    if yearam and yearam >= 1801 and yearam < 1826 and rig == 1: xmimpflag = 19 
-    if yearam and yearam >= 1826 and yearam < 1851 and rig == 1: xmimpflag = 20 
-    if yearam and yearam >= 1851 and yearam < 1876 and rig == 1: xmimpflag = 21 
-    if yearam and yearam < 1776 and rig == 2: xmimpflag = 22 
-    if yearam and yearam >= 1776 and yearam < 1801 and rig == 2: xmimpflag = 23 
-    if yearam and yearam >= 1801 and yearam < 1826 and rig == 2: xmimpflag = 24 
-    if yearam and yearam >= 1826 and yearam < 1851 and rig == 2: xmimpflag = 25 
-    if yearam and yearam >= 1851 and yearam < 1876 and rig == 2: xmimpflag = 26 
-    if yearam and yearam < 1751 and rig == 3: xmimpflag = 27 
-    if yearam and yearam >= 1751 and yearam < 1776 and rig == 3: xmimpflag = 28 
-    if yearam and yearam >= 1776 and yearam < 1801 and rig == 3: xmimpflag = 29 
-    if yearam and yearam >= 1801 and yearam < 1876 and rig == 3: xmimpflag = 30 
-    if yearam and yearam < 1726 and rig == 4: xmimpflag = 31 
-    if yearam and yearam >= 1726 and yearam < 1751 and rig == 4: xmimpflag = 32 
-    if yearam and yearam >= 1751 and yearam < 1776 and rig == 4: xmimpflag = 33 
-    if yearam and yearam >= 1776 and yearam < 1801 and rig == 4: xmimpflag = 34 
-    if yearam and yearam >= 1801 and yearam < 1826 and rig == 4: xmimpflag = 35 
-    if yearam and yearam >= 1826 and yearam < 1851 and rig == 4: xmimpflag = 36 
-    if yearam and yearam >= 1851 and yearam < 1876 and rig == 4: xmimpflag = 37 
-    if rig == 5: xmimpflag = 38 
-    if rig == 6: xmimpflag = 39 
-    if rig == 7: xmimpflag = 40 
-    if yearam and yearam < 1776 and rig == 8: xmimpflag = 41 
-    if yearam and yearam >= 1776 and yearam < 1801 and rig == 8: xmimpflag = 42 
-    if yearam and yearam >= 1801 and yearam < 1826 and rig == 8: xmimpflag = 43 
-    if yearam and yearam >= 1826 and yearam < 1851 and rig == 8: xmimpflag = 44 
-    if yearam and yearam >= 1851 and yearam < 1876 and rig == 8: xmimpflag = 45 
-    if yearam and yearam < 1826 and (rig == 9 or rig == 31): xmimpflag = 46 
-    if yearam and yearam >= 1826 and yearam < 1851 and (rig == 9 or rig == 31): xmimpflag = 47 
-    if yearam and yearam >= 1851 and yearam < 1876 and (rig == 9 or rig == 31): xmimpflag = 48 
-    if rig == 10 or rig == 24: xmimpflag = 49 
-    if rig == 11 or rig == 12: xmimpflag = 50 
-    if yearam and yearam < 1751 and rig == 13: xmimpflag = 51 
-    if yearam and yearam >= 1751 and yearam < 1776 and rig == 13: xmimpflag = 52 
-    if yearam and yearam >= 1776 and yearam < 1801 and rig == 13: xmimpflag = 53 
-    if yearam and yearam >= 1801 and yearam < 1826 and rig == 13: xmimpflag = 54 
-    if yearam and yearam >= 1826 and yearam < 1877 and rig == 13: xmimpflag = 55 
-    if rig == 15: xmimpflag = 56 
-    if rig == 20: xmimpflag = 57 
-    if rig == 21: xmimpflag = 58 
-    if rig == 23: xmimpflag = 59 
-    if yearam and yearam < 1751 and rig == 25: xmimpflag = 60 
-    if yearam and yearam >= 1751 and yearam < 1776 and rig == 25: xmimpflag = 61 
-    if yearam and yearam >= 1776 and yearam < 1801 and rig == 25: xmimpflag = 62 
-    if yearam and yearam >= 1801 and yearam < 1826 and rig == 25: xmimpflag = 63 
-    if yearam and yearam >= 1826 and yearam < 1851 and rig == 25: xmimpflag = 160 
-    if yearam and yearam >= 1851 and yearam < 1877 and rig == 25: xmimpflag = 64 
-    if yearam and yearam < 1751 and rig == 27: xmimpflag = 65 
-    if yearam and yearam >= 1751 and yearam < 1776 and rig == 27: xmimpflag = 66 
-    if yearam and yearam >= 1776 and yearam < 1801 and rig == 27: xmimpflag = 67 
-    if yearam and yearam >= 1801 and yearam < 1877 and rig == 27: xmimpflag = 68 
-    if rig == 28: xmimpflag = 69 
-    if yearam and yearam < 1726 and (rig == 30 or rig == 45 or rig == 63): xmimpflag = 70 
-    if yearam and yearam >= 1726 and yearam < 1776 and (rig == 30 or rig == 45 or rig == 63): xmimpflag = 71 
-    if yearam and yearam >= 1776 and yearam < 1801 and (rig == 30 or rig == 45 or rig == 63): xmimpflag = 97 
-    if yearam and yearam >= 1801 and yearam < 1826 and (rig == 30 or rig == 45 or rig == 63): xmimpflag = 72 
-    if yearam and yearam >= 1826 and yearam < 1876 and (rig == 30 or rig == 45 or rig == 63): xmimpflag = 85 
-    if rig == 32 or rig == 39: xmimpflag = 73 
-    if yearam and yearam < 1726 and rig == 35: xmimpflag = 74 
-    if yearam and yearam >= 1726 and yearam < 1751 and rig == 35: xmimpflag = 75 
-    if yearam and yearam >= 1751 and yearam < 1776 and rig == 35: xmimpflag = 76 
-    if yearam and yearam >= 1776 and yearam < 1801 and rig == 35: xmimpflag = 77 
-    if yearam and yearam >= 1801 and yearam < 1877 and rig == 35: xmimpflag = 78 
-    if yearam and yearam < 1776 and rig == 40: xmimpflag = 79 
-    if yearam and yearam >= 1776 and yearam < 1801 and rig == 40: xmimpflag = 80 
-    if yearam and yearam >= 1801 and yearam < 1826 and rig == 40: xmimpflag = 81 
-    if yearam and yearam >= 1826 and yearam < 1876 and rig == 40: xmimpflag = 82 
-    if rig == 41 or rig == 57: xmimpflag = 83 
-    if rig == 44: xmimpflag = 84 
-    if rig == 47: xmimpflag = 86 
-    if rig == 48: xmimpflag = 87 
-    if yearam and yearam < 1826 and (rig == 14 or rig == 36 or rig == 49): xmimpflag = 88 
-    if yearam and yearam >= 1826 and yearam < 1876 and (rig == 14 or rig == 36 or rig == 49): xmimpflag = 89 
-    if yearam and yearam < 1826 and (rig == 16 or rig == 51): xmimpflag = 90 
-    if yearam and yearam >= 1826 and yearam < 1851 and (rig == 16 or rig == 51): xmimpflag = 91 
-    if yearam and yearam >= 1851 and yearam < 1876 and (rig == 16 or rig == 51): xmimpflag = 92 
-    if rig == 17 or rig == 19 or rig == 52 or rig == 53: xmimpflag = 93 
-    if yearam and yearam < 1726 and rig == 60: xmimpflag = 94 
-    if yearam and yearam >= 1726 and yearam < 1826 and rig == 60: xmimpflag = 95 
-    if yearam and yearam >= 1826 and yearam < 1876 and rig == 60: xmimpflag = 96 
-    if yearam and yearam < 1776 and rig == 1 and natinimp == 9: xmimpflag = 137 
-    if yearam and yearam >= 1776 and yearam < 1801 and rig == 1 and natinimp == 9: xmimpflag = 138 
-    if yearam and yearam >= 1801 and yearam < 1826 and rig == 1 and natinimp == 9: xmimpflag = 139 
-    if yearam and yearam > 1825 and rig == 1 and natinimp == 9: xmimpflag = 140 
-    if yearam and yearam < 1776 and (rig == 2 or rig == 5) and natinimp == 9: xmimpflag = 141 
-    if yearam and yearam >= 1776 and yearam < 1801 and (rig == 2 or rig == 5) and natinimp == 9: xmimpflag = 142 
-    if yearam and yearam >= 1801 and yearam < 1826 and rig == 5 and natinimp == 9: xmimpflag = 143 
-    if yearam and yearam > 1825 and (rig == 2 or rig == 5) and natinimp == 9: xmimpflag = 145 
-    if yearam and yearam < 1776 and rig == 4 and natinimp == 9: xmimpflag = 146 
-    if yearam and yearam >= 1776 and yearam < 1801 and rig == 4 and natinimp == 9: xmimpflag = 147 
-    if yearam and yearam >= 1801 and yearam < 1826 and rig == 4 and natinimp == 9: xmimpflag = 148 
-    if yearam and yearam > 1825 and rig == 4 and natinimp == 9: xmimpflag = 149 
-    if yearam and yearam < 1776 and rig == 8 and natinimp == 9: xmimpflag = 150 
-    if yearam and yearam >= 1776 and yearam < 1826 and rig == 8 and natinimp == 9: xmimpflag = 151 
-    if yearam and yearam > 1825 and rig == 8 and natinimp == 9: xmimpflag = 152 
-    if yearam and yearam >= 1826 and yearam < 1876 and rig == 9 and natinimp == 9: xmimpflag = 154 
-    if rig == 27 and natinimp == 9: xmimpflag = 155 
+    if (rig == 26 or rig == 29 or rig == 42 or rig == 43 or rig == 54 or rig == 59 or rig == 61 or rig == 65 or rig == 80 or rig == 86 or rig is None) and yearam >= 1626 and yearam < 1651: xmimpflag = 127
+    if (rig == 26 or rig == 29 or rig == 42 or rig == 43 or rig == 54 or rig == 59 or rig == 61 or rig == 65 or rig == 80 or rig == 86 or rig is None) and yearam >= 1651 and yearam < 1676: xmimpflag = 128
+    if (rig == 26 or rig == 29 or rig == 42 or rig == 43 or rig == 54 or rig == 59 or rig == 61 or rig == 65 or rig == 80 or rig == 86 or rig is None) and yearam >= 1676 and yearam < 1701: xmimpflag = 129
+    if (rig == 26 or rig == 29 or rig == 42 or rig == 43 or rig == 54 or rig == 59 or rig == 61 or rig == 65 or rig == 80 or rig == 86 or rig is None) and yearam >= 1701 and yearam < 1726: xmimpflag = 130
+    if (rig == 26 or rig == 29 or rig == 42 or rig == 43 or rig == 54 or rig == 59 or rig == 61 or rig == 65 or rig == 80 or rig == 86 or rig is None) and yearam >= 1726 and yearam < 1751: xmimpflag = 131
+    if (rig == 26 or rig == 29 or rig == 42 or rig == 43 or rig == 54 or rig == 59 or rig == 61 or rig == 65 or rig == 80 or rig == 86 or rig is None) and yearam >= 1751 and yearam < 1776: xmimpflag = 132
+    if (rig == 26 or rig == 29 or rig == 42 or rig == 43 or rig == 54 or rig == 59 or rig == 61 or rig == 65 or rig == 80 or rig == 86 or rig is None) and yearam >= 1776 and yearam < 1801: xmimpflag = 133
+    if (rig == 26 or rig == 29 or rig == 42 or rig == 43 or rig == 54 or rig == 59 or rig == 61 or rig == 65 or rig == 80 or rig == 86 or rig is None) and yearam >= 1801 and yearam < 1826: xmimpflag = 134
+    if (rig == 26 or rig == 29 or rig == 42 or rig == 43 or rig == 54 or rig == 59 or rig == 61 or rig == 65 or rig == 80 or rig == 86 or rig is None) and yearam >= 1826 and yearam < 1851: xmimpflag = 135
+    if (rig == 26 or rig == 29 or rig == 42 or rig == 43 or rig == 54 or rig == 59 or rig == 61 or rig == 65 or rig == 80 or rig == 86 or rig is None) and yearam >= 1851 and yearam < 1876: xmimpflag = 136
+    if yearam and yearam < 1700 and majbyimp == 60100: xmimpflag = 101
+    if yearam and yearam >= 1700 and yearam < 1801 and majbyimp == 60100: xmimpflag = 102
+    if yearam and yearam >= 1800 and majbyimp == 60100: xmimpflag = 103
+    if yearam and yearam < 1700 and majbyimp == 60200: xmimpflag = 104
+    if yearam and yearam >= 1700 and yearam < 1801 and majbyimp == 60200: xmimpflag = 105
+    if yearam and yearam >= 1800 and majbyimp == 60200: xmimpflag = 106
+    if yearam and yearam < 1700 and majbyimp == 60400: xmimpflag = 107
+    if yearam and yearam >= 1700 and yearam < 1801 and majbyimp == 60400: xmimpflag = 108
+    if yearam and yearam < 1700 and majbyimp == 60500: xmimpflag = 110
+    if yearam and yearam >= 1700 and yearam < 1801 and majbyimp == 60500: xmimpflag = 111
+    if yearam and yearam >= 1800 and majbyimp == 60500: xmimpflag = 112
+    if yearam and yearam < 1700 and majbyimp == 60600: xmimpflag = 113
+    if yearam and yearam >= 1700 and yearam < 1801 and majbyimp == 60600: xmimpflag = 114
+    if yearam and yearam >= 1800 and majbyimp == 60600: xmimpflag = 115
+    if yearam and yearam < 1700 and majbyimp == 60700: xmimpflag = 116
+    if yearam and yearam >= 1700 and yearam < 1801 and majbyimp == 60700: xmimpflag = 117
+    if yearam and yearam >= 1800 and majbyimp == 60700: xmimpflag = 118
+    if yearam and yearam >= 1700 and yearam < 1801 and majbyimp == 60300: xmimpflag = 120
+    if yearam and yearam >= 1800 and majbyimp == 60300: xmimpflag = 121
+    if yearam and yearam < 1700 and majbyimp == 60800: xmimpflag = 122
+    if yearam and yearam >= 1700 and yearam < 1801 and majbyimp == 60800: xmimpflag = 123
+    if yearam and yearam >= 1800 and majbyimp == 60800: xmimpflag = 124
+    if yearam and yearam < 1627: xmimpflag = 1
+    if (yearam >= 1626 and yearam < 1642) and ((mjselimp >= 31100 and mjselimp < 32000) or mjselimp1 == 40000 or mjselimp == 80400): xmimpflag = 2
+    if yearam and yearam < 1716 and mjselimp >= 36100 and mjselimp < 37000: xmimpflag = 3
+    if yearam and yearam < 1701 and mjselimp == 50300: xmimpflag = 4
+    if yearam and yearam >= 1700 and yearam < 1800 and mjselimp == 50300: xmimpflag = 5
+    if yearam and yearam > 1799 and mjselimp == 50300: xmimpflag = 6
+    if yearam and yearam < 1650 and natinimp == 8: xmimpflag = 7
+    if yearam and yearam >= 1650 and yearam < 1674 and natinimp == 8: xmimpflag = 8
+    if yearam and yearam >= 1674 and yearam < 1731 and natinimp == 8: xmimpflag = 9
+    if yearam and yearam > 1730 and natinimp == 8: xmimpflag = 10
+    if yearam and yearam < 1751 and mjselimp == 50200: xmimpflag = 11
+    if yearam and yearam >= 1751 and yearam < 1776 and mjselimp == 50200: xmimpflag = 12
+    if yearam and yearam >= 1776 and yearam < 1801 and mjselimp == 50200: xmimpflag = 13
+    if yearam and yearam >= 1801 and yearam < 1826 and mjselimp == 50200: xmimpflag = 14
+    if yearam and yearam > 1825 and mjselimp == 50200: xmimpflag = 15
+    if yearam and yearam >= 1642 and yearam < 1663 and ((mjselimp >= 31100 and mjselimp < 32000) or mjselimp1 == 40000 or mjselimp == 80400): xmimpflag = 16
+    if yearam and yearam >= 1794 and yearam < 1807 and natinimp == 15: xmimpflag = 157
+    if yearam and yearam < 1794 and natinimp == 15: xmimpflag = 159
+    if yearam and yearam < 1851 and natinimp == 9: xmimpflag = 99
+    if yearam and yearam >= 1851 and yearam < 1876 and natinimp == 9: xmimpflag = 100
+    if yearam and yearam < 1751 and rig == 1: xmimpflag = 17
+    if yearam and yearam >= 1751 and yearam < 1776 and rig == 1: xmimpflag = 98
+    if yearam and yearam >= 1776 and yearam < 1801 and rig == 1: xmimpflag = 18
+    if yearam and yearam >= 1801 and yearam < 1826 and rig == 1: xmimpflag = 19
+    if yearam and yearam >= 1826 and yearam < 1851 and rig == 1: xmimpflag = 20
+    if yearam and yearam >= 1851 and yearam < 1876 and rig == 1: xmimpflag = 21
+    if yearam and yearam < 1776 and rig == 2: xmimpflag = 22
+    if yearam and yearam >= 1776 and yearam < 1801 and rig == 2: xmimpflag = 23
+    if yearam and yearam >= 1801 and yearam < 1826 and rig == 2: xmimpflag = 24
+    if yearam and yearam >= 1826 and yearam < 1851 and rig == 2: xmimpflag = 25
+    if yearam and yearam >= 1851 and yearam < 1876 and rig == 2: xmimpflag = 26
+    if yearam and yearam < 1751 and rig == 3: xmimpflag = 27
+    if yearam and yearam >= 1751 and yearam < 1776 and rig == 3: xmimpflag = 28
+    if yearam and yearam >= 1776 and yearam < 1801 and rig == 3: xmimpflag = 29
+    if yearam and yearam >= 1801 and yearam < 1876 and rig == 3: xmimpflag = 30
+    if yearam and yearam < 1726 and rig == 4: xmimpflag = 31
+    if yearam and yearam >= 1726 and yearam < 1751 and rig == 4: xmimpflag = 32
+    if yearam and yearam >= 1751 and yearam < 1776 and rig == 4: xmimpflag = 33
+    if yearam and yearam >= 1776 and yearam < 1801 and rig == 4: xmimpflag = 34
+    if yearam and yearam >= 1801 and yearam < 1826 and rig == 4: xmimpflag = 35
+    if yearam and yearam >= 1826 and yearam < 1851 and rig == 4: xmimpflag = 36
+    if yearam and yearam >= 1851 and yearam < 1876 and rig == 4: xmimpflag = 37
+    if rig == 5: xmimpflag = 38
+    if rig == 6: xmimpflag = 39
+    if rig == 7: xmimpflag = 40
+    if yearam and yearam < 1776 and rig == 8: xmimpflag = 41
+    if yearam and yearam >= 1776 and yearam < 1801 and rig == 8: xmimpflag = 42
+    if yearam and yearam >= 1801 and yearam < 1826 and rig == 8: xmimpflag = 43
+    if yearam and yearam >= 1826 and yearam < 1851 and rig == 8: xmimpflag = 44
+    if yearam and yearam >= 1851 and yearam < 1876 and rig == 8: xmimpflag = 45
+    if yearam and yearam < 1826 and (rig == 9 or rig == 31): xmimpflag = 46
+    if yearam and yearam >= 1826 and yearam < 1851 and (rig == 9 or rig == 31): xmimpflag = 47
+    if yearam and yearam >= 1851 and yearam < 1876 and (rig == 9 or rig == 31): xmimpflag = 48
+    if rig == 10 or rig == 24: xmimpflag = 49
+    if rig == 11 or rig == 12: xmimpflag = 50
+    if yearam and yearam < 1751 and rig == 13: xmimpflag = 51
+    if yearam and yearam >= 1751 and yearam < 1776 and rig == 13: xmimpflag = 52
+    if yearam and yearam >= 1776 and yearam < 1801 and rig == 13: xmimpflag = 53
+    if yearam and yearam >= 1801 and yearam < 1826 and rig == 13: xmimpflag = 54
+    if yearam and yearam >= 1826 and yearam < 1877 and rig == 13: xmimpflag = 55
+    if rig == 15: xmimpflag = 56
+    if rig == 20: xmimpflag = 57
+    if rig == 21: xmimpflag = 58
+    if rig == 23: xmimpflag = 59
+    if yearam and yearam < 1751 and rig == 25: xmimpflag = 60
+    if yearam and yearam >= 1751 and yearam < 1776 and rig == 25: xmimpflag = 61
+    if yearam and yearam >= 1776 and yearam < 1801 and rig == 25: xmimpflag = 62
+    if yearam and yearam >= 1801 and yearam < 1826 and rig == 25: xmimpflag = 63
+    if yearam and yearam >= 1826 and yearam < 1851 and rig == 25: xmimpflag = 160
+    if yearam and yearam >= 1851 and yearam < 1877 and rig == 25: xmimpflag = 64
+    if yearam and yearam < 1751 and rig == 27: xmimpflag = 65
+    if yearam and yearam >= 1751 and yearam < 1776 and rig == 27: xmimpflag = 66
+    if yearam and yearam >= 1776 and yearam < 1801 and rig == 27: xmimpflag = 67
+    if yearam and yearam >= 1801 and yearam < 1877 and rig == 27: xmimpflag = 68
+    if rig == 28: xmimpflag = 69
+    if yearam and yearam < 1726 and (rig == 30 or rig == 45 or rig == 63): xmimpflag = 70
+    if yearam and yearam >= 1726 and yearam < 1776 and (rig == 30 or rig == 45 or rig == 63): xmimpflag = 71
+    if yearam and yearam >= 1776 and yearam < 1801 and (rig == 30 or rig == 45 or rig == 63): xmimpflag = 97
+    if yearam and yearam >= 1801 and yearam < 1826 and (rig == 30 or rig == 45 or rig == 63): xmimpflag = 72
+    if yearam and yearam >= 1826 and yearam < 1876 and (rig == 30 or rig == 45 or rig == 63): xmimpflag = 85
+    if rig == 32 or rig == 39: xmimpflag = 73
+    if yearam and yearam < 1726 and rig == 35: xmimpflag = 74
+    if yearam and yearam >= 1726 and yearam < 1751 and rig == 35: xmimpflag = 75
+    if yearam and yearam >= 1751 and yearam < 1776 and rig == 35: xmimpflag = 76
+    if yearam and yearam >= 1776 and yearam < 1801 and rig == 35: xmimpflag = 77
+    if yearam and yearam >= 1801 and yearam < 1877 and rig == 35: xmimpflag = 78
+    if yearam and yearam < 1776 and rig == 40: xmimpflag = 79
+    if yearam and yearam >= 1776 and yearam < 1801 and rig == 40: xmimpflag = 80
+    if yearam and yearam >= 1801 and yearam < 1826 and rig == 40: xmimpflag = 81
+    if yearam and yearam >= 1826 and yearam < 1876 and rig == 40: xmimpflag = 82
+    if rig == 41 or rig == 57: xmimpflag = 83
+    if rig == 44: xmimpflag = 84
+    if rig == 47: xmimpflag = 86
+    if rig == 48: xmimpflag = 87
+    if yearam and yearam < 1826 and (rig == 14 or rig == 36 or rig == 49): xmimpflag = 88
+    if yearam and yearam >= 1826 and yearam < 1876 and (rig == 14 or rig == 36 or rig == 49): xmimpflag = 89
+    if yearam and yearam < 1826 and (rig == 16 or rig == 51): xmimpflag = 90
+    if yearam and yearam >= 1826 and yearam < 1851 and (rig == 16 or rig == 51): xmimpflag = 91
+    if yearam and yearam >= 1851 and yearam < 1876 and (rig == 16 or rig == 51): xmimpflag = 92
+    if rig == 17 or rig == 19 or rig == 52 or rig == 53: xmimpflag = 93
+    if yearam and yearam < 1726 and rig == 60: xmimpflag = 94
+    if yearam and yearam >= 1726 and yearam < 1826 and rig == 60: xmimpflag = 95
+    if yearam and yearam >= 1826 and yearam < 1876 and rig == 60: xmimpflag = 96
+    if yearam and yearam < 1776 and rig == 1 and natinimp == 9: xmimpflag = 137
+    if yearam and yearam >= 1776 and yearam < 1801 and rig == 1 and natinimp == 9: xmimpflag = 138
+    if yearam and yearam >= 1801 and yearam < 1826 and rig == 1 and natinimp == 9: xmimpflag = 139
+    if yearam and yearam > 1825 and rig == 1 and natinimp == 9: xmimpflag = 140
+    if yearam and yearam < 1776 and (rig == 2 or rig == 5) and natinimp == 9: xmimpflag = 141
+    if yearam and yearam >= 1776 and yearam < 1801 and (rig == 2 or rig == 5) and natinimp == 9: xmimpflag = 142
+    if yearam and yearam >= 1801 and yearam < 1826 and rig == 5 and natinimp == 9: xmimpflag = 143
+    if yearam and yearam > 1825 and (rig == 2 or rig == 5) and natinimp == 9: xmimpflag = 145
+    if yearam and yearam < 1776 and rig == 4 and natinimp == 9: xmimpflag = 146
+    if yearam and yearam >= 1776 and yearam < 1801 and rig == 4 and natinimp == 9: xmimpflag = 147
+    if yearam and yearam >= 1801 and yearam < 1826 and rig == 4 and natinimp == 9: xmimpflag = 148
+    if yearam and yearam > 1825 and rig == 4 and natinimp == 9: xmimpflag = 149
+    if yearam and yearam < 1776 and rig == 8 and natinimp == 9: xmimpflag = 150
+    if yearam and yearam >= 1776 and yearam < 1826 and rig == 8 and natinimp == 9: xmimpflag = 151
+    if yearam and yearam > 1825 and rig == 8 and natinimp == 9: xmimpflag = 152
+    if yearam and yearam >= 1826 and yearam < 1876 and rig == 9 and natinimp == 9: xmimpflag = 154
+    if rig == 27 and natinimp == 9: xmimpflag = 155
     if rig == 35 and natinimp == 9: xmimpflag = 156
-    
+
     # slaximp - Imputed number of slaves embarked
     # slamimp - Imputed number of slaves disembarked
-    
+
     slaximp = None
     slamimp = None
     captive_threshold = 0 if is_iam else 50
@@ -750,14 +750,14 @@ def compute_imputed_vars(_interim, is_iam=False):
     if not tslavesd and not tslavesp and not slaarriv and ncartot > slastot and slastot: slaximp = ncartot
     if not tslavesd and not tslavesp and not slaarriv and not slastot and ncartot < captive_threshold: ncartot = None
     if not tslavesd and not tslavesp and not slaarriv and not slastot and ncartot >= captive_threshold: slaximp = ncartot
-    
+
     if slaarriv >= 1: slamimp = slaarriv
     if not slaarriv and slastot <= tslavesd: slamimp = slastot
     if not slaarriv and not tslavesd and slastot <= tslavesp: slamimp = slastot
     if not slaarriv and not tslavesd and not tslavesp and slastot <= ncartot: slamimp = slastot
     if not tslavesd and not tslavesp and not slaarriv and not ncartot and slastot < captive_threshold: slastot = None
     if not slaarriv and not tslavesd and not tslavesd and not ncartot and slastot >= captive_threshold: slamimp = slastot
-    
+
     if xmimpflag == 127 and slaximp >= 1 and not slaarriv and not slastot: slamimp = slaximp - (slaximp * 0.165107561642471)
     if xmimpflag == 127 and slamimp >= 1 and not tslavesd and not tslavesp and not ncartot: slaximp = slamimp / (1 - 0.165107561642471)
     if xmimpflag == 127 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slamimp = 163.181286549708
@@ -1362,7 +1362,7 @@ def compute_imputed_vars(_interim, is_iam=False):
     if xmimpflag == 156 and slamimp >= 1 and not tslavesd and not tslavesp and not ncartot: slaximp = slamimp / (1 - 0.17641709128796)
     if xmimpflag == 156 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slamimp = 118.333333333333
     if xmimpflag == 156 and not tslavesd and not tslavesp and not ncartot and not slaarriv and not slastot: slaximp = 118.333333333333 / (1 - 0.17641709128796 )
-    
+
     sladvoy = _numbers.get('SLADVOY')
     if sladvoy > 0 and not slaarriv and not tslavesd and not tslavesp and not ncartot and slastot >= 50: slaximp = slastot + sladvoy
     if sladvoy > 0 and not tslavesd and not tslavesp and not ncartot and slaarriv > 1: slaximp = slaarriv + sladvoy
@@ -1370,11 +1370,11 @@ def compute_imputed_vars(_interim, is_iam=False):
 
     slaximp = round(slaximp) if slaximp else None
     slamimp = round(slamimp) if slamimp else None
-    
+
     # tslmtimp - Imputed total of slaves embarked for mortality calculation
     # vymrtimp - Imputed number of slaves died in middle passage
     # vymrtrat - Slaves died on voyage / Slaves embarked
-    
+
     vymrtimp = sladvoy
     tslmtimp = None
     slaarriv = _numbers.get('SLAARRIV')
@@ -1382,14 +1382,14 @@ def compute_imputed_vars(_interim, is_iam=False):
     if vymrtimp >= 0: tslmtimp = tslavesd
     if (not tslavesd and vymrtimp >= 0) and slaarriv >= 1: tslmtimp = slaarriv + vymrtimp
     vymrtrat = vymrtimp / tslmtimp if vymrtimp and tslmtimp else None
-    
+
     # AGE AND GENDER VARIABLES INCORPORATING INFORMATION FROM VARIABLES 4,5,6
-	
+
 	# adlt1imp - Imputed number of adults among embarked slaves
 	# chil1imp - Imputed number of children among embarked slaves
 	# male1imp - Imputed number of males among embarked slaves
 	# feml1imp - Imputed number of females among embarked slaves
-	# slavema1 - Number of embarked slaves with age identified 
+	# slavema1 - Number of embarked slaves with age identified
 	# slavemx1 - Number of embarkedslaves with sex identified
 	# slavmax1 - Number of embarked slaves identified by age and sex
 	# menrat1 - Ratio of men among embarked slaves
@@ -1398,47 +1398,47 @@ def compute_imputed_vars(_interim, is_iam=False):
 	# girlrat1 - Ratio of girls among embarked slaves
 	# chilrat1 - Child ratio among embarked slaves
 	# malrat1 - Male ratio among embarked slaves
-	
+
 	# adlt4imp - Imputed number of adults embarked at second port of purchase
 	# chil4imp - Imputed number of children embarked at second port of purchase
 	# male4imp - Imputed number of males embarked at second port of purchase
 	# feml4imp - Imputed number of females embarked at second port of purchase
-    
+
     men1 = _numbers.get('MEN1', 0)
     men4 = _numbers.get('MEN4', 0)
     men5 = _numbers.get('MEN5', 0)
-    
+
     women1 = _numbers.get('WOMEN1', 0)
     women4 = _numbers.get('WOMEN4', 0)
     women5 = _numbers.get('WOMEN5', 0)
-    
+
     adult1 = _numbers.get('ADULT1', 0)
     adult4 = _numbers.get('ADULT4', 0)
     adult5 = _numbers.get('ADULT5', 0)
-    
+
     girl1 = _numbers.get('GIRL1', 0)
     girl4 = _numbers.get('GIRL4', 0)
     girl5 = _numbers.get('GIRL5', 0)
-    
+
     boy1 = _numbers.get('BOY1', 0)
     boy4 = _numbers.get('BOY4', 0)
     boy5 = _numbers.get('BOY5', 0)
-    
+
     child1 = _numbers.get('CHILD1', 0)
     child4 = _numbers.get('CHILD4', 0)
     child5 = _numbers.get('CHILD5', 0)
-     
+
     infant1 = _numbers.get('INFANT1', 0)
     infant4 = _numbers.get('INFANT4', 0)
-     
+
     male1 = _numbers.get('MALE1', 0)
     male4 = _numbers.get('MALE4', 0)
     male5 = _numbers.get('MALE5', 0)
-     
+
     female1 = _numbers.get('FEMALE1', 0)
     female4 = _numbers.get('FEMALE4', 0)
     female5 = _numbers.get('FEMALE5', 0)
-    
+
     adlt1imp = men1 + women1 + adult1 + men4 + women4 + adult4 + men5 + women5 + adult5
     chil1imp = boy1 + girl1 + child1 + infant1 + boy4 + girl4 + child4 + infant4 + boy5 + girl5 + child5
     male1imp = male1 + male4 + male5
@@ -1466,7 +1466,7 @@ def compute_imputed_vars(_interim, is_iam=False):
     if slavmax1 >= 20: womrat1 = (women1 + women4 + women5) / slavmax1
     if slavmax1 >= 20: boyrat1 = (boy1 + boy4 + boy5) / slavmax1
     if slavmax1 >= 20: girlrat1 = (girl1 + girl4 + girl5) / slavmax1
-    
+
 	# adlt3imp - Imputed number of adults among disembarked slaves
 	# chil3imp - Imputed number of children among disembarked slaves
 	# male3imp - Imputed number of males among disembarked slaves
@@ -1480,52 +1480,52 @@ def compute_imputed_vars(_interim, is_iam=False):
 	# girlrat3 - Ratio of girls among disembarked slaves
 	# chilrat3 - Child ratio among disembarked slaves
 	# malrat3 - Male ratio among disembarked slaves
-    
+
     men3 = _numbers.get('MEN3', 0)
     men6 = _numbers.get('MEN6', 0)
-    
+
     women3 = _numbers.get('WOMEN3', 0)
     women6 = _numbers.get('WOMEN6', 0)
-    
+
     adult3 = _numbers.get('ADULT3', 0)
     adult6 = _numbers.get('ADULT6', 0)
-    
+
     girl3 = _numbers.get('GIRL3', 0)
     girl6 = _numbers.get('GIRL6', 0)
-    
+
     boy3 = _numbers.get('BOY3', 0)
     boy6 = _numbers.get('BOY6', 0)
-    
+
     child3 = _numbers.get('CHILD3', 0)
     child6 = _numbers.get('CHILD6', 0)
-    
+
     infant3 = _numbers.get('INFANT3', 0)
-    
+
     male3 = _numbers.get('MALE3', 0)
     male6 = _numbers.get('MALE6', 0)
-    
+
     female3 = _numbers.get('FEMALE3', 0)
     female6 = _numbers.get('FEMALE6', 0)
-    
+
     adlt3imp = men3 + women3 + adult3 + men6 + women6 + adult6
     chil3imp = boy3 + girl3 + child3 + infant3 + boy6 + girl6 + child6
-    
+
     male3imp = male3 + male6
     feml3imp = female3 + female6
     if male3imp == 0: male3imp = men3 + boy3 + men6 + boy6
     if feml3imp == 0: feml3imp = women3 + girl3 + women6 + girl6
-    
+
     slavema3 = threshold(adlt3imp + chil3imp, 20)
     slavemx3 = threshold(male3imp + feml3imp, 20)
     slavmax3 = threshold(men3 + women3 + boy3 + girl3 + men6 + women6 + boy6 + girl6, 20)
-    
+
     if slavema3 is None:
         adlt3imp = None
         chil3imp = None
     if slavemx3 is None:
         feml3imp = None
         male3imp = None
-    
+
     chilrat3 = chil3imp / slavema3 if slavema3 else None
     malrat3 = male3imp / slavemx3 if slavemx3 else None
     menrat3 = None
@@ -1536,7 +1536,7 @@ def compute_imputed_vars(_interim, is_iam=False):
     if slavmax3 >= 20: womrat3 = (women3 + women6) / slavmax3
     if slavmax3 >= 20: boyrat3 = (boy3 + boy6) / slavmax3
     if slavmax3 >= 20: girlrat3 = (girl3 + girl6) / slavmax3
-    
+
     # men7 - Imputed men when leaving Africa or arriving at ports of landing
 	# women7 - Imputed women when leaving Africa or arriving at ports of landing
 	# boy7 - Imputed boys when leaving Africa or arriving at ports of landing
@@ -1571,7 +1571,7 @@ def compute_imputed_vars(_interim, is_iam=False):
     girlrat7 = None
     chilrat7 = None
     malrat7 = None
-    
+
     if slavema3 >= 20: slavema7 = slavema3
     if slavemx3 >= 20: slavemx7 = slavemx3
     if slavmax3 >= 20: slavmax7 = slavmax3
@@ -1607,23 +1607,23 @@ def compute_imputed_vars(_interim, is_iam=False):
     if girlrat3 is None and girlrat1 >= 0: girlrat7 = girlrat1
     if malrat3 is None and malrat1 >= 0: malrat7 = malrat1
     if chilrat3 is None and chilrat1 >= 0: chilrat7 = chilrat1
-    
+
 	# adlt2imp - Imputed number of adults who died on middle passage
 	# chil2imp - Imputed number of children who died on middle passage
 	# male2imp - Imputed number of males who died on middle passage
 	# feml2imp - Imputed number of females who died on middle passage
-    men2 = _numbers.get('MEN2', 0)    
+    men2 = _numbers.get('MEN2', 0)
     women2 = _numbers.get('WOMEN2', 0)
     adult2 = _numbers.get('ADULT2', 0)
-    girl2 = _numbers.get('GIRL2', 0)    
+    girl2 = _numbers.get('GIRL2', 0)
     boy2 = _numbers.get('BOY2', 0)
     child2 = _numbers.get('CHILD2', 0)
     male2 = _numbers.get('MALE2', 0)
     female2 = _numbers.get('FEMALE2', 0)
-    
+
     adlt2imp = men2 + women2 + adult2
     chil2imp = boy2 + girl2 + child2
-    
+
     male2imp = male2
     feml2imp = female2
     if not male2imp: male2imp = men2 + boy2
@@ -1636,42 +1636,42 @@ def compute_imputed_vars(_interim, is_iam=False):
 
     local_vars = locals()
     local_vars = {k: v for k, v in local_vars.items() if not k.startswith('_')}
-    
+
     # Recode zero numerical values to None and vice versa with an 'all or nothing' logic.
     _recode_var_names = [
         'men1', 'women1', 'boy1', 'girl1', 'child1', 'infant1', 'adult1',
         'men4', 'women4', 'boy4', 'girl4', 'child4', 'infant4', 'adult4',
         'men5', 'women5', 'boy5', 'girl5', 'child5', 'adult5']
     all_or_nothing(_recode_var_names, local_vars)
-    
+
     _recode_var_names = ['male1', 'female1', 'male4', 'female4', 'male5', 'female5']
     all_or_nothing(_recode_var_names, local_vars)
-    
+
     _recode_var_names = ['men2', 'women2', 'boy2', 'girl2', 'child2', 'adult2']
     all_or_nothing(_recode_var_names, local_vars)
-    
+
     _recode_var_names = ['male2', 'female2']
     all_or_nothing(_recode_var_names, local_vars)
-    
+
     _recode_var_names = [
         'men3', 'women3', 'boy3', 'girl3', 'child3', 'infant3', 'adult3',
         'men6', 'women6', 'boy6', 'girl6', 'child6', 'adult6']
     all_or_nothing(_recode_var_names, local_vars)
-    
+
     _recode_var_names = ['male3', 'female3', 'male6', 'female6']
     all_or_nothing(_recode_var_names, local_vars)
-    
+
     _recode_var_names = ['ncar13', 'ncar15', 'ncar17', 'ncartot']
     all_or_nothing(_recode_var_names, local_vars)
-    
+
     _recode_var_names = ['slas32', 'slas36', 'slas39', 'slastot']
     all_or_nothing(_recode_var_names, local_vars)
-    
+
     _no_zeros = ['pctdis', 'adlt2imp', 'chil2imp', 'male2imp', 'feml2imp']
     for k in _no_zeros:
         if not local_vars.get(k):
             local_vars[k] = None
-    
+
     # Generate model field values.
     imputed_field_values = {v[0]: v[1](local_vars[k]) for k, v in imputed_vars_model_map.items()}
     # Generate imputed number values.
@@ -1682,7 +1682,7 @@ def compute_imputed_vars(_interim, is_iam=False):
         'retrnreg1', 'embport', 'embport2', 'embreg', 'embreg2', 'plac3tra', 'regem3', 'arrport2',
         'regarr2', 'portret', 'retrnreg', 'xmimpflag']
     iam_sex_rem = ['men$', 'women$', 'adult$', 'girl$', 'boy$', 'child$', 'male$', 'female$', 'adlt$imp', 'chil$imp', 'male$imp', 'feml$imp']
-    
+
     if is_iam:
         for d in [imputed_field_values, imputed_numbers, local_vars]:
             for k in iam_rem:
