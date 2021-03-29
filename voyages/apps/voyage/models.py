@@ -52,12 +52,10 @@ class Region(models.Model):
     class Meta(object):
         verbose_name = 'Region'
         verbose_name_plural = "Regions"
+        ordering = ['value']
 
     def __unicode__(self):
         return self.region
-
-    class Meta(object):
-        ordering = ['value']
 
 
 class Place(models.Model):
