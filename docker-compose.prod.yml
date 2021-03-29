@@ -1,0 +1,59 @@
+---
+version: "3.7"
+
+services:
+  voyages-django-blue:
+    image: "voyages-django"
+    container_name: "voyages-django-blue"
+    hostname: "voyages-django-blue"
+    restart: "on-failure"
+    ports:
+      - "8000:8000"
+    volumes:
+      - "python_volume:/root/.local"
+      - "/mnt/sv_share/documents:/mnt/sv_share/documents"
+      - "/mnt/sv_share/sitemedia:/mnt/sv_share/sitemedia"
+      - "/mnt/sv_share/static:/mnt/sv_share/static"
+    build:
+      context: "."
+      dockerfile: "./docker/django/Dockerfile-prod"
+      args:
+        - "GUNICORN_PORT=8000"
+
+  voyages-django-green:
+    image: "voyages-django"
+    container_name: "voyages-django-green"
+    hostname: "voyages-django-green"
+    restart: "on-failure"
+    ports:
+      - "8001:8001"
+    volumes:
+      - "python_volume:/root/.local"
+      - "/mnt/sv_share/documents:/mnt/sv_share/documents"
+      - "/mnt/sv_share/sitemedia:/mnt/sv_share/sitemedia"
+      - "/mnt/sv_share/static:/mnt/sv_share/static"
+    build:
+      context: "."
+      dockerfile: "./docker/django/Dockerfile-prod"
+      args:
+        - "GUNICORN_PORT=8001"
+
+  voyages-nginx:
+    image: "nginx:1.19.8"
+    container_name: "voyages-nginx"
+    hostname: "voyages-nginx"
+    restart: "on-failure"
+    ports:
+      - "80:80"
+    volumes:
+      - "/mnt/sv_share/documents:/mnt/sv_share/documents"
+      - "/mnt/sv_share/sitemedia:/mnt/sv_share/sitemedia"
+      - "/mnt/sv_share/static:/mnt/sv_share/static"
+    build:
+      context: "./docker/nginx/"
+      dockerfile: "./Dockerfile"
+      args:
+        - "NGINX_UPSTREAM=voyages-django-blue"
+
+volumes:
+  python_volume: {}

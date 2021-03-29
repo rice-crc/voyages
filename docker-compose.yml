@@ -1,46 +1,132 @@
-version: '3.4'
+---
+version: "3.7"
 
 services:
-  voyages-mysql-service:
-    container_name: voyages-mysql # change localsettings.py db host to this name
-    restart: always
-    image: mysql:latest
+  voyages-mysql:
+    image: "mysql:8.0.23"
+    container_name: "voyages-mysql"
+    hostname: "voyages-mysql"
+    restart: "on-failure"
     ports:
-     - "3306:3306"
+      - "3306:3306"
+    networks:
+      - "voyages"
+    volumes:
+      - "mysql_volume:/var/lib/mysql"
+      - "./docker/mysql/conf:/etc/mysql/conf.d"
     environment:
-      MYSQL_ROOT_PASSWORD: 'voyages'
-      MYSQL_USER: 'voyages'
-      MYSQL_PASS: 'voyages'
-    volumes:
-      - ./data/db:/var/lib/mysql
-  voyages-solr-service:
-    container_name: voyages-solr # change localsettings.py solr host http://{container_name}:8983/solr/voyages
-    image: solr:latest
+      MYSQL_ROOT_PASSWORD: "voyages"
+
+  voyages-solr:
+    image: "solr:8.5.2"
+    container_name: "voyages-solr"
+    hostname: "voyages-solr"
+    restart: "on-failure"
     ports:
-     - "8983:8983"
+      - "8983:8983"
+    networks:
+      - "voyages"
     volumes:
-      - ./solr:/config
-      - ./data/solr:/var/solr/data
-    entrypoint:
-      - docker-entrypoint.sh
-      - solr-precreate
-      - voyages
-      - /config
-  voyages-django-service:
-    container_name: voyages-django
-    image: voyages-django-dev
+      - "solr_volume:/var/solr"
+      - "./solr:/srv/voyages/solr"
+    environment:
+      SOLR_JAVA_MEM: "-Xms1g -Xmx1g"
+
+  voyages-redis:
+    image: "redis:3.2.12-alpine"
+    container_name: "voyages-redis"
+    hostname: "voyages-redis"
+    restart: "on-failure"
+    ports:
+      - "6379:6379"
+    networks:
+      - "voyages"
+    volumes:
+      - "redis_volume:/data"
     build:
-      context: .
-      dockerfile: Dockerfile-dev
+      context: "."
+      dockerfile: "./docker/redis/Dockerfile"
+
+  voyages-django:
+    image: "voyages-django"
+    container_name: "voyages-django"
+    hostname: "voyages-django"
+    restart: "on-failure"
     depends_on:
-      - voyages-mysql-service
-      - voyages-solr-service
+      - "voyages-mysql"
+      - "voyages-solr"
+      - "voyages-redis"
     ports:
       - "8000:8000"
+    networks:
+      - "voyages"
     volumes:
-      - .:/src/voyages
-    entrypoint:
-      - python
-      - /src/voyages/manage.py
-      - runserver
-      - 0.0.0.0:8000
+      - "python_volume:/root/.local"
+      - ".:/srv/voyages"
+      - "./documents:/mnt/sv_share/documents"
+      - "./voyages/sitemedia:/mnt/sv_share/sitemedia"
+      - "./voyages/static:/mnt/sv_share/static"
+    build:
+      context: "."
+      dockerfile: "./docker/django/Dockerfile"
+      args:
+        - "GUNICORN_PORT=8000"
+        - "GUNICORN_OPTS=--reload"
+
+  voyages-nginx:
+    image: "nginx:1.19.8-alpine"
+    container_name: "voyages-nginx"
+    hostname: "voyages-nginx"
+    restart: "on-failure"
+    depends_on:
+      - "voyages-django"
+    ports:
+      - "80:80"
+    networks:
+      - "voyages"
+    volumes:
+      - "./documents:/mnt/sv_share/documents"
+      - "./voyages/sitemedia:/mnt/sv_share/sitemedia"
+      - "./voyages/static:/mnt/sv_share/static"
+    build:
+      context: "./docker/nginx/"
+      dockerfile: "./Dockerfile"
+      args:
+        - "NGINX_UPSTREAM=voyages-django"
+
+  voyages-adminer:
+    image: "adminer:latest"
+    container_name: "voyages-adminer"
+    hostname: "voyages-adminer"
+    restart: "on-failure"
+    depends_on:
+      - "voyages-mysql"
+    ports:
+      - "8080:8080"
+    networks:
+      - "voyages"
+
+  voyages-mailhog:
+    image: "mailhog/mailhog:latest"
+    container_name: "voyages-mailhog"
+    hostname: "voyages-mailhog"
+    restart: "on-failure"
+    depends_on:
+      - "voyages-django"
+    ports:
+      - "1025:1025"
+      - "8025:8025"
+    networks:
+      - "voyages"
+    logging:
+      driver: "none"
+
+networks:
+  voyages:
+    driver: "bridge"
+
+volumes:
+  mysql_volume: {}
+  solr_volume: {}
+  redis_volume: {}
+  python_volume: {}
