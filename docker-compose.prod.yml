@@ -11,10 +11,9 @@ services:
       - "8000:8000"
     volumes:
       - "python_volume:/root/.local"
-      - ".:/srv/voyages"
-      - "./documents:/mnt/sv_share/documents"
-      - "./voyages/sitemedia:/mnt/sv_share/sitemedia"
-      - "./voyages/static:/mnt/sv_share/static"
+      - "/mnt/sv_share/documents:/mnt/sv_share/documents"
+      - "/mnt/sv_share/sitemedia:/mnt/sv_share/sitemedia"
+      - "/mnt/sv_share/static:/mnt/sv_share/static"
     build:
       context: "."
       dockerfile: "./docker/django/Dockerfile-prod"
@@ -30,10 +29,9 @@ services:
       - "8001:8001"
     volumes:
       - "python_volume:/root/.local"
-      - ".:/srv/voyages"
-      - "./documents:/mnt/sv_share/documents"
-      - "./voyages/sitemedia:/mnt/sv_share/sitemedia"
-      - "./voyages/static:/mnt/sv_share/static"
+      - "/mnt/sv_share/documents:/mnt/sv_share/documents"
+      - "/mnt/sv_share/sitemedia:/mnt/sv_share/sitemedia"
+      - "/mnt/sv_share/static:/mnt/sv_share/static"
     build:
       context: "."
       dockerfile: "./docker/django/Dockerfile-prod"
@@ -48,9 +46,9 @@ services:
     ports:
       - "80:80"
     volumes:
-      - "./documents:/mnt/sv_share/documents"
-      - "./voyages/sitemedia:/mnt/sv_share/sitemedia"
-      - "./voyages/static:/mnt/sv_share/static"
+      - "/mnt/sv_share/documents:/mnt/sv_share/documents"
+      - "/mnt/sv_share/sitemedia:/mnt/sv_share/sitemedia"
+      - "/mnt/sv_share/static:/mnt/sv_share/static"
     build:
       context: "./docker/nginx/"
       dockerfile: "./Dockerfile"
