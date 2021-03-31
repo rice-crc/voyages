@@ -920,7 +920,7 @@ If (xmimpflag = 103 & MISSING(tslavesd) & MISSING(tslavesp) & MISSING(ncartot) &
 If (xmimpflag = 104 & slaximp >= 1 & MISSING(slaarriv) & MISSING(slastot)) slamimp = slaximp - (slaximp*0.125269157905197).
 If (xmimpflag = 104 & slamimp >= 1 & MISSING(tslavesd) & MISSING(tslavesp) & MISSING(ncartot)) slaximp = slamimp / (1- 0.125269157905197).
 If (xmimpflag = 104 & MISSING(tslavesd) & MISSING(tslavesp) & MISSING(ncartot) & MISSING(slaarriv) & MISSING(slastot)) slaximp =107.64.
-If (xmimpflag = 104 & MISSING(tslavesd) & MISSING(tslavesp) & MISSING(ncartot) & MISSING(slaarriv) & MISSING(slastot)) slamimp =107.64 - (107.64*0.125269157905197 ).
+If (xmimpflag = 104 & MISSING(tslavesd) & MISSING(tslavesp) & MISSING(ncartot) & MISSING(slaarriv) & MISSING(slastot)) slamimp =107.64* (1-0.125269157905197 ).
 If (xmimpflag = 105 & slaximp >= 1 & MISSING(slaarriv) & MISSING(slastot)) slamimp = slaximp - (slaximp*0.0887057111704602).
 If (xmimpflag = 105 & slamimp >= 1 & MISSING(tslavesd) & MISSING(tslavesp) & MISSING(ncartot)) slaximp = slamimp / (1- 0.0887057111704602).
 If (xmimpflag = 105 & MISSING(tslavesd) & MISSING(tslavesp) & MISSING(ncartot) & MISSING(slaarriv) & MISSING(slastot)) slamimp =191.988789237668.
@@ -1008,11 +1008,11 @@ If (xmimpflag = 3 & MISSING(tslavesd) & MISSING(tslavesp) & MISSING(ncartot) & M
 If (xmimpflag = 4 & slaximp >= 1 & MISSING(slaarriv) & MISSING(slastot)) slamimp = slaximp - (slaximp*0.143739162059858).
 If (xmimpflag = 4 & slamimp >= 1 & MISSING(tslavesd) & MISSING(tslavesp) & MISSING(ncartot)) slaximp = slamimp / (1- 0.143739162059858).
 If (xmimpflag = 4 & MISSING(tslavesd) & MISSING(tslavesp) & MISSING(ncartot) & MISSING(slaarriv) & MISSING(slastot)) slaximp =273.896226415094.
-If (xmimpflag = 4 & MISSING(tslavesd) & MISSING(tslavesp) & MISSING(ncartot) & MISSING(slaarriv) & MISSING(slastot)) slamimp =273.896226415094 - (273.896226415094*0.143739162059858 ).
+If (xmimpflag = 4 & MISSING(tslavesd) & MISSING(tslavesp) & MISSING(ncartot) & MISSING(slaarriv) & MISSING(slastot)) slamimp =273.896226415094* (1-0.143739162059858 ).
 If (xmimpflag = 5 & slaximp >= 1 & MISSING(slaarriv) & MISSING(slastot)) slamimp = slaximp - (slaximp*0.0703329947332674).
 If (xmimpflag = 5 & slamimp >= 1 & MISSING(tslavesd) & MISSING(tslavesp) & MISSING(ncartot)) slaximp = slamimp / (1- 0.0703329947332674).
 If (xmimpflag = 5 & MISSING(tslavesd) & MISSING(tslavesp) & MISSING(ncartot) & MISSING(slaarriv) & MISSING(slastot)) slaximp =380.04854368932.
-If (xmimpflag = 5 & MISSING(tslavesd) & MISSING(tslavesp) & MISSING(ncartot) & MISSING(slaarriv) & MISSING(slastot)) slamimp =380.04854368932 - (380.04854368932*0.0703329947332674 ).
+If (xmimpflag = 5 & MISSING(tslavesd) & MISSING(tslavesp) & MISSING(ncartot) & MISSING(slaarriv) & MISSING(slastot)) slamimp =380.04854368932* (1-0.0703329947332674 ).
 If (xmimpflag = 6 & slaximp >= 1 & MISSING(slaarriv) & MISSING(slastot)) slamimp = slaximp - (slaximp*0.117444418143106).
 If (xmimpflag = 6 & slamimp >= 1 & MISSING(tslavesd) & MISSING(tslavesp) & MISSING(ncartot)) slaximp = slamimp / (1- 0.117444418143106).
 If (xmimpflag = 6 & MISSING(tslavesd) & MISSING(tslavesp) & MISSING(ncartot) & MISSING(slaarriv) & MISSING(slastot)) slamimp =305.868020304568.
@@ -1020,7 +1020,7 @@ If (xmimpflag = 6 & MISSING(tslavesd) & MISSING(tslavesp) & MISSING(ncartot) & M
 If (xmimpflag = 7 & slaximp >= 1 & MISSING(slaarriv) & MISSING(slastot)) slamimp = slaximp - (slaximp*0.126779394689057).
 If (xmimpflag = 7 & slamimp >= 1 & MISSING(tslavesd) & MISSING(tslavesp) & MISSING(ncartot)) slaximp = slamimp / (1- 0.126779394689057).
 If (xmimpflag = 7 & MISSING(tslavesd) & MISSING(tslavesp) & MISSING(ncartot) & MISSING(slaarriv) & MISSING(slastot)) slaximp =265.88.
-If (xmimpflag = 7 & MISSING(tslavesd) & MISSING(tslavesp) & MISSING(ncartot) & MISSING(slaarriv) & MISSING(slastot)) slamimp =265.88 - (265.88*0.126779394689057 ).
+If (xmimpflag = 7 & MISSING(tslavesd) & MISSING(tslavesp) & MISSING(ncartot) & MISSING(slaarriv) & MISSING(slastot)) slamimp =265.88* (1-0.126779394689057 ).
 If (xmimpflag = 8 & slaximp >= 1 & MISSING(slaarriv) & MISSING(slastot)) slamimp = slaximp - (slaximp*0.189011301766662).
 If (xmimpflag = 8 & slamimp >= 1 & MISSING(tslavesd) & MISSING(tslavesp) & MISSING(ncartot)) slaximp = slamimp / (1- 0.189011301766662).
 If (xmimpflag = 8 & MISSING(tslavesd) & MISSING(tslavesp) & MISSING(ncartot) & MISSING(slaarriv) & MISSING(slastot)) slamimp =281.325.
@@ -1120,11 +1120,11 @@ If (xmimpflag = 26 & MISSING(tslavesd) & MISSING(tslavesp) & MISSING(ncartot) & 
 If (xmimpflag = 27 & slaximp >= 1 & MISSING(slaarriv) & MISSING(slastot)) slamimp = slaximp - (slaximp*0.0951735364832193).
 If (xmimpflag = 27 & slamimp >= 1 & MISSING(tslavesd) & MISSING(tslavesp) & MISSING(ncartot)) slaximp = slamimp / (1- 0.0951735364832193).
 If (xmimpflag = 27 & MISSING(tslavesd) & MISSING(tslavesp) & MISSING(ncartot) & MISSING(slaarriv) & MISSING(slastot)) slaximp =335.546666666667.
-If (xmimpflag = 27 & MISSING(tslavesd) & MISSING(tslavesp) & MISSING(ncartot) & MISSING(slaarriv) & MISSING(slastot)) slamimp =335.546666666667 - (335.546666666667*0.0951735364832193 ).
+If (xmimpflag = 27 & MISSING(tslavesd) & MISSING(tslavesp) & MISSING(ncartot) & MISSING(slaarriv) & MISSING(slastot)) slamimp =335.546666666667* (1-0.0951735364832193 ).
 If (xmimpflag = 28 & slaximp >= 1 & MISSING(slaarriv) & MISSING(slastot)) slamimp = slaximp - (slaximp*0.0599984615282753).
 If (xmimpflag = 28 & slamimp >= 1 & MISSING(tslavesd) & MISSING(tslavesp) & MISSING(ncartot)) slaximp = slamimp / (1- 0.0599984615282753).
 If (xmimpflag = 28 & MISSING(tslavesd) & MISSING(tslavesp) & MISSING(ncartot) & MISSING(slaarriv) & MISSING(slastot)) slaximp =348.926267281106.
-If (xmimpflag = 28 & MISSING(tslavesd) & MISSING(tslavesp) & MISSING(ncartot) & MISSING(slaarriv) & MISSING(slastot)) slamimp =348.926267281106 - (348.926267281106*0.0599984615282753 ).
+If (xmimpflag = 28 & MISSING(tslavesd) & MISSING(tslavesp) & MISSING(ncartot) & MISSING(slaarriv) & MISSING(slastot)) slamimp =348.926267281106* (1-0.0599984615282753 ).
 If (xmimpflag = 29 & slaximp >= 1 & MISSING(slaarriv) & MISSING(slastot)) slamimp = slaximp - (slaximp*0.0849037398486349).
 If (xmimpflag = 29 & slamimp >= 1 & MISSING(tslavesd) & MISSING(tslavesp) & MISSING(ncartot)) slaximp = slamimp / (1- 0.0849037398486349).
 If (xmimpflag = 29 & MISSING(tslavesd) & MISSING(tslavesp) & MISSING(ncartot) & MISSING(slaarriv) & MISSING(slastot)) slamimp =323.539358600583.
@@ -1220,7 +1220,7 @@ If (xmimpflag = 51 & MISSING(tslavesd) & MISSING(tslavesp) & MISSING(ncartot) & 
 If (xmimpflag = 52 & slaximp >= 1 & MISSING(slaarriv) & MISSING(slastot)) slamimp = slaximp - (slaximp*0.0819156347249732).
 If (xmimpflag = 52 & slamimp >= 1 & MISSING(tslavesd) & MISSING(tslavesp) & MISSING(ncartot)) slaximp = slamimp / (1- 0.0819156347249732).
 If (xmimpflag = 52 & MISSING(tslavesd) & MISSING(tslavesp) & MISSING(ncartot) & MISSING(slaarriv) & MISSING(slastot)) slaximp =290.164383561644.
-If (xmimpflag = 52 & MISSING(tslavesd) & MISSING(tslavesp) & MISSING(ncartot) & MISSING(slaarriv) & MISSING(slastot)) slamimp =290.164383561644 - (290.164383561644*0.0819156347249732 ).
+If (xmimpflag = 52 & MISSING(tslavesd) & MISSING(tslavesp) & MISSING(ncartot) & MISSING(slaarriv) & MISSING(slastot)) slamimp =290.164383561644* (1-0.0819156347249732 ).
 If (xmimpflag = 53 & slaximp >= 1 & MISSING(slaarriv) & MISSING(slastot)) slamimp = slaximp - (slaximp*0.0540922242825536).
 If (xmimpflag = 53 & slamimp >= 1 & MISSING(tslavesd) & MISSING(tslavesp) & MISSING(ncartot)) slaximp = slamimp / (1- 0.0540922242825536).
 If (xmimpflag = 53 & MISSING(tslavesd) & MISSING(tslavesp) & MISSING(ncartot) & MISSING(slaarriv) & MISSING(slastot)) slamimp =256.548387096774.
@@ -1244,7 +1244,7 @@ If (xmimpflag = 57 & MISSING(tslavesd) & MISSING(tslavesp) & MISSING(ncartot) & 
 If (xmimpflag = 58 & slaximp >= 1 & MISSING(slaarriv) & MISSING(slastot)) slamimp = slaximp - (slaximp*0.162886379968412).
 If (xmimpflag = 58 & slamimp >= 1 & MISSING(tslavesd) & MISSING(tslavesp) & MISSING(ncartot)) slaximp = slamimp / (1- 0.162886379968412).
 If (xmimpflag = 58 & MISSING(tslavesd) & MISSING(tslavesp) & MISSING(ncartot) & MISSING(slaarriv) & MISSING(slastot)) slaximp =447.518072289157.
-If (xmimpflag = 58 & MISSING(tslavesd) & MISSING(tslavesp) & MISSING(ncartot) & MISSING(slaarriv) & MISSING(slastot)) slamimp =447.518072289157 - (447.518072289157*0.162886379968412 ).
+If (xmimpflag = 58 & MISSING(tslavesd) & MISSING(tslavesp) & MISSING(ncartot) & MISSING(slaarriv) & MISSING(slastot)) slamimp =447.518072289157* (1-0.162886379968412 ).
 If (xmimpflag = 59 & slaximp >= 1 & MISSING(slaarriv) & MISSING(slastot)) slamimp = slaximp - (slaximp*0.0561646667118922).
 If (xmimpflag = 59 & slamimp >= 1 & MISSING(tslavesd) & MISSING(tslavesp) & MISSING(ncartot)) slaximp = slamimp / (1- 0.0561646667118922).
 If (xmimpflag = 59 & MISSING(tslavesd) & MISSING(tslavesp) & MISSING(ncartot) & MISSING(slaarriv) & MISSING(slastot)) slamimp =152.923076923077.
@@ -1284,7 +1284,7 @@ If (xmimpflag = 67 & MISSING(tslavesd) & MISSING(tslavesp) & MISSING(ncartot) & 
 If (xmimpflag = 68 & slaximp >= 1 & MISSING(slaarriv) & MISSING(slastot)) slamimp = slaximp - (slaximp*0.127935729778166).
 If (xmimpflag = 68 & slamimp >= 1 & MISSING(tslavesd) & MISSING(tslavesp) & MISSING(ncartot)) slaximp = slamimp / (1- 0.127935729778166).
 If (xmimpflag = 68 & MISSING(tslavesd) & MISSING(tslavesp) & MISSING(ncartot) & MISSING(slaarriv) & MISSING(slastot)) slaximp =84.
-If (xmimpflag = 68 & MISSING(tslavesd) & MISSING(tslavesp) & MISSING(ncartot) & MISSING(slaarriv) & MISSING(slastot)) slamimp =84 - (84*0.127935729778166 ).
+If (xmimpflag = 68 & MISSING(tslavesd) & MISSING(tslavesp) & MISSING(ncartot) & MISSING(slaarriv) & MISSING(slastot)) slamimp =84* (1-0.127935729778166 ).
 If (xmimpflag = 69 & slaximp >= 1 & MISSING(slaarriv) & MISSING(slastot)) slamimp = slaximp - (slaximp*0.206358225584424).
 If (xmimpflag = 69 & slamimp >= 1 & MISSING(tslavesd) & MISSING(tslavesp) & MISSING(ncartot)) slaximp = slamimp / (1- 0.206358225584424).
 If (xmimpflag = 69 & MISSING(tslavesd) & MISSING(tslavesp) & MISSING(ncartot) & MISSING(slaarriv) & MISSING(slastot)) slamimp =1004.47058823529.
@@ -1352,7 +1352,7 @@ If (xmimpflag = 82 & MISSING(tslavesd) & MISSING(tslavesp) & MISSING(ncartot) & 
 If (xmimpflag = 83 & slaximp >= 1 & MISSING(slaarriv) & MISSING(slastot)) slamimp = slaximp - (slaximp*0.0956449943871365).
 If (xmimpflag = 83 & slamimp >= 1 & MISSING(tslavesd) & MISSING(tslavesp) & MISSING(ncartot)) slaximp = slamimp / (1- 0.0956449943871365).
 If (xmimpflag = 83 & MISSING(tslavesd) & MISSING(tslavesp) & MISSING(ncartot) & MISSING(slaarriv) & MISSING(slastot)) slaximp =304.5625.
-If (xmimpflag = 83 & MISSING(tslavesd) & MISSING(tslavesp) & MISSING(ncartot) & MISSING(slaarriv) & MISSING(slastot)) slamimp =304.5625 - (304.5625*0.0956449943871365 ).
+If (xmimpflag = 83 & MISSING(tslavesd) & MISSING(tslavesp) & MISSING(ncartot) & MISSING(slaarriv) & MISSING(slastot)) slamimp =304.5625* (1-0.0956449943871365 ).
 If (xmimpflag = 84 & slaximp >= 1 & MISSING(slaarriv) & MISSING(slastot)) slamimp = slaximp - (slaximp*0.163929225997462).
 If (xmimpflag = 84 & slamimp >= 1 & MISSING(tslavesd) & MISSING(tslavesp) & MISSING(ncartot)) slaximp = slamimp / (1- 0.163929225997462).
 If (xmimpflag = 84 & MISSING(tslavesd) & MISSING(tslavesp) & MISSING(ncartot) & MISSING(slaarriv) & MISSING(slastot)) slamimp =319.285714285714.
@@ -1368,7 +1368,7 @@ If (xmimpflag = 87 & MISSING(tslavesd) & MISSING(tslavesp) & MISSING(ncartot) & 
 If (xmimpflag = 88 & slaximp >= 1 & MISSING(slaarriv) & MISSING(slastot)) slamimp = slaximp - (slaximp*0.198929221794951).
 If (xmimpflag = 88 & slamimp >= 1 & MISSING(tslavesd) & MISSING(tslavesp) & MISSING(ncartot)) slaximp = slamimp / (1- 0.198929221794951).
 If (xmimpflag = 88 & MISSING(tslavesd) & MISSING(tslavesp) & MISSING(ncartot) & MISSING(slaarriv) & MISSING(slastot)) slaximp =296.473684210526.
-If (xmimpflag = 88 & MISSING(tslavesd) & MISSING(tslavesp) & MISSING(ncartot) & MISSING(slaarriv) & MISSING(slastot)) slamimp =296.473684210526 - (296.473684210526*0.198929221794951 ).
+If (xmimpflag = 88 & MISSING(tslavesd) & MISSING(tslavesp) & MISSING(ncartot) & MISSING(slaarriv) & MISSING(slastot)) slamimp =296.473684210526* (1-0.198929221794951 ).
 If (xmimpflag = 89 & slaximp >= 1 & MISSING(slaarriv) & MISSING(slastot)) slamimp = slaximp - (slaximp*0.107517933823928).
 If (xmimpflag = 89 & slamimp >= 1 & MISSING(tslavesd) & MISSING(tslavesp) & MISSING(ncartot)) slaximp = slamimp / (1- 0.107517933823928).
 If (xmimpflag = 89 & MISSING(tslavesd) & MISSING(tslavesp) & MISSING(ncartot) & MISSING(slaarriv) & MISSING(slastot)) slamimp =281.958333333333.
@@ -1408,7 +1408,7 @@ If (xmimpflag = 137 & MISSING(tslavesd) & MISSING(tslavesp) & MISSING(ncartot) &
 If (xmimpflag = 138 & slaximp >= 1 & MISSING(slaarriv) & MISSING(slastot)) slamimp = slaximp - (slaximp*0.179201806454531).
 If (xmimpflag = 138 & slamimp >= 1 & MISSING(tslavesd) & MISSING(tslavesp) & MISSING(ncartot)) slaximp = slamimp / (1- 0.179201806454531).
 If (xmimpflag = 138 & MISSING(tslavesd) & MISSING(tslavesp) & MISSING(ncartot) & MISSING(slaarriv) & MISSING(slastot)) slaximp =108.37037037037.
-If (xmimpflag = 138 & MISSING(tslavesd) & MISSING(tslavesp) & MISSING(ncartot) & MISSING(slaarriv) & MISSING(slastot)) slamimp =108.37037037037 - (108.37037037037*0.179201806454531 ).
+If (xmimpflag = 138 & MISSING(tslavesd) & MISSING(tslavesp) & MISSING(ncartot) & MISSING(slaarriv) & MISSING(slastot)) slamimp =108.37037037037* (1-0.179201806454531 ).
 If (xmimpflag = 139 & slaximp >= 1 & MISSING(slaarriv) & MISSING(slastot)) slamimp = slaximp - (slaximp*0.162003845923261).
 If (xmimpflag = 139 & slamimp >= 1 & MISSING(tslavesd) & MISSING(tslavesp) & MISSING(ncartot)) slaximp = slamimp / (1- 0.162003845923261).
 If (xmimpflag = 139 & MISSING(tslavesd) & MISSING(tslavesp) & MISSING(ncartot) & MISSING(slaarriv) & MISSING(slastot)) slamimp =128.438775510204.
@@ -1424,7 +1424,7 @@ If (xmimpflag = 141 & MISSING(tslavesd) & MISSING(tslavesp) & MISSING(ncartot) &
 If (xmimpflag = 142 & slaximp >= 1 & MISSING(slaarriv) & MISSING(slastot)) slamimp = slaximp - (slaximp*0.190548809128441).
 If (xmimpflag = 142 & slamimp >= 1 & MISSING(tslavesd) & MISSING(tslavesp) & MISSING(ncartot)) slaximp = slamimp / (1- 0.190548809128441).
 If (xmimpflag = 142 & MISSING(tslavesd) & MISSING(tslavesp) & MISSING(ncartot) & MISSING(slaarriv) & MISSING(slastot)) slaximp =80.5625.
-If (xmimpflag = 142 & MISSING(tslavesd) & MISSING(tslavesp) & MISSING(ncartot) & MISSING(slaarriv) & MISSING(slastot)) slamimp =80.5625 - (80.5625*0.190548809128441 ).
+If (xmimpflag = 142 & MISSING(tslavesd) & MISSING(tslavesp) & MISSING(ncartot) & MISSING(slaarriv) & MISSING(slastot)) slamimp =80.5625* (1-0.190548809128441 ).
 If (xmimpflag = 145 & slaximp >= 1 & MISSING(slaarriv) & MISSING(slastot)) slamimp = slaximp - (slaximp*0.0577485174550083).
 If (xmimpflag = 145 & slamimp >= 1 & MISSING(tslavesd) & MISSING(tslavesp) & MISSING(ncartot)) slaximp = slamimp / (1- 0.0577485174550083).
 If (xmimpflag = 145 & MISSING(tslavesd) & MISSING(tslavesp) & MISSING(ncartot) & MISSING(slaarriv) & MISSING(slastot)) slamimp =376.928571428571.
@@ -1436,7 +1436,7 @@ If (xmimpflag = 146 & MISSING(tslavesd) & MISSING(tslavesp) & MISSING(ncartot) &
 If (xmimpflag = 147 & slaximp >= 1 & MISSING(slaarriv) & MISSING(slastot)) slamimp = slaximp - (slaximp*0.143606923731731).
 If (xmimpflag = 147 & slamimp >= 1 & MISSING(tslavesd) & MISSING(tslavesp) & MISSING(ncartot)) slaximp = slamimp / (1- 0.143606923731731).
 If (xmimpflag = 147 & MISSING(tslavesd) & MISSING(tslavesp) & MISSING(ncartot) & MISSING(slaarriv) & MISSING(slastot)) slaximp =165.903225806452.
-If (xmimpflag = 147 & MISSING(tslavesd) & MISSING(tslavesp) & MISSING(ncartot) & MISSING(slaarriv) & MISSING(slastot)) slamimp =165.903225806452 - (165.903225806452*0.143606923731731 ).
+If (xmimpflag = 147 & MISSING(tslavesd) & MISSING(tslavesp) & MISSING(ncartot) & MISSING(slaarriv) & MISSING(slastot)) slamimp =165.903225806452* (1-0.143606923731731 ).
 If (xmimpflag = 148 & slaximp >= 1 & MISSING(slaarriv) & MISSING(slastot)) slamimp = slaximp - (slaximp*0.254317624200109).
 If (xmimpflag = 148 & slamimp >= 1 & MISSING(tslavesd) & MISSING(tslavesp) & MISSING(ncartot)) slaximp = slamimp / (1- 0.254317624200109).
 If (xmimpflag = 148 & MISSING(tslavesd) & MISSING(tslavesp) & MISSING(ncartot) & MISSING(slaarriv) & MISSING(slastot)) slamimp =199.730769230769.
