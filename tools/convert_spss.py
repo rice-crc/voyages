@@ -3,14 +3,16 @@ import re
 import sys
 
 subst = [
+    (r'slaximp\s\-\s\(slaximp\*([.0-9]+)\)', 'slaximp * (1 - \\1)'),
     ('\s*\.$', ''), # remove trailing dot
 	('missing\(([^\)]+)\)', '\\1 is None'), # use is None test for missing values
 	('\s+&\s+', ' and '), # logic and
 	('\s+\|\s+', ' or '), # logic or
-	('if\s+\(([^\(]*(?:\([^\)]+\)[^\(]*)*)\)\s+(.*)$', 'if \\1: \\2'), # parse SPSS if with at most two levels of parentheses
+	('if\s+\(([^\(]*(?:\([^\)]+\)[^\(]*)*)\)\s+(.*)$', 'if \\1:\n    \\2'), # parse SPSS if with at most two levels of parentheses
 	('~=', '!='), # not equal comparisson
 	('\s*(?<![<>=!~])=(?!=)\s*(?=.*:)', ' == '), # equal comparisson
 	('\s+:\s+', ': '), # remove redundant spaces
+    ('\s+\)', ')'), # remove space before ')'
 	('\s*([><=+\-!\*/]+)\s*', ' \\1 '), # space between operators
 	('\s+lt\s+', ' < '), # less than
 	('\s+gt\s+', ' > '), # greater than
