@@ -6,54 +6,48 @@ services:
     image: "voyages-django"
     container_name: "voyages-django-blue"
     hostname: "voyages-django-blue"
-    restart: "on-failure"
+    restart: "always"
     ports:
-      - "8000:8000"
+      - "8001:8001"
+    networks:
+      voyages:
+        ipv4_address: "172.20.0.11"
     volumes:
-      - "python_volume:/root/.local"
       - "/mnt/sv_share/documents:/mnt/sv_share/documents"
       - "/mnt/sv_share/sitemedia:/mnt/sv_share/sitemedia"
       - "/mnt/sv_share/static:/mnt/sv_share/static"
     build:
       context: "."
-      dockerfile: "./docker/django/Dockerfile-prod"
+      dockerfile: "./docker/django/Dockerfile"
       args:
-        - "GUNICORN_PORT=8000"
+        - "GUNICORN_PORT=8001"
+        - "GUNICORN_OPTS=--reload --workers 5 --threads 2 --worker-class gthread"
 
   voyages-django-green:
     image: "voyages-django"
     container_name: "voyages-django-green"
     hostname: "voyages-django-green"
-    restart: "on-failure"
+    restart: "always"
     ports:
-      - "8001:8001"
+      - "8002:8002"
+    networks:
+      voyages:
+        ipv4_address: "172.20.0.12"
     volumes:
-      - "python_volume:/root/.local"
       - "/mnt/sv_share/documents:/mnt/sv_share/documents"
       - "/mnt/sv_share/sitemedia:/mnt/sv_share/sitemedia"
       - "/mnt/sv_share/static:/mnt/sv_share/static"
     build:
       context: "."
-      dockerfile: "./docker/django/Dockerfile-prod"
+      dockerfile: "./docker/django/Dockerfile"
       args:
-        - "GUNICORN_PORT=8001"
+        - "GUNICORN_PORT=8002"
+        - "GUNICORN_OPTS=--reload --workers 5 --threads 2 --worker-class gthread"
 
-  voyages-nginx:
-    image: "nginx:1.19.8"
-    container_name: "voyages-nginx"
-    hostname: "voyages-nginx"
-    restart: "on-failure"
-    ports:
-      - "80:80"
-    volumes:
-      - "/mnt/sv_share/documents:/mnt/sv_share/documents"
-      - "/mnt/sv_share/sitemedia:/mnt/sv_share/sitemedia"
-      - "/mnt/sv_share/static:/mnt/sv_share/static"
-    build:
-      context: "./docker/nginx/"
-      dockerfile: "./Dockerfile"
-      args:
-        - "NGINX_UPSTREAM=voyages-django-blue"
-
-volumes:
-  python_volume: {}
+networks:
+  voyages:
+    driver: "bridge"
+    ipam:
+      driver: "default"
+      config:
+        - subnet: "172.20.0.0/16"
