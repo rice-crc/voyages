@@ -138,7 +138,7 @@ host:~/Projects/voyages$ docker exec -i voyages-django bash -c 'python manage.py
 
 Note the following project resources:
 
-* Voyages app: [http://127.0.0.1/](http://127.0.0.1/).
+* Voyages app: [http://127.0.0.1:8100/](http://127.0.0.1:8100/).
 * Solr: [http://127.0.0.1:8983](http://127.0.0.1:8983)
 * Adminer: [http://127.0.0.1:8080](http://127.0.0.1:8080)
 * Mailhog: [http://127.0.0.1:8025](http://127.0.0.1:8025)
