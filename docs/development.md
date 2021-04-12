@@ -62,7 +62,7 @@ For more information, check GitHub's documentation on [forking repositories](htt
 Clone the fork to your local machine.
 
 ```bash
-host:~/Projects$ git clone https://github.com/<username>/voyages.git
+host:~/Projects$ git clone --depth 1 https://github.com/<username>/voyages.git
 ```
 
 Add the parent repository as an upstream remote.
@@ -76,6 +76,12 @@ host:~/Projects/voyages$ git remote add upstream https://github.com/rice-crc/voy
 [Return to Top](#table-of-contents)
 
 ## Installation
+
+Copy and rename the default localsettings file for local environments.
+
+```bash
+host:~/Projects/voyages$ cp voyages/localsettings-local.py.default voyages/localsettings.py
+```
 
 Build and run the containers necessary to work on the project.
 
