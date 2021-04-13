@@ -1,8 +1,13 @@
+django-redis==4.10.0
+redis==2.10.6
+futures==3.3.0
+gunicorn==19.10.0
 Django==1.11.6
+Django-appconf==1.0.2
 lxml==3.6.0
 mysql-python==1.2.5
 hurry.filesize==0.9
-pysolr==3.6.0
+pysolr==3.9.0
 mock==2.0.0
 django-autocomplete-light==2.3.3
 sorl-thumbnail==12.3
