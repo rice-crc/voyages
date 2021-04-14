@@ -115,9 +115,9 @@ host:~/Projects/voyages$ docker exec -i voyages-mysql mysql -uroot -pvoyages voy
 Verify the data import.
 
 ```mysql
-host:~/Projects/voyages$ docker exec -i voyages-mysql mysql -uroot -pvoyages -e "show databases"
-host:~/Projects/voyages$ docker exec -i voyages-mysql mysql -uroot -pvoyages -e "show tables from voyages"
-host:~/Projects/voyages$ docker exec -i voyages-mysql mysql -uroot -pvoyages -e "select * from voyages.voyage_voyage limit 1"
+host:~/Projects/voyages$ docker exec -i voyages-mysql mysql -uvoyages -pvoyages -e "show databases"
+host:~/Projects/voyages$ docker exec -i voyages-mysql mysql -uvoyages -pvoyages -e "show tables from voyages"
+host:~/Projects/voyages$ docker exec -i voyages-mysql mysql -uvoyages -pvoyages -e "select * from voyages.voyage_voyage limit 1"
 ```
 
 Create the Solr index.
