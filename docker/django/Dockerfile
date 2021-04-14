@@ -44,6 +44,7 @@ RUN python -m pip install --user --no-cache-dir --upgrade \
 
 COPY requirements/common.txt requirements/
 RUN python -m pip install --user --no-warn-script-location --no-cache-dir -r requirements/common.txt
+RUN mkdir logs
 
 # -- Release --
 
