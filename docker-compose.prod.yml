@@ -1,0 +1,53 @@
+---
+version: "3.7"
+
+services:
+  voyages-django-blue:
+    image: "voyages-django"
+    container_name: "voyages-django-blue"
+    hostname: "voyages-django-blue"
+    restart: "always"
+    ports:
+      - "8001:8001"
+    networks:
+      voyages:
+        ipv4_address: "172.20.0.11"
+    volumes:
+      - "/mnt/sv_share/documents:/mnt/sv_share/documents"
+      - "/mnt/sv_share/sitemedia:/mnt/sv_share/sitemedia"
+      - "/mnt/sv_share/static:/mnt/sv_share/static"
+    build:
+      context: "."
+      dockerfile: "./docker/django/Dockerfile"
+      args:
+        - "GUNICORN_PORT=8001"
+        - "GUNICORN_OPTS=--reload --workers 5 --threads 2 --worker-class gthread"
+
+  voyages-django-green:
+    image: "voyages-django"
+    container_name: "voyages-django-green"
+    hostname: "voyages-django-green"
+    restart: "always"
+    ports:
+      - "8002:8002"
+    networks:
+      voyages:
+        ipv4_address: "172.20.0.12"
+    volumes:
+      - "/mnt/sv_share/documents:/mnt/sv_share/documents"
+      - "/mnt/sv_share/sitemedia:/mnt/sv_share/sitemedia"
+      - "/mnt/sv_share/static:/mnt/sv_share/static"
+    build:
+      context: "."
+      dockerfile: "./docker/django/Dockerfile"
+      args:
+        - "GUNICORN_PORT=8002"
+        - "GUNICORN_OPTS=--reload --workers 5 --threads 2 --worker-class gthread"
+
+networks:
+  voyages:
+    driver: "bridge"
+    ipam:
+      driver: "default"
+      config:
+        - subnet: "172.20.0.0/16"
