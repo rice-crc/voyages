@@ -1,2 +1,23 @@
-data/**/*
-data
+# Exclude everything:
+#
+*
+
+# Include specific files and folders:
+#
+!requirements/common.txt
+!solr
+!tmp
+!tools
+!voyages/apps
+!voyages/locale
+!voyages/templates
+!voyages/__init__.py
+!voyages/extratools.py
+!voyages/localsettings.py
+!voyages/settings.py
+!voyages/sitemap.py
+!voyages/urls.py
+!voyages/views.py
+!voyages/wsgi.py
+!fabfile.py
+!manage.py
