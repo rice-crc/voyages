@@ -41,8 +41,8 @@ RUN apt-get update \
 
 WORKDIR /srv/voyages
 
-RUN python -m pip install --user --no-cache-dir --upgrade \
-    pip==20.3.4  \
+RUN python3 -m pip install --user --no-cache-dir --upgrade \
+    pip==21.0.1  \
     setuptools==44.1.1 \
     wheel==0.36.2
 
