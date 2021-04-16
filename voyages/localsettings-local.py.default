@@ -1,4 +1,5 @@
-import settings
+from __future__ import absolute_import
+from . import settings
 import os
 
 # Django local settings for voyages project.
