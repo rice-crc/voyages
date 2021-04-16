@@ -103,11 +103,8 @@ class VoyageRoutes(object):
                 voyage_by_ends[idx] = route
             self._voyage_routes[v.pk] = (route, idx)
         return self._voyage_routes
-<<<<<<< HEAD
 
-=======
 
->>>>>>> future
 class VoyageRoutesCache(object):
     _cache = None
     _lock = threading.Lock()
