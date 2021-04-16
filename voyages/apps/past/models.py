@@ -1,9 +1,14 @@
+from __future__ import absolute_import
+from __future__ import unicode_literals
+from builtins import str
+from builtins import object
 from django.db import models
 from django.db.models import Func, F, Q, Case, When, Value, CharField, IntegerField
 from django.db.models.functions import Coalesce, Concat, Length, Substr
 from django.contrib.auth.models import User
 from voyages.apps.voyage.models import Place, Voyage, VoyageSources
 import operator
+from functools import reduce
 
 class EnslaverInfoAbstractBase(models.Model):
     principal_alias = models.CharField(max_length=255)
@@ -33,11 +38,11 @@ class EnslaverInfoAbstractBase(models.Model):
     will_value_dollars = models.CharField(max_length=12, null=True)
     will_court = models.CharField(max_length=12, null=True)
 
-    class Meta:
+    class Meta(object):
         abstract = True
 
 class EnslaverIdentity(EnslaverInfoAbstractBase):
-    class Meta:
+    class Meta(object):
         verbose_name = 'Enslaver unique identity and personal info'
 
 class EnslaverIdentitySourceConnection(models.Model):
@@ -56,7 +61,7 @@ class EnslaverAlias(models.Model):
     identity = models.ForeignKey(EnslaverIdentity, on_delete=models.CASCADE)
     alias = models.CharField(max_length=255)
 
-    class Meta:
+    class Meta(object):
         verbose_name = 'Enslaver alias'
 
 class EnslaverMerger(EnslaverInfoAbstractBase):
@@ -82,7 +87,7 @@ class EnslaverVoyageConnection(models.Model):
     Associates an enslaver with a voyage at some particular role.
     """
 
-    class Role:
+    class Role(object):
         CAPTAIN = 1
         OWNER = 2
         BUYER = 3
@@ -101,7 +106,7 @@ class NamedModelAbstractBase(models.Model):
     id = models.IntegerField(primary_key=True)
     name = models.CharField(max_length=255)
 
-    class Meta:
+    class Meta(object):
         abstract = True
 
 class ModernCountry(NamedModelAbstractBase):
@@ -207,7 +212,7 @@ class EnslavedName(models.Model):
     language = models.CharField(max_length=3, null=False, blank=False)
     recordings_count = models.IntegerField()
 
-    class Meta:
+    class Meta(object):
         unique_together = ('name', 'language')
 
 _special_empty_string_fields = {'voyage__voyage_ship__ship_name': 1, 'voyage__voyage_dates__first_dis_of_slaves': '2'}
@@ -215,7 +220,7 @@ _special_empty_string_fields = {'voyage__voyage_ship__ship_name': 1, 'voyage__vo
 _name_fields = ['documented_name', 'name_first', 'name_second', 'name_third']
 _modern_name_fields = ['modern_name_first', 'modern_name_second', 'modern_name_third']
 
-class EnslavedSearch:
+class EnslavedSearch(object):
     """
     Search parameters for enslaved persons.
     """
@@ -298,7 +303,7 @@ class EnslavedSearch:
                 q = q.filter(Q(documented_name=self.searched_name) | Q(name_first=self.searched_name) | \
                     Q(name_second=self.searched_name) | Q(name_third=self.searched_name))
             else:
-                from name_search import NameSearchCache
+                from .name_search import NameSearchCache
                 # Perform a fuzzy search on our cached names.
                 NameSearchCache.load()
                 fuzzy_ids = NameSearchCache.search(self.searched_name)

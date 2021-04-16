@@ -1,4 +1,9 @@
-from cache import VoyageCache, CachedGeo
+from __future__ import print_function
+from __future__ import absolute_import
+from __future__ import unicode_literals
+from builtins import str
+from builtins import object
+from .cache import VoyageCache, CachedGeo
 from django.conf import settings
 from django.core.cache import cache
 from django.http import JsonResponse, HttpResponse, HttpResponseBadRequest, HttpResponseForbidden, HttpResponseRedirect
@@ -8,11 +13,11 @@ from django.utils.translation import ugettext as _
 from django.views.decorators.cache import cache_page
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
-from graphs import *
-from globals import voyage_timeline_variables, table_columns, table_rows, table_functions
+from .graphs import *
+from .globals import voyage_timeline_variables, table_columns, table_rows, table_functions
 from haystack.query import SearchQuerySet
 from haystack.inputs import Raw
-from search_indexes import VoyageIndex
+from .search_indexes import VoyageIndex
 from voyages.apps.common.export import download_xls
 from voyages.apps.common.models import get_pks_from_haystack_results, SavedQuery
 from voyages.apps.common.views import get_ordered_places
@@ -27,7 +32,7 @@ import os
 import re
 import unicodecsv
 
-class SearchOperator():
+class SearchOperator(object):
     def __init__(self, front_end_op_str, back_end_op_str, list_type):
         self.front_end_op_str = front_end_op_str
         self.back_end_op_str = back_end_op_str
@@ -45,9 +50,9 @@ _operators_dict = {op.front_end_op_str: op for op in _operators_list}
 
 index = VoyageIndex()
 plain_text_suffix = '_plaintext'
-plain_text_suffix_list = [f[:-len(plain_text_suffix)] for f in index.fields.keys() if f.endswith(plain_text_suffix)]
+plain_text_suffix_list = [f[:-len(plain_text_suffix)] for f in list(index.fields.keys()) if f.endswith(plain_text_suffix)]
 translate_suffix = '_lang_en'
-translated_field_list = [f[:-len(translate_suffix)] for f in index.fields.keys() if f.endswith(translate_suffix)]
+translated_field_list = [f[:-len(translate_suffix)] for f in list(index.fields.keys()) if f.endswith(translate_suffix)]
 
 def perform_search(search, lang):
     items = search['items']
@@ -73,10 +78,10 @@ def perform_search(search, lang):
                 # If the search is really for a full exact match, then we search 
                 # on the plaintext_exact variant of the field. If it is a "contains"
                 # the exact search terms, then we use the plaintext variant instead.
-                custom_terms.append(u'var_' + unicode(item['varName']) + '_plaintext' + ('_exact' if len(m.group(1)) + len(m.group(3)) == 0 else '') + ':("' + term + '")')
+                custom_terms.append(u'var_' + str(item['varName']) + '_plaintext' + ('_exact' if len(m.group(1)) + len(m.group(3)) == 0 else '') + ':("' + term + '")')
                 skip = True
         if not skip:
-            search_terms[u'var_' + unicode(item['varName']) + u'__' + unicode(operator.back_end_op_str)] = term
+            search_terms[u'var_' + str(item['varName']) + u'__' + str(operator.back_end_op_str)] = term
     dataset = search_terms.pop(u'var_dataset__exact', None)
     if dataset is None:
         # Map I-Am searches to the appropriate dataset.
@@ -84,7 +89,7 @@ def perform_search(search, lang):
         try:
             if json.loads(search_terms.get(u'var_intra_american_voyage__exact', 'false')):
                 dataset = VoyageDataset.IntraAmerican
-            rem_keys = [k for k in search_terms.keys() if k.startswith(u'var_intra_american_voyage')]
+            rem_keys = [k for k in list(search_terms.keys()) if k.startswith(u'var_intra_american_voyage')]
             for k in rem_keys:
                 search_terms.pop(k)
         except:
@@ -104,7 +109,7 @@ def perform_search(search, lang):
         remaped_fields = []
         for field in order_fields:
             # Remap field names if they are plain text or language dependent.
-            order_by_field = u'var_' + unicode(field['name'])
+            order_by_field = u'var_' + str(field['name'])
             if order_by_field.endswith('_partial'):
                 # Partial dates are encoded in a way that is terrible for sorting MM,DD,YYYY.
                 # Therefore we use the original Date value (which defaults month, day to 1).
@@ -179,7 +184,7 @@ def get_results_timeline(results, post):
     timeline_var_name = post.get('timelineVariable')
     timeline_var = _all_timeline_vars.get(timeline_var_name)
     if not timeline_var:
-        return HttpResponseBadRequest('Timeline variable is invalid ' + str(timeline_var_name) + '. Available: ' + str(_all_timeline_vars.keys()))
+        return HttpResponseBadRequest('Timeline variable is invalid ' + str(timeline_var_name) + '. Available: ' + str(list(_all_timeline_vars.keys())))
     timeline_var_name = timeline_var['var_name']
     timeline_data = sorted(timeline_var['time_line_func'](results, timeline_var_name), key=lambda t: t[0])
     return JsonResponse({'var_name': timeline_var_name, 'data': [{'year': t[0], 'value': t[1]} for t in timeline_data]})
@@ -197,30 +202,30 @@ def get_results_graph(results, post):
     x_axis = graphData.get('xAxis', '')
     y_axes = graphData.get('yAxes', [])
     if not x_axis in _all_x_axes:
-        return HttpResponseBadRequest('X axis is invalid: ' + str(x_axis) + '. Available: ' + str(_all_x_axes.keys()))
+        return HttpResponseBadRequest('X axis is invalid: ' + str(x_axis) + '. Available: ' + str(list(_all_x_axes.keys())))
     if len(y_axes) == 0:
         return HttpResponseBadRequest('No Y axis specified')
     missing_y_axes = [y for y in y_axes if y not in _all_y_axes]
     if len(missing_y_axes) > 0:
-        return HttpResponseBadRequest('Missing Y axes: ' + str(missing_y_axes) + '. Available: ' + str(_all_y_axes.keys()))
+        return HttpResponseBadRequest('Missing Y axes: ' + str(missing_y_axes) + '. Available: ' + str(list(_all_y_axes.keys())))
     x_axis_info = _all_x_axes[x_axis]
     output = get_graph_data(results, x_axis_info, [_all_y_axes[y] for y in y_axes])
     data_format = post.get('data_format', 'json')
     if data_format == 'json':
-        return JsonResponse({unicode(_(k)): [{'x': v[0], 'value': v[1]} for v in lst] for k, lst in output.items()})
+        return JsonResponse({str(_(k)): [{'x': v[0], 'value': v[1]} for v in lst] for k, lst in list(output.items())})
     if data_format == 'csv':
         # Here we need to build a tabular data format. The output
         # is a collection of series, each correspond to a column in
         # the export. It is not necessary that they have the same row
         # sets, so we first build a row index to account for "blank"
         # cells in the output.
-        all_series = output.values()
+        all_series = list(output.values())
         row_index = sorted(set(sum([[v[0] for v in lst] for lst in all_series], [])))
         columns = [{v[0]: v[1] for v in lst} for lst in all_series]
         response = HttpResponse(content_type='text/csv')
         response['Content-Disposition'] = 'attachment; filename="graph.csv"'
         writer = csv.writer(response)
-        writer.writerow([x_axis_info.description or ''] + output.keys())
+        writer.writerow([x_axis_info.description or ''] + list(output.keys()))
         for index in row_index:
             writer.writerow([index] + [col.get(index, '') for col in columns])
         return response
@@ -235,7 +240,7 @@ def get_results_map_animation(results, allow_no_numbers = False):
     for pk in keys:
         voyage = all_voyages.get(pk)
         if voyage is None:
-            print "Missing voyage with PK" + str(pk)
+            print("Missing voyage with PK" + str(pk))
             continue
         
         def can_show(port_pk):
@@ -264,7 +269,7 @@ def get_results_map_animation(results, allow_no_numbers = False):
                 "month": voyage.month,
                 "ship_ton": voyage.ship_ton if voyage.ship_ton is not None else 0,
                 "nat_id": voyage.ship_nat_pk if voyage.ship_nat_pk is not None else 0,
-                "ship_name": unicode(voyage.ship_name) if voyage.ship_name is not None else '',
+                "ship_name": str(voyage.ship_name) if voyage.ship_name is not None else '',
             })
     return JsonResponse(items, safe=False)
 
@@ -289,8 +294,8 @@ def get_timelapse_port_regions(request):
     # Generate a simple JSON that reports the broad regions.
     VoyageCache.load()
     regions = { 
-        'src': { pk: { 'value': r.value, 'name': r.name } for pk, r in VoyageCache.regions.items() if r.parent == 1 },
-        'dst': { pk: { 'value': r.value, 'name': r.name } for pk, r in VoyageCache.broad_regions.items() }
+        'src': { pk: { 'value': r.value, 'name': r.name } for pk, r in list(VoyageCache.regions.items()) if r.parent == 1 },
+        'dst': { pk: { 'value': r.value, 'name': r.name } for pk, r in list(VoyageCache.broad_regions.items()) }
     }
     return JsonResponse(regions)
 
@@ -308,7 +313,7 @@ def get_results_map_flow(request, results):
     def add_flow(source, destination, embarked, disembarked):
         result = embarked is not None and disembarked is not None and add_port(source) and add_port(destination)
         if result:
-            flow_key = long(source[0].pk) * 2147483647 + long(destination[0].pk)
+            flow_key = int(source[0].pk) * 2147483647 + int(destination[0].pk)
             current = map_flows.get(flow_key)
             if current is not None:
                 embarked += current[2]
@@ -521,7 +526,7 @@ def ajax_download(request):
     if len(columns) == 0:
         # Get all columns.
         lang_version = 'lang_' + lang
-        columns = [col for col in results[0].get_stored_fields().keys() if 'lang' not in col or lang_version in col]
+        columns = [col for col in list(results[0].get_stored_fields().keys()) if 'lang' not in col or lang_version in col]
         # Remove columns which have a name matching a prefix of another column.
         copy = list(columns)
         columns = [col for col in copy if len([x for x in copy if len(x) > len(col) and col in x]) == 0]
@@ -567,7 +572,7 @@ def get_var_options(request):
     var_name = data.get('var_name', '(blank)')
     options_model = _options_model.get(var_name)
     if not options_model:
-        return HttpResponseBadRequest('Caller passed: "' + var_name + '". Must specify some var_name in ' + str(_options_model.keys()))
+        return HttpResponseBadRequest('Caller passed: "' + var_name + '". Must specify some var_name in ' + str(list(_options_model.keys())))
     # Check if we have the results cached to avoid a db hit.
     cache_key = '_options_' + var_name
     response_data = cache.get(cache_key)

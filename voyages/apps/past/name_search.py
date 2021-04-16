@@ -1,6 +1,10 @@
+from __future__ import unicode_literals
 # Levenshtein-distance based search with ranked results.
 # https://en.wikipedia.org/wiki/Levenshtein_distance
 
+from builtins import str
+from builtins import range
+from builtins import object
 import threading
 import unicodedata
 import heapq
@@ -19,14 +23,14 @@ def strip_accents(text):
     :rtype: String.
     """
     try:
-        text = unicode(text, 'utf-8')
+        text = str(text, 'utf-8')
     except (TypeError, NameError): # unicode is a default on python 3 
         pass
     text = unicodedata.normalize('NFD', text)
     text = text.encode('ascii', 'ignore')
     return str(text.lower())
 
-class NameSearchCache:
+class NameSearchCache(object):
     _loaded = False
     _lock = threading.Lock()
     _index = None

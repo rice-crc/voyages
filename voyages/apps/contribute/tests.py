@@ -1,11 +1,15 @@
+from __future__ import print_function
+from __future__ import absolute_import
+from __future__ import unicode_literals
+from builtins import str
 from django.test import TestCase, TransactionTestCase
 from django.test.utils import override_settings
 from django.core.urlresolvers import reverse
 import random
 from django.contrib.auth.models import User
-from imputed import *
-from models import *
-from forms import *
+from .imputed import *
+from .models import *
+from .forms import *
 from voyages.apps.voyage.models import *
 import numbers
 import csv
@@ -114,7 +118,7 @@ class TestImputedDataCalculation(TestCase):
         with open(file_name) as csvfile:
             reader = csv.DictReader(csvfile)
             for row in reader:
-                row = {k: v if v and v.strip() != '' else None for k, v in row.items()}
+                row = {k: v if v and v.strip() != '' else None for k, v in list(row.items())}
                 data[row['voyageid']] = row
         return data
     
@@ -123,8 +127,8 @@ class TestImputedDataCalculation(TestCase):
         folder = os.path.dirname(os.path.realpath(__file__)) + '/testdata/'
         errors = self.compute_imputed_csv(folder + 'ImputeTestData.csv', folder + 'ImputeTestDataOutput.csv')        
         if len(errors) > 0:
-            print 'Failed count ' + str(len(errors))
-        self.assertEqual(0, len(errors), '\n'.join(errors.values()))
+            print('Failed count ' + str(len(errors)))
+        self.assertEqual(0, len(errors), '\n'.join(list(errors.values())))
     
     def compute_imputed_csv(self, input_csv, output_csv, dump_file=None):
         # The test dataset is divided into two CSV files, one contains the source
@@ -135,7 +139,7 @@ class TestImputedDataCalculation(TestCase):
             raise Exception('Input and output files do not have the same row count')
         
         # Join input and output data
-        for k, v in test_input.items():
+        for k, v in list(test_input.items()):
             v.update(test_output[k])
         errors = {}
         
@@ -154,7 +158,7 @@ class TestImputedDataCalculation(TestCase):
         
         computed_data = []
         first = True
-        for voyage_id, row in test_input.items():
+        for voyage_id, row in list(test_input.items()):
             interim = self.interim_voyage(row)
             try:
                 all_vars = compute_imputed_vars(interim)[2]
@@ -163,10 +167,10 @@ class TestImputedDataCalculation(TestCase):
                 continue 
             # Check that the imputed fields all match.
             mismatches = []
-            for k, v in all_vars.items():
+            for k, v in list(all_vars.items()):
                 if not k in row:
                     if first:
-                        print "WARNING: Missing field in target output: " + k
+                        print("WARNING: Missing field in target output: " + k)
                     continue
                 expected = row[k]
                 if is_number(v) or is_number(expected):
@@ -190,7 +194,7 @@ class TestImputedDataCalculation(TestCase):
         
         if dump_file is not None and len(computed_data) > 0:
             with open(dump_file, 'w') as csvfile:
-                writer = csv.DictWriter(csvfile, computed_data[0].keys())
+                writer = csv.DictWriter(csvfile, list(computed_data[0].keys()))
                 writer.writeheader()
                 for row in computed_data:
                     writer.writerow(row)
@@ -422,7 +426,7 @@ class TestEditorialPlatform(TransactionTestCase):
         
         # Submit data to save record (no source references yet).
         def get_cleaned_form_data(form):
-            return {k: v.pk if hasattr(v, 'pk') else v for k, v in form.cleaned_data.items() if v is not None}
+            return {k: v.pk if hasattr(v, 'pk') else v for k, v in list(form.cleaned_data.items()) if v is not None}
         
         ajax_data = get_cleaned_form_data(form)
         ajax_data.update(slave_numbers)
@@ -440,7 +444,7 @@ class TestEditorialPlatform(TransactionTestCase):
         self.assertEqual(response.status_code, 200) # not a redirect since there are no sources for this contribution.
         
         # Now submit sources.
-        source_type_inverse = {v: k for k, v in source_type_dict.items()}
+        source_type_inverse = {v: k for k, v in list(source_type_dict.items())}
         new_sources = [
             {u'place_of_publication': u'Cambridge', u'information': None, u'source_ref_text': None,
              u'page_end': 34, u'book_title': u'Transatlantic History', u'url': None, u'publisher': u'CUP',
@@ -480,7 +484,7 @@ class TestEditorialPlatform(TransactionTestCase):
         parsed_response = json.loads(json_response.content)
         self.assertEqual(len(parsed_response), 1)
         self.assertTrue('new/' + str(original_contribution_pk) in parsed_response)
-        data = parsed_response.values()[0]
+        data = list(parsed_response.values())[0]
         self.assertEqual([u'Lion'], data['voyage_ship'])
         
         json_response = self.client.post(reverse('contribute:begin_editorial_review'), {'contribution_id': 'new/' + str(original_contribution_pk)})
@@ -541,7 +545,7 @@ class TestEditorialPlatform(TransactionTestCase):
             self.assertTrue(is_valid, form.errors.as_text())
         submit_data = get_cleaned_form_data(form)
         submit_data.update(slave_numbers)
-        submit_data.update({prefix + k: v for k, v in editor_numbers.items()})
+        submit_data.update({prefix + k: v for k, v in list(editor_numbers.items())})
         submit_data.update({
             'editorial_decision': ReviewRequestDecision.accepted_by_editor,
             'created_voyage_id': 99999,
@@ -553,7 +557,7 @@ class TestEditorialPlatform(TransactionTestCase):
         self.assertEqual(parsed_response['result'], 'Failed')
         
         # Now we create the source reference.
-        source_post_data = {'interim_source[' + str(k) + ']': v for k, v in new_sources[0].items() if v is not None}
+        source_post_data = {'interim_source[' + str(k) + ']': v for k, v in list(new_sources[0].items()) if v is not None}
         source_post_data['mode'] = 'new'
         response = self.client.post(reverse('contribute:editorial_sources'), source_post_data)
         data = response.context
@@ -599,7 +603,7 @@ class TestEditorialPlatform(TransactionTestCase):
             reverse('contribute:submit_editorial_decision', kwargs={'editor_contribution_id': editor_contribution_id}),
             submit_data)
         parsed_response = json.loads(json_response.content)
-        print parsed_response
+        print(parsed_response)
         self.assertEqual(parsed_response['result'], 'OK')
         
         contribution = NewVoyageContribution.objects.get(pk=original_contribution_pk)
@@ -617,7 +621,7 @@ class TestEditorialPlatform(TransactionTestCase):
         parsed_response = json.loads(json_response.content)
         self.assertEqual(len(parsed_response), 1)
         self.assertTrue('new/' + str(original_contribution_pk) in parsed_response)
-        data = parsed_response.values()[0]
+        data = list(parsed_response.values())[0]
         self.assertEqual(data['reviewer_final_decision'], 'Accepted')
         self.assertEqual(data['review_request_id'], active_reviews[0].pk)
         self.assertEqual(data['voyage_ids'], [999999])
@@ -649,7 +653,7 @@ class TestEditorialPlatform(TransactionTestCase):
         pub_voyage = Voyage.all_dataset_objects.filter(voyage_id=999999).first()
         from django.core import serializers
         error_dump = serializers.serialize("json", [pub_voyage.voyage_ship, pub_voyage.voyage_itinerary, pub_voyage.voyage_slaves_numbers, pub_voyage.voyage_dates])
-        print error_dump
+        print(error_dump)
         self.assertTrue(pub_voyage is not None)
         self.assertEqual(pub_voyage.voyage_ship.ship_name, u'Lion')
         self.assertEqual(pub_voyage.voyage_ship.registered_year, 1645)

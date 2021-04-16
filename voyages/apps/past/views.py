@@ -1,3 +1,8 @@
+from __future__ import division
+from __future__ import absolute_import
+from __future__ import unicode_literals
+from builtins import str
+from past.utils import old_div
 from datetime import date
 from django.conf import settings
 from django.core.paginator import Paginator
@@ -10,7 +15,7 @@ from django.views.decorators.cache import cache_page
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 from voyages.apps.past.models import *
-from name_search import NameSearchCache
+from .name_search import NameSearchCache
 import itertools
 import json
 import uuid
@@ -18,7 +23,7 @@ import uuid
 def _generate_table(query, table_params, data_adapter=None):
     try:
         rows_per_page = int(table_params.get('length', 10))
-        current_page_num = 1 + int(table_params.get('start', 0)) / rows_per_page
+        current_page_num = 1 + old_div(int(table_params.get('start', 0)), rows_per_page)
         paginator = Paginator(query, rows_per_page)
         page = paginator.page(current_page_num)
     except:

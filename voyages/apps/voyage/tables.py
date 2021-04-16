@@ -1,3 +1,6 @@
+from __future__ import unicode_literals
+from builtins import range
+from builtins import object
 from django.utils.translation import ugettext_lazy as _
 import json
 
@@ -45,11 +48,11 @@ def get_pivot_table_advanced(results, row_field, col_field, cell_formula_dict, r
     row_data = [(x['val'], {y['val']: y for y in x['subcat']['buckets']}) for x in buckets if 'subcat' in x]
     return row_data
 
-class PivotTable():
+class PivotTable(object):
     def __init__(self, row_data, col_map=lambda x: x, row_map=lambda x: x, omit_empty=False):
         self.row_data = sorted(row_data, key=lambda r: r[0])
         # Extract the columns from row_data, eliminating duplicates.
-        self.original_columns = sorted(set([header for r in self.row_data for header in r[1].keys()]))
+        self.original_columns = sorted(set([header for r in self.row_data for header in list(r[1].keys())]))
         self.columns = [col_map(c) for c in self.original_columns]
         self.original_rows = [r[0] for r in self.row_data]
         self.rows = [row_map(r) for r in self.original_rows]
@@ -63,7 +66,7 @@ class PivotTable():
             def safe_num(x):
                 try:
                     return float(x[default_cell_key]) if default_cell_key in x\
-                        else sum([float(v) for k, v in x.items() if not k in excluded_bucket_keys])
+                        else sum([float(v) for k, v in list(x.items()) if not k in excluded_bucket_keys])
                 except:
                     return 0
 

@@ -1,3 +1,5 @@
+from __future__ import unicode_literals
+from builtins import object
 from captcha.fields import CaptchaField
 from collections import OrderedDict
 from django import forms
@@ -21,7 +23,7 @@ class AdminFaqAdminForm(forms.ModelForm):
     question = forms.CharField(widget=forms.Textarea(attrs={'rows':4, 'cols':60}))
     answer = forms.CharField(widget=AdvancedEditor(attrs={'class' : 'tinymcetextarea', 'label': 'Answer'}))
 
-    class Meta:
+    class Meta(object):
         model = AdminFaq
         fields = '__all__'
 
@@ -60,7 +62,7 @@ class SignUpForm(forms.Form):
             'terms',
             'agree_to_terms',
         ]
-        self.fields = OrderedDict(sorted(self.fields.items(), key=lambda k: key_order.index(k[0]) if k[0] in key_order else 1000))
+        self.fields = OrderedDict(sorted(list(self.fields.items()), key=lambda k: key_order.index(k[0]) if k[0] in key_order else 1000))
         self.fields['terms'].widget.attrs['readonly'] = True
 
     def signup(self, request, user):
@@ -117,12 +119,12 @@ class InterimVoyageForm(forms.ModelForm):
     def full_clean(self):
         self.cleaned_data = {}
         super(InterimVoyageForm, self).full_clean()
-        for k, v in self._errors.items():
+        for k, v in list(self._errors.items()):
             if k.startswith('date_'):
                 del self._errors[k]
         return self.cleaned_data
 
-    class Meta:
+    class Meta(object):
         model = InterimVoyage
         fields = '__all__'
         help_texts = {

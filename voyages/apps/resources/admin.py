@@ -1,3 +1,5 @@
+from __future__ import unicode_literals
+from builtins import object
 from django.contrib import admin
 from .models import *
 from .forms import *
@@ -13,7 +15,7 @@ class ImageAdmin(admin.ModelAdmin):
 
     form = ImageAdminForm
 
-    class Meta:
+    class Meta(object):
         model = Image
 
 
@@ -24,7 +26,7 @@ class ImageCategoryAdmin(admin.ModelAdmin):
     ordering = ['value']
     search_fields = ['value']
 
-    class Meta:
+    class Meta(object):
         model = ImageCategory
 
 
@@ -34,7 +36,7 @@ class CountryAdmin(admin.ModelAdmin):
     ordering = ['country_id']
     search_fields = ['country_id', 'name']
 
-    class Meta:
+    class Meta(object):
         model = Country
 
 
@@ -44,7 +46,7 @@ class SexAgeAdmin(admin.ModelAdmin):
     ordering = ['sex_age_id']
     search_fields = ['sex_age_id', 'name']
 
-    class Meta:
+    class Meta(object):
         model = SexAge
 
 
@@ -56,7 +58,7 @@ class AfricanNameAdmin(admin.ModelAdmin):
     ordering = ['slave_id']
     search_fields = ['slave_id', 'name', 'age', 'height', 'source', 'ship_name', 'date_arrived', 'voyage_number']
 
-    class Meta:
+    class Meta(object):
         model = AfricanName
 
 

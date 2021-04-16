@@ -1,3 +1,6 @@
+from __future__ import absolute_import
+from __future__ import unicode_literals
+from builtins import str
 from django.conf import settings
 from django.core import management
 from django.db import transaction
@@ -326,7 +329,7 @@ def _map_voyage_to_spss(voyage):
     data['YEARAM'] = yearam
     data['VOY1IMP'] = dates.imp_length_home_to_disembark
     data['VOY2IMP'] = dates.imp_length_leaving_africa_to_disembark
-    from imputed import year_mod
+    from .imputed import year_mod
     data['YEAR5'] = year_mod(yearam, 5, 1500)
     data['YEAR10'] = year_mod(yearam, 10, 1500)
     data['YEAR25'] = year_mod(yearam, 25, 1500)

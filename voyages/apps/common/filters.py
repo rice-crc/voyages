@@ -1,3 +1,5 @@
+from __future__ import unicode_literals
+from past.builtins import basestring
 from django.utils.safestring import mark_safe
 from django.conf import settings
 from django.core import serializers

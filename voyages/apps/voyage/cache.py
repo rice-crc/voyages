@@ -1,7 +1,10 @@
+from __future__ import absolute_import
+from __future__ import unicode_literals
+from builtins import object
 import threading
-from models import *
+from .models import *
 
-class CachedGeo:
+class CachedGeo(object):
     """
     Caches a geographical place (could be a port, region, or broad region)
     """
@@ -29,7 +32,7 @@ class CachedGeo:
         broad_region = VoyageCache.broad_regions.get(region.parent)
         return port, region, broad_region
 
-class CachedVoyage:
+class CachedVoyage(object):
     """
     Cache the most basic information of a voyage for map generation and aggregation
     """
@@ -46,7 +49,7 @@ class CachedVoyage:
         self.embarked = embarked
         self.disembarked = disembarked
 
-class VoyageCache:
+class VoyageCache(object):
     """
     Caches all geo locations and all voyages in the db loading only the minimum
     amount of fields required.
@@ -85,7 +88,7 @@ class VoyageCache:
                                                             'longitude',
                                                             'show_on_main_map',
                                                             'region_id').iterator()}
-            cls.ports_by_value = {x.value: x for x in cls.ports.values()}
+            cls.ports_by_value = {x.value: x for x in list(cls.ports.values())}
             cls.regions = {x[0]: CachedGeo(x[0], x[1], x[2], x[3], x[4], x[5], x[6])
                            for x in Region.objects.values_list('pk',
                                                                'value',
@@ -94,7 +97,7 @@ class VoyageCache:
                                                                'longitude',
                                                                'show_on_main_map',
                                                                'broad_region_id').iterator()}
-            cls.regions_by_value = {x.value: x for x in cls.regions.values()}
+            cls.regions_by_value = {x.value: x for x in list(cls.regions.values())}
             cls.broad_regions = {x[0]: CachedGeo(x[0], x[1], x[2], x[3], x[4], x[5], None)
                                  for x in BroadRegion.objects.values_list('pk',
                                                                           'value',
@@ -102,7 +105,7 @@ class VoyageCache:
                                                                           'latitude',
                                                                           'longitude',
                                                                           'show_on_map').iterator()}
-            cls.broad_regions_by_value = {x.value: x for x in cls.broad_regions.values()}
+            cls.broad_regions_by_value = {x.value: x for x in list(cls.broad_regions.values())}
             nations = list(Nationality.objects.values_list('pk', 'label', 'value'))
             cls.nations = {x[0]: x[1] for x in nations}
             cls.nations_by_value = {x[2]: x[1] for x in nations}
