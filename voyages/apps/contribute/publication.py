@@ -12,12 +12,12 @@ import unicodecsv as csv
 import re
 
 _exported_spss_fields = \
-    ['VOYAGEID', 'STATUS', 'ADLT1IMP', 'ADLT2IMP', 'ADLT3IMP', 'ADPSALE1', 'ADPSALE2', 
+    ['VOYAGEID', 'STATUS', 'ADLT1IMP', 'ADLT2IMP', 'ADLT3IMP', 'ADPSALE1', 'ADPSALE2',
     'ADULT1', 'ADULT2', 'ADULT3', 'ADULT4', 'ADULT5', 'ADULT6', 'ADULT7',
     'ARRPORT', 'ARRPORT2', 'BOY1', 'BOY2', 'BOY3', 'BOY4', 'BOY5', 'BOY6',
     'BOY7', 'BOYRAT7', 'CAPTAINA', 'CAPTAINB',
     'CAPTAINC', 'CHIL1IMP', 'CHIL2IMP', 'CHIL3IMP', 'CHILD1', 'CHILD2',
-    'CHILD3', 'CHILD4', 'CHILD5', 'CHILD6', 'CHILD7', 
+    'CHILD3', 'CHILD4', 'CHILD5', 'CHILD6', 'CHILD7',
     'CHILRAT7', 'CONSTREG', 'CREW', 'CREW1', 'CREW2', 'CREW3',
     'CREW4', 'CREW5', 'CREWDIED', 'DATEDEPA', 'DATEDEPB', 'DATEDEPC',
     'D1SLATRA', 'D1SLATRB', 'D1SLATRC', 'DLSLATRA', 'DLSLATRB',
@@ -29,7 +29,7 @@ _exported_spss_fields = \
     'EMBREG', 'EMBREG2', 'EVGREEN', 'FATE', 'FATE2', 'FATE3', 'FATE4',
     'FEMALE1', 'FEMALE2', 'FEMALE3', 'FEMALE4', 'FEMALE5', 'FEMALE6',
     'FEMALE7', 'FEML1IMP', 'FEML2IMP', 'FEML3IMP', 'GIRL1', 'GIRL2',
-    'GIRL3', 'GIRL4', 'GIRL5', 'GIRL6', 'GIRL7',  
+    'GIRL3', 'GIRL4', 'GIRL5', 'GIRL6', 'GIRL7',
     'GIRLRAT7', 'GUNS', 'INFANT1', 'INFANT2', 'INFANT3',
     'INFANT4', 'INFANT5', 'INFANT6', 'JAMCASPR',
     'MAJBUYPT', 'MAJBYIMP', 'MAJBYIMP1', 'MAJSELPT', 'MALE1', 'MALE1IMP',
@@ -98,9 +98,9 @@ def export_contributions(statuses):
     for user_contrib in notreviewed:
         for data in export_contribution(user_contrib, None, None, 'not reviewed'):
             yield data
-    
+
 def export_from_review_requests(review_requests):
-    for req in review_requests:    
+    for req in review_requests:
         contrib = req.editor_contribution.first()
         user_contribution = req.contribution()
         status_text = 'undecided'
@@ -171,8 +171,8 @@ def publish_accepted_contributions(log_file, skip_backup=False):
     everything is published or nothing is.
     """
     import os
-    
-    def log(text):     
+
+    def log(text):
         log_file.write(text)
         log_file.flush()
         os.fsync(log_file.fileno())
@@ -181,12 +181,12 @@ def publish_accepted_contributions(log_file, skip_backup=False):
     transaction_started = False
     try:
         # Step 1 - Backup database
-        if not skip_backup:        
+        if not skip_backup:
             log('Backing up all data.\n')
             with open(settings.MEDIA_ROOT  + '/db.json', 'w') as f:
                 management.call_command('dumpdata', stdout=f)
             log('Finished backup.\n')
-        
+
         log('Fetching contributions...\n')
         (review_requests, _) = _fetch_active_reviews_by_status([ContributionStatus.approved])
         log('Publishing...\n')
@@ -240,7 +240,7 @@ def publish_accepted_contributions(log_file, skip_backup=False):
                         r = post('<commit />')
                         if r.status_code != 200:
                             log('Failed to commit deletion for Solr record for voyage_id ' + str(id) + ' response code: ' + str(r.status_code))
-                            
+
                 for id in all_deleted_ids:
                     post_delete_request(id)
         except:
@@ -267,7 +267,7 @@ def _delete_child_fk(obj, child_attr):
         setattr(obj, child_attr, None)
         obj.save()
         child.delete()
-        
+
 def _fetch_active_reviews_by_status(statuses):
     contribution_info = get_filtered_contributions({'status__in': statuses})
     review_requests = []
@@ -282,7 +282,7 @@ def _fetch_active_reviews_by_status(statuses):
         else:
             review_requests += reqs
     return review_requests, notreviewed_contributions
-    
+
 def _map_csv_date(data, varname, csv_date, labels=['A', 'B', 'C']):
     if csv_date is None: return None
     members = csv_date.split(',')
@@ -291,18 +291,18 @@ def _map_csv_date(data, varname, csv_date, labels=['A', 'B', 'C']):
     data[varname + labels[0]] = int(members[1]) if members[1] and members[1] != '' else None
     data[varname + labels[1]] = int(members[0]) if members[0] and members[0] != '' else None
     data[varname + labels[2]] = int(members[2]) if members[2] and members[2] != '' else None
-    
+
 def _get_label_value(x):
     return x.value if x else None
 
 def _get_region_value(place):
     return place.region.value if place else None
-    
+
 def _map_voyage_to_spss(voyage):
     data = {'STATUS': 'PUBLISHED'}
     data['VOYAGEID'] = voyage.voyage_id
     data['INTRAAMER'] = 1 if voyage.dataset == 1 else 0
-    
+
     # Dates
     dates = voyage.voyage_dates
     data['DATEDEP'] = dates.voyage_began
@@ -344,7 +344,7 @@ def _map_voyage_to_spss(voyage):
         data['FATE3'] = _get_label_value(outcomes.vessel_captured_outcome)
         data['FATE4'] = _get_label_value(outcomes.outcome_owner)
         data['RESISTANCE'] = _get_label_value(outcomes.resistance)
-    
+
     # Ship
     ship = voyage.voyage_ship
     data['SHIPNAME'] = ship.ship_name
@@ -359,7 +359,7 @@ def _map_voyage_to_spss(voyage):
     data['YRREG'] = ship.registered_year
     data['PLACREG'] = _get_label_value(ship.registered_place)
     data['REGISREG'] = _get_label_value(ship.registered_region)
-    
+
     aux = 'ABCDEFGHIJKLMNOP'
     for i, owner in enumerate(voyage.voyage_ship_owner.all()):
         if i >= len(aux): break
@@ -371,7 +371,7 @@ def _map_voyage_to_spss(voyage):
     for i, captain in enumerate(voyage.voyage_captain.all()):
         if i >= len(aux): break
         data['CAPTAIN' + aux[i]] = captain.name
-    
+
     # Itinerary
     itinerary = voyage.voyage_itinerary
     data['PORTDEP'] = _get_label_value(itinerary.port_of_departure)
@@ -412,7 +412,7 @@ def _map_voyage_to_spss(voyage):
     data['MJSELIMP1'] = _get_label_value(itinerary.imp_broad_region_slave_dis)
     data['DEPTREGIMP'] = _get_label_value(itinerary.imp_region_voyage_begin)
     data['DEPTREGIMP1'] = _get_label_value(itinerary.imp_broad_region_voyage_begin)
-    
+
     # Crew
     crew = voyage.voyage_crew
     data['CREW1'] = crew.crew_voyage_outset
@@ -428,7 +428,7 @@ def _map_voyage_to_spss(voyage):
     data['SAILD5'] = crew.crew_died_on_return_voyage
     data['CREWDIED'] = crew.crew_died_complete_voyage
     data['NDESERT'] = crew.crew_deserted
-    
+
     # Numbers
     numbers = voyage.voyage_slaves_numbers
     data['SLADAFRI'] = numbers.slave_deaths_before_africa
@@ -553,23 +553,23 @@ def _map_voyage_to_spss(voyage):
     data["MENRAT3"] = numbers.percentage_men_among_landed_slaves
     data["WOMRAT3"] = numbers.percentage_women_among_landed_slaves
     # INSERT HERE any new number variables [export CSV]
-    
+
     aux = 'ABCDEFGHIJKLMNOPQR'
     for i, source_conn in enumerate(voyage.group.all()):
         if i >= len(aux): break
         data['SOURCE' + aux[i]] = source_conn.text_ref
-        
+
     data['XMIMPFLAG'] = _get_label_value(voyage.voyage_groupings)
 
     # Links
     links = [str(link.second.voyage_id) for link in voyage.links_to_other_voyages.all()]
     data['VOYAGEID2'] = '/'.join(links)
-    
+
     return data
 
 def _map_interim_to_spss(interim):
     data = {}
-    
+
     _map_csv_date(data, 'DATEDEP', interim.date_departure)
     _map_csv_date(data, 'D1SLATR', interim.date_slave_purchase_began)
     _map_csv_date(data, 'DLSLATR', interim.date_vessel_left_last_slaving_port)
@@ -579,7 +579,7 @@ def _map_interim_to_spss(interim):
     _map_csv_date(data, 'DDEPAM', interim.date_return_departure, ['', 'B', 'C'])
     _map_csv_date(data, 'DATARR4', interim.date_voyage_completed, '345')
     data['VOYAGE'] = interim.length_of_middle_passage
-    
+
     # Ship, nation, owners
     data['SHIPNAME'] = interim.name_of_vessel
     data['NATIONAL'] = _get_label_value(interim.national_carrier)
@@ -600,15 +600,15 @@ def _map_interim_to_spss(interim):
     for i, owner in enumerate(other_ship_owners):
         if i >= len(aux): break
         data['OWNER' + aux[i]] = owner
-       
-    data['CAPTAINA'] = interim.first_captain    
-    data['CAPTAINB'] = interim.second_captain    
+
+    data['CAPTAINA'] = interim.first_captain
+    data['CAPTAINB'] = interim.second_captain
     data['CAPTAINC'] = interim.third_captain
-    
+
     # Outcome
     data['FATE'] = _get_label_value(interim.voyage_outcome)
     data['RESISTANCE'] = _get_label_value(interim.african_resistance)
-    
+
     # Itinerary
     data['PORTDEP'] = _get_label_value(interim.port_of_departure)
     data['EMBPORT'] = _get_label_value(interim.first_port_intended_embarkation)
@@ -673,7 +673,7 @@ def _map_interim_to_spss(interim):
     data['VYMRTIMP'] = interim.imputed_total_slave_deaths_during_middle_passage
     data['VYMRTRAT'] = interim.imputed_mortality_rate
     data['JAMCASPR'] = interim.imputed_standardized_price_of_slaves
-    
+
     # Sources
     created_sources = list(interim.article_sources.all()) + list(interim.book_sources.all()) + \
         list(interim.newspaper_sources.all()) + list(interim.private_note_or_collection_sources.all()) + \
@@ -684,11 +684,11 @@ def _map_interim_to_spss(interim):
     for i, ref in enumerate(source_refs):
         if i >= len(aux): break
         data['SOURCE' + aux[i]] = ref
-    
+
     # Numerical variables
     for n in interim.slave_numbers.all():
         data[n.var_name] = n.number
-        
+
     return data
 
 def _save_editorial_version(review_request, contrib_type, in_cd_rom_override=None):
@@ -707,7 +707,7 @@ def _save_editorial_version(review_request, contrib_type, in_cd_rom_override=Non
         voyage = Voyage.all_dataset_objects.get(voyage_id=contrib.edited_voyage_id)
     else:
         raise Exception('Unsupported contribution type ' + str(contrib_type))
-    
+
     # Edit field values and create child records for the voyage.
     if contrib_type != 'edit':
         voyage.voyage_in_cd_rom = in_cd_rom_override if in_cd_rom_override is not None else False
@@ -721,19 +721,19 @@ def _save_editorial_version(review_request, contrib_type, in_cd_rom_override=Non
         voyage.voyage_captain.clear()
         voyage.voyage_ship_owner.clear()
         voyage.voyage_sources.clear()
-    
+
     voyage.dataset = review_request.dataset
     # Save voyage so that the database generates a primary key for it.
     voyage.voyage_groupings = interim.imputed_voyage_groupings_for_estimating_imputed_slaves
     voyage.save()
-    
+
     def region(place):
         return None if place is None else place.region
-        
+
     def broad_region(place):
         r = region(place)
         return None if r is None else r.broad_region
-        
+
     # Voyage Ship
     ship = VoyageShip()
     ship.voyage = voyage
@@ -752,7 +752,7 @@ def _save_editorial_version(review_request, contrib_type, in_cd_rom_override=Non
     ship.imputed_nationality = interim.imputed_national_carrier
     ship.tonnage_mod = interim.imputed_standardized_tonnage
     ship.save()
-    
+
     # Voyage Ship Owners
     def create_ship_owner(owner_name, order):
         owner = VoyageShipOwner()
@@ -763,7 +763,7 @@ def _save_editorial_version(review_request, contrib_type, in_cd_rom_override=Non
         conn.owner_order = order
         conn.voyage = voyage
         conn.save()
-    
+
     if interim.first_ship_owner:
         create_ship_owner(interim.first_ship_owner, 1)
     if interim.second_ship_owner:
@@ -771,7 +771,7 @@ def _save_editorial_version(review_request, contrib_type, in_cd_rom_override=Non
     additional_ship_owners = _get_interim_additional_ship_owners(interim)
     for index, owner in enumerate(additional_ship_owners):
         create_ship_owner(owner, index + 3)
-            
+
     # Voyage Ship Captains
     def create_captain(name, order):
         captain = VoyageCaptain()
@@ -782,15 +782,15 @@ def _save_editorial_version(review_request, contrib_type, in_cd_rom_override=Non
         conn.captain_order = order
         conn.voyage = voyage
         conn.save()
-    
+
     if interim.first_captain:
         create_captain(interim.first_captain, 1)
     if interim.second_captain:
         create_captain(interim.second_captain, 2)
     if interim.third_captain:
         create_captain(interim.third_captain, 3)
-    
-    # Voyage Itinerary    
+
+    # Voyage Itinerary
     itinerary = VoyageItinerary()
     itinerary.voyage = voyage
     itinerary.port_of_departure = interim.port_of_departure
@@ -832,7 +832,7 @@ def _save_editorial_version(review_request, contrib_type, in_cd_rom_override=Non
     itinerary.imp_principal_region_slave_dis = region(interim.imputed_principal_port_of_slave_disembarkation)
     itinerary.imp_broad_region_slave_dis = broad_region(interim.imputed_principal_port_of_slave_disembarkation)
     itinerary.save()
-    
+
     # Voyage Outcome
     outcome = VoyageOutcome()
     outcome.voyage = voyage
@@ -842,7 +842,7 @@ def _save_editorial_version(review_request, contrib_type, in_cd_rom_override=Non
     outcome.vessel_captured_outcome = interim.imputed_outcome_of_voyage_if_ship_captured
     outcome.outcome_owner = interim.imputed_outcome_of_voyage_for_owner
     outcome.save()
-    
+
     # Voyage dates.
     def year_dummies(year):
         try:
@@ -850,7 +850,7 @@ def _save_editorial_version(review_request, contrib_type, in_cd_rom_override=Non
             return ',,' + str(year_int)
         except:
             return ',,'
-    
+
     dates = VoyageDates()
     dates.voyage = voyage
     dates.voyage_began = interim.date_departure
@@ -869,9 +869,9 @@ def _save_editorial_version(review_request, contrib_type, in_cd_rom_override=Non
     dates.imp_length_home_to_disembark = interim.imputed_voyage_length_home_port_to_first_port_of_disembarkation
     dates.imp_length_leaving_africa_to_disembark = interim.imputed_length_of_middle_passage
     dates.save()
-    
+
     numbers = {n.var_name.upper(): n.number for n in interim.slave_numbers.all()}
-    
+
     # Voyage crew
     crew = VoyageCrew()
     crew.voyage = voyage
@@ -889,7 +889,7 @@ def _save_editorial_version(review_request, contrib_type, in_cd_rom_override=Non
     crew.crew_died_complete_voyage = numbers.get('CREWDIED')
     crew.crew_deserted = numbers.get('NDESERT')
     crew.save()
-    
+
     # Voyage slave numbers
     slaves_numbers = VoyageSlavesNumbers()
     slaves_numbers.voyage = voyage
@@ -991,7 +991,7 @@ def _save_editorial_version(review_request, contrib_type, in_cd_rom_override=Non
     slaves_numbers.imp_num_adult_total = numbers.get('ADULT7')
     slaves_numbers.imp_num_child_total = numbers.get('CHILD7')
     slaves_numbers.imp_num_males_total = numbers.get('MALE7')
-    slaves_numbers.imp_num_females_total = numbers.get('FEMALE7')    
+    slaves_numbers.imp_num_females_total = numbers.get('FEMALE7')
     slaves_numbers.percentage_men = numbers.get('MENRAT7')
     slaves_numbers.percentage_women = numbers.get('WOMRAT7')
     slaves_numbers.percentage_boy = numbers.get('BOYRAT7')
@@ -1018,7 +1018,7 @@ def _save_editorial_version(review_request, contrib_type, in_cd_rom_override=Non
     slaves_numbers.percentage_women_among_landed_slaves = numbers.get(u'WOMRAT3')
     # INSERT HERE any new number variables [publish from interim]
     slaves_numbers.save()
-    
+
     # Voyage sources
     def create_source_connection(src, conn_ref, order):
         conn = VoyageSourcesConnection()
@@ -1027,13 +1027,13 @@ def _save_editorial_version(review_request, contrib_type, in_cd_rom_override=Non
         conn.source_order = order
         conn.text_ref = conn_ref
         conn.save()
-    
+
     def create_source_reference(short_ref, conn_ref, order):
         src = VoyageSources.objects.filter(short_ref=short_ref).first()
         if src is None:
             raise Exception('Source "' + short_ref + '" not found')
         create_source_connection(src, conn_ref, order)
-    
+
     created_sources = list(interim.article_sources.all()) + list(interim.book_sources.all()) + \
         list(interim.newspaper_sources.all()) + list(interim.private_note_or_collection_sources.all()) + \
         list(interim.unpublished_secondary_sources.all()) + list(interim.primary_sources.all())
@@ -1051,7 +1051,7 @@ def _save_editorial_version(review_request, contrib_type, in_cd_rom_override=Non
         if src.action == InterimPreExistingSourceActions.exclude: continue
         create_source_reference(src.original_short_ref, src.original_ref, source_order)
         source_order += 1
-    
+
     # Set voyage foreign keys (this is redundant, but we are keeping the original model design)
     voyage.voyage_ship = ship
     voyage.voyage_itinerary = itinerary
@@ -1059,22 +1059,22 @@ def _save_editorial_version(review_request, contrib_type, in_cd_rom_override=Non
     voyage.voyage_crew = crew
     voyage.voyage_slaves_numbers = slaves_numbers
     voyage.save()
-    
+
     return voyage
-    
+
 def _delete_voyages(ids):
     delete_voyages = list(Voyage.all_dataset_objects.filter(voyage_id__in=ids))
     if len(ids) != len(delete_voyages):
         raise Exception("Voyage not found for deletion, voyage ids=" + str(ids))
     for v in delete_voyages:
         v.delete()
-    
+
 def _publish_single_review_delete(review_request, all_deleted_ids):
     contribution = review_request.contribution()
     ids = list(contribution.get_related_voyage_ids())
     _delete_voyages(ids)
     all_deleted_ids.extend(ids)
-    
+
 def _publish_single_review_merge(review_request, all_deleted_ids):
     contribution = review_request.contribution()
     # Delete previous records and create a new one to replace them.
@@ -1083,9 +1083,9 @@ def _publish_single_review_merge(review_request, all_deleted_ids):
     _delete_voyages(ids)
     all_deleted_ids.extend(ids)
     _save_editorial_version(review_request, 'merge', True in in_cd_rom_list)
-    
+
 def _publish_single_review_new(review_request):
     _save_editorial_version(review_request, 'new')
-    
+
 def _publish_single_review_update(review_request):
     _save_editorial_version(review_request, 'edit')

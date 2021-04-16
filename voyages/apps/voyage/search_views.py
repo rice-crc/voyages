@@ -67,15 +67,15 @@ def perform_search(search, lang):
             term = term[0]
         skip = False
         if operator.front_end_op_str == _op_contains.front_end_op_str:
-            m = re.match(u'^\s*["\u201c](\*?)([^\*]*)(\*?)["\u201d]\s*$', term)
-            if m:   
+            m = re.match(r'^\s*["\u201c](\*?)([^\*]*)(\*?)["\u201d]\s*$', term)
+            if m:
                 # Change to exact match and remove quotes.
                 # Make sure we sanitize the input.
                 term = sqs.query.clean(m.group(2))
                 operator = _op_eq
                 # Here we are using Solr's format, which is not very portable,
                 # but at this stage this project is very dependent on Solr anyway.
-                # If the search is really for a full exact match, then we search 
+                # If the search is really for a full exact match, then we search
                 # on the plaintext_exact variant of the field. If it is a "contains"
                 # the exact search terms, then we use the plaintext variant instead.
                 custom_terms.append(u'var_' + str(item['varName']) + '_plaintext' + ('_exact' if len(m.group(1)) + len(m.group(3)) == 0 else '') + ':("' + term + '")')
@@ -191,7 +191,7 @@ def get_results_timeline(results, post):
 
 # Construct a dict with all X/Y-axes
 _all_x_axes = {a.id(): a for a in (graphs_x_axes + other_graphs_x_axes)}
-_all_y_axes = {a.id() + '_' + a.mode: a for a in graphs_y_axes} # MODES: avg, freq, count, sum 
+_all_y_axes = {a.id() + '_' + a.mode: a for a in graphs_y_axes} # MODES: avg, freq, count, sum
 def get_results_graph(results, post):
     """
     post['graphData']: contains a single X axis (xAxis key) and one or more Y axes (yAxes key).
@@ -242,11 +242,11 @@ def get_results_map_animation(results, allow_no_numbers = False):
         if voyage is None:
             print("Missing voyage with PK" + str(pk))
             continue
-        
+
         def can_show(port_pk):
             ph = CachedGeo.get_hierarchy(port_pk)
             return ph is not None and (ph[0].show or ph[1].show)
-        
+
         if can_show(voyage.emb_pk) and can_show(voyage.dis_pk) and \
                 voyage.year is not None and \
                 (allow_no_numbers or \
@@ -293,7 +293,7 @@ def get_compiled_routes(request):
 def get_timelapse_port_regions(request):
     # Generate a simple JSON that reports the broad regions.
     VoyageCache.load()
-    regions = { 
+    regions = {
         'src': { pk: { 'value': r.value, 'name': r.name } for pk, r in list(VoyageCache.regions.items()) if r.parent == 1 },
         'dst': { pk: { 'value': r.value, 'name': r.name } for pk, r in list(VoyageCache.broad_regions.items()) }
     }
@@ -375,7 +375,7 @@ def ajax_search(request):
         target_lang = 'lang_' + lang
         requested_fields = [x['data'] for x in data['tableParams']['columns']]
         requested_fields = set([f + '_' + lang if f.endswith('lang') else f for f in requested_fields])
-        return get_results_table(results, data, 
+        return get_results_table(results, data,
             field_filter=lambda field_name: field_name in requested_fields,
             key_adapter=lambda key_val: key_val[0].replace(target_lang, 'lang'))
     elif output_type == 'mapAnimation':
@@ -509,7 +509,7 @@ def ajax_download(request):
     API to download results in tabular format (Excel or CSV).
     The parameter 'data' of the request should contain a JSON
     encoded object.
-    
+
     The member 'cols' is an array of columns which correspond
     to Solr indexed variables. If this array is empty, all
     columns are exported.
