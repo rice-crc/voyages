@@ -30,7 +30,6 @@ import re
 from .forms import *
 from haystack.query import SearchQuerySet
 from . import globals
-import bitly_api
 import requests
 import json
 import xlwt
@@ -67,10 +66,10 @@ def get_voyages_search_query_set():
 def get_page(request, chapternum, sectionnum, pagenum):
     """
     Voyage Understanding the Database part
-    
+
     Display an html page corresponding to the chapter-section-page
-    
-    Further content is rendered using the pagepath parameter 
+
+    Further content is rendered using the pagepath parameter
     """
     # We might want to do some error checking for pagenum here. Even though 404 will be raised if needed
     pagepath = "voyage/c" + chapternum + "_s" + sectionnum + "_p" + pagenum + ".html"
@@ -121,9 +120,9 @@ def understanding_page(request, name='guide'):
 @staff_member_required
 def download_file(request):
     """
-    This view serves uploading files, which will be in 
+    This view serves uploading files, which will be in
     the download section. It uses UploadFileForm to maintain
-    information regarding uploaded files and call 
+    information regarding uploaded files and call
     handle_uploaded_file() to store files on the disk.
     This view is available only for admin users.
     """
@@ -294,7 +293,7 @@ def create_forms_from_var_list(var_list):
             form = SimpleDateSearchForm(prefix=varname)
             mdict = dict([(int(choice[0]), choice) for choice in globals.list_months])
             form.fields['months'].initial = [str(x).zfill(2) for x in var_list[varname + '_months'].split(',')]
-            
+
             opt = var_list[varname + '_options']
             form.fields['options'].initial = opt
             if opt == '1': # Between
@@ -393,7 +392,7 @@ def create_var_dict(query_forms, time_frame_form):
         var_list['used_variable_names'] = ';'.join(used_variables)
     #for var in var_list:
     #    var_list[var] = unidecode.unidecode(unicode(var_list[var]))
-    
+
     return var_list
 
 def create_query_dict(var_list):
@@ -768,7 +767,7 @@ def search(request):
         query_dict = create_query_dict(var_list)
         results = perform_search(query_dict, None, order_by_field, sort_direction, request.LANGUAGE_CODE)
         search_url = request.build_absolute_uri(reverse('voyage:search',)) + "?" + urllib.parse.urlencode(var_list)
-        
+
     elif request.method == "GET" or request.POST.get('submitVal') == 'reset':
         # A new search is being performed
         # Clear session keys.
@@ -782,7 +781,7 @@ def search(request):
         if request.POST.get('submitVal') == 'reset':
             request.session['result_columns'] = get_new_visible_attrs(globals.default_result_columns)
     elif request.method == "POST":
-        
+
         # A normal search is being performed, or it is on another tab, or it is downloading a file
         results_per_page_form = ResultsPerPageOptionForm(request.POST)
         if results_per_page_form.is_valid():
@@ -796,7 +795,7 @@ def search(request):
         display_columns = get_new_visible_attrs(globals.default_result_columns)
         if 'result_columns' in request.session:
             display_columns = request.session['result_columns']
-        
+
         ble = request.POST.get('basic_list_expanded')
         basic_list_contracted = not ble
 
@@ -816,7 +815,7 @@ def search(request):
         request.session['voyages_order_by_field'] = order_by_field
         request.session['voyages_sort_direction'] = sort_direction
         results = perform_search(query_dict, None, order_by_field, sort_direction, request.LANGUAGE_CODE)
-        
+
         if submitVal == 'configColumn':
             tab = 'config_column'
         elif submitVal == 'applyConfig':
@@ -1329,7 +1328,7 @@ def search(request):
             prevqs.remove(prevqs[prev_query_num])
             request.session['previous_queries'] = prevqs
             prev_queries_open = True
-            
+
     if len(results) == 0:
         no_result = True
 
@@ -1385,8 +1384,8 @@ def search(request):
                    'table_stats_form': table_stats_form,
                    'col_totals': col_totals,
                    'extra_cols': list(range(extra_cols)),
-                   'num_col_labels_before': num_col_labels_before, 
-                   'num_col_labels_total': num_col_labels_total, 
+                   'num_col_labels_before': num_col_labels_before,
+                   'num_col_labels_total': num_col_labels_total,
                    'num_row_labels': num_row_labels,
                    'is_double_fun': is_double_fun,
                    'inline_graph_png': inline_graph_png,
@@ -1521,7 +1520,7 @@ def getNestedListPlaces(varname, nested_places, selected_places=[]):#, place_vis
                               'is_selected': is_area_selected,
                               'value': area.value})
     nestedChoices = putOtherLast(nestedChoices)
-    
+
     # Check if visible parameters have been passed, if so filter
     return nestedChoices, flatChoices
 

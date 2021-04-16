@@ -130,7 +130,7 @@ class Command(BaseCommand):
         all_sources = VoyageSources.objects.all()
         trie = {}
         _end = '_end'
-        
+
         def add_to_trie(key, value):
             dict = trie
             for letter in plain:
@@ -138,7 +138,7 @@ class Command(BaseCommand):
                     continue
                 dict = dict.setdefault(letter, {})
             dict[_end] = value
-            
+
         for source in all_sources:
             plain = unidecode(source.short_ref).lower()
             add_to_trie(plain, source)
@@ -563,7 +563,7 @@ class Command(BaseCommand):
                         (source, match) = get_source(source_ref)
                         if source is None:
                             self.errors += 1
-                            sys.stderr.write('Source not found for voyage id: ' + str(id) + 
+                            sys.stderr.write('Source not found for voyage id: ' + str(id) +
                                 ' source_ref: "' + smart_str(source_ref) +
                                 '", longest partial match: ' + smart_str(match) + '\n')
                             continue
@@ -586,7 +586,7 @@ class Command(BaseCommand):
                     # Links
                     if intra_american and 'voyageid2' in row:
                         voyage_links.append((id, cint(row['voyageid2']), LinkedVoyages.INTRA_AMERICAN_LINK_MODE))
-            
+
         print('Constructed ' + str(len(voyages)) + ' voyages from CSV. ' + \
             str(count_tast) + ' transatlantic and ' + str(count_iam) + ' intra-American.')
         if self.errors > 0:
@@ -600,8 +600,8 @@ class Command(BaseCommand):
         print('Deleting old data...')
 
         quote_char = '`' if target_db == 'mysql' else '"'
-        
-        from django.db import connection 
+
+        from django.db import connection
         cursor = connection.cursor()
 
         def clear_fk(fk_field):

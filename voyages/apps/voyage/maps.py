@@ -24,7 +24,7 @@ class VoyageRoutes(object):
         self._edges = edges
         self._routes = {}
         self._voyage_routes = {}
-        
+
     def closest_node(self, pt):
         # This could be replaced by a quad-tree for faster operations.
         return min(enumerate(self._nodes), key=lambda pair: dist(pt, pair[1]))[0]
@@ -67,7 +67,7 @@ class VoyageRoutes(object):
     def get_voyage_routes(self):
         """
         Build or return a cached dictionary indexed by voyage pk
-        containing pairs (route, idx) where route is a list of 
+        containing pairs (route, idx) where route is a list of
         lat-lng pairs and idx is a pair (embarkation port pk,
         disembarkation port pk).
         """
@@ -77,11 +77,11 @@ class VoyageRoutes(object):
         ports = VoyageCache.ports
         port_node_index = {}
         voyage_by_ends = {}
-        
+
         def geo_to_pt(g):
             if g.lat is None or g.lng is None: return None
-            return (float(g.lat), float(g.lng)) 
-        
+            return (float(g.lat), float(g.lng))
+
         for v in list(all_voyages.values()):
             if v.emb_pk is None or v.dis_pk is None: continue
             idx = (v.emb_pk, v.dis_pk)
@@ -92,10 +92,10 @@ class VoyageRoutes(object):
                 if src is None or dest is None: continue
                 start_index = port_node_index.get(v.emb_pk)
                 finish_index = port_node_index.get(v.dis_pk)
-                if start_index is None: 
+                if start_index is None:
                     start_index = self.closest_node(src)
                     port_node_index[v.emb_pk] = start_index
-                if finish_index is None: 
+                if finish_index is None:
                     finish_index = self.closest_node(dest)
                     port_node_index[v.dis_pk] = finish_index
                 route = self.find_route(start_index, finish_index)
@@ -103,11 +103,15 @@ class VoyageRoutes(object):
                 voyage_by_ends[idx] = route
             self._voyage_routes[v.pk] = (route, idx)
         return self._voyage_routes
-        
+<<<<<<< HEAD
+
+=======
+
+>>>>>>> future
 class VoyageRoutesCache(object):
     _cache = None
     _lock = threading.Lock()
-    
+
     @classmethod
     def load(cls, force_reload = False):
         with cls._lock:
@@ -115,8 +119,8 @@ class VoyageRoutesCache(object):
                 dir = os.path.dirname(os.path.abspath(__file__))
                 with open(dir + '/../../sitemedia/maps/js/routeNodes.js', 'r') as f:
                     s = f.read()
-                nodes = [(float(m.group(1)), float(m.group(2))) for m in re.finditer('LatLng\(([0-9\-\.]+),\s*([0-9\-\.]+)\)', s)]
-                links = [(int(m.group(1)), int(m.group(2))) for m in re.finditer('start:\s*([0-9]+),\s*end:\s*([0-9]+)', s)]
+                nodes = [(float(m.group(1)), float(m.group(2))) for m in re.finditer(r'LatLng\(([0-9\-\.]+),\s*([0-9\-\.]+)\)', s)]
+                links = [(int(m.group(1)), int(m.group(2))) for m in re.finditer(r'start:\s*([0-9]+),\s*end:\s*([0-9]+)', s)]
                 routes = VoyageRoutes(nodes, links)
                 cls._cache = routes.get_voyage_routes()
             return cls._cache

@@ -4,6 +4,7 @@ from __future__ import absolute_import
 from __future__ import unicode_literals
 from builtins import str
 from builtins import range
+from builtins import object
 from haystack import indexes
 from .models import *
 from datetime import date
@@ -386,7 +387,7 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
 
     def get_model(self):
         return Voyage
-        
+
     def get_updated_field(self):
         return 'last_update'
 
@@ -566,5 +567,5 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
         mangle_method = globals.search_mangle_methods.get('var_sources', globals.no_mangle)
         return mangle_method(unidecode.unidecode(self.prepare_var_sources_plaintext(obj)))
 
-    def prepare_var_voyage_links(self, obj):    
+    def prepare_var_voyage_links(self, obj):
         return [str(link.mode) + ': ' + str(link.second.voyage_id) for link in obj.links_to_other_voyages.all()]
