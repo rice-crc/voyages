@@ -1,3 +1,5 @@
+from __future__ import print_function
+from __future__ import unicode_literals
 # This is a script file to run a full db backup and publication script.
 import os, sys
 import django
@@ -10,7 +12,7 @@ django.setup()
 from voyages.apps.contribute.publication import publish_accepted_contributions
 
 if len(sys.argv) <= 1:
-    print "Pass the filename of output log as argument"
+    print("Pass the filename of output log as argument")
     exit()
 
 f = open(sys.argv[1], 'w')

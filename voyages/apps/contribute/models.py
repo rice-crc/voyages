@@ -1,3 +1,5 @@
+from __future__ import unicode_literals
+from builtins import object
 from django.db import models
 from django.contrib.auth.models import User
 from django.core.validators import validate_comma_separated_integer_list, MinLengthValidator
@@ -19,7 +21,7 @@ class AdminFaq(models.Model):
     def __unicode__(self):
         return "%s" % self.question
 
-    class Meta:
+    class Meta(object):
         ordering = ['question']
         verbose_name = 'Frequently Asked Question For Admins'
         verbose_name_plural = 'Frequently Asked Question For Admins'
@@ -148,7 +150,7 @@ class InterimContributedSource(models.Model):
     created_voyage_sources = models.ForeignKey(voyage.models.VoyageSources, null=True, on_delete=models.SET_NULL, related_name='+')
     source_ref_text = models.CharField(max_length=255, null=True, blank=True)
     
-    class Meta:
+    class Meta(object):
         abstract = True
     
 class InterimArticleSource(InterimContributedSource):
@@ -229,7 +231,7 @@ class InterimNewspaperSource(InterimContributedSource):
     city = models.CharField(max_length=255, null=True, blank=True)
     country = models.CharField(max_length=60, null=True, blank=True)
 
-class InterimPreExistingSourceActions:
+class InterimPreExistingSourceActions(object):
     accepted = 0,
     edit = 1,
     exclude = 2
@@ -259,7 +261,7 @@ class InterimSlaveNumber(models.Model):
         null=False, blank=False)
     number = models.FloatField('Number')
 
-class ReviewRequestDecision:
+class ReviewRequestDecision(object):
     under_review = 0
     accepted_by_reviewer = 1
     rejected_by_reviewer = 2
@@ -268,7 +270,7 @@ class ReviewRequestDecision:
     deleted = 5
     begun_editorial_review = 1000
 
-class ReviewRequestResponse:
+class ReviewRequestResponse(object):
     no_reply = 0
     accepted = 1
     rejected = 2
@@ -344,7 +346,7 @@ class EditorVoyageContribution(models.Model):
     def get_related_voyage_ids(self):
         return self.request.contribution().get_related_voyage_ids()
 
-class ContributionStatus:
+class ContributionStatus(object):
     pending = 0
     committed = 1
     under_review = 2
@@ -371,7 +373,7 @@ class BaseVoyageContribution(models.Model):
     def get_related_voyages(self):
         return list(voyage.models.Voyage.all_dataset_objects.filter(voyage_id__in=self.get_related_voyage_ids()))
 
-    class Meta:
+    class Meta(object):
         abstract = True
 
 # NOTE: Contributions may reference Voyages using the
@@ -480,6 +482,6 @@ source_type_dict = {
     }
     
 def get_all_new_sources_for_interim(interim_pk):
-    all_sources = [list(src_type.objects.filter(interim_voyage__id=interim_pk)) for src_type in source_type_dict.values()]
+    all_sources = [list(src_type.objects.filter(interim_voyage__id=interim_pk)) for src_type in list(source_type_dict.values())]
     return list(itertools.chain.from_iterable(all_sources))
  

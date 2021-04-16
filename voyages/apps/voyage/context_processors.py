@@ -1,3 +1,4 @@
+from __future__ import unicode_literals
 from voyages.apps.voyage.globals import calculate_maxmin_years
 
 def voyage_span(request):

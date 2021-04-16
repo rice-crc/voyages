@@ -1,3 +1,8 @@
+from __future__ import division
+from __future__ import unicode_literals
+from builtins import str
+from past.utils import old_div
+from builtins import object
 from django.conf import settings
 from django.contrib.flatpages.models import FlatPage
 from django.core.paginator import Paginator
@@ -60,7 +65,7 @@ def get_ordered_places(place_query=None, translate=True):
                        'port': trans(place.place)})
     return result
 
-class FlatPageTree:
+class FlatPageTree(object):
     """
     Represents a hierarchy of flat pages.
     """
@@ -84,7 +89,7 @@ class FlatPageTree:
         match is found. This method returns None if self.lang_set is empty.
         """
         s = self.lang_set
-        return s.get(lang, s.get('en', s.values()[0] if len(s) > 0 else None))
+        return s.get(lang, s.get('en', list(s.values())[0] if len(s) > 0 else None))
 
     def flatten(self, lang):
         """
@@ -152,7 +157,7 @@ def get_flat_page_tree(prefix, language=None):
             {t[2]: t[0] for t in leaf_set},
             min([t[1] for t in leaf_set]) if len(leaf_set) > 0 else 0,
             parent)
-        for k, v in d.items():
+        for k, v in list(d.items()):
             if k != leaf_key:
                 recursive_create(v, node)
         return node
@@ -237,7 +242,7 @@ def get_datatable_json_result(results, post, field_filter=lambda _: True,
     try:
         table_params = post['tableParams']
         rows_per_page = int(table_params['length'])
-        current_page_num = 1 + int(table_params['start']) / rows_per_page
+        current_page_num = 1 + old_div(int(table_params['start']), rows_per_page)
         paginator = Paginator(results, rows_per_page)
         page = paginator.page(current_page_num)
     except:
@@ -248,7 +253,7 @@ def get_datatable_json_result(results, post, field_filter=lambda _: True,
     reponse_data['recordsFiltered'] = total_results
     reponse_data['draw'] = int(table_params.get('draw', 0))
     reponse_data['data'] = [{key_adapter((k, v)): value_adapter((k, v))
-        for k, v in x.get_stored_fields().items() if field_filter(k)}
+        for k, v in list(x.get_stored_fields().items()) if field_filter(k)}
         for x in page]
     return JsonResponse(reponse_data)
 

@@ -1,4 +1,15 @@
 # -*- coding: utf-8 -*-
+from __future__ import division
+from __future__ import print_function
+from __future__ import absolute_import
+from __future__ import unicode_literals
+from future import standard_library
+standard_library.install_aliases()
+from builtins import map
+from builtins import str
+from builtins import range
+from builtins import object
+from past.utils import old_div
 from django.http import Http404, HttpResponseRedirect, HttpResponse, StreamingHttpResponse
 from django.db.models import Max, Min
 from django.template import TemplateDoesNotExist, loader
@@ -18,13 +29,13 @@ import csv
 import re
 from .forms import *
 from haystack.query import SearchQuerySet
-import globals
+from . import globals
 import bitly_api
 import requests
 import json
 import xlwt
 from openpyxl import Workbook
-import urllib
+import urllib.request, urllib.parse, urllib.error
 import unidecode
 from itertools import groupby
 from django.views.decorators.gzip import gzip_page
@@ -34,9 +45,9 @@ from voyages.apps.common.export import download_xls
 from voyages.apps.resources.models import Image
 from django.utils.translation import ugettext as _
 from django.utils.translation import get_language
-from cache import VoyageCache, CachedGeo
+from .cache import VoyageCache, CachedGeo
 from voyages.apps.common.models import get_pks_from_haystack_results
-from graphs import *
+from .graphs import *
 from django.shortcuts import redirect
 
 
@@ -282,7 +293,7 @@ def create_forms_from_var_list(var_list):
         elif varname in globals.list_date_fields:
             form = SimpleDateSearchForm(prefix=varname)
             mdict = dict([(int(choice[0]), choice) for choice in globals.list_months])
-            form.fields['months'].initial = map(lambda x: str(x).zfill(2), var_list[varname + '_months'].split(','))
+            form.fields['months'].initial = [str(x).zfill(2) for x in var_list[varname + '_months'].split(',')]
             
             opt = var_list[varname + '_options']
             form.fields['options'].initial = opt
@@ -423,10 +434,10 @@ def create_query_dict(var_list):
                     query_dict[varname + "__exact"] = mangle_method(var_list[varname + '_threshold'])
             elif varname in globals.list_date_fields:
                 if varname + '_months' in var_list:
-                    months = map(lambda x: int(x), var_list[varname + '_months'].split(','))
+                    months = [int(x) for x in var_list[varname + '_months'].split(',')]
                     # Only filter by months if not all the months are included
                     if len(months) < 12:
-                        query_dict[varname + '_month' + '__in'] = map(lambda x: int(x), months)
+                        query_dict[varname + '_month' + '__in'] = [int(x) for x in months]
                 opt = var_list[varname + '_options']
                 if opt == '1': # Between
                     to_date = None
@@ -485,8 +496,8 @@ def prettify_var_list(varlist):
     qdict = create_query_dict(varlist)
     # For some reason, when time_span is set, it also shows "Year arrived with slaves*"
     if 'time_span_from_year' in varlist and 'time_span_to_year' in varlist:
-        output.append((_('Time frame:'), unicode(varlist['time_span_from_year']) + ' - ' + unicode(varlist['time_span_to_year'])))
-    for kvar, vvar in qdict.items():
+        output.append((_('Time frame:'), str(varlist['time_span_from_year']) + ' - ' + str(varlist['time_span_to_year'])))
+    for kvar, vvar in list(qdict.items()):
         varname = kvar.split('__')[0]
         is_real_var = False
         fullname = ''
@@ -511,7 +522,7 @@ def prettify_var_list(varlist):
         unmangle_method = globals.parameter_unmangle_methods.get(varname, globals.default_prettifier(varname))
         tvar = unmangle_method(vvar)
         if isinstance(tvar, (list, tuple)):
-            value = unicode(u', '.join(map(unicode, tvar)))
+            value = str(u', '.join(map(str, tvar)))
         else:
             value = tvar
         prefix = ''
@@ -519,42 +530,42 @@ def prettify_var_list(varlist):
             opt = varlist[varname + '_options']
             if opt == '1' and len(vvar) >= 2:
                 if varname == 'var_imp_arrival_at_port_of_dis':
-                    value = _('between ') + unicode(tvar[0]) + _(' and ') + unicode(tvar[1])
+                    value = _('between ') + str(tvar[0]) + _(' and ') + str(tvar[1])
                 elif varname in globals.list_date_fields:
                     tod = None
                     if vvar[1].month == 1:
                         tod = date(vvar[1].year - 1, 12, vvar[1].day)
                     else:
                         tod = date(vvar[1].year, vvar[1].month - 1, vvar[1].day)
-                    value = _('between ') + unicode(unmangle_method(vvar[0])) + _(' and ') + unicode(unmangle_method(tod))
+                    value = _('between ') + str(unmangle_method(vvar[0])) + _(' and ') + str(unmangle_method(tod))
                 else:
-                    value = _('between ') + unicode(tvar[0]) + _(' and ') + unicode(tvar[1])
+                    value = _('between ') + str(tvar[0]) + _(' and ') + str(tvar[1])
             elif opt == '4':
                 if isinstance(vvar, (list, tuple)):
-                    value = _('in ') + unicode(unmangle_method(vvar[0]))
+                    value = _('in ') + str(unmangle_method(vvar[0]))
                 else:
-                    value = _('equal to ') + unicode(tvar)
+                    value = _('equal to ') + str(tvar)
             elif isinstance(vvar, (list, tuple)):
                 continue
             elif opt == '2':
                 if varname == 'var_imp_arrival_at_port_of_dis':
-                    value = _('before ') + unicode(tvar)
+                    value = _('before ') + str(tvar)
                 elif varname in globals.list_date_fields:
                     tod = None
                     if vvar.month == 1:
                         tod = date(vvar.year - 1, 12, vvar.day)
                     else:
                         tod = date(vvar.year, vvar.month - 1, vvar.day)
-                    value = _('before ') + unicode(unmangle_method(tod))
+                    value = _('before ') + str(unmangle_method(tod))
                 else:
-                    value = _('at most ') + unicode(tvar)
+                    value = _('at most ') + str(tvar)
             elif opt == '3':
                 if varname == 'var_imp_arrival_at_port_of_dis':
-                    value = _('after ') + unicode(tvar)
+                    value = _('after ') + str(tvar)
                 elif varname in globals.list_date_fields:
-                    value = _('after ') + unicode(tvar)
+                    value = _('after ') + str(tvar)
                 else:
-                    value = _('at least ') + unicode(tvar)
+                    value = _('at least ') + str(tvar)
         # Prevent display of 'Year arrived with slaves*' when it is just the time frame
         if not (isinstance(vvar, (list, tuple)) and varname in globals.list_numeric_fields and not ((varname + '_options') in varlist)):
             output.append((fullname + ":", (prefix + value)))
@@ -608,16 +619,16 @@ def voyage_variables_data(voyage_id, show_imputed=True):
         group = i[0]
         glist = list([x for x in i[1] if show_imputed or not x['var_full_name'].endswith('*')])
         for idx,j in enumerate(glist):
-            val = unicode("")
+            val = str("")
             if voyagevariables[j['var_name']]:
                 mangle_method = globals.display_unmangle_methods.get(j['var_name'], globals.default_prettifier(j['var_name']))
-                val = unicode(mangle_method(voyagevariables[j['var_name']], voyagenum))
+                val = str(mangle_method(voyagevariables[j['var_name']], voyagenum))
             if val == u'[]': val = u''
             if idx == 0:
                 # For the first variable, give the number of variables in the group, and give the name of the group as a tuple in the first entry of the triple for the row
-                allvars.append(((len(glist), unicode(group)), unicode(j['var_full_name']), val, j['var_name']))
+                allvars.append(((len(glist), str(group)), str(j['var_full_name']), val, j['var_name']))
             else:
-                allvars.append(((None, None), unicode(j['var_full_name']), val, j['var_name']))
+                allvars.append(((None, None), str(j['var_full_name']), val, j['var_name']))
     return voyage, allvars
 
 def voyage_variables(request, voyage_id):
@@ -756,7 +767,7 @@ def search(request):
                                                            'frame_to_year': var_list.get('time_span_to_year', voyage_span_last_year)})
         query_dict = create_query_dict(var_list)
         results = perform_search(query_dict, None, order_by_field, sort_direction, request.LANGUAGE_CODE)
-        search_url = request.build_absolute_uri(reverse('voyage:search',)) + "?" + urllib.urlencode(var_list)
+        search_url = request.build_absolute_uri(reverse('voyage:search',)) + "?" + urllib.parse.urlencode(var_list)
         
     elif request.method == "GET" or request.POST.get('submitVal') == 'reset':
         # A new search is being performed
@@ -797,7 +808,7 @@ def search(request):
         if submitVal != 'delete_prev_query':
             if len(request.session['previous_queries']) < 1 or not request.session['previous_queries'][0] == var_list:
                 request.session['previous_queries'] = [var_list] + request.session['previous_queries']
-        search_url = request.build_absolute_uri(reverse('voyage:search',)) + "?" + urllib.urlencode(var_list)
+        search_url = request.build_absolute_uri(reverse('voyage:search',)) + "?" + urllib.parse.urlencode(var_list)
         query_dict = create_query_dict(var_list)
 
         order_by_field = request.POST.get('order_by_field', order_by_field)
@@ -833,7 +844,7 @@ def search(request):
             # Most of the time the row/column span will just be 1.
             xls_table = []
             tab = 'tables'
-            pst = {x: y for x, y in request.POST.items()}
+            pst = {x: y for x, y in list(request.POST.items())}
 
             # Try to retrieve sessions values
             tables_columns = request.session.get('voyages_tables_columns')
@@ -898,7 +909,7 @@ def search(request):
                 # that list is a list of tuples with the label and the query dict
                 # the query dict is a dictionary with 1 element which the key is the var name with a '__'
                 # and then the query type (e.g. "__exact")
-                table_row_var_name = table_row_query_def[1][0][1].keys()[0].split('__')[0]
+                table_row_var_name = list(table_row_query_def[1][0][1].keys())[0].split('__')[0]
             table_row_var = search_var_dict(table_row_var_name)
             if not table_row_var:
                 for var in globals.additional_var_dict:
@@ -919,7 +930,7 @@ def search(request):
             # Get the variable name for the column
             table_col_var_name = ''
             if len(table_col_query_def[1]) > 0:
-                table_col_var_name = table_col_query_def[1][0].keys()[0].split('__')[0]
+                table_col_var_name = list(table_col_query_def[1][0].keys())[0].split('__')[0]
             table_col_var = search_var_dict(table_col_var_name)
             if not table_col_var:
                 for var in globals.additional_var_dict:
@@ -944,7 +955,7 @@ def search(request):
             used_col_query_sets = []
 
             # Transform tuples to lists
-            listed_cols = [map(list, k) for k in table_col_query_def[2]]
+            listed_cols = [list(map(list, k)) for k in table_col_query_def[2]]
 
             # Create column labels
             collabels = [[j for j in i] for i in listed_cols]
@@ -982,8 +993,8 @@ def search(request):
                 collabels = [[[j, k*2] for j, k in i] for i in collabels]
                 lastcol = []
                 for i in collabels[-1]:
-                    lastcol.append(['Embarked', i[1]/2])
-                    lastcol.append(['Disembarked', i[1]/2])
+                    lastcol.append(['Embarked', old_div(i[1],2)])
+                    lastcol.append(['Disembarked', old_div(i[1],2)])
                 collabels.append(lastcol)
             num_col_labels_before = len(collabels)
             xls_row = []
@@ -1207,7 +1218,7 @@ def search(request):
             timeline_chart_settings['name'] = timeline_selected_tuple[1]
             if len(timeline_selected_tuple) > 4:
                 # Include extra dict if exists
-                timeline_chart_settings = dict(timeline_chart_settings.items() + timeline_selected_tuple[4].items())
+                timeline_chart_settings = dict(list(timeline_chart_settings.items()) + list(timeline_selected_tuple[4].items()))
 
         elif submitVal == 'tab_maps' or submitVal == 'tab_animation':
             tab = submitVal[4:]
@@ -1227,7 +1238,7 @@ def search(request):
             def add_flow(source, destination, embarked, disembarked):
                 result = embarked is not None and disembarked is not None and add_port(source) and add_port(destination)
                 if result:
-                    flow_key = long(source[0].pk) * 2147483647 + long(destination[0].pk)
+                    flow_key = int(source[0].pk) * 2147483647 + int(destination[0].pk)
                     current = map_flows.get(flow_key)
                     if current is not None:
                         embarked += current[2]
@@ -1303,7 +1314,7 @@ def search(request):
                               (str(voyage.ship_nat_pk) if voyage.ship_nat_pk is not None else '0') + \
                               ', "ship_nationality_name": "' + _(flag) + '"' \
                               ', "ship_name": "' + \
-                              (unicode(voyage.ship_name) if voyage.ship_name is not None else '') + '"' + \
+                              (str(voyage.ship_name) if voyage.ship_name is not None else '') + '"' + \
                               ', "route": ' + json.dumps(route) +\
                               ' }'
             return HttpResponse('[' + ',\n'.join(animation_response()) + ']', 'application/json')
@@ -1329,7 +1340,7 @@ def search(request):
         request.session['current_page'] = current_page
         # Prepare paginator ranges
         (paginator_range, pages_range) = prepare_paginator_variables(paginator, current_page, results_per_page)
-        result_display = prettify_results(map(lambda x: x.get_stored_fields(), pagins), globals.display_methods)
+        result_display = prettify_results([x.get_stored_fields() for x in pagins], globals.display_methods)
     else:
         pagins = None
         (paginator_range, pages_range) = (None, None)
@@ -1373,7 +1384,7 @@ def search(request):
                    'row_list': row_list,
                    'table_stats_form': table_stats_form,
                    'col_totals': col_totals,
-                   'extra_cols': range(extra_cols),
+                   'extra_cols': list(range(extra_cols)),
                    'num_col_labels_before': num_col_labels_before, 
                    'num_col_labels_total': num_col_labels_total, 
                    'num_row_labels': num_row_labels,
@@ -1400,7 +1411,7 @@ def prettify_results(results, lookup_table):
     for i in results:
         idict = {}
         voyageid = int(i['var_voyage_id'])
-        for varname, varvalue in i.items():
+        for varname, varvalue in list(i.items()):
             if varvalue:
                 prettify_varvalue = lookup_table.get(varname, globals.default_prettifier(varname))
                 if varvalue == u'[]': varvalue = u''
@@ -1415,7 +1426,7 @@ def _get_all(model):
     except:
         return []
 
-class ChoicesCache:
+class ChoicesCache(object):
     nations = _get_all(Nationality)
     particular_outcomes = _get_all(ParticularOutcome)
     slaves_outcomes = _get_all(SlavesOutcome)
@@ -1462,7 +1473,7 @@ def getChoices(varname):
     return choices
 
 def putOtherLast(lst):
-    others = filter(lambda x: 'other' in x['text'].lower() or 'unspecified' in x['text'].lower() or '???' in x['text'], lst)
+    others = [x for x in lst if 'other' in x['text'].lower() or 'unspecified' in x['text'].lower() or '???' in x['text']]
     for rem in others:
         lst.remove(rem)
         lst.append(rem)
@@ -1479,10 +1490,10 @@ def getNestedListPlaces(varname, nested_places, selected_places=[]):#, place_vis
 
     select = [int(i) for i in selected_places]
 
-    for area, regs in nested_places.items():
+    for area, regs in list(nested_places.items()):
         area_content = []
         is_area_selected = True
-        for reg, places in regs.items():
+        for reg, places in list(regs.items()):
             reg_content = []
             is_selected = True
             for place in places:
@@ -1620,12 +1631,12 @@ def search_var_dict(var_name):
 
 # Automatically fetch fields that should be sorted differently, either
 # by using a translated version or a plain text version of tokenized fields.
-from search_indexes import VoyageIndex
+from .search_indexes import VoyageIndex
 index = VoyageIndex()
 plain_text_suffix = '_plaintext'
-plain_text_suffix_list = [f[:-len(plain_text_suffix)] for f in index.fields.keys() if f.endswith(plain_text_suffix)]
+plain_text_suffix_list = [f[:-len(plain_text_suffix)] for f in list(index.fields.keys()) if f.endswith(plain_text_suffix)]
 translate_suffix = '_lang_en'
-translated_field_list = [f[:-len(translate_suffix)] for f in index.fields.keys() if f.endswith(translate_suffix)]
+translated_field_list = [f[:-len(translate_suffix)] for f in list(index.fields.keys()) if f.endswith(translate_suffix)]
 
 def perform_search(query_dict, date_filters, order_by_field='var_voyage_id', sort_direction='asc', lang='en'):
     """
@@ -1929,7 +1940,7 @@ def download_xls_page(results, current_page, results_per_page, columns, var_list
     if current_page != -1:
         paginator = Paginator(results, results_per_page)
         curpage = paginator.page(current_page)
-        res = map(lambda x: x.get_stored_fields(), curpage.object_list)
+        res = [x.get_stored_fields() for x in curpage.object_list]
     else:
         res = list(results.values(*[x[0] for x in columns]).all())
     pres = prettify_results(res, globals.display_methods_xls)
@@ -1954,7 +1965,7 @@ def download_xls_page(results, current_page, results_per_page, columns, var_list
             data = item[column[0]]
             if data is None:
                 ws.write(idx+2,idy,label="")
-            elif isinstance(data, (int, long, float)):
+            elif isinstance(data, (int, float)):
                 ws.write(idx+2,idy,label=data)
             else:
                 ws.write(idx+2,idy,label=data.encode("utf-8"))
@@ -2061,7 +2072,7 @@ def extract_query_for_download(query_dict, date_filter):
     :return:
     """
     query_arr = []
-    for key in query_dict.keys():
+    for key in list(query_dict.keys()):
         query_str = ""
         split_arr = key.split('__')
         var_name_indexed = split_arr[0]

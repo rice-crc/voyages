@@ -1,3 +1,5 @@
+from __future__ import absolute_import
+from __future__ import unicode_literals
 from django.conf import settings
 from django.conf.urls import include, url
 
@@ -9,7 +11,7 @@ from django.contrib import admin
 admin.autodiscover()
 
 # Sitemap
-from sitemap import StaticSitemap
+from .sitemap import StaticSitemap
 
 js_info_dict = {
     'packages': ('voyages',),
