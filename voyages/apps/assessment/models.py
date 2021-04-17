@@ -15,6 +15,8 @@ class ExportArea(models.Model):
     show_at_zoom = models.IntegerField()
     show_on_map = models.BooleanField()
 
+    def __lt__(self, other):
+        return ((self.name, self.order_num) < (other.name, other.order_num))
     def __unicode__(self):
         return self.name
 
@@ -50,6 +52,8 @@ class ImportArea(models.Model):
 
     def __unicode__(self):
         return self.name
+    def __lt__(self, other):
+        return ((self.name, self.order_num) < (other.name, other.order_num))
 
 
 class ImportRegion(models.Model):
