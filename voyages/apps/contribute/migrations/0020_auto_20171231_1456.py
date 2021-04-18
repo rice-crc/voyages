@@ -18,21 +18,48 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='deletevoyagecontribution',
             name='deleted_voyages_ids',
-            field=models.CharField(help_text=b'The voyage_id of each Voyage being deleted by this contribution', max_length=255, validators=[django.core.validators.RegexValidator(re.compile('^\\d+(?:\\,\\d+)*\\Z'), code='invalid', message='Enter only digits separated by commas.')], verbose_name=b'Deleted voyage ids'),
+            field=models.CharField(
+                help_text=b'The voyage_id of each Voyage being deleted by this contribution',
+                max_length=255,
+                validators=[
+                    django.core.validators.RegexValidator(
+                        re.compile('^\\d+(?:\\,\\d+)*\\Z'),
+                        code='invalid',
+                        message='Enter only digits separated by commas.')
+                ],
+                verbose_name=b'Deleted voyage ids'),
         ),
         migrations.AlterField(
             model_name='interimpreexistingsource',
             name='original_short_ref',
-            field=models.CharField(max_length=255, validators=[django.core.validators.MinLengthValidator(1)]),
+            field=models.CharField(
+                max_length=255,
+                validators=[django.core.validators.MinLengthValidator(1)]),
         ),
         migrations.AlterField(
             model_name='interimpreexistingsource',
             name='voyage_ids',
-            field=models.CharField(max_length=255, validators=[django.core.validators.RegexValidator(re.compile('^\\d+(?:\\,\\d+)*\\Z'), code='invalid', message='Enter only digits separated by commas.')]),
+            field=models.CharField(
+                max_length=255,
+                validators=[
+                    django.core.validators.RegexValidator(
+                        re.compile('^\\d+(?:\\,\\d+)*\\Z'),
+                        code='invalid',
+                        message='Enter only digits separated by commas.')
+                ]),
         ),
         migrations.AlterField(
             model_name='mergevoyagescontribution',
             name='merged_voyages_ids',
-            field=models.CharField(help_text=b'The voyage_id of each Voyage being merged by this contribution', max_length=255, validators=[django.core.validators.RegexValidator(re.compile('^\\d+(?:\\,\\d+)*\\Z'), code='invalid', message='Enter only digits separated by commas.')], verbose_name=b'Merged voyage ids'),
+            field=models.CharField(
+                help_text=b'The voyage_id of each Voyage being merged by this contribution',
+                max_length=255,
+                validators=[
+                    django.core.validators.RegexValidator(
+                        re.compile('^\\d+(?:\\,\\d+)*\\Z'),
+                        code='invalid',
+                        message='Enter only digits separated by commas.')
+                ],
+                verbose_name=b'Merged voyage ids'),
         ),
     ]

@@ -19,16 +19,24 @@ legal_terms_paragraph = _('I warrant that I have the right to contribute the fol
                           'the Voyages: The Trans-Atlantic Slave Trade Database website and will be '
                           'governed by any applicable licenses.')
 
+
 class AdminFaqAdminForm(forms.ModelForm):
     """
     Form for editing HTML for Admin FAQ
     """
-    question = forms.CharField(widget=forms.Textarea(attrs={'rows':4, 'cols':60}))
-    answer = forms.CharField(widget=AdvancedEditor(attrs={'class' : 'tinymcetextarea', 'label': 'Answer'}))
+    question = forms.CharField(widget=forms.Textarea(attrs={
+        'rows': 4,
+        'cols': 60
+    }))
+    answer = forms.CharField(widget=AdvancedEditor(attrs={
+        'class': 'tinymcetextarea',
+        'label': 'Answer'
+    }))
 
     class Meta(object):
         model = AdminFaq
         fields = '__all__'
+
 
 class LoginForm(AuthenticationForm):
     x = 1
@@ -37,16 +45,22 @@ class LoginForm(AuthenticationForm):
         super().__init__(*args, **kwargs)
         self.fields['username'].label = _("Username or Email")
 
+
 class SignUpForm(forms.Form):
     first_name = forms.CharField(max_length=30, label=_('First name'))
     last_name = forms.CharField(max_length=30, label=_('Last name'))
-    institution = forms.CharField(max_length=255, label=_('Institution'), required=False)
+    institution = forms.CharField(
+        max_length=255, label=_('Institution'), required=False)
     new_material_and_sources = forms.CharField(max_length=1000,
-                                               label=_('Brief description of new material and sources'),
+                                               label=_(
+                                                   'Brief description of new material and sources'),
                                                required=False)
-    terms = forms.CharField(widget=forms.Textarea, required=False, label=legal_terms_title,
+    terms = forms.CharField(widget=forms.Textarea,
+                            required=False,
+                            label=legal_terms_title,
                             initial=legal_terms_paragraph)
-    agree_to_terms = forms.BooleanField(required=True, label=_('Agree to the terms and conditions above'))
+    agree_to_terms = forms.BooleanField(required=True, label=_(
+        'Agree to the terms and conditions above'))
     captcha = CaptchaField()
 
     # This init method will reorder the fields so that
@@ -65,7 +79,10 @@ class SignUpForm(forms.Form):
             'terms',
             'agree_to_terms',
         ]
-        self.fields = OrderedDict(sorted(list(self.fields.items()), key=lambda k: key_order.index(k[0]) if k[0] in key_order else 1000))
+        self.fields = OrderedDict(
+            sorted(list(self.fields.items()),
+                   key=lambda k: key_order.index(k[0])
+                   if k[0] in key_order else 1000))
         self.fields['terms'].widget.attrs['readonly'] = True
 
     def signup(self, request, user):
@@ -79,8 +96,10 @@ class SignUpForm(forms.Form):
         profile = UserProfile()
         profile.user = user
         profile.institution = self.cleaned_data['institution']
-        profile.new_material_and_sources = self.cleaned_data['new_material_and_sources']
+        profile.new_material_and_sources = self.cleaned_data[
+            'new_material_and_sources']
         profile.save()
+
 
 class ContributionVoyageSelectionForm(forms.Form):
     """
@@ -90,7 +109,12 @@ class ContributionVoyageSelectionForm(forms.Form):
 
     ids = forms.CharField(max_length=255, required=True)
 
-    def __init__(self, data=None, min_selection=1, max_selection=None, *args, **kwargs):
+    def __init__(self,
+                 data=None,
+                 min_selection=1,
+                 max_selection=None,
+                 *args,
+                 **kwargs):
         super().__init__(data, *args, **kwargs)
         self.min_selection = min_selection
         self.max_selection = max_selection
@@ -108,17 +132,23 @@ class ContributionVoyageSelectionForm(forms.Form):
         self.selected_voyages = ids
         id_count = len(ids)
         if id_count < self.min_selection:
-            raise forms.ValidationError(_('At least %d voyage(s) should be provided') % self.min_selection)
+            raise forms.ValidationError(
+                _('At least %d voyage(s) should be provided') % self.min_selection)
         if self.max_selection is not None and id_count > self.max_selection:
-            raise forms.ValidationError(_('At most %d voyage(s) should be provided') % self.max_selection)
+            raise forms.ValidationError(
+                _('At most %d voyage(s) should be provided') % self.max_selection)
         matches = Voyage.all_dataset_objects.filter(voyage_id__in=ids).count()
         if matches != id_count:
-            raise forms.ValidationError(_('Some of the provided voyage_ids are invalid'))
+            raise forms.ValidationError(
+                _('Some of the provided voyage_ids are invalid'))
         return ids
+
 
 default_name_help_text = _('Enter last name , first name.')
 
+
 class InterimVoyageForm(forms.ModelForm):
+
     def full_clean(self):
         self.cleaned_data = {}
         super().full_clean()

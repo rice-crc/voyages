@@ -16,6 +16,8 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='linkedvoyages',
             name='first',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='links_to_other_voyages', to='voyage.Voyage'),
+            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE,
+                                    related_name='links_to_other_voyages',
+                                    to='voyage.Voyage'),
         ),
     ]

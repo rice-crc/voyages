@@ -23,10 +23,7 @@ class AdminFaqAdmin(admin.ModelAdmin):
     search_fields = ['question', 'answer']
 
 
-
 admin.site.register(AdminFaq, AdminFaqAdmin)
 
 admin.site.unregister(Site)
 admin.site.unregister(Group)
-
-

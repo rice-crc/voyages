@@ -20,8 +20,14 @@ from voyages.apps.voyage.models import Nationality, Place
 
 @cache_page(3600)
 def get_nations(request):
-    nations = {n.pk: { 'name': n.label, 'code': n.value } for n in Nationality.objects.all()}
+    nations = {
+        n.pk: {
+            'name': n.label,
+            'code': n.value
+        } for n in Nationality.objects.all()
+    }
     return JsonResponse(nations)
+
 
 def get_ordered_places(place_query=None, translate=True):
     if place_query is None:
@@ -29,10 +35,9 @@ def get_ordered_places(place_query=None, translate=True):
     trans = _ if translate else (lambda x: x)
     # retrieve list of places in the system.
     places = sorted(place_query.prefetch_related('region__broad_region'),
-                    key=lambda p: (
-                        p.region.broad_region.broad_region if p.region.broad_region.value != 80000 else 'zzz',
-                        p.region.value,
-                        p.value))
+                    key=lambda p: (p.region.broad_region.broad_region
+                                   if p.region.broad_region.value != 80000 else
+                                   'zzz', p.region.value, p.value))
     result = []
     last_broad_region = None
     last_region = None
@@ -43,29 +48,36 @@ def get_ordered_places(place_query=None, translate=True):
         counter += 1
         if last_broad_region != broad_region:
             last_broad_region = broad_region
-            result.append({'type': 'broad_region',
-                           'order': counter,
-                           'pk': broad_region.pk,
-                           'value': -counter,
-                           'broad_region': trans(broad_region.broad_region)})
+            result.append({
+                'type': 'broad_region',
+                'order': counter,
+                'pk': broad_region.pk,
+                'value': -counter,
+                'broad_region': trans(broad_region.broad_region)
+            })
             counter += 1
         if last_region != region:
             last_region = region
-            result.append({'type': 'region',
-                           'order': counter,
-                           'value': -counter,
-                           'pk': region.pk,
-                           'code': region.value,
-                           'parent': broad_region.pk,
-                           'region': trans(region.region)})
+            result.append({
+                'type': 'region',
+                'order': counter,
+                'value': -counter,
+                'pk': region.pk,
+                'code': region.value,
+                'parent': broad_region.pk,
+                'region': trans(region.region)
+            })
             counter += 1
-        result.append({'type': 'port',
-                       'order': counter,
-                       'value': place.pk,
-                       'parent': region.pk,
-                       'code': place.value,
-                       'port': trans(place.place)})
+        result.append({
+            'type': 'port',
+            'order': counter,
+            'value': place.pk,
+            'parent': region.pk,
+            'code': place.value,
+            'port': trans(place.place)
+        })
     return result
+
 
 class FlatPageTree(object):
     """
@@ -91,7 +103,9 @@ class FlatPageTree(object):
         match is found. This method returns None if self.lang_set is empty.
         """
         s = self.lang_set
-        return s.get(lang, s.get('en', list(s.values())[0] if len(s) > 0 else None))
+        return s.get(lang,
+                     s.get('en',
+                           list(s.values())[0] if len(s) > 0 else None))
 
     def flatten(self, lang):
         """
@@ -105,6 +119,7 @@ class FlatPageTree(object):
         with just a title and empty content.
         """
         items = []
+
         def recursive(level, node):
             page = node.get_lang_page_or_default(lang)
             if page:
@@ -114,6 +129,7 @@ class FlatPageTree(object):
 
         recursive(0, self)
         return items
+
 
 def get_flat_page_tree(prefix, language=None):
     """
@@ -136,7 +152,8 @@ def get_flat_page_tree(prefix, language=None):
     leaf_key = '__<fpage>__'
     for page in pages:
         path = [x for x in page.url[prefix_length:].split('/') if x != '']
-        if len(path) < 3: continue
+        if len(path) < 3:
+            continue
         # URL should look like {prefix}/top_level/optional_nested_level/order_number/language_code/
         # There can be as many nested levels as required.
         lang = path.pop()
@@ -157,8 +174,7 @@ def get_flat_page_tree(prefix, language=None):
         leaf_set = d.get(leaf_key, [])
         node = FlatPageTree(
             {t[2]: t[0] for t in leaf_set},
-            min([t[1] for t in leaf_set]) if len(leaf_set) > 0 else 0,
-            parent)
+            min([t[1] for t in leaf_set]) if len(leaf_set) > 0 else 0, parent)
         for k, v in list(d.items()):
             if k != leaf_key:
                 recursive_create(v, node)
@@ -166,19 +182,25 @@ def get_flat_page_tree(prefix, language=None):
 
     return recursive_create(structure, None)
 
+
 @cache_page(3600)
 def get_flat_page_content(request, url):
     page = get_object_or_404(FlatPage, url=url)
     # Remove CDATA before we return
     content = page.content.replace("// <![CDATA[", "").replace("// ]]>", "")
-    content = re.sub(r'\{\{\s*MEDIA_URL\s*\}\}', settings.MEDIA_URL, content, flags=re.MULTILINE)
+    content = re.sub(r'\{\{\s*MEDIA_URL\s*\}\}',
+                     settings.MEDIA_URL,
+                     content,
+                     flags=re.MULTILINE)
     return HttpResponse(content, 'text/html; charset=utf-8')
+
 
 @cache_page(3600)
 def get_flat_page_hierarchy(request, prefix):
     tree = get_flat_page_tree(prefix)
     lang = get_language()
     flat = tree.flatten(lang)
+
     def get_page_info(t):
         page = t[1]
         title = page.title
@@ -188,17 +210,21 @@ def get_flat_page_hierarchy(request, prefix):
         # that the links point to some content.
         # This method should work for multiple nested levels as well.
         node = t[2]
-        while node and page and len(node.children) > 0 and len(page.content) < 50 and 'NO-CONTENT' in page.content:
+        while node and page and len(node.children) > 0 and len(
+                page.content) < 50 and 'NO-CONTENT' in page.content:
             node = node.children[0]
             page = node.get_lang_page_or_default(lang)
-            if page: url = page.url
-        url = request.build_absolute_uri(reverse('common:get_flat_page_content', args=[url]))
+            if page:
+                url = page.url
+        url = request.build_absolute_uri(
+            reverse('common:get_flat_page_content', args=[url]))
         return {'level': t[0], 'title': title, 'url': url}
 
     return JsonResponse({
         'prefix': prefix,
         'items': [get_page_info(t) for t in flat]
     })
+
 
 def _get_flatpage(url, lang):
     page = None
@@ -209,10 +235,12 @@ def _get_flatpage(url, lang):
         pass
     return page
 
+
 def _default_solr_value_adapter(tuple):
     key = tuple[0]
     val = tuple[1]
-    if val == '[]': val = ''
+    if val == '[]':
+        val = ''
     if key.endswith('_partial') and val is not None:
         # This is a partial date so we map from [MM],[DD],[YYYY] to [YYYY]-[MM]-[DD]
         comps = str(val).split(',')
@@ -221,7 +249,7 @@ def _default_solr_value_adapter(tuple):
                 month = int(comps[0]) if comps[0] != '' else None
                 day = int(comps[1]) if comps[1] != '' else None
                 year = int(comps[2]) if comps[2] != '' else None
-                if year is None: 
+                if year is None:
                     val = ''
                 else:
                     val = str(year)
@@ -233,8 +261,12 @@ def _default_solr_value_adapter(tuple):
                 pass
     return val
 
-def get_datatable_json_result(results, post, field_filter=lambda _: True,
-        key_adapter=lambda t: t[0], value_adapter=_default_solr_value_adapter):
+
+def get_datatable_json_result(results,
+                              post,
+                              field_filter=lambda _: True,
+                              key_adapter=lambda t: t[0],
+                              value_adapter=_default_solr_value_adapter):
     """
     Produce a JSON output that can be parsed by a paginated DataTable in the front-end.
     The argument results should be a SearchQuerySet and post should be a dict that
@@ -244,7 +276,8 @@ def get_datatable_json_result(results, post, field_filter=lambda _: True,
     try:
         table_params = post['tableParams']
         rows_per_page = int(table_params['length'])
-        current_page_num = 1 + old_div(int(table_params['start']), rows_per_page)
+        current_page_num = 1 + \
+            old_div(int(table_params['start']), rows_per_page)
         paginator = Paginator(results, rows_per_page)
         page = paginator.page(current_page_num)
     except:
@@ -254,10 +287,14 @@ def get_datatable_json_result(results, post, field_filter=lambda _: True,
     reponse_data['recordsTotal'] = total_results
     reponse_data['recordsFiltered'] = total_results
     reponse_data['draw'] = int(table_params.get('draw', 0))
-    reponse_data['data'] = [{key_adapter((k, v)): value_adapter((k, v))
-        for k, v in list(x.get_stored_fields().items()) if field_filter(k)}
+    reponse_data['data'] = [{
+        key_adapter((k, v)): value_adapter((k, v))
+        for k, v in list(x.get_stored_fields().items())
+        if field_filter(k)
+    }
         for x in page]
     return JsonResponse(reponse_data)
+
 
 def render_locale_flatpage(request, template_path, flatpage_url):
     lang = get_language()
@@ -269,6 +306,7 @@ def render_locale_flatpage(request, template_path, flatpage_url):
     if not page:
         raise Http404("Your selected flatpage is not found")
     return render(request, template_path, {'flatpage': page})
+
 
 def set_language(request, lang_code):
     """

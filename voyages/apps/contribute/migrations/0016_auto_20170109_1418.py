@@ -16,31 +16,55 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='interimarticlesource',
             name='created_voyage_sources',
-            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='+', to='voyage.VoyageSources'),
+            field=models.ForeignKey(
+                null=True,
+                on_delete=django.db.models.deletion.SET_NULL,
+                related_name='+',
+                to='voyage.VoyageSources'),
         ),
         migrations.AlterField(
             model_name='interimbooksource',
             name='created_voyage_sources',
-            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='+', to='voyage.VoyageSources'),
+            field=models.ForeignKey(
+                null=True,
+                on_delete=django.db.models.deletion.SET_NULL,
+                related_name='+',
+                to='voyage.VoyageSources'),
         ),
         migrations.AlterField(
             model_name='interimnewspapersource',
             name='created_voyage_sources',
-            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='+', to='voyage.VoyageSources'),
+            field=models.ForeignKey(
+                null=True,
+                on_delete=django.db.models.deletion.SET_NULL,
+                related_name='+',
+                to='voyage.VoyageSources'),
         ),
         migrations.AlterField(
             model_name='interimprimarysource',
             name='created_voyage_sources',
-            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='+', to='voyage.VoyageSources'),
+            field=models.ForeignKey(
+                null=True,
+                on_delete=django.db.models.deletion.SET_NULL,
+                related_name='+',
+                to='voyage.VoyageSources'),
         ),
         migrations.AlterField(
             model_name='interimprivatenoteorcollectionsource',
             name='created_voyage_sources',
-            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='+', to='voyage.VoyageSources'),
+            field=models.ForeignKey(
+                null=True,
+                on_delete=django.db.models.deletion.SET_NULL,
+                related_name='+',
+                to='voyage.VoyageSources'),
         ),
         migrations.AlterField(
             model_name='interimunpublishedsecondarysource',
             name='created_voyage_sources',
-            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='+', to='voyage.VoyageSources'),
+            field=models.ForeignKey(
+                null=True,
+                on_delete=django.db.models.deletion.SET_NULL,
+                related_name='+',
+                to='voyage.VoyageSources'),
         ),
     ]

@@ -19,6 +19,9 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='reviewrequest',
             name='dataset',
-            field=models.IntegerField(default=0, help_text=b'Which dataset the voyage belongs to (e.g. Transatlantic, IntraAmerican)'),
+            field=models.IntegerField(
+                default=0,
+                help_text=b'Which dataset the voyage belongs to (e.g. Transatlantic, IntraAmerican)'
+            ),
         ),
     ]
