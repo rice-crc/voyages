@@ -3,8 +3,15 @@ from builtins import object
 from django.contrib import admin
 from django.contrib.flatpages.models import FlatPage
 from autocomplete_light import shortcuts as autocomplete_light
-from .forms import *
-from .models import *
+from .forms import (VoyageCaptainConnectionForm, VoyageCrewForm, VoyageDatesForm,
+                    VoyageItineraryForm, VoyageOutcomeForm, VoyageShipForm,
+                    VoyageShipOwnerConnectionForm, VoyageSlavesNumbersForm,
+                    VoyageSourcesConnectionForm, VoyagesSourcesAdminForm)
+from .models import (BroadRegion, Nationality, OwnerOutcome, ParticularOutcome, Place, Region,
+                     RigOfVessel, SlavesOutcome, TonType, VesselCapturedOutcome, Voyage,
+                     VoyageCaptainConnection, VoyageCrew, VoyageDates, VoyageGroupings,
+                     VoyageItinerary, VoyageOutcome, VoyageShip, VoyageShipOwnerConnection,
+                     VoyageSlavesNumbers, VoyageSources, VoyageSourcesConnection, VoyageSourcesType)
 from django.contrib.flatpages.admin import FlatPageAdmin
 from django.contrib.flatpages.models import FlatPage
 from django.utils.translation import ugettext_lazy as _

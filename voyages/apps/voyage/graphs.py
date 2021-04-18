@@ -7,7 +7,8 @@ from past.utils import old_div
 from django.utils.translation import ugettext_lazy as _
 from itertools import groupby
 from voyages.apps.common.models import get_values_from_haystack_results
-from .models import *
+from .models import (BroadRegion, Nationality, OwnerOutcome, ParticularOutcome, Place, Region,
+                     Resistance, RigOfVessel, SlavesOutcome, VesselCapturedOutcome)
 import calendar
 
 class Axis(object):

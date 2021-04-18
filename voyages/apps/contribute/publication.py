@@ -5,9 +5,16 @@ from django.conf import settings
 from django.core import management
 from django.db import transaction
 from django.db.models import Prefetch
-from voyages.apps.contribute.models import *
+from voyages.apps.contribute.models import (ContributionStatus, DeleteVoyageContribution,
+                                            EditVoyageContribution, InterimPreExistingSourceActions,
+                                            MergeVoyagesContribution, NewVoyageContribution,
+                                            ReviewRequest, ReviewRequestDecision)
 from voyages.apps.contribute.views import full_contribution_id, get_filtered_contributions
-from voyages.apps.voyage.models import *
+from voyages.apps.voyage.models import (Voyage, VoyageCaptain, VoyageCaptainConnection, VoyageCrew,
+                                        VoyageDataset, VoyageDates, VoyageItinerary, VoyageOutcome,
+                                        VoyageShip, VoyageShipOwner, VoyageShipOwnerConnection,
+                                        VoyageSlavesNumbers, VoyageSources, VoyageSourcesConnection,
+                                        VoyagesFullQueryHelper)
 import unicodecsv as csv
 import re
 

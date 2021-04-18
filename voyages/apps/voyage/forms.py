@@ -5,7 +5,9 @@ from builtins import str
 from builtins import object
 from django import forms
 from autocomplete_light import shortcuts as autocomplete_light
-from .models import *
+from .models import (VoyageCaptainConnection, VoyageCrew, VoyageDates, VoyageItinerary,
+                     VoyageOutcome, VoyageShip, VoyageShipOwnerConnection, VoyageSlavesNumbers,
+                     VoyageSources, VoyageSourcesConnection)
 from voyages.extratools import AdvancedEditor
 from . import globals
 from . import graphs

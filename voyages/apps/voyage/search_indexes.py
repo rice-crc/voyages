@@ -6,7 +6,7 @@ from builtins import str
 from builtins import range
 from builtins import object
 from haystack import indexes
-from .models import *
+from .models import Voyage, VoyageSources, VoyagesFullQueryHelper
 from datetime import date
 from django.utils import translation
 from django.utils.translation import ugettext as _

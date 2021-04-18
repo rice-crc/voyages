@@ -2,7 +2,7 @@ from __future__ import unicode_literals
 from builtins import str
 from django.template import Template, Context
 from django.template.defaultfilters import stringfilter
-from voyages.apps.common.filters import *
+from voyages.apps.common.filters import jsonify, replaceStar, settings, template, trans_log
 
 register = template.Library()
 register.filter('trans_log', trans_log)

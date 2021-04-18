@@ -8,8 +8,8 @@ from django.http import Http404
 from django.template import TemplateDoesNotExist, Context, loader, RequestContext
 from django.shortcuts import render
 from haystack.query import SearchQuerySet
-from .forms import *
-from .models import *
+from .forms import EstimateSelectionForm, EstimateYearForm
+from .models import Estimate, EstimateManager
 from voyages.apps.common.export import download_xls
 from voyages.apps.common.models import get_pks_from_haystack_results
 import collections

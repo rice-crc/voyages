@@ -14,7 +14,10 @@ from django.http import JsonResponse
 from django.views.decorators.cache import cache_page
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
-from voyages.apps.past.models import *
+from voyages.apps.past.models import (AltEthnicityName, AltLanguageGroupName, Enslaved,
+                                      EnslavedContribution, EnslavedContributionLanguageEntry,
+                                      EnslavedContributionNameEntry, EnslavedSearch, Ethnicity,
+                                      LanguageGroup, ModernCountry)
 from .name_search import NameSearchCache
 import itertools
 import json

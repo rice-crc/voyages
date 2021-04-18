@@ -4,7 +4,7 @@ from __future__ import unicode_literals
 # Pre-compile paths connecting "regions" and link ports to such regions.
 from builtins import str
 from past.utils import old_div
-from voyages.apps.voyage.cache import *
+from voyages.apps.voyage.cache import VoyageCache
 from voyages.apps.voyage.maps import VoyageRoutes
 from scipy.interpolate import interp1d
 from haversine import haversine as hs_dist

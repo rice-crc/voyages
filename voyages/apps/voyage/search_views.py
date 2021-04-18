@@ -13,7 +13,7 @@ from django.utils.translation import ugettext as _
 from django.views.decorators.cache import cache_page
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
-from .graphs import *
+from .graphs import get_graph_data, graphs_x_axes, graphs_y_axes, other_graphs_x_axes
 from .globals import voyage_timeline_variables, table_columns, table_rows, table_functions
 from haystack.query import SearchQuerySet
 from haystack.inputs import Raw
@@ -22,9 +22,12 @@ from voyages.apps.common.export import download_xls
 from voyages.apps.common.models import get_pks_from_haystack_results, SavedQuery
 from voyages.apps.common.views import get_ordered_places
 from voyages.apps.common.views import get_datatable_json_result as get_results_table
-from voyages.apps.voyage.models import *
+from voyages.apps.voyage.models import (Nationality, OwnerOutcome, ParticularOutcome, Place,
+                                        Resistance, RigOfVessel, SlavesOutcome, TonType,
+                                        VesselCapturedOutcome, Voyage, VoyageDataset,
+                                        VoyageItinerary, VoyageSources)
 from voyages.apps.voyage.search_indexes import VoyageIndex
-from voyages.apps.voyage.tables import *
+from voyages.apps.voyage.tables import PivotTable, get_pivot_table_advanced
 import csv
 import itertools
 import json

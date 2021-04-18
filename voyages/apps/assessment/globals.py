@@ -1,6 +1,6 @@
 from __future__ import unicode_literals
 from haystack.query import SearchQuerySet
-from .models import *
+from .models import ExportRegion, ImportArea, ImportRegion, Nation
 from django.utils.translation import ugettext_lazy as _
 
 
