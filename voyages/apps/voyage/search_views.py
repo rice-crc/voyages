@@ -10,11 +10,8 @@ from builtins import object, str
 import unicodecsv
 from django.conf import settings
 from django.core.cache import cache
-from django.http import (HttpResponse, HttpResponseBadRequest,
-                         HttpResponseForbidden, HttpResponseRedirect,
-                         JsonResponse)
+from django.http import HttpResponse, HttpResponseBadRequest, JsonResponse
 from django.shortcuts import render
-from django.utils.translation import get_language
 from django.utils.translation import ugettext as _
 from django.views.decorators.cache import cache_page
 from django.views.decorators.csrf import csrf_exempt
@@ -38,8 +35,7 @@ from voyages.apps.voyage.search_indexes import VoyageIndex
 from voyages.apps.voyage.tables import PivotTable, get_pivot_table_advanced
 
 from .cache import CachedGeo, VoyageCache
-from .globals import (table_columns, table_functions, table_rows,
-                      voyage_timeline_variables)
+from .globals import voyage_timeline_variables
 from .graphs import (get_graph_data, graphs_x_axes, graphs_y_axes,
                      other_graphs_x_axes)
 from .search_indexes import VoyageIndex

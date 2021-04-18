@@ -10,12 +10,11 @@ import os
 import re
 import threading
 from builtins import object
-from math import sqrt
 from queue import PriorityQueue
 
 from haversine import haversine as dist
 
-from .cache import CachedGeo, VoyageCache
+from .cache import VoyageCache
 
 
 class VoyageRoutes(object):

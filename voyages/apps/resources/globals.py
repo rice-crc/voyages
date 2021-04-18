@@ -1,7 +1,5 @@
 from __future__ import unicode_literals
 
-from .models import AfricanName, Country
-
 names_search_strict_text = ['slave_name', 'slave_ship_name', 'slave_voyage_number', 'slave_date_arrived__gte',
                             'slave_date_arrived__lte', 'slave_age__gte', 'slave_age__lte', 'slave_height__gte',
                             'slave_height__lte']

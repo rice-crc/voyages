@@ -7,7 +7,7 @@ import re
 from builtins import object
 from inspect import ismethod
 
-from django.template import Context, loader
+from django.template import loader
 from django.utils import datetime_safe, six
 from haystack.exceptions import SearchFieldError
 from haystack.utils import get_model_ct_tuple

@@ -8,7 +8,7 @@ from django.contrib.auth.models import User
 from django.db import models
 from django.db.models import (Case, CharField, F, Func, IntegerField, Q, Value,
                               When)
-from django.db.models.functions import Coalesce, Concat, Length, Substr
+from django.db.models.functions import Coalesce, Length, Substr
 
 from voyages.apps.voyage.models import Place, Voyage, VoyageSources
 

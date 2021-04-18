@@ -3,7 +3,7 @@ from __future__ import print_function, unicode_literals
 from builtins import range
 
 import xlrd
-from django.core.management.base import BaseCommand, CommandError
+from django.core.management.base import BaseCommand
 
 from voyages.apps.voyage import models
 
@@ -34,5 +34,3 @@ class Command(BaseCommand):
             models.VoyageSources.objects.create(short_ref=short_ref, full_ref=full_ref, source_type=src_type)
             idx += 1
         print("Finished")
-            
-            

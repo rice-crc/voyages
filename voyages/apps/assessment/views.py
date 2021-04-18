@@ -6,8 +6,7 @@ from builtins import range, str
 
 from django.http import Http404
 from django.shortcuts import render
-from django.template import (Context, RequestContext, TemplateDoesNotExist,
-                             loader)
+from django.template import TemplateDoesNotExist, loader
 from haystack.query import SearchQuerySet
 from past.utils import old_div
 

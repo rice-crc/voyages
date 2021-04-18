@@ -3,9 +3,6 @@ from __future__ import absolute_import, unicode_literals
 from future import standard_library
 
 standard_library.install_aliases()
-import urllib.error
-import urllib.parse
-import urllib.request
 from builtins import range, str
 from datetime import date
 
@@ -15,7 +12,6 @@ from django.test.utils import override_settings
 from mock import patch
 
 from . import globals
-from .models import VoyageDates
 
 
 @override_settings(LANGUAGE_CODE='en')
@@ -48,7 +44,7 @@ class ReportingTest(TestCase):
 class SearchTest(TestCase):
 
     fixtures = ['geographical.json', 'shipattributes.json', 'groupings.json', 'outcomes.json']
-    
+
     """
     Tests the search page and associated functions
     """
@@ -61,7 +57,7 @@ class SearchTest(TestCase):
             thing = 'id="id_' + var_name + '-is_shown_field"'
             if var['is_general'] or var['is_basic']:
                 self.assertIn(thing, response.content, msg=var_name)
-    
+
     @patch('voyages.apps.voyage.views.perform_search')
     def test_search_geographical(self, perform_search_func):
         self.client.get('/voyage/search?used_variable_names=var_imp_port_voyage_begin&time_span_from_year=1514&var_imp_port_voyage_begin_choice_field=60412%3B60803%3B60807%3B60820%3B60833%3B60834%3B60999%3B50203%3B50299&time_span_to_year=1866')
@@ -114,9 +110,9 @@ class SearchTest(TestCase):
         qdict = args[0]
         self.assertIn('var_voyage_in_cd_rom__in', qdict)
         self.assertEqual([u'1'], qdict['var_voyage_in_cd_rom__in'])
-    
-    
-#don't think the function is being used 
+
+
+#don't think the function is being used
 #class VoyageDatesPeriodsTest(TestCase):
 #    """
 #    Test of the calculating period variables in the

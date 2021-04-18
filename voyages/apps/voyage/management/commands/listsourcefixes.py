@@ -3,7 +3,7 @@ from __future__ import print_function, unicode_literals
 import re
 
 import openpyxl
-from django.core.management.base import BaseCommand, CommandError
+from django.core.management.base import BaseCommand
 
 
 class Command(BaseCommand):
@@ -41,5 +41,3 @@ class Command(BaseCommand):
             res[reorig] = rep
 #        print("hello")
         print(res)
-                    
-
