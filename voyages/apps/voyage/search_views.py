@@ -31,14 +31,13 @@ from voyages.apps.voyage.models import (Nationality, OwnerOutcome,
                                         VesselCapturedOutcome, Voyage,
                                         VoyageDataset, VoyageItinerary,
                                         VoyageSources)
-from voyages.apps.voyage.search_indexes import VoyageIndex
-from voyages.apps.voyage.tables import PivotTable, get_pivot_table_advanced
 
 from .cache import CachedGeo, VoyageCache
 from .globals import voyage_timeline_variables
 from .graphs import (get_graph_data, graphs_x_axes, graphs_y_axes,
                      other_graphs_x_axes)
 from .search_indexes import VoyageIndex
+from .tables import PivotTable, get_pivot_table_advanced
 
 
 class SearchOperator(object):
