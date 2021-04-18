@@ -1986,7 +1986,7 @@ def generate_voyage_csv_file(statuses,
     count = 0
     try:
         # Simply iterate over generated CSV rows passing the file as buffer.
-        for _ in get_voyages_csv_rows(statuses, published, csv_file,
+        for i in get_voyages_csv_rows(statuses, published, csv_file,
                                       remove_linebreaks, intra_american_flag):
             count += 1
             if (count % 100) == 0:
@@ -2049,9 +2049,10 @@ def get_voyages_csv_rows(statuses,
     yield header
     buffer.write(header)
 
-    def row_processor(x): return x if not remove_linebreaks else \
-        {k: re.sub('\r?\n', ' ', v) if isinstance(
-            v, six.string_types) else v for k, v in list(x.items())}
+    def row_processor(x):
+        return x if not remove_linebreaks else \
+            {k: re.sub('\r?\n', ' ', v) if isinstance(
+                v, six.string_types) else v for k, v in list(x.items())}
 
     for item in export_contributions(statuses):
         yield safe_writerow(writer, row_processor(item))
