@@ -1594,7 +1594,7 @@ def submit_editorial_decision(request, editor_contribution_id):
             created_voyage_id = int(voyage_id)
     except:
         pass
-    if not decision in [
+    if decision not in [
             ReviewRequestDecision.accepted_by_editor,
             ReviewRequestDecision.rejected_by_editor,
             ReviewRequestDecision.deleted
@@ -1630,7 +1630,7 @@ def submit_editorial_decision(request, editor_contribution_id):
         if existing > 0:
             # Only case when this is allowed is if a merge contribution
             # uses one of the merged voyages ids.
-            if not created_voyage_id in user_contribution.get_related_voyage_ids(
+            if created_voyage_id not in user_contribution.get_related_voyage_ids(
             ):
                 return JsonResponse({'result': 'Failed', 'errors': _('Voyage id already exists')})
         existing = ReviewRequest.objects.filter(
@@ -1790,7 +1790,7 @@ def editorial_sources(request):
     if not request.user.is_superuser:
         return HttpResponseForbidden()
     mode = request.POST.get('mode')
-    if not mode in ['new', 'edit', 'save']:
+    if mode not in ['new', 'edit', 'save']:
         return HttpResponseBadRequest()
     original_ref = request.POST.get('original_ref')
     conn = VoyageSourcesConnection.objects.filter(

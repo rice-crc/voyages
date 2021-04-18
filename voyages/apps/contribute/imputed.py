@@ -547,11 +547,11 @@ def compute_imputed_vars(_interim, is_iam=False):
         if ncar13 > 0 and ncar15 == 0 and ncar17 == 0 and _places[
                 1] and _places[2] is None:
             mjbyptimp = _places[1]
-        if ncar13 == 0 and ncar15 == 0 and ncar17 > 0 and not regem1 is None and regem1 == regem2:
+        if ncar13 == 0 and ncar15 == 0 and ncar17 > 0 and regem1 is not None and regem1 == regem2:
             mjbyptimp = regem1 + 99
-        if ncar13 == 0 and ncar15 > 0 and ncar17 == 0 and not regem1 is None and regem1 == regem3:
+        if ncar13 == 0 and ncar15 > 0 and ncar17 == 0 and regem1 is not None and regem1 == regem3:
             mjbyptimp = regem1 + 99
-        if ncar13 > 0 and ncar15 == 0 and ncar17 == 0 and not regem2 is None and regem2 == regem3:
+        if ncar13 > 0 and ncar15 == 0 and ncar17 == 0 and regem2 is not None and regem2 == regem3:
             mjbyptimp = regem2 + 99
         if ncar13 == 0 and ncar15 == 0 and ncar17 > 0 and regem1 != regem2 and regem1 and regem2:
             mjbyptimp = 60999
@@ -562,13 +562,13 @@ def compute_imputed_vars(_interim, is_iam=False):
 
     if not ncartot:
         if _places[0] >= 1 and _places[1] >= 1 and _places[
-                2] is None and not regem1 is None and regem1 and regem1 == regem2:
+                2] is None and regem1 is not None and regem1 and regem1 == regem2:
             mjbyptimp = regem1 + 99
         if _places[0] >= 1 and _places[2] >= 1 and _places[
-                1] is None and not regem1 is None and regem1 and regem1 == regem3:
+                1] is None and regem1 is not None and regem1 and regem1 == regem3:
             mjbyptimp = regem1 + 99
         if _places[1] >= 1 and _places[2] >= 1 and _places[
-                0] is None and not regem2 is None and regem2 and regem2 == regem3:
+                0] is None and regem2 is not None and regem2 and regem2 == regem3:
             mjbyptimp = regem2 + 99
         if _places[0] >= 1 and _places[1] >= 1 and _places[
                 2] is None and regem1 != regem2:

@@ -202,7 +202,7 @@ class TestImputedDataCalculation(TestCase):
             # Check that the imputed fields all match.
             mismatches = []
             for k, v in list(all_vars.items()):
-                if not k in row:
+                if k not in row:
                     if first:
                         print("WARNING: Missing field in target output: " + k)
                     continue
