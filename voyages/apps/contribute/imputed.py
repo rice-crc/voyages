@@ -1072,11 +1072,11 @@ def compute_imputed_vars(_interim, is_iam=False):
         xmimpflag = 139
     if yearam and yearam > 1825 and rig == 1 and natinimp == 9:
         xmimpflag = 140
-    if yearam and yearam < 1776 and (rig == 2 or rig == 5) and natinimp == 9:
-        xmimpflag = 141
-    if yearam and yearam >= 1776 and yearam < 1801 and (rig == 2 or rig
-                                                        == 5) and natinimp == 9:
-        xmimpflag = 142
+    if (rig == 2 or rig == 5) and natinimp == 9:
+        if yearam and yearam < 1776:
+            xmimpflag = 141
+        if yearam and yearam >= 1776 and yearam < 1801:
+            xmimpflag = 142
     if yearam and yearam >= 1801 and yearam < 1826 and rig == 5 and natinimp == 9:
         xmimpflag = 143
     if yearam and yearam > 1825 and (rig == 2 or rig == 5) and natinimp == 9:
