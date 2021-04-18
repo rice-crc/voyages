@@ -17,7 +17,7 @@ register.filter('replaceStar', replaceStar)
 @register.filter
 @stringfilter
 def parse_blocks(value):
-    """ use the django template loader and response object to spit 
+    """ use the django template loader and response object to spit
     out rendered content
     """
     t = Template(value)
