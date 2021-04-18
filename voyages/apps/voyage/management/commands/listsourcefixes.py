@@ -22,12 +22,12 @@ class Command(BaseCommand):
             orig = row[0].value
             repla = row[5].value
             corre = row[7].value
-            if orig == None:
+            if orig is None:
                 break
             new = None
             rep = None
             reorig = re.sub(endre, '', re.sub(beginre, '', orig))
-            if repla != '' and repla != None:
+            if repla != '' and repla is not None:
                 new = repla
             else:
                 new = corre
@@ -35,7 +35,7 @@ class Command(BaseCommand):
             if new == 'DELETE':
                 #                print("Deleting for " + repla + " and " + corre)
                 rep = None
-            elif new == '' or new == None:
+            elif new == '' or new is None:
                 print("WARNING: No replacement for text_ref: " + reorig)
                 continue
             else:
