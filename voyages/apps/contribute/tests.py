@@ -7,9 +7,9 @@ from django.test.utils import override_settings
 from django.core.urlresolvers import reverse
 import random
 from django.contrib.auth.models import User
+from .forms import *
 from .imputed import *
 from .models import *
-from .forms import *
 from voyages.apps.voyage.models import *
 import numbers
 import csv

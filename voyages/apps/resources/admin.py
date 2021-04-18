@@ -1,8 +1,8 @@
 from __future__ import unicode_literals
 from builtins import object
 from django.contrib import admin
-from .models import *
 from .forms import *
+from .models import *
 
 
 class ImageAdmin(admin.ModelAdmin):
