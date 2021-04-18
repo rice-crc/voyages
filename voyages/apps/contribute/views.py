@@ -1194,9 +1194,6 @@ def override_empty_fields_with_single_value(interim_voyage, review_request):
     # the same, if they differ, we update the field to None so that
     # no value gets propagated.
     from django.db.models.fields import Field
-    fields = [
-        f for f in InterimVoyage._meta.get_fields() if isinstance(f, Field)
-    ]
     foreign_keys = {
         f.name: f.name + '_id'
         for f in InterimVoyage._meta.get_fields()
@@ -1337,7 +1334,7 @@ def post_review_request(request):
                            html_message='<strong>Editor message:</strong><p>' +
                            message + '</p>' + '<p>Please click <a href="' +
                            reply_url + '">here</a> to reply.</p>')
-    except Exception as e:
+    except Exception:
         import traceback
         traceback.print_exc()
     finally:
