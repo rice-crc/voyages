@@ -716,7 +716,7 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
     def prepare_var_imp_voyage_began(self, obj):
         try:
             return getYear(obj.voyage_dates.imp_voyage_began)
-        except AttributeError as TypeError:
+        except AttributeError:
             return None
 
     def prepare_var_owner(self, obj):

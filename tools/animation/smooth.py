@@ -27,10 +27,6 @@ def precompile_paths(datasetName, twoWayLinks):
     links = set(region_network.links)
 
     VoyageCache.load()
-    source_port_pks = set(
-        [v.emb_pk for v in list(VoyageCache.voyages.values()) if v.emb_pk])
-    dest_port_pks = set(
-        [v.dis_pk for v in list(VoyageCache.voyages.values()) if v.dis_pk])
 
     # Map closest point from an origin.
     def get_closest(origin, choices):

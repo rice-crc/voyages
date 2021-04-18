@@ -341,9 +341,6 @@ def create_forms_from_var_list(var_list):
                                                             '_threshold']
         elif varname in globals.list_date_fields:
             form = SimpleDateSearchForm(prefix=varname)
-            mdict = dict([
-                (int(choice[0]), choice) for choice in globals.list_months
-            ])
             form.fields['months'].initial = [
                 str(x).zfill(2)
                 for x in var_list[varname + '_months'].split(',')
@@ -430,7 +427,6 @@ def create_var_dict(query_forms, time_frame_form):
         elif varname in globals.list_numeric_fields:
             opt = form.cleaned_data['options']
             var_list[varname + '_options'] = opt
-            mangle_method = globals.no_mangle
             if opt == '1':  # Between
                 var_list[varname +
                          '_lower_bound'] = form.cleaned_data['lower_bound']
@@ -847,10 +843,8 @@ def search(request):
     Handles the Search the Database part
     """
     no_result = False
-    to_reset_form = False
     query_dict = {}
     result_data = {}
-    search_forms = []
     tab = 'result'
     result_data[
         'summary_statistics_columns'] = globals.summary_statistics_columns
@@ -1317,9 +1311,6 @@ def search(request):
                 #cell_displays.append((rowlbl, row_cell_displays, row_total))
             for rownum in remove_rows:
                 xls_table.pop(rownum + num_col_labels_before)
-                row_counters = [0, 0, 0]
-                count1 = 0
-                count2 = 0
                 row_list[rownum] = ([
                     (i[0], i[1] - 1) for i in row_list[rownum][0]
                 ], row_list[rownum][1], row_list[rownum][2])
@@ -2350,7 +2341,6 @@ def csv_stats_download(request):
                                  lang=request.LANGUAGE_CODE)
 
         if len(results) == 0:
-            no_result = True
             results = []
     else:
         results = get_voyages_search_query_set().order_by('var_voyage_id')
