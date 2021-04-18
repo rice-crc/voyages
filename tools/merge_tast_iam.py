@@ -12,6 +12,7 @@ if len(sys.argv) != 4:
 
 iam_column = u'IntraAmer'
 
+
 def load_csv(file_name, iam_val):
     results = []
     cols = []
@@ -25,6 +26,7 @@ def load_csv(file_name, iam_val):
             row[iam_column] = iam_val
             results.append(row)
     return results, cols, ids
+
 
 tast_rows, tast_cols, tast_ids = load_csv(sys.argv[1], 0)
 iam_rows, iam_cols, iam_ids = load_csv(sys.argv[2], 1)

@@ -6,24 +6,34 @@ from django.db import migrations, models
 
 class Migration(migrations.Migration):
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
             name='Estimate',
             fields=[
-                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('id',
+                 models.AutoField(verbose_name='ID',
+                                  serialize=False,
+                                  auto_created=True,
+                                  primary_key=True)),
                 ('year', models.IntegerField()),
                 ('embarked_slaves', models.FloatField(null=True, blank=True)),
-                ('disembarked_slaves', models.FloatField(null=True, blank=True)),
+                ('disembarked_slaves', models.FloatField(null=True,
+                                                         blank=True)),
             ],
         ),
         migrations.CreateModel(
             name='ExportArea',
             fields=[
-                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('name', models.CharField(max_length=200, verbose_name=b'Export area name')),
+                ('id',
+                 models.AutoField(verbose_name='ID',
+                                  serialize=False,
+                                  auto_created=True,
+                                  primary_key=True)),
+                ('name',
+                 models.CharField(max_length=200,
+                                  verbose_name=b'Export area name')),
                 ('order_num', models.IntegerField()),
                 ('latitude', models.FloatField(null=True, blank=True)),
                 ('longitude', models.FloatField(null=True, blank=True)),
@@ -34,8 +44,14 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='ExportRegion',
             fields=[
-                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('name', models.CharField(max_length=200, verbose_name=b'Export region name')),
+                ('id',
+                 models.AutoField(verbose_name='ID',
+                                  serialize=False,
+                                  auto_created=True,
+                                  primary_key=True)),
+                ('name',
+                 models.CharField(max_length=200,
+                                  verbose_name=b'Export region name')),
                 ('order_num', models.IntegerField()),
                 ('latitude', models.FloatField(null=True, blank=True)),
                 ('longitude', models.FloatField(null=True, blank=True)),
@@ -47,8 +63,14 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='ImportArea',
             fields=[
-                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('name', models.CharField(max_length=200, verbose_name=b'Import area name')),
+                ('id',
+                 models.AutoField(verbose_name='ID',
+                                  serialize=False,
+                                  auto_created=True,
+                                  primary_key=True)),
+                ('name',
+                 models.CharField(max_length=200,
+                                  verbose_name=b'Import area name')),
                 ('order_num', models.IntegerField()),
                 ('latitude', models.FloatField(null=True, blank=True)),
                 ('longitude', models.FloatField(null=True, blank=True)),
@@ -59,8 +81,14 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='ImportRegion',
             fields=[
-                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('name', models.CharField(max_length=200, verbose_name=b'Import region name')),
+                ('id',
+                 models.AutoField(verbose_name='ID',
+                                  serialize=False,
+                                  auto_created=True,
+                                  primary_key=True)),
+                ('name',
+                 models.CharField(max_length=200,
+                                  verbose_name=b'Import region name')),
                 ('order_num', models.IntegerField()),
                 ('latitude', models.FloatField(null=True, blank=True)),
                 ('longitude', models.FloatField(null=True, blank=True)),
@@ -72,20 +100,29 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Nation',
             fields=[
-                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('name', models.CharField(max_length=200, null=True, blank=True)),
+                ('id',
+                 models.AutoField(verbose_name='ID',
+                                  serialize=False,
+                                  auto_created=True,
+                                  primary_key=True)),
+                ('name', models.CharField(max_length=200, null=True,
+                                          blank=True)),
                 ('order_num', models.IntegerField()),
             ],
         ),
         migrations.AddField(
             model_name='estimate',
             name='disembarkation_region',
-            field=models.ForeignKey(blank=True, to='assessment.ImportRegion', null=True),
+            field=models.ForeignKey(blank=True,
+                                    to='assessment.ImportRegion',
+                                    null=True),
         ),
         migrations.AddField(
             model_name='estimate',
             name='embarkation_region',
-            field=models.ForeignKey(blank=True, to='assessment.ExportRegion', null=True),
+            field=models.ForeignKey(blank=True,
+                                    to='assessment.ExportRegion',
+                                    null=True),
         ),
         migrations.AddField(
             model_name='estimate',

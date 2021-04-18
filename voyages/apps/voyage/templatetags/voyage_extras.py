@@ -13,6 +13,7 @@ register.filter('trans_log', trans_log)
 register.filter('jsonify', jsonify)
 register.filter('replaceStar', replaceStar)
 
+
 @register.filter
 @stringfilter
 def parse_blocks(value):
@@ -51,6 +52,7 @@ def translate_source_name(label_name):
 def create_page_name(name, number):
     return str(name + "-" + str(number))
 
+
 @register.filter
 def replace(text, args):
     tmp = args.split('/')
@@ -58,6 +60,7 @@ def replace(text, args):
     replace_val = tmp[2]
     import re
     return re.sub(search_val, replace_val, text)
+
 
 @register.filter
 def selected_choice(f):

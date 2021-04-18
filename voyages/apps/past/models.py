@@ -44,9 +44,12 @@ class EnslaverInfoAbstractBase(models.Model):
     class Meta(object):
         abstract = True
 
+
 class EnslaverIdentity(EnslaverInfoAbstractBase):
+
     class Meta(object):
         verbose_name = 'Enslaver unique identity and personal info'
+
 
 class EnslaverIdentitySourceConnection(models.Model):
     identity = models.ForeignKey(EnslaverIdentity, on_delete=models.CASCADE)
@@ -54,6 +57,7 @@ class EnslaverIdentitySourceConnection(models.Model):
     source = models.ForeignKey(VoyageSources, related_name="+", null=False)
     source_order = models.IntegerField()
     text_ref = models.CharField(max_length=255, null=False, blank=True)
+
 
 class EnslaverAlias(models.Model):
     """
@@ -67,6 +71,7 @@ class EnslaverAlias(models.Model):
     class Meta(object):
         verbose_name = 'Enslaver alias'
 
+
 class EnslaverMerger(EnslaverInfoAbstractBase):
     """
     Represents a merger of two or more identities.
@@ -75,15 +80,19 @@ class EnslaverMerger(EnslaverInfoAbstractBase):
     """
     comments = models.CharField(max_length=1024)
 
+
 class EnslaverMergerItem(models.Model):
     """
     Represents a single identity that is part of a merger.
     """
-    merger = models.ForeignKey('EnslaverMerger', null=False, on_delete=models.CASCADE)
+    merger = models.ForeignKey('EnslaverMerger',
+                               null=False,
+                               on_delete=models.CASCADE)
     # We do not use a foreign key to the identity since if the merger
     # is accepted, some/all of the records may be deleted and the keys
     # would either be invalid or set to null.
     enslaver_identity_id = models.IntegerField(null=False)
+
 
 class EnslaverVoyageConnection(models.Model):
     """
@@ -96,14 +105,19 @@ class EnslaverVoyageConnection(models.Model):
         BUYER = 3
         SELLER = 4
 
-    enslaver_alias = models.ForeignKey('EnslaverAlias', null=False, on_delete=models.CASCADE)
-    voyage = models.ForeignKey('voyage.Voyage', null=False, on_delete=models.CASCADE)
+    enslaver_alias = models.ForeignKey('EnslaverAlias',
+                                       null=False,
+                                       on_delete=models.CASCADE)
+    voyage = models.ForeignKey('voyage.Voyage',
+                               null=False,
+                               on_delete=models.CASCADE)
     role = models.IntegerField(null=False)
     # There might be multiple persons with the same role for the same voyage
     # and they can be ordered (ranked) using the following field.
     order = models.IntegerField(null=True)
     # NOTE: we will have to substitute VoyageShipOwner and VoyageCaptain
     # models/tables by this entity.
+
 
 class NamedModelAbstractBase(models.Model):
     id = models.IntegerField(primary_key=True)
@@ -112,36 +126,57 @@ class NamedModelAbstractBase(models.Model):
     class Meta(object):
         abstract = True
 
+
 class ModernCountry(NamedModelAbstractBase):
     longitude = models.DecimalField("Longitude of Country",
-                                     max_digits=10, decimal_places=7,
-                                     null=False)
+                                    max_digits=10,
+                                    decimal_places=7,
+                                    null=False)
     latitude = models.DecimalField("Latitude of Country",
-                                     max_digits=10, decimal_places=7,
-                                     null=False)
+                                   max_digits=10,
+                                   decimal_places=7,
+                                   null=False)
+
 
 class RegisterCountry(NamedModelAbstractBase):
     pass
 
+
 class LanguageGroup(NamedModelAbstractBase):
     longitude = models.DecimalField("Longitude of point",
-                                     max_digits=10, decimal_places=7,
-                                     null=False)
+                                    max_digits=10,
+                                    decimal_places=7,
+                                    null=False)
     latitude = models.DecimalField("Latitude of point",
-                                     max_digits=10, decimal_places=7,
-                                     null=False)
-    modern_country = models.ForeignKey(ModernCountry, null=False, related_name='language_groups')
+                                   max_digits=10,
+                                   decimal_places=7,
+                                   null=False)
+    modern_country = models.ForeignKey(ModernCountry,
+                                       null=False,
+                                       related_name='language_groups')
+
 
 class AltLanguageGroupName(NamedModelAbstractBase):
-    language_group = models.ForeignKey(LanguageGroup, null=False, related_name='alt_names')
+    language_group = models.ForeignKey(LanguageGroup,
+                                       null=False,
+                                       related_name='alt_names')
+
 
 class Ethnicity(NamedModelAbstractBase):
-    language_group = models.ForeignKey(LanguageGroup, null=False, related_name='ethnicities')
+    language_group = models.ForeignKey(LanguageGroup,
+                                       null=False,
+                                       related_name='ethnicities')
+
 
 class AltEthnicityName(NamedModelAbstractBase):
-    ethnicity = models.ForeignKey(Ethnicity, null=False, related_name='alt_names')
+    ethnicity = models.ForeignKey(Ethnicity,
+                                  null=False,
+                                  related_name='alt_names')
+
 
 # TODO: this model will replace resources.AfricanName
+
+
 class Enslaved(models.Model):
     """
     Enslaved person.
@@ -157,7 +192,9 @@ class Enslaved(models.Model):
     modern_name_second = models.CharField(max_length=25, null=True, blank=True)
     modern_name_third = models.CharField(max_length=25, null=True, blank=True)
 
-    editor_modern_names_certainty = models.CharField(max_length=255, null=True, blank=True)
+    editor_modern_names_certainty = models.CharField(max_length=255,
+                                                     null=True,
+                                                     blank=True)
 
     # Personal data
     age = models.IntegerField(null=True)
@@ -178,15 +215,23 @@ class Enslaved(models.Model):
     post_disembark_location = models.ForeignKey(Place, null=True)
 
     voyage = models.ForeignKey(Voyage, null=False)
-    sources = models.ManyToManyField \
-        (VoyageSources, through='EnslavedSourceConnection', related_name='+')
+    sources = models.ManyToManyField(VoyageSources,
+                                     through='EnslavedSourceConnection',
+                                     related_name='+')
+
 
 class EnslavedSourceConnection(models.Model):
-    enslaved = models.ForeignKey(Enslaved, on_delete=models.CASCADE, related_name='sources_conn')
+    enslaved = models.ForeignKey(Enslaved,
+                                 on_delete=models.CASCADE,
+                                 related_name='sources_conn')
     # Sources are shared with Voyages.
-    source = models.ForeignKey(VoyageSources, on_delete=models.CASCADE, related_name='+', null=False)
+    source = models.ForeignKey(VoyageSources,
+                               on_delete=models.CASCADE,
+                               related_name='+',
+                               null=False)
     source_order = models.IntegerField()
     text_ref = models.CharField(max_length=255, null=False, blank=True)
+
 
 class EnslavedContribution(models.Model):
     enslaved = models.ForeignKey(Enslaved, on_delete=models.CASCADE)
@@ -197,18 +242,23 @@ class EnslavedContribution(models.Model):
     status = models.IntegerField()
     token = models.CharField(max_length=40, null=True, blank=True)
 
+
 class EnslavedContributionNameEntry(models.Model):
-    contribution = models.ForeignKey(EnslavedContribution, on_delete=models.CASCADE)
+    contribution = models.ForeignKey(EnslavedContribution,
+                                     on_delete=models.CASCADE)
     name = models.CharField(max_length=255, null=False, blank=False)
     order = models.IntegerField()
     notes = models.CharField(max_length=255, null=True, blank=True)
 
+
 class EnslavedContributionLanguageEntry(models.Model):
-    contribution = models.ForeignKey(EnslavedContribution, on_delete=models.CASCADE)
+    contribution = models.ForeignKey(EnslavedContribution,
+                                     on_delete=models.CASCADE)
     ethnicity = models.ForeignKey(Ethnicity, null=True)
     language_group = models.ForeignKey(LanguageGroup, null=True)
     order = models.IntegerField()
     notes = models.CharField(max_length=255, null=True, blank=True)
+
 
 class EnslavedName(models.Model):
     name = models.CharField(max_length=255, null=False, blank=False)
@@ -218,20 +268,41 @@ class EnslavedName(models.Model):
     class Meta(object):
         unique_together = ('name', 'language')
 
-_special_empty_string_fields = {'voyage__voyage_ship__ship_name': 1, 'voyage__voyage_dates__first_dis_of_slaves': '2'}
+
+_special_empty_string_fields = {
+    'voyage__voyage_ship__ship_name': 1,
+    'voyage__voyage_dates__first_dis_of_slaves': '2'
+}
 
 _name_fields = ['documented_name', 'name_first', 'name_second', 'name_third']
-_modern_name_fields = ['modern_name_first', 'modern_name_second', 'modern_name_third']
+_modern_name_fields = [
+    'modern_name_first', 'modern_name_second', 'modern_name_third'
+]
+
 
 class EnslavedSearch(object):
     """
     Search parameters for enslaved persons.
     """
 
-    def __init__(self, searched_name=None, exact_name_search=False, age_gender=None, \
-            age_range=None, height_range=None, year_range=None, embarkation_ports=None, disembarkation_ports=None, \
-            post_disembark_location=None, language_groups=None, modern_country=None,
-            ship_name=None, voyage_id=None, enslaved_id=None, source=None, order_by=None, dataset=None):
+    def __init__(self,
+                 searched_name=None,
+                 exact_name_search=False,
+                 age_gender=None,
+                 age_range=None,
+                 height_range=None,
+                 year_range=None,
+                 embarkation_ports=None,
+                 disembarkation_ports=None,
+                 post_disembark_location=None,
+                 language_groups=None,
+                 modern_country=None,
+                 ship_name=None,
+                 voyage_id=None,
+                 enslaved_id=None,
+                 source=None,
+                 order_by=None,
+                 dataset=None):
         """
         Search the Enslaved database. If a parameter is set to None, it will not
         be included in the search.
@@ -303,8 +374,11 @@ class EnslavedSearch(object):
         is_fuzzy = False
         if self.searched_name and len(self.searched_name):
             if self.exact_name_search:
-                q = q.filter(Q(documented_name=self.searched_name) | Q(name_first=self.searched_name) | \
-                    Q(name_second=self.searched_name) | Q(name_third=self.searched_name))
+                q = q.filter(
+                    Q(documented_name=self.searched_name) |
+                    Q(name_first=self.searched_name) |
+                    Q(name_second=self.searched_name) |
+                    Q(name_third=self.searched_name))
             else:
                 from .name_search import NameSearchCache
 
@@ -315,6 +389,7 @@ class EnslavedSearch(object):
                 q = q.filter(pk__in=fuzzy_ids)
                 is_fuzzy = True
         if self.age_gender:
+
             def get_ag_query(x):
                 if x == 'male':
                     return Q(gender=1)
@@ -333,6 +408,7 @@ class EnslavedSearch(object):
             conditions = [get_ag_query(x) for x in self.age_gender]
             q = q.filter(reduce(operator.or_, conditions))
         if self.dataset:
+
             def get_dataset_query(x):
                 if x == 'trans':
                     return Q(voyage__dataset=0)
@@ -349,11 +425,15 @@ class EnslavedSearch(object):
         if self.height_range:
             q = q.filter(height__range=self.height_range)
         if self.modern_country:
-            q = q.filter(language_group__modern_country__pk__in=self.modern_country)
+            q = q.filter(
+                language_group__modern_country__pk__in=self.modern_country)
         if self.post_disembark_location:
-            q = q.filter(post_disembark_location__pk__in=self.post_disembark_location)
+            q = q.filter(
+                post_disembark_location__pk__in=self.post_disembark_location)
         if self.source:
-            q = q.filter(Q(sources_conn__text_ref__contains=self.source) | Q(sources__full_ref__contains=self.source))
+            q = q.filter(
+                Q(sources_conn__text_ref__contains=self.source) |
+                Q(sources__full_ref__contains=self.source))
         if self.voyage_id:
             q = q.filter(voyage__pk__range=self.voyage_id)
         if self.enslaved_id:
@@ -361,17 +441,23 @@ class EnslavedSearch(object):
         if self.year_range:
             # Search on YEARAM field. Note that we have a 'MM,DD,YYYY' format even though the
             # only year should be present.
-            q = q.filter(voyage__voyage_dates__imp_arrival_at_port_of_dis__range=[',,' + str(y) for y in self.year_range])
+            q = q.filter(
+                voyage__voyage_dates__imp_arrival_at_port_of_dis__range=[
+                    ',,' + str(y) for y in self.year_range
+                ])
         if self.embarkation_ports:
             # Search on MJBYPTIMP field.
-            q = q.filter(voyage__voyage_itinerary__imp_principal_place_of_slave_purchase__pk__in=self.embarkation_ports)
+            q = q.filter(
+                voyage__voyage_itinerary__imp_principal_place_of_slave_purchase__pk__in=self.embarkation_ports)
         if self.disembarkation_ports:
             # Search on MJSLPTIMP field.
-            q = q.filter(voyage__voyage_itinerary__imp_principal_port_slave_dis__pk__in=self.disembarkation_ports)
+            q = q.filter(
+                voyage__voyage_itinerary__imp_principal_port_slave_dis__pk__in=self.disembarkation_ports)
         if self.language_groups:
             q = q.filter(language_group__pk__in=self.language_groups)
         if self.ship_name:
-            q = q.filter(voyage__voyage_ship__ship_name__icontains=self.ship_name)
+            q = q.filter(
+                voyage__voyage_ship__ship_name__icontains=self.ship_name)
         order_by_ranking = 'asc'
         if isinstance(self.order_by, list):
             order_by_ranking = None
@@ -382,11 +468,13 @@ class EnslavedSearch(object):
             orm_orderby = []
             for x in self.order_by:
                 col_name = x['columnName']
-                if col_name == 'ranking': continue
+                if col_name == 'ranking':
+                    continue
                 is_desc = x['direction'].lower() == 'desc'
                 nulls_last = True
                 order_field = F(col_name)
-                empty_string_field_min_char_len = _special_empty_string_fields.get(col_name)
+                empty_string_field_min_char_len = _special_empty_string_fields.get(
+                    col_name)
                 if empty_string_field_min_char_len:
                     nulls_last = True
                     # Add a "length > min_char_len_for_field" field and sort it first.
@@ -396,41 +484,68 @@ class EnslavedSearch(object):
                     count_field = 'count_' + col_name
                     isempty_field = 'isempty_' + col_name
                     q = q.annotate(**{count_field: Length(order_field)})
-                    q = q.annotate(**{isempty_field: Case(
-                        When(**{ 'then': Value(1), count_field + '__gt': empty_string_field_min_char_len }),
-                        default=Value(0),
-                        output_field=IntegerField()
-                    )})
+                    q = q.annotate(
+                        **{
+                            isempty_field:
+                                Case(When(
+                                    **{
+                                        'then':
+                                            Value(1),
+                                        count_field + '__gt':
+                                            empty_string_field_min_char_len
+                                    }),
+                                    default=Value(0),
+                                    output_field=IntegerField())
+                        })
                     orm_orderby.append('-' + isempty_field)
                     if 'date' in col_name:
                         # The date formats MM,DD,YYYY with possible blank values are
                         # very messy to sort. Here we add sorting by the last 4 characters
                         # to first sort by year (which is always present for non blank dates).
                         year_field = 'yearof_' + col_name
-                        q = q.annotate(**{year_field: Substr(order_field, 4 * Value(-1), 4)})
-                        orm_orderby.append(('-' if is_desc else '') + year_field)
+                        q = q.annotate(
+                            **
+                            {year_field: Substr(order_field, 4 * Value(-1), 4)})
+                        orm_orderby.append(('-' if is_desc else '') +
+                                           year_field)
 
                 def add_names_sorting(sorted_name_fields, col_name, q):
                     # The next lines create a list made of the name fields with
                     # a separator constant value between each consecutive pair.
                     names_sep = Value(';')
-                    names_concat = [names_sep] * (2 * len(sorted_name_fields) - 1)
+                    names_concat = [names_sep] * \
+                        (2 * len(sorted_name_fields) - 1)
                     names_concat[0::2] = sorted_name_fields
                     # We now properly handle
                     fallback_name_val = Value('AAAAA' if is_desc else 'ZZZZZ')
-                    expressions = [Coalesce(F(name_field), fallback_name_val, output_field=CharField()) for name_field in sorted_name_fields]
-                    q = q.annotate(**{col_name: Func(*expressions, function='GREATEST' if is_desc else 'LEAST')})
+                    expressions = [
+                        Coalesce(F(name_field),
+                                 fallback_name_val,
+                                 output_field=CharField())
+                        for name_field in sorted_name_fields
+                    ]
+                    q = q.annotate(
+                        **{
+                            col_name:
+                                Func(*expressions,
+                                     function='GREATEST' if is_desc else 'LEAST'
+                                     )
+                        })
                     order_field = F(col_name)
-                    order_field = order_field.desc() if is_desc else order_field.asc()
+                    order_field = order_field.desc(
+                    ) if is_desc else order_field.asc()
                     return q, order_field
 
                 if col_name == 'names':
                     col_name = '_names_sort'
-                    (q, order_field) = add_names_sorting(_name_fields, col_name, q)
+                    (q,
+                     order_field) = add_names_sorting(_name_fields, col_name, q)
                     fields = fields + [col_name]
                 elif col_name == 'modern_names':
                     col_name = '_modern_names_sort'
-                    (q, order_field) = add_names_sorting(_modern_name_fields, col_name, q)
+                    (q,
+                     order_field) = add_names_sorting(_modern_name_fields,
+                                                      col_name, q)
                     fields = fields + [col_name]
                 elif is_desc:
                     order_field = order_field.desc(nulls_last=nulls_last)
@@ -446,5 +561,7 @@ class EnslavedSearch(object):
             for x in q:
                 x['ranking'] = ranking[x['enslaved_id']]
             if order_by_ranking:
-                q = sorted(q, key=lambda x: x['ranking'], reverse=('desc' == order_by_ranking))
+                q = sorted(q,
+                           key=lambda x: x['ranking'],
+                           reverse=('desc' == order_by_ranking))
         return q

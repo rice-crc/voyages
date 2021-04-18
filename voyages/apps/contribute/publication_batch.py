@@ -1,4 +1,5 @@
 from __future__ import print_function, unicode_literals
+from voyages.apps.contribute.publication import publish_accepted_contributions
 
 # This is a script file to run a full db backup and publication script.
 import os
@@ -9,8 +10,6 @@ import django
 sys.path.append('/home/domingos/Documents/projects/voyages')
 os.environ['DJANGO_SETTINGS_MODULE'] = 'voyages.settings'
 django.setup()
-
-from voyages.apps.contribute.publication import publish_accepted_contributions
 
 if len(sys.argv) <= 1:
     print("Pass the filename of output log as argument")

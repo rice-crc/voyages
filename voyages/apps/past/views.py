@@ -18,10 +18,12 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 from past.utils import old_div
 
-from voyages.apps.past.models import (
-    AltEthnicityName, AltLanguageGroupName, Enslaved, EnslavedContribution,
-    EnslavedContributionLanguageEntry, EnslavedContributionNameEntry,
-    EnslavedSearch, Ethnicity, LanguageGroup, ModernCountry)
+from voyages.apps.past.models import (AltEthnicityName, AltLanguageGroupName,
+                                      Enslaved, EnslavedContribution,
+                                      EnslavedContributionLanguageEntry,
+                                      EnslavedContributionNameEntry,
+                                      EnslavedSearch, Ethnicity, LanguageGroup,
+                                      ModernCountry)
 
 from .name_search import NameSearchCache
 
@@ -29,7 +31,8 @@ from .name_search import NameSearchCache
 def _generate_table(query, table_params, data_adapter=None):
     try:
         rows_per_page = int(table_params.get('length', 10))
-        current_page_num = 1 + old_div(int(table_params.get('start', 0)), rows_per_page)
+        current_page_num = 1 + \
+            old_div(int(table_params.get('start', 0)), rows_per_page)
         paginator = Paginator(query, rows_per_page)
         page = paginator.page(current_page_num)
     except:
@@ -49,10 +52,15 @@ def _generate_table(query, table_params, data_adapter=None):
     response_data['data'] = list(page)
     return response_data
 
+
 def _get_alt_named(altModel, parent_fk, parent_map):
-    key_fn = lambda x: getattr(x, parent_fk + '_id')
+
+    def key_fn(x):
+        return getattr(x, parent_fk + '_id')
+
     res = {}
-    for k, g in itertools.groupby(sorted(altModel.all(), key=key_fn), key=key_fn):
+    for k, g in itertools.groupby(sorted(altModel.all(), key=key_fn),
+                                  key=key_fn):
         alts = list(g)
         parent = getattr(alts[0], parent_fk)
         item = parent_map(parent)
@@ -60,29 +68,54 @@ def _get_alt_named(altModel, parent_fk, parent_map):
         res[k] = item
     return res
 
+
 @csrf_exempt
 @cache_page(3600)
 def get_modern_countries(request):
-    mcs = {mc.id: { 'name': mc.name, 'longitude': mc.longitude, 'latitude': mc.latitude } for mc in ModernCountry.objects.all()}
+    mcs = {
+        mc.id: {
+            'name': mc.name,
+            'longitude': mc.longitude,
+            'latitude': mc.latitude
+        } for mc in ModernCountry.objects.all()
+    }
     return JsonResponse(mcs)
+
 
 @csrf_exempt
 @cache_page(3600)
 def get_ethnicities(request):
-    parent_map = lambda e: {'name': e.name, 'language_group_id': e.language_group_id }
+
+    def parent_map(e):
+        return {'name': e.name, 'language_group_id': e.language_group_id}
+
     models = AltEthnicityName.objects.prefetch_related('ethnicity')
     return JsonResponse(_get_alt_named(models, 'ethnicity', parent_map))
+
 
 @csrf_exempt
 @cache_page(3600)
 def get_language_groups(request):
-    parent_map = lambda lg: {'name': lg.name, 'lat': lg.latitude, 'lng': lg.longitude, 'country': lg.modern_country.name}
-    models = AltLanguageGroupName.objects.prefetch_related(Prefetch('language_group', queryset=LanguageGroup.objects.select_related('modern_country')))
+
+    def parent_map(lg):
+        return {
+            'name': lg.name,
+            'lat': lg.latitude,
+            'lng': lg.longitude,
+            'country': lg.modern_country.name
+        }
+
+    models = AltLanguageGroupName.objects.prefetch_related(
+        Prefetch(
+            'language_group',
+            queryset=LanguageGroup.objects.select_related('modern_country')))
     return JsonResponse(_get_alt_named(models, 'language_group', parent_map))
+
 
 def restore_permalink(request, link_id):
     """Redirect the page with a URL param"""
     return redirect("/past/database#searchId=" + link_id)
+
 
 @require_POST
 @csrf_exempt
@@ -93,24 +126,40 @@ def search_enslaved(request):
     data = json.loads(request.body)
     search = EnslavedSearch(**data['search_query'])
     from voyages.apps.past.models import _modern_name_fields, _name_fields
-    _fields = ['enslaved_id',
-        'age', 'gender', 'height', 'ethnicity__name', 'language_group__name', 'language_group__modern_country__name',
-        'voyage__id', 'voyage__voyage_ship__ship_name', 'voyage__voyage_dates__first_dis_of_slaves',
+    _fields = [
+        'enslaved_id', 'age', 'gender', 'height', 'ethnicity__name',
+        'language_group__name', 'language_group__modern_country__name',
+        'voyage__id', 'voyage__voyage_ship__ship_name',
+        'voyage__voyage_dates__first_dis_of_slaves',
         'voyage__voyage_itinerary__int_first_port_dis__place',
         'voyage__voyage_itinerary__imp_principal_place_of_slave_purchase__place',
         'voyage__voyage_itinerary__imp_principal_place_of_slave_purchase__latitude',
         'voyage__voyage_itinerary__imp_principal_place_of_slave_purchase__longitude',
-        'voyage__voyage_itinerary__imp_principal_port_slave_dis__place'] + _name_fields + _modern_name_fields
+        'voyage__voyage_itinerary__imp_principal_port_slave_dis__place'
+    ] + _name_fields + _modern_name_fields
     query = search.execute(_fields)
     output_type = data.get('output', 'resultsTable')
     # For now we only support outputing the results to DataTables.
     if output_type == 'resultsTable':
+
         def adapter(page):
             for row in page:
-                all_names = list(set([row[name_field] for name_field in _name_fields if row[name_field]]))
-                all_names.sort(reverse=('desc' == search.get_order_for_field('names')))
-                all_modern_names = list(set([row[name_field] for name_field in _modern_name_fields if row[name_field]]))
-                all_modern_names.sort(reverse=('desc' == search.get_order_for_field('modern_names')))
+                all_names = list(
+                    set([
+                        row[name_field]
+                        for name_field in _name_fields
+                        if row[name_field]
+                    ]))
+                all_names.sort(
+                    reverse=('desc' == search.get_order_for_field('names')))
+                all_modern_names = list(
+                    set([
+                        row[name_field]
+                        for name_field in _modern_name_fields
+                        if row[name_field]
+                    ]))
+                all_modern_names.sort(reverse=(
+                    'desc' == search.get_order_for_field('modern_names')))
                 row['names'] = all_names
                 row['modern_names'] = all_modern_names
                 keys = list(row.keys())
@@ -123,9 +172,11 @@ def search_enslaved(request):
         page = table.get('data', [])
         NameSearchCache.load()
         for x in page:
-            x['recordings'] = NameSearchCache.get_recordings([x[f] for f in _name_fields if f in x])
+            x['recordings'] = NameSearchCache.get_recordings(
+                [x[f] for f in _name_fields if f in x])
         return JsonResponse(table)
     return JsonResponse({'error': 'Unsupported'})
+
 
 @require_POST
 @csrf_exempt
@@ -142,14 +193,16 @@ def enslaved_contribution(request):
     languages = data.get('contrib_languages', [])
     # TODO: Check if this is enough validation.
     if len(names) == 0 and len(languages) == 0:
-        return HttpResponseBadRequest('Contribution must specify at least a name or a language')
+        return HttpResponseBadRequest(
+            'Contribution must specify at least a name or a language')
     token = uuid.uuid4().hex
     contrib = EnslavedContribution()
     contrib.date = date.today()
     contrib.enslaved = enslaved
-    contrib.notes = str(data.get('notes', '')) # Optional notes
+    contrib.notes = str(data.get('notes', ''))  # Optional notes
     # TODO: Do we require the user to be authenticated in order to contribute?
-    contrib.contributor = request.user if request.user.is_authenticated() else None
+    contrib.contributor = request.user if request.user.is_authenticated(
+    ) else None
     contrib.is_multilingual = bool(data.get('is_multilingual', False))
     contrib.token = token
     result = {}
@@ -179,9 +232,12 @@ def enslaved_contribution(request):
             lang_group_id = lang.get('lang_group_id', None)
             if ethnicity_id is None and lang_group_id is None:
                 transaction.rollback()
-                return HttpResponseBadRequest('Invalid language entry in contribution')
-            lang_entry.ethnicity = Ethnicity.objects.get(pk=ethnicity_id) if ethnicity_id else None
-            lang_entry.language_group = LanguageGroup.objects.get(pk=lang_group_id) if lang_group_id else None
+                return HttpResponseBadRequest(
+                    'Invalid language entry in contribution')
+            lang_entry.ethnicity = Ethnicity.objects.get(
+                pk=ethnicity_id) if ethnicity_id else None
+            lang_entry.language_group = LanguageGroup.objects.get(
+                pk=lang_group_id) if lang_group_id else None
             lang_entry.notes = lang.get('notes', '')
             lang_entry.save()
             language_ids.append(lang_entry.pk)
@@ -191,6 +247,7 @@ def enslaved_contribution(request):
     # malicious players from storing arbitrary data in our servers.
     result['audio_token'] = token
     return JsonResponse(result)
+
 
 @require_POST
 @csrf_exempt
@@ -203,6 +260,7 @@ def store_audio(request, contrib_pk, name_pk, token):
         return HttpResponseBadRequest('Contribution not found')
     name_pk = int(name_pk)
     file_name = str(contrib_pk) + "_" + str(name_pk) + ".webm"
-    with open('%s/%s/%s' % (settings.MEDIA_ROOT, 'audio', file_name), 'wb+') as destination:
+    with open('%s/%s/%s' % (settings.MEDIA_ROOT, 'audio', file_name),
+              'wb+') as destination:
         destination.write(request.body)
-    return JsonResponse({ 'len': len(request.body) })
+    return JsonResponse({'len': len(request.body)})

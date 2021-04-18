@@ -9,13 +9,15 @@ from django.core.management.base import BaseCommand
 class Command(BaseCommand):
     args = '<xlsx_file>'
     help = 'Takes data from a xlsx file about the problem sources and converts it to json'
+
     def handle(self, xlsx_file, *args, **options):
         wb = openpyxl.load_workbook(xlsx_file)
         ws = wb.active
         rows = ws.rows
         beginre = r'^[^"]*"'
         endre = r'"[^"]*$'
-        res = {} # Result that maps from the incorrect text_ref to the correct text_ref
+        res = {
+        }  # Result that maps from the incorrect text_ref to the correct text_ref
         for row in rows[2:]:
             orig = row[0].value
             repla = row[5].value
@@ -31,7 +33,7 @@ class Command(BaseCommand):
                 new = corre
 
             if new == 'DELETE':
-#                print("Deleting for " + repla + " and " + corre)
+                #                print("Deleting for " + repla + " and " + corre)
                 rep = None
             elif new == '' or new == None:
                 print("WARNING: No replacement for text_ref: " + reorig)
@@ -39,5 +41,7 @@ class Command(BaseCommand):
             else:
                 rep = new
             res[reorig] = rep
+
+
 #        print("hello")
         print(res)
