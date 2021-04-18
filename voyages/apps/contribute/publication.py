@@ -278,8 +278,8 @@ def publish_accepted_contributions(log_file, skip_backup=False):
                     else:
                         r = post('<commit />')
                         if r.status_code != 200:
-                            log('Failed to commit deletion for Solr record for voyage_id '
-                                + str(id) + ' response code: ' +
+                            log('Failed to commit deletion for Solr record for '
+                                'voyage_id ' + str(id) + ' response code: ' +
                                 str(r.status_code))
 
                 for id in all_deleted_ids:
@@ -326,8 +326,9 @@ def _fetch_active_reviews_by_status(statuses):
         if len(reqs) != 1 and info[
                 'contribution'].status == ContributionStatus.approved:
             raise Exception(
-                'Expected a single active review request for approved contributions ['
-                + str(contrib_id) + '], found: ' + str(len(reqs)))
+                'Expected a single active review request for approved '
+                'contributions [' + str(contrib_id) + '], found: ' +
+                str(len(reqs)))
         if len(reqs) == 0:
             notreviewed_contributions.append(info['contribution'])
         else:
@@ -1218,8 +1219,8 @@ def _save_editorial_version(review_request,
         # Each src here has as type a subclass of InterimContributedSource
         if not src.created_voyage_sources:
             raise Exception(
-                'Invalid state: a new source must have been created to match "'
-                + str(src.source_ref_text) + '"')
+                'Invalid state: a new source must have been created to match '
+                '"' + str(src.source_ref_text) + '"')
         create_source_connection(src.created_voyage_sources,
                                  src.source_ref_text, source_order)
         source_order += 1

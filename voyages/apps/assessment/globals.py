@@ -84,10 +84,10 @@ def get_regions(search_configuration=None, mode=None):
 
         if search_configuration is not None:
             if ("submit_regions" in search_configuration["post"] and
-                    search_configuration["post"]["submit_regions"]
-                    == "Reset to default") or (len(local_regions) == 1 and
-                                               "darea-button-" + local_area.pk
-                                               in search_configuration["post"]):
+                    search_configuration["post"]["submit_regions"] ==
+                    "Reset to default") or (len(local_regions) == 1 and
+                                            "darea-button-" + local_area.pk
+                                            in search_configuration["post"]):
                 local_regions_filtered = local_regions
             else:
                 local_regions_filtered = [

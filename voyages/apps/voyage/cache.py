@@ -20,8 +20,8 @@ class CachedGeo(object):
         self.lat = lat
         self.lng = lng
         # Ignore show in favor of having proper coordinates.
-        self.show = lat is not None and lng is not None and (abs(lat) + abs(lng)
-                                                             > 0.1)
+        self.show = lat is not None and lng is not None and \
+            (abs(lat) + abs(lng) > 0.1)
         self.parent = parent
 
     @classmethod
