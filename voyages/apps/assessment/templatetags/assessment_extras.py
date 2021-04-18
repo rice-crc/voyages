@@ -9,9 +9,11 @@ from voyages.apps.common.filters import trans_log
 register = template.Library()
 register.filter('trans_log', trans_log)
 
+
 @register.filter
 def multiply(number, *args, **kwargs):
     return number * 2
+
 
 @register.filter
 def get_range(value):

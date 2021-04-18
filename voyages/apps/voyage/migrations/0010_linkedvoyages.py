@@ -16,10 +16,20 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='LinkedVoyages',
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('id',
+                 models.AutoField(auto_created=True,
+                                  primary_key=True,
+                                  serialize=False,
+                                  verbose_name='ID')),
                 ('mode', models.IntegerField()),
-                ('first', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='+', to='voyage.Voyage')),
-                ('second', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='+', to='voyage.Voyage')),
+                ('first',
+                 models.ForeignKey(on_delete=django.db.models.deletion.CASCADE,
+                                   related_name='+',
+                                   to='voyage.Voyage')),
+                ('second',
+                 models.ForeignKey(on_delete=django.db.models.deletion.CASCADE,
+                                   related_name='+',
+                                   to='voyage.Voyage')),
             ],
         ),
     ]

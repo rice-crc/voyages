@@ -4,8 +4,8 @@ import os
 import re
 import shutil
 
-from fabric.api import (abort, env, lcd, local, prefix, put, puts, require,
-                        run, sudo, task)
+from fabric.api import (abort, env, lcd, local, prefix, put, puts, require, run,
+                        sudo, task)
 from fabric.colors import green, yellow
 from fabric.context_managers import cd, hide, settings
 from fabric.contrib import files
@@ -34,7 +34,9 @@ def test():
 
     # We are specifying apps to test because of problem with autocomplete_light.
     # There is missing some sub app to test and it causes fail of all tests.
-    local('python manage.py test --noinput about assessment common contribute resources voyage')
+    local(
+        'python manage.py test --noinput about assessment common contribute resources voyage'
+    )
 
 
 def doc():
@@ -62,6 +64,7 @@ env.remote_path = '/home/httpd/sites/voyages'
 env.url_prefix = None
 env.remote_proxy = None
 env.remote_acct = 'voyages'
+
 
 def configure(path=None, user=None, url_prefix=None, remote_proxy=None):
     'Configuration settings used internally for the build.'
@@ -95,13 +98,16 @@ def config_from_git():
 def prep_source():
     'Checkout the code from git and do local prep.'
 
-    require('git_rev', 'build_dir',
+    require('git_rev',
+            'build_dir',
             used_for='Exporting code from git into build area')
 
     local('mkdir -p build')
     local('rm -rf build/%(build_dir)s' % env)
     # create a tar archive of the specified version and extract inside the bulid directory
-    local('git archive --format=tar --prefix=%(build_dir)s/ %(git_rev)s | (cd build && tar xf -)' % env)
+    local(
+        'git archive --format=tar --prefix=%(build_dir)s/ %(git_rev)s | (cd build && tar xf -)'
+        % env)
 
     # local settings handled remotely
 
@@ -112,8 +118,10 @@ def prep_source():
         local('cp %s %s' % (env.apache_conf, orig_conf))
         with open(orig_conf) as original:
             text = original.read()
-        text = text.replace('WSGIScriptAlias / ', 'WSGIScriptAlias %(url_prefix)s ' % env)
-        text = text.replace('Alias /static/ ', 'Alias %(url_prefix)s/static ' % env)
+        text = text.replace('WSGIScriptAlias / ',
+                            'WSGIScriptAlias %(url_prefix)s ' % env)
+        text = text.replace('Alias /static/ ',
+                            'Alias %(url_prefix)s/static ' % env)
         text = text.replace('<Location />', '<Location %(url_prefix)s/>' % env)
         with open(env.apache_conf, 'w') as conf:
             conf.write(text)
@@ -127,8 +135,7 @@ def package_source():
 
 def upload_source():
     'Copy the source tarball to the target server.'
-    put('dist/%(tarball)s' % env,
-        '/tmp/%(tarball)s' % env)
+    put('dist/%(tarball)s' % env, '/tmp/%(tarball)s' % env)
 
 
 def extract_source():
@@ -148,8 +155,10 @@ def setup_virtualenv():
     with prefix('source /opt/rh/python27/enable'):
         with cd('%(remote_path)s/%(build_dir)s' % env):
             # create the virtualenv under the build dir
-            sudo('virtualenv --no-site-packages --prompt=\'[%(build_dir)s]\' env' \
-            % env, user=env.remote_acct)
+            sudo(
+                'virtualenv --no-site-packages --prompt=\'[%(build_dir)s]\' env'
+                % env,
+                user=env.remote_acct)
             # activate the environment and install required packages
             with prefix('source env/bin/activate'):
                 pip_cmd = 'pip install -r requirements.txt'
@@ -167,22 +176,27 @@ def configure_site():
     'Copy configuration files into the remote source tree.'
     with cd(env.remote_path):
         if not files.exists('localsettings.py'):
-            abort('Configuration file is not in expected location: %(remote_path)s/localsettings.py' % env)
-        sudo('cp localsettings.py %(build_dir)s/%(project)s/localsettings.py' % env,
+            abort(
+                'Configuration file is not in expected location: %(remote_path)s/localsettings.py'
+                % env)
+        sudo('cp localsettings.py %(build_dir)s/%(project)s/localsettings.py' %
+             env,
              user=env.remote_acct)
 
     with prefix('source /opt/rh/python27/enable'):
         with cd('%(remote_path)s/%(build_dir)s' % env):
             with prefix('source env/bin/activate'):
-                sudo('python manage.py compilescss' % env,
-                     user=env.remote_acct)
+                sudo('python manage.py compilescss' %
+                     env, user=env.remote_acct)
                 sudo('python manage.py collectstatic --noinput' % env,
                      user=env.remote_acct)
                 sudo('python manage.py compress --force' % env,
                      user=env.remote_acct)
                 # make static files world-readable
-                sudo('chmod -R a+r `env DJANGO_SETTINGS_MODULE=\'%(project)s.settings\' python -c \'from django.conf import settings; print settings.STATIC_ROOT\'`' % env,
-                     user=env.remote_acct)
+                sudo(
+                    'chmod -R a+r `env DJANGO_SETTINGS_MODULE=\'%(project)s.settings\' python -c \'from django.conf import settings; print settings.STATIC_ROOT\'`'
+                    % env,
+                    user=env.remote_acct)
 
 
 def update_links():
@@ -205,10 +219,14 @@ def syncdb():
 
 
 @task
-def build_source_package(path=None, user=None, url_prefix='',
+def build_source_package(path=None,
+                         user=None,
+                         url_prefix='',
                          remote_proxy=None):
     '''Produce a tarball of the source tree.'''
-    configure(path=path, user=user, url_prefix=url_prefix,
+    configure(path=path,
+              user=user,
+              url_prefix=url_prefix,
               remote_proxy=remote_proxy)
     prep_source()
     package_source()
@@ -237,8 +255,10 @@ fab deploy:remote_proxy=some.proxy.server:3128 -H servername
 
 '''
 
-    configure(path=path, user=user, url_prefix=url_prefix,
-        remote_proxy=remote_proxy)
+    configure(path=path,
+              user=user,
+              url_prefix=url_prefix,
+              remote_proxy=remote_proxy)
     prep_source()
     package_source()
     upload_source()
@@ -280,19 +300,25 @@ delete without requesting confirmation.
 '''
     configure(path=path, user=user)
     with cd(env.remote_path):
-        with hide('stdout'): # suppress ls/readlink output
+        with hide('stdout'):  # suppress ls/readlink output
             # get directory listing sorted by modification time (single-column for splitting)
             dir_listing = sudo('ls -t1', user=env.remote_acct)
             # get current and previous links so we don't remove either of them
-            current = sudo('readlink current', user=env.remote_acct) if files.exists('current') else None
-            previous = sudo('readlink previous', user=env.remote_acct) if files.exists('previous') else None
+            current = sudo(
+                'readlink current',
+                user=env.remote_acct) if files.exists('current') else None
+            previous = sudo(
+                'readlink previous',
+                user=env.remote_acct) if files.exists('previous') else None
 
         # split dir listing on newlines and strip whitespace
         dir_items = [n.strip() for n in dir_listing.split('\n')]
         # regex based on how we generate the build directory:
         # project name, numeric version, optional pre/dev suffix, optional revision #
         build_dir_regex = r'^%(project)s-[0-9.]+(-[A-Za-z0-9_-]+)?(-r[0-9]+)?$' % env
-        build_dirs = [item for item in dir_items if re.match(build_dir_regex, item)]
+        build_dirs = [
+            item for item in dir_items if re.match(build_dir_regex, item)
+        ]
         # by default, preserve the 3 most recent build dirs from deletion
         rm_dirs = build_dirs[3:]
         # if current or previous for some reason is not in the 3 most recent,
@@ -303,7 +329,8 @@ delete without requesting confirmation.
 
         if rm_dirs:
             for dir in rm_dirs:
-                if noinput or confirm('Remove %s/%s ?' % (env.remote_path, dir)):
+                if noinput or confirm('Remove %s/%s ?' %
+                                      (env.remote_path, dir)):
                     sudo('rm -rf %s' % dir, user=env.remote_acct)
         else:
             puts('No old build directories to remove')
@@ -316,12 +343,22 @@ def compare_localsettings(path=None, user=None):
     with cd(env.remote_path):
         # sanity-check current localsettings against previous
         if files.exists('previous'):
-            with settings(hide('warnings', 'running', 'stdout', 'stderr'),
-                          warn_only=True): # suppress output, don't abort on diff error exit code
-                output = sudo('diff current/%(project)s/localsettings.py previous/%(project)s/localsettings.py' % env,
-                              user=env.remote_acct)
+            with settings(
+                    hide('warnings', 'running', 'stdout',
+                         'stderr'), warn_only=True
+            ):  # suppress output, don't abort on diff error exit code
+                output = sudo(
+                    'diff current/%(project)s/localsettings.py previous/%(project)s/localsettings.py'
+                    % env,
+                    user=env.remote_acct)
                 if output:
-                    puts(yellow('WARNING: found differences between current and previous localsettings.py'))
+                    puts(
+                        yellow(
+                            'WARNING: found differences between current and previous localsettings.py'
+                        ))
                     puts(output)
                 else:
-                    puts(green('No differences between current and previous localsettings.py'))
+                    puts(
+                        green(
+                            'No differences between current and previous localsettings.py'
+                        ))

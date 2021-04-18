@@ -1,12 +1,11 @@
 from __future__ import unicode_literals
+from django.shortcuts import get_object_or_404
+from django.db import models
+from builtins import range
 
 from future import standard_library
 
 standard_library.install_aliases()
-from builtins import range
-
-from django.db import models
-from django.shortcuts import get_object_or_404
 
 
 # Create your models here.
@@ -38,7 +37,7 @@ class SavedQuery(models.Model):
         self.save()
         from django.core.urlresolvers import reverse
         link = ('https://' if request.is_secure() else 'http://') + request.get_host() + \
-               reverse(url_name, kwargs={'link_id': self.id})
+            reverse(url_name, kwargs={'link_id': self.id})
         from django.http import HttpResponse
         return HttpResponse(link, content_type='text/plain')
 
@@ -57,7 +56,9 @@ class SavedQuery(models.Model):
             # This method is now being deprecated as we move in with a JSON
             # backend/frontend-agnostic format that is much cleaner and
             # more flexible.
-            if len(value) == 1 and 'choice_field' not in name and 'select' not in name:
+            if len(
+                    value
+            ) == 1 and 'choice_field' not in name and 'select' not in name:
                 post[name] = value[0]
             else:
                 post[name] = value
@@ -68,7 +69,9 @@ class SavedQuery(models.Model):
         hash_object = hashlib.sha1(self.query)
         self.hash = hash_object.hexdigest()
         if not self.id or not preserve_id:
-            pre_existing = list(SavedQuery.objects.filter(hash=self.hash).filter(query=self.query))
+            pre_existing = list(
+                SavedQuery.objects.filter(hash=self.hash).filter(
+                    query=self.query))
             if len(pre_existing) > 0:
                 self.id = pre_existing[0].id
                 # No update to perform.
@@ -77,9 +80,12 @@ class SavedQuery(models.Model):
             import random
             import string
             self.id = ''.join(
-                random.SystemRandom().choice(string.ascii_uppercase + string.ascii_lowercase + string.digits) for _ in
-                range(self.ID_LENGTH))
+                random.SystemRandom().choice(string.ascii_uppercase +
+                                             string.ascii_lowercase +
+                                             string.digits)
+                for _ in range(self.ID_LENGTH))
         super(SavedQuery, self).save(*args, **kwargs)
+
 
 def restore_link(link_id, session, session_key, redirect_url_name):
     """
@@ -100,6 +106,7 @@ def restore_link(link_id, session, session_key, redirect_url_name):
     from django.http import HttpResponseRedirect
     return HttpResponseRedirect(reverse(redirect_url_name))
 
+
 def get_pks_from_haystack_results(results):
     """
     This is a HACK that gives us much better performance when enumerating the
@@ -119,6 +126,7 @@ def get_pks_from_haystack_results(results):
     except:
         raw_results = []
     return [int(x['id'].split('.')[-1]) for x in raw_results]
+
 
 def get_values_from_haystack_results(results, fields):
     """

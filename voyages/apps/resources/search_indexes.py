@@ -64,7 +64,8 @@ class AfricanNamesIndex(indexes.SearchIndex, indexes.Indexable):
     slave_age = indexes.IntegerField(model_attr="age", null=True)
     slave_height = indexes.FloatField(model_attr="height", null=True)
     slave_source = indexes.CharField(model_attr="source", null=True)
-    slave_date_arrived = indexes.IntegerField(model_attr="date_arrived", null=True)
+    slave_date_arrived = indexes.IntegerField(model_attr="date_arrived",
+                                              null=True)
     slave_ship_name = indexes.NgramField(model_attr="ship_name", null=True)
     slave_ship_name_sort = indexes.CharField(model_attr="ship_name", null=True)
     slave_voyage_number = indexes.CharField(model_attr="voyage_number")

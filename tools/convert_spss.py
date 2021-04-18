@@ -24,12 +24,12 @@ subst = [
 
 
 def replace_many(original):
-	result = original
-	for (k, v) in subst:
-		result = re.sub(k, v, result, flags=re.IGNORECASE)
-	return result
+    result = original
+    for (k, v) in subst:
+        result = re.sub(k, v, result, flags=re.IGNORECASE)
+    return result
 
 
 lines = [replace_many(line.rstrip('\n')) + '\n' for line in open(sys.argv[1])]
 with open(sys.argv[2], 'w') as f:
-	f.writelines(lines)
+    f.writelines(lines)

@@ -6,15 +6,18 @@ from django.db import migrations, models
 
 class Migration(migrations.Migration):
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
             name='SavedQuery',
             fields=[
-                ('id', models.CharField(max_length=8, serialize=False, primary_key=True)),
-                ('hash', models.CharField(default=b'', max_length=255, db_index=True)),
+                ('id',
+                 models.CharField(max_length=8,
+                                  serialize=False,
+                                  primary_key=True)),
+                ('hash',
+                 models.CharField(default=b'', max_length=255, db_index=True)),
                 ('query', models.TextField()),
             ],
         ),

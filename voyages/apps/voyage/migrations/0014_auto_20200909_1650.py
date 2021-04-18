@@ -22,10 +22,17 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='voyage',
             name='dataset',
-            field=models.IntegerField(default=0, help_text=b'Which dataset the voyage belongs to (e.g. Transatlantic, IntraAmerican)'),
+            field=models.IntegerField(
+                default=0,
+                help_text=b'Which dataset the voyage belongs to (e.g. Transatlantic, IntraAmerican)'
+            ),
         ),
         # Set dataset for intra American voyages.
-        migrations.RunSQL(['UPDATE voyage_voyage SET dataset=1 WHERE is_intra_american=1'], reverse_sql=['UPDATE voyage_voyage SET is_intra_american=1 WHERE dataset=1']),
+        migrations.RunSQL(
+            ['UPDATE voyage_voyage SET dataset=1 WHERE is_intra_american=1'],
+            reverse_sql=[
+                'UPDATE voyage_voyage SET is_intra_american=1 WHERE dataset=1'
+            ]),
         migrations.RemoveField(
             model_name='voyage',
             name='is_intra_american',

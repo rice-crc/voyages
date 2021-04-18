@@ -14,11 +14,17 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='voyageslavesnumbers',
             name='slave_deaths_between_arrival_and_sale',
-            field=models.IntegerField(null=True, verbose_name=b'Slaves death before arrival and sale (SLADAMER)', blank=True),
+            field=models.IntegerField(
+                null=True,
+                verbose_name=b'Slaves death before arrival and sale (SLADAMER)',
+                blank=True),
         ),
         migrations.AlterField(
             model_name='voyageslavesnumbers',
             name='slave_deaths_between_africa_america',
-            field=models.IntegerField(null=True, verbose_name=b'Slaves death between Africa and Americas (SLADVOY)', blank=True),
+            field=models.IntegerField(
+                null=True,
+                verbose_name=b'Slaves death between Africa and Americas (SLADVOY)',
+                blank=True),
         ),
     ]

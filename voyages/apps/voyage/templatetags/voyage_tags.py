@@ -11,7 +11,6 @@ register = template.Library()
 
 
 def getattribute(value, arg):
-
     """Gets an attribute of an object dynamically from a string name"""
     if hasattr(value, str(arg)):
         return getattr(value, arg)
@@ -31,7 +30,7 @@ def filtersource(value):
     result = ""
     for source in sources:
         try:
-            ref = source.split("<>");
+            ref = source.split("<>")
             result += "<div class='source_entry'>" + ref[0] + "</div><span class='source_full_ref hidden'>" \
                       + ref[1] + "</span>"
         except IndexError:
@@ -44,4 +43,6 @@ register.filter('filtersource', filtersource)
 
 def percentage(value):
     return format(value, "%")
+
+
 register.filter('percentage', percentage)

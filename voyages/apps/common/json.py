@@ -10,6 +10,7 @@ from django.core.serializers.python import Deserializer as PythonDeserializer
 
 Serializer = DjangoJsonSerializer
 
+
 def Deserializer(stream_or_string, **options):
 
     if isinstance(stream_or_string, six.string_types):
@@ -22,4 +23,5 @@ def Deserializer(stream_or_string, **options):
         raise
     except Exception as e:
         # Map to deserializer error
-        six.reraise(DeserializationError, DeserializationError(e), sys.exc_info()[2])
+        six.reraise(DeserializationError, DeserializationError(e),
+                    sys.exc_info()[2])

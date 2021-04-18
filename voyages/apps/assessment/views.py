@@ -27,14 +27,17 @@ def get_page(request, chapternum, sectionnum, pagenum):
     The remaining content is rendered using the pagepath parameter
     """
     # We might want to do some error checking for pagenum here. Even though 404 will be raised if needed
-    pagepath = "assessment/c" + chapternum + "_s" + sectionnum + "_p" + pagenum + ".html"
-    templatename = "assessment/c" + chapternum + "_s" + sectionnum + "_generic" + ".html"
+    pagepath = "assessment/c" + chapternum + \
+        "_s" + sectionnum + "_p" + pagenum + ".html"
+    templatename = "assessment/c" + chapternum + \
+        "_s" + sectionnum + "_generic" + ".html"
     try:
         loader.get_template(pagepath)
         loader.get_template(templatename)
-        return render(request, templatename, {"pagepath" : pagepath})
+        return render(request, templatename, {"pagepath": pagepath})
     except TemplateDoesNotExist:
         raise Http404
+
 
 def get_estimates(request):
     tab = None
@@ -48,6 +51,7 @@ def get_estimates(request):
         return get_estimates_timeline(request)
     return get_estimates_table(request)
 
+
 def get_estimates_map(request):
     """
     Generates a Map page containing the routes and traffic flow.
@@ -56,7 +60,8 @@ def get_estimates_map(request):
     """
     data = {'tab_selected': 'map'}
     results = get_estimates_common(request, data)
-    data['map_year'] = globals.get_map_year(data['query']["year__gte"], data['query']["year__lte"])
+    data['map_year'] = globals.get_map_year(data['query']["year__gte"],
+                                            data['query']["year__lte"])
     # Group estimates by embarkation and disembarkation geocodes.
     regions = {}
     flows = {}
@@ -65,16 +70,22 @@ def get_estimates_map(request):
         result = cache[int(pk)]
         dregion = result.disembarkation_region.name
         eregion = result.embarkation_region.name
-        regions[dregion] = (result.disembarkation_region.latitude, result.disembarkation_region.longitude, result.disembarkation_region.import_area)
-        regions[eregion] = (result.embarkation_region.latitude, result.embarkation_region.longitude, result.embarkation_region.export_area)
+        regions[dregion] = (result.disembarkation_region.latitude,
+                            result.disembarkation_region.longitude,
+                            result.disembarkation_region.import_area)
+        regions[eregion] = (result.embarkation_region.latitude,
+                            result.embarkation_region.longitude,
+                            result.embarkation_region.export_area)
         key = eregion + "_" + dregion
-        item = (eregion, dregion,  0, 0)
+        item = (eregion, dregion, 0, 0)
         if key in flows:
             item = flows[key]
-        flows[key] = (eregion, dregion, item[2] + result.embarked_slaves, item[3] + result.disembarked_slaves)
+        flows[key] = (eregion, dregion, item[2] + result.embarked_slaves,
+                      item[3] + result.disembarked_slaves)
     data['regions'] = regions
     data['flows'] = flows
     return render(request, 'assessment/estimates.html', data)
+
 
 def get_estimates_timeline(request):
     """
@@ -85,7 +96,7 @@ def get_estimates_timeline(request):
     data = {'tab_selected': 'timeline'}
     results = get_estimates_common(request, data)
     data['show_events'] = data['all_nations_selected'] and data['all_embarkations_selected'] and\
-                          data['all_disembarkations_selected']
+        data['all_disembarkations_selected']
     # Group estimates by year and sum embarked and disembarked for year.
     # The following dict has keys corresponding to years and entries
     # formed by tuples (embarked_count, disembarked_count)
@@ -96,7 +107,8 @@ def get_estimates_timeline(request):
         item = (0, 0)
         if result.year in timeline:
             item = timeline[result.year]
-        timeline[result.year] = (item[0] + result.embarked_slaves, item[1] + result.disembarked_slaves)
+        timeline[result.year] = (item[0] + result.embarked_slaves,
+                                 item[1] + result.disembarked_slaves)
 
     query = data['query']
     data['min_year'] = query['year__gte'] if query['year__gte'] > globals.default_first_year\
@@ -111,9 +123,12 @@ def get_estimates_timeline(request):
     if post is None or "download" not in post:
         return render(request, 'assessment/estimates.html', data)
     else:
-        rows = [[k, int(round(t[0])), int(round(t[1]))] for k, t in timeline.items()]
+        rows = [[k, int(round(t[0])), int(round(t[1]))]
+                for k, t in timeline.items()]
         rows = sorted(rows, key=lambda a: a[0])
-        return download_xls([[('Year', 1), ('Embarked Slaves', 1), ('Disembarked Slaves', 1)]], rows)
+        return download_xls([[('Year', 1), ('Embarked Slaves', 1),
+                              ('Disembarked Slaves', 1)]], rows)
+
 
 def get_estimates_table(request):
     """
@@ -153,7 +168,7 @@ def get_estimates_table(request):
     row_key_index = '7'
     col_key_index = '0'
     cell_key_index = '1'
-    include_empty = False;
+    include_empty = False
     estimate_selection_form = None
     post = data['post']
 
@@ -162,25 +177,30 @@ def get_estimates_table(request):
         estimate_selection_form = EstimateSelectionForm(post)
     if (estimate_selection_form is None or not estimate_selection_form.is_valid()) \
             and "estimate_selection_form" in request.session:
-        estimate_selection_form = EstimateSelectionForm(request.session["estimate_selection_form"])
+        estimate_selection_form = EstimateSelectionForm(
+            request.session["estimate_selection_form"])
     if post is not None and post.get("table_options") == "Reset to default":
         estimate_selection_form = None
-    if estimate_selection_form is not None and estimate_selection_form.is_valid():
+    if estimate_selection_form is not None and estimate_selection_form.is_valid(
+    ):
         cell_key_index = estimate_selection_form.cleaned_data["cells"]
         col_key_index = estimate_selection_form.cleaned_data["columns"]
         row_key_index = estimate_selection_form.cleaned_data["rows"]
         include_empty = estimate_selection_form.cleaned_data["include_empty"]
     else:
-        estimate_selection_form = EstimateSelectionForm(initial={
-            'rows': row_key_index,
-            'columns': col_key_index,
-            'cells': cell_key_index})
+        estimate_selection_form = EstimateSelectionForm(
+            initial={
+                'rows': row_key_index,
+                'columns': col_key_index,
+                'cells': cell_key_index
+            })
     row_key_function = key_functions[row_key_index]
     col_key_function = key_functions[col_key_index]
     data['table_form'] = estimate_selection_form
     # Save form to session so that if the user navigates elsewhere and then returns, the form is unchanged.
     if estimate_selection_form.is_valid():
-        request.session["estimate_selection_form"] = estimate_selection_form.cleaned_data
+        request.session[
+            "estimate_selection_form"] = estimate_selection_form.cleaned_data
 
     # Aggregate results according to the row and column keys.
     # Each result is a pair (tuple) containing total embarked and total disembarked.
@@ -191,25 +211,44 @@ def get_estimates_table(request):
         # This is done by projecting the entire set of data on each key function
         # and forming the Cartesian product of the two.
         query = data['query']
-        year_filter = lambda e: query['year__gte'] <= e.year <= query['year__lte']
+
+        def year_filter(e):
+            return query['year__gte'] <= e.year <= query['year__lte']
+
         filter_functions = {
-            '0': lambda e: e.nation.name in query['nation__in'],
-            '1': lambda e: e.embarkation_region.name in query['embarkation_region__in'],
-            '2': lambda e: e.disembarkation_region.name in query['disembarkation_region__in'],
-            '3': lambda e: e.disembarkation_region.name in query['disembarkation_region__in'],
-            '4': year_filter,
-            '5': year_filter,
-            '6': year_filter,
-            '7': year_filter,
-            '8': year_filter,
-            '9': year_filter,
+            '0':
+                lambda e: e.nation.name in query['nation__in'],
+            '1':
+                lambda e: e.embarkation_region.name in query[
+                    'embarkation_region__in'],
+            '2':
+                lambda e: e.disembarkation_region.name in query[
+                    'disembarkation_region__in'],
+            '3':
+                lambda e: e.disembarkation_region.name in query[
+                    'disembarkation_region__in'],
+            '4':
+                year_filter,
+            '5':
+                year_filter,
+            '6':
+                year_filter,
+            '7':
+                year_filter,
+            '8':
+                year_filter,
+            '9':
+                year_filter,
         }
         row_filter = filter_functions[row_key_index]
         col_filter = filter_functions[col_key_index]
         estimates = list(cache.values())
-        all_row_keys = set([row_key_function(e) for e in estimates if row_filter(e)])
-        all_col_keys = set([col_key_function(e) for e in estimates if col_filter(e)])
-        table_dict = {(rk, ck): (0, 0) for rk in all_row_keys for ck in all_col_keys}
+        all_row_keys = set(
+            [row_key_function(e) for e in estimates if row_filter(e)])
+        all_col_keys = set(
+            [col_key_function(e) for e in estimates if col_filter(e)])
+        table_dict = {(rk, ck): (0, 0) for rk in all_row_keys
+                      for ck in all_col_keys}
 
     for pk in get_pks_from_haystack_results(results):
         result = cache.get(pk)
@@ -218,7 +257,8 @@ def get_estimates_table(request):
             cell = (0, 0)
             if key in table_dict:
                 cell = table_dict[key]
-            cell = (cell[0] + result.embarked_slaves, cell[1] + result.disembarked_slaves)
+            cell = (cell[0] + result.embarked_slaves,
+                    cell[1] + result.disembarked_slaves)
             table_dict[key] = cell
 
     def header_with_name(x):
@@ -245,10 +285,15 @@ def get_estimates_table(request):
     col_header_function = header_functions[col_key_index]
 
     # Order columns and rows by their respective headers.
-    default_sort_fun = lambda x: x.order_num
-    row_sort_fun = default_sort_fun if int(row_key_index) < 4 else row_header_function
-    row_set = sorted(set([k[0] for k in list(table_dict.keys())]), key=row_sort_fun)
-    column_set = sorted(set([k[1] for k in list(table_dict.keys())]), key=default_sort_fun)
+    def default_sort_fun(x):
+        return x.order_num
+
+    row_sort_fun = default_sort_fun if int(
+        row_key_index) < 4 else row_header_function
+    row_set = sorted(set([k[0] for k in list(table_dict.keys())]),
+                     key=row_sort_fun)
+    column_set = sorted(set([k[1] for k in list(table_dict.keys())]),
+                        key=default_sort_fun)
 
     # How many cells a single piece of data spans
     # (1 for either embarked or disembarked only and 2 for both).
@@ -263,19 +308,27 @@ def get_estimates_table(request):
         :param span_multiplier - a multiplicity factor for the columnspan or rowspan of each cell.
         :return: original_set sorted according to area.
         """
-        key_map = lambda region: region.import_area.name
-        modified_set = sorted(original_set, key=lambda region: region.import_area.order_num)
+
+        def key_map(region):
+            return region.import_area.name
+
+        modified_set = sorted(original_set,
+                              key=lambda region: region.import_area.order_num)
         from itertools import groupby
-        header_list.append([(k, span_multiplier * sum(1 for x in g)) for k, g in groupby(modified_set, key_map)])
+        header_list.append([(k, span_multiplier * sum(1
+                                                      for x in g))
+                            for k, g in groupby(modified_set, key_map)])
         return modified_set
 
     # Header rows are encoded as an array of pairs (tuples), where each
     # pair consists of the header's label and column span.
     header_rows = []
     if col_key_index == '3':
-        column_set = specific_region_grouping(column_set, header_rows, cell_span)
+        column_set = specific_region_grouping(column_set, header_rows,
+                                              cell_span)
         header_rows[0].append(('', cell_span))
-    header_rows.append([(col_header_function(x), cell_span) for x in column_set])
+    header_rows.append([(col_header_function(x), cell_span) for x in column_set
+                        ])
     header_rows[-1].append(('Totals', cell_span))
 
     # Generate row headers (left-most columns).
@@ -283,14 +336,17 @@ def get_estimates_table(request):
     if row_key_index == '3':
         row_set = specific_region_grouping(row_set, row_headers)
         row_headers[0].append(('', 1))
-    row_headers.append([(row_header_function(r), 1) for r in row_set] + [('Totals', 1)])
+    row_headers.append([(row_header_function(r), 1) for r in row_set] +
+                       [('Totals', 1)])
 
     cell_display_list = []
     if cell_key_index == '0':
         # Use list comprehensions to repeat the pair of cells
         # Embarked, Disembarked for each column in column_set.
         helper = ['Embarked', 'Disembarked']
-        header_rows.append([(s, 1) for i in range(1 + len(column_set)) for s in helper])
+        header_rows.append([
+            (s, 1) for i in range(1 + len(column_set)) for s in helper
+        ])
         cell_display_list = [0, 1]
     elif cell_key_index == '1':
         cell_display_list = [0]
@@ -299,24 +355,42 @@ def get_estimates_table(request):
 
     data['header_rows'] = header_rows
     data['header_rows_len'] = len(header_rows)
-    data['totals_header_rows_len'] = len(header_rows) - (1 if cell_key_index == '0' else 0)
+    data['totals_header_rows_len'] = len(header_rows) - (1 if cell_key_index
+                                                         == '0' else 0)
     data['totals_header_cols_span'] = len(cell_display_list)
 
     # Generate tabular data from table_dict filling any missing entries with (0, 0).
     # At this point each entry of the table is a pair (embarked_count, disembarked_count).
-    full_data_set = [[table_dict[(r, c)] if (r, c) in table_dict else (0, 0) for c in column_set]
-                     for r in row_set]
+    full_data_set = [[
+        table_dict[(r, c)] if (r, c) in table_dict else (0, 0)
+        for c in column_set
+    ]
+        for r in row_set]
     # Round numbers to integers.
-    full_data_set = [[tuple(int(round(pair[i])) for i in range(2)) for pair in r] for r in full_data_set]
+    full_data_set = [[
+        tuple(int(round(pair[i])) for i in range(2)) for pair in r
+    ] for r in full_data_set]
     # Append row totals (last column).
-    full_data_set = [r + [tuple(sum([x[i] for x in r]) for i in range(2))] for r in full_data_set]
+    full_data_set = [
+        r + [tuple(sum([x[i]
+                        for x in r])
+                   for i in range(2))]
+        for r in full_data_set
+    ]
     # Append column totals (last row).
-    full_data_set.append([tuple(sum([full_data_set[i][j][k] for i in range(len(row_set))]) for k in range(2))
-                         for j in range(1 + len(column_set))])
+    full_data_set.append([
+        tuple(
+            sum([full_data_set[i][j][k]
+                 for i in range(len(row_set))])
+            for k in range(2))
+        for j in range(1 + len(column_set))
+    ])
     # Transform pairs(embarked_count, disembarked_count) by projecting their values
     # into single integers using the cell_display_list to determine which numbers
     # (embarked, disembarked, or both) should appear in the final table.
-    full_data_set = [[pair[i] for pair in r for i in cell_display_list]
+    full_data_set = [[pair[i]
+                      for pair in r
+                      for i in cell_display_list]
                      for r in full_data_set]
 
     data['rows'] = full_data_set
@@ -337,6 +411,7 @@ def get_estimates_table(request):
     else:
         return download_xls(header_rows, full_data_set, row_headers)
 
+
 def get_permanent_link(request):
     """
     Obtain a permanent link for the current search query.
@@ -346,6 +421,7 @@ def get_permanent_link(request):
     from voyages.apps.common.models import SavedQuery
     saved_query = SavedQuery()
     return saved_query.get_link(request, 'restore_e_permalink')
+
 
 def restore_permalink(request, link_id):
     """
@@ -357,7 +433,9 @@ def restore_permalink(request, link_id):
     or an Http404 error if the link is not found.
     """
     from voyages.apps.common.models import restore_link
-    return restore_link(link_id, request.session, 'estimates_post_data', 'assessment:estimates')
+    return restore_link(link_id, request.session, 'estimates_post_data',
+                        'assessment:estimates')
+
 
 def get_estimates_common(request, data):
     """ Append common page content to the argument data
@@ -409,15 +487,19 @@ def get_estimates_common(request, data):
 
     EstimateManager.cache()
     # Check which Flags (nations) are selected and include the selection in the query.
-    nations = [[x.name, x.pk, is_checked("checkbox_nation_", x, "submit_nation")]
-               for x in list(EstimateManager.nations.values())]
+    nations = [[
+        x.name, x.pk,
+        is_checked("checkbox_nation_", x, "submit_nation")
+    ] for x in list(EstimateManager.nations.values())]
     data['nations'] = nations
     query["nation__in"] = [nation[0] for nation in nations if nation[2] == 1]
     data['all_nations_selected'] = len(nations) == len(query["nation__in"])
 
     export_regions = {}
     for area, regions in EstimateManager.export_hierarchy.items():
-        children = [[[x.name, x.pk], is_checked("eregion-button-", x, "submit_regions")] for x in regions]
+        children = [[[x.name, x.pk],
+                     is_checked("eregion-button-", x, "submit_regions")]
+                    for x in regions]
         checked = is_checked("earea-button-", area, "submit_regions")
         if len(regions) == 1:
             children[0][1] = checked
@@ -425,14 +507,18 @@ def get_estimates_common(request, data):
 
     import_regions = {}
     for area, regions in EstimateManager.import_hierarchy.items():
-        children = [[[x.name, x.pk], is_checked("dregion-button-", x, "submit_regions")] for x in regions]
+        children = [[[x.name, x.pk],
+                     is_checked("dregion-button-", x, "submit_regions")]
+                    for x in regions]
         checked = is_checked("darea-button-", area, "submit_regions")
         if len(regions) == 1:
             children[0][1] = checked
         import_regions[(area, checked)] = children
 
-    data['export_regions'] = collections.OrderedDict(sorted(list(export_regions.items()), key=lambda x: x[0][0].name))
-    data['import_regions'] = collections.OrderedDict(sorted(list(import_regions.items()), key=lambda x: x[0][0].name))
+    data['export_regions'] = collections.OrderedDict(
+        sorted(list(export_regions.items()), key=lambda x: x[0][0].name))
+    data['import_regions'] = collections.OrderedDict(
+        sorted(list(import_regions.items()), key=lambda x: x[0][0].name))
 
     def query_region(query_key, regions_dict, all_selected_key):
         """
@@ -453,8 +539,10 @@ def get_estimates_common(request, data):
         query[query_key] = [region[0][0] for region in flat if region[1] == 1]
         data[all_selected_key] = len(flat) == len(query[query_key])
 
-    query_region("embarkation_region__in", export_regions, "all_embarkations_selected")
-    query_region("disembarkation_region__in", import_regions, "all_disembarkations_selected")
+    query_region("embarkation_region__in", export_regions,
+                 "all_embarkations_selected")
+    query_region("disembarkation_region__in", import_regions,
+                 "all_disembarkations_selected")
 
     year_form = None
     # Ensure that GET requests or Reset POST requests yield a fresh copy of the form with default values.
@@ -468,8 +556,11 @@ def get_estimates_common(request, data):
         if year_form is not None:
             import logging
             logging.getLogger('voyages').error(year_form.errors)
-        year_form = EstimateYearForm(initial={'frame_from_year': globals.default_first_year,
-            'frame_to_year': globals.default_last_year})
+        year_form = EstimateYearForm(
+            initial={
+                'frame_from_year': globals.default_first_year,
+                'frame_to_year': globals.default_last_year
+            })
         query["year__gte"] = globals.default_first_year
         query["year__lte"] = globals.default_last_year
 

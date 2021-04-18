@@ -16,22 +16,36 @@ from haystack.utils import get_model_ct_tuple
 class NOT_PROVIDED(object):
     pass
 
+
 # Note that dates in the full ISO 8601 format will be accepted as long as the hour/minute/second components
 # are zeroed for compatibility with search backends which lack a date time distinct from datetime:
-DATE_REGEX = re.compile(r'^(?P<year>\d{4})-(?P<month>\d{2})-(?P<day>\d{2})(?:|T00:00:00Z?)$')
-DATETIME_REGEX = re.compile(r'^(?P<year>\d{4})-(?P<month>\d{2})-(?P<day>\d{2})(T|\s+)(?P<hour>\d{2}):(?P<minute>\d{2}):(?P<second>\d{2}).*?$')
-
+DATE_REGEX = re.compile(
+    r'^(?P<year>\d{4})-(?P<month>\d{2})-(?P<day>\d{2})(?:|T00:00:00Z?)$')
+DATETIME_REGEX = re.compile(
+    r'^(?P<year>\d{4})-(?P<month>\d{2})-(?P<day>\d{2})(T|\s+)(?P<hour>\d{2}):(?P<minute>\d{2}):(?P<second>\d{2}).*?$'
+)
 
 # All the SearchFields variants.
+
 
 class SearchField(object):
     """The base implementation of a search field."""
     field_type = None
 
-    def __init__(self, model_attr=None, use_template=False, template_name=None,
-                 document=False, indexed=True, stored=True, faceted=False,
-                 default=NOT_PROVIDED, null=False, index_fieldname=None,
-                 facet_class=None, boost=1.0, weight=None):
+    def __init__(self,
+                 model_attr=None,
+                 use_template=False,
+                 template_name=None,
+                 document=False,
+                 indexed=True,
+                 stored=True,
+                 faceted=False,
+                 default=NOT_PROVIDED,
+                 null=False,
+                 index_fieldname=None,
+                 facet_class=None,
+                 boost=1.0,
+                 weight=None):
         # Track what the index thinks this field is called.
         self.instance_name = None
         self.model_attr = model_attr
@@ -108,12 +122,14 @@ class SearchField(object):
         for current_object in current_objects:
             if not hasattr(current_object, attributes[0]):
                 raise SearchFieldError(
-                    "The model '%s' does not have a model_attr '%s'." % (repr(current_object), attributes[0])
-                )
+                    "The model '%s' does not have a model_attr '%s'." %
+                    (repr(current_object), attributes[0]))
 
             if len(attributes) > 1:
-                current_objects_in_attr = self.get_iterable_objects(getattr(current_object, attributes[0]))
-                return self.resolve_attributes_lookup(current_objects_in_attr, attributes[1:])
+                current_objects_in_attr = self.get_iterable_objects(
+                    getattr(current_object, attributes[0]))
+                return self.resolve_attributes_lookup(current_objects_in_attr,
+                                                      attributes[1:])
 
             current_object = getattr(current_object, attributes[0])
 
@@ -125,8 +141,8 @@ class SearchField(object):
                 else:
                     raise SearchFieldError(
                         "The model '%s' combined with model_attr '%s' returned None, but doesn't allow "
-                        "a default or null value." % (repr(current_object), self.model_attr)
-                    )
+                        "a default or null value." %
+                        (repr(current_object), self.model_attr))
 
             if callable(current_object):
                 values.append(current_object())
@@ -169,7 +185,9 @@ class SearchField(object):
         its context.
         """
         if self.instance_name is None and self.template_name is None:
-            raise SearchFieldError("This field requires either its instance_name variable to be populated or an explicit template_name in order to load the correct template.")
+            raise SearchFieldError(
+                "This field requires either its instance_name variable to be populated or an explicit template_name in order to load the correct template."
+            )
 
         if self.template_name is not None:
             template_names = self.template_name
@@ -178,7 +196,10 @@ class SearchField(object):
                 template_names = [template_names]
         else:
             app_label, model_name = get_model_ct_tuple(obj)
-            template_names = ['search/indexes/%s/%s_%s.txt' % (app_label, model_name, self.instance_name)]
+            template_names = [
+                'search/indexes/%s/%s_%s.txt' %
+                (app_label, model_name, self.instance_name)
+            ]
 
         t = loader.select_template(template_names)
         return t.render({'object': obj})
@@ -255,7 +276,8 @@ class NgramField(CharField):
 
     def __init__(self, **kwargs):
         if kwargs.get('faceted') is True:
-            raise SearchFieldError("%s can not be faceted." % self.__class__.__name__)
+            raise SearchFieldError("%s can not be faceted." %
+                                   self.__class__.__name__)
 
         super(NgramField, self).__init__(**kwargs)
 
@@ -360,9 +382,12 @@ class DateField(SearchField):
 
             if match:
                 data = match.groupdict()
-                return datetime_safe.date(int(data['year']), int(data['month']), int(data['day']))
+                return datetime_safe.date(int(data['year']), int(data['month']),
+                                          int(data['day']))
             else:
-                raise SearchFieldError("Date provided to '%s' field doesn't appear to be a valid date string: '%s'" % (self.instance_name, value))
+                raise SearchFieldError(
+                    "Date provided to '%s' field doesn't appear to be a valid date string: '%s'"
+                    % (self.instance_name, value))
 
         return value
 
@@ -388,9 +413,16 @@ class DateTimeField(SearchField):
 
             if match:
                 data = match.groupdict()
-                return datetime_safe.datetime(int(data['year']), int(data['month']), int(data['day']), int(data['hour']), int(data['minute']), int(data['second']))
+                return datetime_safe.datetime(int(data['year']),
+                                              int(data['month']),
+                                              int(data['day']),
+                                              int(data['hour']),
+                                              int(data['minute']),
+                                              int(data['second']))
             else:
-                raise SearchFieldError("Datetime provided to '%s' field doesn't appear to be a valid datetime string: '%s'" % (self.instance_name, value))
+                raise SearchFieldError(
+                    "Datetime provided to '%s' field doesn't appear to be a valid datetime string: '%s'"
+                    % (self.instance_name, value))
 
         return value
 
@@ -403,7 +435,9 @@ class MultiValueField(SearchField):
             kwargs['facet_class'] = FacetMultiValueField
 
         if kwargs.get('use_template') is True:
-            raise SearchFieldError("'%s' fields can not use templates to prepare their data." % self.__class__.__name__)
+            raise SearchFieldError(
+                "'%s' fields can not use templates to prepare their data." %
+                self.__class__.__name__)
 
         super(MultiValueField, self).__init__(**kwargs)
         self.is_multivalued = True
@@ -437,16 +471,24 @@ class FacetField(SearchField):
 
     def handle_facet_parameters(self, kwargs):
         if kwargs.get('faceted', False):
-            raise SearchFieldError("FacetField (%s) does not accept the 'faceted' argument." % self.instance_name)
+            raise SearchFieldError(
+                "FacetField (%s) does not accept the 'faceted' argument." %
+                self.instance_name)
 
         if not kwargs.get('null', True):
-            raise SearchFieldError("FacetField (%s) does not accept False for the 'null' argument." % self.instance_name)
+            raise SearchFieldError(
+                "FacetField (%s) does not accept False for the 'null' argument."
+                % self.instance_name)
 
         if not kwargs.get('indexed', True):
-            raise SearchFieldError("FacetField (%s) does not accept False for the 'indexed' argument." % self.instance_name)
+            raise SearchFieldError(
+                "FacetField (%s) does not accept False for the 'indexed' argument."
+                % self.instance_name)
 
         if kwargs.get('facet_class'):
-            raise SearchFieldError("FacetField (%s) does not accept the 'facet_class' argument." % self.instance_name)
+            raise SearchFieldError(
+                "FacetField (%s) does not accept the 'facet_class' argument." %
+                self.instance_name)
 
         self.facet_for = None
         self.facet_class = None
@@ -456,7 +498,7 @@ class FacetField(SearchField):
 
         if 'facet_for' in kwargs:
             self.facet_for = kwargs['facet_for']
-            del(kwargs['facet_for'])
+            del (kwargs['facet_for'])
 
         return kwargs
 

@@ -8,6 +8,7 @@ from voyages.apps.common.filters import trans_log
 register = template.Library()
 register.filter('trans_log', trans_log)
 
+
 @register.filter
 @stringfilter
 def get_year_value(value):
@@ -25,9 +26,11 @@ def get_year_value(value):
 def modulo(num, val):
     return num % val
 
+
 @register.filter
 def spaces_to_underscores(str):
     return "_".join(str.split(" "))
+
 
 @register.filter
 def decode_language(code):

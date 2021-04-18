@@ -30,7 +30,8 @@ def download_xls(header_rows, data_set, row_header_columns=[]):
         for pair in row:
             ws.write(row_index, col_index, str(pair[0]), header_style)
             if pair[1] > 1:
-                ws.merge(row_index, row_index, col_index, col_index + pair[1] - 1)
+                ws.merge(row_index, row_index, col_index,
+                         col_index + pair[1] - 1)
             col_index += pair[1]
         row_index += 1
 
@@ -45,7 +46,7 @@ def download_xls(header_rows, data_set, row_header_columns=[]):
         row_header_data.append(sparse_column)
     # Write tabular data.
     for row in data_set:
-         # TODO: use XLSX format that allows more rows!
+        # TODO: use XLSX format that allows more rows!
         if row_index == 65536:
             break
         col_index = 0
@@ -54,7 +55,8 @@ def download_xls(header_rows, data_set, row_header_columns=[]):
                 pair = rhd[row_index]
                 ws.write(row_index, col_index, str(pair[0]), header_style)
                 if pair[1] > 1:
-                    ws.merge(row_index, row_index + pair[1] - 1, col_index, col_index)
+                    ws.merge(row_index, row_index + pair[1] - 1, col_index,
+                             col_index)
             col_index += 1
         for cell in row:
             ws.write(row_index, col_index, cell, number_style)

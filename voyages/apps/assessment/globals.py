@@ -9,17 +9,21 @@ from .models import ExportRegion, ImportArea, ImportRegion, Nation
 def get_flags(search_configuration=None, mode=None):
     if search_configuration is None:
         nations = [(k.name, 1) for k in SearchQuerySet().models(Nation)]
-        return [nations, ]
+        return [
+            nations,
+        ]
 
     a = SearchQuerySet().models(Nation)
     nations = []
 
     for i in a:
         if "checkbox_nation_" + i.pk in search_configuration["post"] or \
-            ("submit_nation" in search_configuration["post"] and search_configuration["post"]["submit_nation"] == "Reset to default"):
+                ("submit_nation" in search_configuration["post"] and search_configuration["post"]["submit_nation"] == "Reset to default"):
             nations.append([i.name, 1])
 
-    return [nations, ]
+    return [
+        nations,
+    ]
 
 
 def get_flag_labels(search_configuration):
@@ -28,7 +32,9 @@ def get_flag_labels(search_configuration):
     query = []
 
     for i in a:
-        if search_configuration is not None and "submit_nation" in search_configuration["post"] and search_configuration["post"]["submit_nation"] == "Reset to default":
+        if search_configuration is not None and "submit_nation" in search_configuration[
+                "post"] and search_configuration["post"][
+                    "submit_nation"] == "Reset to default":
             nations.append([i.name, i.pk, 1])
             query.append(i.name)
         elif search_configuration is None:
@@ -47,14 +53,21 @@ def get_flag_labels(search_configuration):
 def get_broad_regions(search_configuration=None, mode=None):
     areas_from_query = SearchQuerySet().models(ImportArea)
 
-    if search_configuration is not None and "submit_regions" in search_configuration["post"] and search_configuration["post"]["submit_regions"] == "Reset to default":
+    if search_configuration is not None and "submit_regions" in search_configuration[
+            "post"] and search_configuration["post"][
+                "submit_regions"] == "Reset to default":
         areas = [[k.name, 1] for k in areas_from_query]
     elif search_configuration is not None:
-        areas = [[k.name, 1] if "darea-button-" + k.pk in search_configuration["post"] else [k.name, 0] for k in areas_from_query if "darea-button-" + k.pk in search_configuration["post"]]
+        areas = [[k.name, 1] if "darea-button-" +
+                 k.pk in search_configuration["post"] else [k.name, 0]
+                 for k in areas_from_query
+                 if "darea-button-" + k.pk in search_configuration["post"]]
     else:
         areas = [[k.name, 1] for k in areas_from_query]
 
-    return [areas, ]
+    return [
+        areas,
+    ]
 
 
 def get_regions(search_configuration=None, mode=None):
@@ -66,13 +79,21 @@ def get_regions(search_configuration=None, mode=None):
     for local_area in areas:
 
         # Retrieve regions
-        local_regions = SearchQuerySet().models(ImportRegion).filter(import_area__exact=local_area.name)
+        local_regions = SearchQuerySet().models(ImportRegion).filter(
+            import_area__exact=local_area.name)
 
         if search_configuration is not None:
-            if ("submit_regions" in search_configuration["post"] and search_configuration["post"]["submit_regions"] == "Reset to default") or (len(local_regions) == 1 and "darea-button-" + local_area.pk in search_configuration["post"]):
+            if ("submit_regions" in search_configuration["post"] and
+                    search_configuration["post"]["submit_regions"]
+                    == "Reset to default") or (len(local_regions) == 1 and
+                                               "darea-button-" + local_area.pk
+                                               in search_configuration["post"]):
                 local_regions_filtered = local_regions
             else:
-                local_regions_filtered = [k for k in local_regions if "dregion-button-" + k.pk in search_configuration["post"]]
+                local_regions_filtered = [
+                    k for k in local_regions
+                    if "dregion-button-" + k.pk in search_configuration["post"]
+                ]
         else:
             local_regions_filtered = local_regions
 
@@ -88,7 +109,8 @@ def get_regions(search_configuration=None, mode=None):
     return [return_areas, return_regions]
 
 
-def update_regions_labels(regions, search_configuration, area_prefix, region_prefix):
+def update_regions_labels(regions, search_configuration, area_prefix,
+                          region_prefix):
     new_regions = {}
     query = []
 
@@ -101,14 +123,15 @@ def update_regions_labels(regions, search_configuration, area_prefix, region_pre
                 new_region_list.append([region, 1])
                 count_checked += 1
             elif region_prefix + region[1] in search_configuration["post"] or \
-                (len(regions) == 1 and area_prefix + area.pk in search_configuration["post"]):
+                    (len(regions) == 1 and area_prefix + area.pk in search_configuration["post"]):
                 query.append(region[0])
                 new_region_list.append([region, 1])
                 count_checked += 1
             else:
                 new_region_list.append([region, 0])
 
-        if search_configuration is None or (count_checked > 0 and len(regions) == count_checked):
+        if search_configuration is None or (count_checked > 0 and
+                                            len(regions) == count_checked):
             new_regions[(area, 1)] = new_region_list
         else:
             new_regions[(area, 0)] = new_region_list
@@ -119,14 +142,22 @@ def update_regions_labels(regions, search_configuration, area_prefix, region_pre
 def get_embarkation_regions(search_configuration=None, mode=None):
     areas = SearchQuerySet().models(ExportRegion)
 
-    if search_configuration is not None and "submit_regions" in search_configuration["post"] and search_configuration["post"]["submit_regions"] == "Reset to default":
+    if search_configuration is not None and "submit_regions" in search_configuration[
+            "post"] and search_configuration["post"][
+                "submit_regions"] == "Reset to default":
         return_areas = [[k.name, 1] for k in areas]
     elif search_configuration is not None:
-        return_areas = [[k.name, 1] if "eregion-button-" + k.pk in search_configuration["post"] else [k.name, 0] for k in areas if "eregion-button-" + k.pk in search_configuration["post"]]
+        return_areas = [[k.name, 1] if "eregion-button-" +
+                        k.pk in search_configuration["post"] else [k.name, 0]
+                        for k in areas
+                        if "eregion-button-" +
+                        k.pk in search_configuration["post"]]
     else:
         return_areas = [[k.name, 1] for k in areas]
 
-    return [return_areas, ]
+    return [
+        return_areas,
+    ]
 
 
 def get_incremented_year_tuples(search_configuration, mode):
@@ -160,13 +191,18 @@ def get_incremented_year_tuples(search_configuration, mode):
         years.append([current_year, right_year])
         current_year += interval
 
-    return [years, ]
+    return [
+        years,
+    ]
 
 
 table_rows = [(_("Flag"), "nation__exact", get_flags),
-              (_("Embarkation regions"), "embarkation_region__exact", get_embarkation_regions),
-              (_("Broad disembarkation regions"), "broad_disembarkation_region__exact", get_broad_regions),
-              (_("Specific disembarkation regions"), "disembarkation_region__exact", get_regions),
+              (_("Embarkation regions"),
+               "embarkation_region__exact", get_embarkation_regions),
+              (_("Broad disembarkation regions"),
+               "broad_disembarkation_region__exact", get_broad_regions),
+              (_("Specific disembarkation regions"),
+               "disembarkation_region__exact", get_regions),
               (_("Individual years"), "year__in", get_incremented_year_tuples),
               (_("5-year periods"), "year__in", get_incremented_year_tuples),
               (_("10-year periods"), "year__in", get_incremented_year_tuples),
@@ -175,19 +211,22 @@ table_rows = [(_("Flag"), "nation__exact", get_flags),
               (_("100-year periods"), "year__in", get_incremented_year_tuples)]
 
 table_columns = [(_("Flag"), "nation__exact", get_flags),
-                 (_("Embarkation regions"), "embarkation_region__exact", get_embarkation_regions),
-                 (_("Broad disembarkation regions"), "broad_disembarkation_region__exact", get_broad_regions),
+                 (_("Embarkation regions"),
+                  "embarkation_region__exact", get_embarkation_regions),
+                 (_("Broad disembarkation regions"),
+                  "broad_disembarkation_region__exact", get_broad_regions),
                  (_("Specific disembarkation regions"), "disembarkation_region__exact",
                   get_regions)]
 
-table_cells = [(_("Embarked/Disembarked"), ),
-               (_("Only embarked"), ),
-               (_("Only disembarked"), )]
+table_cells = [(_("Embarked/Disembarked"),),
+               (_("Only embarked"),),
+               (_("Only disembarked"),)]
 
 # These two have to be replaced with context processor call
 # on database/solr
 default_first_year = 1501
 default_last_year = 1866
+
 
 def get_map_year(frame_from_year, frame_to_year):
     """
