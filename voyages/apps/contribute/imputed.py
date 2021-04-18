@@ -472,7 +472,7 @@ def compute_imputed_vars(_interim, is_iam=False):
     if is_iam:
         tslavesp = None
     pctemb = ncartot / tslavesd if tslavesd else None
-    if pctemb == None and tslavesp:
+    if pctemb is None and tslavesp:
         pctemb = ncartot / tslavesp
 
     _places = [
