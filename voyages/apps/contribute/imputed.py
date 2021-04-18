@@ -1,18 +1,19 @@
 # Calculation of imputed variables
 # Python code based on original SPSS script.
 
-from __future__ import division # Make the / operator use floating point division.
-from __future__ import print_function
-from __future__ import unicode_literals
-from builtins import next
-from builtins import str
-from builtins import map
-from builtins import range
-from datetime import datetime
-from voyages.apps.voyage.models import (Nationality, OwnerOutcome, Place, Region, SlavesOutcome,
-                                        VesselCapturedOutcome, VoyageGroupings)
-from django.core.exceptions import ObjectDoesNotExist
+from __future__ import \
+    division  # Make the / operator use floating point division.
+from __future__ import print_function, unicode_literals
+
 import inspect
+from builtins import map, next, range, str
+from datetime import datetime
+
+from django.core.exceptions import ObjectDoesNotExist
+
+from voyages.apps.voyage.models import (Nationality, OwnerOutcome, Place,
+                                        Region, SlavesOutcome,
+                                        VesselCapturedOutcome, VoyageGroupings)
 
 slave_number_var_names = [
     'adlt1imp', 'chil1imp', 'male1imp', 'feml1imp', 'slavmax1', 'slavema1',

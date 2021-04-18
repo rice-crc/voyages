@@ -1,39 +1,49 @@
-from __future__ import print_function
-from __future__ import absolute_import
-from __future__ import unicode_literals
-from builtins import str
-from builtins import object
-from .cache import VoyageCache, CachedGeo
+from __future__ import absolute_import, print_function, unicode_literals
+
+import csv
+import itertools
+import json
+import os
+import re
+from builtins import object, str
+
+import unicodecsv
 from django.conf import settings
 from django.core.cache import cache
-from django.http import JsonResponse, HttpResponse, HttpResponseBadRequest, HttpResponseForbidden, HttpResponseRedirect
+from django.http import (HttpResponse, HttpResponseBadRequest,
+                         HttpResponseForbidden, HttpResponseRedirect,
+                         JsonResponse)
 from django.shortcuts import render
 from django.utils.translation import get_language
 from django.utils.translation import ugettext as _
 from django.views.decorators.cache import cache_page
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
-from .graphs import get_graph_data, graphs_x_axes, graphs_y_axes, other_graphs_x_axes
-from .globals import voyage_timeline_variables, table_columns, table_rows, table_functions
-from haystack.query import SearchQuerySet
 from haystack.inputs import Raw
-from .search_indexes import VoyageIndex
+from haystack.query import SearchQuerySet
+
 from voyages.apps.common.export import download_xls
-from voyages.apps.common.models import get_pks_from_haystack_results, SavedQuery
+from voyages.apps.common.models import (SavedQuery,
+                                        get_pks_from_haystack_results)
+from voyages.apps.common.views import \
+    get_datatable_json_result as get_results_table
 from voyages.apps.common.views import get_ordered_places
-from voyages.apps.common.views import get_datatable_json_result as get_results_table
-from voyages.apps.voyage.models import (Nationality, OwnerOutcome, ParticularOutcome, Place,
-                                        Resistance, RigOfVessel, SlavesOutcome, TonType,
-                                        VesselCapturedOutcome, Voyage, VoyageDataset,
-                                        VoyageItinerary, VoyageSources)
+from voyages.apps.voyage.models import (Nationality, OwnerOutcome,
+                                        ParticularOutcome, Place, Resistance,
+                                        RigOfVessel, SlavesOutcome, TonType,
+                                        VesselCapturedOutcome, Voyage,
+                                        VoyageDataset, VoyageItinerary,
+                                        VoyageSources)
 from voyages.apps.voyage.search_indexes import VoyageIndex
 from voyages.apps.voyage.tables import PivotTable, get_pivot_table_advanced
-import csv
-import itertools
-import json
-import os
-import re
-import unicodecsv
+
+from .cache import CachedGeo, VoyageCache
+from .globals import (table_columns, table_functions, table_rows,
+                      voyage_timeline_variables)
+from .graphs import (get_graph_data, graphs_x_axes, graphs_y_axes,
+                     other_graphs_x_axes)
+from .search_indexes import VoyageIndex
+
 
 class SearchOperator(object):
     def __init__(self, front_end_op_str, back_end_op_str, list_type):

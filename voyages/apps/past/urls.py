@@ -1,9 +1,10 @@
 from __future__ import unicode_literals
+
 from django.conf.urls import url
 from django.views.generic import TemplateView
 
-import voyages.apps.static_content.views
 import voyages.apps.past.views
+import voyages.apps.static_content.views
 
 urlpatterns = [
     url(r'^api/search', voyages.apps.past.views.search_enslaved, name='search'),

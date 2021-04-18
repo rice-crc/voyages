@@ -1,23 +1,29 @@
-from __future__ import print_function
-from __future__ import absolute_import
-from __future__ import unicode_literals
-from builtins import str
-from django.test import TestCase, TransactionTestCase
-from django.test.utils import override_settings
-from django.core.urlresolvers import reverse
-import random
-from django.contrib.auth.models import User
-from .forms import InterimVoyageForm
-from .imputed import compute_imputed_vars, fn_from_value, slave_number_var_names
-from .models import (ContributionStatus, InterimBookSource, InterimSlaveNumber, InterimVoyage,
-                     NewVoyageContribution, ReviewRequest, ReviewRequestDecision,
-                     get_all_new_sources_for_interim, source_type_dict)
-from voyages.apps.voyage.models import (Nationality, ParticularOutcome, Place, Resistance,
-                                        RigOfVessel, TonType, Voyage, VoyageShipOwnerConnection,
-                                        VoyageSources, VoyageSourcesConnection)
-import numbers
+from __future__ import absolute_import, print_function, unicode_literals
+
 import csv
 import json
+import numbers
+import random
+from builtins import str
+
+from django.contrib.auth.models import User
+from django.core.urlresolvers import reverse
+from django.test import TestCase, TransactionTestCase
+from django.test.utils import override_settings
+
+from voyages.apps.voyage.models import (Nationality, ParticularOutcome, Place,
+                                        Resistance, RigOfVessel, TonType,
+                                        Voyage, VoyageShipOwnerConnection,
+                                        VoyageSources, VoyageSourcesConnection)
+
+from .forms import InterimVoyageForm
+from .imputed import (compute_imputed_vars, fn_from_value,
+                      slave_number_var_names)
+from .models import (ContributionStatus, InterimBookSource, InterimSlaveNumber,
+                     InterimVoyage, NewVoyageContribution, ReviewRequest,
+                     ReviewRequestDecision, get_all_new_sources_for_interim,
+                     source_type_dict)
+
 
 @override_settings(LANGUAGE_CODE='en')
 class TestAuthentication(TestCase):

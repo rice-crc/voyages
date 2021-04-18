@@ -1,16 +1,22 @@
-from __future__ import absolute_import
-from __future__ import unicode_literals
+from __future__ import absolute_import, unicode_literals
+
 # Provide mapping data for voyages (e.g. routes) cached in the server.
 # For convenience, we use the same route nodes and directed links as
 # the javascript client side library.
 from future import standard_library
+
 standard_library.install_aliases()
+import os
+import re
+import threading
 from builtins import object
 from math import sqrt
 from queue import PriorityQueue
-from .cache import VoyageCache, CachedGeo
+
 from haversine import haversine as dist
-import os, re, threading
+
+from .cache import CachedGeo, VoyageCache
+
 
 class VoyageRoutes(object):
     def __init__(self, nodes, links, twoWay=False):

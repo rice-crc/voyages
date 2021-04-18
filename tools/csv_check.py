@@ -1,15 +1,17 @@
-from __future__ import print_function
-from __future__ import unicode_literals
+from __future__ import print_function, unicode_literals
+
+import itertools
+import re
+from builtins import str
+
+import unicodecsv
+
 # This tool can be used to verify that CSV data was imported without any loss.
 # After running the importcsv command, head to the Contribute section and export
 # CSV files for the datasets (separately for TAST and I-Am). Then the functions
 # below (check_intra, check_tast) can be used to detect any inconsistency or
 # data loss.
 
-from builtins import str
-import itertools
-import re
-import unicodecsv
 
 def get_csv_data(fpath):
     f = list(open(fpath, "rb"))

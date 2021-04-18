@@ -1,6 +1,9 @@
 from __future__ import unicode_literals
+
 from builtins import object
+
 from django.contrib import admin
+
 from .forms import ImageAdminForm
 from .models import AfricanName, Country, Image, ImageCategory, SexAge
 

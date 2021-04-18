@@ -1,7 +1,10 @@
 from __future__ import unicode_literals
+
 from builtins import str
-from django.db import models
 from itertools import groupby
+
+from django.db import models
+
 
 class ExportArea(models.Model):
     """

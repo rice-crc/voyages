@@ -1,8 +1,10 @@
 from __future__ import unicode_literals
-from builtins import range
-from builtins import object
-from django.utils.translation import ugettext_lazy as _
+
 import json
+from builtins import object, range
+
+from django.utils.translation import ugettext_lazy as _
+
 
 def get_pivot_table(results, row_field, col_field, cell_formula):
     return get_pivot_table_advanced(results, row_field, col_field, {'cell': cell_formula})

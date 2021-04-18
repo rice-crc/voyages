@@ -1,9 +1,14 @@
-from __future__ import print_function
-from __future__ import unicode_literals
-from django.core.management.base import BaseCommand
-from voyages.apps.voyage.models import (OwnerOutcome, ParticularOutcome, Resistance, SlavesOutcome,
-                                        VesselCapturedOutcome, VoyageSourcesType)
+from __future__ import print_function, unicode_literals
+
 from datetime import datetime
+
+from django.core.management.base import BaseCommand
+
+from voyages.apps.voyage.models import (OwnerOutcome, ParticularOutcome,
+                                        Resistance, SlavesOutcome,
+                                        VesselCapturedOutcome,
+                                        VoyageSourcesType)
+
 
 class Command(BaseCommand):
     help = 'Extract text from the database that needs to be translated.'

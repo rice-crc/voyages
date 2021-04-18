@@ -1,19 +1,21 @@
-from __future__ import print_function
-from __future__ import unicode_literals
+from __future__ import print_function, unicode_literals
+
+# Import models that will be used in this import script.
+from builtins import input, str
+
+import unicodecsv
+from django.core.management.base import BaseCommand
+from django.db import transaction
+from unidecode import unidecode
+
+from voyages.apps.resources.models import AfricanName, Country, SexAge
+from voyages.apps.voyage.models import Place, Voyage
+
 # Script to import AfricanNames csv
 # NOTE: the CSV must be UTF-8 without a BOM prefix otherwise
 # the csv reader might choke on it. Use dos2unix utility to
 # ensure that the file is kosher.
 
-# Import models that will be used in this import script.
-from builtins import input
-from builtins import str
-from django.core.management.base import BaseCommand
-from django.db import transaction
-from unidecode import unidecode
-from voyages.apps.resources.models import AfricanName, Country, SexAge
-from voyages.apps.voyage.models import Place, Voyage
-import unicodecsv
 
 class Command(BaseCommand):
     help = 'Imports a CSV file with African Names into the database.'

@@ -1,15 +1,17 @@
 from __future__ import unicode_literals
+
+import heapq
+import threading
+import unicodedata
+from builtins import object, range, str
+
+import Levenshtein_search
+
+from voyages.apps.past.models import Enslaved, EnslavedName
+
 # Levenshtein-distance based search with ranked results.
 # https://en.wikipedia.org/wiki/Levenshtein_distance
 
-from builtins import str
-from builtins import range
-from builtins import object
-import threading
-import unicodedata
-import heapq
-import Levenshtein_search
-from voyages.apps.past.models import Enslaved, EnslavedName
 
 # function obtained from https://stackoverflow.com/questions/517923/what-is-the-best-way-to-remove-accents-in-a-python-unicode-string
 def strip_accents(text):

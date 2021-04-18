@@ -1,7 +1,9 @@
-from __future__ import print_function
-from __future__ import unicode_literals
+from __future__ import print_function, unicode_literals
+
 # This is a script file to run a full db backup and publication script.
-import os, sys
+import os
+import sys
+
 import django
 from django.conf import settings
 

@@ -1,8 +1,10 @@
 from __future__ import unicode_literals
-from builtins import str
-from builtins import range
+
+from builtins import range, str
+
 from django.test import TestCase
 from django.test.utils import override_settings
+
 
 @override_settings(LANGUAGE_CODE='en')
 class SimpleGetPageTest(TestCase):

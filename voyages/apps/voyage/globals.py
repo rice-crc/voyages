@@ -1,21 +1,20 @@
 # -*- coding: utf-8 -*-
 # List of basic variables
-from __future__ import division
-from __future__ import absolute_import
-from __future__ import unicode_literals
-from builtins import zip
-from builtins import map
-from builtins import str
+from __future__ import absolute_import, division, unicode_literals
+
+import re
+from builtins import map, object, str, zip
+from datetime import date
+from itertools import groupby
+
+from django.db.models import Max, Min
+from django.utils.translation import ugettext_lazy as _
 from past.builtins import basestring
 from past.utils import old_div
-from builtins import object
+
 from voyages.apps.common.models import get_values_from_haystack_results
+
 from . import models
-from django.db.models import Max, Min
-import re
-from datetime import date
-from django.utils.translation import ugettext_lazy as _
-from itertools import groupby
 
 session_expire_minutes = 60
 

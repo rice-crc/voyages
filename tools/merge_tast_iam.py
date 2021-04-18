@@ -1,6 +1,7 @@
-from __future__ import print_function
-from __future__ import unicode_literals
+from __future__ import print_function, unicode_literals
+
 import sys
+
 import unicodecsv
 
 # We require three arguments, the TAST CSV file, the IntraAmerican CSV file, and an Output file.

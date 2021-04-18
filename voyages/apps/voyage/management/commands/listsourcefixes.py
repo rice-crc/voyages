@@ -1,8 +1,11 @@
-from __future__ import print_function
-from __future__ import unicode_literals
-from django.core.management.base import BaseCommand, CommandError
+from __future__ import print_function, unicode_literals
+
 import re
+
 import openpyxl
+from django.core.management.base import BaseCommand, CommandError
+
+
 class Command(BaseCommand):
     args = '<xlsx_file>'
     help = 'Takes data from a xlsx file about the problem sources and converts it to json'

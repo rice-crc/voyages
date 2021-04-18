@@ -1,18 +1,23 @@
-from __future__ import division
-from __future__ import unicode_literals
+from __future__ import division, unicode_literals
+
+import collections
 # Create your views here.
-from builtins import str
-from builtins import range
-from past.utils import old_div
+from builtins import range, str
+
 from django.http import Http404
-from django.template import TemplateDoesNotExist, Context, loader, RequestContext
 from django.shortcuts import render
+from django.template import (Context, RequestContext, TemplateDoesNotExist,
+                             loader)
 from haystack.query import SearchQuerySet
-from .forms import EstimateSelectionForm, EstimateYearForm
-from .models import Estimate, EstimateManager
+from past.utils import old_div
+
 from voyages.apps.common.export import download_xls
 from voyages.apps.common.models import get_pks_from_haystack_results
-import collections
+
+from . import globals
+from .forms import EstimateSelectionForm, EstimateYearForm
+from .models import Estimate, EstimateManager
+
 
 def get_page(request, chapternum, sectionnum, pagenum):
     """
@@ -443,6 +448,7 @@ def get_estimates_common(request, data):
         :return:
         """
         from itertools import chain
+
         # Flatten the regions so that we may generate the corresponding query term.
         flat = list(chain.from_iterable(list(regions_dict.values())))
         query[query_key] = [region[0][0] for region in flat if region[1] == 1]

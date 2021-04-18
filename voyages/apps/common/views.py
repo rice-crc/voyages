@@ -1,20 +1,22 @@
-from __future__ import division
-from __future__ import unicode_literals
-from builtins import str
-from past.utils import old_div
-from builtins import object
+from __future__ import division, unicode_literals
+
+import re
+from builtins import object, str
+
+import django
 from django.conf import settings
 from django.contrib.flatpages.models import FlatPage
 from django.core.paginator import Paginator
+from django.http import Http404, HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
 from django.utils.translation import get_language
 from django.utils.translation import ugettext as _
-from voyages.apps.voyage.models import Place, Nationality
-from django.http import Http404, HttpResponse, JsonResponse
 from django.views.decorators.cache import cache_page
-import django
-import re
+from past.utils import old_div
+
+from voyages.apps.voyage.models import Nationality, Place
+
 
 @cache_page(3600)
 def get_nations(request):

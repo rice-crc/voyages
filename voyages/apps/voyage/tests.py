@@ -1,18 +1,22 @@
-from __future__ import absolute_import
-from __future__ import unicode_literals
+from __future__ import absolute_import, unicode_literals
+
 from future import standard_library
+
 standard_library.install_aliases()
-from builtins import str
-from builtins import range
-from django.test import TestCase
-from django.test.utils import override_settings
-from django.test import Client
-from .models import VoyageDates
-from django.core.urlresolvers import reverse
-from mock import patch
-from . import globals
-import urllib.request, urllib.error, urllib.parse
+import urllib.error
+import urllib.parse
+import urllib.request
+from builtins import range, str
 from datetime import date
+
+from django.core.urlresolvers import reverse
+from django.test import Client, TestCase
+from django.test.utils import override_settings
+from mock import patch
+
+from . import globals
+from .models import VoyageDates
+
 
 @override_settings(LANGUAGE_CODE='en')
 class SimpleGetPageTest(TestCase):

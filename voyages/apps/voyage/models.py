@@ -1,10 +1,13 @@
 from __future__ import unicode_literals
-from builtins import str
-from builtins import object
+
+from builtins import object, str
+
 from django.db import models
-from django.utils.translation import ugettext as _
-from voyages.apps.common.validators import date_csv_field_validator
 from django.db.models import Prefetch
+from django.utils.translation import ugettext as _
+
+from voyages.apps.common.validators import date_csv_field_validator
+
 
 # Voyage Regions and Places
 class BroadRegion(models.Model):

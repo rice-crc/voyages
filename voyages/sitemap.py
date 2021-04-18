@@ -1,14 +1,20 @@
 from __future__ import unicode_literals
+
 from future import standard_library
+
 standard_library.install_aliases()
-from django.conf import settings
 import datetime
 import os
-import stat
-from django.core.urlresolvers import reverse
-from django.contrib.sitemaps import Sitemap
 import posixpath
-import urllib.request, urllib.parse, urllib.error
+import stat
+import urllib.error
+import urllib.parse
+import urllib.request
+
+from django.conf import settings
+from django.contrib.sitemaps import Sitemap
+from django.core.urlresolvers import reverse
+
 
 class ViewSitemap(Sitemap):
    # Reverse static views for XML sitemap.
