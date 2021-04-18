@@ -11,6 +11,7 @@ from haystack.query import SearchQuerySet
 from haystack.forms import SearchForm
 from .forms import *
 from .globals import *
+from .models import *
 from .search_indexes import AfricanNamesIndex
 from voyages.apps.common.models import get_values_from_haystack_results
 from voyages.apps.common.export import download_xls

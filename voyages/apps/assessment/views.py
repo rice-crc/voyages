@@ -9,6 +9,7 @@ from django.template import TemplateDoesNotExist, Context, loader, RequestContex
 from django.shortcuts import render
 from haystack.query import SearchQuerySet
 from .forms import *
+from .models import *
 from voyages.apps.common.export import download_xls
 from voyages.apps.common.models import get_pks_from_haystack_results
 import collections

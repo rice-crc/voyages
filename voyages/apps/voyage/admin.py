@@ -4,6 +4,7 @@ from django.contrib import admin
 from django.contrib.flatpages.models import FlatPage
 from autocomplete_light import shortcuts as autocomplete_light
 from .forms import *
+from .models import *
 from django.contrib.flatpages.admin import FlatPageAdmin
 from django.contrib.flatpages.models import FlatPage
 from django.utils.translation import ugettext_lazy as _

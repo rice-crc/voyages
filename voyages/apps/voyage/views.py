@@ -28,6 +28,8 @@ import types
 import csv
 import re
 from .forms import *
+from .graphs import *
+from .models import *
 from haystack.query import SearchQuerySet
 from . import globals
 import requests
@@ -46,7 +48,6 @@ from django.utils.translation import ugettext as _
 from django.utils.translation import get_language
 from .cache import VoyageCache, CachedGeo
 from voyages.apps.common.models import get_pks_from_haystack_results
-from .graphs import *
 from django.shortcuts import redirect
 
 
