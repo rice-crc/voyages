@@ -308,31 +308,25 @@ def compute_imputed_vars(_interim, is_iam=False):
         tonmod = tonnage
         if tontype == 13:
             tonmod = tonnage
-        if ((tontype and tontype < 3) or tontype == 4 or
-                tontype == 5) and yearam > 1773:
-            tonmod = tonnage
-        if ((tontype and tontype < 3) or tontype == 4 or
-                tontype == 5) and yearam and yearam < 1774 and tonnage > 250:
-            tonmod = 13.1 + (1.1 * tonnage)
-        if ((tontype and tontype < 3) or tontype == 4 or tontype == 5
-            ) and yearam and yearam < 1774 and tonnage > 150 and tonnage < 251:
-            tonmod = 65.3 + (1.2 * tonnage)
-        if ((tontype and tontype < 3) or tontype == 4 or
-                tontype == 5) and yearam and yearam < 1774 and tonnage < 151:
-            tonmod = 2.3 + (1.8 * tonnage)
+        if ((tontype and tontype < 3) or tontype == 4 or tontype == 5):
+            if yearam > 1773:
+                tonmod = tonnage
+            if yearam and yearam < 1774 and tonnage > 250:
+                tonmod = 13.1 + (1.1 * tonnage)
+            if yearam and yearam < 1774 and tonnage > 150 and tonnage < 251:
+                tonmod = 65.3 + (1.2 * tonnage)
+            if yearam and yearam < 1774 and tonnage < 151:
+                tonmod = 2.3 + (1.8 * tonnage)
         if tontype == 4 and yearam > 1783 and yearam and yearam < 1794:
             tonmod = None
         if tontype == 3 or tontype == 6 or tontype == 9 or tontype == 16:
             tonmod = 71 + (0.86 * tonnage)
-        if (tontype == 3 or tontype == 6 or tontype == 9 or
-                tontype == 16) and yearam and yearam < 1774 and tonmod > 250:
-            tonmod = 13.1 + (1.1 * tonnage)
-        if (tontype == 3 or tontype == 6 or tontype == 9 or tontype == 16
-            ) and yearam and yearam < 1774 and tonmod > 150 and tonmod < 251:
-            tonmod = 65.3 + (1.2 * tonnage)
-        if (tontype == 3 or tontype == 6 or tontype == 9 or
-                tontype == 16) and yearam and yearam < 1774 and tonmod < 151:
-            tonmod = 2.3 + (1.8 * tonnage)
+            if yearam and yearam < 1774 and tonmod > 250:
+                tonmod = 13.1 + (1.1 * tonnage)
+            if yearam and yearam < 1774 and tonmod > 150 and tonmod < 251:
+                tonmod = 65.3 + (1.2 * tonnage)
+            if yearam and yearam < 1774 and tonmod < 151:
+                tonmod = 2.3 + (1.8 * tonnage)
         if tontype == 7:
             tonmod = tonnage * 2
         if tontype == 7 and yearam > 1773 and tonmod > 250:
