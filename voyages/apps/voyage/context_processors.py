@@ -9,6 +9,6 @@ def voyage_span(request):
     """
     first, last = calculate_maxmin_years()
     return {
-       'voyage_span_first_year': first,
-       'voyage_span_last_year' : last,
+        'voyage_span_first_year': first,
+        'voyage_span_last_year': last,
     }

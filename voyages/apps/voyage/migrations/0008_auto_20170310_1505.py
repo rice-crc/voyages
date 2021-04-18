@@ -14,11 +14,13 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='broadregion',
             name='value',
-            field=models.IntegerField(unique=True, verbose_name=b'Numeric code'),
+            field=models.IntegerField(unique=True,
+                                      verbose_name=b'Numeric code'),
         ),
         migrations.AlterField(
             model_name='region',
             name='value',
-            field=models.IntegerField(unique=True, verbose_name=b'Numeric code'),
+            field=models.IntegerField(unique=True,
+                                      verbose_name=b'Numeric code'),
         ),
     ]

@@ -20,6 +20,7 @@ class ExportArea(models.Model):
 
     def __lt__(self, other):
         return ((self.name, self.order_num) < (other.name, other.order_num))
+
     def __unicode__(self):
         return self.name
 
@@ -55,6 +56,7 @@ class ImportArea(models.Model):
 
     def __unicode__(self):
         return self.name
+
     def __lt__(self, other):
         return ((self.name, self.order_num) < (other.name, other.order_num))
 
@@ -92,7 +94,9 @@ class Estimate(models.Model):
     nation = models.ForeignKey(Nation)
     year = models.IntegerField()
     embarkation_region = models.ForeignKey(ExportRegion, null=True, blank=True)
-    disembarkation_region = models.ForeignKey(ImportRegion, null=True, blank=True)
+    disembarkation_region = models.ForeignKey(ImportRegion,
+                                              null=True,
+                                              blank=True)
     embarked_slaves = models.FloatField(null=True, blank=True)
     disembarked_slaves = models.FloatField(null=True, blank=True)
 
@@ -128,29 +132,50 @@ class EstimateManager(models.Manager):
                     r.export_area = cls.export_areas[r.export_area_id]
                     return r
 
-                cls.export_regions = {r.pk: extract_export_region(r) for r in ExportRegion.objects.all()}
+                cls.export_regions = {
+                    r.pk: extract_export_region(r)
+                    for r in ExportRegion.objects.all()
+                }
 
                 def extract_import_region(r):
                     r.import_area = cls.import_areas[r.import_area_id]
                     return r
 
-                cls.import_regions = {r.pk: extract_import_region(r) for r in ImportRegion.objects.all()}
+                cls.import_regions = {
+                    r.pk: extract_import_region(r)
+                    for r in ImportRegion.objects.all()
+                }
 
                 # Build hierarchies
-                keyfunc = lambda r: r.export_area
-                sorted_regions = sorted(list(cls.export_regions.values()), key=keyfunc)
-                cls.export_hierarchy = {k: list(g) for k, g in groupby(sorted_regions, key=keyfunc)}
-                keyfunc = lambda r: r.import_area
-                sorted_regions = sorted(list(cls.import_regions.values()), key=keyfunc)
-                cls.import_hierarchy = {k: list(g) for k, g in groupby(sorted_regions, key=keyfunc)}
+                def keyfunc(r):
+                    return r.export_area
+
+                sorted_regions = sorted(list(cls.export_regions.values()),
+                                        key=keyfunc)
+                cls.export_hierarchy = {
+                    k: list(g) for k, g in groupby(sorted_regions, key=keyfunc)
+                }
+
+                def keyfunc(r):
+                    return r.import_area
+
+                sorted_regions = sorted(list(cls.import_regions.values()),
+                                        key=keyfunc)
+                cls.import_hierarchy = {
+                    k: list(g) for k, g in groupby(sorted_regions, key=keyfunc)
+                }
 
                 cls.nations = {n.pk: n for n in Nation.objects.all()}
 
                 def extract_estimate(e):
                     e.nation = cls.nations[e.nation_id]
-                    e.embarkation_region = cls.export_regions[e.embarkation_region_id]
-                    e.disembarkation_region = cls.import_regions[e.disembarkation_region_id]
+                    e.embarkation_region = cls.export_regions[
+                        e.embarkation_region_id]
+                    e.disembarkation_region = cls.import_regions[
+                        e.disembarkation_region_id]
                     return e
 
-                cls.estimates = {e.pk: extract_estimate(e) for e in Estimate.objects.all()}
+                cls.estimates = {
+                    e.pk: extract_estimate(e) for e in Estimate.objects.all()
+                }
         return cls.estimates

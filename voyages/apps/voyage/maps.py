@@ -1,4 +1,11 @@
 from __future__ import absolute_import, unicode_literals
+from .cache import VoyageCache
+from haversine import haversine as dist
+from queue import PriorityQueue
+from builtins import object
+import threading
+import re
+import os
 
 # Provide mapping data for voyages (e.g. routes) cached in the server.
 # For convenience, we use the same route nodes and directed links as
@@ -6,18 +13,10 @@ from __future__ import absolute_import, unicode_literals
 from future import standard_library
 
 standard_library.install_aliases()
-import os
-import re
-import threading
-from builtins import object
-from queue import PriorityQueue
-
-from haversine import haversine as dist
-
-from .cache import VoyageCache
 
 
 class VoyageRoutes(object):
+
     def __init__(self, nodes, links, twoWay=False):
         self._nodes = nodes
         edges = [[] for _ in self._nodes]
@@ -32,7 +31,8 @@ class VoyageRoutes(object):
 
     def closest_node(self, pt):
         # This could be replaced by a quad-tree for faster operations.
-        return min(enumerate(self._nodes), key=lambda pair: dist(pt, pair[1]))[0]
+        return min(enumerate(self._nodes),
+                   key=lambda pair: dist(pt, pair[1]))[0]
 
     def find_route(self, start_index, final_index):
         idx = (start_index, final_index)
@@ -76,7 +76,8 @@ class VoyageRoutes(object):
         lat-lng pairs and idx is a pair (embarkation port pk,
         disembarkation port pk).
         """
-        if self._voyage_routes: return self._voyage_routes
+        if self._voyage_routes:
+            return self._voyage_routes
         VoyageCache.load()
         all_voyages = VoyageCache.voyages
         ports = VoyageCache.ports
@@ -84,17 +85,20 @@ class VoyageRoutes(object):
         voyage_by_ends = {}
 
         def geo_to_pt(g):
-            if g.lat is None or g.lng is None: return None
+            if g.lat is None or g.lng is None:
+                return None
             return (float(g.lat), float(g.lng))
 
         for v in list(all_voyages.values()):
-            if v.emb_pk is None or v.dis_pk is None: continue
+            if v.emb_pk is None or v.dis_pk is None:
+                continue
             idx = (v.emb_pk, v.dis_pk)
             route = voyage_by_ends.get(idx)
             if not route:
                 src = geo_to_pt(ports[v.emb_pk])
                 dest = geo_to_pt(ports[v.dis_pk])
-                if src is None or dest is None: continue
+                if src is None or dest is None:
+                    continue
                 start_index = port_node_index.get(v.emb_pk)
                 finish_index = port_node_index.get(v.dis_pk)
                 if start_index is None:
@@ -115,14 +119,19 @@ class VoyageRoutesCache(object):
     _lock = threading.Lock()
 
     @classmethod
-    def load(cls, force_reload = False):
+    def load(cls, force_reload=False):
         with cls._lock:
             if force_reload or not cls._cache:
                 dir = os.path.dirname(os.path.abspath(__file__))
-                with open(dir + '/../../sitemedia/maps/js/routeNodes.js', 'r') as f:
+                with open(dir + '/../../sitemedia/maps/js/routeNodes.js',
+                          'r') as f:
                     s = f.read()
-                nodes = [(float(m.group(1)), float(m.group(2))) for m in re.finditer(r'LatLng\(([0-9\-\.]+),\s*([0-9\-\.]+)\)', s)]
-                links = [(int(m.group(1)), int(m.group(2))) for m in re.finditer(r'start:\s*([0-9]+),\s*end:\s*([0-9]+)', s)]
+                nodes = [(float(m.group(1)), float(m.group(2)))
+                         for m in re.finditer(
+                             r'LatLng\(([0-9\-\.]+),\s*([0-9\-\.]+)\)', s)]
+                links = [(int(m.group(1)), int(m.group(2)))
+                         for m in re.finditer(
+                             r'start:\s*([0-9]+),\s*end:\s*([0-9]+)', s)]
                 routes = VoyageRoutes(nodes, links)
                 cls._cache = routes.get_voyage_routes()
             return cls._cache

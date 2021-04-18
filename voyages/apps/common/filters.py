@@ -14,6 +14,7 @@ logger = logging.getLogger('trans')
 register = template.Library()
 re_has_alpha_chars = re.compile(r'.*[a-zA-Z\.]{2,}')
 
+
 @register.filter
 def trans_log(val):
     """
@@ -45,9 +46,11 @@ def trans_log(val):
         logger.info(val.replace('\n', ' ').replace('\r', ' '))
     return mark_safe(result)
 
+
 @register.filter
 def jsonify(lst):
     return mark_safe(serializers.serialize('json', lst))
+
 
 @register.filter
 def replaceStar(value, arg):

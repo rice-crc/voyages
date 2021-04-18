@@ -15,6 +15,8 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='reviewrequest',
             name='is_intra_american',
-            field=models.BooleanField(default=False, help_text=b'The resulting voyage is IntraAmerican'),
+            field=models.BooleanField(
+                default=False,
+                help_text=b'The resulting voyage is IntraAmerican'),
         ),
     ]

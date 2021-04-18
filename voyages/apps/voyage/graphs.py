@@ -58,7 +58,8 @@ class Axis(object):
         if self.mode == Axis.SUM_MODE:
             return sum([0.0 if x is None else float(x) for x in values])
         if self.mode == Axis.AVERAGE_MODE:
-            return old_div(sum([0.0 if x is None else float(x) for x in values]), count)
+            return old_div(
+                sum([0.0 if x is None else float(x) for x in values]), count)
         if self.mode == Axis.FREQUENCY_MODE:
             return old_div(100.0 * count, len(lst))
         raise Exception
@@ -72,7 +73,9 @@ class Axis(object):
         """
         return d.get(self.var_name)
 
+
 class ForeignKeyAxis(Axis):
+
     def __init__(self, var_name, description, related_objects, mode=None):
         Axis.__init__(self, var_name + '_idnum', description, mode)
         self.original_var_name = var_name
@@ -84,11 +87,13 @@ class ForeignKeyAxis(Axis):
     def get_value(self, d):
         key = d.get(self.var_name)
         return self.related_objects.get(key)
-    
+
     def id(self):
         return self.original_var_name
 
+
 class MonthAxis(Axis):
+
     def __init__(self, var_name, description, mode=None):
         Axis.__init__(self, var_name + '_month', description, mode)
 
@@ -102,7 +107,9 @@ class MonthAxis(Axis):
             return None
         return _(calendar.month_abbr[month])
 
+
 class PercentageAxis(Axis):
+
     def __init__(self, var_name, description):
         Axis.__init__(self, var_name, description, Axis.AVERAGE_MODE)
 
@@ -112,7 +119,9 @@ class PercentageAxis(Axis):
             return None
         return round(result * 100, 1)
 
+
 class YearRangeAxis(Axis):
+
     def __init__(self, var_name, description, year_mod, mode=None):
         Axis.__init__(self, var_name, description, mode)
         self.year_mod = year_mod
@@ -130,45 +139,65 @@ class YearRangeAxis(Axis):
         # year == n * self.year_mod + 1 + (year % self.year_mod)
         return str(n * self.year_mod + 1) + '-' + str((n + 1) * self.year_mod)
 
-graphs_x_axes = [Axis('var_imp_arrival_at_port_of_dis', 'Year arrived with slaves*'),
-                 Axis('var_imp_length_home_to_disembark', 'Voyage length, home port to slaves landing (days)*'),
-                 Axis('var_length_middle_passage_days', 'Middle passage (days)*'),
-                 Axis('var_crew_voyage_outset', 'Crew at voyage outset'),
-                 Axis('var_crew_first_landing', 'Crew at first landing of slaves'),
-                 Axis('var_imp_total_num_slaves_purchased', 'Slaves embarked'),
-                 Axis('var_imp_total_slaves_disembarked', 'Slaves disembarked')]
 
-graphs_y_axes = [Axis('var_voyage_id', 'Number of voyages', Axis.COUNT_MODE),
-                 Axis('var_imp_length_home_to_disembark',
-                      'Average voyage length, home port to slaves landing (days)*',
-                      Axis.AVERAGE_MODE),
-                 Axis('var_length_middle_passage_days', 'Average middle passage (days)*', Axis.AVERAGE_MODE),
-                 Axis('var_tonnage_mod', 'Standardized tonnage*', Axis.AVERAGE_MODE),
-                 Axis('var_crew_voyage_outset', 'Average crew at voyage outset', Axis.AVERAGE_MODE),
-                 Axis('var_crew_first_landing', 'Average crew at first landing of slaves', Axis.AVERAGE_MODE),
-                 Axis('var_crew_voyage_outset', 'Total crew at voyage outset', Axis.SUM_MODE),
-                 Axis('var_crew_first_landing', 'Total crew at first landing of slaves', Axis.SUM_MODE),
-                 Axis('var_imp_total_num_slaves_purchased', 'Average number of slaves embarked', Axis.AVERAGE_MODE),
-                 Axis('var_imp_total_slaves_disembarked', 'Average number of slaves disembarked', Axis.AVERAGE_MODE),
-                 Axis('var_imp_total_num_slaves_purchased', 'Total number of slaves embarked', Axis.SUM_MODE),
-                 Axis('var_imp_total_slaves_disembarked', 'Total number of slaves disembarked', Axis.SUM_MODE),
-                 PercentageAxis('var_imputed_percentage_men', 'Percentage men*'),
-                 PercentageAxis('var_imputed_percentage_women', 'Percentage women*'),
-                 PercentageAxis('var_imputed_percentage_boys', 'Percentage boys*'),
-                 PercentageAxis('var_imputed_percentage_girls', 'Percentage girls*'),
-                 PercentageAxis('var_imputed_percentage_child', 'Percentage children*'),
-                 PercentageAxis('var_imputed_percentage_male', 'Percentage male*'),
-                 Axis('var_imputed_sterling_cash', 'Sterling cash price in Jamaica*', Axis.AVERAGE_MODE),
-                 Axis('var_resistance', 'Rate of resistance', Axis.FREQUENCY_MODE),
-                 PercentageAxis('var_imputed_mortality', 'Percentage of slaves embarked who died during voyage*')]
+graphs_x_axes = [
+    Axis('var_imp_arrival_at_port_of_dis', 'Year arrived with slaves*'),
+    Axis('var_imp_length_home_to_disembark',
+         'Voyage length, home port to slaves landing (days)*'),
+    Axis('var_length_middle_passage_days', 'Middle passage (days)*'),
+    Axis('var_crew_voyage_outset', 'Crew at voyage outset'),
+    Axis('var_crew_first_landing', 'Crew at first landing of slaves'),
+    Axis('var_imp_total_num_slaves_purchased', 'Slaves embarked'),
+    Axis('var_imp_total_slaves_disembarked', 'Slaves disembarked')
+]
+
+graphs_y_axes = [
+    Axis('var_voyage_id', 'Number of voyages', Axis.COUNT_MODE),
+    Axis('var_imp_length_home_to_disembark',
+         'Average voyage length, home port to slaves landing (days)*',
+         Axis.AVERAGE_MODE),
+    Axis('var_length_middle_passage_days', 'Average middle passage (days)*',
+         Axis.AVERAGE_MODE),
+    Axis('var_tonnage_mod', 'Standardized tonnage*', Axis.AVERAGE_MODE),
+    Axis('var_crew_voyage_outset', 'Average crew at voyage outset',
+         Axis.AVERAGE_MODE),
+    Axis('var_crew_first_landing', 'Average crew at first landing of slaves',
+         Axis.AVERAGE_MODE),
+    Axis('var_crew_voyage_outset', 'Total crew at voyage outset',
+         Axis.SUM_MODE),
+    Axis('var_crew_first_landing', 'Total crew at first landing of slaves',
+         Axis.SUM_MODE),
+    Axis('var_imp_total_num_slaves_purchased',
+         'Average number of slaves embarked', Axis.AVERAGE_MODE),
+    Axis('var_imp_total_slaves_disembarked',
+         'Average number of slaves disembarked', Axis.AVERAGE_MODE),
+    Axis('var_imp_total_num_slaves_purchased',
+         'Total number of slaves embarked', Axis.SUM_MODE),
+    Axis('var_imp_total_slaves_disembarked',
+         'Total number of slaves disembarked', Axis.SUM_MODE),
+    PercentageAxis('var_imputed_percentage_men', 'Percentage men*'),
+    PercentageAxis('var_imputed_percentage_women', 'Percentage women*'),
+    PercentageAxis('var_imputed_percentage_boys', 'Percentage boys*'),
+    PercentageAxis('var_imputed_percentage_girls', 'Percentage girls*'),
+    PercentageAxis('var_imputed_percentage_child', 'Percentage children*'),
+    PercentageAxis('var_imputed_percentage_male', 'Percentage male*'),
+    Axis('var_imputed_sterling_cash', 'Sterling cash price in Jamaica*',
+         Axis.AVERAGE_MODE),
+    Axis('var_resistance', 'Rate of resistance', Axis.FREQUENCY_MODE),
+    PercentageAxis('var_imputed_mortality',
+                   'Percentage of slaves embarked who died during voyage*')
+]
 
 # TODO: value SHOULD be used as the pk for several of our Django models.
 # Once this is in place, we can use VoyageCache to store this data.
+
+
 def cache_labels(model, label_field='label'):
     try:
         return {x[0]: _(x[1]) for x in model.objects.values_list('value', label_field).iterator()}
     except:
         return {}
+
 
 _ports = cache_labels(Place, 'place')
 _regions = cache_labels(Region, 'region')
@@ -181,52 +210,50 @@ _owner_outcomes = cache_labels(OwnerOutcome)
 _captured_outcomes = cache_labels(VesselCapturedOutcome)
 _resistances = cache_labels(Resistance)
 
-other_graphs_x_axes = [ForeignKeyAxis('var_imputed_nationality', 'Flag*', _nations),
-                       ForeignKeyAxis('var_rig_of_vessel', 'Rig', _rigs),
-                       ForeignKeyAxis('var_outcome_voyage',
-                                      'Particular outcome of the voyage',
-                                      _particular_outcomes),
-                       ForeignKeyAxis('var_outcome_slaves', 'Outcome for slaves*', _slave_outcomes),
-                       ForeignKeyAxis('var_outcome_owner', 'Outcome for owner*', _owner_outcomes),
-                       ForeignKeyAxis('var_outcome_ship_captured',
-                                      'Outcome if ship captured*',
-                                      _captured_outcomes),
-                       ForeignKeyAxis('var_resistance', 'African resistance', _resistances),
-                       ForeignKeyAxis('var_imp_port_voyage_begin', 'Place where voyage began*', _ports),
-                       ForeignKeyAxis('var_imp_region_voyage_begin', 'Region where voyage began*', _regions),
-                       ForeignKeyAxis('var_imp_principal_place_of_slave_purchase',
-                                      'Principal place of slave purchase*',
-                                      _ports),
-                       ForeignKeyAxis('var_imp_principal_region_of_slave_purchase',
-                                      'Principal region of slave purchase*',
-                                      _regions),
-                       ForeignKeyAxis('var_imp_principal_port_slave_dis',
-                                      'Principal place of slave landing*',
-                                      _ports),
-                       ForeignKeyAxis('var_imp_principal_region_slave_dis',
-                                      'Principal region of slave landing*',
-                                      _regions),
-                       ForeignKeyAxis('var_imp_principal_broad_region_disembark',
-                                      'Broad region of slave landing*',
-                                      _broad_regions),
-                       ForeignKeyAxis('var_place_voyage_ended', 'Place where voyage ended', _ports),
-                       ForeignKeyAxis('var_region_voyage_ended', 'Region where voyage ended', _regions),
-                       MonthAxis('var_voyage_began', 'Month voyage began'),
-                       MonthAxis('var_slave_purchase_began', 'Month trade began in Africa'),
-                       MonthAxis('var_date_departed_africa', 'Month vessel departed Africa'),
-                       MonthAxis('var_first_dis_of_slaves', 'Month vessel arrived with slaves'),
-                       MonthAxis('var_departure_last_place_of_landing', 'Month vessel departed for home port'),
-                       MonthAxis('var_voyage_completed', 'Month voyage completed'),
-                       YearRangeAxis('var_imp_arrival_at_port_of_dis',
-                                     'Year arrived with slaves (5 year periods)',
-                                     5),
-                       YearRangeAxis('var_imp_arrival_at_port_of_dis',
-                                     'Year arrived with slaves (10 year periods)',
-                                     10),
-                       YearRangeAxis('var_imp_arrival_at_port_of_dis',
-                                     'Year arrived with slaves (25 year periods)',
-                                     25)
-                       ]
+other_graphs_x_axes = [
+    ForeignKeyAxis('var_imputed_nationality', 'Flag*', _nations),
+    ForeignKeyAxis('var_rig_of_vessel', 'Rig', _rigs),
+    ForeignKeyAxis('var_outcome_voyage', 'Particular outcome of the voyage',
+                   _particular_outcomes),
+    ForeignKeyAxis('var_outcome_slaves', 'Outcome for slaves*',
+                   _slave_outcomes),
+    ForeignKeyAxis('var_outcome_owner', 'Outcome for owner*', _owner_outcomes),
+    ForeignKeyAxis('var_outcome_ship_captured', 'Outcome if ship captured*',
+                   _captured_outcomes),
+    ForeignKeyAxis('var_resistance', 'African resistance', _resistances),
+    ForeignKeyAxis('var_imp_port_voyage_begin', 'Place where voyage began*',
+                   _ports),
+    ForeignKeyAxis('var_imp_region_voyage_begin', 'Region where voyage began*',
+                   _regions),
+    ForeignKeyAxis('var_imp_principal_place_of_slave_purchase',
+                   'Principal place of slave purchase*', _ports),
+    ForeignKeyAxis('var_imp_principal_region_of_slave_purchase',
+                   'Principal region of slave purchase*', _regions),
+    ForeignKeyAxis('var_imp_principal_port_slave_dis',
+                   'Principal place of slave landing*', _ports),
+    ForeignKeyAxis('var_imp_principal_region_slave_dis',
+                   'Principal region of slave landing*', _regions),
+    ForeignKeyAxis('var_imp_principal_broad_region_disembark',
+                   'Broad region of slave landing*', _broad_regions),
+    ForeignKeyAxis('var_place_voyage_ended', 'Place where voyage ended',
+                   _ports),
+    ForeignKeyAxis('var_region_voyage_ended', 'Region where voyage ended',
+                   _regions),
+    MonthAxis('var_voyage_began', 'Month voyage began'),
+    MonthAxis('var_slave_purchase_began', 'Month trade began in Africa'),
+    MonthAxis('var_date_departed_africa', 'Month vessel departed Africa'),
+    MonthAxis('var_first_dis_of_slaves', 'Month vessel arrived with slaves'),
+    MonthAxis('var_departure_last_place_of_landing',
+              'Month vessel departed for home port'),
+    MonthAxis('var_voyage_completed', 'Month voyage completed'),
+    YearRangeAxis('var_imp_arrival_at_port_of_dis',
+                  'Year arrived with slaves (5 year periods)', 5),
+    YearRangeAxis('var_imp_arrival_at_port_of_dis',
+                  'Year arrived with slaves (10 year periods)', 10),
+    YearRangeAxis('var_imp_arrival_at_port_of_dis',
+                  'Year arrived with slaves (25 year periods)', 25)
+]
+
 
 def get_graph_data(search_query_set, x_axis, y_axes):
     """
@@ -245,7 +272,10 @@ def get_graph_data(search_query_set, x_axis, y_axes):
     fields = [y_axis.var_name for y_axis in y_axes]
     fields.append(x_axis.var_name)
     data = get_values_from_haystack_results(search_query_set, fields)
-    sorting = lambda d: x_axis.get_group_key(d)
+
+    def sorting(d):
+        return x_axis.get_group_key(d)
+
     data = sorted(data, key=sorting)
     result = {y_axis.description: [] for y_axis in y_axes}
     for x_key, e in groupby(data, key=sorting):
