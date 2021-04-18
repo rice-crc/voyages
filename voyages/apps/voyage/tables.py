@@ -3,8 +3,6 @@ from __future__ import unicode_literals
 import json
 from builtins import object, range
 
-from django.utils.translation import ugettext_lazy as _
-
 
 def get_pivot_table(results, row_field, col_field, cell_formula):
     return get_pivot_table_advanced(results, row_field, col_field, {'cell': cell_formula})
@@ -42,7 +40,7 @@ def get_pivot_table_advanced(results, row_field, col_field, cell_formula_dict, r
     facet = { 'categories': { 'terms': terms } }
     if range:
         terms['type'] = 'range'
-        terms.update(range) 
+        terms.update(range)
         facet['categories'] = terms
     search_kwargs['json.facet'] = json.dumps(facet)
     response = json.loads(q.backend.conn._select(search_kwargs))
@@ -91,7 +89,7 @@ class PivotTable(object):
                 del self.columns[del_index]
                 del self.original_columns[del_index]
                 # Update indices from sparse cell data and exclude those that match the deleted column index.
-                self.cells = [[(t[0] if t[0] < del_index else t[0] - 1, t[1]) 
+                self.cells = [[(t[0] if t[0] < del_index else t[0] - 1, t[1])
                     for t in sparse_row if t[0] != del_index] for sparse_row in self.cells]
 
     def to_dict(self):

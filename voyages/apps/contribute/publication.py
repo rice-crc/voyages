@@ -7,7 +7,6 @@ import unicodecsv as csv
 from django.conf import settings
 from django.core import management
 from django.db import transaction
-from django.db.models import Prefetch
 
 from voyages.apps.contribute.models import (ContributionStatus,
                                             DeleteVoyageContribution,

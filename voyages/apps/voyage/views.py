@@ -9,7 +9,6 @@ import csv
 import json
 import re
 import time
-import types
 import urllib.error
 import urllib.parse
 import urllib.request
@@ -19,20 +18,15 @@ from itertools import groupby
 from os import listdir, stat
 from stat import ST_MTIME, ST_SIZE
 
-import requests
 import unidecode
 import xlwt
 from django.conf import settings
 from django.contrib.admin.views.decorators import staff_member_required
-from django.core.cache import cache
 from django.core.paginator import Paginator
 from django.core.urlresolvers import reverse
-from django.db.models import Max, Min
-from django.http import (Http404, HttpResponse, HttpResponseRedirect,
-                         StreamingHttpResponse)
+from django.http import Http404, HttpResponse, HttpResponseRedirect
 from django.shortcuts import redirect, render
 from django.template import TemplateDoesNotExist, loader
-from django.utils.encoding import iri_to_uri
 from django.utils.translation import get_language
 from django.utils.translation import ugettext as _
 from django.views.decorators.gzip import gzip_page

@@ -5,7 +5,6 @@ import os
 import sys
 
 import django
-from django.conf import settings
 
 sys.path.append('/home/domingos/Documents/projects/voyages')
 os.environ['DJANGO_SETTINGS_MODULE'] = 'voyages.settings'

@@ -5,11 +5,6 @@ from future import standard_library
 standard_library.install_aliases()
 import datetime
 import os
-import posixpath
-import stat
-import urllib.error
-import urllib.parse
-import urllib.request
 
 from django.conf import settings
 from django.contrib.sitemaps import Sitemap
@@ -20,7 +15,7 @@ class ViewSitemap(Sitemap):
    # Reverse static views for XML sitemap.
     def __init__(self):
         self._items = ['index', 'voyage:guide', 'voyage:search', ]
-   
+
     def items(self):
     # Return list of url names for views to include in sitemap
         return self._items
@@ -44,7 +39,7 @@ class StaticSitemap(Sitemap):
             if getattr(p,'url_patterns',False):
                for q in p.url_patterns:
                    # urls.py in other apps
-               
+
                    if [url for url in do_not_show if url in q.regex.pattern]:
                        # do not show urls with this word in them
                        continue
@@ -76,7 +71,7 @@ class StaticSitemap(Sitemap):
             elif 'template' in p.default_args:
                 template = p.default_args['template']
             template_path = self._get_template_path(template, appname)
-            
+
             if template_path == None :
                 return datetime.datetime.now()
             else:
@@ -88,7 +83,7 @@ class StaticSitemap(Sitemap):
         path = settings.BASE_DIR + '/apps/' + appname + '/templates/' + template_path
         if os.path.exists(path) :
             return path
-        
+
         for template_dir in settings.TEMPLATES[0]['DIRS']:
             path = os.path.join(template_dir, template_path)
             if os.path.exists(path):

@@ -1,6 +1,5 @@
 from __future__ import unicode_literals
 
-import heapq
 import threading
 import unicodedata
 from builtins import object, range, str

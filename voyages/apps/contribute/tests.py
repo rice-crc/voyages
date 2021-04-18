@@ -2,7 +2,6 @@ from __future__ import absolute_import, print_function, unicode_literals
 
 import csv
 import json
-import numbers
 import random
 from builtins import str
 
@@ -120,10 +119,10 @@ class TestImputedDataCalculation(TestCase):
     """
     Here we test the converted SPSS script that should generate imputed variables
     """
-    
+
     fixtures = ['geographical.json', 'shipattributes.json', 'groupings.json', 'outcomes.json']
-    
-    def parse_csv(self, file_name):            
+
+    def parse_csv(self, file_name):
         data = {}
         with open(file_name) as csvfile:
             reader = csv.DictReader(csvfile)
@@ -131,15 +130,15 @@ class TestImputedDataCalculation(TestCase):
                 row = {k: v if v and v.strip() != '' else None for k, v in list(row.items())}
                 data[row['voyageid']] = row
         return data
-    
+
     def test_dataset(self):
         import os
         folder = os.path.dirname(os.path.realpath(__file__)) + '/testdata/'
-        errors = self.compute_imputed_csv(folder + 'ImputeTestData.csv', folder + 'ImputeTestDataOutput.csv')        
+        errors = self.compute_imputed_csv(folder + 'ImputeTestData.csv', folder + 'ImputeTestDataOutput.csv')
         if len(errors) > 0:
             print('Failed count ' + str(len(errors)))
         self.assertEqual(0, len(errors), '\n'.join(list(errors.values())))
-    
+
     def compute_imputed_csv(self, input_csv, output_csv, dump_file=None):
         # The test dataset is divided into two CSV files, one contains the source
         # variable data and the other contains the expected output.
@@ -147,25 +146,25 @@ class TestImputedDataCalculation(TestCase):
         test_output = self.parse_csv(output_csv)
         if len(test_input) != len(test_output):
             raise Exception('Input and output files do not have the same row count')
-        
+
         # Join input and output data
         for k, v in list(test_input.items()):
             v.update(test_output[k])
         errors = {}
-        
+
         def is_number(s):
             try:
                 float(s)
                 return True
             except:
                 return False
-        
+
         def mismatch_text(m):
             return m[0] + ': expected "' + str(m[1]) + '" [' + str(type(m[1])) + '], got "' + str(m[2]) + '" [' + str(type(m[2])) + '] instead'
-        
+
         def str_dict(d):
             return '{\n' + ',\n'.join(['\t{0}: {1} [{2}]'.format(k, v, type(v)) for k, v in sorted(d.items()) if not k.startswith('_')]) + '\n}'
-        
+
         computed_data = []
         first = True
         for voyage_id, row in list(test_input.items()):
@@ -174,7 +173,7 @@ class TestImputedDataCalculation(TestCase):
                 all_vars = compute_imputed_vars(interim)[2]
             except Exception as ex:
                 errors[voyage_id] = 'Exception raised: ' + str(ex)
-                continue 
+                continue
             # Check that the imputed fields all match.
             mismatches = []
             for k, v in list(all_vars.items()):
@@ -201,16 +200,16 @@ class TestImputedDataCalculation(TestCase):
                     '\nAll variables:\n' + str_dict(all_vars)
             first = False
             interim.delete()
-        
+
         if dump_file is not None and len(computed_data) > 0:
             with open(dump_file, 'w') as csvfile:
                 writer = csv.DictWriter(csvfile, list(computed_data[0].keys()))
                 writer.writeheader()
                 for row in computed_data:
                     writer.writerow(row)
-        
+
         return errors
-        
+
     def interim_voyage(self, dict):
         # TODO: this code may be placed somewhere else so that
         # it can be reused.
@@ -220,13 +219,13 @@ class TestImputedDataCalculation(TestCase):
         tontype_from_value = fn_from_value(TonType)
         outcome_from_value = fn_from_value(ParticularOutcome)
         resistance_from_value = fn_from_value(Resistance)
-        
+
         def date_from_triple(m, d, y):
             arr = [dict[m], dict[d], dict[y]]
             arr = [str(x) if x else '' for x in arr]
             result = ','.join(arr)
             return result if result != ',,' else None
-        
+
         interim = InterimVoyage()
         interim.name_of_vessel = dict['shipname']
         interim.year_ship_constructed = dict['yrcons']
@@ -247,7 +246,7 @@ class TestImputedDataCalculation(TestCase):
         interim.second_port_intended_embarkation = place_from_value(dict['embport2'])
         interim.first_port_intended_disembarkation = place_from_value(dict['arrport'])
         interim.second_port_intended_disembarkation = place_from_value(dict['arrport2'])
-        interim.port_of_departure = place_from_value(dict['portdep'])        
+        interim.port_of_departure = place_from_value(dict['portdep'])
         interim.number_of_ports_called_prior_to_slave_purchase = dict['nppretra']
         interim.first_place_of_slave_purchase = place_from_value(dict['plac1tra'])
         interim.second_place_of_slave_purchase = place_from_value(dict['plac2tra'])
@@ -273,7 +272,7 @@ class TestImputedDataCalculation(TestCase):
         interim.second_captain = dict['captainb']
         interim.third_captain = dict['captainc']
         interim.save()
-        number_variables = ['ncar13', 'ncar15', 'ncar17', 'tslavesd', 
+        number_variables = ['ncar13', 'ncar15', 'ncar17', 'tslavesd',
             'tslavesp', 'slas32', 'slas36', 'slas39', 'slaarriv', 'sladvoy',
             'men1', 'men4', 'men5', 'women1', 'women4', 'women5', 'adult1',
             'adult4', 'adult5', 'girl1', 'girl4', 'girl5', 'boy1', 'boy4',
@@ -302,25 +301,25 @@ class TestEditorialPlatform(TransactionTestCase):
     user contributions and following possible editorial workflows
     until their conclusion (e.g. publication).
     """
-    
+
     fixtures = ['geographical.json', 'shipattributes.json', 'groupings.json', 'outcomes.json', 'testvoyages.json']
-    
+
     def test_workflow(self):
-    
+
         # Create a user for the contributor.
         the_password = 'mypass'
         contributor = User.objects.create_user(username='contributor', password=the_password)
-        
+
         # Create a reviewer user
         reviewer = User.objects.create_user(username='reviewer', password=the_password)
-        
+
         # Create an editor user
         editor = User.objects.create_superuser('editor', 'editor@voyages.org', the_password)
-        
+
         def login(user):
             self.client.logout()
             return self.client.login(username=user.username, password=the_password)
-            
+
         self.assertTrue(login(contributor))
         response = self.client.get(reverse('contribute:new_voyage'), follow=True)
         self.assertEqual(response.status_code, 200)
@@ -333,11 +332,11 @@ class TestEditorialPlatform(TransactionTestCase):
         self.assertNotEqual(interim, None)
         self.assertNotEqual(form, None)
         self.assertEqual(numbers, {})
-        
+
         # Check that the fields are blank (just a sample, there are too many to check).
         self.assertEqual(interim.name_of_vessel, None)
         self.assertEqual(interim.date_departure, None)
-        
+
         # Fill out form and submit contribution.
         interim.name_of_vessel = u'Lion'
         interim.year_ship_constructed = 1642
@@ -386,7 +385,7 @@ class TestEditorialPlatform(TransactionTestCase):
         if not is_valid:
             # Avoid calling form.errors if not needed.
             self.assertTrue(is_valid, form.errors.as_text())
-        
+
         # Slave numbers.
         prefix = 'interim_slave_number_'
         slave_numbers = {
@@ -433,11 +432,11 @@ class TestEditorialPlatform(TransactionTestCase):
             u'interim_slave_number_NCAR15': 44.0,
             u'interim_slave_number_SLAS32': 150.0
         }
-        
+
         # Submit data to save record (no source references yet).
         def get_cleaned_form_data(form):
             return {k: v.pk if hasattr(v, 'pk') else v for k, v in list(form.cleaned_data.items()) if v is not None}
-        
+
         ajax_data = get_cleaned_form_data(form)
         ajax_data.update(slave_numbers)
         original_contribution_pk = contribution.pk
@@ -447,19 +446,19 @@ class TestEditorialPlatform(TransactionTestCase):
         parsed_response = json.loads(json_response.content)
         self.assertTrue(parsed_response['valid'], json_response.content)
         self.assertEqual(len(parsed_response['errors']), 0, json_response.content)
-        
+
         ajax_data['submit_val'] = ''
         contrib_args = {'contribution_type': 'new', 'contribution_id': original_contribution_pk}
         response = self.client.post(reverse('contribute:interim', kwargs=contrib_args), ajax_data)
         self.assertEqual(response.status_code, 200) # not a redirect since there are no sources for this contribution.
-        
+
         # Now submit sources.
         source_type_inverse = {v: k for k, v in list(source_type_dict.items())}
         new_sources = [
             {u'place_of_publication': u'Cambridge', u'information': None, u'source_ref_text': None,
              u'page_end': 34, u'book_title': u'Transatlantic History', u'url': None, u'publisher': u'CUP',
              u'year': 2015, u'created_voyage_sources': None, u'source_is_essay_in_book': True,
-             u'editors': u'Jenkins, Frederick', u'authors': u'Fellows, John', u'essay_title': u'Early English Slave Trade', 
+             u'editors': u'Jenkins, Frederick', u'authors': u'Fellows, John', u'essay_title': u'Early English Slave Trade',
              u'page_start': 33, u'pk': None, u'created_voyage_sources_id': None, u'source_ref_text': None,
              u'type': source_type_inverse[InterimBookSource], u'__index': 1}
         ]
@@ -470,11 +469,11 @@ class TestEditorialPlatform(TransactionTestCase):
         self.assertTrue(response.content.find('Transatlantic History') > 0)
         self.assertTrue(response.content.find('London') > 0)
         self.assertTrue(response.content.find('Great Britain') > 0)
-        
+
         # Commit submission.
         response = self.client.post(reverse('contribute:interim_commit', kwargs=contrib_args), follow=True)
         self.assertRedirects(response, reverse('contribute:thanks'), status_code=302, target_status_code=200)
-        
+
         # Check backend data.
         contribution = NewVoyageContribution.objects.get(pk=original_contribution_pk)
         self.assertEqual(contribution.contributor.username, 'contributor')
@@ -487,7 +486,7 @@ class TestEditorialPlatform(TransactionTestCase):
         self.assertEqual(len(sources), 1)
         self.assertEqual(sources[0].place_of_publication, u'Cambridge')
         self.assertEqual(sources[0].authors, u'Fellows, John')
-        
+
         # Switch to editor and begin editorial review for contribution.
         login(editor)
         json_response = self.client.get(reverse('contribute:json_pending_requests'))
@@ -496,14 +495,14 @@ class TestEditorialPlatform(TransactionTestCase):
         self.assertTrue('new/' + str(original_contribution_pk) in parsed_response)
         data = list(parsed_response.values())[0]
         self.assertEqual([u'Lion'], data['voyage_ship'])
-        
+
         json_response = self.client.post(reverse('contribute:begin_editorial_review'), {'contribution_id': 'new/' + str(original_contribution_pk)})
         parsed_response = json.loads(json_response.content)
         review_request_id = parsed_response.get('review_request_id', 0)
         editor_contribution_id = parsed_response.get('editor_contribution_id', 0)
         self.assertTrue(review_request_id > 0)
         self.assertTrue(parsed_response.get('editor_contribution_id', 0) > 0)
-        
+
         # Access the editorial page.
         response = self.client.get(reverse('contribute:editorial_review', kwargs={'review_request_id': review_request_id}))
         data = response.context
@@ -526,12 +525,12 @@ class TestEditorialPlatform(TransactionTestCase):
         json_response = self.client.post(reverse('contribute:impute_contribution', kwargs={'editor_contribution_id': editor_contribution_id}), ajax_data)
         parsed_response = json.loads(json_response.content)
         self.assertEqual('OK', parsed_response['result'])
-        
+
         expected_imputed_numbers = {u'MEN4': 12.0, u'SLAVEMX7': 185.0, u'MEN6': 20.0, u'MEN7': 85.0, u'MEN1': 75.0, u'MEN2': 12.0, u'MEN3': 65.0, u'ADLT3IMP': 137.0, u'WOMEN1': 60.0, u'WOMEN2': 12.0, u'WOMEN3': 42.0, u'WOMEN4': 12.0, u'WOMEN6': 10.0, u'WOMEN7': 52.0, u'MALE2IMP': 17.0, u'SLAS36': 48.0, u'SLAS32': 150.0, u'FEML1IMP': 100.0, u'SLAVEMX3': 185.0, u'SLAARRIV': 198.0, u'SLAVEMA1': 234.0, u'SLAVEMA3': 185.0, u'ADLT2IMP': 24.0, u'SLAVEMA7': 185.0, u'CHILD7': 48.0, u'SLADAFRI': 14.0, u'CHIL3IMP': 48.0, u'SLAVMAX3': 185.0, u'SLAVMAX1': 234.0, u'BOYRAT3': 0.189189189189189, u'CHIL2IMP': 10.0, u'BOYRAT1': 0.200854700854701, u'SAILD5': 1.0, u'SAILD4': 2.0, u'SAILD1': 2.0, u'SAILD3': 2.0, u'SAILD2': 5.0, u'BOY2': 5.0, u'BOY3': 25.0, u'BOY1': 37.0, u'BOY6': 10.0, u'BOY7': 35.0, u'BOY4': 10.0, u'CREWDIED': 10.0, u'VYMRTIMP': 36.0, u'MENRAT3': 0.459459459459459, u'VYMRTRAT': 0.153846153846154, u'TSLMTIMP': 234.0, u'NDESERT': 1.0, u'FEMALE7': 65.0, u'MALE1IMP': 134.0, u'MALRAT3': 0.648648648648649, u'MALRAT1': 0.572649572649573, u'MALRAT7': 0.648648648648649, u'ADLT1IMP': 159.0, u'TSLAVESD': 234.0, u'TSLAVESP': 248.0, u'CHILRAT1': 0.320512820512821, u'CHILRAT3': 0.259459459459459, u'CHILRAT7': 0.259459459459459, u'WOMRAT3': 0.281081081081081, u'WOMRAT1': 0.307692307692308, u'WOMRAT7': 0.281081081081081, u'BOYRAT7': 0.189189189189189, u'GIRLRAT7': 0.0702702702702703, u'GIRLRAT1': 0.11965811965812, u'GIRLRAT3': 0.0702702702702703, u'SLINTEN2': 50.0, u'SLAVMAX7': 185.0, u'CREW4': 12.0, u'CREW5': 11.0, u'FEML2IMP': 17.0, u'CREW1': 25.0, u'CREW2': 19.0, u'CREW3': 17.0, u'SLAVEMX1': 234.0, u'MENRAT7': 0.459459459459459, u'MENRAT1': 0.371794871794872, u'MALE7': 120.0, u'CHIL1IMP': 75.0, u'SLINTEND': 200.0, u'ADULT7': 137.0, u'GIRL7': 13.0, u'GIRL6': 8.0, u'GIRL4': 10.0, u'GIRL3': 5.0, u'GIRL2': 5.0, u'GIRL1': 18.0, u'MALE3IMP': 120.0, u'NCAR13': 190.0, u'FEML3IMP': 65.0, u'NCAR15': 44.0}
 
         editor_interim = InterimVoyage.objects.get(pk=editor_interim.pk)
         editor_numbers = {x.var_name: x.number for x in editor_interim.slave_numbers.all()}
-        
+
         def are_same_numbers(d1, d2, delta):
             keys = list(set(d1.keys()) | set(d2.keys()))
             failures = []
@@ -539,14 +538,14 @@ class TestEditorialPlatform(TransactionTestCase):
                 v1 = d1.get(k)
                 v2 = d2.get(k)
                 if v1 == v2: continue
-                if (v1 is None) != (v2 is None) or abs(v1 - v2) > delta: 
+                if (v1 is None) != (v2 is None) or abs(v1 - v2) > delta:
                     failures.append(str(k) + ': ' + str(v1) + ' vs ' + str(v2))
             self.assertEqual(len(failures), 0, ', '.join(failures) + '\n\n\n')
-        
+
         for k in slave_number_var_names:
             self.assertAlmostEqual(expected_imputed_numbers.get(k.upper(), -1), parsed_response['imputed_numbers'][k], msg=str(k), delta=0.001)
         are_same_numbers(expected_imputed_numbers, editor_numbers, 0.001)
-        
+
         # If we try to accept the contribution, it should fail since the new reference is not yet created.
         form = InterimVoyageForm(model_to_dict(editor_interim), instance=interim)
         is_valid = form.is_valid()
@@ -565,7 +564,7 @@ class TestEditorialPlatform(TransactionTestCase):
             submit_data)
         parsed_response = json.loads(json_response.content)
         self.assertEqual(parsed_response['result'], 'Failed')
-        
+
         # Now we create the source reference.
         source_post_data = {'interim_source[' + str(k) + ']': v for k, v in list(new_sources[0].items()) if v is not None}
         source_post_data['mode'] = 'new'
@@ -577,7 +576,7 @@ class TestEditorialPlatform(TransactionTestCase):
         self.assertTrue(form_p.find('Transatlantic History') > 0)
         self.assertTrue(form_p.find('Fellows, John') > 0)
         self.assertTrue(form_p.find('(Cambridge, 2015)') > 0)
-        
+
         source_post_data = form.initial.copy()
         source_post_data['mode'] = 'save'
         source_post_data['short_ref'] = 'TEST_SOURCE_1'
@@ -594,7 +593,7 @@ class TestEditorialPlatform(TransactionTestCase):
         self.assertEqual(created_source.short_ref, 'TEST_SOURCE_1')
         self.assertTrue(created_source.full_ref.find('Transatlantic History') > 0)
         self.assertEqual(created_source.source_type.group_name, 'Published source')
-        
+
         # If we try to accept the contribution, it should fail since the new reference is not yet created.
         submit_data['created_voyage_id'] = None
         editor_source_dict = new_sources[0]
@@ -607,7 +606,7 @@ class TestEditorialPlatform(TransactionTestCase):
             submit_data)
         parsed_response = json.loads(json_response.content)
         self.assertEqual(parsed_response['result'], 'Failed')
-        
+
         submit_data['created_voyage_id'] = 999999
         json_response = self.client.post(
             reverse('contribute:submit_editorial_decision', kwargs={'editor_contribution_id': editor_contribution_id}),
@@ -615,17 +614,17 @@ class TestEditorialPlatform(TransactionTestCase):
         parsed_response = json.loads(json_response.content)
         print(parsed_response)
         self.assertEqual(parsed_response['result'], 'OK')
-        
+
         contribution = NewVoyageContribution.objects.get(pk=original_contribution_pk)
         self.assertEqual(contribution.status, ContributionStatus.approved)
         active_reviews = list(ReviewRequest.objects.filter(contribution_id='new/' + str(original_contribution_pk), archived=False).all())
         self.assertEqual(len(active_reviews), 1)
         self.assertEqual(active_reviews[0].final_decision, ReviewRequestDecision.accepted_by_editor)
-        
+
         editor_interim = InterimVoyage.objects.get(pk=editor_interim.pk)
         editor_numbers = {x.var_name: x.number for x in editor_interim.slave_numbers.all()}
         are_same_numbers(expected_imputed_numbers, editor_numbers, 0.001)
-        
+
         # The voyage should now appear on the list of accepted for publication.
         json_response = self.client.post(reverse('contribute:json_pending_publication'))
         parsed_response = json.loads(json_response.content)
@@ -635,7 +634,7 @@ class TestEditorialPlatform(TransactionTestCase):
         self.assertEqual(data['reviewer_final_decision'], 'Accepted')
         self.assertEqual(data['review_request_id'], active_reviews[0].pk)
         self.assertEqual(data['voyage_ids'], [999999])
-        
+
         # Next we will publish the contribution and see if it is now included in the database.
         json_response = self.client.post(reverse('contribute:json_publish_pending'), {'skip_backup': True})
         parsed_response = json.loads(json_response.content)
@@ -658,7 +657,7 @@ class TestEditorialPlatform(TransactionTestCase):
             text += parsed_response['lines']
         self.assertTrue(line_count > 0)
         self.assertTrue(text.find('new/' + str(original_contribution_pk)) >= 0)
-        
+
         # Check that the voyage is indeed published and that fields match (just a sample of all fields).
         pub_voyage = Voyage.all_dataset_objects.filter(voyage_id=999999).first()
         from django.core import serializers
@@ -681,10 +680,10 @@ class TestEditorialPlatform(TransactionTestCase):
         self.assertAlmostEqual(pub_voyage.voyage_slaves_numbers.num_slaves_disembark_first_place, 150, msg=error_dump, delta=0.01)
         self.assertAlmostEqual(pub_voyage.voyage_slaves_numbers.imp_mortality_ratio, 0.153846, msg=error_dump, delta=0.01)
         self.assertAlmostEqual(pub_voyage.voyage_slaves_numbers.total_num_slaves_purchased, 248, msg=error_dump, delta=0.01)
-        
+
         pub_owners = [x.owner.name for x in sorted(VoyageShipOwnerConnection.objects.select_related('owner').filter(voyage=pub_voyage), key=lambda o: o.owner_order)]
         self.assertSequenceEqual(pub_owners, ["Smart, Jonathan", "Spring, Martin", "McCall, Seamus"])
-        
+
         # Check references.
         pub_sources = list(VoyageSourcesConnection.objects.select_related('source').filter(group=pub_voyage))
         self.assertEqual(1, len(pub_sources))
