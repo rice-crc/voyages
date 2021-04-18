@@ -101,8 +101,8 @@ def get_summary(v):
         'ship':
             v.voyage_ship.ship_name,
         'year_arrived':
-            dates.get_date_year(dates.first_dis_of_slaves)
-            or dates.get_date_year(dates.imp_arrival_at_port_of_dis)
+            dates.get_date_year(dates.first_dis_of_slaves) or
+            dates.get_date_year(dates.imp_arrival_at_port_of_dis)
     }
 
 

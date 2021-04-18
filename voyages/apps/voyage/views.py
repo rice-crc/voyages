@@ -551,16 +551,18 @@ def create_query_dict(var_list):
                                    '__in'] = [int(x) for x in months]
                 opt = var_list[varname + '_options']
                 if opt == '1':  # Between
+                    def int_mangle(list):
+                        return int(mangle_method(list))
+
                     to_date = None
                     if int(var_list[varname + '_to_month']) == 12:
                         to_date = formatDate(
-                            int(mangle_method(var_list[varname + '_to_year'])) +
+                            int_mangle(var_list[varname + '_to_year']) +
                             1, 1)
                     else:
                         to_date = formatDate(
-                            int(mangle_method(var_list[varname + '_to_year'])),
-                            int(mangle_method(var_list[varname + '_to_month']))
-                            + 1)
+                            int_mangle(var_list[varname + '_to_year']),
+                            int_mangle(var_list[varname + '_to_month']) + 1)
                     query_dict[varname + "__range"] = [
                         formatDate(
                             mangle_method(var_list[varname + '_from_year']),

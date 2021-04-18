@@ -355,8 +355,8 @@ def get_estimates_table(request):
 
     data['header_rows'] = header_rows
     data['header_rows_len'] = len(header_rows)
-    data['totals_header_rows_len'] = len(header_rows) - (1 if cell_key_index
-                                                         == '0' else 0)
+    data['totals_header_rows_len'] = len(header_rows) - \
+        (1 if cell_key_index == '0' else 0)
     data['totals_header_cols_span'] = len(cell_display_list)
 
     # Generate tabular data from table_dict filling any missing entries with (0, 0).
