@@ -31,7 +31,7 @@ class TextHighlighter(Highlighter):
     def highlight(self, text_block):
         self.text_block = text_block
         highlight_locations = self.find_highlightable_words()
-        #start_offset, end_offset = self.find_window(highlight_locations)
+        # start_offset, end_offset = self.find_window(highlight_locations)
 
         start_offset = 0
         end_offset = len(text_block)

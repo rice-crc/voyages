@@ -193,4 +193,4 @@ def reindex_image_category(sender, **kwargs):
 if hasattr(settings, 'HAYSTACK_SIGNAL_PROCESSOR'):
     models.signals.post_save.connect(reindex_image_category,
                                      sender=ImageCategory)
-    #models.signals.post_save.connect(reindex_image_category, sender=Image)
+    # models.signals.post_save.connect(reindex_image_category, sender=Image)

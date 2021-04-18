@@ -857,7 +857,7 @@ def make_avg_fun(varname):
     prettifier = display_methods.get(varname, display_average)
 
     def avg_fun(queryset, rowset=None, colset=None, allset=None):
-        #lst = [i.get_stored_fields()[varname] for i in queryset.all() if varname in i.get_stored_fields() and i.get_stored_fields()[varname] != None]
+        # lst = [i.get_stored_fields()[varname] for i in queryset.all() if varname in i.get_stored_fields() and i.get_stored_fields()[varname] != None]
         stats = queryset.stats(varname).stats_results()
         if stats and stats[varname]:
             return prettifier(stats[varname]['mean'])
@@ -882,7 +882,7 @@ def make_avg_nopretty_fun(varname):
                                for a in queryset] if b is not None
         ])
         return old_div(sum(values), len(values))
-        #stats = queryset.stats(varname).stats_results()
+        # stats = queryset.stats(varname).stats_results()
         # if stats and stats[varname]:
         #    return prettifier(stats[varname]['mean'])
         # else:
