@@ -140,11 +140,9 @@ class AfricanName(models.Model):
         super(AfricanName, self).save(*args, **kwargs)
 
 
-from .search_indexes import ImagesIndex
-
-
 # We are using this instead of the real time processor, since automatic update seems to fail (serializing strings)
 def reindex_image_category(sender, **kwargs):
+    from .search_indexes import ImagesIndex
     for obj in Image.objects.filter(category=kwargs['instance']):
         ImagesIndex().update_object(obj)
 
