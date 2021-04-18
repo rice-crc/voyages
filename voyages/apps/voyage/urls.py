@@ -29,7 +29,7 @@ urlpatterns = [
         {'group': 'Voyage'},
         name='index'),
 
-    #url(r'^c01_s03_cover', voyages.apps.voyage.views.variable_list, name='variables'),
+    # url(r'^c01_s03_cover', voyages.apps.voyage.views.variable_list, name='variables'),
     url(r'^reload-cache',
         voyages.apps.voyage.views.reload_cache,
         name='reload_cache'),
