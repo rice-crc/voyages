@@ -458,9 +458,9 @@ def get_all_slaves(request):
 
         # If no results in session, retrieve
         if len(results) == 0:
-            if sort_mode is "1":
+            if sort_mode == "1":
                 sort_string = sort_column
-            if sort_mode is "2":
+            if sort_mode == "2":
                 sort_string = "-" + sort_column
 
             # If this is ngram, sort by string field
