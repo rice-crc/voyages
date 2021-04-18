@@ -1635,7 +1635,7 @@ def search(request):
         request.session.create()
 
     # Set up the initial column of display
-    if not 'result_columns' in request.session:
+    if 'result_columns' not in request.session:
         request.session['result_columns'] = get_new_visible_attrs(
             globals.default_result_columns)
     if len(request.session.get('previous_queries', [])) > 10:
