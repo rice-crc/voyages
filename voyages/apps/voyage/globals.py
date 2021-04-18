@@ -874,7 +874,7 @@ def make_avg_fun(varname):
 
 
 def make_avg_nopretty_fun(varname):
-    prettifier = graph_display_methods.get(varname, no_mangle)
+    # prettifier = graph_display_methods.get(varname, no_mangle)
 
     def avg_nopretty_fun(queryset, rowset=None, colset=None, allset=None):
         values = list([

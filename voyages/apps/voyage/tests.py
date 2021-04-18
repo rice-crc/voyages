@@ -87,9 +87,6 @@ class SearchTest(TestCase):
 
     @patch('voyages.apps.voyage.views.perform_search')
     def test_search_text(self, perform_search_func):
-        response = self.client.get(
-            '/voyage/search?time_span_to_year=1866&used_variable_names=var_ship_name&var_ship_name_text_search=Ner&time_span_from_year=1514'
-        )
         self.assertEqual(len(perform_search_func.call_args_list), 1)
         args = perform_search_func.call_args_list[0][0]
         qdict = args[0]
@@ -110,9 +107,6 @@ class SearchTest(TestCase):
 
     @patch('voyages.apps.voyage.views.perform_search')
     def test_search_numeric(self, perform_search_func):
-        response = self.client.get(
-            '/voyage/search?var_imp_total_num_slaves_purchased_lower_bound=40&time_span_from_year=1514&var_imp_total_num_slaves_purchased_upper_bound=2000&var_imp_total_num_slaves_purchased_options=1&used_variable_names=var_imp_total_num_slaves_purchased&time_span_to_year=1866'
-        )
         self.assertEqual(len(perform_search_func.call_args_list), 1)
         args = perform_search_func.call_args_list[0][0]
         qdict = args[0]
@@ -139,9 +133,6 @@ class SearchTest(TestCase):
 
     @patch('voyages.apps.voyage.views.perform_search')
     def test_search_boolean(self, perform_search_func):
-        response = self.client.get(
-            '/voyage/search?time_span_to_year=1866&used_variable_names=var_voyage_in_cd_rom&var_voyage_in_cd_rom_choice_field=1&time_span_from_year=1514'
-        )
         self.assertEqual(len(perform_search_func.call_args_list), 1)
         args = perform_search_func.call_args_list[0][0]
         qdict = args[0]
