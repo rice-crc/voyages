@@ -274,7 +274,7 @@ def get_results_graph(results, post):
         return HttpResponseBadRequest('Missing graph data')
     x_axis = graphData.get('xAxis', '')
     y_axes = graphData.get('yAxes', [])
-    if not x_axis in _all_x_axes:
+    if x_axis not in _all_x_axes:
         return HttpResponseBadRequest('X axis is invalid: ' + str(x_axis) +
                                       '. Available: ' +
                                       str(list(_all_x_axes.keys())))
@@ -374,13 +374,13 @@ def get_compiled_routes(request):
     networkName = request.GET.get('networkName')
     routeType = request.GET.get('routeType')
     names = ['trans', 'intra']
-    if networkName is None or not networkName in names:
+    if networkName is None or networkName not in names:
         return JsonResponse({
             "error":
                 "Value of 'networkName' parameter should be in " + str(names)
         })
     routeTypes = ['port', 'regional']
-    if routeType is None or not routeType in routeTypes:
+    if routeType is None or routeType not in routeTypes:
         return JsonResponse({
             "error":
                 "Value of 'routeType' parameter should be in " +
@@ -692,7 +692,7 @@ def get_download_header(var_name):
                     index, 'related_model') else Voyage
                 header = smart(follow_field(model, index.model_attr))
             download_header_map[var_name] = header
-    return header if (not header is None and header != '') else smart_var_name()
+    return header if (header is not None and header != '') else smart_var_name()
 
 
 @require_POST
