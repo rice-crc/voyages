@@ -1302,7 +1302,7 @@ def post_review_request(request):
     try:
         with transaction.atomic():
             set_isolation_serializable()
-            if request.POST.get('archive_active_requests') == True:
+            if request.POST.get('archive_active_requests'):
                 ReviewRequest.objects.filter(
                     contribution_id=contribution_id,
                     archived=False).update(archived=True)
