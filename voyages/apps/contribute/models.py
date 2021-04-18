@@ -30,7 +30,7 @@ class AdminFaq(models.Model):
         ordering = ['question']
         verbose_name = 'Frequently Asked Question For Admins'
         verbose_name_plural = 'Frequently Asked Question For Admins'
-        #app_label = "AdminHelp"
+        # app_label = "AdminHelp"
         db_table = "contribute_adminfaq"
 
 
