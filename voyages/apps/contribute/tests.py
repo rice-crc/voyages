@@ -361,10 +361,6 @@ class TestEditorialPlatform(TransactionTestCase):
         contributor = User.objects.create_user(username='contributor',
                                                password=the_password)
 
-        # Create a reviewer user
-        reviewer = User.objects.create_user(username='reviewer',
-                                            password=the_password)
-
         # Create an editor user
         editor = User.objects.create_superuser('editor', 'editor@voyages.org',
                                                the_password)
