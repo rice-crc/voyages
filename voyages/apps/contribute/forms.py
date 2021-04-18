@@ -5,7 +5,7 @@ from collections import OrderedDict
 from django import forms
 from django.contrib.auth.forms import AuthenticationForm
 from django.utils.translation import ugettext_lazy as _
-from voyages.apps.contribute.models import *
+from voyages.apps.contribute.models import AdminFaq, InterimVoyage, UserProfile
 from voyages.apps.voyage.models import Voyage
 from voyages.extratools import AdvancedEditor
 

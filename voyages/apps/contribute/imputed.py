@@ -9,7 +9,8 @@ from builtins import str
 from builtins import map
 from builtins import range
 from datetime import datetime
-from voyages.apps.voyage.models import *
+from voyages.apps.voyage.models import (Nationality, OwnerOutcome, Place, Region, SlavesOutcome,
+                                        VesselCapturedOutcome, VoyageGroupings)
 from django.core.exceptions import ObjectDoesNotExist
 import inspect
 

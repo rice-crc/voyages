@@ -1,6 +1,6 @@
 from __future__ import unicode_literals
 from haystack import indexes
-from .models import *
+from .models import Estimate, ExportArea, ExportRegion, ImportArea, ImportRegion, Nation
 
 
 class ExportAreaIndex(indexes.SearchIndex, indexes.Indexable):

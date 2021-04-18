@@ -1,6 +1,8 @@
 from __future__ import unicode_literals
 from autocomplete_light import shortcuts as autocomplete_light
-from .models import *
+from .models import (BroadRegion, Nationality, OwnerOutcome, ParticularOutcome, Place, Region,
+                     Resistance, RigOfVessel, SlavesOutcome, TonType, VesselCapturedOutcome,
+                     VoyageCaptain, VoyageGroupings, VoyageShipOwner, VoyageSources)
 
 
 # Register autocomplete for 'autocomplete as you type'

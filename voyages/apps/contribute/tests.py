@@ -7,10 +7,14 @@ from django.test.utils import override_settings
 from django.core.urlresolvers import reverse
 import random
 from django.contrib.auth.models import User
-from .forms import *
-from .imputed import *
-from .models import *
-from voyages.apps.voyage.models import *
+from .forms import InterimVoyageForm
+from .imputed import compute_imputed_vars, fn_from_value, slave_number_var_names
+from .models import (ContributionStatus, InterimBookSource, InterimSlaveNumber, InterimVoyage,
+                     NewVoyageContribution, ReviewRequest, ReviewRequestDecision,
+                     get_all_new_sources_for_interim, source_type_dict)
+from voyages.apps.voyage.models import (Nationality, ParticularOutcome, Place, Resistance,
+                                        RigOfVessel, TonType, Voyage, VoyageShipOwnerConnection,
+                                        VoyageSources, VoyageSourcesConnection)
 import numbers
 import csv
 import json

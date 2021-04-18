@@ -2,7 +2,9 @@ from __future__ import absolute_import
 from __future__ import unicode_literals
 from builtins import object
 import threading
-from .models import *
+from .models import (BroadRegion, Nationality, OwnerOutcome, ParticularOutcome, Place, Region,
+                     Resistance, RigOfVessel, SlavesOutcome, TonType, VesselCapturedOutcome, Voyage,
+                     VoyageDates)
 
 class CachedGeo(object):
     """

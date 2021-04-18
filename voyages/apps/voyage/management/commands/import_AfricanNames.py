@@ -11,8 +11,8 @@ from builtins import str
 from django.core.management.base import BaseCommand
 from django.db import transaction
 from unidecode import unidecode
-from voyages.apps.resources.models import *
-from voyages.apps.voyage.models import *
+from voyages.apps.resources.models import AfricanName, Country, SexAge
+from voyages.apps.voyage.models import Place, Voyage
 import unicodecsv
 
 class Command(BaseCommand):

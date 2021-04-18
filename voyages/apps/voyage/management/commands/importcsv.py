@@ -6,7 +6,14 @@ from builtins import str
 from builtins import range
 from django.core.management.base import BaseCommand
 from django.utils.encoding import smart_str
-from voyages.apps.voyage.models import *
+from voyages.apps.voyage.models import (BroadRegion, LinkedVoyages, Nationality, OwnerOutcome,
+                                        ParticularOutcome, Place, Region, Resistance, RigOfVessel,
+                                        SlavesOutcome, TonType, VesselCapturedOutcome, Voyage,
+                                        VoyageCaptain, VoyageCaptainConnection, VoyageCrew,
+                                        VoyageDataset, VoyageDates, VoyageGroupings,
+                                        VoyageItinerary, VoyageOutcome, VoyageShip, VoyageShipOwner,
+                                        VoyageShipOwnerConnection, VoyageSlavesNumbers,
+                                        VoyageSources, VoyageSourcesConnection)
 from voyages.apps.resources.models import Image, AfricanName
 from unidecode import unidecode
 import re

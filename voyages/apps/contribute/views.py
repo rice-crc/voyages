@@ -18,10 +18,20 @@ from django.shortcuts import render, get_object_or_404
 from django.views.decorators.cache import cache_page
 from django.views.decorators.csrf import csrf_exempt
 from voyages.apps.common.views import get_ordered_places
-from voyages.apps.contribute.forms import *
-from voyages.apps.contribute.models import *
+from voyages.apps.contribute.forms import ContributionVoyageSelectionForm, InterimVoyageForm
+from voyages.apps.contribute.models import (ContributionStatus, DeleteVoyageContribution,
+                                            EditVoyageContribution, EditorVoyageContribution,
+                                            InterimPreExistingSource, InterimSlaveNumber,
+                                            InterimVoyage, MergeVoyagesContribution,
+                                            NewVoyageContribution, ReviewRequest,
+                                            ReviewRequestDecision, ReviewRequestResponse,
+                                            ReviewVoyageContribution, User,
+                                            get_all_new_sources_for_interim, get_contribution,
+                                            get_contribution_from_id, source_type_dict)
 from voyages.apps.voyage.cache import VoyageCache
-from voyages.apps.voyage.models import *
+from voyages.apps.voyage.models import (Voyage, VoyageDataset, VoyageDates,
+                                        VoyageShipOwnerConnection, VoyageSources,
+                                        VoyageSourcesConnection, VoyageSourcesType)
 from django.utils.html import escape
 from django.utils.translation import ugettext as _
 from django.core.mail import send_mail
