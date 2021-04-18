@@ -88,7 +88,7 @@ class PivotTable(object):
             def safe_num(x):
                 try:
                     return float(x[default_cell_key]) if default_cell_key in x\
-                        else sum([float(v) for k, v in list(x.items()) if not k in excluded_bucket_keys])
+                        else sum([float(v) for k, v in list(x.items()) if k not in excluded_bucket_keys])
                 except:
                     return 0
 
