@@ -1,17 +1,16 @@
 # PATCH to [virtual environment path]/lib/python2.7/site-packages/haystack/fields.py
 # encoding: utf-8
-from __future__ import absolute_import, division, print_function, unicode_literals
+from __future__ import (absolute_import, division, print_function,
+                        unicode_literals)
 
-from builtins import object
 import re
+from builtins import object
+from inspect import ismethod
 
 from django.template import Context, loader
 from django.utils import datetime_safe, six
-
 from haystack.exceptions import SearchFieldError
 from haystack.utils import get_model_ct_tuple
-
-from inspect import ismethod
 
 
 class NOT_PROVIDED(object):
@@ -229,7 +228,7 @@ class LocationField(SearchField):
         return "%s,%s" % (pnt_lat, pnt_lng)
 
     def convert(self, value):
-        from haystack.utils.geo import ensure_point, Point
+        from haystack.utils.geo import Point, ensure_point
 
         if value is None or value == []:
             return None

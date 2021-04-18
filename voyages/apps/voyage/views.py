@@ -1,60 +1,63 @@
 # -*- coding: utf-8 -*-
-from __future__ import division
-from __future__ import print_function
-from __future__ import absolute_import
-from __future__ import unicode_literals
+from __future__ import (absolute_import, division, print_function,
+                        unicode_literals)
+
 from future import standard_library
+
 standard_library.install_aliases()
-from builtins import map
-from builtins import str
-from builtins import range
-from builtins import object
-from past.utils import old_div
-from django.http import Http404, HttpResponseRedirect, HttpResponse, StreamingHttpResponse
-from django.db.models import Max, Min
-from django.template import TemplateDoesNotExist, loader
-from django.shortcuts import render
-from django.conf import settings
-from django.core.cache import cache
-from django.core.urlresolvers import reverse
-from django.utils.encoding import iri_to_uri
-from django.contrib.admin.views.decorators import staff_member_required
-from os import listdir, stat
-from stat import ST_SIZE, ST_MTIME
-from hurry.filesize import size
-from django.core.paginator import Paginator
+import csv
+import json
+import re
 import time
 import types
-import csv
-import re
-from .forms import (GraphRemovePlotForm, GraphSelectionForm, ResultsPerPageOptionForm,
-                    SimpleDateSearchForm, SimpleNumericSearchForm, SimplePlaceSearchForm,
-                    SimpleSelectBooleanForm, SimpleSelectSearchForm, SimpleTextForm,
-                    TableSelectionForm, TimeFrameSpanSearchForm, TimelineVariableForm,
-                    UploadFileForm, graphs)
-from .graphs import get_graph_data, graphs_y_axes
-from .models import (Nationality, OwnerOutcome, ParticularOutcome, Resistance, RigOfVessel,
-                     SlavesOutcome, VesselCapturedOutcome, Voyage)
-from haystack.query import SearchQuerySet
-from . import globals
-import requests
-import json
-import xlwt
-from openpyxl import Workbook
-import urllib.request, urllib.parse, urllib.error
-import unidecode
-from itertools import groupby
-from django.views.decorators.gzip import gzip_page
+import urllib.error
+import urllib.parse
+import urllib.request
+from builtins import map, object, range, str
 from datetime import date
+from itertools import groupby
+from os import listdir, stat
+from stat import ST_MTIME, ST_SIZE
+
+import requests
+import unidecode
+import xlwt
+from django.conf import settings
+from django.contrib.admin.views.decorators import staff_member_required
+from django.core.cache import cache
+from django.core.paginator import Paginator
+from django.core.urlresolvers import reverse
+from django.db.models import Max, Min
+from django.http import (Http404, HttpResponse, HttpResponseRedirect,
+                         StreamingHttpResponse)
+from django.shortcuts import redirect, render
+from django.template import TemplateDoesNotExist, loader
+from django.utils.encoding import iri_to_uri
+from django.utils.translation import get_language
+from django.utils.translation import ugettext as _
+from django.views.decorators.gzip import gzip_page
+from haystack.query import SearchQuerySet
+from hurry.filesize import size
+from openpyxl import Workbook
+from past.utils import old_div
+
 from voyages.apps.assessment.globals import get_map_year
 from voyages.apps.common.export import download_xls
-from voyages.apps.resources.models import Image
-from django.utils.translation import ugettext as _
-from django.utils.translation import get_language
-from .cache import VoyageCache, CachedGeo
 from voyages.apps.common.models import get_pks_from_haystack_results
-from django.shortcuts import redirect
+from voyages.apps.resources.models import Image
 
+from . import globals
+from .cache import CachedGeo, VoyageCache
+from .forms import (GraphRemovePlotForm, GraphSelectionForm,
+                    ResultsPerPageOptionForm, SimpleDateSearchForm,
+                    SimpleNumericSearchForm, SimplePlaceSearchForm,
+                    SimpleSelectBooleanForm, SimpleSelectSearchForm,
+                    SimpleTextForm, TableSelectionForm,
+                    TimeFrameSpanSearchForm, TimelineVariableForm,
+                    UploadFileForm, graphs)
+from .graphs import get_graph_data, graphs_y_axes
+from .models import (Nationality, OwnerOutcome, ParticularOutcome, Resistance,
+                     RigOfVessel, SlavesOutcome, VesselCapturedOutcome, Voyage)
 
 # Here we enumerate all fields that should be cleared
 # from the session if a reset is required.
@@ -653,6 +656,8 @@ def reload_cache(request):
     return HttpResponse("Voyages cache reloaded")
 
 from django.views.decorators.csrf import csrf_exempt
+
+
 @csrf_exempt
 @gzip_page
 def search(request):
@@ -1637,6 +1642,7 @@ def search_var_dict(var_name):
 # Automatically fetch fields that should be sorted differently, either
 # by using a translated version or a plain text version of tokenized fields.
 from .search_indexes import VoyageIndex
+
 index = VoyageIndex()
 plain_text_suffix = '_plaintext'
 plain_text_suffix_list = [f[:-len(plain_text_suffix)] for f in list(index.fields.keys()) if f.endswith(plain_text_suffix)]
@@ -2207,8 +2213,9 @@ def restore_permalink(request, link_id):
     return redirect("/voyage/database#searchId=" + link_id)
 
 def debug_permalink(request, link_id):
-    from voyages.apps.common.models import SavedQuery
-    from django.shortcuts import get_object_or_404
     from django.http import HttpResponse
+    from django.shortcuts import get_object_or_404
+
+    from voyages.apps.common.models import SavedQuery
     permalink = get_object_or_404(SavedQuery, pk=link_id)
     return HttpResponse(permalink.query, content_type='text/plain')

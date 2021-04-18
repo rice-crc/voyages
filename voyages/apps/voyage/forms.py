@@ -1,17 +1,19 @@
-from __future__ import absolute_import
-from __future__ import unicode_literals
-from builtins import map
-from builtins import str
-from builtins import object
-from django import forms
+from __future__ import absolute_import, unicode_literals
+
+from builtins import map, object, str
+
 from autocomplete_light import shortcuts as autocomplete_light
-from .models import (VoyageCaptainConnection, VoyageCrew, VoyageDates, VoyageItinerary,
-                     VoyageOutcome, VoyageShip, VoyageShipOwnerConnection, VoyageSlavesNumbers,
-                     VoyageSources, VoyageSourcesConnection)
-from voyages.extratools import AdvancedEditor
-from . import globals
-from . import graphs
+from django import forms
 from django.utils.translation import ugettext_lazy as _
+
+from voyages.extratools import AdvancedEditor
+
+from . import globals, graphs
+from .models import (VoyageCaptainConnection, VoyageCrew, VoyageDates,
+                     VoyageItinerary, VoyageOutcome, VoyageShip,
+                     VoyageShipOwnerConnection, VoyageSlavesNumbers,
+                     VoyageSources, VoyageSourcesConnection)
+
 
 class UploadFileForm(forms.Form):
     """Form to uploading files in download section"""

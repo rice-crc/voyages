@@ -1,10 +1,11 @@
 from __future__ import unicode_literals
-from django.conf.urls import url
-from django.views.generic import TemplateView, RedirectView
 
-import voyages.apps.voyage.views
-import voyages.apps.voyage.search_views
+from django.conf.urls import url
+from django.views.generic import RedirectView, TemplateView
+
 import voyages.apps.static_content.views
+import voyages.apps.voyage.search_views
+import voyages.apps.voyage.views
 
 urlpatterns = [
 

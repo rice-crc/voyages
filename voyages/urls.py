@@ -1,11 +1,13 @@
-from __future__ import absolute_import
-from __future__ import unicode_literals
+from __future__ import absolute_import, unicode_literals
+
+# Comment out the two autocomplete lines to disable the admin:
+from autocomplete_light import shortcuts as autocomplete_light
+
+autocomplete_light.autodiscover()
+
+
 from django.conf import settings
 from django.conf.urls import include, url
-
-# Uncomment the next two lines to enable the admin:
-from autocomplete_light import shortcuts as autocomplete_light
-autocomplete_light.autodiscover()
 from django.contrib import admin
 
 admin.autodiscover()
@@ -17,13 +19,14 @@ js_info_dict = {
     'packages': ('voyages',),
 }
 
-import voyages.apps.assessment.views
-import voyages.apps.voyage.views
-import voyages.apps.common.views
-import voyages.apps.past.views
 import django.contrib.sitemaps.views
 import django.views.i18n
 import django.views.static
+
+import voyages.apps.assessment.views
+import voyages.apps.common.views
+import voyages.apps.past.views
+import voyages.apps.voyage.views
 
 urlpatterns = [
     url(r'^', include('voyages.apps.static_content.urls', namespace='static_content')),

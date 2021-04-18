@@ -1,11 +1,13 @@
 from __future__ import unicode_literals
-from builtins import str
-from builtins import object
-from django.db import models
+
+from builtins import object, str
 from os.path import basename
-from voyages.apps.voyage.models import Voyage, Place
+
 from django.conf import settings
+from django.db import models
 from django.db.models.signals import post_save
+
+from voyages.apps.voyage.models import Place, Voyage
 
 
 class Image(models.Model):

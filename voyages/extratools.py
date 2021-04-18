@@ -1,5 +1,7 @@
 from __future__ import unicode_literals
+
 from builtins import object
+
 from django import forms
 from django.conf import settings
 from haystack.utils import Highlighter

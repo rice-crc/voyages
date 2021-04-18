@@ -1,45 +1,55 @@
-from __future__ import print_function
-from __future__ import absolute_import
-from __future__ import unicode_literals
+from __future__ import absolute_import, print_function, unicode_literals
+
 # Create your views here.
 from future import standard_library
+
 standard_library.install_aliases()
-from builtins import str
-from builtins import range
-from builtins import object
-from django.contrib.auth.decorators import login_required
-from django.views.decorators.cache import never_cache
-from django.core.urlresolvers import reverse
-from django.db import connection, transaction
-from django.http import JsonResponse, HttpResponse, HttpResponseBadRequest, HttpResponseForbidden, HttpResponseRedirect
-from django.http import Http404
-from django.views.decorators.http import require_POST
-from django.shortcuts import render, get_object_or_404
-from django.views.decorators.cache import cache_page
-from django.views.decorators.csrf import csrf_exempt
-from voyages.apps.common.views import get_ordered_places
-from voyages.apps.contribute.forms import ContributionVoyageSelectionForm, InterimVoyageForm
-from voyages.apps.contribute.models import (ContributionStatus, DeleteVoyageContribution,
-                                            EditVoyageContribution, EditorVoyageContribution,
-                                            InterimPreExistingSource, InterimSlaveNumber,
-                                            InterimVoyage, MergeVoyagesContribution,
-                                            NewVoyageContribution, ReviewRequest,
-                                            ReviewRequestDecision, ReviewRequestResponse,
-                                            ReviewVoyageContribution, User,
-                                            get_all_new_sources_for_interim, get_contribution,
-                                            get_contribution_from_id, source_type_dict)
-from voyages.apps.voyage.cache import VoyageCache
-from voyages.apps.voyage.models import (Voyage, VoyageDataset, VoyageDates,
-                                        VoyageShipOwnerConnection, VoyageSources,
-                                        VoyageSourcesConnection, VoyageSourcesType)
-from django.utils.html import escape
-from django.utils.translation import ugettext as _
-from django.core.mail import send_mail
-from django.conf import settings
-from . import imputed
 import json
 import re
+from builtins import object, range, str
+
 import six
+from django.conf import settings
+from django.contrib.auth.decorators import login_required
+from django.core.mail import send_mail
+from django.core.urlresolvers import reverse
+from django.db import connection, transaction
+from django.http import (Http404, HttpResponse, HttpResponseBadRequest,
+                         HttpResponseForbidden, HttpResponseRedirect,
+                         JsonResponse)
+from django.shortcuts import get_object_or_404, render
+from django.utils.html import escape
+from django.utils.translation import ugettext as _
+from django.views.decorators.cache import cache_page, never_cache
+from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_POST
+
+from voyages.apps.common.views import get_ordered_places
+from voyages.apps.contribute.forms import (ContributionVoyageSelectionForm,
+                                           InterimVoyageForm)
+from voyages.apps.contribute.models import (ContributionStatus,
+                                            DeleteVoyageContribution,
+                                            EditorVoyageContribution,
+                                            EditVoyageContribution,
+                                            InterimPreExistingSource,
+                                            InterimSlaveNumber, InterimVoyage,
+                                            MergeVoyagesContribution,
+                                            NewVoyageContribution,
+                                            ReviewRequest,
+                                            ReviewRequestDecision,
+                                            ReviewRequestResponse,
+                                            ReviewVoyageContribution, User,
+                                            get_all_new_sources_for_interim,
+                                            get_contribution,
+                                            get_contribution_from_id,
+                                            source_type_dict)
+from voyages.apps.voyage.cache import VoyageCache
+from voyages.apps.voyage.models import (Voyage, VoyageDataset, VoyageDates,
+                                        VoyageShipOwnerConnection,
+                                        VoyageSources, VoyageSourcesConnection,
+                                        VoyageSourcesType)
+
+from . import imputed
 
 number_prefix = 'interim_slave_number_'
 
@@ -73,8 +83,7 @@ def index(request):
         return HttpResponseRedirect(reverse('account_login'))
 
 def legal(request):
-    from .forms import legal_terms_title
-    from .forms import legal_terms_paragraph
+    from .forms import legal_terms_paragraph, legal_terms_title
     return render(request, 'contribute/legal.html',
                   {'title': legal_terms_title, 'paragraph': legal_terms_paragraph})
 
@@ -1531,7 +1540,9 @@ def download_voyages(request):
     intra_american_flag = request.POST.get('intra_american_flag')
     if intra_american_flag: intra_american_flag = int(intra_american_flag)
 
-    import os, tempfile, _thread
+    import _thread
+    import os
+    import tempfile
     try:
         dir = settings.MEDIA_ROOT + '/csv_downloads/'
         if not os.path.exists(dir):
@@ -1598,7 +1609,11 @@ def download_voyages_go(request):
     return response
 
 def get_voyages_csv_rows(statuses, published, buffer=None, remove_linebreaks=False, intra_american_flag=None):
-    from voyages.apps.contribute.publication import get_csv_writer, get_header_csv_text, export_contributions, export_from_voyages, safe_writerow
+    from voyages.apps.contribute.publication import (export_contributions,
+                                                     export_from_voyages,
+                                                     get_csv_writer,
+                                                     get_header_csv_text,
+                                                     safe_writerow)
     if buffer is None:
         buffer = Echo()
     writer = get_csv_writer(buffer)
@@ -1620,8 +1635,13 @@ def publish_pending(request):
     # Here we are using a lightweight approach at background processing by starting
     # a thread and logging the progress to a file whose name is returned in the
     # response.
-    import os, re, tempfile, _thread
-    from voyages.apps.contribute.publication import publish_accepted_contributions
+    import _thread
+    import os
+    import re
+    import tempfile
+
+    from voyages.apps.contribute.publication import \
+        publish_accepted_contributions
     try:
         dir = settings.MEDIA_ROOT + '/publication_logs/'
         if not os.path.exists(dir):

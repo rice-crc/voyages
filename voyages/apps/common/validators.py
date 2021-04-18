@@ -1,6 +1,8 @@
 from __future__ import unicode_literals
-from django.core.validators import RegexValidator
+
 import re
+
+from django.core.validators import RegexValidator
 
 date_csv_field_validator = RegexValidator(
     re.compile(r"^(\d{1,2}|),(\d{1,2}|),(\d{4}|)$"),

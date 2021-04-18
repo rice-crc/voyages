@@ -1,24 +1,28 @@
-from __future__ import print_function
-from __future__ import unicode_literals
-from builtins import input
-from builtins import next
-from builtins import str
-from builtins import range
-from django.core.management.base import BaseCommand
-from django.utils.encoding import smart_str
-from voyages.apps.voyage.models import (BroadRegion, LinkedVoyages, Nationality, OwnerOutcome,
-                                        ParticularOutcome, Place, Region, Resistance, RigOfVessel,
-                                        SlavesOutcome, TonType, VesselCapturedOutcome, Voyage,
-                                        VoyageCaptain, VoyageCaptainConnection, VoyageCrew,
-                                        VoyageDataset, VoyageDates, VoyageGroupings,
-                                        VoyageItinerary, VoyageOutcome, VoyageShip, VoyageShipOwner,
-                                        VoyageShipOwnerConnection, VoyageSlavesNumbers,
-                                        VoyageSources, VoyageSourcesConnection)
-from voyages.apps.resources.models import Image, AfricanName
-from unidecode import unidecode
+from __future__ import print_function, unicode_literals
+
 import re
 import sys
+from builtins import input, next, range, str
+
 import unicodecsv
+from django.core.management.base import BaseCommand
+from django.utils.encoding import smart_str
+from unidecode import unidecode
+
+from voyages.apps.resources.models import AfricanName, Image
+from voyages.apps.voyage.models import (BroadRegion, LinkedVoyages,
+                                        Nationality, OwnerOutcome,
+                                        ParticularOutcome, Place, Region,
+                                        Resistance, RigOfVessel, SlavesOutcome,
+                                        TonType, VesselCapturedOutcome, Voyage,
+                                        VoyageCaptain, VoyageCaptainConnection,
+                                        VoyageCrew, VoyageDataset, VoyageDates,
+                                        VoyageGroupings, VoyageItinerary,
+                                        VoyageOutcome, VoyageShip,
+                                        VoyageShipOwner,
+                                        VoyageShipOwnerConnection,
+                                        VoyageSlavesNumbers, VoyageSources,
+                                        VoyageSourcesConnection)
 
 empty = re.compile(r"^\s*\.?$")
 

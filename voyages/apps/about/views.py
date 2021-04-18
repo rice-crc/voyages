@@ -1,5 +1,7 @@
 from __future__ import unicode_literals
+
 from voyages.apps.common.views import render_locale_flatpage
+
 
 # A catch all for URL matching
 def render_about_flatpage(request, flatpage_url):

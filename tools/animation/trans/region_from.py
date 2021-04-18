@@ -1,4 +1,5 @@
 from __future__ import unicode_literals
+
 region_from = [
 	(-27.68352808378776, 39.0234375),
 	(-5.615985819155327, 0.17578125),

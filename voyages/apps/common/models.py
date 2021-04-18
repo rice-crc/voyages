@@ -1,9 +1,13 @@
 from __future__ import unicode_literals
+
 from future import standard_library
+
 standard_library.install_aliases()
 from builtins import range
+
 from django.db import models
 from django.shortcuts import get_object_or_404
+
 
 # Create your models here.
 class SavedQuery(models.Model):
@@ -92,8 +96,8 @@ def restore_link(link_id, session, session_key, redirect_url_name):
     permalink = get_object_or_404(SavedQuery, pk=link_id)
     # Save the query in the session and redirect.
     session[session_key] = permalink.get_post()
-    from django.http import HttpResponseRedirect
     from django.core.urlresolvers import reverse
+    from django.http import HttpResponseRedirect
     return HttpResponseRedirect(reverse(redirect_url_name))
 
 def get_pks_from_haystack_results(results):

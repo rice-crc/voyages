@@ -1,18 +1,18 @@
-from __future__ import division
-from __future__ import print_function
-from __future__ import absolute_import
-from __future__ import unicode_literals
-from builtins import str
-from builtins import range
-from builtins import object
-from haystack import indexes
-from .models import Voyage, VoyageSources, VoyagesFullQueryHelper
+from __future__ import (absolute_import, division, print_function,
+                        unicode_literals)
+
+import re
+from builtins import object, range, str
 from datetime import date
+
+import six
+import unidecode
 from django.utils import translation
 from django.utils.translation import ugettext as _
-import re
-import unidecode
-import six
+from haystack import indexes
+
+from .models import Voyage, VoyagesFullQueryHelper, VoyageSources
+
 
 def split_date(value):
     if value is None: return []

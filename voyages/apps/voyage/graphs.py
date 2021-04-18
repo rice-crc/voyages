@@ -1,15 +1,18 @@
-from __future__ import division
-from __future__ import absolute_import
-from __future__ import unicode_literals
-from builtins import str
-from builtins import object
-from past.utils import old_div
-from django.utils.translation import ugettext_lazy as _
-from itertools import groupby
-from voyages.apps.common.models import get_values_from_haystack_results
-from .models import (BroadRegion, Nationality, OwnerOutcome, ParticularOutcome, Place, Region,
-                     Resistance, RigOfVessel, SlavesOutcome, VesselCapturedOutcome)
+from __future__ import absolute_import, division, unicode_literals
+
 import calendar
+from builtins import object, str
+from itertools import groupby
+
+from django.utils.translation import ugettext_lazy as _
+from past.utils import old_div
+
+from voyages.apps.common.models import get_values_from_haystack_results
+
+from .models import (BroadRegion, Nationality, OwnerOutcome, ParticularOutcome,
+                     Place, Region, Resistance, RigOfVessel, SlavesOutcome,
+                     VesselCapturedOutcome)
+
 
 class Axis(object):
     AVERAGE_MODE = 'avg'

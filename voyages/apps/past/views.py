@@ -1,27 +1,30 @@
-from __future__ import division
-from __future__ import absolute_import
-from __future__ import unicode_literals
+from __future__ import absolute_import, division, unicode_literals
+
+import itertools
+import json
+import uuid
 from builtins import str
-from past.utils import old_div
 from datetime import date
+
 from django.conf import settings
 from django.core.paginator import Paginator
 from django.db import transaction
 from django.db.models import Prefetch
+from django.http import JsonResponse
 from django.http.response import HttpResponseBadRequest
 from django.shortcuts import redirect
-from django.http import JsonResponse
 from django.views.decorators.cache import cache_page
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
-from voyages.apps.past.models import (AltEthnicityName, AltLanguageGroupName, Enslaved,
-                                      EnslavedContribution, EnslavedContributionLanguageEntry,
-                                      EnslavedContributionNameEntry, EnslavedSearch, Ethnicity,
-                                      LanguageGroup, ModernCountry)
+from past.utils import old_div
+
+from voyages.apps.past.models import (
+    AltEthnicityName, AltLanguageGroupName, Enslaved, EnslavedContribution,
+    EnslavedContributionLanguageEntry, EnslavedContributionNameEntry,
+    EnslavedSearch, Ethnicity, LanguageGroup, ModernCountry)
+
 from .name_search import NameSearchCache
-import itertools
-import json
-import uuid
+
 
 def _generate_table(query, table_params, data_adapter=None):
     try:
@@ -89,7 +92,7 @@ def search_enslaved(request):
     # constructor.
     data = json.loads(request.body)
     search = EnslavedSearch(**data['search_query'])
-    from voyages.apps.past.models import _name_fields, _modern_name_fields
+    from voyages.apps.past.models import _modern_name_fields, _name_fields
     _fields = ['enslaved_id',
         'age', 'gender', 'height', 'ethnicity__name', 'language_group__name', 'language_group__modern_country__name',
         'voyage__id', 'voyage__voyage_ship__ship_name', 'voyage__voyage_dates__first_dis_of_slaves',

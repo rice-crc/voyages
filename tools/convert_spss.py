@@ -1,7 +1,7 @@
 from __future__ import unicode_literals
+
 import re
 import sys
-
 
 subst = [
     (r'slaximp\s\-\s\(slaximp\*([.0-9]+)\)', 'slaximp * (1 - \\1)'),

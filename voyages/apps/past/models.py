@@ -1,14 +1,17 @@
-from __future__ import absolute_import
-from __future__ import unicode_literals
-from builtins import str
-from builtins import object
-from django.db import models
-from django.db.models import Func, F, Q, Case, When, Value, CharField, IntegerField
-from django.db.models.functions import Coalesce, Concat, Length, Substr
-from django.contrib.auth.models import User
-from voyages.apps.voyage.models import Place, Voyage, VoyageSources
+from __future__ import absolute_import, unicode_literals
+
 import operator
+from builtins import object, str
 from functools import reduce
+
+from django.contrib.auth.models import User
+from django.db import models
+from django.db.models import (Case, CharField, F, Func, IntegerField, Q, Value,
+                              When)
+from django.db.models.functions import Coalesce, Concat, Length, Substr
+
+from voyages.apps.voyage.models import Place, Voyage, VoyageSources
+
 
 class EnslaverInfoAbstractBase(models.Model):
     principal_alias = models.CharField(max_length=255)
@@ -304,6 +307,7 @@ class EnslavedSearch(object):
                     Q(name_second=self.searched_name) | Q(name_third=self.searched_name))
             else:
                 from .name_search import NameSearchCache
+
                 # Perform a fuzzy search on our cached names.
                 NameSearchCache.load()
                 fuzzy_ids = NameSearchCache.search(self.searched_name)

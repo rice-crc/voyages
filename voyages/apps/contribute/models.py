@@ -1,13 +1,18 @@
 from __future__ import unicode_literals
-from builtins import object
-from django.db import models
-from django.contrib.auth.models import User
-from django.core.validators import validate_comma_separated_integer_list, MinLengthValidator
-from django.utils.translation import ugettext as _
-from voyages.apps import voyage
-from voyages.apps.voyage.models import VoyageDataset
-from voyages.apps.common.validators import date_csv_field_validator
+
 import itertools
+from builtins import object
+
+from django.contrib.auth.models import User
+from django.core.validators import (MinLengthValidator,
+                                    validate_comma_separated_integer_list)
+from django.db import models
+from django.utils.translation import ugettext as _
+
+from voyages.apps import voyage
+from voyages.apps.common.validators import date_csv_field_validator
+from voyages.apps.voyage.models import VoyageDataset
+
 
 class AdminFaq(models.Model):
     """

@@ -1,6 +1,8 @@
 from __future__ import unicode_literals
-from builtins import str
+
 import re
+from builtins import str
+
 from django import template
 from django.conf import settings
 

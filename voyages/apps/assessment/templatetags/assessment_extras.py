@@ -1,6 +1,9 @@
 from __future__ import unicode_literals
+
 from builtins import range
+
 from django import template
+
 from voyages.apps.common.filters import trans_log
 
 register = template.Library()

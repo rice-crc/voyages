@@ -1,5 +1,8 @@
 from __future__ import unicode_literals
+
 from builtins import str
+
+
 def download_xls(header_rows, data_set, row_header_columns=[]):
     """
     Generates an XLS file with the given data.

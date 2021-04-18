@@ -1,8 +1,9 @@
 from __future__ import unicode_literals
+
 from django.conf.urls import url
 from django.views.generic import TemplateView
-import voyages.apps.american.views
 
+import voyages.apps.american.views
 import voyages.apps.static_content.views
 
 urlpatterns = [

@@ -1,22 +1,33 @@
-from __future__ import absolute_import
-from __future__ import unicode_literals
+from __future__ import absolute_import, unicode_literals
+
+import re
 from builtins import str
+
+import unicodecsv as csv
 from django.conf import settings
 from django.core import management
 from django.db import transaction
 from django.db.models import Prefetch
-from voyages.apps.contribute.models import (ContributionStatus, DeleteVoyageContribution,
-                                            EditVoyageContribution, InterimPreExistingSourceActions,
-                                            MergeVoyagesContribution, NewVoyageContribution,
-                                            ReviewRequest, ReviewRequestDecision)
-from voyages.apps.contribute.views import full_contribution_id, get_filtered_contributions
-from voyages.apps.voyage.models import (Voyage, VoyageCaptain, VoyageCaptainConnection, VoyageCrew,
-                                        VoyageDataset, VoyageDates, VoyageItinerary, VoyageOutcome,
-                                        VoyageShip, VoyageShipOwner, VoyageShipOwnerConnection,
-                                        VoyageSlavesNumbers, VoyageSources, VoyageSourcesConnection,
-                                        VoyagesFullQueryHelper)
-import unicodecsv as csv
-import re
+
+from voyages.apps.contribute.models import (ContributionStatus,
+                                            DeleteVoyageContribution,
+                                            EditVoyageContribution,
+                                            InterimPreExistingSourceActions,
+                                            MergeVoyagesContribution,
+                                            NewVoyageContribution,
+                                            ReviewRequest,
+                                            ReviewRequestDecision)
+from voyages.apps.contribute.views import (full_contribution_id,
+                                           get_filtered_contributions)
+from voyages.apps.voyage.models import (Voyage, VoyageCaptain,
+                                        VoyageCaptainConnection, VoyageCrew,
+                                        VoyageDataset, VoyageDates,
+                                        VoyageItinerary, VoyageOutcome,
+                                        VoyagesFullQueryHelper, VoyageShip,
+                                        VoyageShipOwner,
+                                        VoyageShipOwnerConnection,
+                                        VoyageSlavesNumbers, VoyageSources,
+                                        VoyageSourcesConnection)
 
 _exported_spss_fields = \
     ['VOYAGEID', 'STATUS', 'ADLT1IMP', 'ADLT2IMP', 'ADLT3IMP', 'ADPSALE1', 'ADPSALE2',

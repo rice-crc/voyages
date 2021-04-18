@@ -1,5 +1,7 @@
 from __future__ import unicode_literals
+
 from builtins import str
+
 __version_info__ = (2, 2, 13, None)
 
 # Dot-connect all but the last. Last is dash-connected if not None.

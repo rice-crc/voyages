@@ -1,7 +1,9 @@
 from __future__ import unicode_literals
-from haystack.query import SearchQuerySet
-from .models import ExportRegion, ImportArea, ImportRegion, Nation
+
 from django.utils.translation import ugettext_lazy as _
+from haystack.query import SearchQuerySet
+
+from .models import ExportRegion, ImportArea, ImportRegion, Nation
 
 
 def get_flags(search_configuration=None, mode=None):

@@ -1,25 +1,28 @@
-from __future__ import absolute_import
-from __future__ import unicode_literals
+from __future__ import absolute_import, unicode_literals
+
 from builtins import str
-from django.shortcuts import render
+from collections import OrderedDict
+from itertools import groupby
+
 from django.core.cache import cache
+from django.core.paginator import Paginator
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
-from collections import OrderedDict
-from django.core.paginator import Paginator
-from haystack.query import SearchQuerySet
+from django.shortcuts import render
+from django.utils.translation import ugettext as _
 from haystack.forms import SearchForm
+from haystack.query import SearchQuerySet
+
+from voyages.apps.common.export import download_xls
+from voyages.apps.common.models import get_values_from_haystack_results
+from voyages.apps.voyage.globals import structure_places
+from voyages.apps.voyage.views import prepare_paginator_variables
+
 from .forms import ResultsPerPageOptionForm
 from .globals import names_search_strict_text, names_sort_fields
 from .models import AfricanName, Country, Image, ImageCategory, Place
 from .search_indexes import AfricanNamesIndex
-from voyages.apps.common.models import get_values_from_haystack_results
-from voyages.apps.common.export import download_xls
 
-from voyages.apps.voyage.views import prepare_paginator_variables
-from voyages.apps.voyage.globals import structure_places
-from itertools import groupby
-from django.utils.translation import ugettext as _
 
 def image_search_results(adapt_query_set=lambda cat, q: q):
     images = []

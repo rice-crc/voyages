@@ -1,15 +1,17 @@
-from __future__ import division
-from __future__ import print_function
-from __future__ import unicode_literals
+from __future__ import division, print_function, unicode_literals
+
+import importlib
 # Pre-compile paths connecting "regions" and link ports to such regions.
 from builtins import str
+
+import numpy as np
+from haversine import haversine as hs_dist
 from past.utils import old_div
+from scipy.interpolate import interp1d
+
 from voyages.apps.voyage.cache import VoyageCache
 from voyages.apps.voyage.maps import VoyageRoutes
-from scipy.interpolate import interp1d
-from haversine import haversine as hs_dist
-import importlib
-import numpy as np
+
 
 def precompile_paths(datasetName, twoWayLinks):
     def get_module(mod):
@@ -119,7 +121,8 @@ def generate_static_files(datasetName, twoWayLinks=False):
         print("Warnings (" + str(len(warnings)) + ")")
         for w in warnings:
             print(w.encode('utf-8'))
-    import os, json
+    import json
+    import os
     base_folder = os.path.join(os.path.dirname(os.path.abspath(__file__)), '../../voyages/sitemedia/maps/js/', datasetName)
     with open(os.path.join(base_folder, 'regional_routes.json'), 'w') as f:
         json.dump(regional_routes, f)
