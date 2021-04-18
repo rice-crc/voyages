@@ -1274,11 +1274,11 @@ def search(request):
                             tableresults)
                         row_cell_values.append(display_result[0])
                         row_cell_values.append(display_result[1])
-                        if display_result[0] != None:
+                        if display_result[0] is not None:
                             xls_row.append(display_result[0])
                         else:
                             xls_row.append('')
-                        if display_result[1] != None:
+                        if display_result[1] is not None:
                             xls_row.append(display_result[1])
                         else:
                             xls_row.append('')
@@ -1287,7 +1287,7 @@ def search(request):
                             cell_queryset, rowqueryset, colqueryset,
                             tableresults)
                         row_cell_values.append(display_result)
-                        if display_result != None:
+                        if display_result is not None:
                             xls_row.append(display_result)
                         else:
                             xls_row.append('')
@@ -1300,16 +1300,16 @@ def search(request):
                     row_total,
                 ])
                 if is_double_fun:
-                    if row_total[0] != None:
+                    if row_total[0] is not None:
                         xls_row.append(row_total[0])
                     else:
                         xls_row.append('')
-                    if row_total[1] != None:
+                    if row_total[1] is not None:
                         xls_row.append(row_total[1])
                     else:
                         xls_row.append('')
                 else:
-                    if row_total != None:
+                    if row_total is not None:
                         xls_row.append(row_total)
                     else:
                         xls_row.append('')
@@ -1362,7 +1362,7 @@ def search(request):
                 else:
                     xls_row.append('')
             for i in col_totals:
-                if i != None:
+                if i is not None:
                     xls_row.append(i)
                 else:
                     xls_row.append('')
