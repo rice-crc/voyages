@@ -847,7 +847,7 @@ def make_sum_nopretty_fun(varname):
 
 
 def display_average(value):
-    if value != None:
+    if value is not None:
         return round(value, 1)
     else:
         return value
@@ -894,8 +894,8 @@ def make_avg_nopretty_fun(varname):
 def make_row_tot_percent_fun(varname):
 
     def row_tot_fun(queryset, rowset, colset, allset):
-        if rowset == None:
-            if colset == None:
+        if rowset is None:
+            if colset is None:
                 return display_percent(1)
             else:
                 rowset = allset
@@ -913,8 +913,8 @@ def make_row_tot_percent_fun(varname):
 def make_col_tot_percent_fun(varname):
 
     def col_tot_fun(queryset, rowset, colset, allset):
-        if colset == None:
-            if rowset == None:
+        if colset is None:
+            if rowset is None:
                 return display_percent(1)
             else:
                 colset = allset
