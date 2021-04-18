@@ -363,7 +363,7 @@ admin.site.register(Place, PlaceAdmin)
 admin.site.register(VoyageGroupings, VoyageGroupingsAdmin)
 
 # Ship, Nation, Owners
-#admin.site.register(VoyageShipOwner, VoyageShipOwnerAdmin)
+# admin.site.register(VoyageShipOwner, VoyageShipOwnerAdmin)
 admin.site.register(Nationality, VoyageNationalityAdmin)
 admin.site.register(TonType, VoyageTonTypeAdmin)
 admin.site.register(RigOfVessel, VoyageRigOfVesselAdmin)

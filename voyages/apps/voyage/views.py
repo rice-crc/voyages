@@ -413,7 +413,7 @@ def create_var_dict(query_forms, time_frame_form):
             x for x in query_forms
             if x['form'].is_valid() and x['form'].is_form_shown()
     ]:
-        #qform = next((l for l in query_forms if l['varname'] == search_var), None)
+        # qform = next((l for l in query_forms if l['varname'] == search_var), None)
         varname = qryform['var_name']
         used_variables.append(varname)
         form = qryform['form']
@@ -1308,7 +1308,7 @@ def search(request):
                     else:
                         xls_row.append('')
                 xls_table.append(xls_row)
-                #cell_displays.append((rowlbl, row_cell_displays, row_total))
+                # cell_displays.append((rowlbl, row_cell_displays, row_total))
             for rownum in remove_rows:
                 xls_table.pop(rownum + num_col_labels_before)
                 row_list[rownum] = ([
