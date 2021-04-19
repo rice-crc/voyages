@@ -34,7 +34,7 @@ class LoginForm(AuthenticationForm):
     x = 1
 
     def __init__(self, *args, **kwargs):
-        super(LoginForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.fields['username'].label = _("Username or Email")
 
 class SignUpForm(forms.Form):
@@ -52,7 +52,7 @@ class SignUpForm(forms.Form):
     # This init method will reorder the fields so that
     # the form is presented just the way we want
     def __init__(self, *args, **kwargs):
-        super(SignUpForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         key_order = [
             'first_name',
             'last_name',
@@ -91,7 +91,7 @@ class ContributionVoyageSelectionForm(forms.Form):
     ids = forms.CharField(max_length=255, required=True)
 
     def __init__(self, data=None, min_selection=1, max_selection=None, *args, **kwargs):
-        super(ContributionVoyageSelectionForm, self).__init__(data, *args, **kwargs)
+        super().__init__(data, *args, **kwargs)
         self.min_selection = min_selection
         self.max_selection = max_selection
         self.selected_voyages = []
@@ -121,7 +121,7 @@ default_name_help_text = _('Enter last name , first name.')
 class InterimVoyageForm(forms.ModelForm):
     def full_clean(self):
         self.cleaned_data = {}
-        super(InterimVoyageForm, self).full_clean()
+        super().full_clean()
         for k, v in list(self._errors.items()):
             if k.startswith('date_'):
                 del self._errors[k]

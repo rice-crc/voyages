@@ -20,12 +20,12 @@ class UploadFileForm(forms.Form):
     downloadfile = forms.FileField(label=_('Select your file'))
 
 
-    
+
 class VoyageBaseForm(forms.Form):
     # Use a char field to keep track of the order of shown forms. Hide it because it is irrelavent to the user.
     # If not shown use empty string, if shown use a number, higher numbers will be shown further down.
     # This is used mostly if not solely in the javascript code
-    
+
     is_shown_field = forms.CharField(required=False, widget=forms.HiddenInput())
     var_name_field = forms.CharField(required=True, widget=forms.HiddenInput())
 
@@ -242,7 +242,7 @@ class TableSelectionForm(forms.Form):
 class GraphRemovePlotForm(forms.Form):
     # Creates a list of boolean fields for each tuple in the list, (description, id)
     def __init__(self, lst, *args, **kwargs):
-        super(GraphRemovePlotForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         for desc, i in lst:
             self.fields[str(i)] = forms.BooleanField(label=desc, required=False, initial=False)
     def get_to_del(self):
@@ -261,7 +261,7 @@ class GraphSelectionForm(forms.Form):
                  yfield_label='Y axis',
                  *args,
                  **kwargs):
-        super(forms.Form, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         lmbd = lambda x: (str(x[0]), x[1].description)
         self.xchoices = [lmbd(x) for x in enumerate(xfunctions)]
         self.ychoices = list(map(lmbd, enumerate(graphs.graphs_y_axes)))

@@ -137,7 +137,7 @@ class AfricanName(models.Model):
     def save(self, *args, **kwargs):
         if Voyage.objects.filter(voyage_id=self.voyage_number).exists():
             self.voyage = Voyage.objects.get(voyage_id=self.voyage_number)
-        super(AfricanName, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
 
 
 # We are using this instead of the real time processor, since automatic update seems to fail (serializing strings)

@@ -96,10 +96,10 @@ class TranslatedTextField(indexes.SearchField):
         kwargs['faceted'] = True
         self.language_code = None
         self.unidecode = unidecode
-        super(TranslatedTextField, self).__init__(**kwargs)
+        super().__init__(**kwargs)
 
     def set_instance_name(self, instance_name):
-        super(TranslatedTextField, self).set_instance_name(instance_name)
+        super().set_instance_name(instance_name)
         if instance_name is not None:
             m = self.re_translated_fieldname.search(instance_name)
             if m is None:
@@ -107,7 +107,7 @@ class TranslatedTextField(indexes.SearchField):
             self.language_code = m.group(2)
 
     def prepare(self, obj):
-        original = super(TranslatedTextField, self).prepare(obj)
+        original = super().prepare(obj)
         if original is None:
             return None
         with translation.override(self.language_code):
