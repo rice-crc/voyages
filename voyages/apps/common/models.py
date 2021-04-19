@@ -79,10 +79,8 @@ class SavedQuery(models.Model):
         if not self.id:
             import random
             import string
-            self.id = ''.join(
-                random.SystemRandom().choice(string.ascii_uppercase +
-                                             string.ascii_lowercase +
-                                             string.digits)
+            self.id = ''.join(random.SystemRandom().choice(
+                string.ascii_uppercase + string.ascii_lowercase + string.digits)
                 for _ in range(self.ID_LENGTH))
         super(SavedQuery, self).save(*args, **kwargs)
 

@@ -374,11 +374,11 @@ class EnslavedSearch(object):
         is_fuzzy = False
         if self.searched_name and len(self.searched_name):
             if self.exact_name_search:
-                q = q.filter(
-                    Q(documented_name=self.searched_name) |
-                    Q(name_first=self.searched_name) |
-                    Q(name_second=self.searched_name) |
-                    Q(name_third=self.searched_name))
+                qmask = Q(documented_name=self.searched_name)
+                qmask |= Q(name_first=self.searched_name)
+                qmask |= Q(name_second=self.searched_name)
+                qmask |= Q(name_third=self.searched_name)
+                q = q.filter(qmask)
             else:
                 from .name_search import NameSearchCache
 
@@ -431,9 +431,9 @@ class EnslavedSearch(object):
             q = q.filter(
                 post_disembark_location__pk__in=self.post_disembark_location)
         if self.source:
-            q = q.filter(
-                Q(sources_conn__text_ref__contains=self.source) |
-                Q(sources__full_ref__contains=self.source))
+            qmask = Q(sources_conn__text_ref__contains=self.source)
+            qmask |= Q(sources__full_ref__contains=self.source)
+            q = q.filter(qmask)
         if self.voyage_id:
             q = q.filter(voyage__pk__range=self.voyage_id)
         if self.enslaved_id:
@@ -504,10 +504,11 @@ class EnslavedSearch(object):
                         # to first sort by year (which is always present for non blank dates).
                         year_field = 'yearof_' + col_name
                         q = q.annotate(
-                            **
-                            {year_field: Substr(order_field, 4 * Value(-1), 4)})
-                        orm_orderby.append(('-' if is_desc else '') +
-                                           year_field)
+                            **{
+                                year_field:
+                                Substr(order_field, 4 * Value(-1), 4)})
+                        orm_orderby.append((
+                            '-' if is_desc else '') + year_field)
 
                 def add_names_sorting(sorted_name_fields, col_name, q):
                     # The next lines create a list made of the name fields with
