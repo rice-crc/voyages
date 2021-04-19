@@ -585,8 +585,8 @@ class TestEditorialPlatform(TransactionTestCase):
             reverse('contribute:json_pending_requests'))
         parsed_response = json.loads(json_response.content)
         self.assertEqual(len(parsed_response), 1)
-        self.assertTrue('new/' +
-                        str(original_contribution_pk) in parsed_response)
+        self.assertTrue('new/' + str(original_contribution_pk)
+                        in parsed_response)
         data = list(parsed_response.values())[0]
         self.assertEqual([u'Lion'], data['voyage_ship'])
 
@@ -843,9 +843,9 @@ class TestEditorialPlatform(TransactionTestCase):
             pk=original_contribution_pk)
         self.assertEqual(contribution.status, ContributionStatus.approved)
         active_reviews = list(
-            ReviewRequest.objects.filter(contribution_id='new/' +
-                                         str(original_contribution_pk),
-                                         archived=False).all())
+            ReviewRequest.objects.filter(
+                contribution_id='new/' + str(original_contribution_pk),
+                archived=False).all())
         self.assertEqual(len(active_reviews), 1)
         self.assertEqual(active_reviews[0].final_decision,
                          ReviewRequestDecision.accepted_by_editor)
@@ -861,8 +861,8 @@ class TestEditorialPlatform(TransactionTestCase):
             reverse('contribute:json_pending_publication'))
         parsed_response = json.loads(json_response.content)
         self.assertEqual(len(parsed_response), 1)
-        self.assertTrue('new/' +
-                        str(original_contribution_pk) in parsed_response)
+        self.assertTrue('new/' + str(original_contribution_pk)
+                        in parsed_response)
         data = list(parsed_response.values())[0]
         self.assertEqual(data['reviewer_final_decision'], 'Accepted')
         self.assertEqual(data['review_request_id'], active_reviews[0].pk)

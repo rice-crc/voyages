@@ -270,17 +270,18 @@ def publish_accepted_contributions(log_file, skip_backup=False):
                     return requests.post(solr_url, data, headers=headers)
 
                 def post_delete_request(id):
-                    r = post('<delete><query>var_voyage_id:' + str(id) +
-                             '</query></delete>')
+                    r = post('<delete><query>'
+                             'var_voyage_id:' + str(id) + '</query></delete>')
                     if r.status_code != 200:
-                        log('Failed to delete Solr record for voyage_id ' +
-                            str(id) + ' response code: ' + str(r.status_code))
+                        log('Failed to delete Solr record for '
+                            'voyage_id ' + str(id) + ' response code:'
+                            ' ' + str(r.status_code))
                     else:
                         r = post('<commit />')
                         if r.status_code != 200:
                             log('Failed to commit deletion for Solr record for '
-                                'voyage_id ' + str(id) + ' response code: ' +
-                                str(r.status_code))
+                                'voyage_id ' + str(id) + ' '
+                                'response code: ' + str(r.status_code))
 
                 for id in all_deleted_ids:
                     post_delete_request(id)
@@ -327,8 +328,8 @@ def _fetch_active_reviews_by_status(statuses):
                 'contribution'].status == ContributionStatus.approved:
             raise Exception(
                 'Expected a single active review request for approved '
-                'contributions [' + str(contrib_id) + '], found: ' +
-                str(len(reqs)))
+                'contributions [' + str(contrib_id) + '], '
+                'found: ' + str(len(reqs)))
         if len(reqs) == 0:
             notreviewed_contributions.append(info['contribution'])
         else:
@@ -1212,8 +1213,9 @@ def _save_editorial_version(review_request,
     pre_existing_sources = list(interim.pre_existing_sources.all())
     if contrib_type != 'edit' and contrib_type != 'merge' and len(
             pre_existing_sources) > 0:
-        raise Exception('A contribution with type "' + contrib_type +
-                        '" cannot have pre existing sources')
+        raise Exception('A contribution with type '
+                        '"' + contrib_type + '" '
+                        'cannot have pre existing sources')
     source_order = 1
     for src in created_sources:
         # Each src here has as type a subclass of InterimContributedSource

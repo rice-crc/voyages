@@ -58,15 +58,15 @@ def mkdate(year, month, day):
     try:
         return date(year, month, day)
     except ValueError:
-        print("Warning attempting to estimate invalid date, Day: " + day +
-              " Month: " + month + " Year: " + year)
+        print("Warning attempting to estimate invalid date, "
+              "Day: " + day + " Month: " + month + " Year: " + year)
         if month > 12:
             return mkdate(year, 12, day)
         elif day > 1:
             return mkdate(year, month, day - 1)
         else:
-            print("Error with date Day: " + day + " Month: " + month +
-                  " Year: " + year)
+            print("Error with date "
+                  "Day: " + day + " Month: " + month + " Year: " + year)
             return date(year, month, day)
 
 
@@ -879,8 +879,8 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
     # Voyage sources
     def prepare_var_sources(self, obj):
         return [
-            conn.text_ref + "<>" +
-            ("" if conn.source is None else conn.source.full_ref)
+            conn.text_ref + "<"
+            ">" + ("" if conn.source is None else conn.source.full_ref)
             for conn in obj.group.all()
         ]
 

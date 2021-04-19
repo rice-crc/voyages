@@ -92,8 +92,8 @@ class NameSearchCache(object):
                 lang['lang'] = item[2]
                 lang['id'] = item[0]
                 lang['records'] = [
-                    '0' + str(item[0]) + '.' + item[2] + '.' + str(index) +
-                    '.mp3' for index in range(1, 1 + item[3])
+                    f'0{item[0]}.{item[2]}.{index}.mp3'
+                    for index in range(1, 1 + item[3])
                 ]
                 langs.append(lang)
             cls._loaded = True

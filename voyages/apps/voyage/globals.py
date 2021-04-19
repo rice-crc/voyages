@@ -277,10 +277,9 @@ def default_prettifier(varname):
     :param varname: the variable name.
     :return: a function that receives value, voyageid and outputs a converted value.
     """
-    if 'idnum' not in varname and ('nation' in varname or 'port' in varname or
-                                   'place' in varname or 'region' in varname or
-                                   'outcome' in varname or
-                                   'resistance' in varname):
+    if 'idnum' not in varname and not set({
+        'nation', 'port', 'place', 'region', 'outcome', 'resistance',
+    }).isdisjoint(varname):
         return trans_adapter()
     return id_func
 
