@@ -79,7 +79,7 @@ class SavedQuery(models.Model):
             self.id = ''.join(
                 random.SystemRandom().choice(string.ascii_uppercase + string.ascii_lowercase + string.digits) for _ in
                 range(self.ID_LENGTH))
-        super(SavedQuery, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
 
 def restore_link(link_id, session, session_key, redirect_url_name):
     """

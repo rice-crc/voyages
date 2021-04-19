@@ -1259,7 +1259,7 @@ class VoyageSlavesNumbers(models.Model):
     percentage_adult = models.FloatField("Percentage adult on voyage", null=True, blank=True)
     # Calculated from malrat7
     percentage_female = models.FloatField("Percentage female on voyage", null=True, blank=True)
-    
+
     # vymrtrat
     imp_mortality_ratio = models.FloatField("Imputed mortality ratio (VYMRTRAT)", null=True, blank=True)
 
@@ -1332,7 +1332,7 @@ class VoyageSourcesConnection(models.Model):
 class VoyageDatasetManager(models.Manager):
     def __init__(self, dataset):
         self.dataset = int(dataset)
-        super(VoyageDatasetManager, self).__init__()
+        super().__init__()
 
     def get_queryset(self):
         return Voyage.all_dataset_objects.filter(dataset=self.dataset)
@@ -1412,7 +1412,7 @@ class Voyage(models.Model):
     def save(self, *args, **kwargs):
         if self.pk is None:
             self.pk = self.voyage_id
-        super(Voyage, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
 
     class Admin(object):
         manager = models.Manager()
@@ -1436,7 +1436,7 @@ class VoyagesFullQueryHelper(object):
             'voyage_crew': VoyageCrew,
             'voyage_slaves_numbers': VoyageSlavesNumbers}
 
-        self.itinerary_fields = ['broad_region_of_return', 
+        self.itinerary_fields = ['broad_region_of_return',
             'first_landing_place',
             'first_landing_region',
             'first_place_slave_purchase',
@@ -1486,12 +1486,12 @@ class VoyagesFullQueryHelper(object):
             Prefetch('voyage_ship__vessel_construction_place'),
             Prefetch('voyage_ship__vessel_construction_region'),
             Prefetch('voyage_ship__registered_place'),
-            Prefetch('voyage_ship__registered_region'),        
+            Prefetch('voyage_ship__registered_region'),
             Prefetch('voyage_ship_owner', queryset=VoyageShipOwner.objects.order_by('owner_name__owner_order')),
             Prefetch('group', queryset=VoyageSourcesConnection.objects.prefetch_related('source').order_by('source_order')),
             Prefetch('voyage_itinerary', queryset=VoyageItinerary.objects.prefetch_related(*self.itinerary_fields).all()),
             Prefetch(
-            'voyage_name_outcome', 
+            'voyage_name_outcome',
             queryset=VoyageOutcome.objects.prefetch_related(
                     'particular_outcome',
                     'resistance',
