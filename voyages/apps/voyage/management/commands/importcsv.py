@@ -38,7 +38,7 @@ class Command(BaseCommand):
                  'Supported values: "mysql" and "pgsql"')
 
     def __init__(self, *args, **kwargs):
-        super(Command, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.errors = 0
 
     def handle(self, csv_file, *args, **options):

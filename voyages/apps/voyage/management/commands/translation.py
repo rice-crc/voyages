@@ -14,7 +14,7 @@ class Command(BaseCommand):
     help = 'Extract text from the database that needs to be translated.'
 
     def __init__(self, *args, **kwargs):
-        super(Command, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.fieldsets = {
             VoyageSourcesType: ['group_name'],
             ParticularOutcome: ['label'],
