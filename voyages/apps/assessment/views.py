@@ -336,8 +336,8 @@ def get_estimates_table(request):
     if row_key_index == '3':
         row_set = specific_region_grouping(row_set, row_headers)
         row_headers[0].append(('', 1))
-    row_headers.append([(row_header_function(r), 1) for r in row_set] +
-                       [('Totals', 1)])
+    row_headers.append([(row_header_function(r), 1)
+                        for r in row_set] + [('Totals', 1)])
 
     cell_display_list = []
     if cell_key_index == '0':

@@ -99,15 +99,13 @@ def perform_search(search, lang):
                 # If the search is really for a full exact match, then we search
                 # on the plaintext_exact variant of the field. If it is a "contains"
                 # the exact search terms, then we use the plaintext variant instead.
-                custom_terms.append(u'var_' + str(item['varName']) +
-                                    '_plaintext' +
-                                    ('_exact' if len(m.group(1)) +
-                                     len(m.group(3)) == 0 else '') + ':("' +
-                                    term + '")')
+                xt = '_exact' if len(m.group(1)) + len(m.group(3)) == 0 else ''
+                custom_terms.append(
+                    f'var_{item["varName"]}_plaintext{xt}:("{term}")')
                 skip = True
         if not skip:
-            search_terms[u'var_' + str(item['varName']) + u'__' +
-                         str(operator.back_end_op_str)] = term
+            search_terms[f'var_{item["varName"]}__'
+                         f'{operator.back_end_op_str}'] = term
     dataset = search_terms.pop(u'var_dataset__exact', None)
     if dataset is None:
         # Map I-Am searches to the appropriate dataset.
@@ -242,9 +240,9 @@ def get_results_timeline(results, post):
     timeline_var_name = post.get('timelineVariable')
     timeline_var = _all_timeline_vars.get(timeline_var_name)
     if not timeline_var:
-        return HttpResponseBadRequest('Timeline variable is invalid ' +
-                                      str(timeline_var_name) + '. Available: ' +
-                                      str(list(_all_timeline_vars.keys())))
+        return HttpResponseBadRequest(
+            f'Timeline variable is invalid {timeline_var_name}. '
+            f'Available: {list(_all_timeline_vars.keys())}')
     timeline_var_name = timeline_var['var_name']
     timeline_data = sorted(timeline_var['time_line_func'](results,
                                                           timeline_var_name),
@@ -274,16 +272,14 @@ def get_results_graph(results, post):
     x_axis = graphData.get('xAxis', '')
     y_axes = graphData.get('yAxes', [])
     if x_axis not in _all_x_axes:
-        return HttpResponseBadRequest('X axis is invalid: ' + str(x_axis) +
-                                      '. Available: ' +
-                                      str(list(_all_x_axes.keys())))
+        return HttpResponseBadRequest(f'X axis is invalid: {x_axis}. '
+                                      f'Available: {list(_all_x_axes.keys())}')
     if len(y_axes) == 0:
         return HttpResponseBadRequest('No Y axis specified')
     missing_y_axes = [y for y in y_axes if y not in _all_y_axes]
     if len(missing_y_axes) > 0:
-        return HttpResponseBadRequest('Missing Y axes: ' + str(missing_y_axes) +
-                                      '. Available: ' +
-                                      str(list(_all_y_axes.keys())))
+        return HttpResponseBadRequest(f'Missing Y axes: {missing_y_axes}. '
+                                      f'Available: {list(_all_y_axes.keys())}')
     x_axis_info = _all_x_axes[x_axis]
     output = get_graph_data(results, x_axis_info,
                             [_all_y_axes[y] for y in y_axes])
@@ -329,8 +325,8 @@ def get_results_map_animation(results, allow_no_numbers=False):
 
         if can_show(voyage.emb_pk) and can_show(voyage.dis_pk) and \
                 voyage.year is not None and \
-                (allow_no_numbers or
-                    (voyage.embarked is not None and voyage.embarked > 0 and voyage.disembarked is not None)):
+                (allow_no_numbers or (
+                    voyage.embarked is not None and voyage.embarked > 0 and voyage.disembarked is not None)):
             flag = VoyageCache.nations.get(voyage.ship_nat_pk)
             if flag is None:
                 flag = ''
@@ -382,8 +378,7 @@ def get_compiled_routes(request):
     if routeType is None or routeType not in routeTypes:
         return JsonResponse({
             "error":
-                "Value of 'routeType' parameter should be in " +
-            str(routeTypes)
+                f"Value of 'routeType' parameter should be in {routeTypes}"
         })
     fpath = os.path.join(settings.STATIC_ROOT, "maps/js", networkName,
                          routeType + "_routes.json")
@@ -457,9 +452,8 @@ def get_results_map_flow(request, results):
         add_flow(source, destination, voyage.embarked, voyage.disembarked)
     if missed_embarked > 0 or missed_disembarked > 0:
         import logging
-        logging.getLogger('voyages').info('Missing flow: (' +
-                                          str(missed_embarked) + ', ' +
-                                          str(missed_disembarked) + ')')
+        logging.getLogger('voyages').info(
+            f'Missing flow: {missed_embarked}, {missed_disembarked})')
     return render(request,
                   "search_maps.datatemplate", {
                       'map_ports': map_ports,
@@ -784,9 +778,9 @@ def get_var_options(request):
     var_name = data.get('var_name', '(blank)')
     options_model = _options_model.get(var_name)
     if not options_model:
-        return HttpResponseBadRequest('Caller passed: "' + var_name +
-                                      '". Must specify some var_name in ' +
-                                      str(list(_options_model.keys())))
+        return HttpResponseBadRequest(
+            f'Caller passed: "{var_name}". '
+            f'Must specify some var_name in ' + list(_options_model.keys()))
     # Check if we have the results cached to avoid a db hit.
     cache_key = '_options_' + var_name
     response_data = cache.get(cache_key)

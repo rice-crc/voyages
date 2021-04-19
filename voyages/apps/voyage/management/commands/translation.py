@@ -36,10 +36,10 @@ class Command(BaseCommand):
         print('msgid ""')
         print('msgstr ""')
         print('"Project-Id-Version: slave-voyages.org\\n"')
-        print('"POT-Creation-Date: ' +
-              datetime.now().strftime("%Y-%m-%d %H:%M") + '\\n"')
-        print('"PO-Revision-Date: ' +
-              datetime.now().strftime("%Y-%m-%d %H:%M") + '\\n"')
+        print('"POT-Creation-Date'
+              ': ' + datetime.now().strftime("%Y-%m-%d %H:%M") + '\\n"')
+        print('"PO-Revision-Date:'
+              ' ' + datetime.now().strftime("%Y-%m-%d %H:%M") + '\\n"')
         print('"Last-Translator: ?\\n"')
         print('"Language-Team: Voyages\\n"')
         print('"MIME-Version: 1.0\\n"')

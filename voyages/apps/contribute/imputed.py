@@ -278,9 +278,9 @@ def compute_imputed_vars(_interim, is_iam=False):
         _interim_length = int(_interim.length_of_middle_passage)
     except:
         _interim_length = 0
-    if voy2imp is None or (voy2imp < (0 if is_iam else 20) and
-                           _interim_length and _interim_length - voy2imp >
-                           (0 if is_iam else 10)):
+    if voy2imp is None or (
+            voy2imp < (0 if is_iam else 20) and _interim_length and (
+            _interim_length - voy2imp > (0 if is_iam else 10))):
         voy2imp = _interim_length
     if not is_iam:
         voy2imp = threshold(voy2imp, 10)
@@ -528,8 +528,7 @@ def compute_imputed_vars(_interim, is_iam=False):
     if ncar15 == ncar17 and ncar15 > ncar17 and regem2 != regem3:
         mjbyptimp = 60999
 
-    if (pctemb and pctemb < 0.5) or (ncartot < 50 and not tslavesd and
-                                     not tslavesp):
+    if (pctemb and pctemb < 0.5) or (ncartot < 50 and not tslavesd and not tslavesp):
         if ncar13 == 0 and ncar15 > 0 and ncar17 > 0:
             mjbyptimp = _places[0]
         if ncar13 > 0 and ncar15 == 0 and ncar17 > 0:
@@ -593,8 +592,8 @@ def compute_imputed_vars(_interim, is_iam=False):
         mjbyptimp = embport2
     if not mjbyptimp and get_obj_value(
             _interim.imputed_outcome_of_voyage_for_slaves) != 2 and (
-                embport or embport2 or ncartot > 0 or _places[0] >= 1 or
-                _places[1] >= 1 or _places[2] >= 1):
+                embport or embport2 or ncartot > 0 or (
+                    _places[0] >= 1 or _places[1] >= 1 or _places[2] >= 1)):
         mjbyptimp = 60999
 
     majbuypt = get_obj_value(_interim.principal_place_of_slave_purchase)
@@ -695,8 +694,8 @@ def compute_imputed_vars(_interim, is_iam=False):
     slaarriv = _numbers.get('SLAARRIV', 0)
     slastot = slas32 + slas36 + slas39
     pctdis = slastot / slaarriv if slaarriv else None
-    if ((pctdis is not None and pctdis < 0.5) or
-            (slastot < 50 and not slaarriv)) and sla1port and adpsale1:
+    if ((pctdis is not None and pctdis < 0.5) or (
+            slastot < 50 and not slaarriv)) and sla1port and adpsale1:
         if adpsale2:
             mjslptimp = 99801
         else:
@@ -765,46 +764,28 @@ def compute_imputed_vars(_interim, is_iam=False):
     # xmimpflag - Voyage groupings for estimating imputed slaves
     xmimpflag = None
     rig = get_obj_value(_interim.rig_of_vessel)
-    if (rig == 26 or rig == 29 or rig == 42 or rig == 43 or rig == 54 or
-            rig == 59 or rig == 61 or rig == 65 or rig == 80 or rig == 86 or
-            rig is None) and yearam >= 1626 and yearam < 1651:
-        xmimpflag = 127
-    if (rig == 26 or rig == 29 or rig == 42 or rig == 43 or rig == 54 or
-            rig == 59 or rig == 61 or rig == 65 or rig == 80 or rig == 86 or
-            rig is None) and yearam >= 1651 and yearam < 1676:
-        xmimpflag = 128
-    if (rig == 26 or rig == 29 or rig == 42 or rig == 43 or rig == 54 or
-            rig == 59 or rig == 61 or rig == 65 or rig == 80 or rig == 86 or
-            rig is None) and yearam >= 1676 and yearam < 1701:
-        xmimpflag = 129
-    if (rig == 26 or rig == 29 or rig == 42 or rig == 43 or rig == 54 or
-            rig == 59 or rig == 61 or rig == 65 or rig == 80 or rig == 86 or
-            rig is None) and yearam >= 1701 and yearam < 1726:
-        xmimpflag = 130
-    if (rig == 26 or rig == 29 or rig == 42 or rig == 43 or rig == 54 or
-            rig == 59 or rig == 61 or rig == 65 or rig == 80 or rig == 86 or
-            rig is None) and yearam >= 1726 and yearam < 1751:
-        xmimpflag = 131
-    if (rig == 26 or rig == 29 or rig == 42 or rig == 43 or rig == 54 or
-            rig == 59 or rig == 61 or rig == 65 or rig == 80 or rig == 86 or
-            rig is None) and yearam >= 1751 and yearam < 1776:
-        xmimpflag = 132
-    if (rig == 26 or rig == 29 or rig == 42 or rig == 43 or rig == 54 or
-            rig == 59 or rig == 61 or rig == 65 or rig == 80 or rig == 86 or
-            rig is None) and yearam >= 1776 and yearam < 1801:
-        xmimpflag = 133
-    if (rig == 26 or rig == 29 or rig == 42 or rig == 43 or rig == 54 or
-            rig == 59 or rig == 61 or rig == 65 or rig == 80 or rig == 86 or
-            rig is None) and yearam >= 1801 and yearam < 1826:
-        xmimpflag = 134
-    if (rig == 26 or rig == 29 or rig == 42 or rig == 43 or rig == 54 or
-            rig == 59 or rig == 61 or rig == 65 or rig == 80 or rig == 86 or
-            rig is None) and yearam >= 1826 and yearam < 1851:
-        xmimpflag = 135
-    if (rig == 26 or rig == 29 or rig == 42 or rig == 43 or rig == 54 or
-            rig == 59 or rig == 61 or rig == 65 or rig == 80 or rig == 86 or
-            rig is None) and yearam >= 1851 and yearam < 1876:
-        xmimpflag = 136
+    rig_set = {26, 29, 42, 43, 54, 59, 61, 65, 80, 86}
+    if (rig in rig_set or rig is None) and yearam >= 1626:
+        if yearam < 1651:
+            xmimpflag = 127
+        elif yearam < 1676:
+            xmimpflag = 128
+        elif yearam < 1701:
+            xmimpflag = 129
+        elif yearam < 1726:
+            xmimpflag = 130
+        elif yearam < 1751:
+            xmimpflag = 131
+        elif yearam < 1776:
+            xmimpflag = 132
+        elif yearam < 1801:
+            xmimpflag = 133
+        elif yearam < 1826:
+            xmimpflag = 134
+        elif yearam < 1851:
+            xmimpflag = 135
+        elif yearam < 1876:
+            xmimpflag = 136
     if yearam and yearam < 1700 and majbyimp == 60100:
         xmimpflag = 101
     if yearam and yearam >= 1700 and yearam < 1801 and majbyimp == 60100:
@@ -851,9 +832,9 @@ def compute_imputed_vars(_interim, is_iam=False):
         xmimpflag = 124
     if yearam and yearam < 1627:
         xmimpflag = 1
-    if (yearam >= 1626 and
-            yearam < 1642) and ((mjselimp >= 31100 and mjselimp < 32000) or
-                                mjselimp1 == 40000 or mjselimp == 80400):
+    if (yearam >= 1626 and yearam < 1642) and ((
+            mjselimp >= 31100 and mjselimp < 32000
+    ) or mjselimp1 == 40000 or mjselimp == 80400):
         xmimpflag = 2
     if yearam and yearam < 1716 and mjselimp >= 36100 and mjselimp < 37000:
         xmimpflag = 3
@@ -881,9 +862,9 @@ def compute_imputed_vars(_interim, is_iam=False):
         xmimpflag = 14
     if yearam and yearam > 1825 and mjselimp == 50200:
         xmimpflag = 15
-    if yearam and yearam >= 1642 and yearam < 1663 and (
-        (mjselimp >= 31100 and mjselimp < 32000) or mjselimp1 == 40000 or
-            mjselimp == 80400):
+    if yearam and yearam >= 1642 and yearam < 1663 and ((
+        mjselimp >= 31100 and mjselimp < 32000
+    ) or mjselimp1 == 40000 or mjselimp == 80400):
         xmimpflag = 16
     if yearam and yearam >= 1794 and yearam < 1807 and natinimp == 15:
         xmimpflag = 157
@@ -1003,20 +984,17 @@ def compute_imputed_vars(_interim, is_iam=False):
         xmimpflag = 68
     if rig == 28:
         xmimpflag = 69
-    if yearam and yearam < 1726 and (rig == 30 or rig == 45 or rig == 63):
-        xmimpflag = 70
-    if yearam and yearam >= 1726 and yearam < 1776 and (rig == 30 or
-                                                        rig == 45 or rig == 63):
-        xmimpflag = 71
-    if yearam and yearam >= 1776 and yearam < 1801 and (rig == 30 or
-                                                        rig == 45 or rig == 63):
-        xmimpflag = 97
-    if yearam and yearam >= 1801 and yearam < 1826 and (rig == 30 or
-                                                        rig == 45 or rig == 63):
-        xmimpflag = 72
-    if yearam and yearam >= 1826 and yearam < 1876 and (rig == 30 or
-                                                        rig == 45 or rig == 63):
-        xmimpflag = 85
+    if yearam and (rig == 30 or rig == 45 or rig == 63):
+        if yearam < 1726:
+            xmimpflag = 70
+        elif yearam < 1776:
+            xmimpflag = 71
+        elif yearam < 1801:
+            xmimpflag = 97
+        elif yearam < 1826:
+            xmimpflag = 72
+        elif yearam < 1876:
+            xmimpflag = 85
     if rig == 32 or rig == 39:
         xmimpflag = 73
     if yearam and yearam < 1726 and rig == 35:
@@ -1045,11 +1023,11 @@ def compute_imputed_vars(_interim, is_iam=False):
         xmimpflag = 86
     if rig == 48:
         xmimpflag = 87
-    if yearam and yearam < 1826 and (rig == 14 or rig == 36 or rig == 49):
-        xmimpflag = 88
-    if yearam and yearam >= 1826 and yearam < 1876 and (rig == 14 or
-                                                        rig == 36 or rig == 49):
-        xmimpflag = 89
+    if yearam and (rig == 14 or rig == 36 or rig == 49):
+        if yearam < 1826:
+            xmimpflag = 88
+        if yearam >= 1826 and yearam < 1876:
+            xmimpflag = 89
     if yearam and yearam < 1826 and (rig == 16 or rig == 51):
         xmimpflag = 90
     if yearam and yearam >= 1826 and yearam < 1851 and (rig == 16 or rig == 51):
@@ -2425,21 +2403,21 @@ def compute_imputed_vars(_interim, is_iam=False):
     female4 = _numbers.get('FEMALE4', 0)
     female5 = _numbers.get('FEMALE5', 0)
 
-    adlt1imp = men1 + women1 + adult1 + men4 + \
-        women4 + adult4 + men5 + women5 + adult5
+    adlt1imp = men1 + women1 + adult1 + \
+        men4 + women4 + adult4 + men5 + women5 + adult5
     chil1imp = boy1 + girl1 + child1 + infant1 + boy4 + \
         girl4 + child4 + infant4 + boy5 + girl5 + child5
+    malemax1 = men1 + boy1 + men4 + boy4 + men5 + boy5
+    femmax1 = women1 + girl1 + women4 + girl4 + women5 + girl5
+    slavmax1 = threshold(malemax1 + femmax1, 20)
     male1imp = male1 + male4 + male5
     feml1imp = female1 + female4 + female5
     if not male1imp:
-        male1imp = men1 + boy1 + men4 + boy4 + men5 + boy5
+        male1imp = malemax1
     if not feml1imp:
-        feml1imp = women1 + girl1 + women4 + girl4 + women5 + girl5
+        feml1imp = femmax1
     slavema1 = threshold(adlt1imp + chil1imp, 20)
     slavemx1 = threshold(male1imp + feml1imp, 20)
-    slavmax1 = threshold(
-        men1 + women1 + boy1 + girl1 + men4 + women4 + boy4 + girl4 + men5 +
-        women5 + boy5 + girl5, 20)
     if slavema1 is None:
         adlt1imp = None
         chil1imp = None

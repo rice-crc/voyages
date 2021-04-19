@@ -313,8 +313,8 @@ def create_forms_from_var_list(var_list):
         tmpElem = {'var_name': varname, 'var_full_name': var['var_full_name']}
         if varname in globals.list_text_fields:
             form = SimpleTextForm(prefix=varname)
-            form.fields['text_search'].initial = var_list[varname +
-                                                          '_text_search']
+            form.fields[
+                'text_search'].initial = var_list[varname + '_text_search']
         elif varname in globals.list_select_fields:
             choices = getChoices(varname)
             form = SimpleSelectSearchForm(prefix=varname)
@@ -326,19 +326,19 @@ def create_forms_from_var_list(var_list):
             opt = var_list[varname + '_options']
             form.fields['options'].initial = opt
             if opt == '1':  # Between
-                form.fields['lower_bound'].initial = var_list[varname +
-                                                              '_lower_bound']
-                form.fields['upper_bound'].initial = var_list[varname +
-                                                              '_upper_bound']
+                form.fields[
+                    'lower_bound'].initial = var_list[varname + '_lower_bound']
+                form.fields[
+                    'upper_bound'].initial = var_list[varname + '_upper_bound']
             elif opt == '2':  # Less than or equal to
-                form.fields['threshold'].initial = var_list[varname +
-                                                            '_threshold']
+                form.fields[
+                    'threshold'].initial = var_list[varname + '_threshold']
             elif opt == '3':  # Greater than or equal to
-                form.fields['threshold'].initial = var_list[varname +
-                                                            '_threshold']
+                form.fields[
+                    'threshold'].initial = var_list[varname + '_threshold']
             elif opt == '4':  # Equal to
-                form.fields['threshold'].initial = var_list[varname +
-                                                            '_threshold']
+                form.fields[
+                    'threshold'].initial = var_list[varname + '_threshold']
         elif varname in globals.list_date_fields:
             form = SimpleDateSearchForm(prefix=varname)
             form.fields['months'].initial = [
@@ -349,13 +349,13 @@ def create_forms_from_var_list(var_list):
             opt = var_list[varname + '_options']
             form.fields['options'].initial = opt
             if opt == '1':  # Between
-                form.fields['from_year'].initial = var_list[varname +
-                                                            '_from_year']
-                form.fields['from_month'].initial = var_list[varname +
-                                                             '_from_month']
+                form.fields[
+                    'from_year'].initial = var_list[varname + '_from_year']
+                form.fields[
+                    'from_month'].initial = var_list[varname + '_from_month']
                 form.fields['to_year'].initial = var_list[varname + '_to_year']
-                form.fields['to_month'].initial = var_list[varname +
-                                                           '_to_month']
+                form.fields[
+                    'to_month'].initial = var_list[varname + '_to_month']
             elif opt == '2':  # Less than or equal to
                 form.fields['threshold_year'].initial = var_list[
                     varname + '_threshold_year']
@@ -428,52 +428,52 @@ def create_var_dict(query_forms, time_frame_form):
             opt = form.cleaned_data['options']
             var_list[varname + '_options'] = opt
             if opt == '1':  # Between
-                var_list[varname +
-                         '_lower_bound'] = form.cleaned_data['lower_bound']
-                var_list[varname +
-                         '_upper_bound'] = form.cleaned_data['upper_bound']
+                var_list[
+                    varname + '_lower_bound'] = form.cleaned_data['lower_bound']
+                var_list[
+                    varname + '_upper_bound'] = form.cleaned_data['upper_bound']
             elif opt == '2':  # Less than or equal to
-                var_list[varname +
-                         '_threshold'] = form.cleaned_data['threshold']
+                var_list[
+                    varname + '_threshold'] = form.cleaned_data['threshold']
             elif opt == '3':  # Greater than or equal to
-                var_list[varname +
-                         '_threshold'] = form.cleaned_data['threshold']
+                var_list[
+                    varname + '_threshold'] = form.cleaned_data['threshold']
             elif opt == '4':  # Equal to
-                var_list[varname +
-                         '_threshold'] = form.cleaned_data['threshold']
+                var_list[
+                    varname + '_threshold'] = form.cleaned_data['threshold']
         elif varname in globals.list_date_fields:
             var_list[varname + '_months'] = ','.join(
                 form.cleaned_data['months'])
             opt = form.cleaned_data['options']
             var_list[varname + '_options'] = opt
             if opt == '1':  # Between
-                var_list[varname +
-                         '_from_year'] = form.cleaned_data['from_year']
-                var_list[varname +
-                         '_from_month'] = form.cleaned_data['from_month']
+                var_list[
+                    varname + '_from_year'] = form.cleaned_data['from_year']
+                var_list[
+                    varname + '_from_month'] = form.cleaned_data['from_month']
                 var_list[varname + '_to_year'] = form.cleaned_data['to_year']
                 var_list[varname + '_to_month'] = form.cleaned_data['to_month']
             elif opt == '2':  # Less than or equal to
                 var_list[
-                    varname +
-                    '_threshold_year'] = form.cleaned_data['threshold_year']
+                    varname + '_threshold_year'] = form.cleaned_data[
+                        'threshold_year']
                 var_list[
-                    varname +
-                    '_threshold_month'] = form.cleaned_data['threshold_month']
+                    varname + '_threshold_month'] = form.cleaned_data[
+                        'threshold_month']
             elif opt == '3':  # Greater than or equal to
                 var_list[
-                    varname +
-                    '_threshold_year'] = form.cleaned_data['threshold_year']
+                    varname + '_threshold_year'] = form.cleaned_data[
+                        'threshold_year']
                 var_list[
-                    varname +
-                    '_threshold_month'] = form.cleaned_data['threshold_month']
+                    varname + '_threshold_month'] = form.cleaned_data[
+                        'threshold_month']
             elif opt == '4':  # Equal to
                 var_list[
-                    varname +
-                    '_threshold_year'] = form.cleaned_data['threshold_year']
+                    varname + '_threshold_year'] = form.cleaned_data[
+                        'threshold_year']
                 var_list[
-                    varname +
-                    '_threshold_month'] = form.cleaned_data['threshold_month']
+                    varname + '_threshold_month'] = form.cleaned_data[
+                        'threshold_month']
         elif varname in globals.list_place_fields:
             var_list[varname + '_choice_field'] = unidecode.unidecode(';'.join(
                 form.cleaned_data['choice_field']))
@@ -520,8 +520,8 @@ def create_query_dict(var_list):
             elif varname in globals.list_select_fields:
                 query_dict[varname + "_idnum" + "__in"] = [
                     int(i)
-                    for i in mangle_method(var_list[varname +
-                                                    '_choice_field']).split(';')
+                    for i in mangle_method(
+                        var_list[varname + '_choice_field']).split(';')
                     if i != ''
                 ]
             elif varname in globals.list_numeric_fields:
@@ -547,8 +547,8 @@ def create_query_dict(var_list):
                     ]
                     # Only filter by months if not all the months are included
                     if len(months) < 12:
-                        query_dict[varname + '_month' +
-                                   '__in'] = [int(x) for x in months]
+                        query_dict[
+                            varname + '_month__in'] = [int(x) for x in months]
                 opt = var_list[varname + '_options']
                 if opt == '1':  # Between
                     def int_mangle(list):
@@ -557,8 +557,7 @@ def create_query_dict(var_list):
                     to_date = None
                     if int(var_list[varname + '_to_month']) == 12:
                         to_date = formatDate(
-                            int_mangle(var_list[varname + '_to_year']) +
-                            1, 1)
+                            int_mangle(var_list[varname + '_to_year']) + 1, 1)
                     else:
                         to_date = formatDate(
                             int_mangle(var_list[varname + '_to_year']),
@@ -579,13 +578,10 @@ def create_query_dict(var_list):
                             1)
                     else:
                         to_date = formatDate(
-                            int(
-                                mangle_method(var_list[varname +
-                                                       '_threshold_year'])),
-                            int(
-                                mangle_method(
-                                    var_list[varname + '_threshold_month'])) +
-                            1)
+                            int(mangle_method(
+                                var_list[varname + '_threshold_year'])),
+                            int(mangle_method(
+                                var_list[varname + '_threshold_month'])) + 1)
                     query_dict[varname + "__lte"] = to_date
                 elif opt == '3':  # Greater than or equal to
                     query_dict[varname + "__gte"] = \
@@ -601,34 +597,31 @@ def create_query_dict(var_list):
                             1)
                     else:
                         to_date = formatDate(
-                            int(
-                                mangle_method(var_list[varname +
-                                                       '_threshold_year'])),
-                            int(
-                                mangle_method(
-                                    var_list[varname + '_threshold_month'])) +
-                            1)
+                            int(mangle_method(
+                                var_list[varname + '_threshold_year'])),
+                            int(mangle_method(
+                                var_list[varname + '_threshold_month'])) + 1)
                     query_dict[varname + "__range"] = [
                         formatDate(
-                            mangle_method(var_list[varname +
-                                                   '_threshold_year']),
-                            mangle_method(var_list[varname +
-                                                   '_threshold_month'])),
+                            mangle_method(var_list[
+                                varname + '_threshold_year']),
+                            mangle_method(var_list[
+                                varname + '_threshold_month'])),
                         to_date
                     ]
             elif varname in globals.list_place_fields:
                 query_dict[varname + "_idnum" + "__in"] = [
                     int(i)
-                    for i in mangle_method(var_list[varname +
-                                                    '_choice_field']).split(';')
+                    for i in mangle_method(var_list[
+                        varname + '_choice_field']).split(';')
                     if i != ''
                 ]
             elif varname in globals.list_boolean_fields:
                 query_dict[varname + "__in"] = mangle_method(
                     var_list[varname + '_choice_field']).split(';')
         except:
-            print("Failure when mangling variable " + varname +
-                  ". It will be removed from the search.")
+            print(f"Failure when mangling variable {varname}. "
+                  "It will be removed from the search.")
             import traceback
             traceback.print_exc()
     return query_dict
@@ -732,9 +725,9 @@ def prettify_var_list(varlist):
                 else:
                     value = _('at least ') + str(tvar)
         # Prevent display of 'Year arrived with slaves*' when it is just the time frame
-        if not (isinstance(vvar, (list, tuple)) and
-                varname in globals.list_numeric_fields and
-                not ((varname + '_options') in varlist)):
+        if not isinstance(vvar, (list, tuple)) or \
+                varname not in globals.list_numeric_fields or \
+                (varname + '_options') in varlist:
             output.append((fullname + ":", (prefix + value)))
     return output
 
@@ -838,8 +831,8 @@ def reload_cache(request):
     return HttpResponse("Voyages cache reloaded")
 
 
-@csrf_exempt
-@gzip_page
+@ csrf_exempt
+@ gzip_page
 def search(request):
     """
     Handles the Search the Database part
@@ -918,10 +911,11 @@ def search(request):
     # if used_variable_names or the pair of time_span_from_year and time_span_to_year keys are in request.GET,
     # then that means that it is a query url and we should get the query from it.
     # or if it is restore_prev_query, then restore it from the session.
-    if ((request.method == "GET" and ('used_variable_names' in request.GET or
-                                      ('time_span_from_year' in request.GET and
-                                       'time_span_to_year' in request.GET))) or
-            submitVal == 'restore_prev_query'):
+    if submitVal == 'restore_prev_query' or (
+            request.method == "GET" and (
+            'used_variable_names' in request.GET or (
+            'time_span_from_year' in request.GET and (
+            'time_span_to_year' in request.GET)))):
         # Search parameters were specified in the url
         var_list = {}
         results_per_page_form = ResultsPerPageOptionForm()
@@ -1147,8 +1141,8 @@ def search(request):
                 if table_row_var['var_type'] == 'numeric':
                     restrict_query[table_row_var_name + "__gte"] = -1
                 elif table_row_var['var_type'] == 'date':
-                    restrict_query[table_row_var_name +
-                                   "__gte"] = date(1, 1, 1)
+                    restrict_query[
+                        f"{table_row_var_name}__gte"] = date(1, 1, 1)
                 else:
                     restrict_query[table_row_var_name + "__gte"] = ""
             elif table_row_var_name.endswith('_idnum'):
@@ -1170,8 +1164,8 @@ def search(request):
                 if table_col_var['var_type'] == 'numeric':
                     restrict_query[table_col_var_name + "__gte"] = -1
                 elif table_col_var['var_type'] == 'date':
-                    restrict_query[table_col_var_name +
-                                   "__gte"] = date(1, 1, 1)
+                    restrict_query[
+                        f"{table_col_var_name}__gte"] = date(1, 1, 1)
                 else:
                     restrict_query[table_col_var_name + "__gte"] = ""
             elif table_col_var_name.endswith('_idnum'):
@@ -1322,9 +1316,9 @@ def search(request):
                     for idy, i in enumerate(rowlbl):
                         # Don't handle the case for the rownum, since that has already been decremented
                         if idx < rownum and idx + i[1] > rownum:
-                            row_list[idx][0][idy] = (row_list[idx][0][idy][0],
-                                                     row_list[idx][0][idy][1] -
-                                                     1)
+                            row_list[idx][0][idy] = (
+                                row_list[idx][0][idy][0],
+                                row_list[idx][0][idy][1] - 1)
                 # Now handle the case when this row we are removing has headers of its own
                 rowlbl = [i for i in row_list[rownum][0]]
                 rowlbl.reverse()
@@ -1421,8 +1415,8 @@ def search(request):
             y_axes = set(request.session.get(session_defs_key, [yind]))
             if submitVal.endswith('_add') and yind not in y_axes:
                 y_axes.add(yind)
-            if (submitVal.endswith('_show') and
-                    len(y_axes) == 0) or graphs_tab == 'tab_graphs_pie':
+            if graphs_tab == 'tab_graphs_pie' or (
+                    submitVal.endswith('_show') and len(y_axes) == 0):
                 y_axes = set([yind])
 
             # Create form allowing the user to remove selected y-functions.
@@ -1490,10 +1484,9 @@ def search(request):
             timeline_chart_settings['name'] = timeline_selected_tuple[1]
             if len(timeline_selected_tuple) > 4:
                 # Include extra dict if exists
-                timeline_chart_settings = dict(
-                    list(timeline_chart_settings.items()) +
-                    list(timeline_selected_tuple[4].items()))
-
+                items = list(timeline_chart_settings.items())
+                items += list(timeline_selected_tuple[4].items())
+                timeline_chart_settings = dict(items)
         elif submitVal == 'tab_maps' or submitVal == 'tab_animation':
             tab = submitVal[4:]
             frame_from_year = int(
@@ -1549,9 +1542,8 @@ def search(request):
                          voyage.disembarked)
             if missed_embarked > 0 or missed_disembarked > 0:
                 import logging
-                logging.getLogger('voyages').info('Missing flow: (' +
-                                                  str(missed_embarked) + ', ' +
-                                                  str(missed_disembarked) + ')')
+                logging.getLogger('voyages').info(
+                    f'Missing flow: ({missed_embarked}, {missed_disembarked})')
             return render(request,
                           "voyage/search_maps.datatemplate", {
                               'map_ports': map_ports,
@@ -1772,7 +1764,8 @@ def getChoices(varname):
 
 def putOtherLast(lst):
     others = [
-        x for x in lst if 'other' in x['text'].lower() or
+        x for x in lst
+        if 'other' in x['text'].lower() or ''
         'unspecified' in x['text'].lower() or '???' in x['text']
     ]
     for rem in others:

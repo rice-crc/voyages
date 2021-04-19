@@ -184,8 +184,8 @@ def images_search(request):
                     category_label__exact=i.label,
                     ready_to_go=True).order_by('date')
                 category_images["number_of_images"] = len(search_set)
-                if restart or enable_checkboxes or post.get("checkbox" +
-                                                            str(i.value)):
+                if restart or enable_checkboxes or post.get(
+                        "checkbox" + str(i.value)):
                     categories_to_search.append(i.label)
 
                 images.append(category_images)
@@ -706,8 +706,9 @@ def create_query_dict(var_list, embarkation_list, disembarkation_list,
     # Include 'gte' and 'lte' fields in current query
     if "slave_date_arrived__gte" in query_dict and "slave_date_arrived__lte" in query_dict:
         fill_current_query_dict(
-            current_query, "Time frame", query_dict["slave_date_arrived__gte"] +
-            " - " + query_dict["slave_date_arrived__lte"])
+            current_query, "Time frame",
+            query_dict["slave_date_arrived__gte"] + " -"
+            " " + query_dict["slave_date_arrived__lte"])
     elif "slave_date_arrived__gte" in query_dict:
         fill_current_query_dict(current_query, "Time frame",
                                 "from " + query_dict["slave_date_arrived__gte"])
@@ -729,8 +730,9 @@ def create_query_dict(var_list, embarkation_list, disembarkation_list,
 
     if "slave_height__gte" in query_dict and "slave_height__lte" in query_dict:
         fill_current_query_dict(
-            current_query, "Height (inches)", query_dict["slave_height__gte"] +
-            " - " + query_dict["slave_height__lte"])
+            current_query, "Height (inches)",
+            query_dict["slave_height__gte"] + " -"
+            " " + query_dict["slave_height__lte"])
     elif "slave_height__gte" in query_dict:
         fill_current_query_dict(current_query, "Height (inches)",
                                 "from " + query_dict["slave_height__gte"])

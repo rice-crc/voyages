@@ -6,6 +6,15 @@ from haystack.query import SearchQuerySet
 from .models import ExportRegion, ImportArea, ImportRegion, Nation
 
 
+def nation_reset(search_configuration):
+    if search_configuration is None:
+        return False
+    post_config = search_configuration["post"]
+    if "submit nation" not in post_config:
+        return False
+    return post_config["submit_nation"] == "Reset to default"
+
+
 def get_flags(search_configuration=None, mode=None):
     if search_configuration is None:
         nations = [(k.name, 1) for k in SearchQuerySet().models(Nation)]
@@ -18,7 +27,7 @@ def get_flags(search_configuration=None, mode=None):
 
     for i in a:
         if "checkbox_nation_" + i.pk in search_configuration["post"] or \
-                ("submit_nation" in search_configuration["post"] and search_configuration["post"]["submit_nation"] == "Reset to default"):
+                nation_reset(search_configuration):
             nations.append([i.name, 1])
 
     return [
@@ -32,20 +41,18 @@ def get_flag_labels(search_configuration):
     query = []
 
     for i in a:
-        if search_configuration is not None and "submit_nation" in search_configuration[
-                "post"] and search_configuration["post"][
-                    "submit_nation"] == "Reset to default":
+        if nation_reset(search_configuration):
             nations.append([i.name, i.pk, 1])
             query.append(i.name)
-        elif search_configuration is None:
-            nations.append([i.name, i.pk, 1])
-            query.append(i.name)
-        else:
+        elif search_configuration is not None:
             if "checkbox_nation_" + i.pk in search_configuration["post"]:
                 nations.append([i.name, i.pk, 1])
                 query.append(i.name)
             else:
                 nations.append([i.name, i.pk, 0])
+        else:
+            nations.append([i.name, i.pk, 1])
+            query.append(i.name)
 
     return nations, query
 
@@ -53,13 +60,11 @@ def get_flag_labels(search_configuration):
 def get_broad_regions(search_configuration=None, mode=None):
     areas_from_query = SearchQuerySet().models(ImportArea)
 
-    if search_configuration is not None and "submit_regions" in search_configuration[
-            "post"] and search_configuration["post"][
-                "submit_regions"] == "Reset to default":
+    if nation_reset(search_configuration):
         areas = [[k.name, 1] for k in areas_from_query]
     elif search_configuration is not None:
-        areas = [[k.name, 1] if "darea-button-" +
-                 k.pk in search_configuration["post"] else [k.name, 0]
+        areas = [[k.name, 1] if "darea-button-" + k.pk
+                 in search_configuration["post"] else [k.name, 0]
                  for k in areas_from_query
                  if "darea-button-" + k.pk in search_configuration["post"]]
     else:
@@ -82,18 +87,14 @@ def get_regions(search_configuration=None, mode=None):
         local_regions = SearchQuerySet().models(ImportRegion).filter(
             import_area__exact=local_area.name)
 
-        if search_configuration is not None:
-            if ("submit_regions" in search_configuration["post"] and
-                    search_configuration["post"]["submit_regions"] ==
-                    "Reset to default") or (len(local_regions) == 1 and
-                                            "darea-button-" + local_area.pk
-                                            in search_configuration["post"]):
-                local_regions_filtered = local_regions
-            else:
-                local_regions_filtered = [
-                    k for k in local_regions
-                    if "dregion-button-" + k.pk in search_configuration["post"]
-                ]
+        if nation_reset(search_configuration) or \
+                (len(local_regions) == 1 and "darea-button-" + local_area.pk in search_configuration["post"]):
+            local_regions_filtered = local_regions
+        elif search_configuration is not None:
+            local_regions_filtered = [
+                k for k in local_regions
+                if "dregion-button-" + k.pk in search_configuration["post"]
+            ]
         else:
             local_regions_filtered = local_regions
 
@@ -130,8 +131,8 @@ def update_regions_labels(regions, search_configuration, area_prefix,
             else:
                 new_region_list.append([region, 0])
 
-        if search_configuration is None or (count_checked > 0 and
-                                            len(regions) == count_checked):
+        if search_configuration is None or (
+                count_checked > 0 and len(regions) == count_checked):
             new_regions[(area, 1)] = new_region_list
         else:
             new_regions[(area, 0)] = new_region_list
@@ -142,16 +143,16 @@ def update_regions_labels(regions, search_configuration, area_prefix,
 def get_embarkation_regions(search_configuration=None, mode=None):
     areas = SearchQuerySet().models(ExportRegion)
 
-    if search_configuration is not None and "submit_regions" in search_configuration[
-            "post"] and search_configuration["post"][
-                "submit_regions"] == "Reset to default":
+    if nation_reset(search_configuration):
         return_areas = [[k.name, 1] for k in areas]
     elif search_configuration is not None:
-        return_areas = [[k.name, 1] if "eregion-button-" +
-                        k.pk in search_configuration["post"] else [k.name, 0]
+        return_areas = [[k.name, 1]
+                        if "eregion-button-" + k.pk
+                        in search_configuration["post"]
+                        else [k.name, 0]
                         for k in areas
-                        if "eregion-button-" +
-                        k.pk in search_configuration["post"]]
+                        if "eregion-button-" + k.pk
+                        in search_configuration["post"]]
     else:
         return_areas = [[k.name, 1] for k in areas]
 
