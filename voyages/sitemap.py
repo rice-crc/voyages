@@ -56,9 +56,9 @@ class StaticSitemap(Sitemap):
                         # only urls with templates, because we get mtime from the file
                         if getattr(q, 'name', False):
                             # only views with names so reverse() can work on them
-                            self._items[p.namespace + ':' +
-                                        q.name] = self._get_modification_date(
-                                            q, p.namespace)
+                            self._items[
+                                f'{p.namespace}:{q.name}'
+                            ] = self._get_modification_date(q, p.namespace)
             else:
                 if [url for url in do_not_show if url in p.regex.pattern]:
                     # do not show urls with this word in them

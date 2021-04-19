@@ -117,9 +117,10 @@ class Command(BaseCommand):
                 return None
             model = prefetch[model_name].get(val)
             if model is None:
-                sys.stderr.write('Failed to locate "' + model_name +
-                                 '" with value: ' + str(val) + ' for field "' +
-                                 field_name + '"\n')
+                sys.stderr.write('Failed to locate '
+                                 '"' + model_name + '"'
+                                 ' with value: ' + str(val) + ' for '
+                                 'field "' + field_name + '"\n')
                 self.errors += 1
             return model
 
@@ -133,16 +134,17 @@ class Command(BaseCommand):
             if place is not None:
                 reg_pk = region.pk if region else None
                 if place.region.pk != reg_pk:
-                    sys.stderr.write("Region mismatch for voyage_id " +
-                                     str(voyage_id) + " on field '" +
-                                     str(field) + "'\n")
+                    sys.stderr.write("Region mismatch for "
+                                     "voyage_id " + str(voyage_id) + " on "
+                                     "field '" + str(field) + "'\n")
                     self.errors += 1
                 if reg_pk:
                     breg_pk = broad_region.pk if broad_region else None
                     if breg_pk != region.broad_region.pk:
                         sys.stderr.write(
-                            "Broad region mismatch for voyage_id " +
-                            str(voyage_id) + " on field '" + str(field) + "'\n")
+                            "Broad region mismatch for "
+                            "voyage_id " + str(voyage_id) + " on "
+                            "field '" + str(field) + "'\n")
                         self.errors += 1
 
         # Prefetch data: Sources
@@ -282,8 +284,8 @@ class Command(BaseCommand):
                     voyage = Voyage()
                     id = cint(row.get(u'voyageid'), False)
                     if id in voyages:
-                        sys.stderr.write('Duplicate voyage found: ' + str(id) +
-                                         '\n')
+                        sys.stderr.write('Duplicate voyage found'
+                                         ': ' + str(id) + '\n')
                         return
                     voyage.pk = id
                     voyage.voyage_id = id
@@ -746,10 +748,12 @@ class Command(BaseCommand):
                         if source is None:
                             self.errors += 1
                             sys.stderr.write(
-                                'Source not found for voyage id: ' + str(id) +
-                                ' source_ref: "' + smart_str(source_ref) +
-                                '", longest partial match: ' +
-                                smart_str(match) + '\n')
+                                'Source not found for '
+                                'voyage id: ' + str(id) + ' '
+                                'source_ref: '
+                                '"' + smart_str(source_ref) + '"'
+                                ', longest partial '
+                                'match: ' + smart_str(match) + '\n')
                             continue
                         source_connection = VoyageSourcesConnection()
                         source_connection.group = voyage
@@ -778,13 +782,13 @@ class Command(BaseCommand):
                             (id, cint(row['voyageid2']),
                              LinkedVoyages.INTRA_AMERICAN_LINK_MODE))
 
-        print('Constructed ' + str(len(voyages)) + ' voyages from CSV. ' +
-              str(count_tast) + ' transatlantic and ' + str(count_iam) +
-              ' intra-American.')
+        print('Constructed ' + str(len(voyages)) + ' voyages from CSV'
+              '. ' + str(count_tast) + ' transatlantic '
+              'and ' + str(count_iam) + ' intra-American.')
         if self.errors > 0:
             print(
-                str(self.errors) +
-                ' errors occurred, please check the messages above.')
+                str(self.errors) + ' errors occurred, '
+                'please check the messages above.')
 
         confirm = input(
             "Are you sure you want to continue? The existing data will be deleted! (yes/[no]): "

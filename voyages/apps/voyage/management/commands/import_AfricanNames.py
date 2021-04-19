@@ -142,13 +142,14 @@ class Command(BaseCommand):
             # At this point any remaining elements in names is no longer present
             # in the CSV so we might delete them.
             delete = len(names) > 0 and input(
-                'Delete pre-existing records (' + str(len(names)) +
-                ') without a match in the CSV? (y/N) ').lower() == 'y'
+                'Delete pre-existing records '
+                '(' + str(len(names)) + ')'
+                ' without a match in the CSV? (y/N) ').lower() == 'y'
 
             if len(insert) > 0:
                 ans = input(
-                    'There are ' + str(len(insert)) +
-                    ' country names to insert. Continue? (y/N/q) ').lower()
+                    'There are ' + str(len(insert)) + ' country names '
+                    'to insert. Continue? (y/N/q) ').lower()
                 if ans == 'q':
                     print(sorted([c.name for c in insert]))
                     ans = input('Continue with insert? (y/N) ').lower()
@@ -157,8 +158,8 @@ class Command(BaseCommand):
 
             if len(missing_voyage_ids) > 0:
                 ans = input(
-                    'There are ' + str(len(missing_voyage_ids)) +
-                    ' voyage IDs not found. Continue? (y/N/q) ').lower()
+                    'There are ' + str(len(missing_voyage_ids)) + ' voyage '
+                    'IDs not found. Continue? (y/N/q) ').lower()
                 if ans == 'q':
                     print(sorted(missing_voyage_ids))
                     ans = input('Continue with db transaction? (y/N) ').lower()

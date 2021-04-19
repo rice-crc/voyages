@@ -101,8 +101,8 @@ def get_summary(v):
         'ship':
             v.voyage_ship.ship_name,
         'year_arrived':
-            dates.get_date_year(dates.first_dis_of_slaves) or
-            dates.get_date_year(dates.imp_arrival_at_port_of_dis)
+            dates.get_date_year(dates.first_dis_of_slaves
+                                ) or dates.get_date_year(dates.imp_arrival_at_port_of_dis)
     }
 
 
@@ -459,8 +459,8 @@ def interim(request, contribution_type, contribution_id):
         return HttpResponseRedirect(reverse('contribute:index'))
     (valid, form, numbers, src_pks) = interim_main(request, contribution,
                                                    interim)
-    if valid and request.method == 'POST' and (len(src_pks) > 0 or
-                                               contribution_type != 'new'):
+    if valid and request.method == 'POST' and (
+            len(src_pks) > 0 or contribution_type != 'new'):
         return redirect()
     sources_post = None if request.method != 'POST' else request.POST.get(
         'sources')
@@ -1328,12 +1328,14 @@ def post_review_request(request):
         reply_url = settings.WEBSITE_ROOT + \
             '/contribute/reply_review_request/' + str(review_request.pk)
         result = send_mail('Voyages - contribution review request',
-                           'Editor message:\r\n' + message +
-                           '\n\nPlease visit ' + reply_url + '\r\nto reply.',
+                           'Editor message:\r\n' + message + '\n\n'
+                           'Please visit ' + reply_url + '\r\nto reply.',
                            settings.CONTRIBUTE_SENDER_EMAIL, [reviewer.email],
-                           html_message='<strong>Editor message:</strong><p>' +
-                           message + '</p>' + '<p>Please click <a href="' +
-                           reply_url + '">here</a> to reply.</p>')
+                           html_message='<strong>Editor message:'
+                           '</strong><p>' + message + '</p>'
+                           '<p>Please click '
+                           '<a href="' + reply_url + '">here</a>'
+                           ' to reply.</p>')
     except Exception:
         import traceback
         traceback.print_exc()
@@ -1619,11 +1621,11 @@ def submit_editorial_decision(request, editor_contribution_id):
     user_contribution = review_request.contribution()
     if user_contribution is None:
         raise Http404
-    if not created_voyage_id and (
-            review_request.requires_created_voyage_id() and
-            decision == ReviewRequestDecision.accepted_by_editor):
-        return JsonResponse({'result': 'Failed', 'errors': _('Expected a voyage id for new/merge contribution')})
-    if created_voyage_id:
+    if not created_voyage_id:
+        if review_request.requires_created_voyage_id(
+        ) and decision == ReviewRequestDecision.accepted_by_editor:
+            return JsonResponse({'result': 'Failed', 'errors': _('Expected a voyage id for new/merge contribution')})
+    else:
         # We must check whether this is a unique id (with respect to pre-existing and next publication batch).
         existing = Voyage.all_dataset_objects.filter(
             voyage_id=created_voyage_id).count()
@@ -1820,8 +1822,8 @@ def editorial_sources(request):
                 interim_source_id = request.POST.get('interim_source_id')
                 connection_ref = request.POST.get('connection_ref',
                                                   original_ref)
-                if interim_source_id and (not connection_ref or
-                                          connection_ref == ''):
+                if interim_source_id and (
+                        not connection_ref or connection_ref == ''):
                     return JsonResponse({
                         'result': 'Failed',
                         'errors': ['Text reference is mandatory']
@@ -1980,9 +1982,10 @@ def generate_voyage_csv_file(statuses,
         log_file.write(message)
         log_file.flush()
 
-    log('Started generating CSV file with statuses=' + str(statuses) +
-        ', published=' + str(published) + ', intra_american_flag=' +
-        str(intra_american_flag))
+    log('Started generating CSV file with statuses'
+        '=' + str(statuses) + ', '
+        'published=' + str(published) + ', '
+        'intra_american_flag=' + str(intra_american_flag))
     count = 0
     try:
         # Simply iterate over generated CSV rows passing the file as buffer.
