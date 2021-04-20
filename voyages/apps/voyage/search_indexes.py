@@ -12,6 +12,7 @@ from django.utils.translation import ugettext as _
 from haystack import indexes
 from unidecode import unidecode
 
+from . import globals
 from .models import Voyage, VoyagesFullQueryHelper, VoyageSources
 
 
@@ -888,7 +889,6 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
         return ", ".join(self.prepare_var_sources(obj))
 
     def prepare_var_sources_plaintext_search(self, obj):
-        from . import globals
         mangle_method = globals.search_mangle_methods.get(
             'var_sources', globals.no_mangle)
         return mangle_method(

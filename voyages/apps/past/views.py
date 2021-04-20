@@ -21,7 +21,8 @@ from past.utils import old_div
 from voyages.apps.past.models import (
     AltEthnicityName, AltLanguageGroupName, Enslaved, EnslavedContribution,
     EnslavedContributionLanguageEntry, EnslavedContributionNameEntry,
-    EnslavedSearch, Ethnicity, LanguageGroup, ModernCountry)
+    EnslavedSearch, Ethnicity, LanguageGroup, ModernCountry,
+    _modern_name_fields, _name_fields)
 
 from .name_search import NameSearchCache
 
@@ -123,7 +124,6 @@ def search_enslaved(request):
     # constructor.
     data = json.loads(request.body)
     search = EnslavedSearch(**data['search_query'])
-    from voyages.apps.past.models import _modern_name_fields, _name_fields
     _fields = [
         'enslaved_id', 'age', 'gender', 'height', 'ethnicity__name',
         'language_group__name', 'language_group__modern_country__name',
