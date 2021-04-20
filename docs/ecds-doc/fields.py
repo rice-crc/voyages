@@ -11,6 +11,7 @@ from django.template import loader
 from django.utils import datetime_safe, six
 from haystack.exceptions import SearchFieldError
 from haystack.utils import get_model_ct_tuple
+from haystack.utils.geo import Point, ensure_point
 
 
 class NOT_PROVIDED(object):
@@ -237,8 +238,6 @@ class LocationField(SearchField):
     field_type = 'location'
 
     def prepare(self, obj):
-        from haystack.utils.geo import ensure_point
-
         value = super().prepare(obj)
 
         if value is None or value == []:
@@ -249,8 +248,6 @@ class LocationField(SearchField):
         return "%s,%s" % (pnt_lat, pnt_lng)
 
     def convert(self, value):
-        from haystack.utils.geo import Point, ensure_point
-
         if value is None or value == []:
             return None
 

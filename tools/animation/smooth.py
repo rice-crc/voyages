@@ -1,6 +1,8 @@
 from __future__ import division, print_function, unicode_literals
 
 import importlib
+import json
+import os
 # Pre-compile paths connecting "regions" and link ports to such regions.
 from builtins import str
 
@@ -141,8 +143,6 @@ def generate_static_files(datasetName, twoWayLinks=False):
         print("Warnings (" + str(len(warnings)) + ")")
         for w in warnings:
             print(w.encode('utf-8'))
-    import json
-    import os
     base_folder = os.path.join(os.path.dirname(os.path.abspath(__file__)),
                                '../../voyages/sitemedia/maps/js/', datasetName)
     with open(os.path.join(base_folder, 'regional_routes.json'), 'w') as f:

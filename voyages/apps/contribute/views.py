@@ -1,7 +1,12 @@
 from __future__ import absolute_import, print_function, unicode_literals
 
+import _thread
+import gc
 import json
+import os
 import re
+import tempfile
+import traceback
 from builtins import object, range, str
 
 import six
@@ -10,6 +15,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
 from django.core.urlresolvers import reverse
 from django.db import connection, transaction
+from django.db.models.fields import Field
 from django.http import (Http404, HttpResponse, HttpResponseBadRequest,
                          HttpResponseForbidden, HttpResponseRedirect,
                          JsonResponse)
@@ -1205,7 +1211,6 @@ def override_empty_fields_with_single_value(interim_voyage, review_request):
     # already in the dictionary, we check to see if the value is
     # the same, if they differ, we update the field to None so that
     # no value gets propagated.
-    from django.db.models.fields import Field
     foreign_keys = {
         f.name: f.name + '_id'
         for f in InterimVoyage._meta.get_fields()
@@ -1349,7 +1354,6 @@ def post_review_request(request):
                            '<a href="' + reply_url + '">here</a>'
                            ' to reply.</p>')
     except Exception:
-        import traceback
         traceback.print_exc()
     finally:
         if result == 1:
@@ -1480,7 +1484,6 @@ def reply_review_request(request):
 
 
 def interim_data(interim):
-    from django.db.models.fields import Field
     dict = {
         number_prefix + n.var_name: n.number
         for n in interim.slave_numbers.all()
@@ -1747,7 +1750,6 @@ def submit_review_to_editor(request, review_request_id):
             editor_contribution.save()
         return JsonResponse({'result': 'OK'})
     except Exception as e:
-        import traceback
         traceback.print_exc()
         return JsonResponse({'result': 'Failed', 'errors': [str(e)]})
 
@@ -1959,9 +1961,6 @@ def download_voyages(request):
     if intra_american_flag:
         intra_american_flag = int(intra_american_flag)
 
-    import _thread
-    import os
-    import tempfile
     try:
         dir = settings.MEDIA_ROOT + '/csv_downloads/'
         if not os.path.exists(dir):
@@ -2008,7 +2007,6 @@ def generate_voyage_csv_file(statuses,
                 log(str(count) + ' rows exported to CSV')
         log('FINISHED')
     except:
-        import traceback
         error_message = 'ERROR occurred after ' + \
             str(count) + ' rows processed: ' + traceback.format_exc()
         print(error_message)
@@ -2016,7 +2014,6 @@ def generate_voyage_csv_file(statuses,
     csv_file.flush()
     csv_file.close()
     log_file.close()
-    import gc
     gc.collect()
 
 
@@ -2083,11 +2080,6 @@ def publish_pending(request):
     # Here we are using a lightweight approach at background processing by starting
     # a thread and logging the progress to a file whose name is returned in the
     # response.
-    import _thread
-    import os
-    import re
-    import tempfile
-
     from voyages.apps.contribute.publication import \
         publish_accepted_contributions
     try:

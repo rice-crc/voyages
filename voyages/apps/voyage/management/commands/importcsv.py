@@ -1,11 +1,13 @@
 from __future__ import print_function, unicode_literals
 
+import itertools
 import re
 import sys
 from builtins import input, next, range, str
 
 import unicodecsv
 from django.core.management.base import BaseCommand
+from django.db import connection
 from django.utils.encoding import smart_str
 from unidecode import unidecode
 
@@ -271,8 +273,6 @@ class Command(BaseCommand):
                 self.errors += 1
                 sys.stderr.write('Invalid date ' + value + '\n')
             return ''
-
-        import itertools
 
         def lower_headers(iterator):
             return itertools.chain([next(iterator).lower().replace("_", "")],
@@ -806,8 +806,6 @@ class Command(BaseCommand):
         print('Deleting old data...')
 
         quote_char = '`' if target_db == 'mysql' else '"'
-
-        from django.db import connection
         cursor = connection.cursor()
 
         def clear_fk(fk_field):
