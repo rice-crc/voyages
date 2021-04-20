@@ -3,6 +3,7 @@ from __future__ import absolute_import, print_function, unicode_literals
 import csv
 import itertools
 import json
+import logging
 import os
 import re
 from builtins import object, str
@@ -451,7 +452,6 @@ def get_results_map_flow(request, results):
         destination = CachedGeo.get_hierarchy(voyage.dis_pk)
         add_flow(source, destination, voyage.embarked, voyage.disembarked)
     if missed_embarked > 0 or missed_disembarked > 0:
-        import logging
         logging.getLogger('voyages').info(
             f'Missing flow: {missed_embarked}, {missed_disembarked})')
     return render(request,

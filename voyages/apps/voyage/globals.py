@@ -4,6 +4,7 @@ from __future__ import absolute_import, division, unicode_literals
 
 import re
 from builtins import map, object, str, zip
+from collections import OrderedDict
 from datetime import date
 from itertools import groupby
 
@@ -34,7 +35,6 @@ def structure_places(place_list):
     Returns a dictionary(key=broad_region, value=dictionary(key=region, value=list of places))
     """
     # Dict keyed by region, value is a list of places
-    from collections import OrderedDict
     try:
         places = sorted([
             p for p in

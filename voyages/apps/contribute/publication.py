@@ -1,8 +1,11 @@
 from __future__ import absolute_import, unicode_literals
 
+import os
 import re
+import traceback
 from builtins import str
 
+import requests
 import unicodecsv as csv
 from django.conf import settings
 from django.core import management
@@ -211,8 +214,6 @@ def publish_accepted_contributions(log_file, skip_backup=False):
     all the db operations are transacional, either
     everything is published or nothing is.
     """
-    import os
-
     def log(text):
         log_file.write(text)
         log_file.flush()
@@ -270,7 +271,6 @@ def publish_accepted_contributions(log_file, skip_backup=False):
             entry = settings.HAYSTACK_CONNECTIONS.get('default')
             solr_url = entry.get('URL') if entry else None
             if solr_url:
-                import requests
                 solr_url += '/update'
                 headers = {'Content-type': 'text/xml'}
 
@@ -307,7 +307,6 @@ def publish_accepted_contributions(log_file, skip_backup=False):
             transaction.rollback()
             log('Database transaction was rolledback.\n')
         log(str(exception))
-        import traceback
         log(traceback.format_exc())
         return False
     finally:

@@ -1,5 +1,6 @@
 from __future__ import unicode_literals
 
+import threading
 from builtins import str
 from itertools import groupby
 
@@ -116,8 +117,6 @@ class EstimateManager(models.Manager):
     import_hierarchy = {}
 
     _has_loaded = False
-    import threading
-
     _lock = threading.Lock()
 
     @classmethod

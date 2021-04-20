@@ -1,5 +1,6 @@
 from __future__ import unicode_literals
 
+import re
 from builtins import str
 
 from django.template import Context, Template
@@ -58,7 +59,6 @@ def replace(text, args):
     tmp = args.split('/')
     search_val = tmp[1]
     replace_val = tmp[2]
-    import re
     return re.sub(search_val, replace_val, text)
 
 

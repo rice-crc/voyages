@@ -1,8 +1,11 @@
 from __future__ import division, unicode_literals
 
 import collections
+import logging
+import time
 # Create your views here.
 from builtins import range, str
+from itertools import chain, groupby
 
 from django.http import Http404
 from django.shortcuts import render
@@ -314,7 +317,6 @@ def get_estimates_table(request):
 
         modified_set = sorted(original_set,
                               key=lambda region: region.import_area.order_num)
-        from itertools import groupby
         header_list.append([(k, span_multiplier * sum(1
                                                       for x in g))
                             for k, g in groupby(modified_set, key_map)])
@@ -451,7 +453,6 @@ def get_estimates_common(request, data):
     # We could have used set_expiry but then we do not get sessions
     # to automatically expire when browser closes.
     last_access = request.session.get('estimates_last_access_time', 0.0)
-    import time
     current_time = time.time()
     if last_access < (current_time - (20 * 60.0)):
         request.session.pop("estimates_post_data", None)
@@ -532,8 +533,6 @@ def get_estimates_common(request, data):
         whether all regions are selected.
         :return:
         """
-        from itertools import chain
-
         # Flatten the regions so that we may generate the corresponding query term.
         flat = list(chain.from_iterable(list(regions_dict.values())))
         query[query_key] = [region[0][0] for region in flat if region[1] == 1]
@@ -554,7 +553,6 @@ def get_estimates_common(request, data):
         query["year__lte"] = year_form.cleaned_data["frame_to_year"]
     else:
         if year_form is not None:
-            import logging
             logging.getLogger('voyages').error(year_form.errors)
         year_form = EstimateYearForm(
             initial={

@@ -2,11 +2,15 @@ from __future__ import absolute_import, print_function, unicode_literals
 
 import csv
 import json
+import os
 import random
+import time
 from builtins import str
 
 from django.contrib.auth.models import User
+from django.core import serializers
 from django.core.urlresolvers import reverse
+from django.forms import model_to_dict
 from django.test import TestCase, TransactionTestCase
 from django.test.utils import override_settings
 
@@ -149,7 +153,6 @@ class TestImputedDataCalculation(TestCase):
         return data
 
     def test_dataset(self):
-        import os
         folder = os.path.dirname(os.path.realpath(__file__)) + '/testdata/'
         errors = self.compute_imputed_csv(folder + 'ImputeTestData.csv',
                                           folder + 'ImputeTestDataOutput.csv')
@@ -432,7 +435,6 @@ class TestEditorialPlatform(TransactionTestCase):
         interim.second_captain = "Wood, John"
         interim.third_captain = "Inglis, Henry"
         # Many other fields.
-        from django.forms import model_to_dict
         form = InterimVoyageForm(model_to_dict(interim), instance=interim)
         is_valid = form.is_valid()
         if not is_valid:
@@ -875,7 +877,6 @@ class TestEditorialPlatform(TransactionTestCase):
         self.assertEqual(parsed_response['result'], 'OK')
         log_file_path = parsed_response.get('log_file')
         self.assertTrue(log_file_path is not None)
-        import time
         time.sleep(1)
         json_response = self.client.post(
             reverse('contribute:json_retrieve_publication_status'), {
@@ -903,7 +904,6 @@ class TestEditorialPlatform(TransactionTestCase):
         # Check that the voyage is indeed published and that fields match (just a sample of all fields).
         pub_voyage = Voyage.all_dataset_objects.filter(
             voyage_id=999999).first()
-        from django.core import serializers
         error_dump = serializers.serialize("json", [
             pub_voyage.voyage_ship, pub_voyage.voyage_itinerary,
             pub_voyage.voyage_slaves_numbers, pub_voyage.voyage_dates

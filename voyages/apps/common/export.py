@@ -2,6 +2,9 @@ from __future__ import unicode_literals
 
 from builtins import str
 
+import xlwt
+from django.http import HttpResponse
+
 
 def download_xls(header_rows, data_set, row_header_columns=[]):
     """
@@ -12,8 +15,6 @@ def download_xls(header_rows, data_set, row_header_columns=[]):
                                (value, rowspan)
     :return: An HttpResponse containing the XLS file.
     """
-    import xlwt
-    from django.http import HttpResponse
     response = HttpResponse(content_type='application/ms-excel')
     response['Content-Disposition'] = 'attachment; filename=data.xls'
     wb = xlwt.Workbook(encoding='utf-8')

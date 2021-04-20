@@ -1,8 +1,14 @@
 from __future__ import unicode_literals
 
+import hashlib
+import random
+import string
 from builtins import range
+from urllib.parse import parse_qs
 
+from django.core.urlresolvers import reverse
 from django.db import models
+from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from future import standard_library
 
@@ -36,10 +42,8 @@ class SavedQuery(models.Model):
         """
         self.query = request.POST.urlencode()
         self.save()
-        from django.core.urlresolvers import reverse
         link = ('https://' if request.is_secure() else 'http://') + request.get_host() + \
             reverse(url_name, kwargs={'link_id': self.id})
-        from django.http import HttpResponse
         return HttpResponse(link, content_type='text/plain')
 
     def get_post(self):
@@ -48,7 +52,6 @@ class SavedQuery(models.Model):
         with the original post that generated the permalink.
         :return: dict with stored POST data.
         """
-        from urllib.parse import parse_qs
         src = parse_qs(self.query, keep_blank_values=True)
         post = {}
         for name, value in list(src.items()):
@@ -66,7 +69,6 @@ class SavedQuery(models.Model):
         return post
 
     def save(self, preserve_id=False, *args, **kwargs):
-        import hashlib
         hash_object = hashlib.sha1(self.query)
         self.hash = hash_object.hexdigest()
         if not self.id or not preserve_id:
@@ -78,8 +80,6 @@ class SavedQuery(models.Model):
                 # No update to perform.
                 return
         if not self.id:
-            import random
-            import string
             self.id = ''.join(random.SystemRandom().choice(
                 string.ascii_uppercase + string.ascii_lowercase + string.digits)
                 for _ in range(self.ID_LENGTH))
@@ -101,8 +101,6 @@ def restore_link(link_id, session, session_key, redirect_url_name):
     permalink = get_object_or_404(SavedQuery, pk=link_id)
     # Save the query in the session and redirect.
     session[session_key] = permalink.get_post()
-    from django.core.urlresolvers import reverse
-    from django.http import HttpResponseRedirect
     return HttpResponseRedirect(reverse(redirect_url_name))
 
 

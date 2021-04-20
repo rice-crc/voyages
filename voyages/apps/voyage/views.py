@@ -4,8 +4,10 @@ from __future__ import (absolute_import, division, print_function,
 
 import csv
 import json
+import logging
 import re
 import time
+import traceback
 import urllib.error
 import urllib.parse
 import urllib.request
@@ -19,10 +21,11 @@ import unidecode
 import xlwt
 from django.conf import settings
 from django.contrib.admin.views.decorators import staff_member_required
+from django.contrib.flatpages.models import FlatPage
 from django.core.paginator import Paginator
 from django.core.urlresolvers import reverse
 from django.http import Http404, HttpResponse, HttpResponseRedirect
-from django.shortcuts import redirect, render
+from django.shortcuts import get_object_or_404, redirect, render
 from django.template import TemplateDoesNotExist, loader
 from django.utils.translation import get_language
 from django.utils.translation import ugettext as _
@@ -171,7 +174,6 @@ def download_file(request):
 
 
 def download_flatpage(request):
-    from django.contrib.flatpages.models import FlatPage
     page_title = 'Downloads'
     lang = get_language()
     flatpage = None
@@ -182,7 +184,6 @@ def download_flatpage(request):
             pass
     if flatpage is None:
         flatpage = FlatPage.objects.get(title=page_title)
-    from datetime import date
     return render(
         request, 'flatpages/download.html', {
             'flatpage': flatpage,
@@ -626,7 +627,6 @@ def create_query_dict(var_list):
         except:
             print(f"Failure when mangling variable {varname}. "
                   "It will be removed from the search.")
-            import traceback
             traceback.print_exc()
     return query_dict
 
@@ -1545,7 +1545,6 @@ def search(request):
                 add_flow(source, destination, voyage.embarked,
                          voyage.disembarked)
             if missed_embarked > 0 or missed_disembarked > 0:
-                import logging
                 logging.getLogger('voyages').info(
                     f'Missing flow: ({missed_embarked}, {missed_disembarked})')
             return render(request,
@@ -2552,9 +2551,6 @@ def restore_permalink(request, link_id):
 
 
 def debug_permalink(request, link_id):
-    from django.http import HttpResponse
-    from django.shortcuts import get_object_or_404
-
     from voyages.apps.common.models import SavedQuery
     permalink = get_object_or_404(SavedQuery, pk=link_id)
     return HttpResponse(permalink.query, content_type='text/plain')
