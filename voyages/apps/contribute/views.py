@@ -48,12 +48,15 @@ from voyages.apps.contribute.models import (ContributionStatus,
                                             get_contribution_from_id,
                                             source_type_dict)
 from voyages.apps.voyage.cache import VoyageCache
+from voyages.apps.voyage.forms import VoyagesSourcesAdminForm
 from voyages.apps.voyage.models import (Voyage, VoyageDataset, VoyageDates,
                                         VoyageShipOwnerConnection,
                                         VoyageSources, VoyageSourcesConnection,
                                         VoyageSourcesType)
+from voyages.apps.voyage.views import voyage_variables_data
 
 from . import imputed
+from .forms import legal_terms_paragraph, legal_terms_title
 
 standard_library.install_aliases()
 
@@ -102,7 +105,6 @@ def index(request):
 
 
 def legal(request):
-    from .forms import legal_terms_paragraph, legal_terms_title
     return render(request, 'contribute/legal.html', {
         'title': legal_terms_title,
         'paragraph': legal_terms_paragraph
@@ -218,7 +220,6 @@ def delete_review(request, contribution_id):
 
 
 def delete_review_render(request, contribution, readonly, mode):
-    from voyages.apps.voyage.views import voyage_variables_data
     ids = [int(pk) for pk in contribution.deleted_voyages_ids.split(',')]
     deleted_voyage_vars = [
         voyage_variables_data(voyage_id, mode == 'editor')[1]
@@ -1827,7 +1828,6 @@ def editorial_sources(request):
     created_source_pk = interim_source_dict.get('created_voyage_sources_id')
     if conn is None and created_source_pk:
         source = VoyageSources.objects.get(pk=created_source_pk)
-    from voyages.apps.voyage.forms import VoyagesSourcesAdminForm
     if mode == 'save':
         form = VoyagesSourcesAdminForm(request.POST, instance=source)
         if form.is_valid():

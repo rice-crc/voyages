@@ -32,6 +32,7 @@ from voyages.apps.voyage.models import (Nationality, OwnerOutcome,
                                         VesselCapturedOutcome, Voyage,
                                         VoyageDataset, VoyageItinerary,
                                         VoyageSources)
+from voyages.apps.voyage.views import retrieve_summary_stats
 
 from .cache import CachedGeo, VoyageCache
 from .globals import voyage_timeline_variables
@@ -463,7 +464,6 @@ def get_results_map_flow(request, results):
 
 
 def get_results_summary_stats(results):
-    from voyages.apps.voyage.views import retrieve_summary_stats
     summary = retrieve_summary_stats(results)
     return JsonResponse({'data': summary})
 

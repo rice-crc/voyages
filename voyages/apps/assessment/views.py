@@ -14,7 +14,9 @@ from haystack.query import SearchQuerySet
 from past.utils import old_div
 
 from voyages.apps.common.export import download_xls
-from voyages.apps.common.models import get_pks_from_haystack_results
+from voyages.apps.common.models import (SavedQuery,
+                                        get_pks_from_haystack_results,
+                                        restore_link)
 
 from . import globals
 from .forms import EstimateSelectionForm, EstimateYearForm
@@ -420,7 +422,6 @@ def get_permanent_link(request):
     :param request: The request containing the search query.
     :return: A permanent URL link for that exact query.
     """
-    from voyages.apps.common.models import SavedQuery
     saved_query = SavedQuery()
     return saved_query.get_link(request, 'restore_e_permalink')
 
@@ -434,7 +435,6 @@ def restore_permalink(request, link_id):
     :return: a Redirect to the Estimates page after setting the session POST data to match the permalink
     or an Http404 error if the link is not found.
     """
-    from voyages.apps.common.models import restore_link
     return restore_link(link_id, request.session, 'estimates_post_data',
                         'assessment:estimates')
 

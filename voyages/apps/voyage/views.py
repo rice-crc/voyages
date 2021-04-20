@@ -39,8 +39,10 @@ from past.utils import old_div
 
 from voyages.apps.assessment.globals import get_map_year
 from voyages.apps.common.export import download_xls
-from voyages.apps.common.models import get_pks_from_haystack_results
+from voyages.apps.common.models import (SavedQuery,
+                                        get_pks_from_haystack_results)
 from voyages.apps.resources.models import Image
+from voyages.apps.voyage.maps import VoyageRoutesCache
 
 from . import globals
 from .cache import CachedGeo, VoyageCache
@@ -1556,7 +1558,6 @@ def search(request):
         elif submitVal == 'animation_ajax':
             VoyageCache.load()
             all_voyages = VoyageCache.voyages
-            from voyages.apps.voyage.maps import VoyageRoutesCache
             all_routes = VoyageRoutesCache.load()
 
             def animation_response():
@@ -2540,7 +2541,6 @@ def get_permanent_link(request):
     :param request: The request containing the search query.
     :return: A permanent URL link for that exact query.
     """
-    from voyages.apps.common.models import SavedQuery
     saved_query = SavedQuery()
     return saved_query.get_link(request, 'restore_v_permalink')
 
@@ -2551,6 +2551,5 @@ def restore_permalink(request, link_id):
 
 
 def debug_permalink(request, link_id):
-    from voyages.apps.common.models import SavedQuery
     permalink = get_object_or_404(SavedQuery, pk=link_id)
     return HttpResponse(permalink.query, content_type='text/plain')
