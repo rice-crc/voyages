@@ -20,7 +20,6 @@ class UploadFileForm(forms.Form):
     downloadfile = forms.FileField(label=_('Select your file'))
 
 
-
 class VoyageBaseForm(forms.Form):
     # Use a char field to keep track of the order of shown forms. Hide it because it is irrelavent to the user.
     # If not shown use empty string, if shown use a number, higher numbers will be shown further down.
