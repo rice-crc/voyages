@@ -1,53 +1,57 @@
 # -*- coding: utf-8 -*-
 from __future__ import (absolute_import, division, print_function,
                         unicode_literals)
+
+import csv
+import json
+import re
+import time
+import urllib.error
+import urllib.parse
+import urllib.request
+from builtins import map, object, range, str
+from datetime import date
+from itertools import groupby
+from os import listdir, stat
+from stat import ST_MTIME, ST_SIZE
+
+import unidecode
+import xlwt
+from django.conf import settings
+from django.contrib.admin.views.decorators import staff_member_required
+from django.core.paginator import Paginator
+from django.core.urlresolvers import reverse
+from django.http import Http404, HttpResponse, HttpResponseRedirect
+from django.shortcuts import redirect, render
+from django.template import TemplateDoesNotExist, loader
+from django.utils.translation import get_language
+from django.utils.translation import ugettext as _
 from django.views.decorators.csrf import csrf_exempt
-from .search_indexes import VoyageIndex
-from .models import (Nationality, OwnerOutcome, ParticularOutcome, Resistance,
-                     RigOfVessel, SlavesOutcome, VesselCapturedOutcome, Voyage)
-from .graphs import get_graph_data, graphs_y_axes
+from django.views.decorators.gzip import gzip_page
+from future import standard_library
+from haystack.query import SearchQuerySet
+from hurry.filesize import size
+from openpyxl import Workbook
+from past.utils import old_div
+
+from voyages.apps.assessment.globals import get_map_year
+from voyages.apps.common.export import download_xls
+from voyages.apps.common.models import get_pks_from_haystack_results
+from voyages.apps.resources.models import Image
+
+from . import globals
+from .cache import CachedGeo, VoyageCache
 from .forms import (GraphRemovePlotForm, GraphSelectionForm,
                     ResultsPerPageOptionForm, SimpleDateSearchForm,
                     SimpleNumericSearchForm, SimplePlaceSearchForm,
                     SimpleSelectBooleanForm, SimpleSelectSearchForm,
-                    SimpleTextForm, TableSelectionForm, TimeFrameSpanSearchForm,
-                    TimelineVariableForm, UploadFileForm, graphs)
-from .cache import CachedGeo, VoyageCache
-from . import globals
-from voyages.apps.resources.models import Image
-from voyages.apps.common.models import get_pks_from_haystack_results
-from voyages.apps.common.export import download_xls
-from voyages.apps.assessment.globals import get_map_year
-from past.utils import old_div
-from openpyxl import Workbook
-from hurry.filesize import size
-from haystack.query import SearchQuerySet
-from django.views.decorators.gzip import gzip_page
-from django.utils.translation import ugettext as _
-from django.utils.translation import get_language
-from django.template import TemplateDoesNotExist, loader
-from django.shortcuts import redirect, render
-from django.http import Http404, HttpResponse, HttpResponseRedirect
-from django.core.urlresolvers import reverse
-from django.core.paginator import Paginator
-from django.contrib.admin.views.decorators import staff_member_required
-from django.conf import settings
-import xlwt
-import unidecode
-from stat import ST_MTIME, ST_SIZE
-from os import listdir, stat
-from itertools import groupby
-from datetime import date
-from builtins import map, object, range, str
-import urllib.request
-import urllib.parse
-import urllib.error
-import time
-import re
-import json
-import csv
-
-from future import standard_library
+                    SimpleTextForm, TableSelectionForm,
+                    TimeFrameSpanSearchForm, TimelineVariableForm,
+                    UploadFileForm, graphs)
+from .graphs import get_graph_data, graphs_y_axes
+from .models import (Nationality, OwnerOutcome, ParticularOutcome, Resistance,
+                     RigOfVessel, SlavesOutcome, VesselCapturedOutcome, Voyage)
+from .search_indexes import VoyageIndex
 
 standard_library.install_aliases()
 

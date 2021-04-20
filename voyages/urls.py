@@ -1,18 +1,20 @@
 from __future__ import absolute_import, unicode_literals
-import voyages.apps.voyage.views
-import voyages.apps.past.views
-import voyages.apps.common.views
-import voyages.apps.assessment.views
-import django.views.static
-import django.views.i18n
-import django.contrib.sitemaps.views
-from .sitemap import StaticSitemap
-from django.contrib import admin
-from django.conf.urls import include, url
-from django.conf import settings
 
+import django.contrib.sitemaps.views
+import django.views.i18n
+import django.views.static
 # Comment out the two autocomplete lines to disable the admin:
 from autocomplete_light import shortcuts as autocomplete_light
+from django.conf import settings
+from django.conf.urls import include, url
+from django.contrib import admin
+
+import voyages.apps.assessment.views
+import voyages.apps.common.views
+import voyages.apps.past.views
+import voyages.apps.voyage.views
+
+from .sitemap import StaticSitemap
 
 autocomplete_light.autodiscover()
 

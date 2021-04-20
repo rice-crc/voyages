@@ -1,41 +1,53 @@
 from __future__ import absolute_import, print_function, unicode_literals
-from . import imputed
+
+import json
+import re
+from builtins import object, range, str
+
+import six
+from django.conf import settings
+from django.contrib.auth.decorators import login_required
+from django.core.mail import send_mail
+from django.core.urlresolvers import reverse
+from django.db import connection, transaction
+from django.http import (Http404, HttpResponse, HttpResponseBadRequest,
+                         HttpResponseForbidden, HttpResponseRedirect,
+                         JsonResponse)
+from django.shortcuts import get_object_or_404, render
+from django.utils.html import escape
+from django.utils.translation import ugettext as _
+from django.views.decorators.cache import cache_page, never_cache
+from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_POST
+# Create your views here.
+from future import standard_library
+
+from voyages.apps.common.views import get_ordered_places
+from voyages.apps.contribute.forms import (ContributionVoyageSelectionForm,
+                                           InterimVoyageForm)
+from voyages.apps.contribute.models import (ContributionStatus,
+                                            DeleteVoyageContribution,
+                                            EditorVoyageContribution,
+                                            EditVoyageContribution,
+                                            InterimPreExistingSource,
+                                            InterimSlaveNumber, InterimVoyage,
+                                            MergeVoyagesContribution,
+                                            NewVoyageContribution,
+                                            ReviewRequest,
+                                            ReviewRequestDecision,
+                                            ReviewRequestResponse,
+                                            ReviewVoyageContribution, User,
+                                            get_all_new_sources_for_interim,
+                                            get_contribution,
+                                            get_contribution_from_id,
+                                            source_type_dict)
+from voyages.apps.voyage.cache import VoyageCache
 from voyages.apps.voyage.models import (Voyage, VoyageDataset, VoyageDates,
                                         VoyageShipOwnerConnection,
                                         VoyageSources, VoyageSourcesConnection,
                                         VoyageSourcesType)
-from voyages.apps.voyage.cache import VoyageCache
-from voyages.apps.contribute.models import (
-    ContributionStatus, DeleteVoyageContribution, EditorVoyageContribution,
-    EditVoyageContribution, InterimPreExistingSource, InterimSlaveNumber,
-    InterimVoyage, MergeVoyagesContribution, NewVoyageContribution,
-    ReviewRequest, ReviewRequestDecision, ReviewRequestResponse,
-    ReviewVoyageContribution, User, get_all_new_sources_for_interim,
-    get_contribution, get_contribution_from_id, source_type_dict)
-from voyages.apps.contribute.forms import (ContributionVoyageSelectionForm,
-                                           InterimVoyageForm)
-from voyages.apps.common.views import get_ordered_places
-from django.views.decorators.http import require_POST
-from django.views.decorators.csrf import csrf_exempt
-from django.views.decorators.cache import cache_page, never_cache
-from django.utils.translation import ugettext as _
-from django.utils.html import escape
-from django.shortcuts import get_object_or_404, render
-from django.http import (Http404, HttpResponse, HttpResponseBadRequest,
-                         HttpResponseForbidden, HttpResponseRedirect,
-                         JsonResponse)
-from django.db import connection, transaction
-from django.core.urlresolvers import reverse
-from django.core.mail import send_mail
-from django.contrib.auth.decorators import login_required
-from django.conf import settings
-import six
-from builtins import object, range, str
-import re
-import json
 
-# Create your views here.
-from future import standard_library
+from . import imputed
 
 standard_library.install_aliases()
 

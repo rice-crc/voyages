@@ -18,12 +18,10 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 from past.utils import old_div
 
-from voyages.apps.past.models import (AltEthnicityName, AltLanguageGroupName,
-                                      Enslaved, EnslavedContribution,
-                                      EnslavedContributionLanguageEntry,
-                                      EnslavedContributionNameEntry,
-                                      EnslavedSearch, Ethnicity, LanguageGroup,
-                                      ModernCountry)
+from voyages.apps.past.models import (
+    AltEthnicityName, AltLanguageGroupName, Enslaved, EnslavedContribution,
+    EnslavedContributionLanguageEntry, EnslavedContributionNameEntry,
+    EnslavedSearch, Ethnicity, LanguageGroup, ModernCountry)
 
 from .name_search import NameSearchCache
 

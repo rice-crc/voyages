@@ -4,8 +4,8 @@ import os
 import re
 import shutil
 
-from fabric.api import (abort, env, lcd, local, prefix, put, puts, require, run,
-                        sudo, task)
+from fabric.api import (abort, env, lcd, local, prefix, put, puts, require,
+                        run, sudo, task)
 from fabric.colors import green, yellow
 from fabric.context_managers import cd, hide, settings
 from fabric.contrib import files

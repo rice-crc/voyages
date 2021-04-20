@@ -8,17 +8,25 @@ from django.conf import settings
 from django.core import management
 from django.db import transaction
 
-from voyages.apps.contribute.models import (
-    ContributionStatus, DeleteVoyageContribution, EditVoyageContribution,
-    InterimPreExistingSourceActions, MergeVoyagesContribution,
-    NewVoyageContribution, ReviewRequest, ReviewRequestDecision)
+from voyages.apps.contribute.models import (ContributionStatus,
+                                            DeleteVoyageContribution,
+                                            EditVoyageContribution,
+                                            InterimPreExistingSourceActions,
+                                            MergeVoyagesContribution,
+                                            NewVoyageContribution,
+                                            ReviewRequest,
+                                            ReviewRequestDecision)
 from voyages.apps.contribute.views import (full_contribution_id,
                                            get_filtered_contributions)
-from voyages.apps.voyage.models import (
-    Voyage, VoyageCaptain, VoyageCaptainConnection, VoyageCrew, VoyageDataset,
-    VoyageDates, VoyageItinerary, VoyageOutcome, VoyagesFullQueryHelper,
-    VoyageShip, VoyageShipOwner, VoyageShipOwnerConnection, VoyageSlavesNumbers,
-    VoyageSources, VoyageSourcesConnection)
+from voyages.apps.voyage.models import (Voyage, VoyageCaptain,
+                                        VoyageCaptainConnection, VoyageCrew,
+                                        VoyageDataset, VoyageDates,
+                                        VoyageItinerary, VoyageOutcome,
+                                        VoyagesFullQueryHelper, VoyageShip,
+                                        VoyageShipOwner,
+                                        VoyageShipOwnerConnection,
+                                        VoyageSlavesNumbers, VoyageSources,
+                                        VoyageSourcesConnection)
 
 _exported_spss_fields = \
     ['VOYAGEID', 'STATUS', 'ADLT1IMP', 'ADLT2IMP', 'ADLT3IMP', 'ADPSALE1', 'ADPSALE2',

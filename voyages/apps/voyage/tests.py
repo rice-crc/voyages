@@ -1,13 +1,15 @@
 from __future__ import absolute_import, unicode_literals
-from . import globals
-from mock import patch
-from django.test.utils import override_settings
-from django.test import Client, TestCase
-from django.core.urlresolvers import reverse
-from datetime import date
-from builtins import range, str
 
+from builtins import range, str
+from datetime import date
+
+from django.core.urlresolvers import reverse
+from django.test import Client, TestCase
+from django.test.utils import override_settings
 from future import standard_library
+from mock import patch
+
+from . import globals
 
 standard_library.install_aliases()
 
