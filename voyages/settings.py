@@ -1,8 +1,9 @@
 from __future__ import absolute_import, print_function, unicode_literals
-import sys
-from django.utils.translation import ugettext_lazy as _
 
 import os
+import sys
+
+from django.utils.translation import ugettext_lazy as _
 
 # Django settings for voyages project.
 

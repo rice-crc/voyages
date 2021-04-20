@@ -1,8 +1,9 @@
 from __future__ import unicode_literals
-from django.shortcuts import get_object_or_404
-from django.db import models
+
 from builtins import range
 
+from django.db import models
+from django.shortcuts import get_object_or_404
 from future import standard_library
 
 standard_library.install_aliases()

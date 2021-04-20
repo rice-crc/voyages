@@ -1,16 +1,18 @@
 from __future__ import absolute_import, unicode_literals
-from .cache import VoyageCache
-from haversine import haversine as dist
-from queue import PriorityQueue
-from builtins import object
-import threading
-import re
+
 import os
+import re
+import threading
+from builtins import object
+from queue import PriorityQueue
 
 # Provide mapping data for voyages (e.g. routes) cached in the server.
 # For convenience, we use the same route nodes and directed links as
 # the javascript client side library.
 from future import standard_library
+from haversine import haversine as dist
+
+from .cache import VoyageCache
 
 standard_library.install_aliases()
 

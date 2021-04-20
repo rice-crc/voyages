@@ -1,10 +1,11 @@
 from __future__ import unicode_literals
-from django.core.urlresolvers import reverse
-from django.contrib.sitemaps import Sitemap
-from django.conf import settings
-import os
-import datetime
 
+import datetime
+import os
+
+from django.conf import settings
+from django.contrib.sitemaps import Sitemap
+from django.core.urlresolvers import reverse
 from future import standard_library
 
 standard_library.install_aliases()

@@ -10,13 +10,19 @@ from django.utils.encoding import smart_str
 from unidecode import unidecode
 
 from voyages.apps.resources.models import AfricanName, Image
-from voyages.apps.voyage.models import (
-    BroadRegion, LinkedVoyages, Nationality, OwnerOutcome, ParticularOutcome,
-    Place, Region, Resistance, RigOfVessel, SlavesOutcome, TonType,
-    VesselCapturedOutcome, Voyage, VoyageCaptain, VoyageCaptainConnection,
-    VoyageCrew, VoyageDataset, VoyageDates, VoyageGroupings, VoyageItinerary,
-    VoyageOutcome, VoyageShip, VoyageShipOwner, VoyageShipOwnerConnection,
-    VoyageSlavesNumbers, VoyageSources, VoyageSourcesConnection)
+from voyages.apps.voyage.models import (BroadRegion, LinkedVoyages,
+                                        Nationality, OwnerOutcome,
+                                        ParticularOutcome, Place, Region,
+                                        Resistance, RigOfVessel, SlavesOutcome,
+                                        TonType, VesselCapturedOutcome, Voyage,
+                                        VoyageCaptain, VoyageCaptainConnection,
+                                        VoyageCrew, VoyageDataset, VoyageDates,
+                                        VoyageGroupings, VoyageItinerary,
+                                        VoyageOutcome, VoyageShip,
+                                        VoyageShipOwner,
+                                        VoyageShipOwnerConnection,
+                                        VoyageSlavesNumbers, VoyageSources,
+                                        VoyageSourcesConnection)
 
 empty = re.compile(r"^\s*\.?$")
 
