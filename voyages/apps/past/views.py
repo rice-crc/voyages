@@ -18,13 +18,11 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 from past.utils import old_div
 
-from voyages.apps.past.models import (
-    AltEthnicityName, AltLanguageGroupName, Enslaved, EnslavedContribution,
-    EnslavedContributionLanguageEntry, EnslavedContributionNameEntry,
-    EnslavedSearch, Ethnicity, LanguageGroup, ModernCountry,
-    _modern_name_fields, _name_fields)
-
-from .name_search import NameSearchCache
+from .models import (AltEthnicityName, AltLanguageGroupName, Enslaved,
+                     EnslavedContribution, EnslavedContributionLanguageEntry,
+                     EnslavedContributionNameEntry, EnslavedSearch, Ethnicity,
+                     LanguageGroup, ModernCountry, NameSearchCache,
+                     _modern_name_fields, _name_fields)
 
 
 def _generate_table(query, table_params, data_adapter=None):
