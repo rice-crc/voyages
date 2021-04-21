@@ -47,6 +47,10 @@ from voyages.apps.contribute.models import (ContributionStatus,
                                             get_contribution,
                                             get_contribution_from_id,
                                             source_type_dict)
+from voyages.apps.contribute.publication import (
+    export_contributions, export_from_voyages, full_contribution_id,
+    get_csv_writer, get_filtered_contributions, get_header_csv_text,
+    publish_accepted_contributions, safe_writerow)
 from voyages.apps.voyage.cache import VoyageCache
 from voyages.apps.voyage.forms import VoyagesSourcesAdminForm
 from voyages.apps.voyage.models import (Voyage, VoyageDataset, VoyageDates,
@@ -61,22 +65,6 @@ from .forms import legal_terms_paragraph, legal_terms_title
 standard_library.install_aliases()
 
 number_prefix = 'interim_slave_number_'
-
-
-def full_contribution_id(contribution_type, contribution_id):
-    return contribution_type + '/' + str(contribution_id)
-
-
-def get_contrib_default_query(model):
-    return model.objects.select_related('contributor')
-
-
-def get_filtered_contributions(filter_args):
-    return [{'type': 'edit', 'id': x.pk, 'contribution': x} for x in get_contrib_default_query(EditVoyageContribution).filter(**filter_args)] +\
-        [{'type': 'merge', 'id': x.pk, 'contribution': x} for x in get_contrib_default_query(MergeVoyagesContribution).filter(**filter_args)] +\
-        [{'type': 'delete', 'id': x.pk, 'contribution': x} for x in get_contrib_default_query(DeleteVoyageContribution).filter(**filter_args)] +\
-        [{'type': 'new', 'id': x.pk, 'contribution': x}
-         for x in get_contrib_default_query(NewVoyageContribution).filter(**filter_args)]
 
 
 def index(request):
@@ -2049,11 +2037,6 @@ def get_voyages_csv_rows(statuses,
                          buffer=None,
                          remove_linebreaks=False,
                          intra_american_flag=None):
-    from voyages.apps.contribute.publication import (export_contributions,
-                                                     export_from_voyages,
-                                                     get_csv_writer,
-                                                     get_header_csv_text,
-                                                     safe_writerow)
     if buffer is None:
         buffer = Echo()
     writer = get_csv_writer(buffer)
@@ -2080,8 +2063,6 @@ def publish_pending(request):
     # Here we are using a lightweight approach at background processing by starting
     # a thread and logging the progress to a file whose name is returned in the
     # response.
-    from voyages.apps.contribute.publication import \
-        publish_accepted_contributions
     try:
         dir = settings.MEDIA_ROOT + '/publication_logs/'
         if not os.path.exists(dir):

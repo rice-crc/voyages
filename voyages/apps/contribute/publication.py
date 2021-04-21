@@ -20,8 +20,6 @@ from voyages.apps.contribute.models import (ContributionStatus,
                                             NewVoyageContribution,
                                             ReviewRequest,
                                             ReviewRequestDecision)
-from voyages.apps.contribute.views import (full_contribution_id,
-                                           get_filtered_contributions)
 from voyages.apps.voyage.models import (Voyage, VoyageCaptain,
                                         VoyageCaptainConnection, VoyageCrew,
                                         VoyageDataset, VoyageDates,
@@ -321,6 +319,22 @@ def _delete_child_fk(obj, child_attr):
         setattr(obj, child_attr, None)
         obj.save()
         child.delete()
+
+
+def full_contribution_id(contribution_type, contribution_id):
+    return contribution_type + '/' + str(contribution_id)
+
+
+def get_contrib_default_query(model):
+    return model.objects.select_related('contributor')
+
+
+def get_filtered_contributions(filter_args):
+    return [{'type': 'edit', 'id': x.pk, 'contribution': x} for x in get_contrib_default_query(EditVoyageContribution).filter(**filter_args)] +\
+        [{'type': 'merge', 'id': x.pk, 'contribution': x} for x in get_contrib_default_query(MergeVoyagesContribution).filter(**filter_args)] +\
+        [{'type': 'delete', 'id': x.pk, 'contribution': x} for x in get_contrib_default_query(DeleteVoyageContribution).filter(**filter_args)] +\
+        [{'type': 'new', 'id': x.pk, 'contribution': x}
+         for x in get_contrib_default_query(NewVoyageContribution).filter(**filter_args)]
 
 
 def _fetch_active_reviews_by_status(statuses):
