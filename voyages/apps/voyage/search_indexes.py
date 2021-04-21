@@ -63,12 +63,11 @@ def mkdate(year, month, day):
               "Day: " + day + " Month: " + month + " Year: " + year)
         if month > 12:
             return mkdate(year, 12, day)
-        elif day > 1:
+        if day > 1:
             return mkdate(year, month, day - 1)
-        else:
-            print("Error with date "
-                  "Day: " + day + " Month: " + month + " Year: " + year)
-            return date(year, month, day)
+        print("Error with date "
+              "Day: " + day + " Month: " + month + " Year: " + year)
+        return date(year, month, day)
 
 
 # Index for Sources
@@ -740,8 +739,7 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
             data = obj.voyage_dates.voyage_began
             if data == ',,' or len(data) == 0:
                 return None
-            else:
-                return getDate(data)
+            return getDate(data)
         except (AttributeError, TypeError):
             return None
 
@@ -750,8 +748,7 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
             data = getMonth(obj.voyage_dates.voyage_began)
             if data == ',,' or data == '' or len(data) == 0 or int(data) == 0:
                 return None
-            else:
-                return data
+            return data
         except (AttributeError, TypeError):
             return None
 
@@ -760,8 +757,7 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
             data = obj.voyage_dates.slave_purchase_began
             if data == ',,' or len(data) == 0:
                 return None
-            else:
-                return getDate(data)
+            return getDate(data)
         except (AttributeError, TypeError):
             return None
 
@@ -770,8 +766,7 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
             data = getMonth(obj.voyage_dates.slave_purchase_began)
             if data == ',,' or data == '' or len(data) == 0 or int(data) == 0:
                 return None
-            else:
-                return data
+            return data
         except (AttributeError, TypeError):
             return None
 
@@ -781,8 +776,7 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
             data = obj.voyage_dates.date_departed_africa
             if data == ',,' or len(data) == 0:
                 return None
-            else:
-                return getDate(data)
+            return getDate(data)
         except (AttributeError, TypeError):
             return None
 
@@ -791,8 +785,7 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
             data = getMonth(obj.voyage_dates.date_departed_africa)
             if data == ',,' or data == '' or len(data) == 0 or int(data) == 0:
                 return None
-            else:
-                return data
+            return data
         except (AttributeError, TypeError):
             return None
 
@@ -801,8 +794,7 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
             data = obj.voyage_dates.first_dis_of_slaves
             if data == ',,' or len(data) == 0:
                 return None
-            else:
-                return getDate(data)
+            return getDate(data)
         except (AttributeError, TypeError):
             return None
 
@@ -811,8 +803,7 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
             data = getMonth(obj.voyage_dates.first_dis_of_slaves)
             if data == ',,' or data == '' or len(data) == 0 or int(data) == 0:
                 return None
-            else:
-                return data
+            return data
         except (AttributeError, TypeError):
             return None
 
@@ -821,8 +812,7 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
             data = obj.voyage_dates.departure_last_place_of_landing
             if data == ',,' or len(data) == 0:
                 return None
-            else:
-                return getDate(data)
+            return getDate(data)
         except (AttributeError, TypeError):
             return None
 
@@ -831,8 +821,7 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
             data = getMonth(obj.voyage_dates.departure_last_place_of_landing)
             if data == ',,' or data == '' or len(data) == 0 or int(data) == 0:
                 return None
-            else:
-                return data
+            return data
         except (AttributeError, TypeError):
             return None
 
@@ -841,8 +830,7 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
             data = obj.voyage_dates.voyage_completed
             if data == ',,' or len(data) == 0:
                 return None
-            else:
-                return getDate(data)
+            return getDate(data)
         except (AttributeError, TypeError):
             return None
 
@@ -851,8 +839,7 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
             data = getMonth(obj.voyage_dates.voyage_completed)
             if data == ',,' or data == '' or len(data) == 0 or int(data) == 0:
                 return None
-            else:
-                return data
+            return data
         except (AttributeError, TypeError):
             return None
 

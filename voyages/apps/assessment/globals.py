@@ -238,9 +238,6 @@ def get_map_year(frame_from_year, frame_to_year):
     """
     if frame_from_year >= 1808:
         return '1850'
-    elif frame_from_year >= 1642 and frame_to_year <= 1807:
+    if frame_from_year >= 1642:
         return '1750'
-    elif frame_to_year <= 1641:
-        return '1650'
-    else:
-        return 'all'
+    return '1650'

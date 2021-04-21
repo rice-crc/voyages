@@ -97,7 +97,7 @@ class SearchField(object):
         # Give priority to a template.
         if self.use_template:
             return self.prepare_template(obj)
-        elif self.model_attr is not None:
+        if self.model_attr is not None:
             attrs = self.split_model_attr_lookups()
             current_objects = [obj]
 
@@ -105,13 +105,11 @@ class SearchField(object):
 
             if len(values) == 1:
                 return values[0]
-            else:
-                return values
+            return values
 
         if self.has_default():
             return self.default
-        else:
-            return None
+        return None
 
     def resolve_attributes_lookup(self, current_objects, attributes):
         """
@@ -171,7 +169,7 @@ class SearchField(object):
                 return current_objects.all()
             return []
 
-        elif not hasattr(current_objects, '__iter__'):
+        if not hasattr(current_objects, '__iter__'):
             current_objects = [current_objects]
 
         return current_objects
@@ -381,10 +379,9 @@ class DateField(SearchField):
                 data = match.groupdict()
                 return datetime_safe.date(int(data['year']), int(data['month']),
                                           int(data['day']))
-            else:
-                raise SearchFieldError(
-                    "Date provided to '%s' field doesn't appear to be a valid date string: '%s'"
-                    % (self.instance_name, value))
+            raise SearchFieldError(
+                "Date provided to '%s' field doesn't appear to be a valid date string: '%s'"
+                % (self.instance_name, value))
 
         return value
 
@@ -416,10 +413,9 @@ class DateTimeField(SearchField):
                                               int(data['hour']),
                                               int(data['minute']),
                                               int(data['second']))
-            else:
-                raise SearchFieldError(
-                    "Datetime provided to '%s' field doesn't appear to be a valid datetime string: '%s'"
-                    % (self.instance_name, value))
+            raise SearchFieldError(
+                "Datetime provided to '%s' field doesn't appear to be a valid datetime string: '%s'"
+                % (self.instance_name, value))
 
         return value
 

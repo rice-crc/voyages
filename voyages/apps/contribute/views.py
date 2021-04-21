@@ -73,23 +73,22 @@ def index(request):
     Display the user index page if the user is already authenticated
     Or return to the login page if the user has not logged in yet
     """
-    if request.user.is_authenticated():
-        filter_args = {
-            'contributor': request.user,
-            'status__lte': ContributionStatus.committed
-        }
-        contributions = get_filtered_contributions(filter_args)
-        review_requests = ReviewRequest.objects.filter(
-            suggested_reviewer=request.user,
-            response__lte=1,
-            archived=False,
-            final_decision=0)
-        return render(request, "contribute/index.html", {
-            'contributions': contributions,
-            'review_requests': review_requests
-        })
-    else:
+    if not request.user.is_authenticated():
         return HttpResponseRedirect(reverse('account_login'))
+    filter_args = {
+        'contributor': request.user,
+        'status__lte': ContributionStatus.committed
+    }
+    contributions = get_filtered_contributions(filter_args)
+    review_requests = ReviewRequest.objects.filter(
+        suggested_reviewer=request.user,
+        response__lte=1,
+        archived=False,
+        final_decision=0)
+    return render(request, "contribute/index.html", {
+        'contributions': contributions,
+        'review_requests': review_requests
+    })
 
 
 def legal(request):
@@ -121,30 +120,25 @@ def set_isolation_serializable():
 
 @csrf_exempt
 def get_voyage_by_id(request):
-    if request.method == 'POST':
-        voyage_id = request.POST.get('voyage_id')
-        if voyage_id is not None:
-            voyage_id = int(voyage_id)
-            v = Voyage.all_dataset_objects.filter(voyage_id=voyage_id).first()
-            if v is not None:
-                summary = get_summary(v)
-                # Check whether the voyage already has an open contribution.
-                active_statuses = ContributionStatus.active_statuses
-                regex = '(^' + str(voyage_id) + '|,' + \
-                    str(voyage_id) + ')(,|$)'
-                is_blocked = EditVoyageContribution.objects.filter(edited_voyage_id=voyage_id, status__in=active_statuses).count() > 0 or \
-                    MergeVoyagesContribution.objects.filter(merged_voyages_ids__iregex=regex, status__in=active_statuses).count() > 0 or \
-                    DeleteVoyageContribution.objects.filter(
-                        deleted_voyages_ids__iregex=regex, status__in=active_statuses).count()
-                summary['is_blocked'] = is_blocked
-                return JsonResponse(summary)
-            else:
-                error = 'No voyage found with voyage_id = ' + str(voyage_id)
-        else:
-            error = 'Missing voyage_id field in POST'
-    else:
-        error = 'POST request required'
-    return JsonResponse({'error': error})
+    if request.method != 'POST':
+        return JsonResponse({'error': 'POST request required'})
+    voyage_id = request.POST.get('voyage_id')
+    if voyage_id is None:
+        return JsonResponse({'error': 'Missing voyage_id field in POST'})
+    voyage_id = int(voyage_id)
+    v = Voyage.all_dataset_objects.filter(voyage_id=voyage_id).first()
+    if v is None:
+        return JsonResponse({'error': 'No voyage found with voyage_id = ' + str(voyage_id)})
+    summary = get_summary(v)
+    # Check whether the voyage already has an open contribution.
+    active_statuses = ContributionStatus.active_statuses
+    regex = '(^' + str(voyage_id) + '|,' + str(voyage_id) + ')(,|$)'
+    is_blocked = EditVoyageContribution.objects.filter(edited_voyage_id=voyage_id, status__in=active_statuses).count() > 0 or \
+        MergeVoyagesContribution.objects.filter(merged_voyages_ids__iregex=regex, status__in=active_statuses).count() > 0 or \
+        DeleteVoyageContribution.objects.filter(
+            deleted_voyages_ids__iregex=regex, status__in=active_statuses).count()
+    summary['is_blocked'] = is_blocked
+    return JsonResponse(summary)
 
 
 @cache_page(24 * 60 * 60)
@@ -157,34 +151,35 @@ def get_places(request):
 
 @login_required
 def delete(request):
-    voyage_selection = []
-    if request.method == 'POST':
-        form = ContributionVoyageSelectionForm(request.POST)
-        if form.is_valid():
-            ids = form.cleaned_data['ids']
-            with transaction.atomic():
-                contribution = DeleteVoyageContribution()
-                contribution.contributor = request.user
-                contribution.status = ContributionStatus.pending
-                contribution.deleted_voyages_ids = ','.join(
-                    [str(x) for x in ids])
-                contribution.notes = request.POST.get('notes')
-                contribution.save()
-            return HttpResponseRedirect(
-                reverse('contribute:delete_review',
-                        kwargs={'contribution_id': contribution.pk}))
-        else:
-            ids = form.selected_voyages
-            voyage_selection = [
-                get_summary(v)
-                for v in Voyage.all_dataset_objects.filter(voyage_id__in=ids)
-            ]
-    else:
+    if request.method != 'POST':
         form = ContributionVoyageSelectionForm()
-    return render(request, 'contribute/delete.html', {
-        'form': form,
-        'voyage_selection': voyage_selection
-    })
+        return render(request, 'contribute/delete.html', {
+            'form': form,
+            'voyage_selection': []
+        })
+    form = ContributionVoyageSelectionForm(request.POST)
+    if not form.is_valid():
+        ids = form.selected_voyages
+        voyage_selection = [
+            get_summary(v)
+            for v in Voyage.all_dataset_objects.filter(voyage_id__in=ids)
+        ]
+        return render(request, 'contribute/delete.html', {
+            'form': form,
+            'voyage_selection': voyage_selection
+        })
+    ids = form.cleaned_data['ids']
+    with transaction.atomic():
+        contribution = DeleteVoyageContribution()
+        contribution.contributor = request.user
+        contribution.status = ContributionStatus.pending
+        contribution.deleted_voyages_ids = ','.join(
+            [str(x) for x in ids])
+        contribution.notes = request.POST.get('notes')
+        contribution.save()
+    return HttpResponseRedirect(
+        reverse('contribute:delete_review',
+                kwargs={'contribution_id': contribution.pk}))
 
 
 @login_required
@@ -193,18 +188,17 @@ def delete_review(request, contribution_id):
                                      pk=contribution_id)
     if request.user.pk != contribution.contributor.pk:
         return HttpResponseForbidden()
-    if request.method == 'POST':
-        action = request.POST.get('submit_val')
-        if action == 'confirm':
-            contribution.status = ContributionStatus.committed
-            contribution.save()
-            return HttpResponseRedirect(reverse('contribute:thanks'))
-        elif action == 'cancel':
-            contribution.delete()
-            return HttpResponseRedirect(reverse('contribute:index'))
-        else:
-            return HttpResponseBadRequest()
-    return delete_review_render(request, contribution, False, 'contributor')
+    if request.method != 'POST':
+        return delete_review_render(request, contribution, False, 'contributor')
+    action = request.POST.get('submit_val')
+    if action == 'confirm':
+        contribution.status = ContributionStatus.committed
+        contribution.save()
+        return HttpResponseRedirect(reverse('contribute:thanks'))
+    if action == 'cancel':
+        contribution.delete()
+        return HttpResponseRedirect(reverse('contribute:index'))
+    return HttpResponseBadRequest()
 
 
 def delete_review_render(request, contribution, readonly, mode):
@@ -232,75 +226,77 @@ def delete_review_render(request, contribution, readonly, mode):
 
 @login_required
 def edit(request):
-    voyage_selection = []
-    if request.method == 'POST':
-        form = ContributionVoyageSelectionForm(request.POST, max_selection=1)
-        if form.is_valid():
-            ids = form.cleaned_data['ids']
-            with transaction.atomic():
-                interim_voyage = InterimVoyage()
-                interim_voyage.save()
-                contribution = EditVoyageContribution()
-                contribution.interim_voyage = interim_voyage
-                contribution.contributor = request.user
-                contribution.edited_voyage_id = ids[0]
-                contribution.status = ContributionStatus.pending
-                contribution.save()
-                init_interim_voyage(interim_voyage, contribution)
-            return HttpResponseRedirect(
-                reverse('contribute:interim',
-                        kwargs={
-                            'contribution_type': 'edit',
-                            'contribution_id': contribution.pk
-                        }))
-        else:
-            ids = form.selected_voyages
-            voyage_selection = [get_summary(v) for v in Voyage.all_dataset_objects.filter(voyage_id=ids[0])] \
-                if len(ids) != 0 else []
-    else:
+    if request.method != 'POST':
         form = ContributionVoyageSelectionForm(max_selection=1)
-    return render(request, 'contribute/edit.html', {
-        'form': form,
-        'voyage_selection': voyage_selection
-    })
+        return render(request, 'contribute/edit.html', {
+            'form': form,
+            'voyage_selection': []
+        })
+    form = ContributionVoyageSelectionForm(request.POST, max_selection=1)
+    if not form.is_valid():
+        ids = form.selected_voyages
+        voyage_selection = [get_summary(v) for v in Voyage.all_dataset_objects.filter(voyage_id=ids[0])] \
+            if len(ids) != 0 else []
+        return render(request, 'contribute/edit.html', {
+            'form': form,
+            'voyage_selection': voyage_selection
+        })
+    ids = form.cleaned_data['ids']
+    with transaction.atomic():
+        interim_voyage = InterimVoyage()
+        interim_voyage.save()
+        contribution = EditVoyageContribution()
+        contribution.interim_voyage = interim_voyage
+        contribution.contributor = request.user
+        contribution.edited_voyage_id = ids[0]
+        contribution.status = ContributionStatus.pending
+        contribution.save()
+        init_interim_voyage(interim_voyage, contribution)
+    return HttpResponseRedirect(
+        reverse('contribute:interim',
+                kwargs={
+                    'contribution_type': 'edit',
+                    'contribution_id': contribution.pk
+                }))
 
 
 @login_required
 def merge(request):
-    voyage_selection = []
-    if request.method == 'POST':
-        form = ContributionVoyageSelectionForm(request.POST, min_selection=2)
-        if form.is_valid():
-            ids = form.cleaned_data['ids']
-            with transaction.atomic():
-                interim_voyage = InterimVoyage()
-                interim_voyage.save()
-                contribution = MergeVoyagesContribution()
-                contribution.interim_voyage = interim_voyage
-                contribution.contributor = request.user
-                contribution.merged_voyages_ids = ','.join(
-                    [str(x) for x in ids])
-                contribution.status = ContributionStatus.pending
-                contribution.save()
-                init_interim_voyage(interim_voyage, contribution)
-            return HttpResponseRedirect(
-                reverse('contribute:interim',
-                        kwargs={
-                            'contribution_type': 'merge',
-                            'contribution_id': contribution.pk
-                        }))
-        else:
-            ids = form.selected_voyages
-            voyage_selection = [
-                get_summary(v)
-                for v in Voyage.all_dataset_objects.filter(voyage_id__in=ids)
-            ]
-    else:
+    if request.method != 'POST':
         form = ContributionVoyageSelectionForm(min_selection=2)
-    return render(request, 'contribute/merge.html', {
-        'form': form,
-        'voyage_selection': voyage_selection
-    })
+        return render(request, 'contribute/merge.html', {
+            'form': form,
+            'voyage_selection': []
+        })
+    form = ContributionVoyageSelectionForm(request.POST, min_selection=2)
+    if not form.is_valid():
+        ids = form.selected_voyages
+        voyage_selection = [
+            get_summary(v)
+            for v in Voyage.all_dataset_objects.filter(voyage_id__in=ids)
+        ]
+        return render(request, 'contribute/merge.html', {
+            'form': form,
+            'voyage_selection': voyage_selection
+        })
+    ids = form.cleaned_data['ids']
+    with transaction.atomic():
+        interim_voyage = InterimVoyage()
+        interim_voyage.save()
+        contribution = MergeVoyagesContribution()
+        contribution.interim_voyage = interim_voyage
+        contribution.contributor = request.user
+        contribution.merged_voyages_ids = ','.join(
+            [str(x) for x in ids])
+        contribution.status = ContributionStatus.pending
+        contribution.save()
+        init_interim_voyage(interim_voyage, contribution)
+    return HttpResponseRedirect(
+        reverse('contribute:interim',
+                kwargs={
+                    'contribution_type': 'merge',
+                    'contribution_id': contribution.pk
+                }))
 
 
 def interim_source_model(type):
@@ -352,81 +348,82 @@ def interim_main(request, contribution, interim):
     """
     result = True
     src_pks = {}
-    if request.method == 'POST':
-        form = InterimVoyageForm(request.POST, instance=interim)
-        prefix = number_prefix
-        numbers = {
-            k: float(v)
-            for k, v in list(request.POST.items())
-            if k.startswith(prefix) and v != ''
-        }
-        sources_post = request.POST.get('sources', '[]')
-        sources = [(create_source(x, interim), x.get('__index'))
-                   for x in json.loads(sources_post)]
-        result = form.is_valid()
-        if result:
-            with transaction.atomic():
-
-                def del_children(child_model):
-                    child_model.objects.filter(
-                        interim_voyage__id=interim.pk).delete()
-
-                for src_type in interim_new_source_types:
-                    del_children(src_type)
-
-                del_children(InterimSlaveNumber)
-                # Get pre-existing sources.
-                for src in interim.pre_existing_sources.all():
-                    src.action = request.POST.get(
-                        'pre_existing_source_action_' + str(src.pk), 0)
-                    src.notes = escape(
-                        request.POST.get(
-                            'pre_existing_source_notes_' + str(src.pk), ''))
-                    src.save()
-                interim = form.save()
-                # Additional form data.
-                persistedFields = [
-                    'message_to_editor', 'reviewer_decision',
-                    'decision_message', 'editorial_decision',
-                    'created_voyage_id'
-                ]
-                persistedDict = {
-                    k: escape(request.POST[k])
-                    for k in persistedFields
-                    if k in request.POST
-                }
-                interim.persisted_form_data = json.dumps(
-                    persistedDict) if len(persistedDict) > 0 else None
-                # Reparse notes safely.
-                try:
-                    note_dict = {
-                        k: escape(v)
-                        for k, v in list(json.loads(interim.notes).items())
-                    }
-                except:
-                    note_dict = {'parse_error': interim.notes}
-                interim.notes = json.dumps(note_dict)
-                interim.save()
-                contribution.notes = escape(
-                    request.POST.get('contribution_main_notes'))
-                contribution.save()
-                for (src, view_item_index) in sources:
-                    src.save()
-                    if view_item_index is not None:
-                        src_pks[view_item_index] = src.pk
-                # Clear previous numbers and save new ones.
-                for k, v in list(numbers.items()):
-                    number = InterimSlaveNumber()
-                    number.interim_voyage = interim
-                    number.var_name = k[len(prefix):]
-                    number.number = v
-                    number.save()
-    else:
+    if request.method != 'POST':
         numbers = {
             number_prefix + n.var_name: n.number
             for n in interim.slave_numbers.all()
         }
         form = InterimVoyageForm(instance=interim)
+        return result, form, numbers, src_pks
+    form = InterimVoyageForm(request.POST, instance=interim)
+    prefix = number_prefix
+    numbers = {
+        k: float(v)
+        for k, v in list(request.POST.items())
+        if k.startswith(prefix) and v != ''
+    }
+    sources_post = request.POST.get('sources', '[]')
+    sources = [(create_source(x, interim), x.get('__index'))
+               for x in json.loads(sources_post)]
+    result = form.is_valid()
+    if not result:
+        return result, form, numbers, src_pks
+    with transaction.atomic():
+
+        def del_children(child_model):
+            child_model.objects.filter(
+                interim_voyage__id=interim.pk).delete()
+
+        for src_type in interim_new_source_types:
+            del_children(src_type)
+
+        del_children(InterimSlaveNumber)
+        # Get pre-existing sources.
+        for src in interim.pre_existing_sources.all():
+            src.action = request.POST.get(
+                'pre_existing_source_action_' + str(src.pk), 0)
+            src.notes = escape(
+                request.POST.get(
+                    'pre_existing_source_notes_' + str(src.pk), ''))
+            src.save()
+        interim = form.save()
+        # Additional form data.
+        persistedFields = [
+            'message_to_editor', 'reviewer_decision',
+            'decision_message', 'editorial_decision',
+            'created_voyage_id'
+        ]
+        persistedDict = {
+            k: escape(request.POST[k])
+            for k in persistedFields
+            if k in request.POST
+        }
+        interim.persisted_form_data = json.dumps(
+            persistedDict) if len(persistedDict) > 0 else None
+        # Reparse notes safely.
+        try:
+            note_dict = {
+                k: escape(v)
+                for k, v in list(json.loads(interim.notes).items())
+            }
+        except:
+            note_dict = {'parse_error': interim.notes}
+        interim.notes = json.dumps(note_dict)
+        interim.save()
+        contribution.notes = escape(
+            request.POST.get('contribution_main_notes'))
+        contribution.save()
+        for (src, view_item_index) in sources:
+            src.save()
+            if view_item_index is not None:
+                src_pks[view_item_index] = src.pk
+        # Clear previous numbers and save new ones.
+        for k, v in list(numbers.items()):
+            number = InterimSlaveNumber()
+            number.interim_voyage = interim
+            number.var_name = k[len(prefix):]
+            number.number = v
+            number.save()
     return result, form, numbers, src_pks
 
 

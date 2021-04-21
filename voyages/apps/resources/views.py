@@ -255,10 +255,9 @@ def images_search(request):
                                     kwargs={
                                         'category': categories_to_search.pop()
                                     }))
-                    else:
-                        results = base_query.all().filter(ready_to_go=True,
-                                                          category_label__in=categories_to_search).\
-                            order_by('date')
+                    results = base_query.all().filter(ready_to_go=True,
+                                                      category_label__in=categories_to_search).\
+                        order_by('date')
 
             else:
                 if len(categories_to_search) > 1:

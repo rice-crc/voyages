@@ -84,9 +84,8 @@ class StaticSitemap(Sitemap):
 
             if template_path is None:
                 return datetime.datetime.now()
-            else:
-                mtime = os.stat(template_path).st_mtime
-                return datetime.datetime.fromtimestamp(mtime)
+            mtime = os.stat(template_path).st_mtime
+            return datetime.datetime.fromtimestamp(mtime)
 
     def _get_template_path(self, template_path, appname):
         # check the app directory

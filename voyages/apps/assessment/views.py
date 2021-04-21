@@ -127,12 +127,11 @@ def get_estimates_timeline(request):
     post = data['post']
     if post is None or "download" not in post:
         return render(request, 'assessment/estimates.html', data)
-    else:
-        rows = [[k, int(round(t[0])), int(round(t[1]))]
-                for k, t in timeline.items()]
-        rows = sorted(rows, key=lambda a: a[0])
-        return download_xls([[('Year', 1), ('Embarked Slaves', 1),
-                              ('Disembarked Slaves', 1)]], rows)
+    rows = [[k, int(round(t[0])), int(round(t[1]))]
+            for k, t in timeline.items()]
+    rows = sorted(rows, key=lambda a: a[0])
+    return download_xls([[('Year', 1), ('Embarked Slaves', 1),
+                          ('Disembarked Slaves', 1)]], rows)
 
 
 def get_estimates_table(request):
@@ -412,8 +411,7 @@ def get_estimates_table(request):
         data['row_headers'] = tmp
         data['row_headers_count'] = len(row_headers)
         return render(request, 'assessment/estimates.html', data)
-    else:
-        return download_xls(header_rows, full_data_set, row_headers)
+    return download_xls(header_rows, full_data_set, row_headers)
 
 
 def get_permanent_link(request):
@@ -483,8 +481,7 @@ def get_estimates_common(request, data):
         if post is not None and prefix + str(element.pk) not in post and \
                 post.get(reset) != "Reset to default":
             return 0
-        else:
-            return 1
+        return 1
 
     EstimateManager.cache()
     # Check which Flags (nations) are selected and include the selection in the query.
