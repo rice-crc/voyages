@@ -2269,8 +2269,7 @@ def extract_places(string):
     # Get city (and state eventually)
     if len(places_list) == 2:
         return places_list[0], places_list[1]
-    else:
-        return places_list[0] + ", " + places_list[1], places_list[2]
+    return places_list[0] + ", " + places_list[1], places_list[2]
 
 
 def download_xls_page(results, current_page, results_per_page, columns,

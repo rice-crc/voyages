@@ -145,8 +145,7 @@ def mangle_source(value, voyageid=None):
 def unmangle_percent(value, voyageid=None):
     if isinstance(value, (str, int, float)):
         return str(round(float(value) * 100, 1)) + "%"
-    else:
-        return str(value * 100) + "%"
+    return str(value * 100) + "%"
 
 
 def unmangle_date(value, voyageid=None):
@@ -231,8 +230,7 @@ def voyage_by_id(voyageid):
     fil = models.Voyage.objects.filter(voyage_id=voyageid)
     if len(fil) < 1:
         return None
-    else:
-        return fil[0]
+    return fil[0]
 
 
 # Take a comma separated date and convert it to a string in the form of (mm/dd/yyyy), and replace unknowns with "?"
@@ -548,8 +546,7 @@ def get_incremented_year_tuples(interval,
     def year_labeler(years):
         if years[0] == years[1]:
             return years[1]
-        else:
-            return str(years[0]) + '-' + str(years[1])
+        return str(years[0]) + '-' + str(years[1])
 
     return get_each_from_list(years, 'var_imp_arrival_at_port_of_dis__range',
                               year_labeler)
@@ -748,8 +745,7 @@ def get_each_from_list_col(filter_name,
             uziped[1],
             [[x[0] for x in uziped[0]]],
         )
-    else:
-        return (filter_name, [], [])
+    return (filter_name, [], [])
 
 
 def get_each_from_table_col(filter_name,
@@ -764,8 +760,7 @@ def get_each_from_table_col(filter_name,
             uziped[1],
             [[x[0] for x in uziped[0]]],
         )
-    else:
-        return (filter_name, [], [])
+    return (filter_name, [], [])
 
 
 # Defines the options selectable for filtering the rows/columns of the table section
@@ -822,8 +817,7 @@ def make_sum_fun(varname):
         stats = queryset.stats(varname).stats_results()
         if stats and stats[varname]:
             return prettifier(int(stats[varname]['sum']))
-        else:
-            return prettifier(0)
+        return prettifier(0)
         # return prettifier(sum([i[varname] for i in list(queryset.values(varname)) if varname in i and i[varname] != None]))
 
     return sum_fun
@@ -836,8 +830,7 @@ def make_sum_nopretty_fun(varname):
         stats = queryset.stats(varname).stats_results()
         if stats and stats[varname]:
             return prettifier(int(stats[varname]['sum']))
-        else:
-            return prettifier(0)
+        return prettifier(0)
 
     return sum_nopretty_fun
 
@@ -846,10 +839,9 @@ def make_sum_nopretty_fun(varname):
 
 
 def display_average(value):
-    if value is not None:
-        return round(value, 1)
-    else:
-        return value
+    if value is None:
+        return None
+    return round(value, 1)
 
 
 def make_avg_fun(varname):
@@ -860,8 +852,7 @@ def make_avg_fun(varname):
         stats = queryset.stats(varname).stats_results()
         if stats and stats[varname]:
             return prettifier(stats[varname]['mean'])
-        else:
-            return None
+        return None
 
 
 #        if len(lst) == 0:
@@ -896,15 +887,13 @@ def make_row_tot_percent_fun(varname):
         if rowset is None:
             if colset is None:
                 return display_percent(1)
-            else:
-                rowset = allset
+            rowset = allset
         rowstats = rowset.stats(varname).stats_results()
         qstats = queryset.stats(varname).stats_results()
         if qstats and qstats[varname]:
             return display_percent(
                 float(qstats[varname]['sum']) / float(rowstats[varname]['sum']))
-        else:
-            return None
+        return None
 
     return row_tot_fun
 
@@ -915,15 +904,13 @@ def make_col_tot_percent_fun(varname):
         if colset is None:
             if rowset is None:
                 return display_percent(1)
-            else:
-                colset = allset
+            colset = allset
         colstats = colset.stats(varname).stats_results()
         qstats = queryset.stats(varname).stats_results()
         if qstats and qstats[varname]:
             return display_percent(
                 float(qstats[varname]['sum']) / float(colstats[varname]['sum']))
-        else:
-            return None
+        return None
 
     return col_tot_fun
 
@@ -937,8 +924,7 @@ def make_num_fun(varname):
         stats = queryset.stats(varname).stats_results()
         if stats and stats[varname]:
             return stats[varname]['count']
-        else:
-            return 0
+        return 0
 
     return num_fun
 

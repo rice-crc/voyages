@@ -772,11 +772,10 @@ class VoyageDates(models.Model):
         strval = value.split(',')[2]
         if len(strval) < 1:
             return None
-        else:
-            try:
-                return int(strval)
-            except:
-                return None
+        try:
+            return int(strval)
+        except:
+            return None
 
     @classmethod
     def get_date_month(cls, value):
@@ -788,11 +787,10 @@ class VoyageDates(models.Model):
         strval = value.split(',')[1]
         if len(strval) < 1:
             return 0
-        else:
-            try:
-                return int(strval)
-            except:
-                return None
+        try:
+            return int(strval)
+        except:
+            return None
 
     @classmethod
     def get_date_day(cls, value):
@@ -804,11 +802,10 @@ class VoyageDates(models.Model):
         strval = value.split(',')[0]
         if len(strval) < 1:
             return 0
-        else:
-            try:
-                return int(strval)
-            except:
-                return None
+        try:
+            return int(strval)
+        except:
+            return None
 
     # don't think this is being used anywhere
 #    def calculate_year_period(self, period):

@@ -490,17 +490,17 @@ def ajax_search(request):
             data,
             field_filter=lambda field_name: field_name in requested_fields,
             key_adapter=lambda key_val: key_val[0].replace(target_lang, 'lang'))
-    elif output_type == 'mapAnimation':
+    if output_type == 'mapAnimation':
         return get_results_map_animation(results)
-    elif output_type == 'mapFlow':
+    if output_type == 'mapFlow':
         return get_results_map_flow(request, results)
-    elif output_type == 'graph':
+    if output_type == 'graph':
         return get_results_graph(results, data)
-    elif output_type == 'timeline':
+    if output_type == 'timeline':
         return get_results_timeline(results, data)
-    elif output_type == 'pivotTable':
+    if output_type == 'pivotTable':
         return get_results_pivot_table(results, data)
-    elif output_type == 'summaryStats':
+    if output_type == 'summaryStats':
         return get_results_summary_stats(results)
     return HttpResponseBadRequest('Unkown type of output.')
 
@@ -731,16 +731,15 @@ def ajax_download(request):
         return download_xls(
             [[(_(get_download_header(col)), 1) for col in columns]],
             [[item[col] for col in columns] for item in [x.get_stored_fields() for x in results]])
-    else:
-        response = HttpResponse(content_type='text/csv')
-        response['Content-Disposition'] = 'attachment; filename="data.csv"'
-        writer = unicodecsv.DictWriter(response, fieldnames=columns)
-        # writer.writeheader()
-        writer.writerow({col: _(get_download_header(col)) for col in columns})
-        for x in results:
-            item = x.get_stored_fields()
-            writer.writerow({col: item[col] for col in columns})
-        return response
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="data.csv"'
+    writer = unicodecsv.DictWriter(response, fieldnames=columns)
+    # writer.writeheader()
+    writer.writerow({col: _(get_download_header(col)) for col in columns})
+    for x in results:
+        item = x.get_stored_fields()
+        writer.writerow({col: item[col] for col in columns})
+    return response
 
 
 _options_model = {

@@ -99,26 +99,22 @@ class ImagesIndex(indexes.SearchIndex, indexes.Indexable):
     def prepare_voyage_id(self, obj):
         if obj.voyage is not None:
             return obj.voyage.voyage_id
-        else:
-            return None
+        return None
 
     def prepare_voyage_vessel_name(self, obj):
         if obj.voyage is not None:
             return obj.voyage.voyage_ship.ship_name
-        else:
-            return None
+        return None
 
     def prepare_voyage_imp_voyage_began(self, obj):
         if obj.voyage is not None:
             return obj.voyage.voyage_dates.imp_voyage_began
-        else:
-            return None
+        return None
 
     def prepare_voyage_year(self, obj):
         if obj.voyage is not None:
             return obj.voyage.voyage_dates.imp_voyage_began
-        else:
-            return None
+        return None
 
     def index_queryset(self, using=None):
         """Used when the entire index for model is updated."""
@@ -276,50 +272,42 @@ class AfricanNamesIndex(indexes.SearchIndex, indexes.Indexable):
     def prepare_slave_voyage(self, obj):
         if obj.voyage is not None:
             return obj.voyage.voyage_id
-        else:
-            return None
+        return None
 
     def prepare_slave_sex_age(self, obj):
         if obj.sex_age is not None:
             return obj.sex_age.name
-        else:
-            return None
+        return None
 
     def prepare_slave_country(self, obj):
         if obj.country is not None:
             return obj.country.country_id
-        else:
-            return None
+        return None
 
     def prepare_slave_country_sort(self, obj):
         if obj.country is not None:
             return obj.country.name
-        else:
-            return None
+        return None
 
     def prepare_slave_embarkation_port(self, obj):
         if obj.embarkation_port is not None:
             return obj.embarkation_port.value
-        else:
-            return None
+        return None
 
     def prepare_slave_embarkation_port_sort(self, obj):
         if obj.embarkation_port is not None:
             return obj.embarkation_port.place
-        else:
-            return None
+        return None
 
     def prepare_slave_disembarkation_port(self, obj):
         if obj.disembarkation_port is not None:
             return obj.disembarkation_port.value
-        else:
-            return None
+        return None
 
     def prepare_slave_disembarkation_port_sort(self, obj):
         if obj.disembarkation_port is not None:
             return obj.disembarkation_port.place
-        else:
-            return None
+        return None
 
     def index_queryset(self, using=None):
         """Used when the entire index for model is updated."""
