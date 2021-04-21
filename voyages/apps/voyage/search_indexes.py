@@ -10,7 +10,6 @@ import unidecode
 from django.utils import translation
 from django.utils.translation import ugettext as _
 from haystack import indexes
-from unidecode import unidecode
 
 from . import globals
 from .models import Voyage, VoyagesFullQueryHelper, VoyageSources
