@@ -1,0 +1,151 @@
+import settings
+import os
+
+# Django local settings for voyages project.
+
+DEBUG = False
+
+# set this to allow access to the app when DEBUG is False
+ALLOWED_HOSTS = ['*']
+
+ADMINS = (
+    # ('Your Name', 'your_email@example.com'),
+)
+
+MANAGERS = ADMINS
+
+# Make this unique, and don't share it with anybody.
+
+SECRET_KEY = 'fz1GAeu/MuPkUIsV7sR6m+BmRc3/K6CCzaBVuYBNz2eD1MPylu'
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',   # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
+        'NAME': 'voyages',                      # Or path to database file if using sqlite3.
+        'USER': 'voyages',                      # Not used with sqlite3.
+        'PASSWORD': 'voyages',                  # Not used with sqlite3.
+        'HOST': 'voyages-mysql',                # Set to empty string for localhost. Not used with sqlite3.
+        'PORT': '3306',                         # Set to empty string for default. Not used with sqlite3.
+    },
+}
+
+STATICFILES_DIRS = (
+    # Put strings here, like "/home/html/static" or "C:/www/django/static".
+    # Always use forward slashes, even on Windows.
+    # Don't forget to use absolute paths, not relative paths.
+    '/mnt/sv_share/sitemedia',
+)
+
+# Absolute filesystem path to the directory that will hold user-uploaded files.
+# Should be in a location outside the deploy like /home/httpd/sites/voyages/media
+MEDIA_ROOT = '/mnt/sv_share/documents/'
+
+# Absolute path to the directory static files should be collected to.
+# Don't put anything in this directory yourself; store your static files
+# in apps' "static/" subdirectories and in STATICFILES_DIRS.
+# Example: "/home/media/media.lawrence.com/static/"
+STATIC_ROOT = '/mnt/sv_share/static/'
+
+# URL prefix for static files.
+# Example: "http://media.lawrence.com/static/"
+STATIC_URL = 'http://127.0.0.1:8100/static/'
+
+LOCALE_PATHS = (
+    ['voyages/locale']
+)
+
+LOCALE_PATHS = (
+    '/srv/voyages/voyages/locale',
+)
+
+# Used to index Django models, in our case using Solr
+HAYSTACK_CONNECTIONS = {
+    'default': {
+        'ENGINE': 'haystack.backends.solr_backend.SolrEngine',
+        'URL': 'http://voyages-solr:8983/solr/voyages'
+    },
+}
+
+# Real time signal processor for updating index
+HAYSTACK_SIGNAL_PROCESSOR = 'haystack.signals.RealtimeSignalProcessor'
+
+# Local time zone for this installation. Choices can be found here:
+# http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
+# although not all choices may be available on all operating systems.
+# In a Windows environment this must be set to your system time zone.
+TIME_ZONE = 'America/New_York'
+
+# Language code for this installation. All choices can be found here:
+# http://www.i18nguy.com/unicode/language-identifiers.html
+LANGUAGE_CODE = 'en-us'
+
+# when using an ImageField setting this DEBUG to Ture will give debug info about ImageFields and thumbnails
+THUMBNAIL_DEBUG = False
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django_redis.cache.RedisCache',
+        'LOCATION': 'redis://voyages-redis:6379/1',
+        'OPTIONS': {
+            'CLIENT_CLASS': 'django_redis.client.DefaultClient',
+        },
+    },
+    'redis': {
+        'BACKEND': 'django_redis.cache.RedisCache',
+        'LOCATION': 'redis://voyages-redis:6379/2',
+        'OPTIONS': {
+            'CLIENT_CLASS': 'django_redis.client.DefaultClient',
+        },
+    },
+}
+
+SESSION_ENGINE = "django.contrib.sessions.backends.cache"
+SESSION_CACHE_ALIAS = "redis"
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'voyages-mailhog'
+EMAIL_PORT = 1025
+EMAIL_HOST_USER = ''
+EMAIL_HOST_PASSWORD = ''
+DEFAULT_FROM_EMAIL = 'no-reply@slavevoyages.crc.rice.edu'
+
+# A sample logging configuration. The only tangible logging
+# performed by this configuration is to send an email to
+# the site admins on every HTTP 500 error when DEBUG=False.
+# See http://docs.djangoproject.com/en/dev/topics/logging for
+# more details on how to customize your logging configuration.
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'filters': {
+        'require_debug_false': {
+            '()': 'django.utils.log.RequireDebugFalse'
+        }
+    },
+    'formatters': {
+        'console': {
+            'format': '%(name)-12s %(levelname)-8s %(message)s'
+        },
+        'file': {
+            'format': '%(asctime)s %(name)-12s %(levelname)-8s %(message)s'
+        }
+    },
+    'handlers': {
+        'console':{
+            'class':'logging.StreamHandler',
+            'formatter': 'console'
+        },
+        'file': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'formatter': 'file',
+            'filename' : './logs/debug.log',
+        }
+    },
+    'loggers': {
+        '': {
+            'level': 'DEBUG',
+            'handlers': ['console', 'file']
+        }
+    }
+}

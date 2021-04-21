@@ -13,7 +13,6 @@ services:
       - "voyages"
     volumes:
       - "mysql_volume:/var/lib/mysql"
-      - "./docker/mysql/conf:/etc/mysql/conf.d"
     environment:
       MYSQL_ROOT_PASSWORD: "voyages"
 
@@ -43,9 +42,6 @@ services:
       - "voyages"
     volumes:
       - "redis_volume:/data"
-    build:
-      context: "."
-      dockerfile: "./docker/redis/Dockerfile"
 
   voyages-django:
     image: "voyages-django"
@@ -61,7 +57,6 @@ services:
     networks:
       - "voyages"
     volumes:
-      - "python_volume:/root/.local"
       - ".:/srv/voyages"
       - "./documents:/mnt/sv_share/documents"
       - "./voyages/sitemedia:/mnt/sv_share/sitemedia"
@@ -69,9 +64,6 @@ services:
     build:
       context: "."
       dockerfile: "./docker/django/Dockerfile"
-      args:
-        - "GUNICORN_PORT=8000"
-        - "GUNICORN_OPTS=--reload"
 
   voyages-nginx:
     image: "nginx:1.19.8-alpine"
@@ -81,18 +73,14 @@ services:
     depends_on:
       - "voyages-django"
     ports:
-      - "80:80"
+      - "8100:80"
     networks:
       - "voyages"
     volumes:
+      - "./docker/nginx/conf.d:/etc/nginx/conf.d"
       - "./documents:/mnt/sv_share/documents"
       - "./voyages/sitemedia:/mnt/sv_share/sitemedia"
       - "./voyages/static:/mnt/sv_share/static"
-    build:
-      context: "./docker/nginx/"
-      dockerfile: "./Dockerfile"
-      args:
-        - "NGINX_UPSTREAM=voyages-django"
 
   voyages-adminer:
     image: "adminer:latest"
@@ -124,9 +112,12 @@ services:
 networks:
   voyages:
     driver: "bridge"
+    ipam:
+      driver: "default"
+      config:
+        - subnet: "172.20.0.0/16"
 
 volumes:
   mysql_volume: {}
   solr_volume: {}
   redis_volume: {}
-  python_volume: {}

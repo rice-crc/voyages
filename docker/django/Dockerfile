@@ -17,11 +17,6 @@ RUN apt-get update \
     /var/lib/apt/lists/* \
     /var/tmp/*
 
-RUN python -m pip install --user --no-cache-dir --upgrade \
-    pip==20.3.4  \
-    setuptools==44.1.1 \
-    wheel==0.36.2
-
 # -- Build --
 
 FROM base AS build
@@ -42,6 +37,11 @@ RUN apt-get update \
 
 WORKDIR /srv/voyages
 
+RUN python -m pip install --user --no-cache-dir --upgrade \
+    pip==20.3.4  \
+    setuptools==44.1.1 \
+    wheel==0.36.2
+
 COPY requirements/common.txt requirements/
 RUN python -m pip install --user --no-warn-script-location --no-cache-dir -r requirements/common.txt
 
@@ -51,18 +51,19 @@ FROM base AS release
 
 WORKDIR /srv/voyages
 
-ARG GUNICORN_PORT
-ENV GUNICORN_PORT $GUNICORN_PORT
-
-ARG GUNICORN_OPTS
-ENV GUNICORN_OPTS $GUNICORN_OPTS
-
-ENV PYTHONDONTWRITEBYTECODE 1
-ENV PYTHONUNBUFFERED 1
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
 ENV PATH=/root/.local/bin:$PATH
 
 COPY --from=build /root/.local /root/.local
+COPY . .
+
+ARG GUNICORN_PORT="8000"
+ARG GUNICORN_OPTS="--reload --workers 3 --threads 2 --worker-class gthread"
+
+ENV GUNICORN_PORT=${GUNICORN_PORT}
+ENV GUNICORN_OPTS=${GUNICORN_OPTS}
 
 EXPOSE $GUNICORN_PORT
 
-CMD gunicorn --bind 0.0.0.0:$GUNICORN_PORT $GUNICORN_OPTS --workers 3 --threads 2 --worker-class gthread voyages.wsgi
+CMD gunicorn --bind 0.0.0.0:$GUNICORN_PORT $GUNICORN_OPTS voyages.wsgi
