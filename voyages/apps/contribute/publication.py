@@ -11,6 +11,7 @@ from django.conf import settings
 from django.core import management
 from django.db import transaction
 
+from voyages.apps.common.models import year_mod
 from voyages.apps.contribute.models import (ContributionStatus,
                                             DeleteVoyageContribution,
                                             EditVoyageContribution,
@@ -400,11 +401,10 @@ def _map_voyage_to_spss(voyage):
     data['YEARAM'] = yearam
     data['VOY1IMP'] = dates.imp_length_home_to_disembark
     data['VOY2IMP'] = dates.imp_length_leaving_africa_to_disembark
-    from .imputed import year_mod
     data['YEAR5'] = year_mod(yearam, 5, 1500)
     data['YEAR10'] = year_mod(yearam, 10, 1500)
     data['YEAR25'] = year_mod(yearam, 25, 1500)
-    data['YEAR100'] = ((yearam - 1) // 100) * 100 if yearam else None
+    data['YEAR100'] = (year_mod(yearam, 100, 0) - 1) * 100 if yearam else None
 
     # Outcomes
     outcomes = list(voyage.voyage_name_outcome.all())

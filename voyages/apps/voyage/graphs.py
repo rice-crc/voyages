@@ -7,7 +7,8 @@ from itertools import groupby
 from django.utils.translation import ugettext_lazy as _
 from past.utils import old_div
 
-from voyages.apps.common.models import get_values_from_haystack_results
+from voyages.apps.common.models import (get_values_from_haystack_results,
+                                        year_mod)
 
 from .models import (BroadRegion, Nationality, OwnerOutcome, ParticularOutcome,
                      Place, Region, Resistance, RigOfVessel, SlavesOutcome,
@@ -134,7 +135,7 @@ class YearRangeAxis(Axis):
         if year is None:
             return None
         # The ranges are always of the form [n * year_mod + 1, (n + 1) * year_mod]
-        n = (year - 1) // self.year_mod
+        n = year_mod(year, self.year_mod, 0) - 1
         # At this point we have
         # year == n * self.year_mod + 1 + (year % self.year_mod)
         return str(n * self.year_mod + 1) + '-' + str((n + 1) * self.year_mod)

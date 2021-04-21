@@ -11,6 +11,7 @@ from datetime import datetime
 
 from django.core.exceptions import ObjectDoesNotExist
 
+from voyages.apps.common.models import year_mod
 from voyages.apps.voyage.models import (Nationality, OwnerOutcome, Place,
                                         Region, SlavesOutcome,
                                         VesselCapturedOutcome, VoyageGroupings)
@@ -203,12 +204,6 @@ def threshold(value, min):
     return None if (value is not None and value < min) else value
 
 
-def year_mod(the_year, mod, start):
-    if the_year is None:
-        return None
-    return 1 + ((the_year - start - 1) // mod)
-
-
 def compute_imputed_vars(_interim, is_iam=False):
     """
     This method will calculate all imputed variables.
@@ -266,7 +261,7 @@ def compute_imputed_vars(_interim, is_iam=False):
     year5 = year_mod(yearam, 5, 1500)
     year10 = year_mod(yearam, 10, 1500)
     year25 = year_mod(yearam, 25, 1500)
-    year100 = ((yearam - 1) // 100) * 100 if yearam else None
+    year100 = (year_mod(yearam, 100, 0) - 1) * 100 if yearam else None
     # VOY1IMP = DATEDIF(DATE_LAND1, DATE_DEP, "days").
     voy1imp = date_diff(_interim.date_first_slave_disembarkation,
                         _interim.date_departure)

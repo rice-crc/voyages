@@ -15,6 +15,12 @@ from future import standard_library
 standard_library.install_aliases()
 
 
+def year_mod(the_year, mod, start):
+    if the_year is None:
+        return None
+    return 1 + ((the_year - start - 1) // mod)
+
+
 # Create your models here.
 class SavedQuery(models.Model):
     """
