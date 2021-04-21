@@ -77,6 +77,12 @@ host:~/Projects/voyages$ git remote add upstream https://github.com/rice-crc/voy
 
 ## Installation
 
+Copy and rename the default localsettings file for local environments.
+
+```bash
+host:~/Projects/voyages$ cp voyages/localsettings-local.py.default voyages/localsettings.py
+```
+
 Build and run the containers necessary to work on the project.
 
 For details, see `docker-compose.yml`.
@@ -109,9 +115,9 @@ host:~/Projects/voyages$ docker exec -i voyages-mysql mysql -uroot -pvoyages voy
 Verify the data import.
 
 ```mysql
-host:~/Projects/voyages$ docker exec -i voyages-mysql mysql -uroot -pvoyages -e "show databases"
-host:~/Projects/voyages$ docker exec -i voyages-mysql mysql -uroot -pvoyages -e "show tables from voyages"
-host:~/Projects/voyages$ docker exec -i voyages-mysql mysql -uroot -pvoyages -e "select * from voyages.voyage_voyage limit 1"
+host:~/Projects/voyages$ docker exec -i voyages-mysql mysql -uvoyages -pvoyages -e "show databases"
+host:~/Projects/voyages$ docker exec -i voyages-mysql mysql -uvoyages -pvoyages -e "show tables from voyages"
+host:~/Projects/voyages$ docker exec -i voyages-mysql mysql -uvoyages -pvoyages -e "select * from voyages.voyage_voyage limit 1"
 ```
 
 Create the Solr index.
@@ -138,7 +144,7 @@ host:~/Projects/voyages$ docker exec -i voyages-django bash -c 'python manage.py
 
 Note the following project resources:
 
-* Voyages app: [http://127.0.0.1/](http://127.0.0.1/).
+* Voyages app: [http://127.0.0.1:8100/](http://127.0.0.1:8100/).
 * Solr: [http://127.0.0.1:8983](http://127.0.0.1:8983)
 * Adminer: [http://127.0.0.1:8080](http://127.0.0.1:8080)
 * Mailhog: [http://127.0.0.1:8025](http://127.0.0.1:8025)
