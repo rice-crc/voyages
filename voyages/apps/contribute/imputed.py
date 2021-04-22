@@ -314,7 +314,7 @@ def compute_imputed_vars(_interim, is_iam=False):
                 tonmod = 2.3 + (1.8 * tonnage)
         if tontype == 4 and yearam > 1783 and yearam and yearam < 1794:
             tonmod = None
-        if tontype == 3 or tontype == 6 or tontype == 9 or tontype == 16:
+        if tontype in (3, 6, 9, 16):
             tonmod = 71 + (0.86 * tonnage)
             if yearam and yearam < 1774 and tonmod > 250:
                 tonmod = 13.1 + (1.1 * tonnage)
@@ -346,7 +346,7 @@ def compute_imputed_vars(_interim, is_iam=False):
             tonmod = 65.3 + (1.2 * tonnage)
         if tontype == 22 and tonnage < 151:
             tonmod = 2.3 + (1.8 * tonnage)
-        if tontype == 15 or tontype == 14 or tontype == 17:
+        if tontype in (14, 15, 17):
             tonmod = 52.86 + (1.22 * tonnage)
 
     fate2 = None
@@ -728,7 +728,7 @@ def compute_imputed_vars(_interim, is_iam=False):
     if arrport and not sla1port and not adpsale1 and not adpsale2:
         mjslptimp = arrport
 
-    if not mjslptimp and (fate2 == 1 or fate2 == 3 or fate2 == 5) and \
+    if not mjslptimp and fate2 in (1, 3, 5) and \
        (arrport or arrport2 or sla1port or adpsale1 or adpsale2 or slastot > 0):
         mjslptimp = 99801
 
@@ -759,8 +759,7 @@ def compute_imputed_vars(_interim, is_iam=False):
     # xmimpflag - Voyage groupings for estimating imputed slaves
     xmimpflag = None
     rig = get_obj_value(_interim.rig_of_vessel)
-    rig_set = {26, 29, 42, 43, 54, 59, 61, 65, 80, 86}
-    if (rig in rig_set or rig is None) and yearam >= 1626:
+    if (rig in (26, 29, 42, 43, 54, 59, 61, 65, 80, 86) or rig is None) and yearam >= 1626:
         if yearam < 1651:
             xmimpflag = 127
         elif yearam < 1676:
@@ -929,26 +928,28 @@ def compute_imputed_vars(_interim, is_iam=False):
         xmimpflag = 44
     if yearam and yearam >= 1851 and yearam < 1876 and rig == 8:
         xmimpflag = 45
-    if yearam and yearam < 1826 and (rig == 9 or rig == 31):
-        xmimpflag = 46
-    if yearam and yearam >= 1826 and yearam < 1851 and (rig == 9 or rig == 31):
-        xmimpflag = 47
-    if yearam and yearam >= 1851 and yearam < 1876 and (rig == 9 or rig == 31):
-        xmimpflag = 48
-    if rig == 10 or rig == 24:
+    if yearam and rig in (9, 31):
+        if yearam < 1826:
+            xmimpflag = 46
+        elif yearam < 1851:
+            xmimpflag = 47
+        elif yearam < 1876:
+            xmimpflag = 48
+    if rig in (10, 24):
         xmimpflag = 49
-    if rig == 11 or rig == 12:
+    if rig in (11, 12):
         xmimpflag = 50
-    if yearam and yearam < 1751 and rig == 13:
-        xmimpflag = 51
-    if yearam and yearam >= 1751 and yearam < 1776 and rig == 13:
-        xmimpflag = 52
-    if yearam and yearam >= 1776 and yearam < 1801 and rig == 13:
-        xmimpflag = 53
-    if yearam and yearam >= 1801 and yearam < 1826 and rig == 13:
-        xmimpflag = 54
-    if yearam and yearam >= 1826 and yearam < 1877 and rig == 13:
-        xmimpflag = 55
+    if yearam and rig == 13:
+        if yearam < 1751:
+            xmimpflag = 51
+        elif yearam < 1776:
+            xmimpflag = 52
+        elif yearam < 1801:
+            xmimpflag = 53
+        elif yearam < 1826:
+            xmimpflag = 54
+        elif yearam < 1877:
+            xmimpflag = 55
     if rig == 15:
         xmimpflag = 56
     if rig == 20:
@@ -957,29 +958,31 @@ def compute_imputed_vars(_interim, is_iam=False):
         xmimpflag = 58
     if rig == 23:
         xmimpflag = 59
-    if yearam and yearam < 1751 and rig == 25:
-        xmimpflag = 60
-    if yearam and yearam >= 1751 and yearam < 1776 and rig == 25:
-        xmimpflag = 61
-    if yearam and yearam >= 1776 and yearam < 1801 and rig == 25:
-        xmimpflag = 62
-    if yearam and yearam >= 1801 and yearam < 1826 and rig == 25:
-        xmimpflag = 63
-    if yearam and yearam >= 1826 and yearam < 1851 and rig == 25:
-        xmimpflag = 160
-    if yearam and yearam >= 1851 and yearam < 1877 and rig == 25:
-        xmimpflag = 64
-    if yearam and yearam < 1751 and rig == 27:
-        xmimpflag = 65
-    if yearam and yearam >= 1751 and yearam < 1776 and rig == 27:
-        xmimpflag = 66
-    if yearam and yearam >= 1776 and yearam < 1801 and rig == 27:
-        xmimpflag = 67
-    if yearam and yearam >= 1801 and yearam < 1877 and rig == 27:
-        xmimpflag = 68
+    if yearam and rig == 25:
+        if yearam < 1751:
+            xmimpflag = 60
+        elif yearam < 1776:
+            xmimpflag = 61
+        elif yearam < 1801:
+            xmimpflag = 62
+        elif yearam < 1826:
+            xmimpflag = 63
+        elif yearam < 1851:
+            xmimpflag = 160
+        elif yearam < 1877:
+            xmimpflag = 64
+    if yearam and rig == 27:
+        if yearam < 1751:
+            xmimpflag = 65
+        if yearam < 1776:
+            xmimpflag = 66
+        if yearam < 1801:
+            xmimpflag = 67
+        if yearam < 1877:
+            xmimpflag = 68
     if rig == 28:
         xmimpflag = 69
-    if yearam and (rig == 30 or rig == 45 or rig == 63):
+    if yearam and rig in (30, 45, 63):
         if yearam < 1726:
             xmimpflag = 70
         elif yearam < 1776:
@@ -990,27 +993,29 @@ def compute_imputed_vars(_interim, is_iam=False):
             xmimpflag = 72
         elif yearam < 1876:
             xmimpflag = 85
-    if rig == 32 or rig == 39:
+    if rig in (32, 39):
         xmimpflag = 73
-    if yearam and yearam < 1726 and rig == 35:
-        xmimpflag = 74
-    if yearam and yearam >= 1726 and yearam < 1751 and rig == 35:
-        xmimpflag = 75
-    if yearam and yearam >= 1751 and yearam < 1776 and rig == 35:
-        xmimpflag = 76
-    if yearam and yearam >= 1776 and yearam < 1801 and rig == 35:
-        xmimpflag = 77
-    if yearam and yearam >= 1801 and yearam < 1877 and rig == 35:
-        xmimpflag = 78
-    if yearam and yearam < 1776 and rig == 40:
-        xmimpflag = 79
-    if yearam and yearam >= 1776 and yearam < 1801 and rig == 40:
-        xmimpflag = 80
-    if yearam and yearam >= 1801 and yearam < 1826 and rig == 40:
-        xmimpflag = 81
-    if yearam and yearam >= 1826 and yearam < 1876 and rig == 40:
-        xmimpflag = 82
-    if rig == 41 or rig == 57:
+    if yearam and rig == 35:
+        if yearam < 1726:
+            xmimpflag = 74
+        elif yearam >= 1726:
+            xmimpflag = 75
+        elif yearam >= 1751:
+            xmimpflag = 76
+        elif yearam >= 1776:
+            xmimpflag = 77
+        elif yearam >= 1801:
+            xmimpflag = 78
+    if yearam and rig == 40:
+        if yearam < 1776:
+            xmimpflag = 79
+        elif yearam < 1801:
+            xmimpflag = 80
+        elif yearam < 1826:
+            xmimpflag = 81
+        elif yearam < 1876:
+            xmimpflag = 82
+    if rig in (41, 57):
         xmimpflag = 83
     if rig == 44:
         xmimpflag = 84
@@ -1018,56 +1023,61 @@ def compute_imputed_vars(_interim, is_iam=False):
         xmimpflag = 86
     if rig == 48:
         xmimpflag = 87
-    if yearam and (rig == 14 or rig == 36 or rig == 49):
+    if yearam and rig in (14, 36, 49):
         if yearam < 1826:
             xmimpflag = 88
-        if yearam >= 1826 and yearam < 1876:
+        elif yearam < 1876:
             xmimpflag = 89
-    if yearam and yearam < 1826 and (rig == 16 or rig == 51):
-        xmimpflag = 90
-    if yearam and yearam >= 1826 and yearam < 1851 and (rig == 16 or rig == 51):
-        xmimpflag = 91
-    if yearam and yearam >= 1851 and yearam < 1876 and (rig == 16 or rig == 51):
-        xmimpflag = 92
-    if rig == 17 or rig == 19 or rig == 52 or rig == 53:
+    if yearam and rig in (16, 51):
+        if yearam < 1826:
+            xmimpflag = 90
+        elif yearam < 1851:
+            xmimpflag = 91
+        elif yearam < 1876:
+            xmimpflag = 92
+    if rig in (17, 19, 52, 53):
         xmimpflag = 93
-    if yearam and yearam < 1726 and rig == 60:
-        xmimpflag = 94
-    if yearam and yearam >= 1726 and yearam < 1826 and rig == 60:
-        xmimpflag = 95
-    if yearam and yearam >= 1826 and yearam < 1876 and rig == 60:
-        xmimpflag = 96
-    if yearam and yearam < 1776 and rig == 1 and natinimp == 9:
-        xmimpflag = 137
-    if yearam and yearam >= 1776 and yearam < 1801 and rig == 1 and natinimp == 9:
-        xmimpflag = 138
-    if yearam and yearam >= 1801 and yearam < 1826 and rig == 1 and natinimp == 9:
-        xmimpflag = 139
-    if yearam and yearam > 1825 and rig == 1 and natinimp == 9:
-        xmimpflag = 140
-    if (rig == 2 or rig == 5) and natinimp == 9:
-        if yearam and yearam < 1776:
+    if yearam and rig == 60:
+        if yearam < 1726:
+            xmimpflag = 94
+        elif yearam >= 1726:
+            xmimpflag = 95
+        elif yearam >= 1826:
+            xmimpflag = 96
+    if yearam and rig == 1 and natinimp == 9:
+        if yearam < 1776:
+            xmimpflag = 137
+        elif yearam < 1801:
+            xmimpflag = 138
+        elif yearam < 1826:
+            xmimpflag = 139
+        else:
+            xmimpflag = 140
+    if yearam and rig in (2, 5) and natinimp == 9:
+        if yearam < 1776:
             xmimpflag = 141
-        if yearam and yearam >= 1776 and yearam < 1801:
+        elif yearam < 1801:
             xmimpflag = 142
-    if yearam and yearam >= 1801 and yearam < 1826 and rig == 5 and natinimp == 9:
-        xmimpflag = 143
-    if yearam and yearam > 1825 and (rig == 2 or rig == 5) and natinimp == 9:
-        xmimpflag = 145
-    if yearam and yearam < 1776 and rig == 4 and natinimp == 9:
-        xmimpflag = 146
-    if yearam and yearam >= 1776 and yearam < 1801 and rig == 4 and natinimp == 9:
-        xmimpflag = 147
-    if yearam and yearam >= 1801 and yearam < 1826 and rig == 4 and natinimp == 9:
-        xmimpflag = 148
-    if yearam and yearam > 1825 and rig == 4 and natinimp == 9:
-        xmimpflag = 149
-    if yearam and yearam < 1776 and rig == 8 and natinimp == 9:
-        xmimpflag = 150
-    if yearam and yearam >= 1776 and yearam < 1826 and rig == 8 and natinimp == 9:
-        xmimpflag = 151
-    if yearam and yearam > 1825 and rig == 8 and natinimp == 9:
-        xmimpflag = 152
+        elif yearam < 1826 and rig == 5:
+            xmimpflag = 143
+        else:
+            xmimpflag = 145
+    if yearam and rig == 4 and natinimp == 9:
+        if yearam < 1776:
+            xmimpflag = 146
+        elif yearam < 1801:
+            xmimpflag = 147
+        elif yearam < 1826:
+            xmimpflag = 148
+        else:
+            xmimpflag = 149
+    if yearam and rig == 8 and natinimp == 9:
+        if yearam < 1776:
+            xmimpflag = 150
+        elif yearam < 1826:
+            xmimpflag = 151
+        else:
+            xmimpflag = 152
     if yearam and yearam >= 1826 and yearam < 1876 and rig == 9 and natinimp == 9:
         xmimpflag = 154
     if rig == 27 and natinimp == 9:

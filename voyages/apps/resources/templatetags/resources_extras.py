@@ -48,3 +48,4 @@ def decode_language(code):
         return "Latin"
     if code == "es":
         return "Spanish"
+    return None

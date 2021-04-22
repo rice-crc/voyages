@@ -25,7 +25,7 @@ class Command(BaseCommand):
 
     def __init__(self, *args, **kwargs):
         self.next_country_id = -1000000
-        super(Command, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
     def handle(self, csv_path, *args, **options):
 

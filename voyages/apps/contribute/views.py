@@ -959,11 +959,11 @@ def get_reviews_by_status(statuses, display_interim_data=False):
         return place.region.region + '/' + place.place
 
     # Load all necessary voyage id data in a single query for better efficiency.
-    all_voyage_ids = set([
+    all_voyage_ids = {
         id for ids in
         [x['contribution'].get_related_voyage_ids() for x in contributions]
         for id in ids
-    ])
+    }
     fetched_voyages = Voyage.all_dataset_objects \
         .filter(voyage_id__in=all_voyage_ids) \
         .select_related('voyage_ship') \
@@ -1696,7 +1696,8 @@ def submit_review_to_editor(request, review_request_id):
         decision = int(request.POST['reviewer_decision'])
     except:
         pass
-    if decision != ReviewRequestDecision.accepted_by_reviewer and decision != ReviewRequestDecision.rejected_by_reviewer:
+    if decision not in (ReviewRequestDecision.accepted_by_reviewer,
+                        ReviewRequestDecision.rejected_by_reviewer):
         return HttpResponseBadRequest()
     try:
         with transaction.atomic():
@@ -2051,7 +2052,6 @@ def get_voyages_csv_rows(statuses,
     if published:
         for item in export_from_voyages(intra_american_flag):
             yield safe_writerow(writer, row_processor(item))
-    return
 
 
 @login_required()

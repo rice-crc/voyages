@@ -69,9 +69,8 @@ class PivotTable(object):
                  omit_empty=False):
         self.row_data = sorted(row_data, key=lambda r: r[0])
         # Extract the columns from row_data, eliminating duplicates.
-        self.original_columns = sorted(
-            set([header for r in self.row_data for header in list(r[1].keys())
-                 ]))
+        self.original_columns = sorted({
+            header for r in self.row_data for header in list(r[1].keys())})
         self.columns = [col_map(c) for c in self.original_columns]
         self.original_rows = [r[0] for r in self.row_data]
         self.rows = [row_map(r) for r in self.original_rows]

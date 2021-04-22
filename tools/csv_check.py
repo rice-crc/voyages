@@ -34,10 +34,10 @@ integral_fields = [
 
 def get_set_from_prefix(row, prefix):
     row_set = [row.get(prefix + c) for c in "abcdefghijklmnop"]
-    return set([
+    return {
         o for o in row_set
         if o is not None and o.strip() != '' and o.strip() != "."
-    ])
+    }
 
 
 def compare_csv(r1,
@@ -53,71 +53,71 @@ def compare_csv(r1,
         count += 1
         if a is None or b is None:
             bad.append((a, b, {"__row__": "Missing"}))
-        else:
-            keys = set(a.keys()).union(list(b.keys()))
-            diffs = {}
-            for k in keys:
-                if key_map:
-                    k = key_map.get(k, k)
-                if k in ignore_keys:
+            continue
+        keys = set(a.keys()).union(list(b.keys()))
+        diffs = {}
+        for k in keys:
+            if key_map:
+                k = key_map.get(k, k)
+            if k in ignore_keys:
+                continue
+            x = a.get(k, default_values.get(k, "")).strip()
+            y = b.get(k, default_values.get(k, "")).strip()
+            if x == y:
+                continue
+            if (x == ",," and y == "") or (x == "" and y == ",,"):
+                continue
+            # Same date?
+            dx = re.search(r"^(\d+)[,/-](\d+)[,/-](\d+)$", x)
+            dy = re.search(r"^(\d+)[,/-](\d+)[,/-](\d+)$", y)
+            if dx and dy and int(dx.group(1)) == int(dy.group(1)) and int(
+                    dx.group(2)) == int(dy.group(2)) and int(
+                        dx.group(3)) == int(dy.group(3)):
+                continue
+            try:
+                # If the field is numeric, we compare with some tolerance
+                fx = float(x if x != "" else "0")
+                fy = float(y if y != "" else "0")
+                delta = abs(fx - fy)
+                if (delta < 0.001):
                     continue
-                x = a.get(k, default_values.get(k, "")).strip()
-                y = b.get(k, default_values.get(k, "")).strip()
-                if x == y:
+                if k in integral_fields and delta < 0.51:
+                    if delta > 0.05:
+                        w = warning.setdefault(a["voyageid"], {})
+                        w[str(
+                            k
+                        )] = "Integral field with fractional value import"
                     continue
-                if (x == ",," and y == "") or (x == "" and y == ",,"):
+            except:
+                pass
+            try:
+                # Boolean comparisson
+                bx = x.lower()
+                by = y.lower()
+                if bx in bool_values and by in bool_values and bx == by:
                     continue
-                # Same date?
-                dx = re.search(r"^(\d+)[,/-](\d+)[,/-](\d+)$", x)
-                dy = re.search(r"^(\d+)[,/-](\d+)[,/-](\d+)$", y)
-                if dx and dy and int(dx.group(1)) == int(dy.group(1)) and int(
-                        dx.group(2)) == int(dy.group(2)) and int(
-                            dx.group(3)) == int(dy.group(3)):
-                    continue
-                try:
-                    # If the field is numeric, we compare with some tolerance
-                    fx = float(x if x != "" else "0")
-                    fy = float(y if y != "" else "0")
-                    delta = abs(fx - fy)
-                    if (delta < 0.001):
-                        continue
-                    if k in integral_fields and delta < 0.51:
-                        if delta > 0.05:
-                            w = warning.setdefault(a["voyageid"], {})
-                            w[str(
-                                k
-                            )] = "Integral field with fractional value import"
-                        continue
-                except:
-                    pass
-                try:
-                    # Boolean comparisson
-                    bx = x.lower()
-                    by = y.lower()
-                    if bx in bool_values and by in bool_values and bx == by:
-                        continue
-                except:
-                    pass
-                diffs[k] = "Fields differ: \"" + \
-                    str(a.get(k)) + "\" != \"" + str(b.get(k)) + "\""
-            if len(diffs) > 0:
-                # See if it the errors are due to the ordering in a multi-value field (e.g. owner)
-                for prefix in ["owner", "captain"]:
-                    prefix_diffs = [
-                        key for key in list(diffs.keys())
-                        if key.startswith(prefix)
-                    ]
-                    for k in prefix_diffs:
-                        diffs.pop(k)
-                    prefix_set_a = get_set_from_prefix(a, prefix)
-                    prefix_set_b = get_set_from_prefix(b, prefix)
-                    if prefix_set_a != prefix_set_b:
-                        diffs[prefix + "_set"] = "Set of " + prefix + " is different: " + \
-                            str(prefix_set_a) + " vs. " + str(prefix_set_b)
-            if len(diffs) > 0:
-                bad.append((a, b, diffs))
-    print("Row count " + str(count) + ". Issues " + str(len(bad)) +
-          ". Warnings: " + str(len(warning)) + ".")
+            except:
+                pass
+            diffs[k] = "Fields differ: \"" + \
+                str(a.get(k)) + "\" != \"" + str(b.get(k)) + "\""
+        if len(diffs) == 0:
+            continue
+        # See if it the errors are due to the ordering in a multi-value field (e.g. owner)
+        for prefix in ["owner", "captain"]:
+            prefix_diffs = [
+                key for key in list(diffs.keys())
+                if key.startswith(prefix)
+            ]
+            for k in prefix_diffs:
+                diffs.pop(k)
+            prefix_set_a = get_set_from_prefix(a, prefix)
+            prefix_set_b = get_set_from_prefix(b, prefix)
+            if prefix_set_a != prefix_set_b:
+                diffs[prefix + "_set"] = "Set of " + prefix + " is different: " + \
+                    str(prefix_set_a) + " vs. " + str(prefix_set_b)
+        if len(diffs) > 0:
+            bad.append((a, b, diffs))
+    print(f"Row count {count}. Issues {len(bad)}. Warnings: {len(warning)}.")
     return (bad, warning)
 
 
@@ -164,10 +164,10 @@ def print_delta(delta):
         for item in delta[0]:
             voyage_id = item[0]["voyageid"]
             if item[1]["voyageid"] != voyage_id:
-                print("- Voyage id mismatch " + voyage_id + "/" +
-                      item[0]["voyageid"])
+                print("- Voyage id mismatch "
+                      f"{voyage_id}/{item[0]['voyageid']}")
             else:
-                print("- Voyage id: " + voyage_id)
+                print(f"- Voyage id: {voyage_id}")
             print(str(item[2]))
     if len(delta[1]) > 0:
         print("Warnings:")

@@ -342,9 +342,7 @@ def get_image_search_detail(request, page):
     })
 
 
-AFRICAN_NAME_SOLR_FIELDS = [
-    field_name for field_name in AfricanNamesIndex.fields
-]
+AFRICAN_NAME_SOLR_FIELDS = list(AfricanNamesIndex.fields)
 
 
 def download_slaves_helper(data):
@@ -656,7 +654,7 @@ def create_query_dict(var_list, embarkation_list, disembarkation_list,
         query_dict['slave_sex_age__in'] = sex_list
         sex_list_str = ""
         for i in sex_list:
-            if i == "Boy" or i == "Girl" or i == "Male" or i == "Female":
+            if i in ("Boy", "Girl", "Male", "Female"):
                 sex_list_str += i + "s "
             elif i == "Man":
                 sex_list_str += "Men "

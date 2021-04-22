@@ -13,7 +13,7 @@ import urllib.parse
 import urllib.request
 from builtins import map, object, range, str
 from datetime import date
-from itertools import groupby
+from itertools import accumulate, filterfalse, groupby, islice, starmap, takewhile
 from os import listdir, stat
 from stat import ST_MTIME, ST_SIZE
 
@@ -304,6 +304,7 @@ def get_place_from_ascii(ascii_name, flat_place_list):
     for place in flat_place_list:
         if ascii_name == unidecode.unidecode(place[0]):
             return place[0]
+    return None
 
 
 def create_forms_from_var_list(var_list):
@@ -558,17 +559,16 @@ def create_query_dict(var_list):
                             varname + '_month__in'] = [int(x) for x in months]
                 opt = var_list[varname + '_options']
                 if opt == '1':  # Between
-                    def int_mangle(list):
-                        return int(mangle_method(list))
-
                     to_date = None
-                    if int(var_list[varname + '_to_month']) == 12:
+                    var_month = var_list[f'{varname}_to_month']
+                    var_year = var_list[f'{varname}_to_year']
+                    if int(var_month) == 12:
                         to_date = formatDate(
-                            int_mangle(var_list[varname + '_to_year']) + 1, 1)
+                            int(mangle_method(var_year)) + 1, 1)
                     else:
                         to_date = formatDate(
-                            int_mangle(var_list[varname + '_to_year']),
-                            int_mangle(var_list[varname + '_to_month']) + 1)
+                            int(mangle_method(var_year)),
+                            int(mangle_method(var_month)) + 1)
                     query_dict[varname + "__range"] = [
                         formatDate(
                             mangle_method(var_list[varname + '_from_year']),
@@ -794,10 +794,10 @@ def voyage_variables_data(voyage_id, show_imputed=True):
     allvars = []
     for i in allvargroups:
         group = i[0]
-        glist = list([
+        glist = list(
             x for x in i[1]
             if show_imputed or not x['var_full_name'].endswith('*')
-        ])
+        )
         for idx, j in enumerate(glist):
             val = str("")
             if voyagevariables[j['var_name']]:
@@ -869,7 +869,6 @@ def search(request):
     num_col_labels_before = 1
     num_col_labels_total = 1
     num_row_labels = 1
-    is_double_fun = False
     graphs_select_form = None
     graph_data = None
     graph_xfun_index = None
@@ -1007,9 +1006,9 @@ def search(request):
                 'results_per_page_choice']
             results_per_page_form = ResultsPerPageOptionForm(
                 {u'option': request.session['results_per_page_choice']})
-        display_columns = get_new_visible_attrs(globals.default_result_columns)
-        if 'result_columns' in request.session:
-            display_columns = request.session['result_columns']
+        display_columns = request.session.get(
+            'result_columns',
+            get_new_visible_attrs(globals.default_result_columns))
 
         ble = request.POST.get('basic_list_expanded')
         basic_list_contracted = not ble
@@ -1020,12 +1019,9 @@ def search(request):
         if 'previous_queries' not in request.session:
             request.session['previous_queries'] = []
         if submitVal != 'delete_prev_query':
-            if len(
-                    request.session['previous_queries']
-            ) < 1 or not request.session['previous_queries'][0] == var_list:
-                request.session['previous_queries'] = [
-                    var_list
-                ] + request.session['previous_queries']
+            qprev = request.session['previous_queries']
+            if len(qprev) < 1 or not qprev[0] == var_list:
+                request.session['previous_queries'] = [var_list] + qprev
         search_url = request.build_absolute_uri(reverse(
             'voyage:search',)) + "?" + urllib.parse.urlencode(var_list)
         query_dict = create_query_dict(var_list)
@@ -1067,7 +1063,7 @@ def search(request):
             # Most of the time the row/column span will just be 1.
             xls_table = []
             tab = 'tables'
-            pst = {x: y for x, y in list(request.POST.items())}
+            pst = dict(request.POST.items())
 
             # Try to retrieve sessions values
             tables_columns = request.session.get('voyages_tables_columns')
@@ -1075,33 +1071,16 @@ def search(request):
             tables_cells = request.session.get('voyages_tables_cells')
             omit_empty = request.session.get('voyages_tables_omit')
 
-            # Collect settings (if possible retrieve from the session)
-            if 'columns' not in pst and tables_columns:
-                # Stored in session, retrieve
-                pst['columns'] = tables_columns
-            elif 'columns' not in pst:
-                # Not in session, set default
-                pst['columns'] = '7'
-
-            if 'rows' not in pst and tables_rows:
-                pst['rows'] = tables_rows
-            elif 'rows' not in pst:
-                pst['rows'] = '12'
-
-            if 'cells' not in pst and tables_cells:
-                pst['cells'] = tables_cells
-            elif 'cells' not in pst:
-                pst['cells'] = '1'
-
-            if submitVal == "tab_tables_in":
-                if omit_empty is True and 'omit_empty' not in pst:
-                    omit_empty = False
-                elif not omit_empty and 'omit_empty' in pst:
-                    omit_empty = True
-            else:
-                if omit_empty is None:
-                    omit_empty = True
-
+            # Collect settings (if possible retrieve from tyhe session)
+            if 'columns' not in pst:
+                pst['columns'] = tables_columns or '7'
+            if 'rows' not in pst:
+                pst['rows'] = tables_rows or '12'
+            if 'cells' not in pst:
+                pst['cells'] = tables_cells or '1'
+            omit_empty = ('omit_empty' in pst
+                          if submitVal == "tab_tables_in"
+                          else omit_empty or True)
             pst['omit_empty'] = omit_empty
             request.session['voyages_tables_omit'] = omit_empty
 
@@ -1143,6 +1122,7 @@ def search(request):
                 for var in globals.additional_var_dict:
                     if var['var_name'] == table_row_var_name:
                         table_row_var = var
+                        break
             if table_row_var:
                 if table_row_var['var_type'] == 'numeric':
                     restrict_query[table_row_var_name + "__gte"] = -1
@@ -1166,18 +1146,17 @@ def search(request):
                 for var in globals.additional_var_dict:
                     if var['var_name'] == table_col_var_name:
                         table_col_var = var
+            qname = f"{table_col_var_name}_gte"
             if table_col_var:
-                if table_col_var['var_type'] == 'numeric':
-                    restrict_query[table_col_var_name + "__gte"] = -1
-                elif table_col_var['var_type'] == 'date':
-                    restrict_query[
-                        f"{table_col_var_name}__gte"] = date(1, 1, 1)
-                else:
-                    restrict_query[table_col_var_name + "__gte"] = ""
+                vtype = table_col_var['var_type']
+                restrict_query[qname] = (
+                    -1 if vtype == 'numeric' else
+                    date(1, 1, 1) if vtype == 'date' else
+                    "")
             elif table_col_var_name.endswith('_idnum'):
-                restrict_query[table_col_var_name + "__gte"] = "-1"
+                restrict_query[qname] = "-1"
             elif table_col_var_name != '':
-                restrict_query[table_col_var_name + "__gte"] = ""
+                restrict_query[qname] = ""
 
             tableresults = results.filter(**restrict_query)
 
@@ -1189,40 +1168,37 @@ def search(request):
             listed_cols = [list(map(list, k)) for k in table_col_query_def[2]]
 
             # Create column labels
-            collabels = [[j for j in i] for i in listed_cols]
+            collabels = [list(i) for i in listed_cols]
 
             num_col_labels_total = len(collabels)
             num_row_labels = extra_cols + 1
             remove_cols = []
-            if display_fun_name in globals.double_functions:
-                is_double_fun = True
+            is_double_fun = display_fun_name in globals.double_functions
 
             for idx, colquery in enumerate(table_col_query_def[1]):
                 colqueryset = tableresults.filter(**colquery)
                 if omit_empty and colqueryset.count() == 0:
-
                     # Find column label that matches, then find the parent labels that match
                     # Generate the list of subcolumns for the parent column label
                     remove_cols.insert(0, idx)
+                    continue
+                if is_double_fun:
+                    display_col_total = display_function(
+                        colqueryset, None, colqueryset, tableresults)
+                    col_totals.append(display_col_total[0])
+                    col_totals.append(display_col_total[1])
                 else:
-                    if is_double_fun:
-                        display_col_total = display_function(
-                            colqueryset, None, colqueryset, tableresults)
-                        col_totals.append(display_col_total[0])
-                        col_totals.append(display_col_total[1])
-                    else:
-                        col_totals.append(
-                            display_function(colqueryset, None, colqueryset,
-                                             tableresults))
-                    used_col_query_sets.append((colquery, colqueryset))
+                    col_totals.append(
+                        display_function(colqueryset, None, colqueryset,
+                                         tableresults))
+                used_col_query_sets.append((colquery, colqueryset))
             for col in remove_cols:
                 for idt, collbllist in enumerate(collabels):
-                    idy = 0
-                    for idc, colstuff in enumerate(collbllist):
-                        if col >= idy and col < idy + colstuff[1]:
-                            collabels[idt][idc] = [
-                                colstuff[0], colstuff[1] - 1]
-                        idy += colstuff[1]
+                    enum_list = enumerate(collbllist)
+                    idc, colstuff = next(islice(enum_list, len(list(
+                        takewhile(lambda idy, colx=col: idy <= colx, accumulate(
+                            starmap(lambda i, c: c[1], enum_list))))), None))
+                    collabels[idt][idc] = [colstuff[0], colstuff[1] - 1]
             remove_rows = []
             if is_double_fun:
                 collabels = [[[j, k * 2] for j, k in i] for i in collabels]
@@ -1238,10 +1214,10 @@ def search(request):
                 for j in range(num_row_labels):
                     xls_row.append('')
                 for lbl, num in i:
-                    if num > 0:
-                        xls_row.append(lbl)
-                        for j in range(num - 1):
-                            xls_row.append('')
+                    if num == 0:
+                        continue
+                    xls_row.append(lbl)
+                    xls_row.extend('' * (num - 1))
                 xls_table.append(xls_row)
                 if idx == 0:
                     if is_double_fun:
@@ -1264,29 +1240,17 @@ def search(request):
                     if rowqueryset.count() > 0:
                         cell_queryset = rowqueryset.filter(**colquery)
 
+                    display_result = display_function(
+                        cell_queryset, rowqueryset, colqueryset,
+                        tableresults)
                     if is_double_fun:
-                        display_result = display_function(
-                            cell_queryset, rowqueryset, colqueryset,
-                            tableresults)
                         row_cell_values.append(display_result[0])
                         row_cell_values.append(display_result[1])
-                        if display_result[0] is not None:
-                            xls_row.append(display_result[0])
-                        else:
-                            xls_row.append('')
-                        if display_result[1] is not None:
-                            xls_row.append(display_result[1])
-                        else:
-                            xls_row.append('')
+                        xls_row.append(display_result[0] or '')
+                        xls_row.append(display_result[1] or '')
                     else:
-                        display_result = display_function(
-                            cell_queryset, rowqueryset, colqueryset,
-                            tableresults)
                         row_cell_values.append(display_result)
-                        if display_result is not None:
-                            xls_row.append(display_result)
-                        else:
-                            xls_row.append('')
+                        xls_row.append(display_result or '')
                 cell_values.append(row_cell_values)
                 row_total = display_function(rowqueryset, rowqueryset, None,
                                              tableresults)
@@ -1296,19 +1260,10 @@ def search(request):
                     row_total,
                 ])
                 if is_double_fun:
-                    if row_total[0] is not None:
-                        xls_row.append(row_total[0])
-                    else:
-                        xls_row.append('')
-                    if row_total[1] is not None:
-                        xls_row.append(row_total[1])
-                    else:
-                        xls_row.append('')
+                    xls_row.append(row_total[0] or '')
+                    xls_row.append(row_total[1] or '')
                 else:
-                    if row_total is not None:
-                        xls_row.append(row_total)
-                    else:
-                        xls_row.append('')
+                    xls_row.append(row_total or '')
                 xls_table.append(xls_row)
                 # cell_displays.append((rowlbl, row_cell_displays, row_total))
             for rownum in remove_rows:
@@ -1318,22 +1273,25 @@ def search(request):
                 ], row_list[rownum][1], row_list[rownum][2])
                 # Now find the rows with the headers for it and reduce those header counts by 1
                 for idx, rl in enumerate(row_list):
-                    rowlbl = [i for i in rl[0]]
-                    for idy, i in enumerate(rowlbl):
+                    if idx >= rownum:
+                        continue
+                    limit = rownum - idx
+                    rowlbl = list(rl[0])
+                    decrements = list(filterfalse(
+                        lambda idy, i, lim=limit: i[1] < lim,
+                        enumerate(rowlbl)))
+                    for idy, i in decrements:
                         # Don't handle the case for the rownum, since that has already been decremented
-                        if idx < rownum and idx + i[1] > rownum:
-                            row_list[idx][0][idy] = (
-                                row_list[idx][0][idy][0],
-                                row_list[idx][0][idy][1] - 1)
+                        row_list[idx][0][idy][1] -= 1
                 # Now handle the case when this row we are removing has headers of its own
-                rowlbl = [i for i in row_list[rownum][0]]
+                rowlbl = list(row_list[rownum][0])
                 rowlbl.reverse()
                 for lbl, num in rowlbl:
                     if num > 0:
                         row_list[rownum + 1][0].insert(0, (lbl, num))
                 row_list.pop(rownum)
             for idx, row in enumerate(row_list):
-                rowlbl = [i for i in row[0]]
+                rowlbl = list(row[0])
                 for i in range(num_row_labels - len(rowlbl)):
                     xls_table[idx + num_col_labels_before].insert(0, '')
                 rowlbl.reverse()
@@ -1348,17 +1306,9 @@ def search(request):
             else:
                 col_totals.append(
                     display_function(tableresults, None, None, tableresults))
-            xls_row = []
-            for i in range(num_row_labels):
-                if i == 0:
-                    xls_row.append('Totals')
-                else:
-                    xls_row.append('')
+            xls_row = ['Totals'] + (num_row_labels - 1) * ['']
             for i in col_totals:
-                if i is not None:
-                    xls_row.append(i)
-                else:
-                    xls_row.append('')
+                xls_row.append(i or '')
             xls_table.append(xls_row)
             if 'xls_download_table' == submitVal:
                 response = HttpResponse(
@@ -1493,7 +1443,7 @@ def search(request):
                 items = list(timeline_chart_settings.items())
                 items += list(timeline_selected_tuple[4].items())
                 timeline_chart_settings = dict(items)
-        elif submitVal == 'tab_maps' or submitVal == 'tab_animation':
+        elif submitVal in ('tab_maps', 'tab_animation'):
             tab = submitVal[4:]
             frame_from_year = int(
                 request.POST.get('frame_from_year', voyage_span_first_year))
@@ -1572,9 +1522,8 @@ def search(request):
                     if source is not None and destination is not None and source[0].show and \
                             destination[0].show and voyage.year is not None and \
                             voyage.embarked is not None and voyage.embarked > 0 and voyage.disembarked is not None:
-                        flag = VoyageCache.nations.get(voyage.ship_nat_pk)
-                        if flag is None:
-                            flag = ''
+                        flag = VoyageCache.nations.get(
+                            voyage.ship_nat_pk) or ''
                         yield '{ "voyage_id": ' + str(voyage.voyage_id) + \
                               ', "source_name": "' + _(source[0].name) + '"' + \
                               ', "source_lat": ' + str(source[0].lat) + \
@@ -1586,28 +1535,26 @@ def search(request):
                               ', "disembarked": ' + str(voyage.disembarked) + \
                               ', "year": ' + str(voyage.year) + \
                               ', "ship_ton": ' + \
-                              (str(voyage.ship_ton) if voyage.ship_ton is not None else '0') + \
+                              str(voyage.ship_ton or 0) + \
                               ', "nat_id": ' + \
-                              (str(voyage.ship_nat_pk) if voyage.ship_nat_pk is not None else '0') + \
+                              str(voyage.ship_nat_pk or 0) + \
                               ', "ship_nationality_name": "' + _(flag) + '"' \
                               ', "ship_name": "' + \
-                              (str(voyage.ship_name) if voyage.ship_name is not None else '') + '"' + \
+                              str(voyage.ship_name or '') + '"' + \
                               ', "route": ' + json.dumps(route) +\
                               ' }'
 
             return HttpResponse('[' + ',\n'.join(animation_response()) + ']',
                                 'application/json')
         elif submitVal == 'download_xls_current_page':
-            pageNum = request.POST.get('pageNum')
-            if not pageNum:
-                pageNum = 1
+            pageNum = request.POST.get('pageNum') or 1
             return download_xls_page(results, int(pageNum), results_per_page,
                                      display_columns, var_list)
         elif submitVal == 'delete_prev_query':
             prev_query_num = int(request.POST.get('prev_query_num'))
-            prevqs = request.session['previous_queries']
-            prevqs.remove(prevqs[prev_query_num])
-            request.session['previous_queries'] = prevqs
+            qprev = request.session['previous_queries']
+            qprev.remove(qprev[prev_query_num])
+            request.session['previous_queries'] = qprev
             prev_queries_open = True
 
     if len(results) == 0:
@@ -1902,34 +1849,22 @@ def check_and_save_options_form(request, to_reset_form):
     # Reset form if necessary
     if to_reset_form:
         form = ResultsPerPageOptionForm()
-        results_per_page = form.cleaned_option()
-    else:
-        if request.method == "POST":
-            form = ResultsPerPageOptionForm(request.POST)
-
-            if form.is_valid():
-                results_per_page = form.cleaned_option()
-            else:
-                form = form_in_session
-                if form is not None:
-                    form.is_valid()
-                    results_per_page = form.cleaned_option()
-                else:
-                    form = ResultsPerPageOptionForm()
-                    results_per_page = form.cleaned_option()
-
-            if form_in_session != form:
-                request.session['results_per_page_form'] = form
-        else:
-            if form_in_session is not None:
-                form = request.session['results_per_page_form']
+    elif request.method == "POST":
+        form = ResultsPerPageOptionForm(request.POST)
+        if not form.is_valid():
+            form = form_in_session
+            if form is not None:
                 form.is_valid()
-                results_per_page = form.cleaned_option()
             else:
                 form = ResultsPerPageOptionForm()
-                results_per_page = form.cleaned_option()
-
-    return form, results_per_page
+        if form_in_session != form:
+            request.session['results_per_page_form'] = form
+    elif form_in_session is not None:
+        form = request.session['results_per_page_form']
+        form.is_valid()
+    else:
+        form = ResultsPerPageOptionForm()
+    return form, form.cleaned_option()
 
 
 def search_var_dict(var_name):
@@ -2091,18 +2026,17 @@ def insert_source(dict, category, source):
 
     # If string has been parsed, get information,
     # Otherwise, it will be uncategorized item
-    if m is not None:
-        if category == "documentary_sources":
-            group_name = m.group(1)
-            (city, country) = extract_places(m.group(2))
-            text = m.group(3)
-        else:
-            group_name = m.group(1)
-    else:
+    if m is None:
         group_name = source.full_ref
         city = "uncategorized"
         country = "uncategorized"
         text = source.full_ref
+    elif category == "documentary_sources":
+        group_name = m.group(1)
+        (city, country) = extract_places(m.group(2))
+        text = m.group(3)
+    else:
+        group_name = m.group(1)
 
     # Get cities in country
     cities_list = None
@@ -2258,6 +2192,7 @@ def get_first_letter(string):
     for j in string:
         if (j >= 'a' and j <= 'z') or (j >= 'A' and j <= 'Z'):
             return j.capitalize()
+    return None
 
 
 def extract_places(string):
@@ -2325,18 +2260,12 @@ def csv_stats_download(request):
     response['Content-Disposition'] = 'attachment; filename="data.csv"'
 
     writer = csv.writer(response)
-    if 'voyage_last_query' in request.session and request.session['voyage_last_query'] is not None\
-            and request.session['voyage_last_query']:
-        query_dict = request.session['voyage_last_query']
-        if 'voyage_last_query_date_filters' in request.session\
-                and request.session['voyage_last_query_date_filters'] is not None:
-            date_filters = request.session['voyage_last_query_date_filters']
-        else:
-            date_filters = []
-
-        results = perform_search(query_dict,
-                                 date_filters,
-                                 lang=request.LANGUAGE_CODE)
+    query_dict = request.session.get('voyage_last_query')
+    if query_dict:
+        results = perform_search(
+            query_dict,
+            request.session.get('voyage_last_query_date_filters', []),
+            lang=request.LANGUAGE_CODE)
 
         if len(results) == 0:
             results = []
@@ -2437,15 +2366,7 @@ def extract_query_for_download(query_dict, date_filter):
         if isinstance(query_dict[key], (int, float)):
             query_str += str(query_dict[key])
         elif isinstance(query_dict[key], (list, tuple)):
-            for elem in query_dict[key]:
-                if isinstance(elem, (int, float)):
-                    typeElem = 'number'
-                    break
-                else:
-                    typeElem = 'text'
-                    break
-
-            if typeElem == 'number':
+            if isinstance(list(query_dict.items())[0], (int, float)):
                 query_str += "(" + " to ".join(map(str, query_dict[key])) + ")"
             else:
                 tmp_arr = []
@@ -2487,11 +2408,12 @@ def remove_empty_columns(index, row_list, collabels, col_totals):
     # Port
     current_index = 1
     for ind, value in enumerate(collabels[-1]):
-        if value[1] == 1 and current_index == index + 1:
+        if value[1] != 1:
+            continue
+        if current_index == index + 1:
             del collabels[-1][ind]
             break
-        elif value[1] == 1:
-            current_index += 1
+        current_index += 1
 
     # If there is more (parents), check then and remove if necessary
     # Start from first parent and go to grandparents if necessary
@@ -2521,14 +2443,11 @@ def remove_empty_columns(index, row_list, collabels, col_totals):
                     # If 0, remove it
                     if value[1] == 0:
                         del collabels[depth][i]
-                        depth -= 1
-                    else:
-                        depth -= 1
+                    depth -= 1
 
                     # Go to the next parents if needed
                     break
-                else:
-                    val += value[1]
+                val += value[1]
 
     remove_empty_columns(index + 1, row_list, collabels, col_totals)
 

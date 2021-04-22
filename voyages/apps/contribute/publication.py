@@ -361,7 +361,7 @@ def _fetch_active_reviews_by_status(statuses):
 
 def _map_csv_date(data, varname, csv_date, labels=['A', 'B', 'C']):
     if csv_date is None:
-        return None
+        return
     members = csv_date.split(',')
     if len(members) != 3:
         members = [None, None, None]
@@ -843,7 +843,7 @@ def _save_editorial_version(review_request,
     # Create or load a voyage with the appropriate voyage id.
     voyage = Voyage()
     contrib = review_request.contribution()
-    if contrib_type == 'merge' or contrib_type == 'new':
+    if contrib_type in ('merge', 'new'):
         if not review_request.created_voyage_id:
             raise Exception(
                 'For new or merged contributions, an explicit voyage_id must be set'

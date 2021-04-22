@@ -18,8 +18,7 @@ from voyages.apps.voyage.maps import VoyageRoutes
 def precompile_paths(datasetName, twoWayLinks):
 
     def get_module(mod):
-        return importlib.import_module("tools.animation." + datasetName + "." +
-                                       mod)
+        return importlib.import_module(f"tools.animation.{datasetName}.{mod}")
 
     # Import the appropriate files
     region_from = get_module("region_from").region_from
@@ -83,8 +82,7 @@ def precompile_paths(datasetName, twoWayLinks):
                 # This is an invalid coordinate, try parent coordinates instead.
                 pt = get_coords(VoyageCache.regions.get(p.parent))
             if pt is None:
-                warnings.append('Port [' + str(pk) + ']' + p.name +
-                                ' has invalid coordinates')
+                warnings.append(f'Port [{pk}]{p.name} has invalid coordinates')
                 proutes[pk] = {'reg': -1, 'path': [pt], 'name': p.name}
                 continue
             closest_region_index = get_closest(pt, regions)
@@ -96,8 +94,8 @@ def precompile_paths(datasetName, twoWayLinks):
                 'name': p.name
             }
             if closest_distance > threshold:
-                warnings.append('Port [' + str(pk) + ']' + p.name +
-                                ' is too far from any regional hub')
+                warnings.append(f'Port [{pk}]{p.name} is too far from '
+                                'any regional hub')
         return proutes
 
     port_routes = {}
@@ -113,13 +111,12 @@ def precompile_paths(datasetName, twoWayLinks):
 
     reg_route_pairs = [
         (s, d)
-        for (s, d) in set([(get_port_reg(v, 'src'), get_port_reg(v, 'dst'))
-                           for v in list(VoyageCache.voyages.values())])
+        for (s, d) in {(get_port_reg(v, 'src'), get_port_reg(v, 'dst'))
+                       for v in list(VoyageCache.voyages.values())}
         if s is not None and d is not None and s >= 0 and d >= 0
     ]
 
-    print("Computing " + str(len(reg_route_pairs)) +
-          " smooth paths between routes.")
+    print(f"Computing {len(reg_route_pairs)} smooth paths between routes.")
 
     regional_routes = {}
     computed = 0
