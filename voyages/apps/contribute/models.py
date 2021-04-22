@@ -409,8 +409,8 @@ class InterimNewspaperSource(InterimContributedSource):
 
 
 class InterimPreExistingSourceActions(object):
-    accepted = 0,
-    edit = 1,
+    accepted = 0
+    edit = 1
     exclude = 2
 
 

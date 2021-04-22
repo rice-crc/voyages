@@ -33,10 +33,9 @@ def get_year_value(value):
     out rendered content
     """
     try:
-        ret = value.split(",")[2]
+        return value.split(",")[2]
     except:
-        ret = ""
-    return ret
+        return ""
 
 
 @register.filter

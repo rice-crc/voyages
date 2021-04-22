@@ -14,7 +14,7 @@ django.setup()
 
 if len(sys.argv) <= 1:
     print("Pass the filename of output log as argument")
-    exit()
+    sys.exit()
 
 f = open(sys.argv[1], 'w')
 f.write('Starting publication script.\n')

@@ -481,10 +481,10 @@ def ajax_search(request):
     if output_type == 'resultsTable':
         target_lang = 'lang_' + lang
         requested_fields = [x['data'] for x in data['tableParams']['columns']]
-        requested_fields = set([
+        requested_fields = {
             f + '_' + lang if f.endswith('lang') else f
             for f in requested_fields
-        ])
+        }
         return get_results_table(
             results,
             data,

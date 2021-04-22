@@ -110,12 +110,12 @@ def get_regions(search_configuration=None, mode=None):
     return [return_areas, return_regions]
 
 
-def update_regions_labels(regions, search_configuration, area_prefix,
+def update_regions_labels(old_regions, search_configuration, area_prefix,
                           region_prefix):
     new_regions = {}
     query = []
 
-    for area, regions in regions.items():
+    for area, regions in old_regions.items():
         new_region_list = []
         count_checked = 0
         for region in regions:

@@ -8,7 +8,7 @@ import unicodecsv
 
 if len(sys.argv) != 4:
     print("You must pass 3 args: TAST CSV, IAm CSV, Output CSV")
-    exit()
+    sys.exit()
 
 iam_column = u'IntraAmer'
 
@@ -34,7 +34,7 @@ bad_ids = set(tast_ids) & set(iam_ids)
 if len(bad_ids) > 0:
     print("The voyage Ids are not unique")
     print(bad_ids)
-    exit()
+    sys.exit()
 
 all_cols = set(tast_cols + iam_cols + [iam_column])
 all_rows = tast_rows + iam_rows

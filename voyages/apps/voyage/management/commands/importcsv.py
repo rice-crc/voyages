@@ -48,7 +48,7 @@ class Command(BaseCommand):
     def handle(self, csv_file, *args, **options):
         self.errors = 0
         target_db = options.get('db')
-        if target_db != 'mysql' and target_db != 'pgsql':
+        if target_db not in ('mysql', 'pgsql'):
             sys.stderr.write(
                 'Supported dbs are "mysql" and "pgsql". Aborting...\n')
             return
@@ -133,7 +133,7 @@ class Command(BaseCommand):
             return model
 
         def filter_out_source_letter(letter):
-            return letter == ' ' or letter == ','
+            return letter in (' ', ',')
 
         def check_hierarchy(voyage_id, field, place, region, broad_region):
             """

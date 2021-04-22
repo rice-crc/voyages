@@ -79,11 +79,11 @@ class NameSearchCache(object):
                                              'name_first', 'name_second',
                                              'name_third')
             for item in q:
-                ns = set([
+                ns = {
                     strip_accents(item[i])
                     for i in range(1, 4)
                     if item[i] is not None
-                ])
+                }
                 all_names.update(ns)
                 id = item[0]
                 for name in ns:
@@ -601,7 +601,7 @@ class EnslavedSearch(object):
                         orm_orderby.append((
                             '-' if is_desc else '') + year_field)
 
-                def add_names_sorting(sorted_name_fields, col_name, q):
+                def add_names_sorting(sorted_name_fields, col_name, q, is_desc=is_desc):
                     # The next lines create a list made of the name fields with
                     # a separator constant value between each consecutive pair.
                     names_sep = Value(';')

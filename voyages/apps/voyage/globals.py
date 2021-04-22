@@ -867,10 +867,9 @@ def make_avg_nopretty_fun(varname):
     # prettifier = graph_display_methods.get(varname, no_mangle)
 
     def avg_nopretty_fun(queryset, rowset=None, colset=None, allset=None):
-        values = list([
+        values = list(
             float(b) for b in [a.get(varname)
-                               for a in queryset] if b is not None
-        ])
+                               for a in queryset] if b is not None)
         return old_div(sum(values), len(values))
         # stats = queryset.stats(varname).stats_results()
         # if stats and stats[varname]:
@@ -2306,9 +2305,9 @@ def get_sum_set_timeline(query_dict, var_name):
     :return: list of values [['year', 'value'],]
     """
     data = get_time_aggregate_data(query_dict, var_name)
-    return list([
-        [year, round(sum([x[1] for x in values]), 1)] for year, values in data
-    ])
+    return list(
+        [year, round(sum([x[1] for x in values]), 1)]
+        for (year, values) in data)
 
 
 def get_exist_set_timeline(query_dict, var_name):
@@ -2360,7 +2359,7 @@ def get_simple_set_timeline(query_dict, var_name):
     :return: list of values [['year', 'value'],]
     """
     data = get_time_aggregate_data(query_dict, var_name)
-    return list([[year, len(values)] for year, values in data])
+    return list([year, len(values)] for (year, values) in data)
 
 
 # List of options and settings for timeline in form of:

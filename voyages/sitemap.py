@@ -75,17 +75,18 @@ class StaticSitemap(Sitemap):
 
     def _get_modification_date(self, p, appname):
         # We get the modification date from the template itself
-        if getattr(p, 'default_args', None):
-            if 'template_name' in p.default_args:
-                template = p.default_args['template_name']
-            elif 'template' in p.default_args:
-                template = p.default_args['template']
-            template_path = self._get_template_path(template, appname)
+        if not getattr(p, 'default_args', None):
+            return None
+        if 'template_name' in p.default_args:
+            template = p.default_args['template_name']
+        elif 'template' in p.default_args:
+            template = p.default_args['template']
+        template_path = self._get_template_path(template, appname)
 
-            if template_path is None:
-                return datetime.datetime.now()
-            mtime = os.stat(template_path).st_mtime
-            return datetime.datetime.fromtimestamp(mtime)
+        if template_path is None:
+            return datetime.datetime.now()
+        mtime = os.stat(template_path).st_mtime
+        return datetime.datetime.fromtimestamp(mtime)
 
     def _get_template_path(self, template_path, appname):
         # check the app directory

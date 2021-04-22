@@ -82,9 +82,7 @@ def get_estimates_map(request):
                             result.embarkation_region.longitude,
                             result.embarkation_region.export_area)
         key = eregion + "_" + dregion
-        item = (eregion, dregion, 0, 0)
-        if key in flows:
-            item = flows[key]
+        item = flows.get(key, (eregion, dregion, 0, 0))
         flows[key] = (eregion, dregion, item[2] + result.embarked_slaves,
                       item[3] + result.disembarked_slaves)
     data['regions'] = regions
@@ -247,10 +245,10 @@ def get_estimates_table(request):
         row_filter = filter_functions[row_key_index]
         col_filter = filter_functions[col_key_index]
         estimates = list(cache.values())
-        all_row_keys = set(
-            [row_key_function(e) for e in estimates if row_filter(e)])
-        all_col_keys = set(
-            [col_key_function(e) for e in estimates if col_filter(e)])
+        all_row_keys = {
+            row_key_function(e) for e in estimates if row_filter(e)}
+        all_col_keys = {
+            col_key_function(e) for e in estimates if col_filter(e)}
         table_dict = {(rk, ck): (0, 0) for rk in all_row_keys
                       for ck in all_col_keys}
 
@@ -294,9 +292,9 @@ def get_estimates_table(request):
 
     row_sort_fun = default_sort_fun if int(
         row_key_index) < 4 else row_header_function
-    row_set = sorted(set([k[0] for k in list(table_dict.keys())]),
+    row_set = sorted({k[0] for k in list(table_dict.keys())},
                      key=row_sort_fun)
-    column_set = sorted(set([k[1] for k in list(table_dict.keys())]),
+    column_set = sorted({k[1] for k in list(table_dict.keys())},
                         key=default_sort_fun)
 
     # How many cells a single piece of data spans
