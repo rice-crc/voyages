@@ -77,8 +77,8 @@ To generate the underlying directed network visit
 {SERVER HTTP PATH}/static/maps/index.html
 The tool has explanatory notes on how to visually design and inspect the network.
 
-Once a routeNodes.js file is generated from the tool, it must replace the one
-in {project local path}/sitemedia/maps/routeNodes.js
+Once a route_nodes.js file is generated from the tool, it must replace the one
+in {project local path}/sitemedia/maps/route_nodes.js
 
 Warning
 -------

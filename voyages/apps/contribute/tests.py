@@ -44,10 +44,10 @@ class TestAuthentication(TestCase):
         username = "test_user" + str(random.randint(0, 1000000))
         password = "test_user" + str(random.randint(0, 100000))
 
-        tmpUser = User.objects.create(username=username)
-        tmpUser.set_password(password)
-        tmpUser.save()
-        return tmpUser, username, password
+        user = User.objects.create(username=username)
+        user.set_password(password)
+        user.save()
+        return user, username, password
 
     def test_invalid_login_info(self):
         """
@@ -178,7 +178,7 @@ class TestImputedDataCalculation(TestCase):
             try:
                 float(s)
                 return True
-            except:
+            except Exception:
                 return False
 
         def mismatch_text(m):

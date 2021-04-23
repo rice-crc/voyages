@@ -271,7 +271,7 @@ def compute_imputed_vars(_interim, is_iam=False):
                         _interim.date_vessel_left_last_slaving_port)
     try:
         _interim_length = int(_interim.length_of_middle_passage)
-    except:
+    except Exception:
         _interim_length = 0
     if voy2imp is None or (
             voy2imp < (0 if is_iam else 20) and _interim_length and (

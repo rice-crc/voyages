@@ -15,16 +15,16 @@ from voyages.apps.voyage.cache import VoyageCache
 from voyages.apps.voyage.maps import VoyageRoutes
 
 
-def precompile_paths(datasetName, twoWayLinks):
+def precompile_paths(dataset_name, two_way_links):
 
     def get_module(mod):
-        return importlib.import_module(f"tools.animation.{datasetName}.{mod}")
+        return importlib.import_module(f"tools.animation.{dataset_name}.{mod}")
 
     # Import the appropriate files
     region_from = get_module("region_from").region_from
     region_to = get_module("region_to").region_to
     region_network = get_module("region_network")
-    routeNodes = region_network.routeNodes
+    route_nodes = region_network.route_nodes
     links = set(region_network.links)
 
     VoyageCache.load()
@@ -34,10 +34,10 @@ def precompile_paths(datasetName, twoWayLinks):
         return min(enumerate(choices),
                    key=lambda __pt: hs_dist(__pt[1], origin))[0]
 
-    region_from_nodes = [get_closest(r, routeNodes) for r in region_from]
-    region_to_nodes = [get_closest(r, routeNodes) for r in region_to]
+    region_from_nodes = [get_closest(r, route_nodes) for r in region_from]
+    region_to_nodes = [get_closest(r, route_nodes) for r in region_to]
     # We now compute the regional routes.
-    route_finder = VoyageRoutes(routeNodes, links, twoWayLinks)
+    route_finder = VoyageRoutes(route_nodes, links, two_way_links)
 
     def get_coords(geo_entry):
         if geo_entry is not None:
@@ -52,7 +52,7 @@ def precompile_paths(datasetName, twoWayLinks):
     def smooth_path(source, target):
         nodes = route_finder.find_route(source, target)
         if nodes is None or source == target:
-            return [routeNodes[source], routeNodes[target]]
+            return [route_nodes[source], route_nodes[target]]
         points = np.array([[pt[0] for pt in nodes], [pt[1] for pt in nodes]]).T
         # Linear length along the points:
         distance = np.cumsum(np.sqrt(np.sum(np.diff(points, axis=0)**2,
@@ -67,10 +67,10 @@ def precompile_paths(datasetName, twoWayLinks):
                                         axis=0)
                 alpha = np.linspace(0, 1, max([20, 5 * len(nodes)]))
                 return interpolated(alpha).tolist()
-            except:
+            except Exception:
                 pass
         print(str(source) + " " + str(target))
-        return [routeNodes[source], routeNodes[target]]
+        return [route_nodes[source], route_nodes[target]]
 
     warnings = []
 
@@ -130,18 +130,18 @@ def precompile_paths(datasetName, twoWayLinks):
     return regional_routes, port_routes, warnings
 
 
-def generate_static_files(datasetName, twoWayLinks=False):
+def generate_static_files(dataset_name, two_way_links=False):
     """
     Generate JSON files with regional routes and port paths to respective hubs.
     """
     (regional_routes, port_routes,
-     warnings) = precompile_paths(datasetName, twoWayLinks)
+     warnings) = precompile_paths(dataset_name, two_way_links)
     if len(warnings) > 0:
         print("Warnings (" + str(len(warnings)) + ")")
         for w in warnings:
             print(w.encode('utf-8'))
     base_folder = os.path.join(os.path.dirname(os.path.abspath(__file__)),
-                               '../../voyages/sitemedia/maps/js/', datasetName)
+                               '../../voyages/sitemedia/maps/js/', dataset_name)
     with open(os.path.join(base_folder, 'regional_routes.json'), 'w') as f:
         json.dump(regional_routes, f)
     with open(os.path.join(base_folder, 'port_routes.json'), 'w') as f:

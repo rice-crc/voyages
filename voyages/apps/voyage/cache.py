@@ -8,7 +8,7 @@ from .models import (BroadRegion, Nationality, OwnerOutcome, ParticularOutcome,
                      TonType, VesselCapturedOutcome, Voyage, VoyageDates)
 
 
-class CachedGeo(object):
+class CachedGeo:
     """
     Caches a geographical place (could be a port, region, or broad region)
     """
@@ -39,7 +39,7 @@ class CachedGeo(object):
         return port, region, broad_region
 
 
-class CachedVoyage(object):
+class CachedVoyage:
     """
     Cache the most basic information of a voyage for map generation and aggregation
     """
@@ -59,7 +59,7 @@ class CachedVoyage(object):
         self.disembarked = disembarked
 
 
-class VoyageCache(object):
+class VoyageCache:
     """
     Caches all geo locations and all voyages in the db loading only the minimum
     amount of fields required.

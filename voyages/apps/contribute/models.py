@@ -26,7 +26,7 @@ class AdminFaq(models.Model):
     def __unicode__(self):
         return "%s" % self.question
 
-    class Meta(object):
+    class Meta:
         ordering = ['question']
         verbose_name = 'Frequently Asked Question For Admins'
         verbose_name_plural = 'Frequently Asked Question For Admins'
@@ -39,7 +39,7 @@ class UserProfile(models.Model):
     This model stores additional information related to users of the site.
     """
 
-    user = models.OneToOneField(User)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
     institution = models.CharField(max_length=255)
     new_material_and_sources = models.TextField(max_length=1000)
 
@@ -58,24 +58,29 @@ class InterimVoyage(models.Model):
     ship_construction_place = models.ForeignKey(voyage.models.Place,
                                                 related_name='+',
                                                 null=True,
-                                                blank=True)
+                                                blank=True,
+                                                on_delete=models.CASCADE)
     ship_registration_place = models.ForeignKey(voyage.models.Place,
                                                 related_name='+',
                                                 null=True,
-                                                blank=True)
+                                                blank=True,
+                                                on_delete=models.CASCADE)
     national_carrier = models.ForeignKey(voyage.models.Nationality,
                                          related_name='+',
                                          null=True,
-                                         blank=True)
+                                         blank=True,
+                                         on_delete=models.CASCADE)
     rig_of_vessel = models.ForeignKey(voyage.models.RigOfVessel,
                                       related_name='+',
                                       null=True,
-                                      blank=True)
+                                      blank=True,
+                                      on_delete=models.CASCADE)
     tonnage_of_vessel = models.IntegerField(null=True, blank=True)
     ton_type = models.ForeignKey(voyage.models.TonType,
                                  related_name='+',
                                  null=True,
-                                 blank=True)
+                                 blank=True,
+                                 on_delete=models.CASCADE)
     guns_mounted = models.IntegerField(null=True, blank=True)
     first_ship_owner = models.CharField(max_length=255, null=True, blank=True)
     second_ship_owner = models.CharField(max_length=255, null=True, blank=True)
@@ -87,73 +92,96 @@ class InterimVoyage(models.Model):
     voyage_outcome = models.ForeignKey(voyage.models.ParticularOutcome,
                                        related_name='+',
                                        null=True,
-                                       blank=True)
+                                       blank=True,
+                                       on_delete=models.CASCADE)
     african_resistance = models.ForeignKey(voyage.models.Resistance,
                                            related_name='+',
                                            null=True,
-                                           blank=True)
+                                           blank=True,
+                                           on_delete=models.CASCADE)
 
     # Itinerary
     first_port_intended_embarkation = models.ForeignKey(voyage.models.Place,
                                                         related_name='+',
                                                         null=True,
-                                                        blank=True)
+                                                        blank=True,
+                                                        on_delete=models.CASCADE)
     second_port_intended_embarkation = models.ForeignKey(voyage.models.Place,
                                                          related_name='+',
                                                          null=True,
-                                                         blank=True)
+                                                         blank=True,
+                                                         on_delete=models.CASCADE)
     first_port_intended_disembarkation = models.ForeignKey(voyage.models.Place,
                                                            related_name='+',
                                                            null=True,
-                                                           blank=True)
+                                                           blank=True,
+                                                           on_delete=models.CASCADE)
     second_port_intended_disembarkation = models.ForeignKey(voyage.models.Place,
                                                             related_name='+',
                                                             null=True,
-                                                            blank=True)
+                                                            blank=True,
+                                                            on_delete=models.CASCADE)
     port_of_departure = models.ForeignKey(voyage.models.Place,
                                           related_name='+',
                                           null=True,
-                                          blank=True)
+                                          blank=True,
+                                          on_delete=models.CASCADE)
     number_of_ports_called_prior_to_slave_purchase = models.IntegerField(
         null=True, blank=True)
     first_place_of_slave_purchase = models.ForeignKey(voyage.models.Place,
                                                       related_name='+',
                                                       null=True,
-                                                      blank=True)
+                                                      blank=True,
+                                                      on_delete=models.CASCADE)
     second_place_of_slave_purchase = models.ForeignKey(voyage.models.Place,
                                                        related_name='+',
                                                        null=True,
-                                                       blank=True)
+                                                       blank=True,
+                                                       on_delete=models.CASCADE)
     third_place_of_slave_purchase = models.ForeignKey(voyage.models.Place,
                                                       related_name='+',
                                                       null=True,
-                                                      blank=True)
+                                                      blank=True,
+                                                      on_delete=models.CASCADE)
     principal_place_of_slave_purchase = models.ForeignKey(voyage.models.Place,
                                                           related_name='+',
                                                           null=True,
-                                                          blank=True)
+                                                          blank=True,
+                                                          on_delete=models.CASCADE)
     place_of_call_before_atlantic_crossing = models.ForeignKey(
-        voyage.models.Place, related_name='+', null=True, blank=True)
+        voyage.models.Place,
+        related_name='+',
+        null=True,
+        blank=True,
+        on_delete=models.CASCADE)
     number_of_new_world_ports_called_prior_to_disembarkation = models.IntegerField(
         null=True, blank=True)
     first_place_of_landing = models.ForeignKey(voyage.models.Place,
                                                related_name='+',
                                                null=True,
-                                               blank=True)
+                                               blank=True,
+                                               on_delete=models.CASCADE)
     second_place_of_landing = models.ForeignKey(voyage.models.Place,
                                                 related_name='+',
                                                 null=True,
-                                                blank=True)
+                                                blank=True,
+                                                on_delete=models.CASCADE)
     third_place_of_landing = models.ForeignKey(voyage.models.Place,
                                                related_name='+',
                                                null=True,
-                                               blank=True)
+                                               blank=True,
+                                               on_delete=models.CASCADE)
     principal_place_of_slave_disembarkation = models.ForeignKey(
-        voyage.models.Place, related_name='+', null=True, blank=True)
+        voyage.models.Place,
+        related_name='+',
+        null=True,
+        blank=True,
+        on_delete=models.CASCADE)
     port_voyage_ended = models.ForeignKey(voyage.models.Place,
                                           related_name='+',
                                           null=True,
-                                          blank=True)
+                                          blank=True,
+                                          on_delete=models.CASCADE)
 
     # Dates
     date_departure = models.CharField(validators=[date_csv_field_validator],
@@ -213,47 +241,93 @@ class InterimVoyage(models.Model):
     imputed_national_carrier = models.ForeignKey(voyage.models.Nationality,
                                                  related_name='+',
                                                  null=True,
-                                                 blank=True)
+                                                 blank=True,
+                                                 on_delete=models.CASCADE)
     imputed_standardized_tonnage = models.FloatField(null=True, blank=True)
     imputed_region_ship_constructed = models.ForeignKey(voyage.models.Region,
                                                         related_name='+',
                                                         null=True,
-                                                        blank=True)
+                                                        blank=True,
+                                                        on_delete=models.CASCADE)
 
     imputed_outcome_of_voyage_for_slaves = models.ForeignKey(
-        voyage.models.SlavesOutcome, related_name='+', null=True, blank=True)
+        voyage.models.SlavesOutcome,
+        related_name='+',
+        null=True,
+        blank=True,
+        on_delete=models.CASCADE)
     imputed_outcome_of_voyage_if_ship_captured = models.ForeignKey(
         voyage.models.VesselCapturedOutcome,
         related_name='+',
         null=True,
-        blank=True)
+        blank=True,
+        on_delete=models.CASCADE)
     imputed_outcome_of_voyage_for_owner = models.ForeignKey(
-        voyage.models.OwnerOutcome, related_name='+', null=True, blank=True)
+        voyage.models.OwnerOutcome,
+        related_name='+',
+        null=True,
+        blank=True,
+        on_delete=models.CASCADE)
 
     imputed_port_where_voyage_began = models.ForeignKey(voyage.models.Place,
                                                         related_name='+',
                                                         null=True,
-                                                        blank=True)
+                                                        blank=True,
+                                                        on_delete=models.CASCADE)
     imputed_principal_place_of_slave_purchase = models.ForeignKey(
-        voyage.models.Place, related_name='+', null=True, blank=True)
+        voyage.models.Place,
+        related_name='+',
+        null=True,
+        blank=True,
+        on_delete=models.CASCADE)
     imputed_principal_port_of_slave_disembarkation = models.ForeignKey(
-        voyage.models.Place, related_name='+', null=True, blank=True)
-    imputed_region_where_voyage_began = models.ForeignKey(voyage.models.Region,
-                                                          related_name='+',
-                                                          null=True,
-                                                          blank=True)
+        voyage.models.Place,
+        related_name='+',
+        null=True,
+        blank=True,
+        on_delete=models.CASCADE)
+    imputed_region_where_voyage_began = models.ForeignKey(
+        voyage.models.Region,
+        related_name='+',
+        null=True,
+        blank=True,
+        on_delete=models.CASCADE)
     imputed_first_region_of_slave_landing = models.ForeignKey(
-        voyage.models.Region, related_name='+', null=True, blank=True)
+        voyage.models.Region,
+        related_name='+',
+        null=True,
+        blank=True,
+        on_delete=models.CASCADE)
     imputed_second_region_of_slave_landing = models.ForeignKey(
-        voyage.models.Region, related_name='+', null=True, blank=True)
+        voyage.models.Region,
+        related_name='+',
+        null=True,
+        blank=True,
+        on_delete=models.CASCADE)
     imputed_third_region_of_slave_landing = models.ForeignKey(
-        voyage.models.Region, related_name='+', null=True, blank=True)
+        voyage.models.Region,
+        related_name='+',
+        null=True,
+        blank=True,
+        on_delete=models.CASCADE)
     imputed_first_region_of_embarkation_of_slaves = models.ForeignKey(
-        voyage.models.Region, related_name='+', null=True, blank=True)
+        voyage.models.Region,
+        related_name='+',
+        null=True,
+        blank=True,
+        on_delete=models.CASCADE)
     imputed_second_region_of_embarkation_of_slaves = models.ForeignKey(
-        voyage.models.Region, related_name='+', null=True, blank=True)
+        voyage.models.Region,
+        related_name='+',
+        null=True,
+        blank=True,
+        on_delete=models.CASCADE)
     imputed_third_region_of_embarkation_of_slaves = models.ForeignKey(
-        voyage.models.Region, related_name='+', null=True, blank=True)
+        voyage.models.Region,
+        related_name='+',
+        null=True,
+        blank=True,
+        on_delete=models.CASCADE)
 
     imputed_year_voyage_began = models.IntegerField(null=True, blank=True)
     imputed_year_departed_africa = models.IntegerField(null=True, blank=True)
@@ -273,7 +347,11 @@ class InterimVoyage(models.Model):
                                                            blank=True)
 
     imputed_voyage_groupings_for_estimating_imputed_slaves = models.ForeignKey(
-        voyage.models.VoyageGroupings, related_name='+', null=True, blank=True)
+        voyage.models.VoyageGroupings,
+        related_name='+',
+        null=True,
+        blank=True,
+        on_delete=models.CASCADE)
     imputed_total_slaves_embarked = models.IntegerField(null=True, blank=True)
     imputed_total_slaves_disembarked = models.IntegerField(null=True,
                                                            blank=True)
@@ -304,7 +382,7 @@ class InterimContributedSource(models.Model):
                                                related_name='+')
     source_ref_text = models.CharField(max_length=255, null=True, blank=True)
 
-    class Meta(object):
+    class Meta:
         abstract = True
 
 
@@ -314,7 +392,8 @@ class InterimArticleSource(InterimContributedSource):
     """
     interim_voyage = models.ForeignKey(InterimVoyage,
                                        null=False,
-                                       related_name='article_sources')
+                                       related_name='article_sources',
+                                       on_delete=models.CASCADE)
     authors = models.TextField(max_length=1000, null=True, blank=True)
     article_title = models.CharField(max_length=255, null=True, blank=True)
     journal = models.CharField(max_length=255, null=True, blank=True)
@@ -330,7 +409,8 @@ class InterimBookSource(InterimContributedSource):
     """
     interim_voyage = models.ForeignKey(InterimVoyage,
                                        null=False,
-                                       related_name='book_sources')
+                                       related_name='book_sources',
+                                       on_delete=models.CASCADE)
     authors = models.TextField(max_length=1000, null=True, blank=True)
     book_title = models.CharField(max_length=255, null=True, blank=True)
     publisher = models.CharField(max_length=255, null=True, blank=True)
@@ -352,7 +432,8 @@ class InterimPrivateNoteOrCollectionSource(InterimContributedSource):
     interim_voyage = models.ForeignKey(
         InterimVoyage,
         null=False,
-        related_name='private_note_or_collection_sources')
+        related_name='private_note_or_collection_sources',
+        on_delete=models.CASCADE)
     authors = models.TextField(max_length=1000, null=True, blank=True)
     title = models.CharField(max_length=255, null=True, blank=True)
     location = models.CharField(max_length=255, null=True, blank=True)
@@ -365,7 +446,10 @@ class InterimUnpublishedSecondarySource(InterimContributedSource):
     Other source for an interim voyage.models.
     """
     interim_voyage = models.ForeignKey(
-        InterimVoyage, null=False, related_name='unpublished_secondary_sources')
+        InterimVoyage,
+        null=False,
+        related_name='unpublished_secondary_sources',
+        on_delete=models.CASCADE)
     authors = models.TextField(max_length=1000, null=True, blank=True)
     title = models.CharField(max_length=255, null=True, blank=True)
     location = models.CharField(max_length=255, null=True, blank=True)
@@ -379,7 +463,8 @@ class InterimPrimarySource(InterimContributedSource):
     """
     interim_voyage = models.ForeignKey(InterimVoyage,
                                        null=False,
-                                       related_name='primary_sources')
+                                       related_name='primary_sources',
+                                       on_delete=models.CASCADE)
     name_of_library_or_archive = models.CharField(max_length=255,
                                                   null=True,
                                                   blank=True)
@@ -401,14 +486,15 @@ class InterimNewspaperSource(InterimContributedSource):
     """
     interim_voyage = models.ForeignKey(InterimVoyage,
                                        null=False,
-                                       related_name='newspaper_sources')
+                                       related_name='newspaper_sources',
+                                       on_delete=models.CASCADE)
     name = models.CharField(max_length=255, null=True, blank=True)
     alternative_name = models.CharField(max_length=255, null=True, blank=True)
     city = models.CharField(max_length=255, null=True, blank=True)
     country = models.CharField(max_length=60, null=True, blank=True)
 
 
-class InterimPreExistingSourceActions(object):
+class InterimPreExistingSourceActions:
     accepted = 0
     edit = 1
     exclude = 2
@@ -421,7 +507,8 @@ class InterimPreExistingSource(models.Model):
     """
     interim_voyage = models.ForeignKey(InterimVoyage,
                                        null=False,
-                                       related_name='pre_existing_sources')
+                                       related_name='pre_existing_sources',
+                                       on_delete=models.CASCADE)
     voyage_ids = models.CharField(
         validators=[validate_comma_separated_integer_list],
         null=False,
@@ -441,7 +528,8 @@ class InterimSlaveNumber(models.Model):
     """
     interim_voyage = models.ForeignKey(InterimVoyage,
                                        null=False,
-                                       related_name='slave_numbers')
+                                       related_name='slave_numbers',
+                                       on_delete=models.CASCADE)
     var_name = models.CharField('Slave number code-book variable name',
                                 max_length=20,
                                 null=False,
@@ -449,7 +537,7 @@ class InterimSlaveNumber(models.Model):
     number = models.FloatField('Number')
 
 
-class ReviewRequestDecision(object):
+class ReviewRequestDecision:
     under_review = 0
     accepted_by_reviewer = 1
     rejected_by_reviewer = 2
@@ -459,7 +547,7 @@ class ReviewRequestDecision(object):
     begun_editorial_review = 1000
 
 
-class ReviewRequestResponse(object):
+class ReviewRequestResponse:
     no_reply = 0
     accepted = 1
     rejected = 2
@@ -470,8 +558,16 @@ class ReviewRequest(models.Model):
     """
     A request made to a reviewer for a contribution.
     """
-    editor = models.ForeignKey(User, null=False, related_name='+')
-    suggested_reviewer = models.ForeignKey(User, null=False, related_name='+')
+    editor = models.ForeignKey(
+        User,
+        null=False,
+        related_name='+',
+        on_delete=models.CASCADE)
+    suggested_reviewer = models.ForeignKey(
+        User,
+        null=False,
+        related_name='+',
+        on_delete=models.CASCADE)
     contribution_id = models.TextField(null=False)
     email_sent = models.BooleanField(default=False)
     response = models.IntegerField(default=0)
@@ -519,10 +615,12 @@ class ReviewVoyageContribution(models.Model):
     The reviewer's input on the contribution.
     """
     request = models.ForeignKey(ReviewRequest,
-                                related_name='review_contribution')
+                                related_name='review_contribution',
+                                on_delete=models.CASCADE)
     interim_voyage = models.ForeignKey(InterimVoyage,
                                        null=True,
-                                       related_name='+')
+                                       related_name='+',
+                                       on_delete=models.CASCADE)
     notes = models.TextField('Notes',
                              null=True,
                              max_length=10000,
@@ -540,10 +638,12 @@ class EditorVoyageContribution(models.Model):
     The editor's input on the contribution.
     """
     request = models.ForeignKey(ReviewRequest,
-                                related_name='editor_contribution')
+                                related_name='editor_contribution',
+                                on_delete=models.CASCADE)
     interim_voyage = models.ForeignKey(InterimVoyage,
                                        null=True,
-                                       related_name='+')
+                                       related_name='+',
+                                       on_delete=models.CASCADE)
     notes = models.TextField('Notes',
                              null=True,
                              max_length=10000,
@@ -557,7 +657,7 @@ class EditorVoyageContribution(models.Model):
         return self.request.contribution().get_related_voyage_ids()
 
 
-class ContributionStatus(object):
+class ContributionStatus:
     pending = 0
     committed = 1
     under_review = 2
@@ -573,7 +673,11 @@ class BaseVoyageContribution(models.Model):
     Base (abstract) model for all types of contributions.
     """
     date_created = models.DateTimeField(auto_now_add=True)
-    contributor = models.ForeignKey(User, null=False, related_name='+')
+    contributor = models.ForeignKey(
+        User,
+        null=False,
+        related_name='+',
+        on_delete=models.CASCADE)
     notes = models.TextField('Notes',
                              max_length=10000,
                              help_text='Notes for the contribution')
@@ -591,7 +695,7 @@ class BaseVoyageContribution(models.Model):
             voyage.models.Voyage.all_dataset_objects.filter(
                 voyage_id__in=self.get_related_voyage_ids()))
 
-    class Meta(object):
+    class Meta:
         abstract = True
 
 
@@ -623,7 +727,8 @@ class EditVoyageContribution(BaseVoyageContribution):
     """
     interim_voyage = models.ForeignKey(InterimVoyage,
                                        null=False,
-                                       related_name='+')
+                                       related_name='+',
+                                       on_delete=models.CASCADE)
     edited_voyage_id = models.IntegerField(
         'Edited voyage id',
         help_text='The voyage_id of the Voyage edited by this contribution')
@@ -645,7 +750,8 @@ class MergeVoyagesContribution(BaseVoyageContribution):
     """
     interim_voyage = models.ForeignKey(InterimVoyage,
                                        null=False,
-                                       related_name='+')
+                                       related_name='+',
+                                       on_delete=models.CASCADE)
     merged_voyages_ids = models.CharField(
         'Merged voyage ids',
         validators=[validate_comma_separated_integer_list],
@@ -669,7 +775,8 @@ class NewVoyageContribution(BaseVoyageContribution):
     """
     interim_voyage = models.ForeignKey(InterimVoyage,
                                        null=False,
-                                       related_name='+')
+                                       related_name='+',
+                                       on_delete=models.CASCADE)
     help_text = _(
         'Complete as many boxes in each category as your source(s) allow.')
 

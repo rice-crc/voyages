@@ -45,7 +45,7 @@ class VoyageShipForm(autocomplete_light.ModelForm):
     Form for Voyage Ship (this is inline).
     """
 
-    class Meta(object):
+    class Meta:
         model = VoyageShip
         fields = '__all__'
 
@@ -55,7 +55,7 @@ class VoyageShipOwnerConnectionForm(autocomplete_light.ModelForm):
     Form for Ship Owner Outcome (this is inline).
     """
 
-    class Meta(object):
+    class Meta:
         model = VoyageShipOwnerConnection
         fields = '__all__'
 
@@ -66,7 +66,7 @@ class VoyageOutcomeForm(autocomplete_light.ModelForm):
     Form for Voyage Outcome (this is inline).
     """
 
-    class Meta(object):
+    class Meta:
         model = VoyageOutcome
         fields = '__all__'
 
@@ -77,7 +77,7 @@ class VoyageItineraryForm(autocomplete_light.ModelForm):
     Form for Voyage Itinerary (this is inline).
     """
 
-    class Meta(object):
+    class Meta:
         model = VoyageItinerary
         fields = '__all__'
 
@@ -88,7 +88,7 @@ class VoyageDatesForm(autocomplete_light.ModelForm):
     Form for Voyage Dates (this is inline).
     """
 
-    class Meta(object):
+    class Meta:
         model = VoyageDates
         fields = '__all__'
 
@@ -99,7 +99,7 @@ class VoyageCaptainConnectionForm(autocomplete_light.ModelForm):
     Form for Captain Connection (this is inline).
     """
 
-    class Meta(object):
+    class Meta:
         model = VoyageCaptainConnection
         fields = '__all__'
 
@@ -109,7 +109,7 @@ class VoyageCrewForm(autocomplete_light.ModelForm):
     Form for Voyage Crew (this is inline).
     """
 
-    class Meta(object):
+    class Meta:
         model = VoyageCrew
         fields = '__all__'
 
@@ -120,7 +120,7 @@ class VoyageSlavesNumbersForm(autocomplete_light.ModelForm):
     Form for Voyage Characteristics (this is inline).
     """
 
-    class Meta(object):
+    class Meta:
         model = VoyageSlavesNumbers
         fields = '__all__'
         exclude = ['percentage_adult', 'percentage_female']
@@ -132,7 +132,7 @@ class VoyageSourcesConnectionForm(autocomplete_light.ModelForm):
     Form for Voyage Characteristics (this is inline).
     """
 
-    class Meta(object):
+    class Meta:
         model = VoyageSourcesConnection
         fields = '__all__'
 
@@ -148,7 +148,7 @@ class VoyagesSourcesAdminForm(forms.ModelForm):
     full_ref = forms.CharField(widget=AdvancedEditor(
         attrs={'class': 'tinymcetextarea'}))
 
-    class Meta(object):
+    class Meta:
         fields = '__all__'
         model = VoyageSources
 
@@ -288,7 +288,7 @@ class ResultsPerPageOptionForm(forms.Form):
     def cleaned_option(self):
         try:
             option_value = self.cleaned_data['option']
-        except:
+        except Exception:
             option_value = None
 
         if option_value is None:
@@ -297,24 +297,25 @@ class ResultsPerPageOptionForm(forms.Form):
         return dict(self.fields['option'].choices)[option_value]
 
 
+def extract(x):
+    return (str(x[0]), x[1][0])
+
+
 class TableSelectionForm(forms.Form):
 
-    def lmbd(x):
-        return (str(x[0]), x[1][0])
-
-    rowchoices = list(map(lmbd, enumerate(globals.table_rows)))
+    rowchoices = list(map(extract, enumerate(globals.table_rows)))
     rows = forms.ChoiceField(label='Rows',
                              choices=rowchoices,
                              initial=[rowchoices[12][1]
                                       ])  # globals.table_rows[12])
     rows.initial = [rowchoices[12][0]]
-    colchoices = list(map(lmbd, enumerate(globals.table_columns)))
+    colchoices = list(map(extract, enumerate(globals.table_columns)))
     columns = forms.ChoiceField(label='Columns',
                                 choices=colchoices,
                                 initial=[colchoices[7][1]
                                          ])  # globals.table_columns[1])
     columns.initial = [colchoices[1][0]]
-    cellchoices = list(map(lmbd, enumerate(globals.table_functions)))
+    cellchoices = list(map(extract, enumerate(globals.table_functions)))
     cells = forms.ChoiceField(label='Cells',
                               choices=cellchoices,
                               initial=[cellchoices[1][1]

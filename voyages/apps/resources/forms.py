@@ -16,7 +16,7 @@ class ImageAdminForm(forms.ModelForm):
         'cols': 60
     }))
 
-    class Meta(object):
+    class Meta:
         model = Image
         fields = '__all__'
 
@@ -31,7 +31,7 @@ class ResultsPerPageOptionForm(forms.Form):
     def cleaned_option(self):
         try:
             option_value = self.cleaned_data['option']
-        except:
+        except Exception:
             option_value = '2'
 
         return dict(self.fields['option'].choices)[option_value]

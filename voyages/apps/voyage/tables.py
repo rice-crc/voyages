@@ -60,7 +60,7 @@ def get_pivot_table_advanced(results,
     return row_data
 
 
-class PivotTable(object):
+class PivotTable:
 
     def __init__(self,
                  row_data,
@@ -88,7 +88,7 @@ class PivotTable(object):
                 try:
                     return float(x[default_cell_key]) if default_cell_key in x\
                         else sum([float(v) for k, v in list(x.items()) if k not in excluded_bucket_keys])
-                except:
+                except Exception:
                     return 0
 
             # Delete rows that are zero-valued.

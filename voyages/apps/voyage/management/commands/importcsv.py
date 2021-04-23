@@ -198,7 +198,7 @@ class Command(BaseCommand):
                 return None
             try:
                 return int(round(float(val)))
-            except:
+            except Exception:
                 if allow_null:
                     return None
                 raise Exception("Invalid value for int: " + str(val))
@@ -211,7 +211,7 @@ class Command(BaseCommand):
                 return None
             try:
                 return float(val)
-            except:
+            except Exception:
                 if allow_null:
                     return None
                 raise Exception("Invalid value for float: " + str(val))
@@ -269,7 +269,7 @@ class Command(BaseCommand):
                     sys.stderr.write('Invalid date ' + value + '\n')
                     return ''
                 return str(month) + ',' + str(day) + ',' + str(year)
-            except:
+            except Exception:
                 self.errors += 1
                 sys.stderr.write('Invalid date ' + value + '\n')
             return ''

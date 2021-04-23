@@ -12,7 +12,7 @@ class ContentGroup(models.Model):
 
     name = models.CharField(max_length=50)
 
-    class Meta(object):
+    class Meta:
         verbose_name = "Static content group"
         verbose_name_plural = "Static content groups"
 
@@ -28,9 +28,9 @@ class ContentPage(models.Model):
     title = models.TextField(max_length=50)
     description = models.TextField(max_length=2000)
     order = models.IntegerField()
-    group = models.ForeignKey(ContentGroup)
+    group = models.ForeignKey(ContentGroup, on_delete=models.CASCADE)
 
-    class Meta(object):
+    class Meta:
         verbose_name = "Static content page"
         verbose_name_plural = "Static content pages"
 

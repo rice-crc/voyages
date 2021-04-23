@@ -42,7 +42,7 @@ from .search_indexes import VoyageIndex
 from .tables import PivotTable, get_pivot_table_advanced
 
 
-class SearchOperator(object):
+class SearchOperator:
 
     def __init__(self, front_end_op_str, back_end_op_str, list_type):
         self.front_end_op_str = front_end_op_str
@@ -123,12 +123,12 @@ def perform_search(search, lang):
             ]
             for k in rem_keys:
                 search_terms.pop(k)
-        except:
+        except Exception:
             pass
     else:
         try:
             dataset = int(dataset)
-        except:
+        except Exception:
             dataset = VoyageDataset.Transatlantic
     if dataset >= 0:
         search_terms[u'var_dataset__exact'] = dataset
@@ -259,7 +259,7 @@ def get_results_timeline(results, post):
 
 
 # Construct a dict with all X/Y-axes
-_all_x_axes = {a.id(): a for a in (graphs_x_axes + other_graphs_x_axes)}
+_all_x_axes = {a.id(): a for a in graphs_x_axes + other_graphs_x_axes}
 # MODES: avg, freq, count, sum
 _all_y_axes = {a.id() + '_' + a.mode: a for a in graphs_y_axes}
 
@@ -268,11 +268,11 @@ def get_results_graph(results, post):
     """
     post['graphData']: contains a single X axis (xAxis key) and one or more Y axes (yAxes key).
     """
-    graphData = post.get('graphData')
-    if graphData is None:
+    graph_data = post.get('graphData')
+    if graph_data is None:
         return HttpResponseBadRequest('Missing graph data')
-    x_axis = graphData.get('xAxis', '')
-    y_axes = graphData.get('yAxes', [])
+    x_axis = graph_data.get('xAxis', '')
+    y_axes = graph_data.get('yAxes', [])
     if x_axis not in _all_x_axes:
         return HttpResponseBadRequest(f'X axis is invalid: {x_axis}. '
                                       f'Available: {list(_all_x_axes.keys())}')
@@ -368,22 +368,22 @@ def get_results_map_animation(results, allow_no_numbers=False):
 
 @cache_page(3600)
 def get_compiled_routes(request):
-    networkName = request.GET.get('networkName')
-    routeType = request.GET.get('routeType')
+    network_name = request.GET.get('networkName')
+    route_type = request.GET.get('routeType')
     names = ['trans', 'intra']
-    if networkName is None or networkName not in names:
+    if network_name is None or network_name not in names:
         return JsonResponse({
             "error":
                 "Value of 'networkName' parameter should be in " + str(names)
         })
-    routeTypes = ['port', 'regional']
-    if routeType is None or routeType not in routeTypes:
+    route_types = ['port', 'regional']
+    if route_type is None or route_type not in route_types:
         return JsonResponse({
             "error":
-                f"Value of 'routeType' parameter should be in {routeTypes}"
+                f"Value of 'routeType' parameter should be in {route_types}"
         })
-    fpath = os.path.join(settings.STATIC_ROOT, "maps/js", networkName,
-                         routeType + "_routes.json")
+    fpath = os.path.join(settings.STATIC_ROOT, "maps/js", network_name,
+                         route_type + "_routes.json")
     return HttpResponse(content=open(fpath, 'rb'),
                         content_type='application/json')
 
@@ -650,7 +650,7 @@ def get_download_header(var_name):
         current = name_to_follow[:split] if split > 0 else name_to_follow
         try:
             f = model._meta.get_field(current)
-        except:
+        except Exception:
             f = None
         result = f.verbose_name if f else ''
         if split > 0 and f:
@@ -845,7 +845,7 @@ def get_all_sources(request):
         table_params = data['tableParams']
         search = table_params['search']['value']
         results = results.filter(text__contains=search)
-    except:
+    except Exception:
         pass
     try:
         # Process data table sorting.
@@ -855,7 +855,7 @@ def get_all_sources(request):
         if order_info['dir'] == 'desc':
             order_by = '-' + order_by
         results = results.order_by(order_by)
-    except:
+    except Exception:
         pass
     output_fields = ['group_name', 'short_ref', 'full_ref']
     return get_results_table(results,

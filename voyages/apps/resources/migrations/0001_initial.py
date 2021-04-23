@@ -149,7 +149,8 @@ class Migration(migrations.Migration):
             model_name='image',
             name='category',
             field=models.ForeignKey(verbose_name=b'Image category',
-                                    to='resources.ImageCategory'),
+                                    to='resources.ImageCategory',
+                                    on_delete=models.CASCADE),
         ),
         migrations.AddField(
             model_name='image',
@@ -157,7 +158,8 @@ class Migration(migrations.Migration):
             field=models.ForeignKey(to_field=b'voyage_id',
                                     blank=True,
                                     to='voyage.Voyage',
-                                    null=True),
+                                    null=True,
+                                    on_delete=models.CASCADE),
         ),
         migrations.AddField(
             model_name='africanname',
@@ -166,7 +168,8 @@ class Migration(migrations.Migration):
                                     to_field=b'country_id',
                                     blank=True,
                                     to='resources.Country',
-                                    null=True),
+                                    null=True,
+                                    on_delete=models.CASCADE),
         ),
         migrations.AddField(
             model_name='africanname',
@@ -176,7 +179,8 @@ class Migration(migrations.Migration):
                                     to_field=b'value',
                                     blank=True,
                                     to='voyage.Place',
-                                    null=True),
+                                    null=True,
+                                    on_delete=models.CASCADE),
         ),
         migrations.AddField(
             model_name='africanname',
@@ -186,7 +190,8 @@ class Migration(migrations.Migration):
                                     to_field=b'value',
                                     blank=True,
                                     to='voyage.Place',
-                                    null=True),
+                                    null=True,
+                                    on_delete=models.CASCADE),
         ),
         migrations.AddField(
             model_name='africanname',
@@ -195,7 +200,8 @@ class Migration(migrations.Migration):
                                     to_field=b'sex_age_id',
                                     blank=True,
                                     to='resources.SexAge',
-                                    null=True),
+                                    null=True,
+                                    on_delete=models.CASCADE),
         ),
         migrations.AddField(
             model_name='africanname',
@@ -204,6 +210,7 @@ class Migration(migrations.Migration):
                                     to_field=b'voyage_id',
                                     blank=True,
                                     to='voyage.Voyage',
-                                    null=True),
+                                    null=True,
+                                    on_delete=models.CASCADE),
         ),
     ]

@@ -42,7 +42,7 @@ def structure_places(place_list):
             if p
         ],
             key=lambda p: p.value)
-    except:
+    except Exception:
         places = []
     region_list = OrderedDict()
     for place in places:
@@ -489,17 +489,7 @@ graph_display_methods = {
 }
 
 
-def formatYear(year, month=0):
-    """
-    Format the passed year month to a YYYY,MM string
-    :param year:
-    :param month:
-    :return:
-    """
-    return "%s,%s" % (str(year).zfill(4), str(month).zfill(2))
-
-
-class VoyageDateCache(object):
+class VoyageDateCache:
     cached_voyage_fist_year = None
     cached_voyage_last_year = None
 
@@ -519,7 +509,7 @@ def calculate_maxmin_years():
                 Min('imp_voyage_began'))['imp_voyage_began__min'][2:]
             voyage_span_last_year = q.aggregate(
                 Max('imp_voyage_began'))['imp_voyage_began__max'][2:]
-    except:
+    except Exception:
         pass
     VoyageDateCache.cached_voyage_fist_year = voyage_span_first_year or def_first
     VoyageDateCache.cached_voyage_last_year = voyage_span_last_year or def_last
@@ -596,7 +586,7 @@ def get_each_from_table(table,
                 ),
             ]
             result.append((label_list, {qdictkey: lmbval(i)}))
-    except:
+    except Exception:
         pass
     return result
 
@@ -608,7 +598,7 @@ def impute_nat_fun(lst):
             mods = models.Nationality.objects.filter(value=i)
             if mods.count() > 0 and len(mods) > 0:
                 output.append(mods[0])
-    except:
+    except Exception:
         pass
     return output
 
@@ -638,7 +628,7 @@ def make_regions_filter(varname):
                     },
                 ))
                 label_list = []
-    except:
+    except Exception:
         pass
     return results
 
@@ -672,7 +662,7 @@ def make_places_filter(varname):
                         },
                     ))
                     label_list = []
-    except:
+    except Exception:
         pass
     return results
 
@@ -693,7 +683,7 @@ def make_regions_col_filter(filter_name, varname):
                     1,
                 ))
                 results.append({qdictkey: reg.value})
-    except:
+    except Exception:
         pass
     return (
         filter_name,
@@ -724,7 +714,7 @@ def make_places_col_filter(filter_name, varname):
                         1,
                     ))
                     results.append({qdictkey: place.value})
-    except:
+    except Exception:
         pass
     return (
         filter_name,

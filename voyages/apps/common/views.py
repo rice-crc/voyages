@@ -79,7 +79,7 @@ def get_ordered_places(place_query=None, translate=True):
     return result
 
 
-class FlatPageTree(object):
+class FlatPageTree:
     """
     Represents a hierarchy of flat pages.
     """
@@ -162,7 +162,7 @@ def get_flat_page_tree(prefix, language=None):
         order = None
         try:
             order = float(order_str)
-        except:
+        except Exception:
             pass
         d = structure
         for item in path:
@@ -231,7 +231,7 @@ def _get_flatpage(url, lang):
     try:
         localized_url = url + ((lang + '/') if lang else '')
         page = FlatPage.objects.get(url=localized_url)
-    except:
+    except Exception:
         pass
     return page
 
@@ -257,7 +257,7 @@ def _default_solr_value_adapter(tuple):
                         val = val + '-' + str(month)
                     if day:
                         val = val + '-' + str(day)
-            except:
+            except Exception:
                 pass
     return val
 
@@ -280,7 +280,7 @@ def get_datatable_json_result(results,
             old_div(int(table_params['start']), rows_per_page)
         paginator = Paginator(results, rows_per_page)
         page = paginator.page(current_page_num)
-    except:
+    except Exception:
         page = results
     reponse_data = {}
     total_results = results.count()

@@ -126,7 +126,7 @@ def get_pks_from_haystack_results(results):
     search_kwargs = q.backend.build_search_kwargs(final_query, **search_kwargs)
     try:
         raw_results = q.backend.conn.search(final_query, **search_kwargs)
-    except:
+    except Exception:
         raw_results = []
     return [int(x['id'].split('.')[-1]) for x in raw_results]
 
@@ -148,6 +148,6 @@ def get_values_from_haystack_results(results, fields):
     search_kwargs = q.backend.build_search_kwargs(final_query, **search_kwargs)
     try:
         raw_results = q.backend.conn.search(final_query, **search_kwargs)
-    except:
+    except Exception:
         raw_results = []
     return raw_results

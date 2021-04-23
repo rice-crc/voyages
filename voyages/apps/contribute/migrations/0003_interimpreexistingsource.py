@@ -31,7 +31,8 @@ class Migration(migrations.Migration):
                 ('interim_voyage',
                  models.ForeignKey(on_delete=django.db.models.deletion.CASCADE,
                                    related_name='pre_existing_sources',
-                                   to='contribute.InterimVoyage')),
+                                   to='contribute.InterimVoyage',
+                                   on_delete=models.CASCADE)),
             ],
         ),
     ]

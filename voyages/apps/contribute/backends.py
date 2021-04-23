@@ -5,7 +5,7 @@ from builtins import object
 from django.contrib.auth.models import User
 
 
-class EmailOrUsernameModelBackend(object):
+class EmailOrUsernameModelBackend:
 
     def authenticate(self, username=None, password=None):
         if '@' in username:

@@ -18,7 +18,7 @@ class ImageAdmin(admin.ModelAdmin):
 
     form = ImageAdminForm
 
-    class Meta(object):
+    class Meta:
         model = Image
 
 
@@ -29,7 +29,7 @@ class ImageCategoryAdmin(admin.ModelAdmin):
     ordering = ['value']
     search_fields = ['value']
 
-    class Meta(object):
+    class Meta:
         model = ImageCategory
 
 
@@ -39,7 +39,7 @@ class CountryAdmin(admin.ModelAdmin):
     ordering = ['country_id']
     search_fields = ['country_id', 'name']
 
-    class Meta(object):
+    class Meta:
         model = Country
 
 
@@ -49,7 +49,7 @@ class SexAgeAdmin(admin.ModelAdmin):
     ordering = ['sex_age_id']
     search_fields = ['sex_age_id', 'name']
 
-    class Meta(object):
+    class Meta:
         model = SexAge
 
 
@@ -69,7 +69,7 @@ class AfricanNameAdmin(admin.ModelAdmin):
         'date_arrived', 'voyage_number'
     ]
 
-    class Meta(object):
+    class Meta:
         model = AfricanName
 
 

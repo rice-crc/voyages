@@ -32,12 +32,12 @@ def _generate_table(query, table_params, data_adapter=None):
             old_div(int(table_params.get('start', 0)), rows_per_page)
         paginator = Paginator(query, rows_per_page)
         page = paginator.page(current_page_num)
-    except:
+    except Exception:
         page = query
     response_data = {}
     try:
         total_results = query.count()
-    except:
+    except Exception:
         total_results = len(query)
     response_data['recordsTotal'] = total_results
     response_data['recordsFiltered'] = total_results
@@ -50,13 +50,13 @@ def _generate_table(query, table_params, data_adapter=None):
     return response_data
 
 
-def _get_alt_named(altModel, parent_fk, parent_map):
+def _get_alt_named(alt_model, parent_fk, parent_map):
 
     def key_fn(x):
         return getattr(x, parent_fk + '_id')
 
     res = {}
-    for k, g in itertools.groupby(sorted(altModel.all(), key=key_fn),
+    for k, g in itertools.groupby(sorted(alt_model.all(), key=key_fn),
                                   key=key_fn):
         alts = list(g)
         parent = getattr(alts[0], parent_fk)

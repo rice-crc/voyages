@@ -39,7 +39,7 @@ def strip_accents(text):
     return str(text.lower())
 
 
-class NameSearchCache(object):
+class NameSearchCache:
     _loaded = False
     _lock = threading.Lock()
     _index = None
@@ -134,20 +134,21 @@ class EnslaverInfoAbstractBase(models.Model):
     will_value_dollars = models.CharField(max_length=12, null=True)
     will_court = models.CharField(max_length=12, null=True)
 
-    class Meta(object):
+    class Meta:
         abstract = True
 
 
 class EnslaverIdentity(EnslaverInfoAbstractBase):
 
-    class Meta(object):
+    class Meta:
         verbose_name = 'Enslaver unique identity and personal info'
 
 
 class EnslaverIdentitySourceConnection(models.Model):
     identity = models.ForeignKey(EnslaverIdentity, on_delete=models.CASCADE)
     # Sources are shared with Voyages.
-    source = models.ForeignKey(VoyageSources, related_name="+", null=False)
+    source = models.ForeignKey(VoyageSources, related_name="+",
+                               null=False, on_delete=models.CASCADE)
     source_order = models.IntegerField()
     text_ref = models.CharField(max_length=255, null=False, blank=True)
 
@@ -161,7 +162,7 @@ class EnslaverAlias(models.Model):
     identity = models.ForeignKey(EnslaverIdentity, on_delete=models.CASCADE)
     alias = models.CharField(max_length=255)
 
-    class Meta(object):
+    class Meta:
         verbose_name = 'Enslaver alias'
 
 
@@ -192,7 +193,7 @@ class EnslaverVoyageConnection(models.Model):
     Associates an enslaver with a voyage at some particular role.
     """
 
-    class Role(object):
+    class Role:
         CAPTAIN = 1
         OWNER = 2
         BUYER = 3
@@ -216,7 +217,7 @@ class NamedModelAbstractBase(models.Model):
     id = models.IntegerField(primary_key=True)
     name = models.CharField(max_length=255)
 
-    class Meta(object):
+    class Meta:
         abstract = True
 
 
@@ -246,25 +247,29 @@ class LanguageGroup(NamedModelAbstractBase):
                                    null=False)
     modern_country = models.ForeignKey(ModernCountry,
                                        null=False,
-                                       related_name='language_groups')
+                                       related_name='language_groups',
+                                       on_delete=models.CASCADE)
 
 
 class AltLanguageGroupName(NamedModelAbstractBase):
     language_group = models.ForeignKey(LanguageGroup,
                                        null=False,
-                                       related_name='alt_names')
+                                       related_name='alt_names',
+                                       on_delete=models.CASCADE)
 
 
 class Ethnicity(NamedModelAbstractBase):
     language_group = models.ForeignKey(LanguageGroup,
                                        null=False,
-                                       related_name='ethnicities')
+                                       related_name='ethnicities',
+                                       on_delete=models.CASCADE)
 
 
 class AltEthnicityName(NamedModelAbstractBase):
     ethnicity = models.ForeignKey(Ethnicity,
                                   null=False,
-                                  related_name='alt_names')
+                                  related_name='alt_names',
+                                  on_delete=models.CASCADE)
 
 
 # TODO: this model will replace resources.AfricanName
@@ -301,13 +306,17 @@ class Enslaved(models.Model):
     # The possibility of including 'Unknown' values in the
     # reference tables and using them instead of null was
     # proposed and discarded.
-    ethnicity = models.ForeignKey(Ethnicity, null=True)
-    language_group = models.ForeignKey(LanguageGroup, null=True)
-    register_country = models.ForeignKey(RegisterCountry, null=True)
+    ethnicity = models.ForeignKey(Ethnicity, null=True,
+                                  on_delete=models.CASCADE)
+    language_group = models.ForeignKey(LanguageGroup, null=True,
+                                       on_delete=models.CASCADE)
+    register_country = models.ForeignKey(RegisterCountry, null=True,
+                                         on_delete=models.CASCADE)
 
-    post_disembark_location = models.ForeignKey(Place, null=True)
+    post_disembark_location = models.ForeignKey(Place, null=True,
+                                                on_delete=models.CASCADE)
 
-    voyage = models.ForeignKey(Voyage, null=False)
+    voyage = models.ForeignKey(Voyage, null=False, on_delete=models.CASCADE)
     sources = models.ManyToManyField(VoyageSources,
                                      through='EnslavedSourceConnection',
                                      related_name='+')
@@ -328,7 +337,8 @@ class EnslavedSourceConnection(models.Model):
 
 class EnslavedContribution(models.Model):
     enslaved = models.ForeignKey(Enslaved, on_delete=models.CASCADE)
-    contributor = models.ForeignKey(User, null=True, related_name='+')
+    contributor = models.ForeignKey(User, null=True, related_name='+',
+                                    on_delete=models.CASCADE)
     date = models.DateField(auto_now_add=True)
     notes = models.CharField(max_length=255, null=True, blank=True)
     is_multilingual = models.BooleanField(default=False)
@@ -347,8 +357,10 @@ class EnslavedContributionNameEntry(models.Model):
 class EnslavedContributionLanguageEntry(models.Model):
     contribution = models.ForeignKey(EnslavedContribution,
                                      on_delete=models.CASCADE)
-    ethnicity = models.ForeignKey(Ethnicity, null=True)
-    language_group = models.ForeignKey(LanguageGroup, null=True)
+    ethnicity = models.ForeignKey(Ethnicity, null=True,
+                                  on_delete=models.CASCADE)
+    language_group = models.ForeignKey(LanguageGroup, null=True,
+                                       on_delete=models.CASCADE)
     order = models.IntegerField()
     notes = models.CharField(max_length=255, null=True, blank=True)
 
@@ -358,7 +370,7 @@ class EnslavedName(models.Model):
     language = models.CharField(max_length=3, null=False, blank=False)
     recordings_count = models.IntegerField()
 
-    class Meta(object):
+    class Meta:
         unique_together = ('name', 'language')
 
 
@@ -373,7 +385,7 @@ _modern_name_fields = [
 ]
 
 
-class EnslavedSearch(object):
+class EnslavedSearch:
     """
     Search parameters for enslaved persons.
     """

@@ -15,7 +15,7 @@ from .models import (BroadRegion, Nationality, OwnerOutcome, ParticularOutcome,
                      VesselCapturedOutcome)
 
 
-class Axis(object):
+class Axis:
     AVERAGE_MODE = 'avg'
     COUNT_MODE = 'count'
     # Determines the frequency of non-null values in a list.
@@ -196,7 +196,7 @@ graphs_y_axes = [
 def cache_labels(model, label_field='label'):
     try:
         return {x[0]: _(x[1]) for x in model.objects.values_list('value', label_field).iterator()}
-    except:
+    except Exception:
         return {}
 
 

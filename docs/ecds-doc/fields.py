@@ -14,7 +14,7 @@ from haystack.utils import get_model_ct_tuple
 from haystack.utils.geo import Point, ensure_point
 
 
-class NOT_PROVIDED(object):
+class NotProvided:
     pass
 
 
@@ -29,7 +29,7 @@ DATETIME_REGEX = re.compile(
 # All the SearchFields variants.
 
 
-class SearchField(object):
+class SearchField:
     """The base implementation of a search field."""
     field_type = None
 
@@ -41,7 +41,7 @@ class SearchField(object):
                  indexed=True,
                  stored=True,
                  faceted=False,
-                 default=NOT_PROVIDED,
+                 default=NotProvided,
                  null=False,
                  index_fieldname=None,
                  facet_class=None,
@@ -79,7 +79,7 @@ class SearchField(object):
 
     def has_default(self):
         """Returns a boolean of whether this field has a default value."""
-        return self._default is not NOT_PROVIDED
+        return self._default is not NotProvided
 
     @property
     def default(self):
@@ -491,7 +491,7 @@ class FacetField(SearchField):
 
         if 'facet_for' in kwargs:
             self.facet_for = kwargs['facet_for']
-            del (kwargs['facet_for'])
+            del kwargs['facet_for']
 
         return kwargs
 
