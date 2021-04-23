@@ -29,13 +29,15 @@ class Image(models.Model):
 
     # Category
     category = models.ForeignKey(
-        'ImageCategory', verbose_name="Image category")
+        'ImageCategory', verbose_name="Image category",
+        on_delete=models.CASCADE)
     voyage = models.ForeignKey(Voyage,
                                to_field='voyage_id',
                                null=True,
-                               blank=True)
+                               blank=True,
+                               on_delete=models.CASCADE)
 
-    class Meta(object):
+    class Meta:
         verbose_name = "Image"
         verbose_name_plural = "Images"
 
@@ -63,7 +65,7 @@ class ImageCategory(models.Model):
         "if there is at least one image to display.)",
         default=True)
 
-    class Meta(object):
+    class Meta:
         verbose_name = "Image Category"
         verbose_name_plural = "Image Categories"
         ordering = [
@@ -129,7 +131,7 @@ class Country(models.Model):
     country_id = models.IntegerField("Country id", unique=True)
     name = models.CharField(max_length=100)
 
-    class Meta(object):
+    class Meta:
         verbose_name = "Country"
         verbose_name_plural = "Countries"
         ordering = [
@@ -161,7 +163,7 @@ class SexAge(models.Model):
     sex_age_id = models.IntegerField("SexAge Id", unique=True)
     name = models.CharField(max_length=50, blank=True, null=True)
 
-    class Meta(object):
+    class Meta:
         verbose_name = "Sex Age"
         verbose_name_plural = "Sex Ages"
         ordering = [
@@ -204,31 +206,36 @@ class AfricanName(models.Model):
                                 verbose_name="Sex Age",
                                 to_field='sex_age_id',
                                 blank=True,
-                                null=True)
+                                null=True,
+                                on_delete=models.CASCADE)
     country = models.ForeignKey(Country,
                                 verbose_name="Country of Origin",
                                 to_field='country_id',
                                 blank=True,
-                                null=True)
+                                null=True,
+                                on_delete=models.CASCADE)
     disembarkation_port = models.ForeignKey(Place,
                                             verbose_name="Disembarkation",
                                             to_field='value',
                                             related_name="disembarkation_port",
                                             blank=True,
-                                            null=True)
+                                            null=True,
+                                            on_delete=models.CASCADE)
     embarkation_port = models.ForeignKey(Place,
                                          verbose_name="Embarkation",
                                          to_field='value',
                                          related_name="embarkation_port",
                                          blank=True,
-                                         null=True)
+                                         null=True,
+                                         on_delete=models.CASCADE)
     voyage = models.ForeignKey(Voyage,
                                verbose_name="Voyage",
                                to_field='voyage_id',
                                blank=True,
-                               null=True)
+                               null=True,
+                               on_delete=models.CASCADE)
 
-    class Meta(object):
+    class Meta:
         verbose_name = "African Name"
         verbose_name_plural = "African Names"
         ordering = [

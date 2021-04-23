@@ -79,7 +79,7 @@ def compare_csv(r1,
                 fx = float(x if x != "" else "0")
                 fy = float(y if y != "" else "0")
                 delta = abs(fx - fy)
-                if (delta < 0.001):
+                if delta < 0.001:
                     continue
                 if k in integral_fields and delta < 0.51:
                     if delta > 0.05:
@@ -88,7 +88,7 @@ def compare_csv(r1,
                             k
                         )] = "Integral field with fractional value import"
                     continue
-            except:
+            except Exception:
                 pass
             try:
                 # Boolean comparisson
@@ -96,7 +96,7 @@ def compare_csv(r1,
                 by = y.lower()
                 if bx in bool_values and by in bool_values and bx == by:
                     continue
-            except:
+            except Exception:
                 pass
             diffs[k] = "Fields differ: \"" + \
                 str(a.get(k)) + "\" != \"" + str(b.get(k)) + "\""
@@ -152,10 +152,10 @@ def check_tast(imported_csv_file, exported_csv_file):
 
 
 def get_fields_affected(delta):
-    all = set()
+    affected = set()
     for x in delta[0]:
-        all = all | set(x[2].keys())
-    return all
+        affected = affected | set(x[2].keys())
+    return affected
 
 
 def print_delta(delta):

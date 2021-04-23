@@ -6,13 +6,13 @@ from builtins import str
 from django.template import Context, Template
 from django.template.defaultfilters import stringfilter
 
-from voyages.apps.common.filters import (jsonify, replaceStar, settings,
+from voyages.apps.common.filters import (jsonify, replace_star, settings,
                                          template, trans_log)
 
 register = template.Library()
 register.filter('trans_log', trans_log)
 register.filter('jsonify', jsonify)
-register.filter('replaceStar', replaceStar)
+register.filter('replace_star', replace_star)
 
 
 @register.filter
@@ -34,7 +34,7 @@ def get_year_value(value):
     """
     try:
         return value.split(",")[2]
-    except:
+    except Exception:
         return ""
 
 

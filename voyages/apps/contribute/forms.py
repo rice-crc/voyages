@@ -33,7 +33,7 @@ class AdminFaqAdminForm(forms.ModelForm):
         'label': 'Answer'
     }))
 
-    class Meta(object):
+    class Meta:
         model = AdminFaq
         fields = '__all__'
 
@@ -127,7 +127,7 @@ class ContributionVoyageSelectionForm(forms.Form):
         # that are current present in the database.
         try:
             ids = [int(x) for x in data.split(',')]
-        except:
+        except Exception:
             raise forms.ValidationError(_('Improperly formatted field'))
         self.selected_voyages = ids
         id_count = len(ids)
@@ -157,7 +157,7 @@ class InterimVoyageForm(forms.ModelForm):
                 del self._errors[k]
         return self.cleaned_data
 
-    class Meta(object):
+    class Meta:
         model = InterimVoyage
         fields = '__all__'
         help_texts = {

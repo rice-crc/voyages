@@ -53,5 +53,5 @@ def jsonify(lst):
 
 
 @register.filter
-def replaceStar(value, arg):
+def replace_star(value, arg):
     return value.replace("*", arg)

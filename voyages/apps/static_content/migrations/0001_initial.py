@@ -35,7 +35,8 @@ class Migration(migrations.Migration):
                 ('title', models.TextField(max_length=50)),
                 ('description', models.TextField(max_length=2000)),
                 ('order', models.IntegerField()),
-                ('group', models.ForeignKey(to='static_content.ContentGroup')),
+                ('group', models.ForeignKey(to='static_content.ContentGroup',
+                                            on_delete=models.CASCADE)),
             ],
             options={
                 'verbose_name': 'Static content page',

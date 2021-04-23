@@ -20,7 +20,7 @@ class ExportArea(models.Model):
     show_on_map = models.BooleanField()
 
     def __lt__(self, other):
-        return ((self.name, self.order_num) < (other.name, other.order_num))
+        return (self.name, self.order_num) < (other.name, other.order_num)
 
     def __unicode__(self):
         return self.name
@@ -37,7 +37,7 @@ class ExportRegion(models.Model):
     longitude = models.FloatField(null=True, blank=True)
     show_at_zoom = models.IntegerField()
     show_on_map = models.BooleanField()
-    export_area = models.ForeignKey(ExportArea)
+    export_area = models.ForeignKey(ExportArea, on_delete=models.CASCADE)
 
     def __unicode__(self):
         return self.name
@@ -59,7 +59,7 @@ class ImportArea(models.Model):
         return self.name
 
     def __lt__(self, other):
-        return ((self.name, self.order_num) < (other.name, other.order_num))
+        return (self.name, self.order_num) < (other.name, other.order_num)
 
 
 class ImportRegion(models.Model):
@@ -73,7 +73,7 @@ class ImportRegion(models.Model):
     longitude = models.FloatField(null=True, blank=True)
     show_at_zoom = models.IntegerField()
     show_on_map = models.BooleanField()
-    import_area = models.ForeignKey(ImportArea)
+    import_area = models.ForeignKey(ImportArea, on_delete=models.CASCADE)
 
     def __unicode__(self):
         return self.name
@@ -92,12 +92,12 @@ class Estimate(models.Model):
     Class represents Estimate entity
     """
 
-    nation = models.ForeignKey(Nation)
+    nation = models.ForeignKey(Nation, on_delete=models.CASCADE)
     year = models.IntegerField()
-    embarkation_region = models.ForeignKey(ExportRegion, null=True, blank=True)
-    disembarkation_region = models.ForeignKey(ImportRegion,
-                                              null=True,
-                                              blank=True)
+    embarkation_region = models.ForeignKey(
+        ExportRegion, null=True, blank=True, on_delete=models.CASCADE)
+    disembarkation_region = models.ForeignKey(
+        ImportRegion, null=True, blank=True, on_delete=models.CASCADE)
     embarked_slaves = models.FloatField(null=True, blank=True)
     disembarked_slaves = models.FloatField(null=True, blank=True)
 

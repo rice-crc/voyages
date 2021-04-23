@@ -35,7 +35,7 @@ class FlatPageAdmin(FlatPageAdmin):
         }),
     )
 
-    class Media(object):
+    class Media:
         js = (
             'scripts/tiny_mce/tinymce.min.js',
             'scripts/tiny_mce/textareas.js',
@@ -345,7 +345,7 @@ class VoyageAdmin(admin.ModelAdmin):
     exclude = ('voyage_ship', 'voyage_itinerary', 'voyage_dates', 'voyage_crew',
                'voyage_slaves_numbers')
 
-    class Meta(object):
+    class Meta:
         fields = '__all__'
 
 

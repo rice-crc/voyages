@@ -292,7 +292,7 @@ def publish_accepted_contributions(log_file, skip_backup=False):
 
                 for id in all_deleted_ids:
                     post_delete_request(id)
-        except:
+        except Exception:
             pass
         management.call_command('update_index',
                                 'voyage.voyage',
@@ -1007,7 +1007,7 @@ def _save_editorial_version(review_request,
         try:
             year_int = int(year)
             return ',,' + str(year_int)
-        except:
+        except Exception:
             return ',,'
 
     dates = VoyageDates()

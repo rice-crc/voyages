@@ -17,15 +17,15 @@ from .cache import VoyageCache
 standard_library.install_aliases()
 
 
-class VoyageRoutes(object):
+class VoyageRoutes:
 
-    def __init__(self, nodes, links, twoWay=False):
+    def __init__(self, nodes, links, two_way=False):
         self._nodes = nodes
         edges = [[] for _ in self._nodes]
         for a, b in links:
             ab_dist = dist(self._nodes[a], self._nodes[b])
             edges[a].append((b, ab_dist))
-            if twoWay:
+            if two_way:
                 edges[b].append((a, ab_dist))
         self._edges = edges
         self._routes = {}
@@ -116,7 +116,7 @@ class VoyageRoutes(object):
         return self._voyage_routes
 
 
-class VoyageRoutesCache(object):
+class VoyageRoutesCache:
     _cache = None
     _lock = threading.Lock()
 
@@ -125,7 +125,7 @@ class VoyageRoutesCache(object):
         with cls._lock:
             if force_reload or not cls._cache:
                 dir = os.path.dirname(os.path.abspath(__file__))
-                with open(dir + '/../../sitemedia/maps/js/routeNodes.js',
+                with open(dir + '/../../sitemedia/maps/js/route_nodes.js',
                           'r') as f:
                     s = f.read()
                 nodes = [(float(m.group(1)), float(m.group(2)))

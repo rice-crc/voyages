@@ -17,7 +17,7 @@ def get_year_value(value):
     """
     try:
         ret = value.split(",")[2]
-    except:
+    except Exception:
         ret = ""
     return ret
 

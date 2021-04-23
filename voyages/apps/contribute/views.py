@@ -27,6 +27,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 # Create your views here.
 from future import standard_library
+from itertools import chain
 
 from voyages.apps.common.views import get_ordered_places
 from voyages.apps.contribute.forms import (ContributionVoyageSelectionForm,
@@ -318,7 +319,7 @@ def create_source(source_values, interim_voyage):
     source.interim_voyage = interim_voyage
     try:
         source.pk = int(source_values['pk'])
-    except:
+    except Exception:
         pass
     if source.created_voyage_sources:
         if not source.source_ref_text or not source.source_ref_text.startswith(
@@ -388,25 +389,25 @@ def interim_main(request, contribution, interim):
             src.save()
         interim = form.save()
         # Additional form data.
-        persistedFields = [
+        pesisted_fields = [
             'message_to_editor', 'reviewer_decision',
             'decision_message', 'editorial_decision',
             'created_voyage_id'
         ]
-        persistedDict = {
+        pesisted_dict = {
             k: escape(request.POST[k])
-            for k in persistedFields
+            for k in pesisted_fields
             if k in request.POST
         }
         interim.persisted_form_data = json.dumps(
-            persistedDict) if len(persistedDict) > 0 else None
+            pesisted_dict) if len(pesisted_dict) > 0 else None
         # Reparse notes safely.
         try:
             note_dict = {
                 k: escape(v)
                 for k, v in list(json.loads(interim.notes).items())
             }
-        except:
+        except Exception:
             note_dict = {'parse_error': interim.notes}
         interim.notes = json.dumps(note_dict)
         interim.save()
@@ -1203,17 +1204,16 @@ def override_empty_fields_with_single_value(interim_voyage, review_request):
         if isinstance(f, Field) and f.get_internal_type() == 'ForeignKey'
     }
     single_values = {}
-    for data in list(existing_data.values()):
-        for k, v in list(data.items()):
-            if v is None or v == '':
-                continue
-            if k.startswith('date') and v == ',,':
-                continue
-            k = foreign_keys.get(k, k)
-            if k in single_values and single_values[k] != v:
-                single_values[k] = None
-            else:
-                single_values[k] = v
+    for k, v in list(chain(*existing_data.values())):
+        if v is None or v == '':
+            continue
+        if k.startswith('date') and v == ',,':
+            continue
+        k = foreign_keys.get(k, k)
+        if k in single_values and single_values[k] != v:
+            single_values[k] = None
+        else:
+            single_values[k] = v
     # Second pass, set values of interim_voyage.
     numbers = []
     for k, v in list(single_values.items()):
@@ -1411,7 +1411,7 @@ def clone_interim_voyage(contribution, contributor_comment_prefix):
     changed = {}
     try:
         note_dict = json.loads(interim.notes) if interim.notes else {}
-    except:
+    except Exception:
         note_dict = {'parse_error': interim.notes}
     for key, note in list(note_dict.items()):
         changed[key] = escape(contributor_comment_prefix + note)
@@ -1489,7 +1489,7 @@ def interim_data(interim):
             try:
                 dict[name] = value.pk
                 dict[name + '_name'] = str(value)
-            except:
+            except Exception:
                 pass
         elif type in [
                 'IntegerField', 'CharField', 'TextField',
@@ -1595,7 +1595,7 @@ def submit_editorial_decision(request, editor_contribution_id):
         voyage_id = request.POST.get('created_voyage_id')
         if voyage_id:
             created_voyage_id = int(voyage_id)
-    except:
+    except Exception:
         pass
     if decision not in [
             ReviewRequestDecision.accepted_by_editor,
@@ -1694,7 +1694,7 @@ def submit_review_to_editor(request, review_request_id):
     decision = -1
     try:
         decision = int(request.POST['reviewer_decision'])
-    except:
+    except Exception:
         pass
     if decision not in (ReviewRequestDecision.accepted_by_reviewer,
                         ReviewRequestDecision.rejected_by_reviewer):
@@ -1844,7 +1844,7 @@ def editorial_sources(request):
                     interim_source = None
                     try:
                         interim_source = src_model.objects.get(pk=int(pair[1]))
-                    except:
+                    except Exception:
                         interim_source = src_model()
                         interim_source.interim_voyage = InterimVoyage(
                             pk=int(request.POST['interim_pk']))
@@ -1918,7 +1918,7 @@ def editorial_sources(request):
     })
 
 
-class Echo(object):
+class Echo:
     """An object that implements just the write method of the file-like
     interface.
     """
@@ -1992,7 +1992,7 @@ def generate_voyage_csv_file(statuses,
             if (count % 100) == 0:
                 log(str(count) + ' rows exported to CSV')
         log('FINISHED')
-    except:
+    except Exception:
         error_message = 'ERROR occurred after ' + \
             str(count) + ' rows processed: ' + traceback.format_exc()
         print(error_message)
