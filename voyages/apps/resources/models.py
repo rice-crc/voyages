@@ -1,6 +1,6 @@
 from __future__ import unicode_literals
 
-from builtins import object, str
+from builtins import str
 from os.path import basename
 
 from django.conf import settings

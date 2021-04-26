@@ -5,11 +5,11 @@ import re
 import sys
 from builtins import input, next, range, str
 
-import unicodecsv
 from django.core.management.base import BaseCommand
 from django.db import connection
 from django.utils.encoding import smart_str
 from unidecode import unidecode
+import unicodecsv
 
 from voyages.apps.resources.models import AfricanName, Image
 from voyages.apps.voyage.models import (BroadRegion, LinkedVoyages,
@@ -161,12 +161,12 @@ class Command(BaseCommand):
         _end = '_end'
 
         def add_to_trie(key, value):
-            dict = trie
+            dictionary = trie
             for letter in plain:
                 if filter_out_source_letter(letter):
                     continue
-                dict = dict.setdefault(letter, {})
-            dict[_end] = value
+                dictionary = dictionary.setdefault(letter, {})
+            dictionary[_end] = value
 
         for source in all_sources:
             plain = unidecode(source.short_ref).lower()
@@ -178,16 +178,16 @@ class Command(BaseCommand):
         def get_source(ref):
             best = None
             match = ''
-            dict = trie
+            dictionary = trie
             plain = unidecode(ref).lower()
             for letter in plain:
                 if filter_out_source_letter(letter):
                     continue
-                dict = dict.get(letter)
-                if dict is None:
+                dictionary = dictionary.get(letter)
+                if dictionary is None:
                     break
                 match += letter
-                best = dict.get(_end, best)
+                best = dictionary.get(_end, best)
             return best, match
 
         def cint(val, allow_null=True):
@@ -216,7 +216,7 @@ class Command(BaseCommand):
                     return None
                 raise Exception("Invalid value for float: " + str(val))
 
-        def date_csv(var_name_prefix, suffixes=[u'a', u'b', u'c']):
+        def date_csv(var_name_prefix, suffixes=None):
             """
             Fetches date fields (day, month, year) and produce a CSV
             string in the format MM,DD,YYYY
@@ -233,6 +233,8 @@ class Command(BaseCommand):
                 if len(component) == 1:
                     component = '0' + component
                 return component
+            if suffixes is None:
+                suffixes = [u'a', u'b', u'c']
             return get_component(suffixes[1]) + ',' + \
                 get_component(suffixes[0]) + ',' + \
                 get_component(suffixes[2])
@@ -264,11 +266,11 @@ class Command(BaseCommand):
                 year = int(components[coords[0]].strip())
                 month = int(components[coords[1]].strip())
                 day = int(components[coords[2]].strip())
-                if day <= 0 or day > 31 or month <= 0 or month > 12 or year < 1000 or year > 1900:
-                    self.errors += 1
-                    sys.stderr.write('Invalid date ' + value + '\n')
-                    return ''
-                return str(month) + ',' + str(day) + ',' + str(year)
+                if 1 <= day <= 31 and 1 <= month <= 12 and 1000 <= year <= 1900:
+                    return f'{month},{day},{year}'
+                self.errors += 1
+                sys.stderr.write('Invalid date ' + value + '\n')
+                return ''
             except Exception:
                 self.errors += 1
                 sys.stderr.write('Invalid date ' + value + '\n')
@@ -288,14 +290,14 @@ class Command(BaseCommand):
                 for row in reader:
                     # Create a voyage corresponding to this row
                     voyage = Voyage()
-                    id = cint(row.get(u'voyageid'), False)
-                    if id in voyages:
+                    voyage_id = cint(row.get(u'voyageid'), False)
+                    if voyage_id in voyages:
                         sys.stderr.write('Duplicate voyage found'
-                                         ': ' + str(id) + '\n')
+                                         ': ' + str(voyage_id) + '\n')
                         return
-                    voyage.pk = id
-                    voyage.voyage_id = id
-                    voyages[id] = voyage
+                    voyage.pk = voyage_id
+                    voyage.voyage_id = voyage_id
+                    voyages[voyage_id] = voyage
                     # Next we set up voyage direct and nested members
                     in_cd_room = row.get(u'evgreen', '0')
                     voyage.voyage_in_cd_rom = in_cd_room == '1' or in_cd_room.lower(
@@ -414,16 +416,16 @@ class Command(BaseCommand):
                         'broad_regions', 'mjselimp1')
                     itinerary.voyage = voyage
                     itineraries.append(itinerary)
-                    check_hierarchy(id, 'ptdepimp',
+                    check_hierarchy(voyage_id, 'ptdepimp',
                                     itinerary.imp_port_voyage_begin,
                                     itinerary.imp_region_voyage_begin,
                                     itinerary.imp_broad_region_voyage_begin)
                     check_hierarchy(
-                        id, 'mjbyptimp',
+                        voyage_id, 'mjbyptimp',
                         itinerary.imp_principal_place_of_slave_purchase,
                         itinerary.imp_principal_region_of_slave_purchase,
                         itinerary.imp_broad_region_of_slave_purchase)
-                    check_hierarchy(id, 'mjslptimp',
+                    check_hierarchy(voyage_id, 'mjslptimp',
                                     itinerary.imp_principal_port_slave_dis,
                                     itinerary.imp_principal_region_slave_dis,
                                     itinerary.imp_broad_region_slave_dis)
@@ -871,9 +873,9 @@ class Command(BaseCommand):
                 voyage_links[i] = None
         voyage_links = [link for link in voyage_links if link]
 
-        def set_foreign_keys(items, dict, key_func, fk_field):
+        def set_foreign_keys(items, dictionary, key_func, fk_field):
             for item in items:
-                x = dict[key_func(item)]
+                x = dictionary[key_func(item)]
                 setattr(item, fk_field + '_id', x.pk)
 
         def set_voyages_fk(items):

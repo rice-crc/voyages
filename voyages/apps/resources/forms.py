@@ -1,7 +1,5 @@
 from __future__ import unicode_literals
 
-from builtins import object
-
 from django import forms
 
 from .models import Image

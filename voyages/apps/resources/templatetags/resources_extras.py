@@ -28,8 +28,8 @@ def modulo(num, val):
 
 
 @register.filter
-def spaces_to_underscores(str):
-    return "_".join(str.split(" "))
+def spaces_to_underscores(words):
+    return "_".join(words.split(" "))
 
 
 @register.filter

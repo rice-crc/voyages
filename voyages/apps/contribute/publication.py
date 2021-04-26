@@ -6,10 +6,10 @@ import traceback
 from builtins import str
 
 import requests
-import unicodecsv as csv
 from django.conf import settings
 from django.core import management
 from django.db import transaction
+import unicodecsv as csv
 
 from voyages.apps.common.models import year_mod
 from voyages.apps.contribute.models import (ContributionStatus,
@@ -276,22 +276,22 @@ def publish_accepted_contributions(log_file, skip_backup=False):
                 def post(data):
                     return requests.post(solr_url, data, headers=headers)
 
-                def post_delete_request(id):
+                def post_delete_request(voyage_id):
                     r = post('<delete><query>'
-                             'var_voyage_id:' + str(id) + '</query></delete>')
+                             f'var_voyage_id:{voyage_id}</query></delete>')
                     if r.status_code != 200:
                         log('Failed to delete Solr record for '
-                            'voyage_id ' + str(id) + ' response code:'
-                            ' ' + str(r.status_code))
-                    else:
-                        r = post('<commit />')
-                        if r.status_code != 200:
-                            log('Failed to commit deletion for Solr record for '
-                                'voyage_id ' + str(id) + ' '
-                                'response code: ' + str(r.status_code))
+                            'voyage_id ' + str(voyage_id) + ' '
+                            'response code: ' + str(r.status_code))
+                        return
+                    r = post('<commit />')
+                    if r.status_code != 200:
+                        log('Failed to commit deletion for Solr record for '
+                            'voyage_id ' + str(voyage_id) + ' '
+                            'response code: ' + str(r.status_code))
 
-                for id in all_deleted_ids:
-                    post_delete_request(id)
+                for voyage_id in all_deleted_ids:
+                    post_delete_request(voyage_id)
         except Exception:
             pass
         management.call_command('update_index',
@@ -359,12 +359,14 @@ def _fetch_active_reviews_by_status(statuses):
     return review_requests, notreviewed_contributions
 
 
-def _map_csv_date(data, varname, csv_date, labels=['A', 'B', 'C']):
+def _map_csv_date(data, varname, csv_date, labels=None):
     if csv_date is None:
         return
     members = csv_date.split(',')
     if len(members) != 3:
         members = [None, None, None]
+    if labels is None:
+        labels = ['A', 'B', 'C']
     data[varname + labels[0]] = int(
         members[1]) if members[1] and members[1] != '' else None
     data[varname + labels[1]] = int(
@@ -422,7 +424,7 @@ def _map_voyage_to_spss(voyage):
 
     # Outcomes
     outcomes = list(voyage.voyage_name_outcome.all())
-    if 1 == len(outcomes):
+    if len(outcomes) == 1:
         outcomes = outcomes[0]
         data['FATE'] = _get_label_value(outcomes.particular_outcome)
         data['FATE2'] = _get_label_value(outcomes.outcome_slaves)

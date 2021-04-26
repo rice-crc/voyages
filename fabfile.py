@@ -328,10 +328,10 @@ delete without requesting confirmation.
                 rm_dirs.remove(link)
 
         if rm_dirs:
-            for dir in rm_dirs:
+            for dead_dir in rm_dirs:
                 if noinput or confirm('Remove %s/%s ?' %
-                                      (env.remote_path, dir)):
-                    sudo('rm -rf %s' % dir, user=env.remote_acct)
+                                      (env.remote_path, dead_dir)):
+                    sudo('rm -rf %s' % dead_dir, user=env.remote_acct)
         else:
             puts('No old build directories to remove')
 

@@ -1,7 +1,5 @@
 from __future__ import unicode_literals
 
-from builtins import object
-
 from django import forms
 from django.conf import settings
 from haystack.utils import Highlighter
@@ -11,7 +9,8 @@ class AdvancedEditor(forms.Textarea):
 
     class Media:
         js = (
-            '//cdn.tiny.cloud/1/evau54786a4pxb62mp84sjc26h72hrpdu9b5ht3zzn8oisd5/tinymce/5/tinymce.min.js',
+            '//cdn.tiny.cloud/1/evau54786a4pxb62mp84sjc26h72hrpdu9b5'
+            'ht3zzn8oisd5/tinymce/5/tinymce.min.js',
             'scripts/tiny_mce/textareas_small.js')
 
     def __init__(self, language=None, attrs=None):
@@ -29,7 +28,6 @@ class AdvancedEditor(forms.Textarea):
 class TextHighlighter(Highlighter):
 
     def highlight(self, text_block):
-        self.text_block = text_block
         highlight_locations = self.find_highlightable_words()
         # start_offset, end_offset = self.find_window(highlight_locations)
 

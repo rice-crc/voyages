@@ -2,11 +2,11 @@ from __future__ import unicode_literals
 
 import sys
 
-import ijson
 import six
 from django.core.serializers.base import DeserializationError
 from django.core.serializers.json import Serializer as DjangoJsonSerializer
 from django.core.serializers.python import Deserializer
+import ijson
 
 Serializer = DjangoJsonSerializer
 

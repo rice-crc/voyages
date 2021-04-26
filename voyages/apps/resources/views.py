@@ -775,26 +775,20 @@ def get_embarkation_checked(embarkation_list, checked):
     return emb_str.rstrip().rstrip(",")
 
 
-def fill_current_query_dict(dict=None, key=None, value=None):
+def fill_current_query_dict(dictionary=None, key=None, value=None):
     # Find a key and put the value
-    if key == "African name":
-        val = 1
-    elif key == "Ship name":
-        val = 2
-    elif key == "Voyage ID":
-        val = 3
-    elif key == "Time frame":
-        val = 4
-    elif key == "Age":
-        val = 5
-    elif key == "Height (inches)":
-        val = 6
-    elif key == "Sex/Age":
-        val = 7
-    elif key == "Place of origin":
-        val = 8
-    elif key == "Place of embarkation":
-        val = 9
-    elif key == "Place of disembarkation":
-        val = 10
-    dict[val] = {key: value}
+    name_to_idx = {
+        "African name": 1,
+        "Ship name": 2,
+        "Voyage ID": 3,
+        "Time frame": 4,
+        "Age": 5,
+        "Height (inches)": 6,
+        "Sex/Age": 7,
+        "Place of origin": 8,
+        "Place of embarkation": 9,
+        "Place of disembarkation": 10
+    }
+    val = name_to_idx.get(key, None)
+    if val:
+        dictionary[val] = {key: value}

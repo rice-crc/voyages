@@ -6,9 +6,8 @@ import json
 import logging
 import os
 import re
-from builtins import object, str
+from builtins import str
 
-import unicodecsv
 from django.conf import settings
 from django.core.cache import cache
 from django.http import HttpResponse, HttpResponseBadRequest, JsonResponse
@@ -19,6 +18,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 from haystack.inputs import Raw
 from haystack.query import SearchQuerySet
+import unicodecsv
 
 from voyages.apps.common.export import download_xls
 from voyages.apps.common.models import (SavedQuery,
@@ -38,7 +38,7 @@ from .cache import CachedGeo, VoyageCache
 from .globals import voyage_timeline_variables
 from .graphs import (get_graph_data, graphs_x_axes, graphs_y_axes,
                      other_graphs_x_axes)
-from .search_indexes import VoyageIndex
+from .search_indexes import ok_to_show_animation, VoyageIndex
 from .tables import PivotTable, get_pivot_table_advanced
 
 
@@ -321,47 +321,27 @@ def get_results_map_animation(results, allow_no_numbers=False):
             print("Missing voyage with PK" + str(pk))
             continue
 
-        def can_show(port_pk):
-            ph = CachedGeo.get_hierarchy(port_pk)
+        def can_show(ph):
             return ph is not None and (ph[0].show or ph[1].show)
 
-        if can_show(voyage.emb_pk) and can_show(voyage.dis_pk) and \
-                voyage.year is not None and \
-                (allow_no_numbers or (
-                    voyage.embarked is not None and voyage.embarked > 0 and voyage.disembarked is not None)):
-            flag = VoyageCache.nations.get(voyage.ship_nat_pk)
-            if flag is None:
-                flag = ''
-            hsrc = CachedGeo.get_hierarchy(voyage.emb_pk)
-            hdst = CachedGeo.get_hierarchy(voyage.dis_pk)
+        if ok_to_show_animation(voyage, can_show, allow_no_numbers):
+            # flag = VoyageCache.nations.get(voyage.ship_nat_pk) or ''
+            source = CachedGeo.get_hierarchy(voyage.emb_pk)
+            destination = CachedGeo.get_hierarchy(voyage.dis_pk)
             items.append({
-                "voyage_id":
-                    voyage.voyage_id,
-                "src":
-                    voyage.emb_pk,
-                "dst":
-                    voyage.dis_pk,
-                "regsrc":
-                    hsrc[1].pk,
-                "bregsrc":
-                    hsrc[2].pk,
-                "bregdst":
-                    hdst[2].pk,
-                "embarked":
-                    voyage.embarked or 0,
-                "disembarked":
-                    voyage.disembarked or 0,
-                "year":
-                    voyage.year,
-                "month":
-                    voyage.month,
-                "ship_ton":
-                    voyage.ship_ton if voyage.ship_ton is not None else 0,
-                "nat_id":
-                    voyage.ship_nat_pk if voyage.ship_nat_pk is not None else 0,
-                "ship_name":
-                    str(voyage.ship_name)
-                    if voyage.ship_name is not None else '',
+                "voyage_id": voyage.voyage_id,
+                "src": voyage.emb_pk,
+                "dst": voyage.dis_pk,
+                "regsrc": source[1].pk,
+                "bregsrc": source[2].pk,
+                "bregdst": destination[2].pk,
+                "embarked": voyage.embarked or 0,
+                "disembarked": voyage.disembarked or 0,
+                "year": voyage.year,
+                "month": voyage.month,
+                "ship_ton": voyage.ship_ton or 0,
+                "nat_id": voyage.ship_nat_pk or 0,
+                "ship_name": str(voyage.ship_name or ''),
             })
     return JsonResponse(items, safe=False)
 
@@ -454,7 +434,7 @@ def get_results_map_flow(request, results):
         add_flow(source, destination, voyage.embarked, voyage.disembarked)
     if missed_embarked > 0 or missed_disembarked > 0:
         logging.getLogger('voyages').info(
-            f'Missing flow: {missed_embarked}, {missed_disembarked})')
+            'Missing flow: (%d, %d)', missed_embarked, missed_disembarked)
     return render(request,
                   "search_maps.datatemplate", {
                       'map_ports': map_ports,

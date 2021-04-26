@@ -92,11 +92,10 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='voyagedates',
             name='imp_departed_africa',
-            field=models.CharField(validators=[
-                django.core.validators.RegexValidator(
+            field=models.CharField(
+                validators=[django.core.validators.RegexValidator(
                     re.compile('^[\\d,]+\\Z'),
-                    'Enter only digits separated by commas.', 'invalid')
-            ],
+                    'Enter only digits separated by commas.', 'invalid')],
                 max_length=10,
                 blank=True,
                 help_text=b'Date in format: MM,DD,YYYY',
@@ -106,11 +105,10 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='voyagedates',
             name='imp_voyage_began',
-            field=models.CharField(validators=[
-                django.core.validators.RegexValidator(
+            field=models.CharField(
+                validators=[django.core.validators.RegexValidator(
                     re.compile('^[\\d,]+\\Z'),
-                    'Enter only digits separated by commas.', 'invalid')
-            ],
+                    'Enter only digits separated by commas.', 'invalid')],
                 max_length=10,
                 blank=True,
                 help_text=b'Date in format: MM,DD,YYYY',
@@ -124,8 +122,7 @@ class Migration(migrations.Migration):
                 validators=[
                     django.core.validators.RegexValidator(
                         re.compile('^[\\d,]+\\Z'),
-                        'Enter only digits separated by commas.', 'invalid')
-                ],
+                        'Enter only digits separated by commas.', 'invalid')],
                 max_length=10,
                 blank=True,
                 help_text=b'Date in format: MM,DD,YYYY',
@@ -139,8 +136,7 @@ class Migration(migrations.Migration):
                 validators=[
                     django.core.validators.RegexValidator(
                         re.compile('^[\\d,]+\\Z'),
-                        'Enter only digits separated by commas.', 'invalid')
-                ],
+                        'Enter only digits separated by commas.', 'invalid')],
                 max_length=10,
                 blank=True,
                 help_text=b'Date in format: MM,DD,YYYY',
@@ -154,8 +150,7 @@ class Migration(migrations.Migration):
                 validators=[
                     django.core.validators.RegexValidator(
                         re.compile('^[\\d,]+\\Z'),
-                        'Enter only digits separated by commas.', 'invalid')
-                ],
+                        'Enter only digits separated by commas.', 'invalid')],
                 max_length=10,
                 blank=True,
                 help_text=b'Date in format: MM,DD,YYYY',
@@ -169,8 +164,7 @@ class Migration(migrations.Migration):
                 validators=[
                     django.core.validators.RegexValidator(
                         re.compile('^[\\d,]+\\Z'),
-                        'Enter only digits separated by commas.', 'invalid')
-                ],
+                        'Enter only digits separated by commas.', 'invalid')],
                 max_length=10,
                 blank=True,
                 help_text=b'Date in format: MM,DD,YYYY',

@@ -1,7 +1,7 @@
 from __future__ import unicode_literals
 
 import json
-from builtins import object, range
+from builtins import range
 
 
 def get_pivot_table(results, row_field, col_field, cell_formula):
@@ -42,9 +42,9 @@ def get_pivot_table_advanced(results,
             }
         }
     }
-    filter = cell_formula_dict.pop('_filter', None)
-    if filter:
-        terms['domain'] = {'filter': filter}
+    domain_filter = cell_formula_dict.pop('_filter', None)
+    if domain_filter:
+        terms['domain'] = {'filter': domain_filter}
     facet = {'categories': {'terms': terms}}
     if range:
         terms['type'] = 'range'

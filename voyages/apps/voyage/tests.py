@@ -9,7 +9,7 @@ from django.test.utils import override_settings
 from future import standard_library
 from mock import patch
 
-from . import globals
+from .globals import get_incremented_year_tuples, var_dict
 
 standard_library.install_aliases()
 
@@ -46,7 +46,7 @@ class ReportingTest(TestCase):
         flist25 = [([(str(x[0]) + '-' + str(x[1]), 1)], {
             'var_imp_arrival_at_port_of_dis__range': [x[0], x[1]]
         }) for x in list25]
-        self.assertEqual(globals.get_incremented_year_tuples(25, 1514, 1866),
+        self.assertEqual(get_incremented_year_tuples(25, 1514, 1866),
                          flist25)
 
 
@@ -66,7 +66,7 @@ class SearchTest(TestCase):
 
     def test_search_forms_exist(self):
         response = self.client.get('/voyage/search')
-        for var in globals.var_dict:
+        for var in var_dict:
             var_name = var['var_name']
             thing = 'id="id_' + var_name + '-is_shown_field"'
             if var['is_general'] or var['is_basic']:

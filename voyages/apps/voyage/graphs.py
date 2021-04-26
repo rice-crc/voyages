@@ -1,7 +1,7 @@
 from __future__ import absolute_import, division, unicode_literals
 
 import calendar
-from builtins import object, str
+from builtins import str
 from itertools import groupby
 
 from django.utils.translation import ugettext_lazy as _

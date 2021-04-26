@@ -5,13 +5,14 @@ import re
 from builtins import range, str
 from datetime import date
 
-import six
-import unidecode
 from django.utils import translation
 from django.utils.translation import ugettext as _
+import six
 from haystack import indexes
+import unidecode
 
-from . import globals
+from .cache import CachedGeo
+from .globals import no_mangle, search_mangle_methods
 from .models import Voyage, VoyagesFullQueryHelper, VoyageSources
 
 
@@ -875,8 +876,7 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
         return ", ".join(self.prepare_var_sources(obj))
 
     def prepare_var_sources_plaintext_search(self, obj):
-        mangle_method = globals.search_mangle_methods.get(
-            'var_sources', globals.no_mangle)
+        mangle_method = search_mangle_methods.get('var_sources', no_mangle)
         return mangle_method(
             unidecode.unidecode(self.prepare_var_sources_plaintext(obj)))
 
@@ -885,3 +885,11 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
             str(link.mode) + ': ' + str(link.second.voyage_id)
             for link in obj.links_to_other_voyages.all()
         ]
+
+
+def ok_to_show_animation(voyage, can_show, allow_no_numbers=False):
+    source = CachedGeo.get_hierarchy(voyage.emb_pk)
+    destination = CachedGeo.get_hierarchy(voyage.dis_pk)
+    allow_voyage = allow_no_numbers or (
+        voyage.embarked and voyage.embarked > 0 and voyage.disembarked)
+    return can_show(source) and can_show(destination) and voyage.year and allow_voyage

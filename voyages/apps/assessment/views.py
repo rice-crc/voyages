@@ -10,16 +10,16 @@ from itertools import chain, groupby
 from django.http import Http404
 from django.shortcuts import render
 from django.template import TemplateDoesNotExist, loader
-from haystack.query import SearchQuerySet
 from past.utils import old_div
+from haystack.query import SearchQuerySet
 
 from voyages.apps.common.export import download_xls
 from voyages.apps.common.models import (SavedQuery,
                                         get_pks_from_haystack_results,
                                         restore_link)
 
-from . import globals
 from .forms import EstimateSelectionForm, EstimateYearForm
+from .globals import default_first_year, default_last_year, get_map_year
 from .models import Estimate, EstimateManager
 
 
@@ -65,8 +65,8 @@ def get_estimates_map(request):
     """
     data = {'tab_selected': 'map'}
     results = get_estimates_common(request, data)
-    data['map_year'] = globals.get_map_year(data['query']["year__gte"],
-                                            data['query']["year__lte"])
+    data['map_year'] = get_map_year(data['query']["year__gte"],
+                                    data['query']["year__lte"])
     # Group estimates by embarkation and disembarkation geocodes.
     regions = {}
     flows = {}
@@ -114,10 +114,8 @@ def get_estimates_timeline(request):
                                  item[1] + result.disembarked_slaves)
 
     query = data['query']
-    data['min_year'] = query['year__gte'] if query['year__gte'] > globals.default_first_year\
-        else globals.default_first_year
-    data['max_year'] = query['year__lte'] if query['year__lte'] < globals.default_last_year\
-        else globals.default_last_year
+    data['min_year'] = max(query['year__gte'], default_first_year)
+    data['max_year'] = min(query['year__lte'], default_last_year)
     data['timeline'] = timeline
     data['min_year'] -= 1
     data['max_year'] += 1
@@ -365,8 +363,7 @@ def get_estimates_table(request):
     full_data_set = [[
         table_dict[(r, c)] if (r, c) in table_dict else (0, 0)
         for c in column_set
-    ]
-        for r in row_set]
+    ] for r in row_set]
     # Round numbers to integers.
     full_data_set = [[
         tuple(int(round(pair[i])) for i in range(2)) for pair in r
@@ -551,11 +548,11 @@ def get_estimates_common(request, data):
             logging.getLogger('voyages').error(year_form.errors)
         year_form = EstimateYearForm(
             initial={
-                'frame_from_year': globals.default_first_year,
-                'frame_to_year': globals.default_last_year
+                'frame_from_year': default_first_year,
+                'frame_to_year': default_last_year
             })
-        query["year__gte"] = globals.default_first_year
-        query["year__lte"] = globals.default_last_year
+        query["year__gte"] = default_first_year
+        query["year__lte"] = default_last_year
 
     data['year_form'] = year_form
     data['query'] = query
