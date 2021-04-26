@@ -1,14 +1,16 @@
 from __future__ import absolute_import, unicode_literals
 
-from builtins import map, object, str
+from builtins import map, str
 
-from autocomplete_light import shortcuts as autocomplete_light
 from django import forms
 from django.utils.translation import ugettext_lazy as _
+from autocomplete_light import shortcuts as autocomplete_light
 
 from voyages.extratools import AdvancedEditor
 
-from . import globals, graphs
+from . import graphs
+from .globals import (list_months, table_columns, table_functions,
+                      table_rows, voyage_timeline_variables)
 from .models import (VoyageCaptainConnection, VoyageCrew, VoyageDates,
                      VoyageItinerary, VoyageOutcome, VoyageShip,
                      VoyageShipOwnerConnection, VoyageSlavesNumbers,
@@ -186,7 +188,7 @@ class SimpleDateSearchForm(VoyageBaseForm):
     Simple date search form
     """
     type_str = "date"
-    list_months = globals.list_months
+    list_months = list_months
     OPERATORS = (('1', _('Between')), ('2', _('Before')),
                  ('3', _('After')), ('4', _('In')))
     options = forms.ChoiceField(
@@ -242,8 +244,8 @@ class SimpleDateSearchForm(VoyageBaseForm):
 
     months = forms.MultipleChoiceField(
         widget=forms.CheckboxSelectMultiple(),
-        choices=globals.list_months,
-        initial=[x[0] for x in globals.list_months])
+        choices=list_months,
+        initial=[x[0] for x in list_months])
 
 
 class SimpleSelectSearchForm(VoyageBaseForm):
@@ -303,23 +305,23 @@ def extract(x):
 
 class TableSelectionForm(forms.Form):
 
-    rowchoices = list(map(extract, enumerate(globals.table_rows)))
+    rowchoices = list(map(extract, enumerate(table_rows)))
     rows = forms.ChoiceField(label='Rows',
                              choices=rowchoices,
                              initial=[rowchoices[12][1]
-                                      ])  # globals.table_rows[12])
+                                      ])  # table_rows[12])
     rows.initial = [rowchoices[12][0]]
-    colchoices = list(map(extract, enumerate(globals.table_columns)))
+    colchoices = list(map(extract, enumerate(table_columns)))
     columns = forms.ChoiceField(label='Columns',
                                 choices=colchoices,
                                 initial=[colchoices[7][1]
-                                         ])  # globals.table_columns[1])
+                                         ])  # table_columns[1])
     columns.initial = [colchoices[1][0]]
-    cellchoices = list(map(extract, enumerate(globals.table_functions)))
+    cellchoices = list(map(extract, enumerate(table_functions)))
     cells = forms.ChoiceField(label='Cells',
                               choices=cellchoices,
                               initial=[cellchoices[1][1]
-                                       ])  # globals.table_functions[1])
+                                       ])  # table_functions[1])
     cells.initial = [cellchoices[1][0]]
     omit_empty = forms.BooleanField(label='Omit empty',
                                     required=False,
@@ -347,16 +349,18 @@ class GraphRemovePlotForm(forms.Form):
 class GraphSelectionForm(forms.Form):
 
     def __init__(self,
-                 xfunctions=graphs.other_graphs_x_axes,
+                 *args,
+                 xfunctions=None,
                  xfield_label='X axis',
                  yfield_label='Y axis',
-                 *args,
                  **kwargs):
         super().__init__(*args, **kwargs)
 
         def lmbd(x):
             return (str(x[0]), x[1].description)
 
+        if xfunctions is None:
+            xfunctions = graphs.other_graphs_x_axes
         self.xchoices = [lmbd(x) for x in enumerate(xfunctions)]
         self.ychoices = list(map(lmbd, enumerate(graphs.graphs_y_axes)))
         self.fields['xselect'] = forms.ChoiceField(
@@ -366,6 +370,6 @@ class GraphSelectionForm(forms.Form):
 
 
 class TimelineVariableForm(forms.Form):
-    var_choices = [(v[0], v[1]) for v in globals.voyage_timeline_variables]
+    var_choices = [(v[0], v[1]) for v in voyage_timeline_variables]
     variable_select = forms.ChoiceField(
         label=_('Timeline variable'), choices=var_choices, initial=var_choices[23])

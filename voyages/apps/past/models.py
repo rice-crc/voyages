@@ -3,15 +3,15 @@ from __future__ import absolute_import, unicode_literals
 import operator
 import threading
 import unicodedata
-from builtins import object, range, str
+from builtins import range, str
 from functools import reduce
 
-import Levenshtein_search
 from django.contrib.auth.models import User
 from django.db import models
 from django.db.models import (Case, CharField, F, Func, IntegerField, Q, Value,
                               When)
 from django.db.models.functions import Coalesce, Length, Substr
+import Levenshtein_search
 
 from voyages.apps.voyage.models import Place, Voyage, VoyageSources
 
@@ -85,10 +85,10 @@ class NameSearchCache:
                     if item[i] is not None
                 }
                 all_names.update(ns)
-                id = item[0]
+                item_0 = item[0]
                 for name in ns:
                     ids = cls._name_key.setdefault(name, [])
-                    ids.append(id)
+                    ids.append(item_0)
             Levenshtein_search.populate_wordset(0, list(all_names))
             q = EnslavedName.objects.values_list('id', 'name', 'language',
                                                  'recordings_count')
@@ -587,19 +587,16 @@ class EnslavedSearch:
                     count_field = 'count_' + col_name
                     isempty_field = 'isempty_' + col_name
                     q = q.annotate(**{count_field: Length(order_field)})
-                    q = q.annotate(
-                        **{
-                            isempty_field:
-                                Case(When(
-                                    **{
-                                        'then':
-                                            Value(1),
-                                        count_field + '__gt':
-                                            empty_string_field_min_char_len
-                                    }),
-                                    default=Value(0),
-                                    output_field=IntegerField())
-                        })
+                    q = q.annotate(**{
+                        isempty_field:
+                            Case(
+                                When(**{
+                                    'then': Value(1),
+                                    count_field + '__gt':
+                                        empty_string_field_min_char_len
+                                }),
+                                default=Value(0),
+                                output_field=IntegerField())})
                     orm_orderby.append('-' + isempty_field)
                     if 'date' in col_name:
                         # The date formats MM,DD,YYYY with possible blank values are
@@ -667,5 +664,5 @@ class EnslavedSearch:
             if order_by_ranking:
                 q = sorted(q,
                            key=lambda x: x['ranking'],
-                           reverse=('desc' == order_by_ranking))
+                           reverse=(order_by_ranking == 'desc'))
         return q

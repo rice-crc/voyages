@@ -66,15 +66,14 @@ class SavedQuery(models.Model):
             # This method is now being deprecated as we move in with a JSON
             # backend/frontend-agnostic format that is much cleaner and
             # more flexible.
-            if len(
-                    value
-            ) == 1 and 'choice_field' not in name and 'select' not in name:
+            if len(value) == 1 and set(
+                    {'choice_field', 'select'}).isdisjoint(name):
                 post[name] = value[0]
             else:
                 post[name] = value
         return post
 
-    def save(self, preserve_id=False, *args, **kwargs):
+    def save(self, *args, preserve_id=False, **kwargs):
         hash_object = hashlib.sha1(self.query)
         self.hash = hash_object.hexdigest()
         if not self.id or not preserve_id:
@@ -87,8 +86,8 @@ class SavedQuery(models.Model):
                 return
         if not self.id:
             self.id = ''.join(random.SystemRandom().choice(
-                string.ascii_uppercase + string.ascii_lowercase + string.digits)
-                for _ in range(self.ID_LENGTH))
+                string.ascii_uppercase + string.ascii_lowercase + string.digits
+            ) for _ in range(self.ID_LENGTH))
         super().save(*args, **kwargs)
 
 

@@ -3,7 +3,7 @@
 from __future__ import absolute_import, division, unicode_literals
 
 import re
-from builtins import map, object, str, zip
+from builtins import map, str, zip
 from collections import OrderedDict
 from datetime import date
 from itertools import groupby
@@ -40,8 +40,7 @@ def structure_places(place_list):
             p for p in
             [models.Place.objects.filter(pk=idx).first() for idx in place_list]
             if p
-        ],
-            key=lambda p: p.value)
+        ], key=lambda p: p.value)
     except Exception:
         places = []
     region_list = OrderedDict()
@@ -275,11 +274,12 @@ def default_prettifier(varname):
     :param varname: the variable name.
     :return: a function that receives value, voyageid and outputs a converted value.
     """
-    if 'idnum' not in varname and not set({
-        'nation', 'port', 'place', 'region', 'outcome', 'resistance',
-    }).isdisjoint(varname):
-        return trans_adapter()
-    return id_func
+    if 'idnum' in varname:
+        return id_func
+    if set({'nation', 'port', 'place',
+            'region', 'outcome', 'resistance'}).isdisjoint(varname):
+        return id_func
+    return trans_adapter()
 
 
 # Returns the date as a string for display using the database fields

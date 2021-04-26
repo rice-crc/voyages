@@ -42,10 +42,14 @@ def get_set_from_prefix(row, prefix):
 
 def compare_csv(r1,
                 r2,
-                default_values={},
-                ignore_keys=default_ignore_keys,
+                default_values=None,
+                ignore_keys=None,
                 key_map=None):
     pairs = itertools.zip_longest(r1, r2)
+    if default_values is None:
+        default_values = {}
+    if ignore_keys is None:
+        ignore_keys = default_ignore_keys
     warning = {}
     bad = []
     count = 0

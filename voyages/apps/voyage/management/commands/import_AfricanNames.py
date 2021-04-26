@@ -3,10 +3,10 @@ from __future__ import print_function, unicode_literals
 # Import models that will be used in this import script.
 from builtins import input, str
 
-import unicodecsv
 from django.core.management.base import BaseCommand
 from django.db import transaction
 from unidecode import unidecode
+import unicodecsv
 
 from voyages.apps.resources.models import AfricanName, Country, SexAge
 from voyages.apps.voyage.models import Place, Voyage

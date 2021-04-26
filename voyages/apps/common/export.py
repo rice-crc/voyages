@@ -6,7 +6,7 @@ import xlwt
 from django.http import HttpResponse
 
 
-def download_xls(header_rows, data_set, row_header_columns=[]):
+def download_xls(header_rows, data_set, row_header_columns=None):
     """
     Generates an XLS file with the given data.
     :param header_rows: An array of header rows, with each row being an array of pairs (header label, column span)
@@ -15,6 +15,8 @@ def download_xls(header_rows, data_set, row_header_columns=[]):
                                (value, rowspan)
     :return: An HttpResponse containing the XLS file.
     """
+    if row_header_columns is None:
+        row_header_columns = []
     response = HttpResponse(content_type='application/ms-excel')
     response['Content-Disposition'] = 'attachment; filename=data.xls'
     wb = xlwt.Workbook(encoding='utf-8')

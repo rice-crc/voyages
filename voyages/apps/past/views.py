@@ -146,14 +146,14 @@ def search_enslaved(request):
                     if row[name_field]
                 })
                 all_names.sort(
-                    reverse=('desc' == search.get_order_for_field('names')))
+                    reverse=(search.get_order_for_field('names') == 'desc'))
                 all_modern_names = list({
                     row[name_field]
                     for name_field in _modern_name_fields
                     if row[name_field]
                 })
                 all_modern_names.sort(reverse=(
-                    'desc' == search.get_order_for_field('modern_names')))
+                    search.get_order_for_field('modern_names') == 'desc'))
                 row['names'] = all_names
                 row['modern_names'] = all_modern_names
                 keys = list(row.keys())

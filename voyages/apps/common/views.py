@@ -1,7 +1,7 @@
 from __future__ import division, unicode_literals
 
 import re
-from builtins import object, str
+from builtins import str
 
 import django
 from django.conf import settings
@@ -236,9 +236,9 @@ def _get_flatpage(url, lang):
     return page
 
 
-def _default_solr_value_adapter(tuple):
-    key = tuple[0]
-    val = tuple[1]
+def _default_solr_value_adapter(pair):
+    key = pair[0]
+    val = pair[1]
     if val == '[]':
         val = ''
     if key.endswith('_partial') and val is not None:
@@ -291,8 +291,7 @@ def get_datatable_json_result(results,
         key_adapter((k, v)): value_adapter((k, v))
         for k, v in list(x.get_stored_fields().items())
         if field_filter(k)
-    }
-        for x in page]
+    } for x in page]
     return JsonResponse(reponse_data)
 
 

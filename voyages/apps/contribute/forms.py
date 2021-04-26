@@ -1,12 +1,11 @@
 from __future__ import unicode_literals
 
-from builtins import object
 from collections import OrderedDict
 
-from captcha.fields import CaptchaField
 from django import forms
 from django.contrib.auth.forms import AuthenticationForm
 from django.utils.translation import ugettext_lazy as _
+from captcha.fields import CaptchaField
 
 from voyages.apps.contribute.models import AdminFaq, InterimVoyage, UserProfile
 from voyages.apps.voyage.models import Voyage
@@ -107,18 +106,17 @@ class ContributionVoyageSelectionForm(forms.Form):
     more voyage ids.
     """
 
-    ids = forms.CharField(max_length=255, required=True)
-
     def __init__(self,
+                 *args,
                  data=None,
                  min_selection=1,
                  max_selection=None,
-                 *args,
                  **kwargs):
         super().__init__(data, *args, **kwargs)
         self.min_selection = min_selection
         self.max_selection = max_selection
         self.selected_voyages = []
+        self.ids = forms.CharField(max_length=255, required=True)
 
     def clean_ids(self):
         data = self.cleaned_data['ids']
@@ -148,6 +146,10 @@ default_name_help_text = _('Enter last name , first name.')
 
 
 class InterimVoyageForm(forms.ModelForm):
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.cleaned_data = {}
 
     def full_clean(self):
         self.cleaned_data = {}

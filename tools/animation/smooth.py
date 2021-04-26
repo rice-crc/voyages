@@ -6,9 +6,9 @@ import os
 # Pre-compile paths connecting "regions" and link ports to such regions.
 from builtins import str
 
-import numpy as np
-from haversine import haversine as hs_dist
 from past.utils import old_div
+from haversine import haversine as hs_dist
+import numpy as np
 from scipy.interpolate import interp1d
 
 from voyages.apps.voyage.cache import VoyageCache

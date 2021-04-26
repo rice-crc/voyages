@@ -57,8 +57,7 @@ class TestAuthentication(TestCase):
         response = self.client.post(reverse('contribute:index'), {
             'id_username': 'admin',
             'id_password': 'should_not_work'
-        },
-            follow=True)
+        }, follow=True)
         self.assertTrue(
             response.redirect_chain[0][0].endswith('/accounts/login/'))
         self.assertEqual(response.redirect_chain[0][1], 302)
@@ -238,7 +237,7 @@ class TestImputedDataCalculation(TestCase):
 
         return errors
 
-    def interim_voyage(self, dict):
+    def interim_voyage(self, dictionary):
         # TODO: this code may be placed somewhere else so that
         # it can be reused.
         nat_from_value = fn_from_value(Nationality)
@@ -249,56 +248,56 @@ class TestImputedDataCalculation(TestCase):
         resistance_from_value = fn_from_value(Resistance)
 
         def date_from_triple(m, d, y):
-            arr = [dict[m], dict[d], dict[y]]
+            arr = [dictionary[m], dictionary[d], dictionary[y]]
             arr = [str(x) if x else '' for x in arr]
             result = ','.join(arr)
             return result if result != ',,' else None
 
         interim = InterimVoyage()
-        interim.name_of_vessel = dict['shipname']
-        interim.year_ship_constructed = dict['yrcons']
-        interim.year_ship_registered = dict['yrreg']
-        interim.ship_construction_place = place_from_value(dict['placcons'])
-        interim.ship_registration_place = place_from_value(dict['placreg'])
-        interim.national_carrier = nat_from_value(dict['national'])
-        interim.rig_of_vessel = rig_from_value(dict['rig'])
-        interim.tonnage_of_vessel = dict['tonnage']
-        interim.ton_type = tontype_from_value(dict['tontype'])
-        interim.guns_mounted = dict['guns']
-        interim.first_ship_owner = dict['ownera']
-        interim.second_ship_owner = dict['ownerb']
-        # interim.additional_ship_owners = dict['ownerc' d, e, f...]
-        interim.voyage_outcome = outcome_from_value(dict['fate'])
-        interim.african_resistance = resistance_from_value(dict['resistance'])
+        interim.name_of_vessel = dictionary['shipname']
+        interim.year_ship_constructed = dictionary['yrcons']
+        interim.year_ship_registered = dictionary['yrreg']
+        interim.ship_construction_place = place_from_value(dictionary['placcons'])
+        interim.ship_registration_place = place_from_value(dictionary['placreg'])
+        interim.national_carrier = nat_from_value(dictionary['national'])
+        interim.rig_of_vessel = rig_from_value(dictionary['rig'])
+        interim.tonnage_of_vessel = dictionary['tonnage']
+        interim.ton_type = tontype_from_value(dictionary['tontype'])
+        interim.guns_mounted = dictionary['guns']
+        interim.first_ship_owner = dictionary['ownera']
+        interim.second_ship_owner = dictionary['ownerb']
+        # interim.additional_ship_owners = dictionary['ownerc' d, e, f...]
+        interim.voyage_outcome = outcome_from_value(dictionary['fate'])
+        interim.african_resistance = resistance_from_value(dictionary['resistance'])
         interim.first_port_intended_embarkation = place_from_value(
-            dict['embport'])
+            dictionary['embport'])
         interim.second_port_intended_embarkation = place_from_value(
-            dict['embport2'])
+            dictionary['embport2'])
         interim.first_port_intended_disembarkation = place_from_value(
-            dict['arrport'])
+            dictionary['arrport'])
         interim.second_port_intended_disembarkation = place_from_value(
-            dict['arrport2'])
-        interim.port_of_departure = place_from_value(dict['portdep'])
-        interim.number_of_ports_called_prior_to_slave_purchase = dict[
+            dictionary['arrport2'])
+        interim.port_of_departure = place_from_value(dictionary['portdep'])
+        interim.number_of_ports_called_prior_to_slave_purchase = dictionary[
             'nppretra']
         interim.first_place_of_slave_purchase = place_from_value(
-            dict['plac1tra'])
+            dictionary['plac1tra'])
         interim.second_place_of_slave_purchase = place_from_value(
-            dict['plac2tra'])
+            dictionary['plac2tra'])
         interim.third_place_of_slave_purchase = place_from_value(
-            dict['plac3tra'])
+            dictionary['plac3tra'])
         interim.principal_place_of_slave_purchase = place_from_value(
-            dict['majbuypt'])
+            dictionary['majbuypt'])
         interim.place_of_call_before_atlantic_crossing = place_from_value(
-            dict['npafttra'])
-        interim.number_of_new_world_ports_called_prior_to_disembarkation = dict[
+            dictionary['npafttra'])
+        interim.number_of_new_world_ports_called_prior_to_disembarkation = dictionary[
             'nppretra']
-        interim.first_place_of_landing = place_from_value(dict['sla1port'])
-        interim.second_place_of_landing = place_from_value(dict['adpsale1'])
-        interim.third_place_of_landing = place_from_value(dict['adpsale2'])
+        interim.first_place_of_landing = place_from_value(dictionary['sla1port'])
+        interim.second_place_of_landing = place_from_value(dictionary['adpsale1'])
+        interim.third_place_of_landing = place_from_value(dictionary['adpsale2'])
         interim.principal_place_of_slave_disembarkation = place_from_value(
-            dict['majselpt'])
-        interim.port_voyage_ended = place_from_value(dict['portret'])
+            dictionary['majselpt'])
+        interim.port_voyage_ended = place_from_value(dictionary['portret'])
         interim.date_departure = date_from_triple('datedepb', 'datedepa',
                                                   'datedepc')
         interim.date_slave_purchase_began = date_from_triple(
@@ -315,10 +314,10 @@ class TestImputedDataCalculation(TestCase):
             'ddepamb', 'ddepam', 'ddepamc')
         interim.date_voyage_completed = date_from_triple(
             'datarr44', 'datarr43', 'datarr45')
-        interim.length_of_middle_passage = dict['voyage']
-        interim.first_captain = dict['captaina']
-        interim.second_captain = dict['captainb']
-        interim.third_captain = dict['captainc']
+        interim.length_of_middle_passage = dictionary['voyage']
+        interim.first_captain = dictionary['captaina']
+        interim.second_captain = dictionary['captainb']
+        interim.third_captain = dictionary['captainc']
         interim.save()
         number_variables = [
             'ncar13', 'ncar15', 'ncar17', 'tslavesd', 'tslavesp', 'slas32',
@@ -333,7 +332,7 @@ class TestImputedDataCalculation(TestCase):
         ]
         numbers_added = {}
         for var_name in number_variables:
-            var_value = dict.get(var_name)
+            var_value = dictionary.get(var_name)
             if var_value is None:
                 continue
             number = InterimSlaveNumber()
@@ -954,8 +953,7 @@ class TestEditorialPlatform(TransactionTestCase):
         pub_owners = [
             x.owner.name
             for x in sorted(VoyageShipOwnerConnection.objects.select_related(
-                'owner').filter(voyage=pub_voyage),
-                key=lambda o: o.owner_order)
+                'owner').filter(voyage=pub_voyage), key=lambda o: o.owner_order)
         ]
         self.assertSequenceEqual(
             pub_owners, ["Smart, Jonathan", "Spring, Martin", "McCall, Seamus"])

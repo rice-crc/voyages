@@ -446,7 +446,9 @@ class Migration(migrations.Migration):
         ),
         # Make sure that accented letters are considered different in indices and searches.
         migrations.RunSQL([
-            'ALTER TABLE `past_enslavedname` CHANGE COLUMN `name` `name` VARCHAR(255) CHARACTER SET \'utf8mb4\' COLLATE \'utf8mb4_bin\' NOT NULL;'
-        ],
-            reverse_sql=migrations.RunSQL.noop),
+            'ALTER TABLE `past_enslavedname` '
+            'CHANGE COLUMN `name` `name` '
+            'VARCHAR(255) CHARACTER SET \'utf8mb4\' '
+            'COLLATE \'utf8mb4_bin\' NOT NULL;'
+        ], reverse_sql=migrations.RunSQL.noop),
     ]

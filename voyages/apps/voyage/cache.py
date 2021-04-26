@@ -1,7 +1,6 @@
 from __future__ import absolute_import, unicode_literals
 
 import threading
-from builtins import object
 
 from .models import (BroadRegion, Nationality, OwnerOutcome, ParticularOutcome,
                      Place, Region, Resistance, RigOfVessel, SlavesOutcome,
@@ -44,10 +43,10 @@ class CachedVoyage:
     Cache the most basic information of a voyage for map generation and aggregation
     """
 
-    def __init__(self, pk, id, emb_pk, dis_pk, ship_nat_pk, ship_name, ship_ton,
+    def __init__(self, pk, voyage_id, emb_pk, dis_pk, ship_nat_pk, ship_name, ship_ton,
                  date_voyage_began, embarked, disembarked):
         self.pk = pk
-        self.voyage_id = id
+        self.voyage_id = voyage_id
         self.emb_pk = emb_pk
         self.dis_pk = dis_pk
         self.ship_nat_pk = ship_nat_pk

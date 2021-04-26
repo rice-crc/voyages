@@ -1,15 +1,14 @@
 from __future__ import absolute_import, print_function, unicode_literals
 
-import _thread
 import gc
 import json
 import os
 import re
 import tempfile
 import traceback
-from builtins import object, range, str
+from builtins import range, str
+from itertools import chain
 
-import six
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
@@ -27,7 +26,8 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 # Create your views here.
 from future import standard_library
-from itertools import chain
+import six
+import _thread
 
 from voyages.apps.common.views import get_ordered_places
 from voyages.apps.contribute.forms import (ContributionVoyageSelectionForm,
@@ -300,16 +300,15 @@ def merge(request):
                 }))
 
 
-def interim_source_model(type):
-    result = source_type_dict.get(type)
+def interim_source_model(src_type):
+    result = source_type_dict.get(src_type)
     if result is None:
-        raise Exception('Unrecognized source type: ' + type)
+        raise Exception('Unrecognized source type: ' + src_type)
     return result
 
 
 def create_source(source_values, interim_voyage):
-    type = source_values['type']
-    model = interim_source_model(type)
+    model = interim_source_model(source_values['type'])
     source = model()
     for k, v in list(source_values.items()):
         if v == '':
@@ -784,7 +783,7 @@ all_slave_number_var_map.update(impute_slave_number_var_map)
 
 
 def voyage_to_dict(voyage):
-    dict = {}
+    dictionary = {}
     # Ship, nation, owners
     VoyageCache.load()
     ship = voyage.voyage_ship
@@ -795,149 +794,149 @@ def voyage_to_dict(voyage):
         return getattr(obj, field)
 
     if ship is not None:
-        dict['name_of_vessel'] = ship.ship_name
-        dict['year_ship_constructed'] = ship.year_of_construction
-        dict['year_ship_registered'] = ship.registered_year
-        dict['national_carrier'] = ship.nationality_ship_id
-        dict['national_carrier_name'] = VoyageCache.nations.get(
+        dictionary['name_of_vessel'] = ship.ship_name
+        dictionary['year_ship_constructed'] = ship.year_of_construction
+        dictionary['year_ship_registered'] = ship.registered_year
+        dictionary['national_carrier'] = ship.nationality_ship_id
+        dictionary['national_carrier_name'] = VoyageCache.nations.get(
             ship.nationality_ship_id)
-        dict['ship_construction_place'] = ship.vessel_construction_place_id
-        dict['ship_construction_place_name'] = get_label(
+        dictionary['ship_construction_place'] = ship.vessel_construction_place_id
+        dictionary['ship_construction_place_name'] = get_label(
             VoyageCache.ports.get(ship.vessel_construction_place_id))
-        dict['ship_registration_place'] = ship.registered_place_id
-        dict['ship_registration_place_name'] = get_label(
+        dictionary['ship_registration_place'] = ship.registered_place_id
+        dictionary['ship_registration_place_name'] = get_label(
             VoyageCache.ports.get(ship.registered_place_id))
-        dict['rig_of_vessel'] = ship.rig_of_vessel_id
-        dict['rig_of_vessel_name'] = get_label(
+        dictionary['rig_of_vessel'] = ship.rig_of_vessel_id
+        dictionary['rig_of_vessel_name'] = get_label(
             VoyageCache.rigs.get(ship.rig_of_vessel_id), 'label')
-        dict['tonnage_of_vessel'] = ship.tonnage
-        dict['ton_type'] = ship.ton_type_id
-        dict['ton_type_name'] = get_label(
+        dictionary['tonnage_of_vessel'] = ship.tonnage
+        dictionary['ton_type'] = ship.ton_type_id
+        dictionary['ton_type_name'] = get_label(
             VoyageCache.ton_types.get(ship.ton_type_id), 'label')
-        dict['guns_mounted'] = ship.guns_mounted
+        dictionary['guns_mounted'] = ship.guns_mounted
         owners = list(
             VoyageShipOwnerConnection.objects.filter(voyage=voyage).extra(
                 order_by=['owner_order']))
         if len(owners) > 0:
-            dict['first_ship_owner'] = owners[0].owner.name
+            dictionary['first_ship_owner'] = owners[0].owner.name
         if len(owners) > 1:
-            dict['second_ship_owner'] = owners[1].owner.name
+            dictionary['second_ship_owner'] = owners[1].owner.name
         if len(owners) > 2:
-            dict['additional_ship_owners'] = '\n'.join(
+            dictionary['additional_ship_owners'] = '\n'.join(
                 [x.owner.name for x in owners[2:]])
     # Outcome
     outcome = voyage.voyage_name_outcome.get()
     if outcome is not None:
-        dict['voyage_outcome'] = outcome.particular_outcome_id
-        dict['african_resistance'] = outcome.resistance_id
-        dict['voyage_outcome_name'] = get_label(
+        dictionary['voyage_outcome'] = outcome.particular_outcome_id
+        dictionary['african_resistance'] = outcome.resistance_id
+        dictionary['voyage_outcome_name'] = get_label(
             VoyageCache.particular_outcomes.get(outcome.particular_outcome_id),
             'label')
-        dict['african_resistance_name'] = get_label(
+        dictionary['african_resistance_name'] = get_label(
             VoyageCache.resistances.get(outcome.resistance_id), 'label')
     itinerary = voyage.voyage_itinerary
     if itinerary is not None:
-        dict[
+        dictionary[
             'first_port_intended_embarkation'] = itinerary.int_first_port_emb_id
-        dict[
+        dictionary[
             'second_port_intended_embarkation'] = itinerary.int_second_port_emb_id
-        dict[
+        dictionary[
             'first_port_intended_disembarkation'] = itinerary.int_first_port_dis_id
-        dict[
+        dictionary[
             'second_port_intended_disembarkation'] = itinerary.int_second_port_dis_id
-        dict['port_of_departure'] = itinerary.port_of_departure_id
-        dict[
+        dictionary['port_of_departure'] = itinerary.port_of_departure_id
+        dictionary[
             'number_of_ports_called_prior_to_slave_purchase'] = itinerary.ports_called_buying_slaves
-        dict[
+        dictionary[
             'first_place_of_slave_purchase'] = itinerary.first_place_slave_purchase_id
-        dict[
+        dictionary[
             'second_place_of_slave_purchase'] = itinerary.second_place_slave_purchase_id
-        dict[
+        dictionary[
             'third_place_of_slave_purchase'] = itinerary.third_place_slave_purchase_id
-        dict[
+        dictionary[
             'principal_place_of_slave_purchase'] = itinerary.principal_place_of_slave_purchase_id
-        dict[
+        dictionary[
             'place_of_call_before_atlantic_crossing'] = itinerary.port_of_call_before_atl_crossing_id
-        dict[
+        dictionary[
             'number_of_new_world_ports_called_prior_to_disembarkation'] = itinerary.number_of_ports_of_call
-        dict['first_place_of_landing'] = itinerary.first_landing_place_id
-        dict['second_place_of_landing'] = itinerary.second_landing_place_id
-        dict['third_place_of_landing'] = itinerary.third_landing_place_id
-        dict[
+        dictionary['first_place_of_landing'] = itinerary.first_landing_place_id
+        dictionary['second_place_of_landing'] = itinerary.second_landing_place_id
+        dictionary['third_place_of_landing'] = itinerary.third_landing_place_id
+        dictionary[
             'principal_place_of_slave_disembarkation'] = itinerary.principal_port_of_slave_dis_id
-        dict['port_voyage_ended'] = itinerary.place_voyage_ended_id
+        dictionary['port_voyage_ended'] = itinerary.place_voyage_ended_id
         # Port names.
-        dict['first_port_intended_embarkation_name'] = get_label(
+        dictionary['first_port_intended_embarkation_name'] = get_label(
             VoyageCache.ports.get(itinerary.int_first_port_emb_id))
-        dict['second_port_intended_embarkation_name'] = get_label(
+        dictionary['second_port_intended_embarkation_name'] = get_label(
             VoyageCache.ports.get(itinerary.int_second_port_emb_id))
-        dict['first_port_intended_disembarkation_name'] = get_label(
+        dictionary['first_port_intended_disembarkation_name'] = get_label(
             VoyageCache.ports.get(itinerary.int_first_port_dis_id))
-        dict['second_port_intended_disembarkation_name'] = get_label(
+        dictionary['second_port_intended_disembarkation_name'] = get_label(
             VoyageCache.ports.get(itinerary.int_second_port_dis_id))
-        dict['port_of_departure_name'] = get_label(
+        dictionary['port_of_departure_name'] = get_label(
             VoyageCache.ports.get(itinerary.port_of_departure_id))
-        dict['first_place_of_slave_purchase_name'] = get_label(
+        dictionary['first_place_of_slave_purchase_name'] = get_label(
             VoyageCache.ports.get(itinerary.first_place_slave_purchase_id))
-        dict['second_place_of_slave_purchase_name'] = get_label(
+        dictionary['second_place_of_slave_purchase_name'] = get_label(
             VoyageCache.ports.get(itinerary.second_place_slave_purchase_id))
-        dict['third_place_of_slave_purchase_name'] = get_label(
+        dictionary['third_place_of_slave_purchase_name'] = get_label(
             VoyageCache.ports.get(itinerary.third_place_slave_purchase_id))
-        dict['principal_place_of_slave_purchase_name'] = get_label(
+        dictionary['principal_place_of_slave_purchase_name'] = get_label(
             VoyageCache.ports.get(
                 itinerary.principal_place_of_slave_purchase_id))
-        dict['place_of_call_before_atlantic_crossing_name'] = get_label(
+        dictionary['place_of_call_before_atlantic_crossing_name'] = get_label(
             VoyageCache.ports.get(
                 itinerary.port_of_call_before_atl_crossing_id))
-        dict['first_place_of_landing_name'] = get_label(
+        dictionary['first_place_of_landing_name'] = get_label(
             VoyageCache.ports.get(itinerary.first_landing_place_id))
-        dict['second_place_of_landing_name'] = get_label(
+        dictionary['second_place_of_landing_name'] = get_label(
             VoyageCache.ports.get(itinerary.second_landing_place_id))
-        dict['third_place_of_landing_name'] = get_label(
+        dictionary['third_place_of_landing_name'] = get_label(
             VoyageCache.ports.get(itinerary.third_landing_place_id))
-        dict['principal_place_of_slave_disembarkation_name'] = get_label(
+        dictionary['principal_place_of_slave_disembarkation_name'] = get_label(
             VoyageCache.ports.get(itinerary.principal_port_of_slave_dis_id))
-        dict['port_voyage_ended_name'] = get_label(
+        dictionary['port_voyage_ended_name'] = get_label(
             VoyageCache.ports.get(itinerary.place_voyage_ended_id))
     dates = voyage.voyage_dates
     if dates is not None:
-        dict['date_departure'] = dates.voyage_began
-        dict['date_slave_purchase_began'] = dates.slave_purchase_began
-        dict['date_vessel_left_last_slaving_port'] = dates.vessel_left_port
-        dict['date_first_slave_disembarkation'] = dates.first_dis_of_slaves
-        dict[
+        dictionary['date_departure'] = dates.voyage_began
+        dictionary['date_slave_purchase_began'] = dates.slave_purchase_began
+        dictionary['date_vessel_left_last_slaving_port'] = dates.vessel_left_port
+        dictionary['date_first_slave_disembarkation'] = dates.first_dis_of_slaves
+        dictionary[
             'date_second_slave_disembarkation'] = dates.arrival_at_second_place_landing
-        dict['date_third_slave_disembarkation'] = dates.third_dis_of_slaves
-        dict['date_return_departure'] = dates.departure_last_place_of_landing
-        dict['date_voyage_completed'] = dates.voyage_completed
-        dict['length_of_middle_passage'] = dates.length_middle_passage_days
+        dictionary['date_third_slave_disembarkation'] = dates.third_dis_of_slaves
+        dictionary['date_return_departure'] = dates.departure_last_place_of_landing
+        dictionary['date_voyage_completed'] = dates.voyage_completed
+        dictionary['length_of_middle_passage'] = dates.length_middle_passage_days
     numbers = voyage.voyage_slaves_numbers
     if numbers is not None:
         for k, v in list(slave_number_var_map.items()):
-            dict[number_prefix + k] = getattr(numbers, v)
+            dictionary[number_prefix + k] = getattr(numbers, v)
 
     # Captains
     captains = voyage.voyage_captain.all()
     captain_keys = ['first', 'second', 'third']
     for i in range(0, len(captains)):
-        dict[captain_keys[i] + '_captain'] = captains[i].name
+        dictionary[captain_keys[i] + '_captain'] = captains[i].name
     # Crew numbers
     crew = voyage.voyage_crew
     if crew is not None:
-        dict[number_prefix + 'CREW1'] = crew.crew_voyage_outset
-        dict[number_prefix + 'CREW2'] = crew.crew_departure_last_port
-        dict[number_prefix + 'CREW3'] = crew.crew_first_landing
-        dict[number_prefix + 'CREW4'] = crew.crew_return_begin
-        dict[number_prefix + 'CREW5'] = crew.crew_end_voyage
-        dict[number_prefix + 'CREW'] = crew.unspecified_crew
-        dict[number_prefix + 'SAILD1'] = crew.crew_died_before_first_trade
-        dict[number_prefix + 'SAILD2'] = crew.crew_died_while_ship_african
-        dict[number_prefix + 'SAILD3'] = crew.crew_died_middle_passage
-        dict[number_prefix + 'SAILD4'] = crew.crew_died_in_americas
-        dict[number_prefix + 'SAILD5'] = crew.crew_died_on_return_voyage
-        dict[number_prefix + 'CREWDIED'] = crew.crew_died_complete_voyage
-        dict[number_prefix + 'NDESERT'] = crew.crew_deserted
-    return dict
+        dictionary[number_prefix + 'CREW1'] = crew.crew_voyage_outset
+        dictionary[number_prefix + 'CREW2'] = crew.crew_departure_last_port
+        dictionary[number_prefix + 'CREW3'] = crew.crew_first_landing
+        dictionary[number_prefix + 'CREW4'] = crew.crew_return_begin
+        dictionary[number_prefix + 'CREW5'] = crew.crew_end_voyage
+        dictionary[number_prefix + 'CREW'] = crew.unspecified_crew
+        dictionary[number_prefix + 'SAILD1'] = crew.crew_died_before_first_trade
+        dictionary[number_prefix + 'SAILD2'] = crew.crew_died_while_ship_african
+        dictionary[number_prefix + 'SAILD3'] = crew.crew_died_middle_passage
+        dictionary[number_prefix + 'SAILD4'] = crew.crew_died_in_americas
+        dictionary[number_prefix + 'SAILD5'] = crew.crew_died_on_return_voyage
+        dictionary[number_prefix + 'CREWDIED'] = crew.crew_died_complete_voyage
+        dictionary[number_prefix + 'NDESERT'] = crew.crew_deserted
+    return dictionary
 
 
 @login_required()
@@ -1470,7 +1469,7 @@ def reply_review_request(request):
 
 
 def interim_data(interim):
-    dict = {
+    dictionary = {
         number_prefix + n.var_name: n.number
         for n in interim.slave_numbers.all()
         if n.number is not None
@@ -1484,20 +1483,20 @@ def interim_data(interim):
         value = getattr(interim, field.name)
         if value is None:
             continue
-        type = field.get_internal_type()
-        if type == 'ForeignKey':
+        internal_type = field.get_internal_type()
+        if internal_type == 'ForeignKey':
             try:
-                dict[name] = value.pk
-                dict[name + '_name'] = str(value)
+                dictionary[name] = value.pk
+                dictionary[name + '_name'] = str(value)
             except Exception:
                 pass
-        elif type in [
+        elif internal_type in [
                 'IntegerField', 'CharField', 'TextField',
                 'CommaSeparatedIntegerField'
         ]:
             if value != '':
-                dict[name] = value
-    return dict
+                dictionary[name] = value
+    return dictionary
 
 
 @login_required()
@@ -1862,17 +1861,17 @@ def editorial_sources(request):
             return JsonResponse({'result': 'Failed', 'errors': form.errors})
     else:
         if mode == 'new':
-            type = interim_source_dict['type']
+            src_type = interim_source_dict['type']
             formatted_content = ''
             all_types = {
                 x.group_name: x for x in VoyageSourcesType.objects.all()
             }
-            if type == 'Primary source':
+            if src_type == 'Primary source':
                 formatted_content = '<em>' + interim_source_dict['name_of_library_or_archive'] +\
                     '</em> (' + \
                     interim_source_dict['location_of_library_or_archive'] + ')'
                 source.source_type = all_types['Documentary source']
-            elif type == 'Article source':
+            elif src_type == 'Article source':
                 formatted_content = interim_source_dict['authors'] + \
                     ' "' + interim_source_dict['article_title'] + '", <em>' + \
                     interim_source_dict['journal'] + '</em>, ' + \
@@ -1881,7 +1880,7 @@ def editorial_sources(request):
                     interim_source_dict.get('page_start', 'page_start') + '-' + \
                     interim_source_dict.get('page_end', 'page_end')
                 source.source_type = all_types['Published source']
-            elif type == 'Book source':
+            elif src_type == 'Book source':
                 if interim_source_dict['source_is_essay_in_book'] == 'true':
                     formatted_content = interim_source_dict['authors'] + \
                         ', "' + interim_source_dict['essay_title'] + '", ' + \
@@ -1895,18 +1894,18 @@ def editorial_sources(request):
                         interim_source_dict.get('place_of_publication', 'place??') + \
                         ', ' + interim_source_dict.get('year', 'year??') + ')'
                 source.source_type = all_types['Published source']
-            elif type == 'Newspaper source':
+            elif src_type == 'Newspaper source':
                 alt_name = interim_source_dict.get('alternative_name')
                 formatted_content = '<em>' + interim_source_dict['name'] + '</em>' + \
                     ((' (later, ' + alt_name + ')') if alt_name else '') + \
                     ', (' + interim_source_dict.get('city', 'city??') + ', ' + \
                     interim_source_dict.get('country', 'country??') + ')'
                 source.source_type = all_types['Newspaper']
-            elif type == 'Private note or collection source':
+            elif src_type == 'Private note or collection source':
                 formatted_content = interim_source_dict['authors'] + ', ' + interim_source_dict['title'] + \
                     ' (' + interim_source_dict.get('location', 'location??') + ')'
                 source.source_type = all_types['Private note or collection']
-            elif type == 'Unpublished secondary source':
+            elif src_type == 'Unpublished secondary source':
                 formatted_content = interim_source_dict['authors'] + ', ' + interim_source_dict['title'] + \
                     ' (' + interim_source_dict.get('location', 'location??') + ')'
                 source.source_type = all_types['Unpublished secondary source']
@@ -1948,11 +1947,11 @@ def download_voyages(request):
         intra_american_flag = int(intra_american_flag)
 
     try:
-        dir = settings.MEDIA_ROOT + '/csv_downloads/'
-        if not os.path.exists(dir):
-            os.makedirs(dir)
-        csv_file = tempfile.NamedTemporaryFile(dir=dir, mode='w', delete=False)
-        log_file = tempfile.NamedTemporaryFile(dir=dir, mode='w', delete=False)
+        dloads = settings.MEDIA_ROOT + '/csv_downloads/'
+        if not os.path.exists(dloads):
+            os.makedirs(dloads)
+        csv_file = tempfile.NamedTemporaryFile(dir=dloads, mode='w', delete=False)
+        log_file = tempfile.NamedTemporaryFile(dir=dloads, mode='w', delete=False)
         _thread.start_new_thread(
             generate_voyage_csv_file,
             (statuses, include_published, csv_file, log_file, remove_linebreaks,
@@ -2009,8 +2008,8 @@ def download_voyages_status(request):
     log_file = request.POST.get('log_file')
     if log_file is None:
         return JsonResponse({'result': 'Failed'})
-    dir = settings.MEDIA_ROOT + '/csv_downloads/'
-    log_file = dir + log_file
+    dloads = settings.MEDIA_ROOT + '/csv_downloads/'
+    log_file = dloads + log_file
     status = 'Not started'
     with open(log_file, 'r') as f:
         status = f.readline()
@@ -2061,10 +2060,10 @@ def publish_pending(request):
     # a thread and logging the progress to a file whose name is returned in the
     # response.
     try:
-        dir = settings.MEDIA_ROOT + '/publication_logs/'
-        if not os.path.exists(dir):
-            os.makedirs(dir)
-        log_file = tempfile.NamedTemporaryFile(dir=dir, mode='w', delete=False)
+        pub_logs = settings.MEDIA_ROOT + '/publication_logs/'
+        if not os.path.exists(pub_logs):
+            os.makedirs(pub_logs)
+        log_file = tempfile.NamedTemporaryFile(dir=pub_logs, mode='w', delete=False)
         _thread.start_new_thread(
             publish_accepted_contributions,
             (log_file, request.POST.get('skip_backup', False)))
@@ -2079,8 +2078,8 @@ def publish_pending(request):
 @login_required()
 @require_POST
 def retrieve_publication_status(request):
-    dir = settings.MEDIA_ROOT + '/publication_logs/'
-    log_file = dir + request.POST['log_file']
+    pub_logs = settings.MEDIA_ROOT + '/publication_logs/'
+    log_file = pub_logs + request.POST['log_file']
     with open(log_file, 'r') as f:
         lines = f.readlines()
         skip_count = int(request.POST.get('skip_count', 0))

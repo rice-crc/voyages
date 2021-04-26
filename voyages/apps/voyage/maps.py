@@ -3,7 +3,6 @@ from __future__ import absolute_import, unicode_literals
 import os
 import re
 import threading
-from builtins import object
 from queue import PriorityQueue
 
 # Provide mapping data for voyages (e.g. routes) cached in the server.
@@ -124,8 +123,8 @@ class VoyageRoutesCache:
     def load(cls, force_reload=False):
         with cls._lock:
             if force_reload or not cls._cache:
-                dir = os.path.dirname(os.path.abspath(__file__))
-                with open(dir + '/../../sitemedia/maps/js/route_nodes.js',
+                name = os.path.dirname(os.path.abspath(__file__))
+                with open(name + '/../../sitemedia/maps/js/route_nodes.js',
                           'r') as f:
                     s = f.read()
                 nodes = [(float(m.group(1)), float(m.group(2)))
