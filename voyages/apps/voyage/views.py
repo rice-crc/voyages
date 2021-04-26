@@ -1485,7 +1485,7 @@ def search(request):
                         '"nat_id": ' + str(voyage.ship_nat_pk or 0) + ', '
                         '"ship_nationality_name": "' + _(flag) + '", '
                         '"ship_name": "' + str(voyage.ship_name or "") + '", '
-                        '"route": "' + json.dumps(route) + ' '
+                        '"route": ' + json.dumps(route) + ' '
                         '}'
 
             return HttpResponse('[' + ',\n'.join(animation_response()) + ']',
