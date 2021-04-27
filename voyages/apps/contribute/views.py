@@ -929,8 +929,10 @@ def voyage_to_dict(voyage):
         dictionary[number_prefix + 'CREW4'] = crew.crew_return_begin
         dictionary[number_prefix + 'CREW5'] = crew.crew_end_voyage
         dictionary[number_prefix + 'CREW'] = crew.unspecified_crew
-        dictionary[number_prefix + 'SAILD1'] = crew.crew_died_before_first_trade
-        dictionary[number_prefix + 'SAILD2'] = crew.crew_died_while_ship_african
+        dictionary[
+            number_prefix + 'SAILD1'] = crew.crew_died_before_first_trade
+        dictionary[
+            number_prefix + 'SAILD2'] = crew.crew_died_while_ship_african
         dictionary[number_prefix + 'SAILD3'] = crew.crew_died_middle_passage
         dictionary[number_prefix + 'SAILD4'] = crew.crew_died_in_americas
         dictionary[number_prefix + 'SAILD5'] = crew.crew_died_on_return_voyage
@@ -1950,8 +1952,10 @@ def download_voyages(request):
         dloads = settings.MEDIA_ROOT + '/csv_downloads/'
         if not os.path.exists(dloads):
             os.makedirs(dloads)
-        csv_file = tempfile.NamedTemporaryFile(dir=dloads, mode='w', delete=False)
-        log_file = tempfile.NamedTemporaryFile(dir=dloads, mode='w', delete=False)
+        csv_file = tempfile.NamedTemporaryFile(
+            dir=dloads, mode='w', delete=False)
+        log_file = tempfile.NamedTemporaryFile(
+            dir=dloads, mode='w', delete=False)
         _thread.start_new_thread(
             generate_voyage_csv_file,
             (statuses, include_published, csv_file, log_file, remove_linebreaks,
@@ -2063,7 +2067,8 @@ def publish_pending(request):
         pub_logs = settings.MEDIA_ROOT + '/publication_logs/'
         if not os.path.exists(pub_logs):
             os.makedirs(pub_logs)
-        log_file = tempfile.NamedTemporaryFile(dir=pub_logs, mode='w', delete=False)
+        log_file = tempfile.NamedTemporaryFile(
+            dir=pub_logs, mode='w', delete=False)
         _thread.start_new_thread(
             publish_accepted_contributions,
             (log_file, request.POST.get('skip_backup', False)))

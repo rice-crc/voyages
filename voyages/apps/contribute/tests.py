@@ -257,8 +257,10 @@ class TestImputedDataCalculation(TestCase):
         interim.name_of_vessel = dictionary['shipname']
         interim.year_ship_constructed = dictionary['yrcons']
         interim.year_ship_registered = dictionary['yrreg']
-        interim.ship_construction_place = place_from_value(dictionary['placcons'])
-        interim.ship_registration_place = place_from_value(dictionary['placreg'])
+        interim.ship_construction_place = place_from_value(
+            dictionary['placcons'])
+        interim.ship_registration_place = place_from_value(
+            dictionary['placreg'])
         interim.national_carrier = nat_from_value(dictionary['national'])
         interim.rig_of_vessel = rig_from_value(dictionary['rig'])
         interim.tonnage_of_vessel = dictionary['tonnage']
@@ -268,7 +270,8 @@ class TestImputedDataCalculation(TestCase):
         interim.second_ship_owner = dictionary['ownerb']
         # interim.additional_ship_owners = dictionary['ownerc' d, e, f...]
         interim.voyage_outcome = outcome_from_value(dictionary['fate'])
-        interim.african_resistance = resistance_from_value(dictionary['resistance'])
+        interim.african_resistance = resistance_from_value(
+            dictionary['resistance'])
         interim.first_port_intended_embarkation = place_from_value(
             dictionary['embport'])
         interim.second_port_intended_embarkation = place_from_value(
@@ -292,9 +295,12 @@ class TestImputedDataCalculation(TestCase):
             dictionary['npafttra'])
         interim.number_of_new_world_ports_called_prior_to_disembarkation = dictionary[
             'nppretra']
-        interim.first_place_of_landing = place_from_value(dictionary['sla1port'])
-        interim.second_place_of_landing = place_from_value(dictionary['adpsale1'])
-        interim.third_place_of_landing = place_from_value(dictionary['adpsale2'])
+        interim.first_place_of_landing = place_from_value(
+            dictionary['sla1port'])
+        interim.second_place_of_landing = place_from_value(
+            dictionary['adpsale1'])
+        interim.third_place_of_landing = place_from_value(
+            dictionary['adpsale2'])
         interim.principal_place_of_slave_disembarkation = place_from_value(
             dictionary['majselpt'])
         interim.port_voyage_ended = place_from_value(dictionary['portret'])
