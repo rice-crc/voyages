@@ -88,7 +88,6 @@ def get_regions(search_configuration=None, mode=None):
     return [return_areas, return_regions]
 
 
-
 def get_embarkation_regions(search_configuration=None, mode=None):
     areas = SearchQuerySet().models(ExportRegion)
 
