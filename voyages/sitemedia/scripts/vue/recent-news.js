@@ -29,8 +29,8 @@ var recentNews = new Vue({
     axios.get(url)
     .then(function (response) {
       vm.response = response.data;
-      for (var i = 0; i < Math.min(vm.response.items.length,2); i++) {
-          articleURL = vm.response.items[i].url;
+      for (var i = 1; i < Math.min(vm.response.items.length,3); i++) {
+          articleURL = vm.response.items[vm.response.items.length-i].url;
           var title, timestamp;
           axios.get(articleURL).then(function (articleResponse) {
             var htmlStr = articleResponse.data;
