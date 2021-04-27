@@ -305,7 +305,8 @@ def compute_imputed_vars(_interim, is_iam=False):
         if tontype == 13:
             tonmod = tonnage
         elif (yearam and ((tontype and tontype < 3) or tontype in (4, 5))):
-            tonmod = tonnage if yearam > 1773 else update_tonmod(tonnage, tonnage)
+            tonmod = tonnage if yearam > 1773 else update_tonmod(
+                tonnage, tonnage)
         if tontype == 4:
             if yearam and 1783 < yearam < 1794:
                 tonmod = None

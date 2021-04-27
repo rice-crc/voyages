@@ -1475,7 +1475,8 @@ def search(request):
                         '"source_name": "' + _(source[0].name) + '", '
                         '"source_lat": ' + str(source[0].lat) + ', '
                         '"source_lng": ' + str(source[0].lng) + ', '
-                        '"destination_name": "' + _(destination[0].name) + '", '
+                        '"destination_name": "' + \
+                            _(destination[0].name) + '", '
                         '"destination_lat": ' + str(destination[0].lat) + ', '
                         '"destination_lng": ' + str(destination[0].lng) + ', '
                         '"embarked": ' + str(voyage.embarked) + ', '
