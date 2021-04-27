@@ -35,28 +35,6 @@ def get_flags(search_configuration=None, mode=None):
     ]
 
 
-def get_flag_labels(search_configuration):
-    a = SearchQuerySet().models(Nation)
-    nations = []
-    query = []
-
-    for i in a:
-        if nation_reset(search_configuration):
-            nations.append([i.name, i.pk, 1])
-            query.append(i.name)
-        elif search_configuration is not None:
-            if "checkbox_nation_" + i.pk in search_configuration["post"]:
-                nations.append([i.name, i.pk, 1])
-                query.append(i.name)
-            else:
-                nations.append([i.name, i.pk, 0])
-        else:
-            nations.append([i.name, i.pk, 1])
-            query.append(i.name)
-
-    return nations, query
-
-
 def get_broad_regions(search_configuration=None, mode=None):
     areas_from_query = SearchQuerySet().models(ImportArea)
 
@@ -109,35 +87,6 @@ def get_regions(search_configuration=None, mode=None):
 
     return [return_areas, return_regions]
 
-
-def update_regions_labels(old_regions, search_configuration, area_prefix,
-                          region_prefix):
-    new_regions = {}
-    query = []
-
-    for area, regions in old_regions.items():
-        new_region_list = []
-        count_checked = 0
-        for region in regions:
-            if search_configuration is None:
-                query.append(region[0])
-                new_region_list.append([region, 1])
-                count_checked += 1
-            elif region_prefix + region[1] in search_configuration["post"] or \
-                    (len(regions) == 1 and area_prefix + area.pk in search_configuration["post"]):
-                query.append(region[0])
-                new_region_list.append([region, 1])
-                count_checked += 1
-            else:
-                new_region_list.append([region, 0])
-
-        if search_configuration is None or (
-                count_checked > 0 and len(regions) == count_checked):
-            new_regions[(area, 1)] = new_region_list
-        else:
-            new_regions[(area, 0)] = new_region_list
-
-    return new_regions, query
 
 
 def get_embarkation_regions(search_configuration=None, mode=None):

@@ -226,16 +226,6 @@ def get_flat_page_hierarchy(request, prefix):
     })
 
 
-def _get_flatpage(url, lang):
-    page = None
-    try:
-        localized_url = url + ((lang + '/') if lang else '')
-        page = FlatPage.objects.get(url=localized_url)
-    except Exception:
-        pass
-    return page
-
-
 def _default_solr_value_adapter(pair):
     key = pair[0]
     val = pair[1]
@@ -293,18 +283,6 @@ def get_datatable_json_result(results,
         if field_filter(k)
     } for x in page]
     return JsonResponse(reponse_data)
-
-
-def render_locale_flatpage(request, template_path, flatpage_url):
-    lang = get_language()
-    page = _get_flatpage(flatpage_url, lang)
-    if not page and lang != 'en':
-        page = _get_flatpage(flatpage_url, 'en')
-    if not page:
-        page = _get_flatpage(flatpage_url, None)
-    if not page:
-        raise Http404("Your selected flatpage is not found")
-    return render(request, template_path, {'flatpage': page})
 
 
 def set_language(request, lang_code):
