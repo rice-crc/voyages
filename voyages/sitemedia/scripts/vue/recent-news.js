@@ -29,9 +29,16 @@ var recentNews = new Vue({
     axios.get(url)
     .then(function (response) {
       vm.response = response.data;
-      for (var i = 1; i < Math.min(vm.response.items.length,3); i++) {
-          articleURL = vm.response.items[vm.response.items.length-i].url;
+      var new_article_urls=[];
+      //maximum number of articles to show on the front page
+      var max_new_articles=3;
+      for (var i = 1; i <= Math.min(vm.response.items.length,max_new_articles); i++) {
+      	new_article_urls.push(vm.response.items[vm.response.items.length-i].url)
+      };
+      //console.log(new_article_urls);
+      for (const articleURL of new_article_urls) {
           var title, timestamp;
+          var xhr = new XMLHttpRequest();
           axios.get(articleURL).then(function (articleResponse) {
             var htmlStr = articleResponse.data;
             var el = $("<div></div>");
@@ -46,12 +53,15 @@ var recentNews = new Vue({
             var article = {
               url: url,
               title: title,
-              id: i,
+              id: new_article_urls.indexOf(articleResponse.request.responseURL),
               timestamp: timestamp,
               text: text,
             };
-
+            //if we're doing this asynchronously, we've got to sort the array that we're building iteratively.
             articles.push(article);
+            articles.sort(function(a,b) {
+            	return a.id-b.id
+            });
             Vue.set(vm, "news", articles);
           })
       }
