@@ -1,11 +1,5 @@
 from __future__ import print_function, unicode_literals
 
-import itertools
-import re
-from builtins import str
-
-import unicodecsv
-
 # This tool can be used to verify that CSV data was imported without any loss.
 # After running the importcsv command, head to the Contribute section and export
 # CSV files for the datasets (separately for TAST and I-Am). Then the functions

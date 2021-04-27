@@ -7,8 +7,8 @@ import django
 from django.conf import settings
 from django.contrib.flatpages.models import FlatPage
 from django.core.paginator import Paginator
-from django.http import Http404, HttpResponse, JsonResponse
-from django.shortcuts import get_object_or_404, render
+from django.http import HttpResponse, JsonResponse
+from django.shortcuts import get_object_or_404
 from django.urls import reverse
 from django.utils.translation import get_language
 from django.utils.translation import ugettext as _
