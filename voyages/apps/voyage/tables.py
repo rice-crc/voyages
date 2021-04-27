@@ -4,11 +4,6 @@ import json
 from builtins import range
 
 
-def get_pivot_table(results, row_field, col_field, cell_formula):
-    return get_pivot_table_advanced(results, row_field, col_field,
-                                    {'cell': cell_formula})
-
-
 # Usage example:
 # table = get_pivot_table_advanced(
 #   results,

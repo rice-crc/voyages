@@ -92,13 +92,6 @@ def get_csv_writer(output):
     return csv.DictWriter(output, fieldnames=_exported_spss_fields)
 
 
-def export_data_to_csv(data, csv_file):
-    writer = get_csv_writer(csv_file)
-    writer.writeheader()
-    for item in data:
-        safe_writerow(writer, item)
-
-
 def safe_writerow(writer, item):
     """
     Ensure that only export SPSS fields are included in the item that will be written.

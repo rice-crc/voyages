@@ -59,30 +59,6 @@ def structure_places(place_list):
     return broad_region_list
 
 
-def structure_places_all(place_list):
-    """
-    Takes a list of places and then returns a tree of the places structured by region and broad region.
-    Returns a dictionary(key=broad_region, value=dictionary(key=region, value=list of places))
-    """
-    # Dict keyed by region, value is a list of places
-    # Distinct for foreign key returns a list (sort of) of tuples with the django id of the place.
-    # I think it will only ever have one place in each tuple, though it would probably be best to just iterate through the tuple
-    region_list = {}
-    for place in place_list:
-        reg = place.region
-        if reg not in region_list:
-            region_list[reg] = []
-        region_list[reg].append(place)
-    broad_region_list = {}
-    for region, list_of_places in sorted(list(region_list.items()),
-                                         key=lambda r: r[0].value):
-        broad_reg = region.broad_region
-        if broad_reg not in broad_region_list:
-            broad_region_list[broad_reg] = {}
-        broad_region_list[broad_reg][region] = list_of_places
-    return broad_region_list
-
-
 def display_yesno(value, voyageid=None):
     return 'Yes' if value else 'No'
 
@@ -145,14 +121,6 @@ def unmangle_percent(value, voyageid=None):
     if isinstance(value, (str, int, float)):
         return str(round(float(value) * 100, 1)) + "%"
     return str(value * 100) + "%"
-
-
-def unmangle_date(value, voyageid=None):
-    if isinstance(value, date):
-        return str(value.month) + u'/' + str(value.day) + u'/' + str(value.year)
-    splitstr = str(value).split(',')
-    splitstr.reverse()
-    return '/'.join(splitstr)
 
 
 def unmangle_datem(value, voyageid=None):
@@ -813,18 +781,6 @@ def make_sum_fun(varname):
     return sum_fun
 
 
-def make_sum_nopretty_fun(varname):
-    prettifier = graph_display_methods.get(varname, no_mangle)
-
-    def sum_nopretty_fun(queryset, rowset=None, colset=None, allset=None):
-        stats = queryset.stats(varname).stats_results()
-        if stats and stats[varname]:
-            return prettifier(int(stats[varname]['sum']))
-        return prettifier(0)
-
-    return sum_nopretty_fun
-
-
 # return lambda queryset, rowset, colset, allset: prettifier(sum([i[varname] for i in queryset.values() if varname in i and i[varname] != None]))
 
 
@@ -851,23 +807,6 @@ def make_avg_fun(varname):
 #            return prettifier(sum(lst)/len(lst))
 
     return avg_fun
-
-
-def make_avg_nopretty_fun(varname):
-    # prettifier = graph_display_methods.get(varname, no_mangle)
-
-    def avg_nopretty_fun(queryset, rowset=None, colset=None, allset=None):
-        values = list(
-            float(b) for b in [a.get(varname)
-                               for a in queryset] if b is not None)
-        return old_div(sum(values), len(values))
-        # stats = queryset.stats(varname).stats_results()
-        # if stats and stats[varname]:
-        #    return prettifier(stats[varname]['mean'])
-        # else:
-        #    return None
-
-    return avg_nopretty_fun
 
 
 def make_row_tot_percent_fun(varname):
@@ -1021,14 +960,6 @@ double_functions = [_('Sum of embarked/disembarked slaves'), _(
 imp_nat_pos_bar = [(x.label, {
     'var_imputed_nationality_idnum__exact': x.value
 }) for x in imputed_nationality_possibilities]
-
-
-def placelblr(x):
-    return x.place
-
-
-def regionlblr(x):
-    return x.region
 
 
 additional_var_dict = [{
