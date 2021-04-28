@@ -20,8 +20,6 @@ var recentNews = new Vue({
   created: function() {
     var vm = this;
     var host = window.location.origin;
-    //in dev, you can dodge a cors block with:
-    // var host=http://127.0.0.1:8100
     var prefix = "/common/flatpagehierarchy/";
     var pathname = "about/news";
     var url = host + prefix + pathname;
@@ -35,10 +33,13 @@ var recentNews = new Vue({
       for (var i = 1; i <= Math.min(vm.response.items.length,max_new_articles); i++) {
       	new_article_urls.push(vm.response.items[vm.response.items.length-i].url)
       };
-      //console.log(new_article_urls);
+      console.log(new_article_urls);
       for (const articleURL of new_article_urls) {
           var title, timestamp;
           var xhr = new XMLHttpRequest();
+          //comment out the below line in dev
+          //but it's needed in prod
+          articleURL = articleURL.replace(/^http:\/\//i, 'https://');
           axios.get(articleURL).then(function (articleResponse) {
             var htmlStr = articleResponse.data;
             var el = $("<div></div>");
@@ -62,6 +63,9 @@ var recentNews = new Vue({
             articles.sort(function(a,b) {
             	return a.id-b.id
             });
+            console.log(articleResponse.request.responseURL);
+            console.log(articles);
+            
             Vue.set(vm, "news", articles);
           })
       }
