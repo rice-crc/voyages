@@ -38,7 +38,7 @@ var recentNews = new Vue({
           var title, timestamp;
           //comment out the below line in dev
           //but it's needed in prod
-           articleURLhttps = articleURL.replace(/^http:\/\//i, 'https://');
+           articleURLhttps = articleURL.replace(/^http:\/\//i, '//');
            axios.get(articleURLhttps).then(function (articleResponse) {
             var htmlStr = articleResponse.data;
             var el = $("<div></div>");
