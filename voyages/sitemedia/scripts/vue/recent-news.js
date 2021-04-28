@@ -36,7 +36,6 @@ var recentNews = new Vue({
       console.log(new_article_urls);
       for (const articleURL of new_article_urls) {
           var title, timestamp;
-          var xhr = new XMLHttpRequest();
           //comment out the below line in dev
           //but it's needed in prod
           articleURL = articleURL.replace(/^http:\/\//i, 'https://');
