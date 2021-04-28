@@ -33,7 +33,7 @@ var recentNews = new Vue({
       for (var i = 1; i <= Math.min(vm.response.items.length,max_new_articles); i++) {
       	new_article_urls.push(vm.response.items[vm.response.items.length-i].url)
       };
-      console.log(new_article_urls);
+      //console.log(new_article_urls);
       for (const articleURL of new_article_urls) {
           var title, timestamp;
           //comment out the below line in dev
@@ -62,8 +62,8 @@ var recentNews = new Vue({
             articles.sort(function(a,b) {
             	return a.id-b.id
             });
-            console.log(articleResponse.request.responseURL);
-            console.log(articles);
+            //console.log(articleResponse.request.responseURL);
+            //console.log(articles);
             
             Vue.set(vm, "news", articles);
           })
