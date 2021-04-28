@@ -38,8 +38,8 @@ var recentNews = new Vue({
           var title, timestamp;
           //comment out the below line in dev
           //but it's needed in prod
-          articleURL = articleURL.replace(/^http:\/\//i, 'https://');
-          axios.get(articleURL).then(function (articleResponse) {
+           articleURLhttps = articleURL.replace(/^http:\/\//i, 'https://');
+           axios.get(articleURLhttps).then(function (articleResponse) {
             var htmlStr = articleResponse.data;
             var el = $("<div></div>");
             el.html(htmlStr);
@@ -64,7 +64,11 @@ var recentNews = new Vue({
             });
             //console.log(articleResponse.request.responseURL);
             //console.log(articles);
+<<<<<<< HEAD
 
+=======
+            
+>>>>>>> fixed news feed links & the watermark logo
             Vue.set(vm, "news", articles);
           })
       }
