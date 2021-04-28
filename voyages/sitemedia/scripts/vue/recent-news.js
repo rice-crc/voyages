@@ -64,11 +64,6 @@ var recentNews = new Vue({
             });
             //console.log(articleResponse.request.responseURL);
             //console.log(articles);
-<<<<<<< HEAD
-
-=======
-            
->>>>>>> fixed news feed links & the watermark logo
             Vue.set(vm, "news", articles);
           })
       }
