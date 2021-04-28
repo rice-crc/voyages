@@ -20,46 +20,50 @@ var recentNews = new Vue({
   created: function() {
     var vm = this;
     var host = window.location.origin;
+    //in dev, you can dodge a cors block with:
+    // var host=http://127.0.0.1:8100
     var prefix = "/common/flatpagehierarchy/";
-    var pathname = "about";
+    var pathname = "about/news";
     var url = host + prefix + pathname;
     var articles = [];
-
     axios.get(url)
     .then(function (response) {
       vm.response = response.data;
-      for (var i = 0; i < response.data.items.length; i++) {
-        if (
-          response.data.items[i].url.match(
-            /\/about\/news\/[0-9]+\/.*?\/[0-9]+\//
-          )
-        ) {
-          articleURL = response.data.items[i].url;
-          articleURL = articleURL.replace(/^http:\/\//i, 'https://');
+      var new_article_urls=[];
+      //maximum number of articles to show on the front page
+      var max_new_articles=3;
+      for (var i = 1; i <= Math.min(vm.response.items.length,max_new_articles); i++) {
+      	new_article_urls.push(vm.response.items[vm.response.items.length-i].url)
+      };
+      //console.log(new_article_urls);
+      for (const articleURL of new_article_urls) {
           var title, timestamp;
-          axios.get(articleURL).then(function (artileResponse) {
-            var htmlStr = artileResponse.data;
+          var xhr = new XMLHttpRequest();
+          axios.get(articleURL).then(function (articleResponse) {
+            var htmlStr = articleResponse.data;
             var el = $("<div></div>");
             el.html(htmlStr);
             title = $(".page-title-1", el)[0].innerText;
             timestamp = $(".method-date", el)[0].innerText;
             text = $("p", el)[0].innerText.substring(0, 200) + "...";
-            url = response.data.items[i - 1].url.replace(
+            url = articleResponse.request.responseURL.replace(
               "common/getflatpage/about/",
               "about/about#"
             );
             var article = {
               url: url,
               title: title,
-              id: i,
+              id: new_article_urls.indexOf(articleResponse.request.responseURL),
               timestamp: timestamp,
               text: text,
             };
-
+            //if we're doing this asynchronously, we've got to sort the array that we're building iteratively.
             articles.push(article);
+            articles.sort(function(a,b) {
+            	return a.id-b.id
+            });
             Vue.set(vm, "news", articles);
-          });
-        }
+          })
       }
     })
     .catch(function (error) {
