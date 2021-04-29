@@ -1470,7 +1470,7 @@ def search(request):
                         source = CachedGeo.get_hierarchy(voyage.emb_pk)
                         destination = CachedGeo.get_hierarchy(voyage.dis_pk)
                         route = all_routes.get(pk, ([],))[0]
-                        yield '{ '
+                        yield ('{ '
                         '"voyage_id": ' + str(voyage.voyage_id) + ', '
                         '"source_name": "' + _(source[0].name) + '", '
                         '"source_lat": ' + str(source[0].lat) + ', '
@@ -1487,7 +1487,7 @@ def search(request):
                         '"ship_nationality_name": "' + _(flag) + '", '
                         '"ship_name": "' + str(voyage.ship_name or "") + '", '
                         '"route": ' + json.dumps(route) + ' '
-                        '}'
+                        '}')
 
             return HttpResponse('[' + ',\n'.join(animation_response()) + ']',
                                 'application/json')
