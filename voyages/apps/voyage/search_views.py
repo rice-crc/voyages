@@ -97,10 +97,11 @@ def perform_search(search, lang):
                 term = sqs.query.clean(m.group(2))
                 operator = _op_eq
                 # Here we are using Solr's format, which is not very portable,
-                # but at this stage this project is very dependent on Solr anyway.
-                # If the search is really for a full exact match, then we search
-                # on the plaintext_exact variant of the field. If it is a "contains"
-                # the exact search terms, then we use the plaintext variant instead.
+                # but at this stage this project is very dependent on Solr
+                # anyway. If the search is really for a full exact match, then
+                # we search on the plaintext_exact variant of the field. If it
+                # is a "contains" the exact search terms, then we use the
+                # plaintext variant instead.
                 xt = '_exact' if len(m.group(1)) + len(m.group(3)) == 0 else ''
                 custom_terms.append(
                     f'var_{item["varName"]}_plaintext{xt}:("{term}")')
@@ -142,8 +143,9 @@ def perform_search(search, lang):
             # Remap field names if they are plain text or language dependent.
             order_by_field = u'var_' + str(field['name'])
             if order_by_field.endswith('_partial'):
-                # Partial dates are encoded in a way that is terrible for sorting MM,DD,YYYY.
-                # Therefore we use the original Date value (which defaults month, day to 1).
+                # Partial dates are encoded in a way that is terrible for
+                # sorting MM,DD,YYYY. Therefore we use the original Date value
+                # (which defaults month, day to 1).
                 order_by_field = order_by_field[0:-8]
             if order_by_field.endswith('_lang'):
                 order_by_field += '_' + lang + '_exact'
@@ -172,7 +174,8 @@ def get_results_pivot_table(results, post):
     VoyageCache.load()
 
     def grouping(seq):
-        return [(_(g[0]), sum([1 for __ in g[1]])) for g in itertools.groupby(seq)]
+        return [(_(g[0]), sum([1 for __ in g[1]]))
+                for g in itertools.groupby(seq)]
 
     def region_extra_header_map(port_ids):
         regions = [
@@ -190,22 +193,28 @@ def get_results_pivot_table(results, post):
         return grouping(broad_regions)
 
     def broad_region_extra_header_map(region_ids):
-        broad_regions = [
-            VoyageCache.broad_regions[
-                VoyageCache.regions_by_value[x].parent].name for x in region_ids
-        ]
+        broad_regions = [VoyageCache.broad_regions[
+            VoyageCache.regions_by_value[x].parent
+        ].name for x in region_ids]
         return grouping(broad_regions)
 
     def get_header_map(header):
-        if '_idnum' in header:
-            if 'place' in header or 'port' in header:
-                return lambda x: _(VoyageCache.ports_by_value[x].name), [broad_region_from_port_extra_header_map, region_extra_header_map]
-            if 'broad_region' in header:
-                return lambda x: _(VoyageCache.broad_regions_by_value[x].name), None
-            if 'region' in header:
-                return lambda x: _(VoyageCache.regions_by_value[x].name), [broad_region_extra_header_map]
-            if 'nation' in header:
-                return lambda x: _(VoyageCache.nations_by_value[x]), None
+        if '_idnum' not in header:
+            return lambda x: x, None
+        if 'place' in header or 'port' in header:
+            return lambda x: _(VoyageCache.ports_by_value[
+                x].name), [
+                broad_region_from_port_extra_header_map,
+                region_extra_header_map]
+        if 'broad_region' in header:
+            return lambda x: _(VoyageCache.broad_regions_by_value[
+                x].name), None
+        if 'region' in header:
+            return lambda x: _(VoyageCache.regions_by_value[
+                x].name), [broad_region_extra_header_map]
+        if 'nation' in header:
+            return lambda x: _(VoyageCache.nations_by_value[
+                x]), None
         return lambda x: x, None
 
     col_map, col_extra_headers = get_header_map(col_field)
@@ -237,7 +246,8 @@ _all_timeline_vars = {
 
 def get_results_timeline(results, post):
     """
-    post['timelineVariable']: the timeline variable that will be the source of the data.
+    post['timelineVariable']: the timeline variable that will be the source of
+    the data.
     """
     timeline_var_name = post.get('timelineVariable')
     timeline_var = _all_timeline_vars.get(timeline_var_name)
@@ -266,7 +276,8 @@ _all_y_axes = {a.id() + '_' + a.mode: a for a in graphs_y_axes}
 
 def get_results_graph(results, post):
     """
-    post['graphData']: contains a single X axis (xAxis key) and one or more Y axes (yAxes key).
+    post['graphData']: contains a single X axis (xAxis key) and one or more Y
+    axes (yAxes key).
     """
     graph_data = post.get('graphData')
     if graph_data is None:
@@ -287,7 +298,9 @@ def get_results_graph(results, post):
                             [_all_y_axes[y] for y in y_axes])
     data_format = post.get('data_format', 'json')
     if data_format == 'json':
-        return JsonResponse({str(_(k)): [{'x': v[0], 'value': v[1]} for v in lst] for k, lst in list(output.items())})
+        return JsonResponse({
+            str(_(k)): [{'x': v[0], 'value': v[1]} for v in lst]
+            for k, lst in list(output.items())})
     if data_format == 'csv':
         # Here we need to build a tabular data format. The output
         # is a collection of series, each correspond to a column in
@@ -393,9 +406,11 @@ def get_results_map_flow(request, results):
     map_ports = {}
     map_flows = {}
 
+    def check_geo(geo):
+        return geo.show and geo.lat and geo.lng
+
     def add_port(geo):
-        result = geo is not None and len(geo) == 3 and geo[0].show and geo[1].show and geo[2].show and \
-            geo[0].lat and geo[0].lng and geo[1].lat and geo[1].lng and geo[2].lat and geo[2].lng
+        result = geo and len(geo) == 3 and all([check_geo(g) for g in geo])
         if result and not geo[0].pk in map_ports:
             map_ports[geo[0].pk] = geo
         return result
@@ -418,9 +433,10 @@ def get_results_map_flow(request, results):
     all_voyages = VoyageCache.voyages
     missed_embarked = 0
     missed_disembarked = 0
-    # Set up an unspecified source that will be used if the appropriate setting is enabled
-    geo_unspecified = CachedGeo(-1, -1,
-                                _('Africa, port unspecified'), 0.05, 9.34, True, None)
+    # Set up an unspecified source that will be used if the appropriate setting
+    # is enabled
+    geo_unspecified = CachedGeo(-1, -1, _('Africa, port unspecified'),
+                                0.05, 9.34, True, None)
     source_unspecified = (geo_unspecified, geo_unspecified, geo_unspecified)
     keys = get_pks_from_haystack_results(results)
     for pk in keys:
@@ -469,7 +485,7 @@ def ajax_search(request):
             results,
             data,
             field_filter=lambda field_name: field_name in requested_fields,
-            key_adapter=lambda key_val: key_val[0].replace(target_lang, 'lang'))
+            key_adapter=lambda keyval: keyval[0].replace(target_lang, 'lang'))
     if output_type == 'mapAnimation':
         return get_results_map_animation(results)
     if output_type == 'mapFlow':
@@ -665,7 +681,7 @@ def get_download_header(var_name):
                     index, 'related_model') else Voyage
                 header = smart(follow_field(model, index.model_attr))
             download_header_map[var_name] = header
-    return header if (header is not None and header != '') else smart_var_name()
+    return header if (header and header != '') else smart_var_name()
 
 
 @require_POST
@@ -710,7 +726,8 @@ def ajax_download(request):
     if excel_mode:
         return download_xls(
             [[(_(get_download_header(col)), 1) for col in columns]],
-            [[item[col] for col in columns] for item in [x.get_stored_fields() for x in results]])
+            [[item[col] for col in columns]
+             for item in [x.get_stored_fields() for x in results]])
     response = HttpResponse(content_type='text/csv')
     response['Content-Disposition'] = 'attachment; filename="data.csv"'
     writer = unicodecsv.DictWriter(response, fieldnames=columns)

@@ -134,7 +134,8 @@ class YearRangeAxis(Axis):
         year = d.get(self.var_name)
         if year is None:
             return None
-        # The ranges are always of the form [n * year_mod + 1, (n + 1) * year_mod]
+        # The ranges are always of the form [n * year_mod + 1, (n + 1) *
+        # year_mod]
         n = year_mod(year, self.year_mod, 0) - 1
         # At this point we have
         # year == n * self.year_mod + 1 + (year % self.year_mod)
@@ -195,7 +196,10 @@ graphs_y_axes = [
 
 def cache_labels(model, label_field='label'):
     try:
-        return {x[0]: _(x[1]) for x in model.objects.values_list('value', label_field).iterator()}
+        return {
+            x[0]: _(x[1])
+            for x in model.objects.values_list('value', label_field).iterator()
+        }
     except Exception:
         return {}
 
