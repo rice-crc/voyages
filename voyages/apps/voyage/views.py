@@ -52,9 +52,9 @@ from .forms import (GraphRemovePlotForm, GraphSelectionForm,
                     UploadFileForm, graphs)
 from .globals import (additional_var_dict, basic_variables,
                       calculate_maxmin_years, default_prettifier,
-                      default_result_columns, display_methods, display_methods_xls,
-                      display_unmangle_methods, double_functions,
-                      general_variables, list_boolean_fields,
+                      default_result_columns, display_methods,
+                      display_methods_xls, display_unmangle_methods,
+                      double_functions, general_variables, list_boolean_fields,
                       list_date_fields, list_imputed_nationality_values,
                       list_months, list_numeric_fields, list_place_fields,
                       list_select_fields, list_text_fields, no_mangle,
@@ -103,7 +103,8 @@ def get_page(request, chapternum, sectionnum, pagenum):
 
     Further content is rendered using the pagepath parameter
     """
-    # We might want to do some error checking for pagenum here. Even though 404 will be raised if needed
+    # We might want to do some error checking for pagenum here. Even though 404
+    # will be raised if needed
     pagepath = "voyage/c" + chapternum + "_s" + \
         sectionnum + "_p" + pagenum + ".html"
     templatename = "voyage/c" + chapternum + \
@@ -211,7 +212,8 @@ def create_query_forms():
 
 def retrieve_post_search_forms(post):
     """
-    Retrieves the forms in the post and returns a list of dictionaries with var_name, var_full_name, and form
+    Retrieves the forms in the post and returns a list of dictionaries with
+    var_name, var_full_name, and form
     """
     form_list = []
     # for all basic and/or general variables
@@ -242,7 +244,9 @@ def retrieve_post_search_forms(post):
                 selected_choices = [
                     int(i) for i in form.cleaned_data['choice_field']
                 ]
-            # Get the nested list places again to fill out the selected regions and areas. Needed to get the flat choices and set the choice field to that before form would validate.
+            # Get the nested list places again to fill out the selected regions
+            # and areas. Needed to get the flat choices and set the choice
+            # field to that before form would validate.
             nested_choices, flat_choices = get_nested_list_places(
                 varname, var['choices'], selected_choices)
             vname['nested_choices'] = nested_choices
@@ -351,8 +355,9 @@ def create_forms_from_var_list(var_list):
 
 def create_var_dict(query_forms, time_frame_form):
     """
-    query_forms: list of dictionaries with var_name and value (also probably var_full_name, but I don't think I need to count on that)
-    returns a dictionary of var names and values for that var
+    query_forms: list of dictionaries with var_name and value (also probably
+    var_full_name, but I don't think I need to count on that) returns a
+    dictionary of var names and values for that var
     """
     # Creates a query dict based on all the restrictions the user has made
     var_list = {}
@@ -367,7 +372,8 @@ def create_var_dict(query_forms, time_frame_form):
             x for x in query_forms
             if x['form'].is_valid() and x['form'].is_form_shown()
     ]:
-        # qform = next((l for l in query_forms if l['varname'] == search_var), None)
+        # qform = next((l for l in query_forms if l['varname'] == search_var),
+        # None)
         varname = qryform['var_name']
         used_variables.append(varname)
         form = qryform['form']
@@ -382,19 +388,19 @@ def create_var_dict(query_forms, time_frame_form):
             opt = form.cleaned_data['options']
             var_list[varname + '_options'] = opt
             if opt == '1':  # Between
-                var_list[
-                    varname + '_lower_bound'] = form.cleaned_data['lower_bound']
-                var_list[
-                    varname + '_upper_bound'] = form.cleaned_data['upper_bound']
+                var_list[varname + '_lower_bound'
+                         ] = form.cleaned_data['lower_bound']
+                var_list[varname + '_upper_bound'
+                         ] = form.cleaned_data['upper_bound']
             elif opt == '2':  # Less than or equal to
-                var_list[
-                    varname + '_threshold'] = form.cleaned_data['threshold']
+                var_list[varname + '_threshold'
+                         ] = form.cleaned_data['threshold']
             elif opt == '3':  # Greater than or equal to
-                var_list[
-                    varname + '_threshold'] = form.cleaned_data['threshold']
+                var_list[varname + '_threshold'
+                         ] = form.cleaned_data['threshold']
             elif opt == '4':  # Equal to
-                var_list[
-                    varname + '_threshold'] = form.cleaned_data['threshold']
+                var_list[varname + '_threshold'
+                         ] = form.cleaned_data['threshold']
         elif varname in list_date_fields:
             var_list[varname + '_months'] = ','.join(
                 form.cleaned_data['months'])
@@ -403,8 +409,8 @@ def create_var_dict(query_forms, time_frame_form):
             if opt == '1':  # Between
                 var_list[
                     varname + '_from_year'] = form.cleaned_data['from_year']
-                var_list[
-                    varname + '_from_month'] = form.cleaned_data['from_month']
+                var_list[varname + '_from_month'
+                         ] = form.cleaned_data['from_month']
                 var_list[varname + '_to_year'] = form.cleaned_data['to_year']
                 var_list[varname + '_to_month'] = form.cleaned_data['to_month']
             elif opt == '2':  # Less than or equal to
@@ -445,8 +451,9 @@ def create_var_dict(query_forms, time_frame_form):
 
 def create_query_dict(var_list):
     """
-    query_forms: list of dictionaries with var_name and form (also probably var_full_name, but I don't think I need to count on that)
-    returns a tuple of query dict and a dictionary of variable names with the value(s) it has
+    query_forms: list of dictionaries with var_name and form (also probably
+    var_full_name, but I don't think I need to count on that) returns a tuple
+    of query dict and a dictionary of variable names with the value(s) it has
     """
     # Creates a query dict based on all the restrictions the user has made
     query_dict = {}
@@ -495,9 +502,10 @@ def create_query_dict(var_list):
                     query_dict[varname + "__exact"] = mangle_method(
                         var_list[varname + '_threshold'])
             elif varname in list_date_fields:
-                if varname + '_months' in var_list:
+                month_list = varname + '_months'
+                if month_list in var_list:
                     months = [
-                        int(x) for x in var_list[varname + '_months'].split(',')
+                        int(x) for x in var_list[month_list].split(',')
                     ]
                     # Only filter by months if not all the months are included
                     if len(months) < 12:
@@ -522,46 +530,35 @@ def create_query_dict(var_list):
                         to_date
                     ]
                 elif opt == '2':  # Less than or equal to
+                    month = var_list[varname + '_threshold_month']
+                    year = var_list[varname + '_threshold_year']
                     to_date = None
-                    if int(var_list[varname + '_threshold_month']) == 12:
-                        to_date = format_date(
-                            int(
-                                mangle_method(
-                                    var_list[varname + '_threshold_year'])) + 1,
-                            1)
+                    if int(month) == 12:
+                        to_date = format_date(int(mangle_method(year)) + 1, 1)
                     else:
                         to_date = format_date(
-                            int(mangle_method(
-                                var_list[varname + '_threshold_year'])),
-                            int(mangle_method(
-                                var_list[varname + '_threshold_month'])) + 1)
+                            int(mangle_method(year)),
+                            int(mangle_method(month)) + 1)
                     query_dict[varname + "__lte"] = to_date
                 elif opt == '3':  # Greater than or equal to
-                    query_dict[varname + "__gte"] = \
-                        format_date(mangle_method(var_list[varname + '_threshold_year']),
-                                    mangle_method(var_list[varname + '_threshold_month']))
+                    month = var_list[varname + '_threshold_month']
+                    year = var_list[varname + '_threshold_year']
+                    to_date = format_date(mangle_method(year),
+                                          mangle_method(month))
+                    query_dict[varname + "_gte"] = to_date
                 elif opt == '4':  # In
                     to_date = None
-                    if int(var_list[varname + '_threshold_month']) == 12:
-                        to_date = format_date(
-                            int(
-                                mangle_method(
-                                    var_list[varname + '_threshold_year'])) + 1,
-                            1)
+                    month = var_list[varname + '_threshold_month']
+                    year = var_list[varname + '_threshold_year']
+                    if int(month) == 12:
+                        to_date = format_date(int(mangle_method(year)) + 1, 1)
                     else:
                         to_date = format_date(
-                            int(mangle_method(
-                                var_list[varname + '_threshold_year'])),
-                            int(mangle_method(
-                                var_list[varname + '_threshold_month'])) + 1)
+                            int(mangle_method(year)),
+                            int(mangle_method(month)) + 1)
                     query_dict[varname + "__range"] = [
-                        format_date(
-                            mangle_method(var_list[
-                                varname + '_threshold_year']),
-                            mangle_method(var_list[
-                                varname + '_threshold_month'])),
-                        to_date
-                    ]
+                        format_date(mangle_method(year), mangle_method(month)),
+                        to_date]
             elif varname in list_place_fields:
                 query_dict[varname + "_idnum" + "__in"] = [
                     int(i)
@@ -589,17 +586,19 @@ def create_var_list_from_url(get):
     return var_list
 
 
-# Takes a var list and then gives tuples of strings that describe the query in a nice way
-# Used for formatting the display of previous_queries
+# Takes a var list and then gives tuples of strings that describe the query in
+# a nice way Used for formatting the display of previous_queries
 
 
 def prettify_var_list(varlist):
     output = []
     qdict = create_query_dict(varlist)
-    # For some reason, when time_span is set, it also shows "Year arrived with slaves*"
+    # For some reason, when time_span is set, it also shows "Year arrived with
+    # slaves*"
     if 'time_span_from_year' in varlist and 'time_span_to_year' in varlist:
-        output.append((_('Time frame:'), str(
-            varlist['time_span_from_year']) + ' - ' + str(varlist['time_span_to_year'])))
+        beg = varlist['time_span_from_year']
+        end = varlist['time_span_to_year']
+        output.append((_('Time frame:'), str(beg) + ' - ' + str(end)))
     for kvar, vvar in list(qdict.items()):
         varname = kvar.split('__')[0]
         is_real_var = False
@@ -635,21 +634,20 @@ def prettify_var_list(varlist):
         if varname + '_options' in varlist:
             opt = varlist[varname + '_options']
             if opt == '1' and len(vvar) >= 2:
-                if varname == 'var_imp_arrival_at_port_of_dis':
-                    value = _('between ') + \
-                        str(tvar[0]) + _(' and ') + str(tvar[1])
-                elif varname in list_date_fields:
+                viaapod = 'var_imp_arrival_at_port_of_dis'
+                if varname == viaapod or varname not in list_date_fields:
+                    beg = str(tvar[0])
+                    end = str(tvar[1])
+                else:
                     tod = None
                     if vvar[1].month == 1:
                         tod = date(vvar[1].year - 1, 12, vvar[1].day)
                     else:
                         tod = date(
                             vvar[1].year, vvar[1].month - 1, vvar[1].day)
-                    value = _(
-                        'between ') + str(unmangle_method(vvar[0])) + _(' and ') + str(unmangle_method(tod))
-                else:
-                    value = _('between ') + \
-                        str(tvar[0]) + _(' and ') + str(tvar[1])
+                    beg = str(unmangle_method(vvar[0]))
+                    end = str(unmangle_method(tod))
+                value = _('between ') + beg + _(' and ') + end
             elif opt == '4':
                 if isinstance(vvar, (list, tuple)):
                     value = _('in ') + str(unmangle_method(vvar[0]))
@@ -676,7 +674,8 @@ def prettify_var_list(varlist):
                     value = _('after ') + str(tvar)
                 else:
                     value = _('at least ') + str(tvar)
-        # Prevent display of 'Year arrived with slaves*' when it is just the time frame
+        # Prevent display of 'Year arrived with slaves*' when it is just the
+        # time frame
         if not isinstance(vvar, (list, tuple)) or \
                 varname not in list_numeric_fields or \
                 (varname + '_options') in varlist:
@@ -732,10 +731,13 @@ def voyage_variables_data(voyage_id, show_imputed=True):
         get_voyages_search_query_set().filter(var_voyage_id=voyagenum))
     if voyage is None:
         return None, []
-    # Apply the matching method (if there is one) in the display_method_details dict for each variable value in the voyage and return a dict of varname: varvalue
+    # Apply the matching method (if there is one) in the display_method_details
+    # dict for each variable value in the voyage and return a dict of varname:
+    # varvalue
     voyagevariables = voyage.get_stored_fields()
     # for vname, vvalue in voyage.get_stored_fields().items():
-    #    voyagevariables[vname] = display_methods_details.get(vname, no_mangle)(vvalue, voyagenum)
+    #    voyagevariables[vname] = display_methods_details.get(vname,
+    #    no_mangle)(vvalue, voyagenum)
     allvargroups = groupby(var_dict, key=lambda x: x['var_category'])
     allvars = []
     for i in allvargroups:
@@ -754,12 +756,14 @@ def voyage_variables_data(voyage_id, show_imputed=True):
             if val == u'[]':
                 val = u''
             if idx == 0:
-                # For the first variable, give the number of variables in the group, and give the name of the group as a tuple in the first entry of the triple for the row
-                allvars.append(((len(glist), str(group)),
-                                str(j['var_full_name']), val, j['var_name']))
+                # For the first variable, give the number of variables in the
+                # group, and give the name of the group as a tuple in the first
+                # entry of the triple for the row
+                newvar = (len(glist), str(group))
             else:
-                allvars.append(
-                    ((None, None), str(j['var_full_name']), val, j['var_name']))
+                newvar = (None, None)
+            allvars.append((newvar,
+                            str(j['var_full_name']), val, j['var_name']))
     return voyage, allvars
 
 
@@ -849,7 +853,8 @@ def search(request):
     if 'submit_val' in request.GET:
         submit_val = request.GET['submit_val']
 
-    # If session has expired (no search activity for the last session_expire_minutes time) then clear the previous queries
+    # If session has expired (no search activity for the last
+    # session_expire_minutes time) then clear the previous queries
     old_time = request.session.get('last_access_time', 0.0)
     if old_time < time.time() - session_expire_minutes * 60.0:
         # request.session.clear()
@@ -857,9 +862,10 @@ def search(request):
 
     request.session['last_access_time'] = time.time()
 
-    # if used_variable_names or the pair of time_span_from_year and time_span_to_year keys are in request.GET,
-    # then that means that it is a query url and we should get the query from it.
-    # or if it is restore_prev_query, then restore it from the session.
+    # if used_variable_names or the pair of time_span_from_year and
+    # time_span_to_year keys are in request.GET, then that means that it is a
+    # query url and we should get the query from it. or if it is
+    # restore_prev_query, then restore it from the session.
     if submit_val == 'restore_prev_query' or (
             request.method == "GET" and (
                 'used_variable_names' in request.GET or (
@@ -936,20 +942,22 @@ def search(request):
                 default_result_columns)
     elif request.method == "POST":
 
-        # A normal search is being performed, or it is on another tab, or it is downloading a file
+        # A normal search is being performed, or it is on another tab, or it is
+        # downloading a file
+        rpp = 'results_per_page'
+        rppc = 'results_per_page_choice'
         results_per_page_form = ResultsPerPageOptionForm(request.POST)
         if results_per_page_form.is_valid():
             results_per_page = results_per_page_form.cleaned_option()
-            request.session[
-                'results_per_page_choice'] = results_per_page_form.cleaned_data[
-                    'option']
-            request.session['results_per_page'] = results_per_page
-        elif 'results_per_page' in request.session and 'results_per_page_choice' in request.session:
-            results_per_page = request.session['results_per_page']
+            request.session[rppc] = results_per_page_form.cleaned_data[
+                'option']
+            request.session[rpp] = results_per_page
+        elif rpp in request.session and rppc in request.session:
+            results_per_page = request.session[rpp]
             results_per_page_form.fields['option'].initial = request.session[
-                'results_per_page_choice']
+                rppc]
             results_per_page_form = ResultsPerPageOptionForm(
-                {u'option': request.session['results_per_page_choice']})
+                {u'option': request.session[rppc]})
         display_columns = request.session.get(
             'result_columns',
             get_new_visible_attrs(default_result_columns))
@@ -997,13 +1005,16 @@ def search(request):
         elif (submit_val and submit_val.startswith("tab_tables")
               ) or submit_val == 'xls_download_table':
             # row_cell_values is what is displayed in the cells in the table,
-            # it is a list of triples which contain the row_label, the cell values, then the row total
-            # rowlabels is a list of lists of row label tuples (e.g. there is the region and the port).
-            # Typically these will just be a list of lists with one entry that is the label tuple for that row/
+            # it is a list of triples which contain the row_label, the cell
+            # values, then the row total
+            # rowlabels is a list of lists of row label tuples (e.g. there is
+            # the region and the port). Typically these will just be a list of
+            # lists with one entry that is the label tuple for that row/
             # column labels is similar, but it is a list of column label lists,
-            # and will typically be a list of one element that is a list of the column label tuples
-            # entries in the rowlabels/collabels matrix are tuples
-            # that contain the label and then the row/column span of that cell.
+            # and will typically be a list of one element that is a list of the
+            # column label tuples entries in the rowlabels/collabels matrix are
+            # tuples that contain the label and then the row/column span of
+            # that cell.
             # Most of the time the row/column span will just be 1.
             xls_table = []
             tab = 'tables'
@@ -1039,7 +1050,8 @@ def search(request):
             display_function = table_functions[1][1]
             display_fun_name = table_functions[1][0]
             if table_stats_form.is_valid():
-                # If form is valid, collect all necessary settings: column, row and cell variables
+                # If form is valid, collect all necessary settings: column, row
+                # and cell variables
                 table_row_query_def = table_rows[int(
                     table_stats_form.cleaned_data['rows'])]
                 table_col_query_def = table_columns[int(
@@ -1051,14 +1063,16 @@ def search(request):
                 table_stats_form.omit_empty = omit_empty
 
             restrict_query = {}
-            # Get the variable name of the variable used to filter the rows
-            # so we can constrain the column totals to voyages with the row variable defined
+            # Get the variable name of the variable used to filter the rows so
+            # we can constrain the column totals to voyages with the row
+            # variable defined
             table_row_var_name = ''
             if len(table_row_query_def[1]) > 0:
                 # The query def is a triple with the 2nd element being a list
-                # that list is a list of tuples with the label and the query dict
-                # the query dict is a dictionary with 1 element which the key is the var name with a '__'
-                # and then the query type (e.g. "__exact")
+                # that list is a list of tuples with the label and the query
+                # dict the query dict is a dictionary with 1 element which the
+                # key is the var name with a '__' and then the query type (e.g.
+                # "__exact")
                 table_row_var_name = list(
                     table_row_query_def[1][0][1].keys())[0].split('__')[0]
             table_row_var = search_var_dict(table_row_var_name)
@@ -1122,8 +1136,9 @@ def search(request):
             for idx, colquery in enumerate(table_col_query_def[1]):
                 colqueryset = tableresults.filter(**colquery)
                 if omit_empty and colqueryset.count() == 0:
-                    # Find column label that matches, then find the parent labels that match
-                    # Generate the list of subcolumns for the parent column label
+                    # Find column label that matches, then find the parent
+                    # labels that match Generate the list of subcolumns for the
+                    # parent column label
                     remove_cols.insert(0, idx)
                     continue
                 if is_double_fun:
@@ -1140,7 +1155,7 @@ def search(request):
                 for idt, collbllist in enumerate(collabels):
                     enum_list = enumerate(collbllist)
                     idc, colstuff = next(islice(enum_list, len(list(
-                        takewhile(lambda idy, colx=col: idy <= colx, accumulate(
+                        takewhile(lambda idy, col=col: idy <= col, accumulate(
                             starmap(lambda i, c: c[1], enum_list))))), None))
                     collabels[idt][idc] = [colstuff[0], colstuff[1] - 1]
             remove_rows = []
@@ -1178,7 +1193,8 @@ def search(request):
                 if omit_empty and rowqueryset.count() == 0:
                     remove_rows.insert(0, idx)
                 row_cell_values = []
-                # Iterate through column labels to make the labels for the xls download
+                # Iterate through column labels to make the labels for the xls
+                # download
                 for colquery, colqueryset in used_col_query_sets:
                     cell_queryset = rowqueryset
                     if rowqueryset.count() > 0:
@@ -1215,7 +1231,8 @@ def search(request):
                 row_list[rownum] = ([
                     (i[0], i[1] - 1) for i in row_list[rownum][0]
                 ], row_list[rownum][1], row_list[rownum][2])
-                # Now find the rows with the headers for it and reduce those header counts by 1
+                # Now find the rows with the headers for it and reduce those
+                # header counts by 1
                 for idx, rl in enumerate(row_list):
                     if idx >= rownum:
                         continue
@@ -1225,9 +1242,11 @@ def search(request):
                         lambda idy, i, lim=limit: i[1] < lim,
                         enumerate(rowlbl)))
                     for idy, i in decrements:
-                        # Don't handle the case for the rownum, since that has already been decremented
+                        # Don't handle the case for the rownum, since that has
+                        # already been decremented
                         row_list[idx][0][idy][1] -= 1
-                # Now handle the case when this row we are removing has headers of its own
+                # Now handle the case when this row we are removing has headers
+                # of its own
                 rowlbl = list(row_list[rownum][0])
                 rowlbl.reverse()
                 for lbl, num in rowlbl:
@@ -1256,7 +1275,8 @@ def search(request):
             xls_table.append(xls_row)
             if submit_val == 'xls_download_table':
                 response = HttpResponse(
-                    content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+                    content_type='application/'
+                    'vnd.openxmlformats-officedocument.spreadsheetml.sheet'
                 )
                 response[
                     'Content-Disposition'] = 'attachment; filename="data.xlsx"'
@@ -1289,8 +1309,9 @@ def search(request):
             xind = request.session.get(session_defs_key + '_x_ind', 0)
             yind = request.session.get(session_defs_key + '_y_ind', 0)
             # Handle adding a y-function or simply changing the x-function.
-            xfuns = graphs.graphs_x_axes if graphs_tab == 'tab_graphs_lin' else \
-                graphs.other_graphs_x_axes
+            xfuns = (graphs.graphs_x_axes
+                     if graphs_tab == 'tab_graphs_lin'
+                     else graphs.other_graphs_x_axes)
             graphs_form_params = {
                 'data': request.POST,
                 'prefix': graphs_tab,
@@ -1350,25 +1371,20 @@ def search(request):
             except Exception:
                 timeline_form_in_session = None
 
+            if not timeline_form.is_valid():
+                timeline_form = timeline_form_in_session
+
             if timeline_form.is_valid():
                 # If any choice passed, get chosen index and get selected tuple
                 timeline_selected_var_index = int(
                     timeline_form.cleaned_data['variable_select'])
-                timeline_selected_tuple = voyage_timeline_variables[
-                    timeline_selected_var_index]
-            elif timeline_form_in_session and timeline_form_in_session.is_valid(
-            ):
-                # If option is stored in the session
-                timeline_form = timeline_form_in_session
-                timeline_selected_var_index = int(
-                    timeline_form.cleaned_data['variable_select'])
-                timeline_selected_tuple = voyage_timeline_variables[
-                    timeline_selected_var_index]
             else:
                 # Otherwise, it's the first time when timeline is loaded
                 timeline_form = TimelineVariableForm(
                     initial={'variable_select': '15'})
-                timeline_selected_tuple = voyage_timeline_variables[15]
+                timeline_selected_var_index = 15
+            timeline_selected_tuple = voyage_timeline_variables[
+                timeline_selected_var_index]
 
             request.session['voyage_timeline_form_option'] = timeline_form
 
@@ -1423,9 +1439,10 @@ def search(request):
             all_voyages = VoyageCache.voyages
             missed_embarked = 0
             missed_disembarked = 0
-            # Set up an unspecified source that will be used if the appropriate setting is enabled
-            geo_unspecified = CachedGeo(-1, -1,
-                                        _('Africa, port unspecified'), 0.05, 9.34, True, None)
+            # Set up an unspecified source that will be used if the appropriate
+            # setting is enabled
+            geo_unspecified = CachedGeo(-1, -1, _('Africa, port unspecified'),
+                                        0.05, 9.34, True, None)
             source_unspecified = (geo_unspecified, geo_unspecified,
                                   geo_unspecified)
             keys = get_pks_from_haystack_results(results)
@@ -1464,30 +1481,32 @@ def search(request):
                     def can_show(ph):
                         return ph is not None and ph[0].show
 
-                    if ok_to_show_animation(voyage, can_show):
-                        flag = VoyageCache.nations.get(
-                            voyage.ship_nat_pk) or ''
-                        source = CachedGeo.get_hierarchy(voyage.emb_pk)
-                        destination = CachedGeo.get_hierarchy(voyage.dis_pk)
-                        route = all_routes.get(pk, ([],))[0]
-                        yield ('{ '
-                        '"voyage_id": ' + str(voyage.voyage_id) + ', '
-                        '"source_name": "' + _(source[0].name) + '", '
-                        '"source_lat": ' + str(source[0].lat) + ', '
-                        '"source_lng": ' + str(source[0].lng) + ', '
-                        '"destination_name": "' + \
-                            _(destination[0].name) + '", '
-                        '"destination_lat": ' + str(destination[0].lat) + ', '
-                        '"destination_lng": ' + str(destination[0].lng) + ', '
-                        '"embarked": ' + str(voyage.embarked) + ', '
-                        '"disembarked": ' + str(voyage.disembarked) + ', '
-                        '"year": ' + str(voyage.year) + ', '
-                        '"ship_ton": ' + str(voyage.ship_ton or 0) + ', '
-                        '"nat_id": ' + str(voyage.ship_nat_pk or 0) + ', '
-                        '"ship_nationality_name": "' + _(flag) + '", '
-                        '"ship_name": "' + str(voyage.ship_name or "") + '", '
-                        '"route": ' + json.dumps(route) + ' '
-                        '}')
+                    if not ok_to_show_animation(voyage, can_show):
+                        continue
+
+                    flag = VoyageCache.nations.get(
+                        voyage.ship_nat_pk) or ''
+                    ship_name = voyage.ship_name or ""
+                    src = CachedGeo.get_hierarchy(voyage.emb_pk)
+                    dst = CachedGeo.get_hierarchy(voyage.dis_pk)
+                    route = all_routes.get(pk, ([],))[0]
+                    yield ('{ '
+                           '"voyage_id": ' + str(voyage.voyage_id) + ', '
+                           '"source_name": "' + _(src[0].name) + '", '
+                           '"source_lat": ' + str(src[0].lat) + ', '
+                           '"source_lng": ' + str(src[0].lng) + ', '
+                           '"destination_name": "' + _(dst[0].name) + '", '
+                           '"destination_lat": ' + str(dst[0].lat) + ', '
+                           '"destination_lng": ' + str(dst[0].lng) + ', '
+                           '"embarked": ' + str(voyage.embarked) + ', '
+                           '"disembarked": ' + str(voyage.disembarked) + ', '
+                           '"year": ' + str(voyage.year) + ', '
+                           '"ship_ton": ' + str(voyage.ship_ton or 0) + ', '
+                           '"nat_id": ' + str(voyage.ship_nat_pk or 0) + ', '
+                           '"ship_nationality_name": "' + _(flag) + '", '
+                           '"ship_name": "' + str(ship_name) + '", '
+                           '"route": ' + json.dumps(route) + ' '
+                           '}')
 
             return HttpResponse('[' + ',\n'.join(animation_response()) + ']',
                                 'application/json')
@@ -1583,9 +1602,11 @@ def search(request):
 
 def prettify_results(results, lookup_table):
     """
-    Returns a list of dictionaries keyed by variable name, prettifies the value so that it displays properly
-    Uses the lookup_table which has the methods to prettify the variable based on the value and the voyage id
-    The lookup_table is gotten from the globals file, either from the display_methods or the display_methods_xls
+    Returns a list of dictionaries keyed by variable name, prettifies the value
+    so that it displays properly Uses the lookup_table which has the methods to
+    prettify the variable based on the value and the voyage id The lookup_table
+    is gotten from the globals file, either from the display_methods or the
+    display_methods_xls
     """
     # Results must be a list of dictionaries of variable name and value
     for i in results:
@@ -1629,9 +1650,8 @@ def get_choices(varname):
     choices = []
     if varname in ['var_nationality']:
         for nation in _ChoicesCache.nations:
-            if "/" in nation.label or "Other (specify in note)" in nation.label:
-                continue
-            choices.append((nation.value, _(nation.label)))
+            if set({'/', 'Other (specify in note)'}).isdisjoint(nation.label):
+                choices.append((nation.value, _(nation.label)))
     elif varname in ['var_imputed_nationality']:
         for nation in _ChoicesCache.nations:
             # imputed flags
@@ -1670,10 +1690,12 @@ def put_other_last(lst):
     return lst
 
 
-# , place_visible=[], region_visible=[], area_visible=[], place_selected=[], region_selected=[], area_selected=[]):
+# , place_visible=[], region_visible=[], area_visible=[], place_selected=[],
+# region_selected=[], area_selected=[]):
 def get_nested_list_places(varname, nested_places, selected_places=None):
     """
-    Retrieve a nested list of places sorted by broad region (area) and then region
+    Retrieve a nested list of places sorted by broad region (area) and then
+    region
     :param varname:
     returns a tuple of the nested choices and the choices
     """
@@ -1697,7 +1719,8 @@ def get_nested_list_places(varname, nested_places, selected_places=None):
 
 #                if place.place == "???":
 #                    continue
-# Selected does not need to be part of this, since the form dict will have a list of places selected that the template checks
+# Selected does not need to be part of this, since the form dict will have a
+# list of places selected that the template checks
                 reg_content.append({
                     'id': 'id_' + varname + '_2_' + str(place.pk),
                     'text': place.place,
@@ -1830,7 +1853,8 @@ def perform_search(query_dict,
 
 def date_filter_query(date_filters, results):
     """
-    Further filter the results passed in by excluding those that have months in date_filtered list (deselected)
+    Further filter the results passed in by excluding those that have months in
+    date_filtered list (deselected)
     :param date_filters:
     :param results:
     :return:
@@ -1864,7 +1888,8 @@ def format_date(year, month):
 def get_new_visible_attrs(list_column_varnames):
     """
     :param list_column_varnames: a list of variable names (short_name)
-    :return: a list of tuples containing short names and full names of variables from the passed parameter
+    :return: a list of tuples containing short names and full names of
+    variables from the passed parameter
     """
     result_columns = []
     for column in list_column_varnames:
@@ -2059,7 +2084,8 @@ def remove_empty_columns(idx, row_list, collabels, col_totals):
             # Increment counter of items
             count_items += 1
 
-            # If wanted idx is in between of the current val and less than val+next, found
+            # If wanted idx is in between of the current val and less than
+            # val+next, found
             if val <= current_index < val + value[1]:
 
                 # Decrement current parent value
