@@ -23,9 +23,10 @@ class UploadFileForm(forms.Form):
 
 
 class VoyageBaseForm(forms.Form):
-    # Use a char field to keep track of the order of shown forms. Hide it because it is irrelavent to the user.
-    # If not shown use empty string, if shown use a number, higher numbers will be shown further down.
-    # This is used mostly if not solely in the javascript code
+    # Use a char field to keep track of the order of shown forms. Hide it
+    # because it is irrelavent to the user. If not shown use empty string, if
+    # shown use a number, higher numbers will be shown further down. This is
+    # used mostly if not solely in the javascript code
 
     is_shown_field = forms.CharField(
         required=False, widget=forms.HiddenInput())
@@ -33,7 +34,8 @@ class VoyageBaseForm(forms.Form):
 
     def is_form_shown(self):
         """
-        Determines if form is used in building the query, and if it is shown on the page
+        Determines if form is used in building the query, and if it is shown on
+        the page
         """
         return not not self.cleaned_data['is_shown_field']
 
@@ -161,7 +163,8 @@ class SimpleTextForm(VoyageBaseForm):
     """
     # TODO: Remove empty label
     text_search = forms.CharField(
-        widget=forms.TextInput(attrs={'class': "query-builder-text"}), label="")
+        widget=forms.TextInput(
+            attrs={'class': "query-builder-text"}), label="")
     type_str = "plain_text"
 
 
@@ -176,11 +179,14 @@ class SimpleNumericSearchForm(VoyageBaseForm):
         choices=OPERATORS,
         widget=forms.Select(attrs={'class': "select_field newly_inserted"}))
     threshold = forms.IntegerField(
-        required=False, widget=forms.TextInput(attrs={'class': "medium_field"}))
+        required=False,
+        widget=forms.TextInput(attrs={'class': "medium_field"}))
     lower_bound = forms.IntegerField(
-        required=False, widget=forms.TextInput(attrs={'class': "short_field"}))
+        required=False,
+        widget=forms.TextInput(attrs={'class': "short_field"}))
     upper_bound = forms.IntegerField(
-        required=False, widget=forms.TextInput(attrs={'class': "short_field"}))
+        required=False,
+        widget=forms.TextInput(attrs={'class': "short_field"}))
 
 
 class SimpleDateSearchForm(VoyageBaseForm):
@@ -273,10 +279,14 @@ class SimpleSelectBooleanForm(VoyageBaseForm):
 
 
 class TimeFrameSpanSearchForm(forms.Form):
-    frame_from_year = forms.IntegerField(label=_('From'), widget=forms.TextInput(
-        attrs={'class': "short_field_white"}))
-    frame_to_year = forms.IntegerField(label=_('To'), widget=forms.TextInput(
-        attrs={'class': "short_field_white"}))
+    frame_from_year = forms.IntegerField(
+        label=_('From'),
+        widget=forms.TextInput(
+            attrs={'class': "short_field_white"}))
+    frame_to_year = forms.IntegerField(
+        label=_('To'),
+        widget=forms.TextInput(
+            attrs={'class': "short_field_white"}))
 
 
 class ResultsPerPageOptionForm(forms.Form):
@@ -329,7 +339,8 @@ class TableSelectionForm(forms.Form):
 
 
 class GraphRemovePlotForm(forms.Form):
-    # Creates a list of boolean fields for each tuple in the list, (description, id)
+    # Creates a list of boolean fields for each tuple in the list,
+    # (description, id)
     def __init__(self, lst, *args, **kwargs):
         super().__init__(*args, **kwargs)
         for desc, i in lst:
@@ -372,4 +383,5 @@ class GraphSelectionForm(forms.Form):
 class TimelineVariableForm(forms.Form):
     var_choices = [(v[0], v[1]) for v in voyage_timeline_variables]
     variable_select = forms.ChoiceField(
-        label=_('Timeline variable'), choices=var_choices, initial=var_choices[23])
+        label=_('Timeline variable'),
+        choices=var_choices, initial=var_choices[23])

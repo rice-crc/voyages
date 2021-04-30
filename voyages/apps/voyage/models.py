@@ -540,7 +540,8 @@ class VoyageItinerary(models.Model):
         on_delete=models.CASCADE)
 
     number_of_ports_of_call = models.IntegerField(
-        "Number of ports of call in Americas prior to sale of slaves (NPPRIOR)",
+        "Number of ports of call in Americas prior to sale of slaves "
+        "(NPPRIOR)",
         null=True,
         blank=True)
     first_landing_place = models.ForeignKey(
@@ -655,7 +656,8 @@ class VoyageItinerary(models.Model):
     imp_broad_region_of_slave_purchase = models.ForeignKey(
         'BroadRegion',
         related_name="imp_broad_region_of_slave_purchase",
-        verbose_name="Imputed principal broad region of slave purchase (MAJBYIMP1)",
+        verbose_name="Imputed principal broad region of slave purchase "
+        "(MAJBYIMP1)",
         null=True,
         blank=True,
         on_delete=models.CASCADE)
@@ -669,21 +671,24 @@ class VoyageItinerary(models.Model):
     imp_principal_port_slave_dis = models.ForeignKey(
         'Place',
         related_name="imp_principal_port_slave_dis",
-        verbose_name="Imputed principal port of slave disembarkation (MJSLPTIMP)",
+        verbose_name="Imputed principal port of slave disembarkation "
+        "(MJSLPTIMP)",
         null=True,
         blank=True,
         on_delete=models.CASCADE)
     imp_principal_region_slave_dis = models.ForeignKey(
         'Region',
         related_name="imp_principal_region_slave_dis",
-        verbose_name="Imputed principal region of slave disembarkation (MJSELIMP)",
+        verbose_name="Imputed principal region of slave disembarkation "
+        "(MJSELIMP)",
         null=True,
         blank=True,
         on_delete=models.CASCADE)
     imp_broad_region_slave_dis = models.ForeignKey(
         'BroadRegion',
         related_name="imp_broad_region_slave_dis",
-        verbose_name="Imputed broad region of slave disembarkation (MJSELIMP1)",
+        verbose_name="Imputed broad region of slave disembarkation "
+        "(MJSELIMP1)",
         null=True,
         blank=True,
         on_delete=models.CASCADE)
@@ -807,7 +812,8 @@ class VoyageDates(models.Model):
         null=True,
         blank=True)
     imp_length_leaving_africa_to_disembark = models.IntegerField(
-        "Voyage length from last slave embarkation to first disembarkation (days) (VOY2IMP)",
+        "Voyage length from last slave embarkation to first disembarkation "
+        "(days) (VOY2IMP)",
         null=True,
         blank=True)
 
@@ -872,15 +878,17 @@ class VoyageDates(models.Model):
 #        """
 #
 #        if (period != 100):
-#            if ((self.get_date_year(self.imp_arrival_at_port_of_dis)-self.years_start[period])
-#                        % period != 0):
-#                return ((self.get_date_year(self.imp_arrival_at_port_of_dis)-self.years_start[period])
-#                        / period +1)
+#            if ((self.get_date_year(self.imp_arrival_at_port_of_dis) -
+#            self.years_start[period]) % period != 0):
+#                return ((self.get_date_year(self.imp_arrival_at_port_of_dis) -
+#                self.years_start[period]) / period +1)
 #            else:
-#                return (self.get_date_year(self.imp_arrival_at_port_of_dis)-self.years_start[period]) \
-#                        / period
+#                return
+#                (self.get_date_year(self.imp_arrival_at_port_of_dis) -
+#                self.years_start[period]) \ / period
 #        else:
-#            return ((self.get_date_year(self.imp_arrival_at_port_of_dis))/100 * 100)
+#            return ((self.get_date_year(self.imp_arrival_at_port_of_dis))/100
+#            + 100)
 
     class Meta:
         verbose_name = 'Date'
@@ -1139,7 +1147,8 @@ class VoyageSlavesNumbers(models.Model):
         "Number of boys (BOY2) died on Middle Passage", null=True, blank=True)
     # Representing GIRL2 variables
     num_girl_died_middle_passage = models.IntegerField(
-        "Number of girls (GIRL2) died on Middle Passage", null=True, blank=True)
+        "Number of girls (GIRL2) died on Middle Passage",
+        null=True, blank=True)
     # Representing ADULT2 variables
     num_adult_died_middle_passage = models.IntegerField(
         "Number of adults (gender unspecified) (ADULT2) "
@@ -1433,7 +1442,8 @@ class VoyageSlavesNumbers(models.Model):
         null=True,
         blank=True)
     imp_slaves_embarked_for_mortality = models.IntegerField(
-        "Imputed number of slaves embarked for mortality calculation (TSLMTIMP)",
+        "Imputed number of slaves embarked for mortality calculation "
+        "(TSLMTIMP)",
         null=True,
         blank=True)
 
@@ -1455,7 +1465,8 @@ class VoyageSlavesNumbers(models.Model):
                                              blank=True)
     # Representing ADULT7 variables
     imp_num_adult_total = models.IntegerField(
-        "Number of adults (gender unspecified) (ADULT7)", null=True, blank=True)
+        "Number of adults (gender unspecified) (ADULT7)",
+        null=True, blank=True)
     # Representing CHILD7 variables
     imp_num_child_total = models.IntegerField(
         "Number of children (gender unspecified) (CHILD7)",
@@ -1467,7 +1478,8 @@ class VoyageSlavesNumbers(models.Model):
         "Number of males (age unspecified) (MALE7)", null=True, blank=True)
     # Representing FEMALE7 variables
     imp_num_females_total = models.IntegerField(
-        "Number of females (age unspecified) (FEMALE7) ", null=True, blank=True)
+        "Number of females (age unspecified) (FEMALE7) ",
+        null=True, blank=True)
 
     total_slaves_embarked_age_gender_identified = models.IntegerField(
         "Total slaves embarked wi th age and gender identified (SLAVMAX1)",
@@ -1477,10 +1489,11 @@ class VoyageSlavesNumbers(models.Model):
         "Total slaves identified by age and gender among landed (SLAVMAX3)",
         null=True,
         blank=True)
-    total_slaves_by_age_gender_identified_departure_or_arrival = models.IntegerField(
-        "Total slavesidentified by age and gender at departure or arrival (SLAVMAX7)",
-        null=True,
-        blank=True)
+    total_slaves_by_age_gender_identified_departure_or_arrival = (
+        models.IntegerField(
+            "Total slaves identified by age and gender at departure or "
+            "arrival (SLAVMAX7)",
+            null=True, blank=True))
 
     percentage_boys_among_embarked_slaves = models.FloatField(
         "Percentage of boys among embarked slaves (BOYRAT1)",
@@ -1531,23 +1544,23 @@ class VoyageSlavesNumbers(models.Model):
 
     percentage_women_among_landed_slaves = models.FloatField(
         "Percentage of women among landed slaves (WOMRAT3)",
-        null=True,
-        blank=True)
+        null=True, blank=True)
 
     # INSERT HERE any new number variables [model]
 
-    voyage = models.ForeignKey('Voyage',
-                               related_name="voyage_name_slave_characteristics",
-                               on_delete=models.CASCADE)
+    voyage = models.ForeignKey(
+        'Voyage',
+        related_name="voyage_name_slave_characteristics",
+        on_delete=models.CASCADE)
 
     # menrat7
     percentage_men = models.FloatField("Percentage men on voyage (MENRAT7)",
                                        null=True,
                                        blank=True)
     # womrat7
-    percentage_women = models.FloatField("Percentage women on voyage (WOMRAT7)",
-                                         null=True,
-                                         blank=True)
+    percentage_women = models.FloatField(
+        "Percentage women on voyage (WOMRAT7)",
+        null=True, blank=True)
     # boyrat7
     percentage_boy = models.FloatField("Percentage boy on voyage (BOYRAT7)",
                                        null=True,
@@ -1619,7 +1632,8 @@ class VoyageSources(models.Model):
     """
 
     short_ref = models.CharField(_('Short reference'),
-                                 max_length=255, null=False, blank=True, unique=True)
+                                 max_length=255, null=False, blank=True,
+                                 unique=True)
     # Might contain HTML text formatting
     full_ref = models.CharField(_('Full reference'),
                                 max_length=2550, null=False, blank=True)
@@ -1755,7 +1769,8 @@ class Voyage(models.Model):
     dataset = models.IntegerField(
         null=False,
         default=VoyageDataset.Transatlantic,
-        help_text='Which dataset the voyage belongs to (e.g. Transatlantic, IntraAmerican)'
+        help_text='Which dataset the voyage belongs to '
+                  '(e.g. Transatlantic, IntraAmerican)'
     )
 
     # generate natural key

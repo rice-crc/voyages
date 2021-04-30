@@ -26,7 +26,8 @@ class CachedGeo:
     @classmethod
     def get_hierarchy(cls, pk):
         """
-        Fetches a tuple (port, region, broad_region) given the primary key of a port.
+        Fetches a tuple (port, region, broad_region) given the primary key of a
+        port.
         """
         port = VoyageCache.ports.get(pk)
         if port is None:
@@ -40,11 +41,12 @@ class CachedGeo:
 
 class CachedVoyage:
     """
-    Cache the most basic information of a voyage for map generation and aggregation
+    Cache the most basic information of a voyage for map generation and
+    aggregation
     """
 
-    def __init__(self, pk, voyage_id, emb_pk, dis_pk, ship_nat_pk, ship_name, ship_ton,
-                 date_voyage_began, embarked, disembarked):
+    def __init__(self, pk, voyage_id, emb_pk, dis_pk, ship_nat_pk, ship_name,
+                 ship_ton, date_voyage_began, embarked, disembarked):
         self.pk = pk
         self.voyage_id = voyage_id
         self.emb_pk = emb_pk
@@ -134,7 +136,8 @@ class VoyageCache:
                                    x[7], x[8], x[9])
                 for x in Voyage.all_dataset_objects.values_list(
                     'pk', 'voyage_id',
-                    'voyage_itinerary__imp_principal_place_of_slave_purchase_id',
+                    'voyage_itinerary_'
+                    '_imp_principal_place_of_slave_purchase_id',
                     'voyage_itinerary__imp_principal_port_slave_dis_id',
                     'voyage_ship__imputed_nationality_id',
                     'voyage_ship__ship_name', 'voyage_ship__tonnage',

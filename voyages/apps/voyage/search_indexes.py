@@ -102,7 +102,8 @@ class VoyageSourcesIndex(indexes.SearchIndex, indexes.Indexable):
 class TranslatedTextField(indexes.SearchField):
     field_type = 'string'
 
-    # Regular expression that extracts name and language code from the index declaration.
+    # Regular expression that extracts name and language code from the index
+    # declaration.
     re_translated_fieldname = re.compile('(.*)_lang_([a-z]{2})$')
 
     def __init__(self, unidecode=True, **kwargs):
@@ -139,9 +140,10 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
     Index method for class Voyage.
     """
 
-    # NOTE: To add support for a new language, a simple regular expression search-and replace
-    # can be used to create a variable with the additional language. For instance, the following
-    # regular expression adds a language "es" for each variable with language "pt":
+    # NOTE: To add support for a new language, a simple regular expression
+    # search-and replace can be used to create a variable with the additional
+    # language. For instance, the following regular expression adds a language
+    # "es" for each variable with language "pt":
     #
     # Search: (.*)lang_pt(.*)
     # Replace: $0\n$1lang_es$2
@@ -199,7 +201,8 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
     var_rig_of_vessel = indexes.CharField(
         null=True, model_attr='voyage_ship__rig_of_vessel__label')
     var_rig_of_vessel_plaintext = indexes.CharField(
-        null=True, faceted=True, model_attr='voyage_ship__rig_of_vessel__label')
+        null=True, faceted=True,
+        model_attr='voyage_ship__rig_of_vessel__label')
     var_tonnage = indexes.FloatField(null=True,
                                      faceted=True,
                                      model_attr='voyage_ship__tonnage')
@@ -326,16 +329,20 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
         model_attr='voyage_itinerary__third_place_slave_purchase__place')
     var_imp_principal_place_of_slave_purchase = indexes.CharField(
         null=True,
-        model_attr='voyage_itinerary__imp_principal_place_of_slave_purchase__place')
+        model_attr='voyage_itinerary_'
+        '_imp_principal_place_of_slave_purchase__place')
     var_imp_principal_place_of_slave_purchase_lang_en = TranslatedTextField(
         null=True,
-        model_attr='voyage_itinerary__imp_principal_place_of_slave_purchase__place')
+        model_attr='voyage_itinerary_'
+        '_imp_principal_place_of_slave_purchase__place')
     var_imp_principal_place_of_slave_purchase_lang_pt = TranslatedTextField(
         null=True,
-        model_attr='voyage_itinerary__imp_principal_place_of_slave_purchase__place')
+        model_attr='voyage_itinerary_'
+        '_imp_principal_place_of_slave_purchase__place')
     var_imp_principal_place_of_slave_purchase_lang_es = TranslatedTextField(
         null=True,
-        model_attr='voyage_itinerary__imp_principal_place_of_slave_purchase__place')
+        model_attr='voyage_itinerary_'
+        '_imp_principal_place_of_slave_purchase__place')
     var_port_of_call_before_atl_crossing = indexes.NgramField(
         null=True,
         model_attr='voyage_itinerary__port_of_call_before_atl_crossing__place')
@@ -406,7 +413,8 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
         model_attr='voyage_itinerary__third_place_slave_purchase__value')
     var_imp_principal_place_of_slave_purchase_idnum = indexes.IntegerField(
         null=True,
-        model_attr='voyage_itinerary__imp_principal_place_of_slave_purchase__value')
+        model_attr='voyage_itinerary_'
+        '_imp_principal_place_of_slave_purchase__value')
     var_port_of_call_before_atl_crossing_idnum = indexes.IntegerField(
         null=True,
         model_attr='voyage_itinerary__port_of_call_before_atl_crossing__value')
@@ -473,16 +481,20 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
         model_attr='voyage_itinerary__third_region_slave_emb__region')
     var_imp_principal_region_of_slave_purchase = indexes.CharField(
         null=True,
-        model_attr='voyage_itinerary__imp_principal_region_of_slave_purchase__region')
+        model_attr='voyage_itinerary_'
+        '_imp_principal_region_of_slave_purchase__region')
     var_imp_principal_region_of_slave_purchase_lang_en = TranslatedTextField(
         null=True,
-        model_attr='voyage_itinerary__imp_principal_region_of_slave_purchase__region')
+        model_attr='voyage_itinerary_'
+        '_imp_principal_region_of_slave_purchase__region')
     var_imp_principal_region_of_slave_purchase_lang_pt = TranslatedTextField(
         null=True,
-        model_attr='voyage_itinerary__imp_principal_region_of_slave_purchase__region')
+        model_attr='voyage_itinerary_'
+        '_imp_principal_region_of_slave_purchase__region')
     var_imp_principal_region_of_slave_purchase_lang_es = TranslatedTextField(
         null=True,
-        model_attr='voyage_itinerary__imp_principal_region_of_slave_purchase__region')
+        model_attr='voyage_itinerary_'
+        '_imp_principal_region_of_slave_purchase__region')
     var_first_landing_region = indexes.CharField(
         null=True, model_attr='voyage_itinerary__first_landing_region__region')
     var_first_landing_region_lang_en = TranslatedTextField(
@@ -492,13 +504,17 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
     var_first_landing_region_lang_es = TranslatedTextField(
         null=True, model_attr='voyage_itinerary__first_landing_region__region')
     var_second_landing_region = indexes.CharField(
-        null=True, model_attr='voyage_itinerary__second_landing_region__region')
+        null=True,
+        model_attr='voyage_itinerary__second_landing_region__region')
     var_second_landing_region_lang_en = TranslatedTextField(
-        null=True, model_attr='voyage_itinerary__second_landing_region__region')
+        null=True,
+        model_attr='voyage_itinerary__second_landing_region__region')
     var_second_landing_region_lang_pt = TranslatedTextField(
-        null=True, model_attr='voyage_itinerary__second_landing_region__region')
+        null=True,
+        model_attr='voyage_itinerary__second_landing_region__region')
     var_second_landing_region_lang_es = TranslatedTextField(
-        null=True, model_attr='voyage_itinerary__second_landing_region__region')
+        null=True,
+        model_attr='voyage_itinerary__second_landing_region__region')
     var_third_landing_region = indexes.CharField(
         null=True, model_attr='voyage_itinerary__third_landing_region__region')
     var_third_landing_region_lang_en = TranslatedTextField(
@@ -532,15 +548,18 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
         null=True,
         model_attr='voyage_itinerary__imp_region_voyage_begin__value')
     var_first_region_slave_emb_idnum = indexes.IntegerField(
-        null=True, model_attr='voyage_itinerary__first_region_slave_emb__value')
+        null=True,
+        model_attr='voyage_itinerary__first_region_slave_emb__value')
     var_second_region_slave_emb_idnum = indexes.IntegerField(
         null=True,
         model_attr='voyage_itinerary__second_region_slave_emb__value')
     var_third_region_slave_emb_idnum = indexes.IntegerField(
-        null=True, model_attr='voyage_itinerary__third_region_slave_emb__value')
+        null=True,
+        model_attr='voyage_itinerary__third_region_slave_emb__value')
     var_imp_principal_region_of_slave_purchase_idnum = indexes.IntegerField(
         null=True,
-        model_attr='voyage_itinerary__imp_principal_region_of_slave_purchase__value')
+        model_attr='voyage_itinerary_'
+                   '_imp_principal_region_of_slave_purchase__value')
     var_first_landing_region_idnum = indexes.IntegerField(
         null=True, model_attr='voyage_itinerary__first_landing_region__value')
     var_second_landing_region_idnum = indexes.IntegerField(
@@ -595,7 +614,8 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
     var_date_departed_africa_month = indexes.IntegerField(null=True)
     var_first_dis_of_slaves = indexes.DateField(null=True)
     var_first_dis_of_slaves_partial = indexes.CharField(
-        null=True, model_attr='voyage_dates__first_dis_of_slaves', indexed=True)
+        null=True, model_attr='voyage_dates__first_dis_of_slaves',
+        indexed=True)
     var_first_dis_of_slaves_month = indexes.IntegerField(null=True)
     var_departure_last_place_of_landing = indexes.DateField(null=True)
     var_departure_last_place_of_landing_partial = indexes.CharField(
@@ -629,7 +649,8 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
     var_total_num_slaves_purchased = indexes.IntegerField(
         null=True,
         faceted=True,
-        model_attr='voyage_slaves_numbers__total_num_slaves_dep_last_slaving_port')
+        model_attr='voyage_slaves_numbers_'
+                   '_total_num_slaves_dep_last_slaving_port')
     # To be corrected (copied from previous comment)
     var_imp_total_num_slaves_purchased = indexes.IntegerField(
         null=True,
@@ -637,7 +658,8 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
         model_attr='voyage_slaves_numbers__imp_total_num_slaves_embarked')
     var_total_num_slaves_arr_first_port_embark = indexes.IntegerField(
         null=True,
-        model_attr='voyage_slaves_numbers__total_num_slaves_arr_first_port_embark')
+        model_attr='voyage_slaves_numbers_'
+                   '_total_num_slaves_arr_first_port_embark')
     var_num_slaves_disembark_first_place = indexes.IntegerField(
         null=True,
         model_attr='voyage_slaves_numbers__num_slaves_disembark_first_place')
@@ -892,4 +914,6 @@ def ok_to_show_animation(voyage, can_show, allow_no_numbers=False):
     destination = CachedGeo.get_hierarchy(voyage.dis_pk)
     allow_voyage = allow_no_numbers or (
         voyage.embarked and voyage.embarked > 0 and voyage.disembarked)
-    return can_show(source) and can_show(destination) and voyage.year and allow_voyage
+    return all([
+        can_show(source), can_show(destination), voyage.year, allow_voyage
+    ])

@@ -31,8 +31,9 @@ list_months = [('01', 'Jan'), ('02', 'Feb'), ('03', 'Mar'), ('04', 'Apr'),
 
 def structure_places(place_list):
     """
-    Takes a list of place ids and then returns a tree of the places structured by region and broad region.
-    Returns a dictionary(key=broad_region, value=dictionary(key=region, value=list of places))
+    Takes a list of place ids and then returns a tree of the places structured
+    by region and broad region. Returns a dictionary(key=broad_region,
+    value=dictionary(key=region, value=list of places))
     """
     # Dict keyed by region, value is a list of places
     try:
@@ -140,9 +141,10 @@ def no_mangle(value, voyageid=None):
     return value
 
 
-# Unmangle methods for select variables, since now the selections are stored as the numeric ids,
-# in previous queries it needs to be converted back to the string representing the place.
-# This will perform a lot of db queries, so all option tables should probably be stored into a dict on startup/every so often
+# Unmangle methods for select variables, since now the selections are stored as
+# the numeric ids, in previous queries it needs to be converted back to the
+# string representing the place. This will perform a lot of db queries, so all
+# option tables should probably be stored into a dict on startup/every so often
 
 
 def unmangle_place(value, voyageid=None):
@@ -184,7 +186,8 @@ def unmangle_outcome_owner(value, voyageid=None):
 def unmangle_outcome_ship(value, voyageid=None):
     if isinstance(value, (list, tuple)):
         return list(map(unmangle_outcome_ship, value))
-    return str(_(models.VesselCapturedOutcome.objects.get(value=int(value)).label))
+    return str(_(
+        models.VesselCapturedOutcome.objects.get(value=int(value)).label))
 
 
 def unmangle_resistance(value, voyageid=None):
@@ -200,7 +203,8 @@ def voyage_by_id(voyageid):
     return fil[0]
 
 
-# Take a comma separated date and convert it to a string in the form of (mm/dd/yyyy), and replace unknowns with "?"
+# Take a comma separated date and convert it to a string in the form of
+# (mm/dd/yyyy), and replace unknowns with "?"
 
 
 def csd_to_str(csd):
@@ -240,7 +244,8 @@ def default_prettifier(varname):
     that contain translatable names such as Port/Place/Region names as well as
     voyage outcomes.
     :param varname: the variable name.
-    :return: a function that receives value, voyageid and outputs a converted value.
+    :return: a function that receives value, voyageid and outputs a converted
+    value.
     """
     if 'idnum' in varname:
         return id_func
@@ -254,7 +259,8 @@ def default_prettifier(varname):
 
 
 def gd_voyage_began(value, voyageid):
-    # In production it should fail silently and just give the date based on the solr value
+    # In production it should fail silently and just give the date based on the
+    # solr value
     # For now it should error on no voyageid
     vd = None
     if value.day == 1:
@@ -463,25 +469,28 @@ class VoyageDateCache:
 
 
 def calculate_maxmin_years():
-    if VoyageDateCache.cached_voyage_fist_year is not None and VoyageDateCache.cached_voyage_last_year is not None:
-        return VoyageDateCache.cached_voyage_fist_year, VoyageDateCache.cached_voyage_last_year
-    def_first = 1514
+    if all(VoyageDateCache.cached_voyage_fist_year,
+           VoyageDateCache.cached_voyage_last_year):
+        return (VoyageDateCache.cached_voyage_fist_year,
+                VoyageDateCache.cached_voyage_last_year)
+    def_fist = 1514
     def_last = 1866
-    voyage_span_first_year = def_first
+    voyage_span_fist_year = def_fist
     voyage_span_last_year = def_last
     try:
         q = models.VoyageDates.objects.filter(
             imp_voyage_began__regex=r'^\d*,\d*,\d{4}$')
         if q.count() > 1:
-            voyage_span_first_year = q.aggregate(
+            voyage_span_fist_year = q.aggregate(
                 Min('imp_voyage_began'))['imp_voyage_began__min'][2:]
             voyage_span_last_year = q.aggregate(
                 Max('imp_voyage_began'))['imp_voyage_began__max'][2:]
     except Exception:
         pass
-    VoyageDateCache.cached_voyage_fist_year = voyage_span_first_year or def_first
+    VoyageDateCache.cached_voyage_fist_year = voyage_span_fist_year or def_fist
     VoyageDateCache.cached_voyage_last_year = voyage_span_last_year or def_last
-    return VoyageDateCache.cached_voyage_fist_year, VoyageDateCache.cached_voyage_last_year
+    return (VoyageDateCache.cached_voyage_fist_year,
+            VoyageDateCache.cached_voyage_last_year)
 
 
 sfirst_year, slast_year = calculate_maxmin_years()
@@ -497,7 +506,8 @@ def get_incremented_year_tuples(interval,
     current_year = start_year
     years = []
     while current_year <= last_year:
-        # Range is exclusive of the start, and inclusive of the end, so a search for years 1800 to 1899 will need the range 1799-1899
+        # Range is exclusive of the start, and inclusive of the end, so a
+        # search for years 1800 to 1899 will need the range 1799-1899
         years.append([current_year, current_year + interval - 1])
         current_year += interval
 
@@ -622,7 +632,8 @@ def make_places_filter(varname):
                         place.place,
                         1,
                     ))
-                    # TODO: Change place filter to use numeric identifiers instead of text
+                    # TODO: Change place filter to use numeric identifiers
+                    # instead of text
                     results.append((
                         label_list,
                         {
@@ -721,51 +732,86 @@ def get_each_from_table_col(filter_name,
     return (filter_name, [], [])
 
 
-# Defines the options selectable for filtering the rows/columns of the table section
-# Each element is a triple with the filter_label, and a list of tuples of the label_list and query_dicts, and a number indicating the number of title columns need to be made
-#  the row/column labels list is a list of lists of label tuples, which will typically just be a list of lists of one element. However for port and region filters, there will need to be multiple labels of the broadregion, region, and ports.
-#  i.e. they are (filter_label, filter_definition)
-table_rows = [(_('Flag*'), get_each_from_list(imputed_nationality_possibilities, 'var_imputed_nationality_idnum__exact', lambda x: x.label, lambda x: x.value), 0,),
-              (_('Broad region where voyage began'), get_each_from_table(models.BroadRegion,
-                                                                         'var_imp_broad_region_voyage_begin_idnum__exact', lambda x: x.broad_region, lambda x: x.value), 0,),
-              (_('Region where voyage began'), make_regions_filter(
-                  'var_imp_region_voyage_begin'), 1,),
-              (_('Port where voyage began'), make_places_filter(
-                  'var_imp_port_voyage_begin'), 2,),
-              (_('Embarkation Regions'), make_regions_filter(
-                  'var_imp_principal_region_of_slave_purchase'), 1,),
-              (_('Embarkation Ports'), make_places_filter(
-                  'var_imp_principal_place_of_slave_purchase'), 2,),
-              (_('Specific regions of disembarkation'), make_regions_filter(
-                  'var_imp_principal_region_slave_dis'), 1,),
-              (_('Broad regions of disembarkation'), get_each_from_table(models.BroadRegion,
-                                                                         'var_imp_principal_broad_region_disembark_idnum__exact', lambda x: x.broad_region, lambda x: x.value), 0,),
-              (_('Disembarkation Ports'), make_places_filter(
-                  'var_imp_principal_port_slave_dis'), 2,),
-              (_('Individual Years'), get_incremented_year_tuples(1), 0,),
-              (_('5-year periods'), get_incremented_year_tuples(5), 0,),
-              (_('10-year periods'), get_incremented_year_tuples(10), 0,),
-              (_('25-year periods'), get_incremented_year_tuples(25), 0,),
-              (_('50-year periods'), get_incremented_year_tuples(50), 0,),
-              (_('100-year periods'), get_incremented_year_tuples(100), 0,), ]
-# Column definitions will be a triple of the filter name, the filter definition (list of queries), and the list of column labels
-table_columns = [get_each_from_list_col(_('Flag*'), imputed_nationality_possibilities, 'var_imputed_nationality_idnum__exact', lambda x: x.label, lambda x: x.value),
-                 get_each_from_table_col(_('Broad region where voyage began'), models.BroadRegion,
-                                         'var_imp_broad_region_voyage_begin_idnum__exact', lambda x: x.broad_region, lambda x: x.value),
-                 make_regions_col_filter(
-                     _('Region where voyage began'), 'var_imp_region_voyage_begin'),
-                 make_places_col_filter(
-                     _('Port where voyage began'), 'var_imp_port_voyage_begin'),
-                 make_regions_col_filter(
-                     _('Embarkation Regions'), 'var_imp_principal_region_of_slave_purchase'),
-                 make_places_col_filter(
-                     _('Embarkation Ports'), 'var_imp_principal_place_of_slave_purchase'),
-                 make_regions_col_filter(
-                     _('Specific regions of disembarkation'), 'var_imp_principal_region_slave_dis'),
-                 get_each_from_table_col(_('Broad regions of disembarkation'), models.BroadRegion,
-                                         'var_imp_principal_broad_region_disembark_idnum__exact', lambda x: x.broad_region, lambda x: x.value),
-                 make_places_col_filter(_('Disembarkation Ports'), 'var_imp_principal_port_slave_dis'), ]
-# Creates a function that takes a queryset and returns a summation of the given value with the display prettifier applied
+# Defines the options selectable for filtering the rows/columns of the table
+# section Each element is a triple with the filter_label, and a list of tuples
+# of the label_list and query_dicts, and a number indicating the number of
+# title columns need to be made the row/column labels list is a list of lists
+# of label tuples, which will typically just be a list of lists of one element.
+# However for port and region filters, there will need to be multiple labels of
+# the broadregion, region, and ports. i.e. they are (filter_label,
+# filter_definition)
+table_rows = [
+    (_('Flag*'),
+     get_each_from_list(
+         imputed_nationality_possibilities,
+         'var_imputed_nationality_idnum__exact',
+         lambda x: x.label, lambda x: x.value), 0,),
+    (_('Broad region where voyage began'),
+     get_each_from_table(
+         models.BroadRegion,
+         'var_imp_broad_region_voyage_begin_idnum__exact',
+         lambda x: x.broad_region, lambda x: x.value), 0,),
+    (_('Region where voyage began'),
+     make_regions_filter(
+         'var_imp_region_voyage_begin'), 1,),
+    (_('Port where voyage began'),
+     make_places_filter(
+         'var_imp_port_voyage_begin'), 2,),
+    (_('Embarkation Regions'),
+     make_regions_filter(
+         'var_imp_principal_region_of_slave_purchase'), 1,),
+    (_('Embarkation Ports'),
+     make_places_filter(
+         'var_imp_principal_place_of_slave_purchase'), 2,),
+    (_('Specific regions of disembarkation'),
+     make_regions_filter(
+         'var_imp_principal_region_slave_dis'), 1,),
+    (_('Broad regions of disembarkation'),
+     get_each_from_table(
+         models.BroadRegion,
+         'var_imp_principal_broad_region_disembark_idnum__exact',
+         lambda x: x.broad_region, lambda x: x.value), 0,),
+    (_('Disembarkation Ports'),
+     make_places_filter(
+         'var_imp_principal_port_slave_dis'), 2,),
+    (_('Individual Years'), get_incremented_year_tuples(1), 0,),
+    (_('5-year periods'), get_incremented_year_tuples(5), 0,),
+    (_('10-year periods'), get_incremented_year_tuples(10), 0,),
+    (_('25-year periods'), get_incremented_year_tuples(25), 0,),
+    (_('50-year periods'), get_incremented_year_tuples(50), 0,),
+    (_('100-year periods'), get_incremented_year_tuples(100), 0,), ]
+# Column definitions will be a triple of the filter name, the filter definition
+# (list of queries), and the list of column labels
+table_columns = [
+    get_each_from_list_col(_('Flag*'),
+                           imputed_nationality_possibilities,
+                           'var_imputed_nationality_idnum__exact',
+                           lambda x: x.label, lambda x: x.value),
+    get_each_from_table_col(_('Broad region where voyage began'),
+                            models.BroadRegion,
+                            'var_imp_broad_region_voyage_begin_idnum__exact',
+                            lambda x: x.broad_region, lambda x: x.value),
+    make_regions_col_filter(
+        _('Region where voyage began'), 'var_imp_region_voyage_begin'),
+    make_places_col_filter(
+        _('Port where voyage began'), 'var_imp_port_voyage_begin'),
+    make_regions_col_filter(
+        _('Embarkation Regions'),
+        'var_imp_principal_region_of_slave_purchase'),
+    make_places_col_filter(
+        _('Embarkation Ports'), 'var_imp_principal_place_of_slave_purchase'),
+    make_regions_col_filter(
+        _('Specific regions of disembarkation'),
+        'var_imp_principal_region_slave_dis'),
+    get_each_from_table_col(
+        _('Broad regions of disembarkation'),
+        models.BroadRegion,
+        'var_imp_principal_broad_region_disembark_idnum__exact',
+        lambda x: x.broad_region, lambda x: x.value),
+    make_places_col_filter(
+        _('Disembarkation Ports'), 'var_imp_principal_port_slave_dis'), ]
+# Creates a function that takes a queryset and returns a summation of the given
+# value with the display prettifier applied
 
 
 def make_sum_fun(varname):
@@ -776,12 +822,15 @@ def make_sum_fun(varname):
         if stats and stats[varname]:
             return prettifier(int(stats[varname]['sum']))
         return prettifier(0)
-        # return prettifier(sum([i[varname] for i in list(queryset.values(varname)) if varname in i and i[varname] != None]))
+        # return prettifier(sum([i[varname]
+        #                   for i in list(queryset.values(varname))
+        #                   if varname in i and i[varname] != None]))
 
     return sum_fun
 
 
-# return lambda queryset, rowset, colset, allset: prettifier(sum([i[varname] for i in queryset.values() if varname in i and i[varname] != None]))
+# return lambda queryset, rowset, colset, allset: prettifier(sum([i[varname]
+# for i in queryset.values() if varname in i and i[varname] != None]))
 
 
 def display_average(value):
@@ -794,7 +843,9 @@ def make_avg_fun(varname):
     prettifier = display_methods.get(varname, display_average)
 
     def avg_fun(queryset, rowset=None, colset=None, allset=None):
-        # lst = [i.get_stored_fields()[varname] for i in queryset.all() if varname in i.get_stored_fields() and i.get_stored_fields()[varname] != None]
+        # lst = [i.get_stored_fields()[varname] for i in queryset.all() if
+        # varname in i.get_stored_fields() and i.get_stored_fields()[varname]
+        # != None]
         stats = queryset.stats(varname).stats_results()
         if stats and stats[varname]:
             return prettifier(stats[varname]['mean'])
@@ -809,19 +860,23 @@ def make_avg_fun(varname):
     return avg_fun
 
 
+def tot_fun(queryset, set1, set2, allset, varname):
+    if set1 is None:
+        if set2 is None:
+            return display_percent(1)
+        set1 = allset
+    stats = set1.stats(varname).stats_results()
+    qstats = queryset.stats(varname).stats_results()
+    if not (qstats and qstats[varname]):
+        return None
+    return display_percent(
+        float(qstats[varname]['sum']) / float(stats[varname]['sum']))
+
+
 def make_row_tot_percent_fun(varname):
 
     def row_tot_fun(queryset, rowset, colset, allset):
-        if rowset is None:
-            if colset is None:
-                return display_percent(1)
-            rowset = allset
-        rowstats = rowset.stats(varname).stats_results()
-        qstats = queryset.stats(varname).stats_results()
-        if qstats and qstats[varname]:
-            return display_percent(
-                float(qstats[varname]['sum']) / float(rowstats[varname]['sum']))
-        return None
+        return tot_fun(queryset, rowset, colset, allset, varname)
 
     return row_tot_fun
 
@@ -829,21 +884,13 @@ def make_row_tot_percent_fun(varname):
 def make_col_tot_percent_fun(varname):
 
     def col_tot_fun(queryset, rowset, colset, allset):
-        if colset is None:
-            if rowset is None:
-                return display_percent(1)
-            colset = allset
-        colstats = colset.stats(varname).stats_results()
-        qstats = queryset.stats(varname).stats_results()
-        if qstats and qstats[varname]:
-            return display_percent(
-                float(qstats[varname]['sum']) / float(colstats[varname]['sum']))
-        return None
+        return tot_fun(queryset, colset, rowset, allset, varname)
 
     return col_tot_fun
 
 
-# Makes a function that counts how many of the voyages have that particular value defined
+# Makes a function that counts how many of the voyages have that particular
+# value defined
 
 
 def make_num_fun(varname):
@@ -873,8 +920,14 @@ def sum_emb_dis(queryset, rowset, colset, allset):
     return (embs, diss)
 
 
-#    return (sum([i.get_stored_fields()[emb_name] for i in queryset.all() if emb_name in i.get_stored_fields() and i.get_stored_fields()[emb_name] != None]),
-#            sum([i.get_stored_fields()[dis_name] for i in queryset.all() if dis_name in i.get_stored_fields() and i.get_stored_fields()[dis_name] != None]))
+#    return (sum([i.get_stored_fields()[emb_name]
+#                 for i in queryset.all()
+#                 if emb_name in i.get_stored_fields()
+#                    and i.get_stored_fields()[emb_name] != None]),
+#            sum([i.get_stored_fields()[dis_name]
+#                 for i in queryset.all()
+#                 if dis_name in i.get_stored_fields()
+#                    and i.get_stored_fields()[dis_name] != None]))
 
 
 def avg_emb_dis(queryset, rowset, colset, allset):
@@ -901,62 +954,73 @@ def num_emb_dis(queryset, rowset, colset, allset):
     return (embc, disc)
 
 
-#    return (len([None for i in queryset.all() if emb_name in i.get_stored_fields() and i.get_stored_fields()[emb_name] != None]),
-#            len([None for i in queryset.all() if dis_name in i.get_stored_fields() and i.get_stored_fields()[dis_name] != None]))
+#    return (len([None for i in queryset.all()
+#                 if emb_name in i.get_stored_fields() and
+#                    i.get_stored_fields()[emb_name] != None]),
+#            len([None for i in queryset.all()
+#                 if dis_name in i.get_stored_fields() and
+#                    i.get_stored_fields()[dis_name] != None]))
 
-# List of tuples that define a function for a cell value (label, mapping function)
-table_functions = [(_('Number of Voyages'), lambda x, y, z, a: x.count(),),
-                   (_('Sum of embarked slaves'), make_sum_fun(
-                       'var_imp_total_num_slaves_purchased'),),
-                   (_('Average number of embarked slaves'), make_avg_fun(
-                       'var_imp_total_num_slaves_purchased'),),
-                   (_('Number of voyages - embarked slaves'),
-                    make_num_fun('var_imp_total_num_slaves_purchased'),),
-                   (_('Percent of embarked slaves (row total)'), make_row_tot_percent_fun(
-                       'var_imp_total_num_slaves_purchased'),),
-                   (_('Percent of embarked slaves (column total)'), make_col_tot_percent_fun(
-                       'var_imp_total_num_slaves_purchased'),),
-                   (_('Sum of disembarked slaves'), make_sum_fun(
-                       'var_imp_total_slaves_disembarked'),),
-                   (_('Average number of disembarked slaves'),
-                    make_avg_fun('var_imp_total_slaves_disembarked'),),
-                   (_('Number of voyages - disembarked slaves'),
-                    make_num_fun('var_imp_total_slaves_disembarked')),
-                   (_('Percent of disembarked slaves (row total)'),
-                    make_row_tot_percent_fun('var_imp_total_slaves_disembarked'),),
-                   (_('Percent of disembarked slaves (column total)'),
-                    make_col_tot_percent_fun('var_imp_total_slaves_disembarked'),),
-                   (_('Sum of embarked/disembarked slaves'), sum_emb_dis),
-                   (_('Average number of embarked/disembarked slaves'), avg_emb_dis),
-                   (_('Number of voyages - embarked/disembarked slaves'), num_emb_dis),
-                   (_('Average percentage male'), make_avg_fun(
-                       'var_imputed_percentage_male')),
-                   (_('Number of voyages - percentage male'),
-                    make_num_fun('var_imputed_percentage_male')),
-                   (_('Average percentage children'), make_avg_fun(
-                       'var_imputed_percentage_child')),
-                   (_('Number of voyages - percentage children'),
-                    make_num_fun('var_imputed_percentage_child')),
-                   (_('Average percentage of slaves embarked who died during voyage'),
-                    make_avg_fun('var_imputed_mortality')),
-                   (_('Number of voyages - percentage of slaves embarked who died during voyage'),
-                    make_num_fun('var_imputed_mortality')),
-                   (_('Average middle passage (days)'), make_avg_fun(
-                       'var_length_middle_passage_days'),),
-                   (_('Number of voyages - middle passage (days)'),
-                    make_num_fun('var_length_middle_passage_days')),
-                   (_('Average standarized tonnage'),
-                    make_avg_fun('var_tonnage_mod'),),
-                   (_('Number of voyages - standarized tonnage'),
-                    make_num_fun('var_tonnage_mod')),
-                   (_('Sterling cash price in Jamaica'),
-                    make_avg_fun('var_imputed_sterling_cash')),
-                   (_('Number of voyages - sterling cash price in Jamaica'), make_num_fun('var_imputed_sterling_cash')), ]
+# List of tuples that define a function for a cell value (label, mapping
+# function)
+table_functions = [
+    (_('Number of Voyages'), lambda x, y, z, a: x.count(),),
+    (_('Sum of embarked slaves'),
+     make_sum_fun('var_imp_total_num_slaves_purchased'),),
+    (_('Average number of embarked slaves'),
+     make_avg_fun('var_imp_total_num_slaves_purchased'),),
+    (_('Number of voyages - embarked slaves'),
+     make_num_fun('var_imp_total_num_slaves_purchased'),),
+    (_('Percent of embarked slaves (row total)'),
+     make_row_tot_percent_fun('var_imp_total_num_slaves_purchased'),),
+    (_('Percent of embarked slaves (column total)'),
+     make_col_tot_percent_fun('var_imp_total_num_slaves_purchased'),),
+    (_('Sum of disembarked slaves'),
+     make_sum_fun('var_imp_total_slaves_disembarked'),),
+    (_('Average number of disembarked slaves'),
+     make_avg_fun('var_imp_total_slaves_disembarked'),),
+    (_('Number of voyages - disembarked slaves'),
+     make_num_fun('var_imp_total_slaves_disembarked')),
+    (_('Percent of disembarked slaves (row total)'),
+     make_row_tot_percent_fun('var_imp_total_slaves_disembarked'),),
+    (_('Percent of disembarked slaves (column total)'),
+     make_col_tot_percent_fun('var_imp_total_slaves_disembarked'),),
+    (_('Sum of embarked/disembarked slaves'), sum_emb_dis),
+    (_('Average number of embarked/disembarked slaves'), avg_emb_dis),
+    (_('Number of voyages - embarked/disembarked slaves'), num_emb_dis),
+    (_('Average percentage male'),
+     make_avg_fun('var_imputed_percentage_male')),
+    (_('Number of voyages - percentage male'),
+     make_num_fun('var_imputed_percentage_male')),
+    (_('Average percentage children'), make_avg_fun(
+        'var_imputed_percentage_child')),
+    (_('Number of voyages - percentage children'),
+     make_num_fun('var_imputed_percentage_child')),
+    (_('Average percentage of slaves embarked who died during voyage'),
+     make_avg_fun('var_imputed_mortality')),
+    (_('Number of voyages - percentage of slaves embarked who died '
+       'during voyage'),
+     make_num_fun('var_imputed_mortality')),
+    (_('Average middle passage (days)'), make_avg_fun(
+        'var_length_middle_passage_days'),),
+    (_('Number of voyages - middle passage (days)'),
+     make_num_fun('var_length_middle_passage_days')),
+    (_('Average standarized tonnage'),
+     make_avg_fun('var_tonnage_mod'),),
+    (_('Number of voyages - standarized tonnage'),
+     make_num_fun('var_tonnage_mod')),
+    (_('Sterling cash price in Jamaica'),
+     make_avg_fun('var_imputed_sterling_cash')),
+    (_('Number of voyages - sterling cash price in Jamaica'),
+     make_num_fun('var_imputed_sterling_cash')), ]
 # Cell functions that return two values, embarked/disembarked
-double_functions = [_('Sum of embarked/disembarked slaves'), _(
-    'Average number of embarked/disembarked slaves'), _('Number of voyages - embarked/disembarked slaves')]
+double_functions = [
+    _('Sum of embarked/disembarked slaves'),
+    _('Average number of embarked/disembarked slaves'),
+    _('Number of voyages - embarked/disembarked slaves')]
 
-# Convert a list of nationality objects into a list of tuples of (label, filterdef)
+# Convert a list of nationality objects into a list of tuples of (label,
+# filterdef)
 imp_nat_pos_bar = [(x.label, {
     'var_imputed_nationality_idnum__exact': x.value
 }) for x in imputed_nationality_possibilities]
@@ -1696,7 +1760,8 @@ var_dict = [
     {
         'var_name': 'var_num_slaves_intended_first_port',
         'spss_name': 'slintend',
-        'var_full_name': 'Number of slaves intended at first place of purchase',
+        'var_full_name':
+            'Number of slaves intended at first place of purchase',
         'var_type': 'numeric',
         'var_category': 'Slave (numbers)',
         "is_estimate": False,
@@ -2291,11 +2356,16 @@ voyage_timeline_variables = [
     ('1', _('Average tonnage'), get_average_set_timeline, 'var_tonnage'),
     ('2', _('Average tonnage (standardized)'),
      get_average_set_timeline, 'var_tonnage_mod'),
-    ('3', _('Average number of guns'), get_average_set_timeline, 'var_guns_mounted'),
-    ('4', _('Rate of resistance'), get_exist_set_timeline, 'var_resistance_idnum',
+    ('3',
+     _('Average number of guns'), get_average_set_timeline,
+     'var_guns_mounted'),
+    ('4',
+     _('Rate of resistance'), get_exist_set_timeline, 'var_resistance_idnum',
      {"suffix": "%", 'tickInterval': 10, 'min': 0, 'max': 100}),
-    ('5', _('Average duration of voyage from home port to disembarkation (days)'),
-     get_average_set_timeline, "var_imp_length_home_to_disembark", {"no_numeric_symbol:": True}),
+    ('5',
+     _('Average duration of voyage from home port to disembarkation (days)'),
+     get_average_set_timeline, "var_imp_length_home_to_disembark",
+     {"no_numeric_symbol:": True}),
     ('6', _('Average duration of middle passage (days)'),
      get_average_set_timeline, 'var_length_middle_passage_days'),
     ('7', _('Average crew at outset'),
@@ -2318,24 +2388,34 @@ voyage_timeline_variables = [
      get_sum_set_timeline, 'var_imp_total_slaves_disembarked'),
     ('16', _('Average number of captives disembarked'),
      get_average_set_timeline, 'var_imp_total_slaves_disembarked'),
-    ('17', _('Percentage men (among captives)'), get_percentage_set_timeline, 'var_imputed_percentage_men',
+    ('17', _('Percentage men (among captives)'),
+     get_percentage_set_timeline, 'var_imputed_percentage_men',
      {"suffix": "%"}),
-    ('18', _('Percentage women (among captives)'), get_percentage_set_timeline, 'var_imputed_percentage_women',
+    ('18', _('Percentage women (among captives)'),
+     get_percentage_set_timeline, 'var_imputed_percentage_women',
      {"suffix": "%"}),
-    ('19', _('Percentage boys (among captives)'), get_percentage_set_timeline, 'var_imputed_percentage_boys',
+    ('19', _('Percentage boys (among captives)'),
+     get_percentage_set_timeline, 'var_imputed_percentage_boys',
      {"suffix": "%"}),
-    ('20', _('Percentage girls (among captives)'), get_percentage_set_timeline, 'var_imputed_percentage_girls',
+    ('20', _('Percentage girls (among captives)'),
+     get_percentage_set_timeline, 'var_imputed_percentage_girls',
      {"suffix": "%"}),
-    ('21', _('Percentage female (among captives)'), get_percentage_set_timeline, 'var_imputed_percentage_female',
+    ('21', _('Percentage female (among captives)'),
+     get_percentage_set_timeline, 'var_imputed_percentage_female',
      {"suffix": "%"}),
-    ('22', _('Percentage male (among captives)'), get_percentage_set_timeline, 'var_imputed_percentage_male',
+    ('22', _('Percentage male (among captives)'),
+     get_percentage_set_timeline, 'var_imputed_percentage_male',
      {"suffix": "%", "max": 100}),
-    ('23', _('Sterling cash price in Jamaica*'), get_average_set_timeline, 'var_imputed_sterling_cash',
+    ('23',
+     _('Sterling cash price in Jamaica*'),
+     get_average_set_timeline, 'var_imputed_sterling_cash',
      {'max': 90, 'tickInterval': 10}),
     ('24', _('Number of slave deaths'), get_sum_set_timeline,
      'var_imputed_death_middle_passage'),
     ('25', _('Average slave deaths'), get_average_set_timeline,
      'var_imputed_death_middle_passage'),
-    ('26', _('Average percentage of slaves embarked who died during the voyage'), get_percentage_set_timeline, 'var_imputed_mortality',
+    ('26',
+     _('Average percentage of slaves embarked who died during the voyage'),
+     get_percentage_set_timeline, 'var_imputed_mortality',
      {"suffix": "%", "max": 100})
 ]

@@ -75,7 +75,13 @@ class SearchTest(TestCase):
     @patch('voyages.apps.voyage.views.perform_search')
     def test_search_geographical(self, perform_search_func):
         self.client.get(
-            '/voyage/search?used_variable_names=var_imp_port_voyage_begin&time_span_from_year=1514&var_imp_port_voyage_begin_choice_field=60412%3B60803%3B60807%3B60820%3B60833%3B60834%3B60999%3B50203%3B50299&time_span_to_year=1866'
+            '/voyage/search?'
+            'used_variable_names=var_imp_port_voyage_begin&'
+            'time_span_from_year=1514&'
+            'var_imp_port_voyage_begin_choice_field='
+            '60412%3B60803%3B60807%3B60820%3B60833%'
+            '3B60834%3B60999%3B50203%3B50299&'
+            'time_span_to_year=1866'
         )
         self.assertEqual(len(perform_search_func.call_args_list), 1)
         args = perform_search_func.call_args_list[0][0]
@@ -98,7 +104,11 @@ class SearchTest(TestCase):
     @patch('voyages.apps.voyage.views.perform_search')
     def test_search_select(self, perform_search_func):
         self.client.get(
-            '/voyage/search?used_variable_names=var_outcome_slaves&var_outcome_slaves_choice_field=1%3B2%3B3%3B5%3B6&time_span_from_year=1514&time_span_to_year=1866'
+            '/voyage/search?'
+            'used_variable_names=var_outcome_slaves&'
+            'var_outcome_slaves_choice_field=1%3B2%3B3%3B5%3B6&'
+            'time_span_from_year=1514&'
+            'time_span_to_year=1866'
         )
         self.assertEqual(len(perform_search_func.call_args_list), 1)
         args = perform_search_func.call_args_list[0][0]
@@ -119,7 +129,17 @@ class SearchTest(TestCase):
     @patch('voyages.apps.voyage.views.perform_search')
     def test_search_date(self, perform_search_func):
         self.client.get(
-            '/voyage/search?var_voyage_began_to_month=12&var_voyage_began_from_month=01&time_span_from_year=1514&var_voyage_began_months=01%2C03%2C05%2C06%2C07%2C09%2C10%2C11%2C12&used_variable_names=var_voyage_began&time_span_to_year=1866&var_voyage_began_options=1&var_voyage_began_from_year=1514&var_voyage_began_to_year=1866'
+            '/voyage/search?'
+            'var_voyage_began_to_month=12&'
+            'var_voyage_began_from_month=01&'
+            'time_span_from_year=1514&'
+            'var_voyage_began_months='
+            '01%2C03%2C05%2C06%2C07%2C09%2C10%2C11%2C12&'
+            'used_variable_names=var_voyage_began&'
+            'time_span_to_year=1866&'
+            'var_voyage_began_options=1&'
+            'var_voyage_began_from_year=1514&'
+            'var_voyage_began_to_year=1866'
         )
         self.assertEqual(len(perform_search_func.call_args_list), 1)
         args = perform_search_func.call_args_list[0][0]

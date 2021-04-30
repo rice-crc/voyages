@@ -9,7 +9,8 @@ from builtins import range
 #   results,
 #   'var_imp_principal_port_slave_dis_idnum',
 #   'var_imp_region_voyage_begin_idnum',
-#   {'embarked': 'sum(var_imp_total_num_slaves_purchased)', 'disembarked': 'sum(var_imp_total_slaves_disembarked)'})
+#   {'embarked': 'sum(var_imp_total_num_slaves_purchased)', 'disembarked':
+#   'sum(var_imp_total_slaves_disembarked)'})
 
 
 def get_pivot_table_advanced(results,
@@ -81,8 +82,10 @@ class PivotTable:
             # Delete any column or row for which all the entries are zero/None.
             def safe_num(x):
                 try:
-                    return float(x[default_cell_key]) if default_cell_key in x\
-                        else sum([float(v) for k, v in list(x.items()) if k not in excluded_bucket_keys])
+                    return (float(x[default_cell_key]) if default_cell_key in x
+                            else (sum([float(v)
+                                  for k, v in list(x.items())
+                                  if k not in excluded_bucket_keys])))
                 except Exception:
                     return 0
 
@@ -93,8 +96,8 @@ class PivotTable:
                     del self.cells[i]
                     del self.rows[i]
                     del self.original_rows[i]
-            # Deleting columns is more complicated since the cells point to column indices
-            # that change after deletion.
+            # Deleting columns is more complicated since the cells point to
+            # column indices that change after deletion.
             deleted_columns = []
             for j in range(0, len(self.columns)):
                 col = self.original_columns[j]
@@ -109,11 +112,14 @@ class PivotTable:
                 del_index = deleted_columns[k] - k
                 del self.columns[del_index]
                 del self.original_columns[del_index]
-                # Update indices from sparse cell data and exclude those that match the deleted column index.
+                # Update indices from sparse cell data and exclude those that
+                # match the deleted column index.
                 self.cells = [[(t[0] if t[0] < del_index else t[0] - 1, t[1])
                                for t in sparse_row
                                if t[0] != del_index]
                               for sparse_row in self.cells]
 
     def to_dict(self):
-        return {'columns': self.columns, 'rows': self.rows, 'cells': self.cells}
+        return {'columns': self.columns,
+                'rows': self.rows,
+                'cells': self.cells}
