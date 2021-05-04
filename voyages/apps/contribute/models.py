@@ -15,8 +15,8 @@ from voyages.apps.voyage.models import VoyageDataset
 
 class AdminFaq(models.Model):
     """
-    This is for the use of the site admins only.  This info is not
-    displayed anywhere else on the site and is means of Admins documenting and sharing
+    This is for the use of the site admins only.  This info is not displayed
+    anywhere else on the site and is means of Admins documenting and sharing
     information about using the site.
     """
     question = models.TextField(max_length=1000)
@@ -100,61 +100,70 @@ class InterimVoyage(models.Model):
                                            on_delete=models.CASCADE)
 
     # Itinerary
-    first_port_intended_embarkation = models.ForeignKey(voyage.models.Place,
-                                                        related_name='+',
-                                                        null=True,
-                                                        blank=True,
-                                                        on_delete=models.CASCADE)
-    second_port_intended_embarkation = models.ForeignKey(voyage.models.Place,
-                                                         related_name='+',
-                                                         null=True,
-                                                         blank=True,
-                                                         on_delete=models.CASCADE)
-    first_port_intended_disembarkation = models.ForeignKey(voyage.models.Place,
-                                                           related_name='+',
-                                                           null=True,
-                                                           blank=True,
-                                                           on_delete=models.CASCADE)
-    second_port_intended_disembarkation = models.ForeignKey(voyage.models.Place,
-                                                            related_name='+',
-                                                            null=True,
-                                                            blank=True,
-                                                            on_delete=models.CASCADE)
-    port_of_departure = models.ForeignKey(voyage.models.Place,
-                                          related_name='+',
-                                          null=True,
-                                          blank=True,
-                                          on_delete=models.CASCADE)
+    first_port_intended_embarkation = models.ForeignKey(
+        voyage.models.Place,
+        related_name='+',
+        null=True,
+        blank=True,
+        on_delete=models.CASCADE)
+    second_port_intended_embarkation = models.ForeignKey(
+        voyage.models.Place,
+        related_name='+',
+        null=True,
+        blank=True,
+        on_delete=models.CASCADE)
+    first_port_intended_disembarkation = models.ForeignKey(
+        voyage.models.Place,
+        related_name='+',
+        null=True,
+        blank=True,
+        on_delete=models.CASCADE)
+    second_port_intended_disembarkation = models.ForeignKey(
+        voyage.models.Place,
+        related_name='+',
+        null=True,
+        blank=True,
+        on_delete=models.CASCADE)
+    port_of_departure = models.ForeignKey(
+        voyage.models.Place,
+        related_name='+',
+        null=True,
+        blank=True,
+        on_delete=models.CASCADE)
     number_of_ports_called_prior_to_slave_purchase = models.IntegerField(
         null=True, blank=True)
-    first_place_of_slave_purchase = models.ForeignKey(voyage.models.Place,
-                                                      related_name='+',
-                                                      null=True,
-                                                      blank=True,
-                                                      on_delete=models.CASCADE)
-    second_place_of_slave_purchase = models.ForeignKey(voyage.models.Place,
-                                                       related_name='+',
-                                                       null=True,
-                                                       blank=True,
-                                                       on_delete=models.CASCADE)
-    third_place_of_slave_purchase = models.ForeignKey(voyage.models.Place,
-                                                      related_name='+',
-                                                      null=True,
-                                                      blank=True,
-                                                      on_delete=models.CASCADE)
-    principal_place_of_slave_purchase = models.ForeignKey(voyage.models.Place,
-                                                          related_name='+',
-                                                          null=True,
-                                                          blank=True,
-                                                          on_delete=models.CASCADE)
+    first_place_of_slave_purchase = models.ForeignKey(
+        voyage.models.Place,
+        related_name='+',
+        null=True,
+        blank=True,
+        on_delete=models.CASCADE)
+    second_place_of_slave_purchase = models.ForeignKey(
+        voyage.models.Place,
+        related_name='+',
+        null=True,
+        blank=True,
+        on_delete=models.CASCADE)
+    third_place_of_slave_purchase = models.ForeignKey(
+        voyage.models.Place,
+        related_name='+',
+        null=True,
+        blank=True,
+        on_delete=models.CASCADE)
+    principal_place_of_slave_purchase = models.ForeignKey(
+        voyage.models.Place,
+        related_name='+',
+        null=True,
+        blank=True,
+        on_delete=models.CASCADE)
     place_of_call_before_atlantic_crossing = models.ForeignKey(
         voyage.models.Place,
         related_name='+',
         null=True,
         blank=True,
         on_delete=models.CASCADE)
-    number_of_new_world_ports_called_prior_to_disembarkation = models.IntegerField(
-        null=True, blank=True)
+    number_of_new_world_ports_called_prior_to_disembarkation = (
+        models.IntegerField(null=True, blank=True))
     first_place_of_landing = models.ForeignKey(voyage.models.Place,
                                                related_name='+',
                                                null=True,
@@ -243,11 +252,12 @@ class InterimVoyage(models.Model):
                                                  blank=True,
                                                  on_delete=models.CASCADE)
     imputed_standardized_tonnage = models.FloatField(null=True, blank=True)
-    imputed_region_ship_constructed = models.ForeignKey(voyage.models.Region,
-                                                        related_name='+',
-                                                        null=True,
-                                                        blank=True,
-                                                        on_delete=models.CASCADE)
+    imputed_region_ship_constructed = models.ForeignKey(
+        voyage.models.Region,
+        related_name='+',
+        null=True,
+        blank=True,
+        on_delete=models.CASCADE)
 
     imputed_outcome_of_voyage_for_slaves = models.ForeignKey(
         voyage.models.SlavesOutcome,
@@ -268,11 +278,12 @@ class InterimVoyage(models.Model):
         blank=True,
         on_delete=models.CASCADE)
 
-    imputed_port_where_voyage_began = models.ForeignKey(voyage.models.Place,
-                                                        related_name='+',
-                                                        null=True,
-                                                        blank=True,
-                                                        on_delete=models.CASCADE)
+    imputed_port_where_voyage_began = models.ForeignKey(
+        voyage.models.Place,
+        related_name='+',
+        null=True,
+        blank=True,
+        on_delete=models.CASCADE)
     imputed_principal_place_of_slave_purchase = models.ForeignKey(
         voyage.models.Place,
         related_name='+',
@@ -340,23 +351,24 @@ class InterimVoyage(models.Model):
         null=True, blank=True)
     imputed_century_in_which_voyage_occurred = models.IntegerField(null=True,
                                                                    blank=True)
-    imputed_voyage_length_home_port_to_first_port_of_disembarkation = models.IntegerField(
-        null=True, blank=True)
+    imputed_voyage_length_home_port_to_first_port_of_disembarkation = (
+        models.IntegerField(null=True, blank=True))
     imputed_length_of_middle_passage = models.IntegerField(null=True,
                                                            blank=True)
 
-    imputed_voyage_groupings_for_estimating_imputed_slaves = models.ForeignKey(
-        voyage.models.VoyageGroupings,
-        related_name='+',
-        null=True,
-        blank=True,
-        on_delete=models.CASCADE)
+    imputed_voyage_groupings_for_estimating_imputed_slaves = (
+        models.ForeignKey(
+            voyage.models.VoyageGroupings,
+            related_name='+',
+            null=True,
+            blank=True,
+            on_delete=models.CASCADE))
     imputed_total_slaves_embarked = models.IntegerField(null=True, blank=True)
     imputed_total_slaves_disembarked = models.IntegerField(null=True,
                                                            blank=True)
 
-    imputed_number_of_slaves_embarked_for_mortality_calculation = models.IntegerField(
-        null=True, blank=True)
+    imputed_number_of_slaves_embarked_for_mortality_calculation = (
+        models.IntegerField(null=True, blank=True))
     imputed_total_slave_deaths_during_middle_passage = models.IntegerField(
         null=True, blank=True)
     imputed_mortality_rate = models.FloatField(null=True, blank=True)
@@ -577,12 +589,14 @@ class ReviewRequest(models.Model):
     archived = models.BooleanField(default=False)
     created_voyage_id = models.IntegerField(
         null=True,
-        help_text='The voyage id that should be used for the newly created voyage (in case of new or merged contributions)'
+        help_text='The voyage id that should be used for the newly created '
+        'voyage (in case of new or merged contributions)'
     )
     dataset = models.IntegerField(
         null=False,
         default=VoyageDataset.Transatlantic,
-        help_text='Which dataset the voyage belongs to (e.g. Transatlantic, IntraAmerican)'
+        help_text='Which dataset the voyage belongs to (e.g. Transatlantic, '
+        'IntraAmerican)'
     )
 
     def contribution(self):
@@ -595,8 +609,10 @@ class ReviewRequest(models.Model):
     def get_status_msg(self):
         decision_values = {
             ReviewRequestDecision.under_review: _('Under review'),
-            ReviewRequestDecision.accepted_by_reviewer: _('Accepted (reviewer)'),
-            ReviewRequestDecision.rejected_by_reviewer: _('Rejected (reviewer)'),
+            ReviewRequestDecision.accepted_by_reviewer:
+            _('Accepted (reviewer)'),
+            ReviewRequestDecision.rejected_by_reviewer:
+            _('Rejected (reviewer)'),
             ReviewRequestDecision.accepted_by_editor: _('Accepted'),
             ReviewRequestDecision.rejected_by_editor: _('Rejected'),
             ReviewRequestDecision.begun_editorial_review: _('Editor bypass')}
@@ -683,7 +699,8 @@ class BaseVoyageContribution(models.Model):
     # see the enumeration ContributionStatus
     status = models.IntegerField(
         'Status',
-        help_text='Indicates whether the contribution is still being edited, committed, discarded etc'
+        help_text='Indicates whether the contribution is still being edited, '
+        'committed, discarded etc'
     )
 
     def get_related_voyage_ids(self):
@@ -712,7 +729,8 @@ class DeleteVoyageContribution(BaseVoyageContribution):
         'Deleted voyage ids',
         validators=[validate_comma_separated_integer_list],
         max_length=255,
-        help_text='The voyage_id of each Voyage being deleted by this contribution')
+        help_text='The voyage_id of each Voyage being deleted by this '
+                  'contribution')
 
     type = 'delete'
 
@@ -732,7 +750,8 @@ class EditVoyageContribution(BaseVoyageContribution):
         'Edited voyage id',
         help_text='The voyage_id of the Voyage edited by this contribution')
     help_text = _(
-        'Edit each variable as required, or leave as is if you think no change is necessary.')
+        'Edit each variable as required, or leave as is if you think no '
+        'change is necessary.')
 
     type = 'edit'
 
@@ -755,8 +774,10 @@ class MergeVoyagesContribution(BaseVoyageContribution):
         'Merged voyage ids',
         validators=[validate_comma_separated_integer_list],
         max_length=255,
-        help_text='The voyage_id of each Voyage being merged by this contribution')
-    help_text = _('Enter your preferred data to the right. If required use the box for '
+        help_text='The voyage_id of each Voyage being merged by this '
+                  'contribution')
+    help_text = _('Enter your preferred data to the right. If required use '
+                  'the box for '
                   'notes to explain your reasons for recommending the merge.')
 
     type = 'merge'

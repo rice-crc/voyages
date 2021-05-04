@@ -782,7 +782,7 @@ def voyage_variables(request, voyage_id):
         })
 
 
-def reload_cache(request):
+def reload_cache(_):
     VoyageCache.load(True)
     return HttpResponse("Voyages cache reloaded")
 
@@ -2114,6 +2114,6 @@ def get_permanent_link(request):
     return saved_query.get_link(request, 'restore_v_permalink')
 
 
-def restore_permalink(request, link_id):
+def restore_permalink(_, link_id):
     """Redirect the page with a URL param"""
     return redirect("/voyage/database#searchId=" + link_id)

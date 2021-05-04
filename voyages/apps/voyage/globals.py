@@ -60,30 +60,30 @@ def structure_places(place_list):
     return broad_region_list
 
 
-def display_yesno(value, voyageid=None):
+def display_yesno(value, _=None):
     return 'Yes' if value else 'No'
 
 
-def display_percent(value, voyageid=None):
+def display_percent(value, _=None):
     return str(round(value * 100, 1)) + "%"
 
 
-def display_sterling_price(value, voyageid=None):
+def display_sterling_price(value, _=None):
     return "£" + str(round(value, 2))
 
 
-def display_sterling_price_nopound(value, voyageid=None):
+def display_sterling_price_nopound(value, _=None):
     return str(round(value, 2))
 
 
-def display_xls_multiple_names(value, voyageid=None):
+def display_xls_multiple_names(value, _=None):
     return value.replace('<br/>', ';').replace('<br>', ';')
 
 
 # Returns a list of the short form sources split by semicolons
 
 
-def display_xls_sources(value, voyageid=None):
+def display_xls_sources(value, _=None):
     if not value:
         return value
     srcs = []
@@ -94,7 +94,7 @@ def display_xls_sources(value, voyageid=None):
     return '; '.join(srcs)
 
 
-def detail_display_sources(value, voyageid=None):
+def detail_display_sources(value, _=None):
     if not value:
         return value
     srcs = []
@@ -110,21 +110,21 @@ def detail_display_sources(value, voyageid=None):
 # Converts a text percentage to a decimal between 0 and 1
 
 
-def mangle_percent(value, voyageid=None):
+def mangle_percent(value, _=None):
     return float(str(value).replace('%', '')) / 100.0
 
 
-def mangle_source(value, voyageid=None):
+def mangle_source(value, _=None):
     return re.sub(r'[,\s]', '', value)
 
 
-def unmangle_percent(value, voyageid=None):
+def unmangle_percent(value, _=None):
     if isinstance(value, (str, int, float)):
         return str(round(float(value) * 100, 1)) + "%"
     return str(value * 100) + "%"
 
 
-def unmangle_datem(value, voyageid=None):
+def unmangle_datem(value, _=None):
     if isinstance(value, date):
         return str(value.month) + u'/' + str(value.year)
     splitstr = str(value).split(',')
@@ -132,12 +132,12 @@ def unmangle_datem(value, voyageid=None):
     return '/'.join(splitstr)
 
 
-def unmangle_truncate(value, voyageid=None):
+def unmangle_truncate(value, _=None):
     val = float(value)
     return int(round(val))
 
 
-def no_mangle(value, voyageid=None):
+def no_mangle(value, _=None):
     return value
 
 
@@ -147,50 +147,50 @@ def no_mangle(value, voyageid=None):
 # option tables should probably be stored into a dict on startup/every so often
 
 
-def unmangle_place(value, voyageid=None):
+def unmangle_place(value, _=None):
     if isinstance(value, (list, tuple)):
         return list(map(unmangle_place, value))
     return str(_(models.Place.objects.get(value=int(value)).place))
 
 
-def unmangle_nationality(value, voyageid=None):
+def unmangle_nationality(value, _=None):
     if isinstance(value, (list, tuple)):
         return list(map(unmangle_nationality, value))
     return str(_(models.Nationality.objects.get(value=int(value)).label))
 
 
-def unmangle_rig(value, voyageid=None):
+def unmangle_rig(value, _=None):
     if isinstance(value, (list, tuple)):
         return list(map(unmangle_rig, value))
     return str(models.RigOfVessel.objects.get(value=int(value)).label)
 
 
-def unmangle_outcome_particular(value, voyageid=None):
+def unmangle_outcome_particular(value, _=None):
     if isinstance(value, (list, tuple)):
         return list(map(unmangle_outcome_particular, value))
     return str(_(models.ParticularOutcome.objects.get(value=int(value)).label))
 
 
-def unmangle_outcome_slaves(value, voyageid=None):
+def unmangle_outcome_slaves(value, _=None):
     if isinstance(value, (list, tuple)):
         return list(map(unmangle_outcome_slaves, value))
     return str(_(models.SlavesOutcome.objects.get(value=int(value)).label))
 
 
-def unmangle_outcome_owner(value, voyageid=None):
+def unmangle_outcome_owner(value, _=None):
     if isinstance(value, (list, tuple)):
         return list(map(unmangle_outcome_owner, value))
     return str(_(models.OwnerOutcome.objects.get(value=int(value)).label))
 
 
-def unmangle_outcome_ship(value, voyageid=None):
+def unmangle_outcome_ship(value, _=None):
     if isinstance(value, (list, tuple)):
         return list(map(unmangle_outcome_ship, value))
     return str(_(
         models.VesselCapturedOutcome.objects.get(value=int(value)).label))
 
 
-def unmangle_resistance(value, voyageid=None):
+def unmangle_resistance(value, _=None):
     if isinstance(value, (list, tuple)):
         return list(map(unmangle_resistance, value))
     return str(_(models.Resistance.objects.get(value=int(value)).label))
@@ -223,7 +223,7 @@ def csd_to_str(csd):
     return year + '-' + month + '-' + day
 
 
-def id_func(value, voyageid=None):
+def id_func(value, _=None):
     return value
 
 
@@ -469,8 +469,8 @@ class VoyageDateCache:
 
 
 def calculate_maxmin_years():
-    if all(VoyageDateCache.cached_voyage_fist_year,
-           VoyageDateCache.cached_voyage_last_year):
+    if all([VoyageDateCache.cached_voyage_fist_year,
+            VoyageDateCache.cached_voyage_last_year]):
         return (VoyageDateCache.cached_voyage_fist_year,
                 VoyageDateCache.cached_voyage_last_year)
     def_fist = 1514
@@ -721,7 +721,7 @@ def get_each_from_table_col(filter_name,
                             table,
                             qkey,
                             lmblbl=lambda x: x.label,
-                            lmbval=lambda x: x.value):
+                            _=lambda x: x.value):
     uziped = list(zip(*get_each_from_table(table, qkey, lmblbl)))
     if len(uziped) > 1:
         return (
@@ -817,7 +817,7 @@ table_columns = [
 def make_sum_fun(varname):
     prettifier = display_methods.get(varname, no_mangle)
 
-    def sum_fun(queryset, rowset, colset, allset):
+    def sum_fun(queryset, *_):
         stats = queryset.stats(varname).stats_results()
         if stats and stats[varname]:
             return prettifier(int(stats[varname]['sum']))
@@ -842,7 +842,7 @@ def display_average(value):
 def make_avg_fun(varname):
     prettifier = display_methods.get(varname, display_average)
 
-    def avg_fun(queryset, rowset=None, colset=None, allset=None):
+    def avg_fun(queryset, *_):
         # lst = [i.get_stored_fields()[varname] for i in queryset.all() if
         # varname in i.get_stored_fields() and i.get_stored_fields()[varname]
         # != None]
@@ -895,7 +895,7 @@ def make_col_tot_percent_fun(varname):
 
 def make_num_fun(varname):
 
-    def num_fun(queryset, rowset, colset, allset):
+    def num_fun(queryset, *_):
         stats = queryset.stats(varname).stats_results()
         if stats and stats[varname]:
             return stats[varname]['count']
@@ -908,7 +908,7 @@ emb_name = 'var_imp_total_num_slaves_purchased'
 dis_name = 'var_imp_total_slaves_disembarked'
 
 
-def sum_emb_dis(queryset, rowset, colset, allset):
+def sum_emb_dis(queryset, *_):
     statsemb = queryset.stats(emb_name).stats_results()
     statsdis = queryset.stats(dis_name).stats_results()
     embs = 0
@@ -930,7 +930,7 @@ def sum_emb_dis(queryset, rowset, colset, allset):
 #                    and i.get_stored_fields()[dis_name] != None]))
 
 
-def avg_emb_dis(queryset, rowset, colset, allset):
+def avg_emb_dis(queryset, *_):
     statsemb = queryset.stats(emb_name).stats_results()
     statsdis = queryset.stats(dis_name).stats_results()
     embs = None
@@ -942,7 +942,7 @@ def avg_emb_dis(queryset, rowset, colset, allset):
     return (embs, diss)
 
 
-def num_emb_dis(queryset, rowset, colset, allset):
+def num_emb_dis(queryset, *_):
     statsemb = queryset.stats(emb_name).stats_results()
     statsdis = queryset.stats(dis_name).stats_results()
     embc = 0

@@ -11,7 +11,7 @@ register.filter('trans_log', trans_log)
 
 
 @register.filter
-def multiply(number, *args, **kwargs):
+def multiply(number, *_):
     return number * 2
 
 

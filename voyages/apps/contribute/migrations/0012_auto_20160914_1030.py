@@ -81,9 +81,10 @@ class Migration(migrations.Migration):
                                    null=True,
                                    on_delete=models.CASCADE)),
                 ('interim_voyage',
-                 models.ForeignKey(related_name='unpublished_secondary_sources',
-                                   to='contribute.InterimVoyage',
-                                   on_delete=models.CASCADE)),
+                 models.ForeignKey(
+                     related_name='unpublished_secondary_sources',
+                     to='contribute.InterimVoyage',
+                     on_delete=models.CASCADE)),
             ],
             options={
                 'abstract': False,

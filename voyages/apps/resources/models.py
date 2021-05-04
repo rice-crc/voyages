@@ -118,7 +118,7 @@ class ImagesIndex(indexes.SearchIndex, indexes.Indexable):
             return obj.voyage.voyage_dates.imp_voyage_began
         return None
 
-    def index_queryset(self, using=None):
+    def index_queryset(self, _=None):
         """Used when the entire index for model is updated."""
         return self.get_model().objects.all()
 
@@ -150,7 +150,7 @@ class CountryIndex(indexes.SearchIndex, indexes.Indexable):
     def get_model(self):
         return Country
 
-    def index_queryset(self, using=None):
+    def index_queryset(self, _=None):
         """Used when the entire index for model is updated."""
         return self.get_model().objects.all()
 
@@ -196,10 +196,10 @@ class AfricanName(models.Model):
                                  verbose_name="Ship Name",
                                  blank=True,
                                  null=True)
-    # This field might seem redundant in view of the voyage FK below but it is used
-    # when the voyage number is part of an external dataset not included in this db,
-    # which means that the FK value must be null. In most cases, the two fields will
-    # be the same.
+    # This field might seem redundant in view of the voyage FK below but it is
+    # used when the voyage number is part of an external dataset not included
+    # in this db, which means that the FK value must be null. In most cases,
+    # the two fields will be the same.
     voyage_number = models.IntegerField(verbose_name="Voyage ID")
 
     sex_age = models.ForeignKey(SexAge,
@@ -316,13 +316,14 @@ class AfricanNamesIndex(indexes.SearchIndex, indexes.Indexable):
             return obj.disembarkation_port.place
         return None
 
-    def index_queryset(self, using=None):
+    def index_queryset(self, _=None):
         """Used when the entire index for model is updated."""
         return self.get_model().objects.all()
 
 
-# We are using this instead of the real time processor, since automatic update seems to fail (serializing strings)
-def reindex_image_category(sender, **kwargs):
+# We are using this instead of the real time processor, since automatic update
+# seems to fail (serializing strings)
+def reindex_image_category(_, **kwargs):
     for obj in Image.objects.filter(category=kwargs['instance']):
         ImagesIndex().update_object(obj)
 

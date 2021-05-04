@@ -30,7 +30,7 @@ class Command(BaseCommand):
         models.VoyageSources.objects.all().delete()
         while idx < sheet.nrows and sheet.cell_value(
                 idx,
-                full_ref_col) and not sheet.cell_value(idx, full_ref_col) == '':
+                full_ref_col) and sheet.cell_value(idx, full_ref_col) != '':
             short_ref = sheet.cell_value(idx, short_ref_col)
             full_ref = sheet.cell_value(idx, full_ref_col)
             src_type = models.VoyageSourcesType.objects.get(

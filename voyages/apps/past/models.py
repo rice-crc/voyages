@@ -19,7 +19,9 @@ from voyages.apps.voyage.models import Place, Voyage, VoyageSources
 # https://en.wikipedia.org/wiki/Levenshtein_distance
 
 
-# function obtained from https://stackoverflow.com/questions/517923/what-is-the-best-way-to-remove-accents-in-a-python-unicode-string
+# function obtained from
+# https://stackoverflow.com/questions/517923/
+# what-is-the-best-way-to-remove-accents-in-a-python-unicode-string
 def strip_accents(text):
     """
     Strip accents from input String.
@@ -409,29 +411,37 @@ class EnslavedSearch:
                  order_by=None,
                  dataset=None):
         """
-        Search the Enslaved database. If a parameter is set to None, it will not
-        be included in the search.
+        Search the Enslaved database. If a parameter is set to None, it will
+        not be included in the search.
         @param: searched_name A name string to be searched
-        @param: exact_name_search Boolean indicating whether the search is exact or fuzzy
-        @param: age_gender A list of pairs (bool is_adult, male = 1/female = 2) with
-                all combinations filtered.
+        @param: exact_name_search Boolean indicating whether the search is
+                exact or fuzzy
+        @param: age_gender A list of pairs (bool is_adult, male = 1/female = 2)
+                with all combinations filtered.
         @param: age_range A pair (a, b) where a is the min and b is maximum age
         @param: dataset A list of datasets
-        @param: height_range A pair (a, b) where a is the min and b is maximum height
+        @param: height_range A pair (a, b) where a is the min and b is maximum
+                height
         @param: is_adult Whether the search is for adults or children only
-        @param: year_range A pair (a, b) where a is the min voyage year and b the max
-        @param: embarkation_ports A list of port ids where the enslaved embarked
-        @param: disembarkation_ports A list of port ids where the enslaved disembarked
-        @param: post_disembark_location A list of place ids where the enslaved was located after disembarkation
+        @param: year_range A pair (a, b) where a is the min voyage year and b
+                the max
+        @param: embarkation_ports A list of port ids where the enslaved
+                embarked
+        @param: disembarkation_ports A list of port ids where the enslaved
+                disembarked
+        @param: post_disembark_location A list of place ids where the enslaved
+                was located after disembarkation
         @param: language_groups A list of language groups ids for the enslaved
         @param: modern_country A list of country ids
         @param: ship_name The ship name that the enslaved embarked
         @param: voyage_id A pair (a, b) where the a <= voyage_id <= b
         @param: enslaved_id A pair (a, b) where the a <= enslaved_id <= b
-        @param: source A text fragment that should match Source's text_ref or full_ref
-        @param: order_by An array of dicts { 'columnName': 'NAME', 'direction': 'ASC or DESC' }.
-                Note that if the search is fuzzy, then the fallback value of order_by is the
-                ranking of the fuzzy search.
+        @param: source A text fragment that should match Source's text_ref or
+                full_ref
+        @param: order_by An array of dicts {
+                'columnName': 'NAME', 'direction': 'ASC or DESC' }.
+                Note that if the search is fuzzy, then the fallback value of
+                order_by is the ranking of the fuzzy search.
         """
         self.searched_name = searched_name
         self.exact_name_search = exact_name_search
@@ -471,8 +481,10 @@ class EnslavedSearch:
             .select_related('voyage__voyage_dates') \
             .select_related('voyage__voyage_ship') \
             .select_related('voyage__voyage_itinerary__int_first_port_dis') \
-            .select_related('voyage__voyage_itinerary__imp_principal_place_of_slave_purchase') \
-            .select_related('voyage__voyage_itinerary__imp_principal_port_slave_dis') \
+            .select_related('voyage__voyage_itinerary_'
+                            '_imp_principal_place_of_slave_purchase') \
+            .select_related('voyage__voyage_itinerary_'
+                            '_imp_principal_port_slave_dis') \
             .select_related('register_country') \
             .all()
         ranking = None
@@ -542,8 +554,8 @@ class EnslavedSearch:
         if self.enslaved_id:
             q = q.filter(pk__range=self.enslaved_id)
         if self.year_range:
-            # Search on YEARAM field. Note that we have a 'MM,DD,YYYY' format even though the
-            # only year should be present.
+            # Search on YEARAM field. Note that we have a 'MM,DD,YYYY' format
+            # even though the only year should be present.
             q = q.filter(
                 voyage__voyage_dates__imp_arrival_at_port_of_dis__range=[
                     ',,' + str(y) for y in self.year_range
@@ -576,14 +588,15 @@ class EnslavedSearch:
                 is_desc = x['direction'].lower() == 'desc'
                 nulls_last = True
                 order_field = F(col_name)
-                empty_string_field_min_char_len = _special_empty_string_fields.get(
-                    col_name)
+                empty_string_field_min_char_len = (
+                    _special_empty_string_fields.get(col_name))
                 if empty_string_field_min_char_len:
                     nulls_last = True
-                    # Add a "length > min_char_len_for_field" field and sort it first.
-                    # Note that we use a non-zero value for min_char_len_for_field because
-                    # some fields uses a string ' ' to represent blank entries while some
-                    # date fields use ',,' to represent a blank date.
+                    # Add a "length > min_char_len_for_field" field and sort it
+                    # first. Note that we use a non-zero value for
+                    # min_char_len_for_field because some fields uses a string
+                    # ' ' to represent blank entries while some date fields use
+                    # ',,' to represent a blank date.
                     count_field = 'count_' + col_name
                     isempty_field = 'isempty_' + col_name
                     q = q.annotate(**{count_field: Length(order_field)})
@@ -599,9 +612,10 @@ class EnslavedSearch:
                                 output_field=IntegerField())})
                     orm_orderby.append('-' + isempty_field)
                     if 'date' in col_name:
-                        # The date formats MM,DD,YYYY with possible blank values are
-                        # very messy to sort. Here we add sorting by the last 4 characters
-                        # to first sort by year (which is always present for non blank dates).
+                        # The date formats MM,DD,YYYY with possible blank
+                        # values are very messy to sort. Here we add sorting by
+                        # the last 4 characters to first sort by year (which is
+                        # always present for non blank dates).
                         year_field = 'yearof_' + col_name
                         q = q.annotate(
                             **{
@@ -610,7 +624,8 @@ class EnslavedSearch:
                         orm_orderby.append((
                             '-' if is_desc else '') + year_field)
 
-                def add_names_sorting(sorted_name_fields, col_name, q, is_desc=is_desc):
+                def add_names_sorting(sorted_name_fields, col_name, q,
+                                      is_desc=is_desc):
                     # The next lines create a list made of the name fields with
                     # a separator constant value between each consecutive pair.
                     names_sep = Value(';')
@@ -625,13 +640,12 @@ class EnslavedSearch:
                                  output_field=CharField())
                         for name_field in sorted_name_fields
                     ]
-                    q = q.annotate(
-                        **{
-                            col_name:
-                                Func(*expressions,
-                                     function='GREATEST' if is_desc else 'LEAST'
-                                     )
-                        })
+                    q = q.annotate(**{
+                        col_name:
+                            Func(*expressions,
+                                 function='GREATEST' if is_desc else 'LEAST'
+                                 )
+                    })
                     order_field = F(col_name)
                     order_field = order_field.desc(
                     ) if is_desc else order_field.asc()
@@ -639,8 +653,8 @@ class EnslavedSearch:
 
                 if col_name == 'names':
                     col_name = '_names_sort'
-                    (q,
-                     order_field) = add_names_sorting(_name_fields, col_name, q)
+                    (q, order_field) = add_names_sorting(
+                        _name_fields, col_name, q)
                     fields = fields + [col_name]
                 elif col_name == 'modern_names':
                     col_name = '_modern_names_sort'
@@ -656,8 +670,8 @@ class EnslavedSearch:
             q = q.order_by(*orm_orderby)
         q = q.values(*fields)
         if is_fuzzy:
-            # Convert the QuerySet to a concrete list and include the ranking as a member of
-            # each object in that list.
+            # Convert the QuerySet to a concrete list and include the ranking
+            # as a member of each object in that list.
             q = list(q)
             for x in q:
                 x['ranking'] = ranking[x['enslaved_id']]

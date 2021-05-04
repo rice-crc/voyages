@@ -11,5 +11,5 @@ if __version_info__[-1] is not None:
 
 
 # context processor to add version to the template environment
-def version_context(request):
+def version_context(_):
     return {'RELEASE_VERSION': __version__}

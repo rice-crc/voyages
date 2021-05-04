@@ -104,7 +104,8 @@ imputed_vars_model_map = {
     'year25': ('imputed_quarter_century_in_which_voyage_occurred', id),
     'year100': ('imputed_century_in_which_voyage_occurred', id),
     'voy1imp':
-        ('imputed_voyage_length_home_port_to_first_port_of_disembarkation', id),
+        ('imputed_voyage_length_home_port_to_first_port_of_disembarkation',
+         id),
     'voy2imp': ('imputed_length_of_middle_passage', id),
     'xmimpflag': ('imputed_voyage_groupings_for_estimating_imputed_slaves',
                   fn_from_value(VoyageGroupings)),
@@ -114,7 +115,8 @@ imputed_vars_model_map = {
         ('imputed_number_of_slaves_embarked_for_mortality_calculation', id),
     'vymrtimp': ('imputed_total_slave_deaths_during_middle_passage', id),
     'vymrtrat': ('imputed_mortality_rate', id),
-    # Manually imputed -- 'jamcaspr': ('imputed_standardized_price_of_slaves', id)
+    # Manually imputed -- 'jamcaspr': ('imputed_standardized_price_of_slaves',
+    # id)
 }
 
 
@@ -132,7 +134,8 @@ def broad_value(x):
 
 def extract_year(csv_date):
     """
-    Extract the four-digit year from a comma separated date in the format MM,DD,YYYY
+    Extract the four-digit year from a comma separated date in the format
+    MM,DD,YYYY
     """
     if not csv_date:
         return None
@@ -322,7 +325,8 @@ def compute_imputed_vars(_interim, is_iam=False):
             tonmod = -6.093 + (0.76155 * tonnage)
             if yearam > 1773:
                 tonmod = update_tonmod(tonmod, tonmod)
-        if tontype is None and yearam and 1714 < yearam < 1786 and tonnage > 0 and natinimp == 7:
+        if all([tontype is None, yearam, 1714 < yearam < 1786,
+                tonnage > 0, natinimp == 7]):
             tontype = 22
             tonmod = update_tonmod(tonnage, tonnage)
         elif tontype in (14, 15, 17):
@@ -427,7 +431,8 @@ def compute_imputed_vars(_interim, is_iam=False):
 
     _numbers = {n.var_name: n.number for n in _interim.slave_numbers.all()}
 
-    # mjbyptimp - Principal port of slave purchase (replaces majbuypt as imputed variable)
+    # mjbyptimp - Principal port of slave purchase (replaces majbuypt as
+    # imputed variable)
 
     ncar13 = _numbers.get('NCAR13', 0)
     ncar15 = _numbers.get('NCAR15', 0)
@@ -538,11 +543,11 @@ def compute_imputed_vars(_interim, is_iam=False):
             mjbyptimp = _places[2]
 
     if not ncartot:
-        if _places[0] >= 1 and _places[1] >= 1 and regem1 == regem2 and regem1:
+        if all([_places[0] >= 1, _places[1] >= 1, regem1 == regem2, regem1]):
             mjbyptimp = regem1 + 99
-        elif _places[0] >= 1 and _places[2] >= 1 and regem1 == regem3 and regem1:
+        elif all([_places[0] >= 1, _places[2] >= 1, regem1 == regem3, regem1]):
             mjbyptimp = regem1 + 99
-        elif _places[1] >= 1 and _places[2] >= 1 and regem2 == regem3 and regem2:
+        elif all([_places[1] >= 1, _places[2] >= 1, regem2 == regem3, regem2]):
             mjbyptimp = regem2 + 99
         elif _num_places >= 2:
             mjbyptimp = 60999
@@ -654,7 +659,9 @@ def compute_imputed_vars(_interim, is_iam=False):
 
     slaarriv = _numbers.get('SLAARRIV', 0)
     slastot = slas32 + slas36 + slas39
-    if slastot < (0.5 * slaarriv if slaarriv else 50) and sla1port and adpsale1:
+    if all([slastot < (0.5 * slaarriv if slaarriv else 50),
+            sla1port,
+            adpsale1]):
         if adpsale2:
             mjslptimp = 99801
         else:
@@ -719,8 +726,8 @@ def compute_imputed_vars(_interim, is_iam=False):
     rig = get_obj_value(_interim.rig_of_vessel)
     if 1626 <= yearam < 1876 and (rig is None or rig in (
             26, 29, 42, 43, 54, 59, 61, 65, 80, 86)):
-        xmimpflag = range_id(
-            yearam, 127, [1651, 1676, 1701, 1726, 1751, 1776, 1801, 1826, 1851])
+        xmimpflag = range_id(yearam, 127, [
+            1651, 1676, 1701, 1726, 1751, 1776, 1801, 1826, 1851])
     if yearam and majbyimp == 60100:
         xmimpflag = range_id(yearam, 101, [1700, 1801])
     if yearam and majbyimp == 60200:
@@ -860,10 +867,12 @@ def compute_imputed_vars(_interim, is_iam=False):
     if tslaves_unknown:
         if slam_unknown and ncartot < captive_threshold:
             ncartot = None
-        slaximp = ncartot if (
-            ncartot > slaarriv or (
-                slastot and not slaarriv and ncartot > slastot) or (
-                    slam_unknown and ncartot >= captive_threshold)) else slaximp
+        slaximp = (
+            ncartot
+            if (ncartot > slaarriv or
+                (slastot and not slaarriv and ncartot > slastot) or
+                (slam_unknown and ncartot >= captive_threshold))
+            else slaximp)
 
     if slaarriv >= 1:
         slamimp = slaarriv
@@ -1238,22 +1247,34 @@ def compute_imputed_vars(_interim, is_iam=False):
         girlrat3 = (girl3 + girl6) / slavmax3
 
     # men7 - Imputed men when leaving Africa or arriving at ports of landing
-    # women7 - Imputed women when leaving Africa or arriving at ports of landing
+    # women7 - Imputed women when leaving Africa or arriving at ports of
+    # landing
     # boy7 - Imputed boys when leaving Africa or arriving at ports of landing
     # girl7 - Imputed girls when leaving Africa or arriving at ports of landing
-    # adult7 - Imputed adults when leaving Africa or arriving at ports of landing
-    # child7 - Imputed children when leaving Africa or arriving at ports of lading
+    # adult7 - Imputed adults when leaving Africa or arriving at ports of
+    # landing
+    # child7 - Imputed children when leaving Africa or arriving at ports of
+    # lading
     # male7 - Imputed males when leaving Africa or arriving at ports of landing
-    # female7 - Imputed females when leaving Africa or arriving at ports of landing
-    # slavema7 - Number of slaves with age identIfied, Africa or ports of lading
-    # slavemx7 - Number of slaves with sex identIfied, Africa or ports of landing
+    # female7 - Imputed females when leaving Africa or arriving at ports of
+    # landing
+    # slavema7 - Number of slaves with age identIfied, Africa or ports of
+    # lading
+    # slavemx7 - Number of slaves with sex identIfied, Africa or ports of
+    # landing
     # slavmax7 - Number of slaves identIfied by both age and sex
-    # menrat7 - Imputed ratio of men when leaving Africa or arriving at ports of landing
-    # womrat7 - Imputed ratio of women when leaving Africa or arriving at ports of landing
-    # boyrat7 - Imputed ratio of boys when leaving Africa or arriving at ports of landing
-    # girlrat7 - Imputed ratio of girls when leaving Africa or arriving at ports of landing
-    # chilrat7 - Imputed ratio of children when leaving Africa or arriving at ports of landing
-    # malrat7 - Imputed ratio of males when leaving Africa or arriving at ports of landing
+    # menrat7 - Imputed ratio of men when leaving Africa or arriving at ports
+    # of landing
+    # womrat7 - Imputed ratio of women when leaving Africa or arriving at ports
+    # of landing
+    # boyrat7 - Imputed ratio of boys when leaving Africa or arriving at ports
+    # of landing
+    # girlrat7 - Imputed ratio of girls when leaving Africa or arriving at
+    # ports of landing
+    # chilrat7 - Imputed ratio of children when leaving Africa or arriving at
+    # ports of landing
+    # malrat7 - Imputed ratio of males when leaving Africa or arriving at ports
+    # of landing
     men7 = None
     women7 = None
     boy7 = None
@@ -1379,7 +1400,8 @@ def compute_imputed_vars(_interim, is_iam=False):
         k: v for k, v in list(local_vars.items()) if not k.startswith('_')
     }
 
-    # Recode zero numerical values to None and vice versa with an 'all or nothing' logic.
+    # Recode zero numerical values to None and vice versa with an 'all or
+    # nothing' logic.
     _recode_var_names = [
         'men1', 'women1', 'boy1', 'girl1', 'child1', 'infant1', 'adult1',
         'men4', 'women4', 'boy4', 'girl4', 'child4', 'infant4', 'adult4',
@@ -1429,7 +1451,8 @@ def compute_imputed_vars(_interim, is_iam=False):
         for k in slave_number_var_names
     }
 
-    # Fields that are not available/present in I-Am and should be removed from the output.
+    # Fields that are not available/present in I-Am and should be removed from
+    # the output.
     iam_rem = [
         'yeardep', 'yearaf', 'voy1imp', 'tonmod', 'ptdepimp', 'deptregimp',
         'deptregimp1', 'retrnreg1', 'embport', 'embport2', 'embreg', 'embreg2',

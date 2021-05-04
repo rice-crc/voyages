@@ -204,8 +204,8 @@ def get_results_pivot_table(results, post):
         if 'place' in header or 'port' in header:
             return lambda x: _(VoyageCache.ports_by_value[
                 x].name), [
-                broad_region_from_port_extra_header_map,
-                region_extra_header_map]
+                    broad_region_from_port_extra_header_map,
+                    region_extra_header_map]
         if 'broad_region' in header:
             return lambda x: _(VoyageCache.broad_regions_by_value[
                 x].name), None
@@ -382,7 +382,7 @@ def get_compiled_routes(request):
 
 
 @cache_page(3600)
-def get_timelapse_port_regions(request):
+def get_timelapse_port_regions(_):
     # Generate a simple JSON that reports the broad regions.
     VoyageCache.load()
     regions = {
@@ -870,6 +870,6 @@ def save_query(request):
     return JsonResponse({'saved_query_id': saved_query.pk})
 
 
-def get_saved_query(request, query_id):
+def get_saved_query(_, query_id):
     q = SavedQuery.objects.get(pk=query_id)
     return HttpResponse(q.query, content_type='application/json')

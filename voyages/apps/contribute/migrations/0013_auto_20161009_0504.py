@@ -23,7 +23,8 @@ class Migration(migrations.Migration):
             model_name='reviewrequest',
             name='created_voyage_id',
             field=models.IntegerField(
-                help_text=b'The voyage id that should be used for the newly created voyage (in case of new or merged contributions)',
+                help_text=b'The voyage id that should be used for the newly '
+                b'created voyage (in case of new or merged contributions)',
                 null=True),
         ),
     ]

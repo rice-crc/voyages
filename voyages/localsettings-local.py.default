@@ -41,7 +41,8 @@ STATICFILES_DIRS = (
     '/mnt/sv_share/sitemedia',)
 
 # Absolute filesystem path to the directory that will hold user-uploaded files.
-# Should be in a location outside the deploy like /home/httpd/sites/voyages/media
+# Should be in a location outside the deploy like
+# /home/httpd/sites/voyages/media
 MEDIA_ROOT = '/mnt/sv_share/documents/'
 
 # Absolute path to the directory static files should be collected to.
@@ -79,7 +80,8 @@ TIME_ZONE = 'America/New_York'
 # http://www.i18nguy.com/unicode/language-identifiers.html
 LANGUAGE_CODE = 'en-us'
 
-# when using an ImageField setting this DEBUG to Ture will give debug info about ImageFields and thumbnails
+# when using an ImageField setting this DEBUG to True will give debug info
+# about ImageFields and thumbnails
 THUMBNAIL_DEBUG = False
 
 CACHES = {

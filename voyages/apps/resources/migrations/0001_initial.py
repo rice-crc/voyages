@@ -79,7 +79,8 @@ class Migration(migrations.Migration):
                                   primary_key=True)),
                 ('file', models.ImageField(upload_to=b'images')),
                 ('title', models.CharField(default=b'', max_length=200)),
-                ('description', models.CharField(default=b'', max_length=2000)),
+                ('description',
+                 models.CharField(default=b'', max_length=2000)),
                 ('creator',
                  models.CharField(max_length=200, null=True, blank=True)),
                 ('language',
@@ -117,7 +118,9 @@ class Migration(migrations.Migration):
                 ('visible_on_website',
                  models.BooleanField(
                      default=True,
-                     verbose_name=b'Visible on website (If checked, category will display on website if there is at least one image to display.)'
+                     verbose_name=b'Visible on website (If checked, category '
+                                  b'will display on website if there is at '
+                                  b'least one image to display.)'
                  )),
             ],
             options={

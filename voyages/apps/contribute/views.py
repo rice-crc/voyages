@@ -20,7 +20,7 @@ from django.http import (Http404, HttpResponse, HttpResponseBadRequest,
                          JsonResponse)
 from django.shortcuts import get_object_or_404, render
 from django.utils.html import escape
-from django.utils.translation import ugettext as _
+from django.utils.translation import ugettext as u_
 from django.views.decorators.cache import cache_page, never_cache
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
@@ -109,8 +109,9 @@ def get_summary(v):
         'ship':
             v.voyage_ship.ship_name,
         'year_arrived':
-            dates.get_date_year(dates.first_dis_of_slaves
-                                ) or dates.get_date_year(dates.imp_arrival_at_port_of_dis)
+            dates.get_date_year(
+                dates.first_dis_of_slaves
+            ) or dates.get_date_year(dates.imp_arrival_at_port_of_dis)
     }
 
 
@@ -129,22 +130,31 @@ def get_voyage_by_id(request):
     voyage_id = int(voyage_id)
     v = Voyage.all_dataset_objects.filter(voyage_id=voyage_id).first()
     if v is None:
-        return JsonResponse({'error': 'No voyage found with voyage_id = ' + str(voyage_id)})
+        return JsonResponse({
+            'error': 'No voyage found with voyage_id = ' + str(voyage_id)
+        })
     summary = get_summary(v)
     # Check whether the voyage already has an open contribution.
     active_statuses = ContributionStatus.active_statuses
     regex = '(^' + str(voyage_id) + '|,' + str(voyage_id) + ')(,|$)'
-    is_blocked = EditVoyageContribution.objects.filter(edited_voyage_id=voyage_id, status__in=active_statuses).count() > 0 or \
-        MergeVoyagesContribution.objects.filter(merged_voyages_ids__iregex=regex, status__in=active_statuses).count() > 0 or \
+    is_blocked = any(
+        EditVoyageContribution.objects.filter(
+            edited_voyage_id=voyage_id,
+            status__in=active_statuses).count() > 0,
+        MergeVoyagesContribution.objects.filter(
+            merged_voyages_ids__iregex=regex,
+            status__in=active_statuses).count() > 0,
         DeleteVoyageContribution.objects.filter(
-            deleted_voyages_ids__iregex=regex, status__in=active_statuses).count()
+            deleted_voyages_ids__iregex=regex,
+            status__in=active_statuses).count()
+    )
     summary['is_blocked'] = is_blocked
     return JsonResponse(summary)
 
 
 @cache_page(24 * 60 * 60)
 @csrf_exempt
-def get_places(request):
+def get_places(_):
     # retrieve list of places in the system.
     result = get_ordered_places()
     return JsonResponse(result, safe=False)
@@ -190,7 +200,8 @@ def delete_review(request, contribution_id):
     if request.user.pk != contribution.contributor.pk:
         return HttpResponseForbidden()
     if request.method != 'POST':
-        return delete_review_render(request, contribution, False, 'contributor')
+        return delete_review_render(
+            request, contribution, False, 'contributor')
     action = request.POST.get('submit_val')
     if action == 'confirm':
         contribution.status = ContributionStatus.committed
@@ -236,8 +247,10 @@ def edit(request):
     form = ContributionVoyageSelectionForm(request.POST, max_selection=1)
     if not form.is_valid():
         ids = form.selected_voyages
-        voyage_selection = [get_summary(v) for v in Voyage.all_dataset_objects.filter(voyage_id=ids[0])] \
-            if len(ids) != 0 else []
+        voyage_selection = [
+            get_summary(v)
+            for v in Voyage.all_dataset_objects.filter(voyage_id=ids[0])
+        ] if len(ids) != 0 else []
         return render(request, 'contribute/edit.html', {
             'form': form,
             'voyage_selection': voyage_selection
@@ -324,7 +337,8 @@ def create_source(source_values, interim_voyage):
         if not source.source_ref_text or not source.source_ref_text.startswith(
                 source.created_voyage_sources.short_ref):
             raise Exception(
-                'Invalid interim source: the text reference must have as prefix the short reference of the Source'
+                'Invalid interim source: the text reference must have as '
+                'prefix the short reference of the Source'
             )
     return source
 
@@ -482,8 +496,8 @@ def interim(request, contribution_type, contribution_id):
 
 
 def common_save_ajax(request, contribution):
-    (valid, form, numbers, src_pks) = interim_main(request, contribution,
-                                                   contribution.interim_voyage)
+    (valid, form, _, src_pks) = interim_main(request, contribution,
+                                             contribution.interim_voyage)
     return JsonResponse({
         'valid': valid,
         'errors': form.errors,
@@ -529,7 +543,8 @@ def interim_commit(request, contribution_type, contribution_id):
     contribution = get_contribution(contribution_type, contribution_id)
     if contribution is None:
         raise Http404
-    if request.user.pk != contribution.contributor.pk or contribution.status != ContributionStatus.pending:
+    if any([request.user.pk != contribution.contributor.pk,
+            contribution.status != ContributionStatus.pending]):
         return HttpResponseForbidden()
     contribution.status = ContributionStatus.committed
     contribution.save()
@@ -544,7 +559,9 @@ def interim_summary(request,
     contribution = get_contribution(contribution_type, contribution_id)
     if contribution is None:
         raise Http404
-    if not request.user.is_superuser and not request.user.is_staff and request.user.pk != contribution.contributor.pk:
+    if all([not request.user.is_superuser,
+            not request.user.is_staff,
+            request.user.pk != contribution.contributor.pk]):
         return HttpResponseForbidden()
     if contribution_type == 'delete':
         return delete_review_render(request, contribution, True, 'editor')
@@ -565,11 +582,11 @@ def interim_summary(request,
     if review_request:
         review_contribution = review_request.review_contribution.first()
         if review_contribution and review_contribution.interim_voyage:
-            previous_data[_('Reviewer')] = interim_data(
+            previous_data[u_('Reviewer')] = interim_data(
                 review_contribution.interim_voyage)
         editorial_contribution = review_request.editor_contribution.first()
         if editorial_contribution and editorial_contribution.interim_voyage:
-            previous_data[_('Editor')] = interim_data(
+            previous_data[u_('Editor')] = interim_data(
                 editorial_contribution.interim_voyage)
     return render(
         request, 'contribute/interim_summary.html', {
@@ -783,7 +800,7 @@ all_slave_number_var_map.update(impute_slave_number_var_map)
 
 
 def voyage_to_dict(voyage):
-    dictionary = {}
+    dikt = {}
     # Ship, nation, owners
     VoyageCache.load()
     ship = voyage.voyage_ship
@@ -794,151 +811,161 @@ def voyage_to_dict(voyage):
         return getattr(obj, field)
 
     if ship is not None:
-        dictionary['name_of_vessel'] = ship.ship_name
-        dictionary['year_ship_constructed'] = ship.year_of_construction
-        dictionary['year_ship_registered'] = ship.registered_year
-        dictionary['national_carrier'] = ship.nationality_ship_id
-        dictionary['national_carrier_name'] = VoyageCache.nations.get(
+        dikt['name_of_vessel'] = ship.ship_name
+        dikt['year_ship_constructed'] = ship.year_of_construction
+        dikt['year_ship_registered'] = ship.registered_year
+        dikt['national_carrier'] = ship.nationality_ship_id
+        dikt['national_carrier_name'] = VoyageCache.nations.get(
             ship.nationality_ship_id)
-        dictionary['ship_construction_place'] = ship.vessel_construction_place_id
-        dictionary['ship_construction_place_name'] = get_label(
+        dikt['ship_construction_place'] = ship.vessel_construction_place_id
+        dikt['ship_construction_place_name'] = get_label(
             VoyageCache.ports.get(ship.vessel_construction_place_id))
-        dictionary['ship_registration_place'] = ship.registered_place_id
-        dictionary['ship_registration_place_name'] = get_label(
+        dikt['ship_registration_place'] = ship.registered_place_id
+        dikt['ship_registration_place_name'] = get_label(
             VoyageCache.ports.get(ship.registered_place_id))
-        dictionary['rig_of_vessel'] = ship.rig_of_vessel_id
-        dictionary['rig_of_vessel_name'] = get_label(
+        dikt['rig_of_vessel'] = ship.rig_of_vessel_id
+        dikt['rig_of_vessel_name'] = get_label(
             VoyageCache.rigs.get(ship.rig_of_vessel_id), 'label')
-        dictionary['tonnage_of_vessel'] = ship.tonnage
-        dictionary['ton_type'] = ship.ton_type_id
-        dictionary['ton_type_name'] = get_label(
+        dikt['tonnage_of_vessel'] = ship.tonnage
+        dikt['ton_type'] = ship.ton_type_id
+        dikt['ton_type_name'] = get_label(
             VoyageCache.ton_types.get(ship.ton_type_id), 'label')
-        dictionary['guns_mounted'] = ship.guns_mounted
+        dikt['guns_mounted'] = ship.guns_mounted
         owners = list(
             VoyageShipOwnerConnection.objects.filter(voyage=voyage).extra(
                 order_by=['owner_order']))
         if len(owners) > 0:
-            dictionary['first_ship_owner'] = owners[0].owner.name
+            dikt['first_ship_owner'] = owners[0].owner.name
         if len(owners) > 1:
-            dictionary['second_ship_owner'] = owners[1].owner.name
+            dikt['second_ship_owner'] = owners[1].owner.name
         if len(owners) > 2:
-            dictionary['additional_ship_owners'] = '\n'.join(
+            dikt['additional_ship_owners'] = '\n'.join(
                 [x.owner.name for x in owners[2:]])
     # Outcome
     outcome = voyage.voyage_name_outcome.get()
     if outcome is not None:
-        dictionary['voyage_outcome'] = outcome.particular_outcome_id
-        dictionary['african_resistance'] = outcome.resistance_id
-        dictionary['voyage_outcome_name'] = get_label(
+        dikt['voyage_outcome'] = outcome.particular_outcome_id
+        dikt['african_resistance'] = outcome.resistance_id
+        dikt['voyage_outcome_name'] = get_label(
             VoyageCache.particular_outcomes.get(outcome.particular_outcome_id),
             'label')
-        dictionary['african_resistance_name'] = get_label(
+        dikt['african_resistance_name'] = get_label(
             VoyageCache.resistances.get(outcome.resistance_id), 'label')
-    itinerary = voyage.voyage_itinerary
-    if itinerary is not None:
-        dictionary[
-            'first_port_intended_embarkation'] = itinerary.int_first_port_emb_id
-        dictionary[
-            'second_port_intended_embarkation'] = itinerary.int_second_port_emb_id
-        dictionary[
-            'first_port_intended_disembarkation'] = itinerary.int_first_port_dis_id
-        dictionary[
-            'second_port_intended_disembarkation'] = itinerary.int_second_port_dis_id
-        dictionary['port_of_departure'] = itinerary.port_of_departure_id
-        dictionary[
-            'number_of_ports_called_prior_to_slave_purchase'] = itinerary.ports_called_buying_slaves
-        dictionary[
-            'first_place_of_slave_purchase'] = itinerary.first_place_slave_purchase_id
-        dictionary[
-            'second_place_of_slave_purchase'] = itinerary.second_place_slave_purchase_id
-        dictionary[
-            'third_place_of_slave_purchase'] = itinerary.third_place_slave_purchase_id
-        dictionary[
-            'principal_place_of_slave_purchase'] = itinerary.principal_place_of_slave_purchase_id
-        dictionary[
-            'place_of_call_before_atlantic_crossing'] = itinerary.port_of_call_before_atl_crossing_id
-        dictionary[
-            'number_of_new_world_ports_called_prior_to_disembarkation'] = itinerary.number_of_ports_of_call
-        dictionary['first_place_of_landing'] = itinerary.first_landing_place_id
-        dictionary['second_place_of_landing'] = itinerary.second_landing_place_id
-        dictionary['third_place_of_landing'] = itinerary.third_landing_place_id
-        dictionary[
-            'principal_place_of_slave_disembarkation'] = itinerary.principal_port_of_slave_dis_id
-        dictionary['port_voyage_ended'] = itinerary.place_voyage_ended_id
+    itin = voyage.voyage_itinerary
+    if itin is not None:
+        dikt[
+            'first_port_intended_embarkation'] = itin.int_first_port_emb_id
+        dikt[
+            'second_port_intended_embarkation'] = itin.int_second_port_emb_id
+        dikt[
+            'first_port_intended_disembarkation'] = itin.int_first_port_dis_id
+        dikt[
+            'second_port_intended_disembarkation'
+        ] = itin.int_second_port_dis_id
+        dikt['port_of_departure'] = itin.port_of_departure_id
+        dikt[
+            'number_of_ports_called_prior_to_slave_purchase'
+        ] = itin.ports_called_buying_slaves
+        dikt[
+            'first_place_of_slave_purchase'
+        ] = itin.first_place_slave_purchase_id
+        dikt[
+            'second_place_of_slave_purchase'
+        ] = itin.second_place_slave_purchase_id
+        dikt[
+            'third_place_of_slave_purchase'
+        ] = itin.third_place_slave_purchase_id
+        dikt[
+            'principal_place_of_slave_purchase'
+        ] = itin.principal_place_of_slave_purchase_id
+        dikt[
+            'place_of_call_before_atlantic_crossing'
+        ] = itin.port_of_call_before_atl_crossing_id
+        dikt[
+            'number_of_new_world_ports_called_prior_to_disembarkation'
+        ] = itin.number_of_ports_of_call
+        dikt['first_place_of_landing'] = itin.first_landing_place_id
+        dikt['second_place_of_landing'] = itin.second_landing_place_id
+        dikt['third_place_of_landing'] = itin.third_landing_place_id
+        dikt[
+            'principal_place_of_slave_disembarkation'
+        ] = itin.principal_port_of_slave_dis_id
+        dikt['port_voyage_ended'] = itin.place_voyage_ended_id
         # Port names.
-        dictionary['first_port_intended_embarkation_name'] = get_label(
-            VoyageCache.ports.get(itinerary.int_first_port_emb_id))
-        dictionary['second_port_intended_embarkation_name'] = get_label(
-            VoyageCache.ports.get(itinerary.int_second_port_emb_id))
-        dictionary['first_port_intended_disembarkation_name'] = get_label(
-            VoyageCache.ports.get(itinerary.int_first_port_dis_id))
-        dictionary['second_port_intended_disembarkation_name'] = get_label(
-            VoyageCache.ports.get(itinerary.int_second_port_dis_id))
-        dictionary['port_of_departure_name'] = get_label(
-            VoyageCache.ports.get(itinerary.port_of_departure_id))
-        dictionary['first_place_of_slave_purchase_name'] = get_label(
-            VoyageCache.ports.get(itinerary.first_place_slave_purchase_id))
-        dictionary['second_place_of_slave_purchase_name'] = get_label(
-            VoyageCache.ports.get(itinerary.second_place_slave_purchase_id))
-        dictionary['third_place_of_slave_purchase_name'] = get_label(
-            VoyageCache.ports.get(itinerary.third_place_slave_purchase_id))
-        dictionary['principal_place_of_slave_purchase_name'] = get_label(
+        dikt['first_port_intended_embarkation_name'] = get_label(
+            VoyageCache.ports.get(itin.int_first_port_emb_id))
+        dikt['second_port_intended_embarkation_name'] = get_label(
+            VoyageCache.ports.get(itin.int_second_port_emb_id))
+        dikt['first_port_intended_disembarkation_name'] = get_label(
+            VoyageCache.ports.get(itin.int_first_port_dis_id))
+        dikt['second_port_intended_disembarkation_name'] = get_label(
+            VoyageCache.ports.get(itin.int_second_port_dis_id))
+        dikt['port_of_departure_name'] = get_label(
+            VoyageCache.ports.get(itin.port_of_departure_id))
+        dikt['first_place_of_slave_purchase_name'] = get_label(
+            VoyageCache.ports.get(itin.first_place_slave_purchase_id))
+        dikt['second_place_of_slave_purchase_name'] = get_label(
+            VoyageCache.ports.get(itin.second_place_slave_purchase_id))
+        dikt['third_place_of_slave_purchase_name'] = get_label(
+            VoyageCache.ports.get(itin.third_place_slave_purchase_id))
+        dikt['principal_place_of_slave_purchase_name'] = get_label(
             VoyageCache.ports.get(
-                itinerary.principal_place_of_slave_purchase_id))
-        dictionary['place_of_call_before_atlantic_crossing_name'] = get_label(
+                itin.principal_place_of_slave_purchase_id))
+        dikt['place_of_call_before_atlantic_crossing_name'] = get_label(
             VoyageCache.ports.get(
-                itinerary.port_of_call_before_atl_crossing_id))
-        dictionary['first_place_of_landing_name'] = get_label(
-            VoyageCache.ports.get(itinerary.first_landing_place_id))
-        dictionary['second_place_of_landing_name'] = get_label(
-            VoyageCache.ports.get(itinerary.second_landing_place_id))
-        dictionary['third_place_of_landing_name'] = get_label(
-            VoyageCache.ports.get(itinerary.third_landing_place_id))
-        dictionary['principal_place_of_slave_disembarkation_name'] = get_label(
-            VoyageCache.ports.get(itinerary.principal_port_of_slave_dis_id))
-        dictionary['port_voyage_ended_name'] = get_label(
-            VoyageCache.ports.get(itinerary.place_voyage_ended_id))
+                itin.port_of_call_before_atl_crossing_id))
+        dikt['first_place_of_landing_name'] = get_label(
+            VoyageCache.ports.get(itin.first_landing_place_id))
+        dikt['second_place_of_landing_name'] = get_label(
+            VoyageCache.ports.get(itin.second_landing_place_id))
+        dikt['third_place_of_landing_name'] = get_label(
+            VoyageCache.ports.get(itin.third_landing_place_id))
+        dikt['principal_place_of_slave_disembarkation_name'] = get_label(
+            VoyageCache.ports.get(itin.principal_port_of_slave_dis_id))
+        dikt['port_voyage_ended_name'] = get_label(
+            VoyageCache.ports.get(itin.place_voyage_ended_id))
     dates = voyage.voyage_dates
     if dates is not None:
-        dictionary['date_departure'] = dates.voyage_began
-        dictionary['date_slave_purchase_began'] = dates.slave_purchase_began
-        dictionary['date_vessel_left_last_slaving_port'] = dates.vessel_left_port
-        dictionary['date_first_slave_disembarkation'] = dates.first_dis_of_slaves
-        dictionary[
-            'date_second_slave_disembarkation'] = dates.arrival_at_second_place_landing
-        dictionary['date_third_slave_disembarkation'] = dates.third_dis_of_slaves
-        dictionary['date_return_departure'] = dates.departure_last_place_of_landing
-        dictionary['date_voyage_completed'] = dates.voyage_completed
-        dictionary['length_of_middle_passage'] = dates.length_middle_passage_days
+        dikt['date_departure'] = dates.voyage_began
+        dikt['date_slave_purchase_began'] = dates.slave_purchase_began
+        dikt['date_vessel_left_last_slaving_port'] = dates.vessel_left_port
+        dikt['date_first_slave_disembarkation'] = dates.first_dis_of_slaves
+        dikt[
+            'date_second_slave_disembarkation'
+        ] = dates.arrival_at_second_place_landing
+        dikt['date_third_slave_disembarkation'] = dates.third_dis_of_slaves
+        dikt['date_return_departure'] = dates.departure_last_place_of_landing
+        dikt['date_voyage_completed'] = dates.voyage_completed
+        dikt['length_of_middle_passage'] = dates.length_middle_passage_days
     numbers = voyage.voyage_slaves_numbers
     if numbers is not None:
         for k, v in list(slave_number_var_map.items()):
-            dictionary[number_prefix + k] = getattr(numbers, v)
+            dikt[number_prefix + k] = getattr(numbers, v)
 
     # Captains
     captains = voyage.voyage_captain.all()
     captain_keys = ['first', 'second', 'third']
-    for i in range(0, len(captains)):
-        dictionary[captain_keys[i] + '_captain'] = captains[i].name
+    for i, captain in enumerate(captains):
+        dikt[captain_keys[i] + '_captain'] = captain.name
     # Crew numbers
     crew = voyage.voyage_crew
     if crew is not None:
-        dictionary[number_prefix + 'CREW1'] = crew.crew_voyage_outset
-        dictionary[number_prefix + 'CREW2'] = crew.crew_departure_last_port
-        dictionary[number_prefix + 'CREW3'] = crew.crew_first_landing
-        dictionary[number_prefix + 'CREW4'] = crew.crew_return_begin
-        dictionary[number_prefix + 'CREW5'] = crew.crew_end_voyage
-        dictionary[number_prefix + 'CREW'] = crew.unspecified_crew
-        dictionary[
+        dikt[number_prefix + 'CREW1'] = crew.crew_voyage_outset
+        dikt[number_prefix + 'CREW2'] = crew.crew_departure_last_port
+        dikt[number_prefix + 'CREW3'] = crew.crew_first_landing
+        dikt[number_prefix + 'CREW4'] = crew.crew_return_begin
+        dikt[number_prefix + 'CREW5'] = crew.crew_end_voyage
+        dikt[number_prefix + 'CREW'] = crew.unspecified_crew
+        dikt[
             number_prefix + 'SAILD1'] = crew.crew_died_before_first_trade
-        dictionary[
+        dikt[
             number_prefix + 'SAILD2'] = crew.crew_died_while_ship_african
-        dictionary[number_prefix + 'SAILD3'] = crew.crew_died_middle_passage
-        dictionary[number_prefix + 'SAILD4'] = crew.crew_died_in_americas
-        dictionary[number_prefix + 'SAILD5'] = crew.crew_died_on_return_voyage
-        dictionary[number_prefix + 'CREWDIED'] = crew.crew_died_complete_voyage
-        dictionary[number_prefix + 'NDESERT'] = crew.crew_deserted
-    return dictionary
+        dikt[number_prefix + 'SAILD3'] = crew.crew_died_middle_passage
+        dikt[number_prefix + 'SAILD4'] = crew.crew_died_in_americas
+        dikt[number_prefix + 'SAILD5'] = crew.crew_died_on_return_voyage
+        dikt[number_prefix + 'CREWDIED'] = crew.crew_died_complete_voyage
+        dikt[number_prefix + 'NDESERT'] = crew.crew_deserted
+    return dikt
 
 
 @login_required()
@@ -960,7 +987,8 @@ def get_reviews_by_status(statuses, display_interim_data=False):
             return ''
         return place.region.region + '/' + place.place
 
-    # Load all necessary voyage id data in a single query for better efficiency.
+    # Load all necessary voyage id data in a single query for better
+    # efficiency.
     all_voyage_ids = {
         id for ids in
         [x['contribution'].get_related_voyage_ids() for x in contributions]
@@ -972,10 +1000,13 @@ def get_reviews_by_status(statuses, display_interim_data=False):
         .select_related('voyage_ship__imputed_nationality') \
         .select_related('voyage_dates') \
         .select_related('voyage_slaves_numbers') \
-        .select_related('voyage_itinerary__imp_principal_place_of_slave_purchase') \
-        .select_related('voyage_itinerary__imp_principal_place_of_slave_purchase__region') \
+        .select_related(
+            'voyage_itinerary__imp_principal_place_of_slave_purchase') \
+        .select_related(
+            'voyage_itinerary__imp_principal_place_of_slave_purchase__region')\
         .select_related('voyage_itinerary__imp_principal_port_slave_dis') \
-        .select_related('voyage_itinerary__imp_principal_port_slave_dis__region')
+        .select_related(
+            'voyage_itinerary__imp_principal_port_slave_dis__region')
     fetched_voyages_dict = {v.id: v for v in fetched_voyages}
 
     # Load all review requests that will be needed.
@@ -993,8 +1024,8 @@ def get_reviews_by_status(statuses, display_interim_data=False):
         review_requests_dict[req.contribution_id] = req
 
     # Load all interim voyages and editor contributions.
-    editor_contributions = EditorVoyageContribution.objects \
-        .filter(request__id__in=[r.pk for r in list(review_requests_dict.values())])
+    editor_contributions = EditorVoyageContribution.objects.filter(
+        request__id__in=[r.pk for r in list(review_requests_dict.values())])
     editor_contributions_req_dict = {}
     for e in editor_contributions:
         if e.request_id in editor_contributions_req_dict:
@@ -1002,15 +1033,24 @@ def get_reviews_by_status(statuses, display_interim_data=False):
         editor_contributions_req_dict[e.request_id] = e
 
     contribs = [info['contribution'] for info in contributions]
-    interim_ids = [c.interim_voyage_id for c in contribs if hasattr(c, 'interim_voyage_id')] + \
-        [e.interim_voyage_id for e in list(
-            editor_contributions_req_dict.values())]
+    interim_ids = [
+        c.interim_voyage_id
+        for c in contribs
+        if hasattr(c, 'interim_voyage_id')
+    ] + [
+        e.interim_voyage_id
+        for e in list(editor_contributions_req_dict.values())
+    ]
     interim_voyages_dict = {
-        interim.pk: interim for interim in InterimVoyage.objects.select_related(
-            'imputed_national_carrier').select_related(
-                'imputed_principal_place_of_slave_purchase__region').
-        select_related('imputed_principal_port_of_slave_disembarkation__region'
-                       ).filter(pk__in=interim_ids)
+        interim.pk:
+        (interim for interim in
+         InterimVoyage.objects.
+         select_related('imputed_national_carrier').
+         select_related('imputed_principal_place_'
+                        'of_slave_purchase__region').
+         select_related('imputed_principal_port_'
+                        'of_slave_disembarkation__region').
+         filter(pk__in=interim_ids))
     }
 
     def get_contribution_info(info):
@@ -1024,8 +1064,8 @@ def get_reviews_by_status(statuses, display_interim_data=False):
             for v in voyages
         ]
         voyage_nation = [
-            get_nation_label(v.voyage_ship.imputed_nationality) for v in voyages
-        ]
+            get_nation_label(
+                v.voyage_ship.imputed_nationality) for v in voyages]
         voyage_exported = [
             v.voyage_slaves_numbers.imp_total_num_slaves_embarked
             for v in voyages
@@ -1052,8 +1092,9 @@ def get_reviews_by_status(statuses, display_interim_data=False):
         # Fetch review info.
         active_request = review_requests_dict.get(
             full_contribution_id(info['type'], info['id']))
-        if active_request and active_request.created_voyage_id and active_request.requires_created_voyage_id(
-        ):
+        if (active_request and
+                active_request.created_voyage_id and
+                active_request.requires_created_voyage_id()):
             voyage_ids = [active_request.created_voyage_id]
         if (display_interim_data and not isinstance(
                 contrib, DeleteVoyageContribution)) or isinstance(
@@ -1100,8 +1141,12 @@ def get_reviews_by_status(statuses, display_interim_data=False):
             res['review_request_id'] = active_request.pk
             res['reviewer'] = active_request.suggested_reviewer.get_full_name()
             res['response_id'] = active_request.response
-            res['response'] = active_request.get_status_msg() \
-                if active_request.final_decision in [ReviewRequestDecision.under_review, ReviewRequestDecision.begun_editorial_review] else _('Posted')
+            res['response'] = (
+                active_request.get_status_msg()
+                if active_request.final_decision in [
+                    ReviewRequestDecision.under_review,
+                    ReviewRequestDecision.begun_editorial_review
+                ] else u_('Posted'))
             res['reviewer_comments'] = active_request.reviewer_comments
             res['reviewer_final_decision'] = active_request.get_status_msg()
             if active_request.final_decision:
@@ -1153,14 +1198,17 @@ def get_pending_publication(request):
         get_reviews_by_status([ContributionStatus.approved], True))
 
 
-def assert_limit_active_review_requests(contribution_id, max_allowed=0):
+def assert_limit_active_review_requests(contrib_id, max_allowed=0):
     reqs = [
         req
-        for req in ReviewRequest.objects.filter(contribution_id=contribution_id)
+        for req in ReviewRequest.objects.filter(contribution_id=contrib_id)
         if not req.archived
     ]
     if len(reqs) > max_allowed:
-        return JsonResponse({'error': _('There is already an active review for this contribution')})
+        return JsonResponse({
+            'error':
+            u_('There is already an active review for this contribution')
+        })
     return None
 
 
@@ -1189,7 +1237,8 @@ def override_empty_fields_with_single_value(interim_voyage, review_request):
     existing_data = contribution_related_data(user_contribution)
     existing_data['user'] = get_dict_from_interim(
         user_contribution.interim_voyage)
-    # Fetch user and reviewer contributions (if any) and map to dict (use __dict__ ?).
+    # Fetch user and reviewer contributions (if any) and map to dict (use
+    # __dict__ ?).
     review_contribution = review_request.review_contribution.first()
     if review_contribution:
         existing_data['reviewer'] = get_dict_from_interim(
@@ -1257,12 +1306,14 @@ def begin_editorial_review(request):
         reviewer = request.user
         review_request = ReviewRequest()
         review_request.editor = request.user
-        review_request.editor_comments = 'Editorial review bypassing a reviewer'
+        review_request.editor_comments = (
+            'Editorial review bypassing a reviewer')
         review_request.email_sent = False
         review_request.contribution_id = contribution_id
         review_request.suggested_reviewer = reviewer
         review_request.response = ReviewRequestResponse.begun_editorial_review
-        review_request.final_decision = ReviewRequestDecision.begun_editorial_review
+        review_request.final_decision = \
+            ReviewRequestDecision.begun_editorial_review
         review_request.save()
         contribution.status = ContributionStatus.under_review
         contribution.save()
@@ -1300,7 +1351,9 @@ def post_review_request(request):
     reviewer_id = int(request.POST.get('reviewer_id'))
     message = request.POST.get('message')
     if contribution.contributor_id == reviewer_id:
-        return JsonResponse({'error': _('Reviewer and contributor must be different users')})
+        return JsonResponse({
+            'error': u_('Reviewer and contributor must be different users')
+        })
 
     review_request = ReviewRequest()
     try:
@@ -1358,11 +1411,14 @@ def post_archive_review_request(request):
     contribution_id = request.POST.get('contribution_id')
     reqs = [
         req
-        for req in ReviewRequest.objects.filter(contribution_id=contribution_id)
+        for req
+        in ReviewRequest.objects.filter(contribution_id=contribution_id)
         if not req.archived
     ]
     if len(reqs) == 0:
-        return JsonResponse({'error': _('There is no active review for this contribution')})
+        return JsonResponse({
+            'error': u_('There is no active review for this contribution')
+        })
     for req in reqs:
         with transaction.atomic():
             contribution = req.contribution()
@@ -1402,11 +1458,15 @@ def clone_interim_voyage(contribution, contributor_comment_prefix):
     interim = contribution.interim_voyage
     if interim is None:
         return None
-    related_models = list(interim.article_sources.all()) + list(interim.book_sources.all()) + \
-        list(interim.newspaper_sources.all()) + list(interim.private_note_or_collection_sources.all()) + \
-        list(interim.unpublished_secondary_sources.all()) + list(interim.primary_sources.all()) + \
-        list(interim.pre_existing_sources.all()) + \
-        list(interim.slave_numbers.all())
+    related_models = list(chain(
+        interim.article_sources.all(),
+        interim.book_sources.all(),
+        interim.newspaper_sources.all(),
+        interim.private_note_or_collection_sources.all(),
+        interim.unpublished_secondary_sources.all(),
+        interim.primary_sources.all(),
+        interim.pre_existing_sources.all(),
+        interim.slave_numbers.all()))
     interim.pk = None
     # Prepend comments with contributor name.
     changed = {}
@@ -1423,8 +1483,9 @@ def clone_interim_voyage(contribution, contributor_comment_prefix):
         for item in related_models:
             item.pk = None
             item.interim_voyage = interim
-            if hasattr(item,
-                       'notes') and item.notes is not None and item.notes != '':
+            if (hasattr(item, 'notes') and
+                    item.notes is not None and
+                    item.notes != ''):
                 item.notes = escape(contributor_comment_prefix + item.notes)
             item.save()
         return interim
@@ -1450,7 +1511,9 @@ def reply_review_request(request):
     valid_responses = ['accept', 'reject']
     if response not in valid_responses:
         return HttpResponseBadRequest()
-    req.response = ReviewRequestResponse.accepted if response == 'accept' else ReviewRequestResponse.rejected
+    req.response = (ReviewRequestResponse.accepted
+                    if response == 'accept'
+                    else ReviewRequestResponse.rejected)
     req.reviewer_comments = request.POST.get('message_to_editor')
     with transaction.atomic():
         req.save()
@@ -1463,7 +1526,8 @@ def reply_review_request(request):
             if hasattr(contribution, 'interim_voyage'):
                 review.interim_voyage = clone_interim_voyage(
                     contribution, 'Contributor: ')
-            review.notes = 'Contributor: ' + contribution.notes if contribution.notes else ''
+            review.notes = ('Contributor: ' + contribution.notes
+                            if contribution.notes else '')
             review.save()
         else:
             redirect = HttpResponseRedirect(reverse('contribute:index'))
@@ -1471,7 +1535,7 @@ def reply_review_request(request):
 
 
 def interim_data(interim):
-    dictionary = {
+    dikt = {
         number_prefix + n.var_name: n.number
         for n in interim.slave_numbers.all()
         if n.number is not None
@@ -1488,8 +1552,8 @@ def interim_data(interim):
         internal_type = field.get_internal_type()
         if internal_type == 'ForeignKey':
             try:
-                dictionary[name] = value.pk
-                dictionary[name + '_name'] = str(value)
+                dikt[name] = value.pk
+                dikt[name + '_name'] = str(value)
             except Exception:
                 pass
         elif internal_type in [
@@ -1497,14 +1561,17 @@ def interim_data(interim):
                 'CommaSeparatedIntegerField'
         ]:
             if value != '':
-                dictionary[name] = value
-    return dictionary
+                dikt[name] = value
+    return dikt
 
 
 @login_required()
 def review(request, review_request_id):
     req = get_object_or_404(ReviewRequest, pk=review_request_id)
-    if req.archived or req.response == 2 or req.final_decision != 0 or req.suggested_reviewer_id != request.user.pk:
+    if any([req.archived,
+            req.response == 2,
+            req.final_decision != 0,
+            req.suggested_reviewer_id != request.user.pk]):
         return HttpResponseForbidden()
     if req.response == 0:
         return HttpResponseRedirect(
@@ -1518,19 +1585,20 @@ def review(request, review_request_id):
         return delete_review_render(request, user_contribution, True,
                                     'reviewer')
     review_contribution = req.review_contribution.first()
-    interim = review_contribution.interim_voyage if review_contribution else None
+    interim = (review_contribution.interim_voyage
+               if review_contribution else None)
     if interim is None:
         raise Exception('Could not find reviewer\'s interim form')
-    (result, form, numbers, src_pks) = interim_main(request,
-                                                    review_contribution,
-                                                    interim)
+    (_, form, numbers, _) = interim_main(request,
+                                         review_contribution,
+                                         interim)
     sources_post = None if request.method != 'POST' else request.POST.get(
         'sources')
     # Build previous data dictionary.
     # For the review we need to include both the original voyage(s) data
     # as well as the user contribution itself.
     previous_data = contribution_related_data(user_contribution)
-    previous_data[_('User contribution')] = interim_data(
+    previous_data[u_('User contribution')] = interim_data(
         user_contribution.interim_voyage)
     return render(
         request, 'contribute/interim.html', {
@@ -1557,19 +1625,20 @@ def editorial_review(request, review_request_id):
     if contribution_id.startswith('delete'):
         return delete_review_render(request, user_contribution, True, 'editor')
     review_contribution = review_request.review_contribution.first()
-    reviewer_interim = review_contribution.interim_voyage if review_contribution else None
+    reviewer_interim = (review_contribution.interim_voyage
+                        if review_contribution else None)
     sources_post = None if request.method != 'POST' else request.POST.get(
         'sources')
     # Build previous data dictionary.
-    # Include pre-existing voyage data, user contribution, and reviewer version.
+    # Include pre-existing voyage data, user contribution, and reviewer
+    # version.
     previous_data = contribution_related_data(user_contribution)
-    previous_data[_('User contribution')] = interim_data(
+    previous_data[u_('User contribution')] = interim_data(
         user_contribution.interim_voyage)
     if reviewer_interim:
-        previous_data[_('Reviewer')] = interim_data(reviewer_interim)
+        previous_data[u_('Reviewer')] = interim_data(reviewer_interim)
     editor_interim = contribution.interim_voyage
-    (result, form, numbers, src_pks) = interim_main(request, contribution,
-                                                    editor_interim)
+    (_, form, numbers, _) = interim_main(request, contribution, editor_interim)
     return render(
         request, 'contribute/interim.html', {
             'form': form,
@@ -1604,21 +1673,39 @@ def submit_editorial_decision(request, editor_contribution_id):
             ReviewRequestDecision.deleted
     ]:
         return HttpResponseBadRequest()
-    if decision == ReviewRequestDecision.accepted_by_editor and contribution.interim_voyage and not contribution.ran_impute:
-        return JsonResponse({'result': 'Failed', 'errors': _('Impute program must be ran on contribution before acceptance')})
-    if decision == ReviewRequestDecision.accepted_by_editor and contribution.interim_voyage:
-        # Check whether every new source in the editorial version has been created in the system before continuing.
+    if all([decision == ReviewRequestDecision.accepted_by_editor,
+            contribution.interim_voyage,
+            not contribution.ran_impute]):
+        return JsonResponse({
+            'result': 'Failed',
+            'errors': u_('Impute program must be ran on contribution before '
+                         'acceptance')
+        })
+    if all([decision == ReviewRequestDecision.accepted_by_editor,
+            contribution.interim_voyage]):
+        # Check whether every new source in the editorial version has been
+        # created in the system before continuing.
         all_sources = get_all_new_sources_for_interim(
             contribution.interim_voyage.pk)
         for src in all_sources:
             created_src = src.created_voyage_sources
             if not created_src:
-                return JsonResponse({'result': 'Failed', 'errors': _('All new sources must be created before this submission is accepted.')})
+                return JsonResponse({
+                    'result': 'Failed',
+                    'errors': u_('All new sources must be created before this '
+                                 'submission is accepted.')
+                })
             if not src.source_ref_text or not src.source_ref_text.startswith(
                     created_src.short_ref):
-                return JsonResponse({'result': 'Failed', 'errors': _('New sources must have a connection reference starting with the source\'s short reference.')})
+                return JsonResponse({
+                    'result': 'Failed',
+                    'errors': u_('New sources must have a connection '
+                                 'reference starting with the source\'s short '
+                                 'reference.')
+                })
 
-    # If the editor accepts a new/merge contribution, a voyage id for the published voyage must be specified.
+    # If the editor accepts a new/merge contribution, a voyage id for the
+    # published voyage must be specified.
     review_request = contribution.request
     user_contribution = review_request.contribution()
     if user_contribution is None:
@@ -1626,45 +1713,50 @@ def submit_editorial_decision(request, editor_contribution_id):
     if not created_voyage_id:
         if review_request.requires_created_voyage_id(
         ) and decision == ReviewRequestDecision.accepted_by_editor:
-            return JsonResponse({'result': 'Failed', 'errors': _('Expected a voyage id for new/merge contribution')})
+            return JsonResponse({
+                'result': 'Failed',
+                'errors': u_('Expected a voyage id for new/merge contribution')
+            })
     else:
-        # We must check whether this is a unique id (with respect to pre-existing and next publication batch).
-        existing = Voyage.all_dataset_objects.filter(
-            voyage_id=created_voyage_id).count()
-        if existing > 0:
+        # We must check whether this is a unique id (with respect to
+        # pre-existing and next publication batch).
+        if (Voyage.all_dataset_objects.filter(
+                voyage_id=created_voyage_id).count() > 0 and
+                created_voyage_id and
+                created_voyage_id not in
+                user_contribution.get_related_voyage_ids()):
             # Only case when this is allowed is if a merge contribution
             # uses one of the merged voyages ids.
-            if created_voyage_id not in user_contribution.get_related_voyage_ids(
-            ):
-                return JsonResponse({'result': 'Failed', 'errors': _('Voyage id already exists')})
-        existing = ReviewRequest.objects.filter(
-            created_voyage_id=created_voyage_id,
-            archived=False).exclude(pk=review_request.pk).count()
-        if existing > 0:
-            return JsonResponse({'result': 'Failed', 'errors': _('Voyage id already in current publication batch')})
+            return JsonResponse({
+                'result': 'Failed',
+                'errors': u_('Voyage id already exists')
+            })
+        if ReviewRequest.objects.filter(
+                created_voyage_id=created_voyage_id,
+                archived=False).exclude(pk=review_request.pk).count() > 0:
+            return JsonResponse({
+                'result': 'Failed',
+                'errors': u_('Voyage id already in current publication batch')
+            })
 
     with transaction.atomic():
         # Save interim form.
         if contribution.interim_voyage:
-            (valid, form, numbers,
-             src_pks) = interim_main(request, contribution,
-                                     contribution.interim_voyage)
+            (valid, form, *_) = interim_main(request, contribution,
+                                             contribution.interim_voyage)
             if not valid:
                 return JsonResponse({'valid': valid, 'errors': form.errors})
             if decision == ReviewRequestDecision.accepted_by_editor:
                 # Check if yearam and fate2 variables are set.
-                yearam = contribution.interim_voyage.imputed_year_arrived_at_port_of_disembarkation
-                fate2 = contribution.interim_voyage.imputed_outcome_of_voyage_for_slaves
                 missing_fields = []
-                if not yearam:
+                if not contribution.interim_voyage.imputed_year_arrived_at_port_of_disembarkation:
                     missing_fields.append('YEARAM')
-                if not fate2:
+                if not contribution.interim_voyage.imputed_outcome_of_voyage_for_slaves:
                     missing_fields.append('FATE2')
                 if len(missing_fields) > 0:
                     transaction.set_rollback(True)
                     return JsonResponse({
-                        'result':
-                            'Failed',
+                        'result': 'Failed',
                         'errors': ('Imputed field(s) %s is(are) mandatory' %
                                    ', '.join(missing_fields))
                     })
@@ -1673,7 +1765,8 @@ def submit_editorial_decision(request, editor_contribution_id):
         review_request.final_decision = decision
         review_request.created_voyage_id = created_voyage_id
         is_iam = request.POST.get('is_intra_american', None) is not None
-        review_request.dataset = VoyageDataset.IntraAmerican if is_iam else VoyageDataset.Transatlantic
+        review_request.dataset = (VoyageDataset.IntraAmerican if is_iam
+                                  else VoyageDataset.Transatlantic)
         msg = request.POST.get('decision_message')
         msg = 'Editor: ' + msg if msg else ''
         msg = escape(msg)
@@ -1690,7 +1783,8 @@ def submit_editorial_decision(request, editor_contribution_id):
 @require_POST
 def submit_review_to_editor(request, review_request_id):
     req = get_object_or_404(ReviewRequest, pk=review_request_id)
-    if req.archived or req.response != 1 or req.suggested_reviewer_id != request.user.pk:
+    if req.archived or req.response != 1 or \
+            req.suggested_reviewer_id != request.user.pk:
         return HttpResponseForbidden()
     decision = -1
     try:
@@ -1707,9 +1801,8 @@ def submit_review_to_editor(request, review_request_id):
             has_interim_voyage = hasattr(
                 contribution, 'interim_voyage') and contribution.interim_voyage
             if has_interim_voyage:
-                (valid, form, numbers,
-                 src_pks) = interim_main(request, contribution,
-                                         contribution.interim_voyage)
+                (valid, form, _, _) = interim_main(
+                    request, contribution, contribution.interim_voyage)
                 if not valid:
                     return JsonResponse({
                         'result': 'Failed',
@@ -1728,7 +1821,8 @@ def submit_review_to_editor(request, review_request_id):
             editor_contribution = EditorVoyageContribution()
             editor_contribution.request = req
             editor_contribution.notes = escape(
-                'Reviewer: ' + contribution.notes if contribution.notes else '')
+                'Reviewer: ' + contribution.notes
+                if contribution.notes else '')
             editor_contribution.ran_impute = not has_interim_voyage
             if has_interim_voyage:
                 editor_contribution.interim_voyage = clone_interim_voyage(
@@ -1750,8 +1844,8 @@ def impute_contribution(request, editor_contribution_id):
     # First we save the current version of the interim voyage.
     contribution = get_object_or_404(EditorVoyageContribution,
                                      pk=editor_contribution_id)
-    (valid, form, numbers, src_pks) = interim_main(request, contribution,
-                                                   contribution.interim_voyage)
+    (valid, form, *_) = interim_main(request, contribution,
+                                     contribution.interim_voyage)
     if not valid:
         return JsonResponse({'result': 'Failed', 'errors': form.errors})
     interim_voyage_id = contribution.interim_voyage_id
@@ -1768,7 +1862,8 @@ def impute_contribution(request, editor_contribution_id):
         InterimSlaveNumber.objects.filter(interim_voyage__id=interim.pk,
                                           var_name__in=list(
                                               imputed_numbers.keys())).delete()
-        # Map imputed fields back to the contribution, save it and yield response.
+        # Map imputed fields back to the contribution, save it and yield
+        # response.
         for k, v in list(result.items()):
             setattr(interim, k, v)
         interim.save()
@@ -1817,102 +1912,100 @@ def editorial_sources(request):
         source = VoyageSources.objects.get(pk=created_source_pk)
     if mode == 'save':
         form = VoyagesSourcesAdminForm(request.POST, instance=source)
-        if form.is_valid():
-            with transaction.atomic():
-                # Save text reference in interim source.
-                interim_source_id = request.POST.get('interim_source_id')
-                connection_ref = request.POST.get('connection_ref',
-                                                  original_ref)
-                if interim_source_id and (
-                        not connection_ref or connection_ref == ''):
-                    return JsonResponse({
-                        'result': 'Failed',
-                        'errors': ['Text reference is mandatory']
-                    })
-                reference = form.save()
-                if interim_source_id and not connection_ref.startswith(
-                        reference.short_ref):
-                    return JsonResponse({
-                        'result':
-                            'Failed',
-                        'errors': [
-                            'Text reference must begin with Source\'s short reference'
-                        ]
-                    })
-                if interim_source_id:
-                    pair = interim_source_id.split('/')
-                    src_model = interim_source_model(pair[0])
-                    interim_source = None
-                    try:
-                        interim_source = src_model.objects.get(pk=int(pair[1]))
-                    except Exception:
-                        interim_source = src_model()
-                        interim_source.interim_voyage = InterimVoyage(
-                            pk=int(request.POST['interim_pk']))
-                    interim_source.source_ref_text = connection_ref
-                    interim_source.created_voyage_sources = reference
-                    interim_source.save()
-                    # Update the composite id in case we needed to create a new entry.
-                    interim_source_id = pair[0] + '/' + str(interim_source.pk)
-                return JsonResponse({
-                    'result': 'OK',
-                    'created_voyage_sources_id': reference.pk,
-                    'interim_source_id': interim_source_id
-                })
-        else:
+        if not form.is_valid():
             return JsonResponse({'result': 'Failed', 'errors': form.errors})
-    else:
-        if mode == 'new':
-            src_type = interim_source_dict['type']
-            formatted_content = ''
-            all_types = {
-                x.group_name: x for x in VoyageSourcesType.objects.all()
-            }
-            if src_type == 'Primary source':
-                formatted_content = '<em>' + interim_source_dict['name_of_library_or_archive'] +\
-                    '</em> (' + \
-                    interim_source_dict['location_of_library_or_archive'] + ')'
-                source.source_type = all_types['Documentary source']
-            elif src_type == 'Article source':
-                formatted_content = interim_source_dict['authors'] + \
-                    ' "' + interim_source_dict['article_title'] + '", <em>' + \
-                    interim_source_dict['journal'] + '</em>, ' + \
-                    interim_source_dict.get('volume_number', 'vol??') + \
-                    ' (' + interim_source_dict.get('year', 'year??') + '): ' + \
-                    interim_source_dict.get('page_start', 'page_start') + '-' + \
-                    interim_source_dict.get('page_end', 'page_end')
-                source.source_type = all_types['Published source']
-            elif src_type == 'Book source':
-                if interim_source_dict['source_is_essay_in_book'] == 'true':
-                    formatted_content = interim_source_dict['authors'] + \
-                        ', "' + interim_source_dict['essay_title'] + '", ' + \
-                        interim_source_dict['editors'] + ' (ed.)' + \
-                        ' <em>' + interim_source_dict['book_title'] + '</em> (' + \
-                        interim_source_dict.get('place_of_publication', 'place??') + \
-                        ', ' + interim_source_dict.get('year', 'year??') + ')'
-                else:
-                    formatted_content = interim_source_dict['authors'] + \
-                        ', <em>' + interim_source_dict['book_title'] + '</em> (' + \
-                        interim_source_dict.get('place_of_publication', 'place??') + \
-                        ', ' + interim_source_dict.get('year', 'year??') + ')'
-                source.source_type = all_types['Published source']
-            elif src_type == 'Newspaper source':
-                alt_name = interim_source_dict.get('alternative_name')
-                formatted_content = '<em>' + interim_source_dict['name'] + '</em>' + \
-                    ((' (later, ' + alt_name + ')') if alt_name else '') + \
-                    ', (' + interim_source_dict.get('city', 'city??') + ', ' + \
-                    interim_source_dict.get('country', 'country??') + ')'
-                source.source_type = all_types['Newspaper']
-            elif src_type == 'Private note or collection source':
-                formatted_content = interim_source_dict['authors'] + ', ' + interim_source_dict['title'] + \
-                    ' (' + interim_source_dict.get('location', 'location??') + ')'
-                source.source_type = all_types['Private note or collection']
-            elif src_type == 'Unpublished secondary source':
-                formatted_content = interim_source_dict['authors'] + ', ' + interim_source_dict['title'] + \
-                    ' (' + interim_source_dict.get('location', 'location??') + ')'
-                source.source_type = all_types['Unpublished secondary source']
-            source.full_ref = formatted_content
-        form = VoyagesSourcesAdminForm(instance=source)
+        with transaction.atomic():
+            # Save text reference in interim source.
+            interim_source_id = request.POST.get('interim_source_id')
+            connection_ref = request.POST.get('connection_ref', original_ref)
+            if interim_source_id and (
+                    not connection_ref or connection_ref == ''):
+                return JsonResponse({
+                    'result': 'Failed',
+                    'errors': ['Text reference is mandatory']
+                })
+            reference = form.save()
+            if interim_source_id and not connection_ref.startswith(
+                    reference.short_ref):
+                return JsonResponse({
+                    'result': 'Failed',
+                    'errors': ['Text reference must begin with '
+                               'Source\'s short reference']
+                })
+            if interim_source_id:
+                pair = interim_source_id.split('/')
+                src_model = interim_source_model(pair[0])
+                interim_source = None
+                try:
+                    interim_source = src_model.objects.get(pk=int(pair[1]))
+                except Exception:
+                    interim_source = src_model()
+                    interim_source.interim_voyage = InterimVoyage(
+                        pk=int(request.POST['interim_pk']))
+                interim_source.source_ref_text = connection_ref
+                interim_source.created_voyage_sources = reference
+                interim_source.save()
+                # Update the composite id in case we needed to create a new
+                # entry.
+                interim_source_id = pair[0] + '/' + str(interim_source.pk)
+            return JsonResponse({
+                'result': 'OK',
+                'created_voyage_sources_id': reference.pk,
+                'interim_source_id': interim_source_id
+            })
+    if mode == 'new':
+        src_type = interim_source_dict['type']
+        formatted_content = ''
+        all_types = {
+            x.group_name: x for x in VoyageSourcesType.objects.all()
+        }
+        if src_type == 'Primary source':
+            formatted_content = '<em>' + \
+                interim_source_dict['name_of_library_or_archive'] + \
+                '</em> (' + \
+                interim_source_dict['location_of_library_or_archive'] + ')'
+            source.source_type = all_types['Documentary source']
+        elif src_type == 'Article source':
+            formatted_content = interim_source_dict['authors'] + \
+                ' "' + interim_source_dict['article_title'] + '", <em>' + \
+                interim_source_dict['journal'] + '</em>, ' + \
+                interim_source_dict.get('volume_number', 'vol??') + \
+                ' (' + interim_source_dict.get('year', 'year??') + '): ' + \
+                interim_source_dict.get('page_start', 'page_start') + '-' + \
+                interim_source_dict.get('page_end', 'page_end')
+            source.source_type = all_types['Published source']
+        elif src_type == 'Book source':
+            formatted_content = interim_source_dict['authors'] + ','
+            if interim_source_dict['source_is_essay_in_book'] == 'true':
+                formatted_content += (
+                    ' "' + interim_source_dict['essay_title'] + '",'
+                    ' ' + interim_source_dict['editors'] + ' (ed.)')
+            place = interim_source_dict.get('place_of_publication', 'place??')
+            year = interim_source_dict.get('year', 'year??')
+            formatted_content += (
+                ' <em>' + interim_source_dict['book_title'] + '</em> '
+                '(' + place + ', ' + year + ')')
+            source.source_type = all_types['Published source']
+        elif src_type == 'Newspaper source':
+            alt_name = interim_source_dict.get('alternative_name')
+            formatted_content = \
+                '<em>' + interim_source_dict['name'] + '</em>' + \
+                ((' (later, ' + alt_name + ')') if alt_name else '') + \
+                ', (' + interim_source_dict.get('city', 'city??') + ', ' + \
+                interim_source_dict.get('country', 'country??') + ')'
+            source.source_type = all_types['Newspaper']
+        elif src_type == 'Private note or collection source':
+            formatted_content = interim_source_dict['authors'] + ', ' + \
+                interim_source_dict['title'] + \
+                ' (' + interim_source_dict.get('location', 'location??') + ')'
+            source.source_type = all_types['Private note or collection']
+        elif src_type == 'Unpublished secondary source':
+            formatted_content = interim_source_dict['authors'] + ', ' + \
+                interim_source_dict['title'] + \
+                ' (' + interim_source_dict.get('location', 'location??') + ')'
+            source.source_type = all_types['Unpublished secondary source']
+        source.full_ref = formatted_content
+    form = VoyagesSourcesAdminForm(instance=source)
     return render(request, 'contribute/sources_form.html', {
         'form': form,
         'original_ref': original_ref
@@ -1958,8 +2051,8 @@ def download_voyages(request):
             dir=dloads, mode='w', delete=False)
         _thread.start_new_thread(
             generate_voyage_csv_file,
-            (statuses, include_published, csv_file, log_file, remove_linebreaks,
-             intra_american_flag))
+            (statuses, include_published, csv_file, log_file,
+             remove_linebreaks, intra_american_flag))
         return JsonResponse({
             'result': 'OK',
             'log_file': re.sub('^.*/', '', log_file.name),
@@ -1989,7 +2082,7 @@ def generate_voyage_csv_file(statuses,
     count = 0
     try:
         # Simply iterate over generated CSV rows passing the file as buffer.
-        for i in get_voyages_csv_rows(statuses, published, csv_file,
+        for _ in get_voyages_csv_rows(statuses, published, csv_file,
                                       remove_linebreaks, intra_american_flag):
             count += 1
             if (count % 100) == 0:
@@ -2060,9 +2153,9 @@ def get_voyages_csv_rows(statuses,
 @login_required()
 @require_POST
 def publish_pending(request):
-    # Here we are using a lightweight approach at background processing by starting
-    # a thread and logging the progress to a file whose name is returned in the
-    # response.
+    # Here we are using a lightweight approach at background processing by
+    # starting a thread and logging the progress to a file whose name is
+    # returned in the response.
     try:
         pub_logs = settings.MEDIA_ROOT + '/publication_logs/'
         if not os.path.exists(pub_logs):

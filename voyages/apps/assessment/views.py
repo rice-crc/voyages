@@ -31,7 +31,8 @@ def get_page(request, chapternum, sectionnum, pagenum):
 
     The remaining content is rendered using the pagepath parameter
     """
-    # We might want to do some error checking for pagenum here. Even though 404 will be raised if needed
+    # We might want to do some error checking for pagenum here. Even though 404
+    # will be raised if needed
     pagepath = "assessment/c" + chapternum + \
         "_s" + sectionnum + "_p" + pagenum + ".html"
     templatename = "assessment/c" + chapternum + \
@@ -98,8 +99,11 @@ def get_estimates_timeline(request):
     """
     data = {'tab_selected': 'timeline'}
     results = get_estimates_common(request, data)
-    data['show_events'] = data['all_nations_selected'] and data['all_embarkations_selected'] and\
-        data['all_disembarkations_selected']
+    data['show_events'] = all([
+        data[x]
+        for x in ['all_nations_selected',
+                  'all_embarkations_selected',
+                  'all_disembarkations_selected']])
     # Group estimates by year and sum embarked and disembarked for year.
     # The following dict has keys corresponding to years and entries
     # formed by tuples (embarked_count, disembarked_count)
@@ -142,7 +146,8 @@ def get_estimates_table(request):
     def year_mod(year, mod):
         """
         Helper function that groups years according to a given modulus.
-        For instance, year_mod(1501, 5) = year_mod(1502, 5) = ... = year_mod(1505, 5).
+        For instance, year_mod(1501, 5) = year_mod(1502, 5) = ... =
+        year_mod(1505, 5).
         :param year: The year.
         :param mod: The length of each year interval.
         :return: A pair (mod, index of year interval).
@@ -164,30 +169,32 @@ def get_estimates_table(request):
         '9': lambda e: year_mod(e.year, 100),
     }
 
-    # Select key functions based on post data or use default values if this is the initial GET request.
-    row_key_index = '7'
-    col_key_index = '0'
-    cell_key_index = '1'
-    include_empty = False
-    estimate_selection_form = None
+    # Fetch EstimateSelectionForm either from Post (if any), from Session (if
+    # any) or a default form.
     post = data['post']
-
-    # Fetch EstimateSelectionForm either from Post (if any), from Session (if any) or a default form.
+    estimate_selection_form = None
     if post is not None:
         estimate_selection_form = EstimateSelectionForm(post)
-    if (estimate_selection_form is None or not estimate_selection_form.is_valid()) \
-            and "estimate_selection_form" in request.session:
+    if ((estimate_selection_form is None or
+         not estimate_selection_form.is_valid()) and
+            "estimate_selection_form" in request.session):
         estimate_selection_form = EstimateSelectionForm(
             request.session["estimate_selection_form"])
     if post is not None and post.get("table_options") == "Reset to default":
         estimate_selection_form = None
-    if estimate_selection_form is not None and estimate_selection_form.is_valid(
-    ):
+    if estimate_selection_form is not None and \
+            estimate_selection_form.is_valid():
         cell_key_index = estimate_selection_form.cleaned_data["cells"]
         col_key_index = estimate_selection_form.cleaned_data["columns"]
         row_key_index = estimate_selection_form.cleaned_data["rows"]
         include_empty = estimate_selection_form.cleaned_data["include_empty"]
     else:
+        # Select key functions based on post data or use default values if this
+        # is the initial GET request.
+        row_key_index = '7'
+        col_key_index = '0'
+        cell_key_index = '1'
+        include_empty = False
         estimate_selection_form = EstimateSelectionForm(
             initial={
                 'rows': row_key_index,
@@ -197,19 +204,20 @@ def get_estimates_table(request):
     row_key_function = key_functions[row_key_index]
     col_key_function = key_functions[col_key_index]
     data['table_form'] = estimate_selection_form
-    # Save form to session so that if the user navigates elsewhere and then returns, the form is unchanged.
+    # Save form to session so that if the user navigates elsewhere and then
+    # returns, the form is unchanged.
     if estimate_selection_form.is_valid():
         request.session[
             "estimate_selection_form"] = estimate_selection_form.cleaned_data
 
-    # Aggregate results according to the row and column keys.
-    # Each result is a pair (tuple) containing total embarked and total disembarked.
+    # Aggregate results according to the row and column keys. Each result is a
+    # pair (tuple) containing total embarked and total disembarked.
     table_dict = {}
     cache = EstimateManager.cache()
     if include_empty:
-        # Force loading entire rows or columns which have zero value.
-        # This is done by projecting the entire set of data on each key function
-        # and forming the Cartesian product of the two.
+        # Force loading entire rows or columns which have zero value. This is
+        # done by projecting the entire set of data on each key function and
+        # forming the Cartesian product of the two.
         query = data['query']
 
         def year_filter(e):
@@ -301,11 +309,13 @@ def get_estimates_table(request):
 
     def specific_region_grouping(original_set, header_list, span_multiplier=1):
         """
-        Helper function that allows grouping column or row headers when the headers
-        are composed of Area and Region.
+        Helper function that allows grouping column or row headers when the
+        headers are composed of Area and Region.
         :param original_set - the original set of columns or rows.
-        :param header_list - the list of (row or column) headers that will be appended by area headers.
-        :param span_multiplier - a multiplicity factor for the columnspan or rowspan of each cell.
+        :param header_list - the list of (row or column) headers that will be
+        appended by area headers.
+        :param span_multiplier - a multiplicity factor for the columnspan or
+        rowspan of each cell.
         :return: original_set sorted according to area.
         """
 
@@ -358,8 +368,9 @@ def get_estimates_table(request):
         (1 if cell_key_index == '0' else 0)
     data['totals_header_cols_span'] = len(cell_display_list)
 
-    # Generate tabular data from table_dict filling any missing entries with (0, 0).
-    # At this point each entry of the table is a pair (embarked_count, disembarked_count).
+    # Generate tabular data from table_dict filling any missing entries with
+    # (0, 0). At this point each entry of the table is a pair (embarked_count,
+    # disembarked_count).
     full_data_set = [[
         table_dict[(r, c)] if (r, c) in table_dict else (0, 0)
         for c in column_set
@@ -383,9 +394,10 @@ def get_estimates_table(request):
             for k in range(2))
         for j in range(1 + len(column_set))
     ])
-    # Transform pairs(embarked_count, disembarked_count) by projecting their values
-    # into single integers using the cell_display_list to determine which numbers
-    # (embarked, disembarked, or both) should appear in the final table.
+    # Transform pairs(embarked_count, disembarked_count) by projecting their
+    # values into single integers using the cell_display_list to determine
+    # which numbers (embarked, disembarked, or both) should appear in the final
+    # table.
     full_data_set = [[pair[i]
                       for pair in r
                       for i in cell_display_list]
@@ -425,8 +437,8 @@ def restore_permalink(request, link_id):
     search results of that query.
     :param request: web request
     :param link_id: the id of the permanent link
-    :return: a Redirect to the Estimates page after setting the session POST data to match the permalink
-    or an Http404 error if the link is not found.
+    :return: a Redirect to the Estimates page after setting the session POST
+    data to match the permalink or an Http404 error if the link is not found.
     """
     return restore_link(link_id, request.session, 'estimates_post_data',
                         'assessment:estimates')
@@ -453,7 +465,8 @@ def get_estimates_common(request, data):
 
     # Get post from session if this is not a POST request.
     if post is None:
-        # If the user had made queries before during this session, recover the state here.
+        # If the user had made queries before during this session, recover the
+        # state here.
         post = request.session.get("estimates_post_data")
     else:
         # Store the POST data for possible use later in this session.
@@ -479,7 +492,8 @@ def get_estimates_common(request, data):
         return 1
 
     EstimateManager.cache()
-    # Check which Flags (nations) are selected and include the selection in the query.
+    # Check which Flags (nations) are selected and include the selection in the
+    # query.
     nations = [[
         x.name, x.pk,
         is_checked("checkbox_nation_", x, "submit_nation")
@@ -525,7 +539,8 @@ def get_estimates_common(request, data):
         whether all regions are selected.
         :return:
         """
-        # Flatten the regions so that we may generate the corresponding query term.
+        # Flatten the regions so that we may generate the corresponding query
+        # term.
         flat = list(chain.from_iterable(list(regions_dict.values())))
         query[query_key] = [region[0][0] for region in flat if region[1] == 1]
         data[all_selected_key] = len(flat) == len(query[query_key])
@@ -536,7 +551,8 @@ def get_estimates_common(request, data):
                  "all_disembarkations_selected")
 
     year_form = None
-    # Ensure that GET requests or Reset POST requests yield a fresh copy of the form with default values.
+    # Ensure that GET requests or Reset POST requests yield a fresh copy of the
+    # form with default values.
     if post is not None and not post.get("submit_year") == "Reset to default":
         year_form = EstimateYearForm(post)
 

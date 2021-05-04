@@ -9,10 +9,12 @@ from django.http import HttpResponse
 def download_xls(header_rows, data_set, row_header_columns=None):
     """
     Generates an XLS file with the given data.
-    :param header_rows: An array of header rows, with each row being an array of pairs (header label, column span)
-    :param data_set: Tabular data in the format [[r_1c_1, r_1c_2, ..., r_1c_N], ..., [r_Mc_1, r_Mc_2, ..., r_Mc_N]]
-    :param row_header_columns: a collection of columns that form the row headers, each cell being a pair
-                               (value, rowspan)
+    :param header_rows: An array of header rows, with each row being an array
+    of pairs (header label, column span)
+    :param data_set: Tabular data in the format [[r_1c_1, r_1c_2, ..., r_1c_N],
+    ..., [r_Mc_1, r_Mc_2, ..., r_Mc_N]]
+    :param row_header_columns: a collection of columns that form the row
+    headers, each cell being a pair (value, rowspan)
     :return: An HttpResponse containing the XLS file.
     """
     if row_header_columns is None:

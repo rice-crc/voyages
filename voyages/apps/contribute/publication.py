@@ -4,6 +4,7 @@ import os
 import re
 import traceback
 from builtins import str
+from itertools import chain
 
 import requests
 from django.conf import settings
@@ -30,54 +31,51 @@ from voyages.apps.voyage.models import (Voyage, VoyageCaptain,
                                         VoyageSlavesNumbers, VoyageSources,
                                         VoyageSourcesConnection)
 
-_exported_spss_fields = \
-    ['VOYAGEID', 'STATUS', 'ADLT1IMP', 'ADLT2IMP', 'ADLT3IMP', 'ADPSALE1', 'ADPSALE2',
-     'ADULT1', 'ADULT2', 'ADULT3', 'ADULT4', 'ADULT5', 'ADULT6', 'ADULT7',
-     'ARRPORT', 'ARRPORT2', 'BOY1', 'BOY2', 'BOY3', 'BOY4', 'BOY5', 'BOY6',
-     'BOY7', 'BOYRAT7', 'CAPTAINA', 'CAPTAINB',
-     'CAPTAINC', 'CHIL1IMP', 'CHIL2IMP', 'CHIL3IMP', 'CHILD1', 'CHILD2',
-     'CHILD3', 'CHILD4', 'CHILD5', 'CHILD6', 'CHILD7',
-     'CHILRAT7', 'CONSTREG', 'CREW', 'CREW1', 'CREW2', 'CREW3',
-     'CREW4', 'CREW5', 'CREWDIED', 'DATEDEPA', 'DATEDEPB', 'DATEDEPC',
-     'D1SLATRA', 'D1SLATRB', 'D1SLATRC', 'DLSLATRA', 'DLSLATRB',
-     'DLSLATRC', 'DDEPAM', 'DDEPAMB', 'DDEPAMC', 'DATARR32', 'DATARR33',
-     'DATARR34', 'DATARR36', 'DATARR37', 'DATARR38', 'DATARR39', 'DATARR40',
-     'DATARR41', 'DATARR43', 'DATARR44', 'DATARR45', 'DATEDEP', 'DATEBUY',
-     'DATELEFTAFR', 'DATELAND1', 'DATELAND2', 'DATELAND3', 'DATEDEPAM',
-     'DATEEND', 'DEPTREGIMP', 'DEPTREGIMP1', 'EMBPORT', 'EMBPORT2',
-     'EMBREG', 'EMBREG2', 'EVGREEN', 'FATE', 'FATE2', 'FATE3', 'FATE4',
-     'FEMALE1', 'FEMALE2', 'FEMALE3', 'FEMALE4', 'FEMALE5', 'FEMALE6',
-     'FEMALE7', 'FEML1IMP', 'FEML2IMP', 'FEML3IMP', 'GIRL1', 'GIRL2',
-     'GIRL3', 'GIRL4', 'GIRL5', 'GIRL6', 'GIRL7',
-     'GIRLRAT7', 'GUNS', 'INFANT1', 'INFANT2', 'INFANT3',
-     'INFANT4', 'INFANT5', 'INFANT6', 'JAMCASPR',
-     'MAJBUYPT', 'MAJBYIMP', 'MAJBYIMP1', 'MAJSELPT', 'MALE1', 'MALE1IMP',
-     'MALE2', 'MALE2IMP', 'MALE3', 'MALE3IMP', 'MALE4', 'MALE5', 'MALE6',
-     'MALE7', 'MALRAT7', 'MEN1', 'MEN2', 'MEN3',
-     'MEN4', 'MEN5', 'MEN6', 'MEN7', 'MENRAT7',
-     'MJBYPTIMP', 'MJSELIMP', 'MJSELIMP1', 'MJSLPTIMP', 'NATINIMP',
-     'NATIONAL', 'NCAR13', 'NCAR15', 'NCAR17', 'NDESERT', 'NPAFTTRA',
-     'NPPRETRA', 'NPPRIOR', 'OWNERA', 'OWNERB', 'OWNERC', 'OWNERD',
-     'OWNERE', 'OWNERF', 'OWNERG', 'OWNERH', 'OWNERI', 'OWNERJ', 'OWNERK',
-     'OWNERL', 'OWNERM', 'OWNERN', 'OWNERO', 'OWNERP', 'PLAC1TRA',
-     'PLAC2TRA', 'PLAC3TRA', 'PLACCONS', 'PLACREG', 'PORTDEP', 'PORTRET',
-     'PTDEPIMP', 'REGARR', 'REGARR2', 'REGDIS1', 'REGDIS2', 'REGDIS3',
-     'REGEM1', 'REGEM2', 'REGEM3', 'REGISREG', 'RESISTANCE', 'RETRNREG',
-     'RETRNREG1', 'RIG', 'SAILD1', 'SAILD2', 'SAILD3', 'SAILD4', 'SAILD5',
-     'SHIPNAME', 'SLA1PORT', 'SLAARRIV', 'SLADAFRI', 'SLADAMER', 'SLADVOY',
-     'SLAMIMP', 'SLAS32', 'SLAS36', 'SLAS39', 'SLAVEMA1', 'SLAVEMA3',
-     'SLAVEMA7', 'SLAVEMX1', 'SLAVEMX3', 'SLAVEMX7', 'SLAVMAX1', 'SLAVMAX3',
-     'SLAVMAX7', 'SLAXIMP', 'SLINTEN2', 'SLINTEND', 'SOURCEA', 'SOURCEB',
-     'SOURCEC', 'SOURCED', 'SOURCEE', 'SOURCEF', 'SOURCEG', 'SOURCEH',
-     'SOURCEI', 'SOURCEJ', 'SOURCEK', 'SOURCEL', 'SOURCEM', 'SOURCEN',
-     'SOURCEO', 'SOURCEP', 'SOURCEQ', 'SOURCER', 'TONMOD', 'TONNAGE',
-     'TONTYPE', 'TSLAVESD', 'TSLAVESP', 'TSLMTIMP', 'VOY1IMP', 'VOY2IMP',
-     'VOYAGE', 'VYMRTIMP', 'VYMRTRAT', 'WOMEN1', 'WOMEN2', 'WOMEN3',
-     'WOMEN4', 'WOMEN5', 'WOMEN6', 'WOMEN7', 'WOMRAT7',
-     'XMIMPFLAG', 'YEAR10', 'YEAR100', 'YEAR25', 'YEAR5', 'YEARAF', 'YEARAM',
-     'YEARDEP', 'YRCONS', 'YRREG', 'VOYAGEID2', 'INTRAAMER',
-     "BOYRAT1", "CHILRAT1", "GIRLRAT1", "MALRAT1", "MENRAT1", "WOMRAT1",
-     "BOYRAT3", "CHILRAT3", "GIRLRAT3", "MALRAT3", "MENRAT3", "WOMRAT3"]
+_exported_spss_fields = [
+    'VOYAGEID', 'STATUS', 'ADLT1IMP', 'ADLT2IMP', 'ADLT3IMP', 'ADPSALE1',
+    'ADPSALE2', 'ADULT1', 'ADULT2', 'ADULT3', 'ADULT4', 'ADULT5', 'ADULT6',
+    'ADULT7', 'ARRPORT', 'ARRPORT2', 'BOY1', 'BOY2', 'BOY3', 'BOY4', 'BOY5',
+    'BOY6', 'BOY7', 'BOYRAT7', 'CAPTAINA', 'CAPTAINB', 'CAPTAINC', 'CHIL1IMP',
+    'CHIL2IMP', 'CHIL3IMP', 'CHILD1', 'CHILD2', 'CHILD3', 'CHILD4', 'CHILD5',
+    'CHILD6', 'CHILD7', 'CHILRAT7', 'CONSTREG', 'CREW', 'CREW1', 'CREW2',
+    'CREW3', 'CREW4', 'CREW5', 'CREWDIED', 'DATEDEPA', 'DATEDEPB', 'DATEDEPC',
+    'D1SLATRA', 'D1SLATRB', 'D1SLATRC', 'DLSLATRA', 'DLSLATRB', 'DLSLATRC',
+    'DDEPAM', 'DDEPAMB', 'DDEPAMC', 'DATARR32', 'DATARR33', 'DATARR34',
+    'DATARR36', 'DATARR37', 'DATARR38', 'DATARR39', 'DATARR40', 'DATARR41',
+    'DATARR43', 'DATARR44', 'DATARR45', 'DATEDEP', 'DATEBUY', 'DATELEFTAFR',
+    'DATELAND1', 'DATELAND2', 'DATELAND3', 'DATEDEPAM', 'DATEEND',
+    'DEPTREGIMP', 'DEPTREGIMP1', 'EMBPORT', 'EMBPORT2', 'EMBREG', 'EMBREG2',
+    'EVGREEN', 'FATE', 'FATE2', 'FATE3', 'FATE4', 'FEMALE1', 'FEMALE2',
+    'FEMALE3', 'FEMALE4', 'FEMALE5', 'FEMALE6', 'FEMALE7', 'FEML1IMP',
+    'FEML2IMP', 'FEML3IMP', 'GIRL1', 'GIRL2', 'GIRL3', 'GIRL4', 'GIRL5',
+    'GIRL6', 'GIRL7', 'GIRLRAT7', 'GUNS', 'INFANT1', 'INFANT2', 'INFANT3',
+    'INFANT4', 'INFANT5', 'INFANT6', 'JAMCASPR', 'MAJBUYPT', 'MAJBYIMP',
+    'MAJBYIMP1', 'MAJSELPT', 'MALE1', 'MALE1IMP', 'MALE2', 'MALE2IMP', 'MALE3',
+    'MALE3IMP', 'MALE4', 'MALE5', 'MALE6', 'MALE7', 'MALRAT7', 'MEN1', 'MEN2',
+    'MEN3', 'MEN4', 'MEN5', 'MEN6', 'MEN7', 'MENRAT7', 'MJBYPTIMP', 'MJSELIMP',
+    'MJSELIMP1', 'MJSLPTIMP', 'NATINIMP', 'NATIONAL', 'NCAR13', 'NCAR15',
+    'NCAR17', 'NDESERT', 'NPAFTTRA', 'NPPRETRA', 'NPPRIOR', 'OWNERA', 'OWNERB',
+    'OWNERC', 'OWNERD', 'OWNERE', 'OWNERF', 'OWNERG', 'OWNERH', 'OWNERI',
+    'OWNERJ', 'OWNERK', 'OWNERL', 'OWNERM', 'OWNERN', 'OWNERO', 'OWNERP',
+    'PLAC1TRA', 'PLAC2TRA', 'PLAC3TRA', 'PLACCONS', 'PLACREG', 'PORTDEP',
+    'PORTRET', 'PTDEPIMP', 'REGARR', 'REGARR2', 'REGDIS1', 'REGDIS2',
+    'REGDIS3', 'REGEM1', 'REGEM2', 'REGEM3', 'REGISREG', 'RESISTANCE',
+    'RETRNREG', 'RETRNREG1', 'RIG', 'SAILD1', 'SAILD2', 'SAILD3', 'SAILD4',
+    'SAILD5', 'SHIPNAME', 'SLA1PORT', 'SLAARRIV', 'SLADAFRI', 'SLADAMER',
+    'SLADVOY', 'SLAMIMP', 'SLAS32', 'SLAS36', 'SLAS39', 'SLAVEMA1', 'SLAVEMA3',
+    'SLAVEMA7', 'SLAVEMX1', 'SLAVEMX3', 'SLAVEMX7', 'SLAVMAX1', 'SLAVMAX3',
+    'SLAVMAX7', 'SLAXIMP', 'SLINTEN2', 'SLINTEND', 'SOURCEA', 'SOURCEB',
+    'SOURCEC', 'SOURCED', 'SOURCEE', 'SOURCEF', 'SOURCEG', 'SOURCEH',
+    'SOURCEI', 'SOURCEJ', 'SOURCEK', 'SOURCEL', 'SOURCEM', 'SOURCEN',
+    'SOURCEO', 'SOURCEP', 'SOURCEQ', 'SOURCER', 'TONMOD', 'TONNAGE', 'TONTYPE',
+    'TSLAVESD', 'TSLAVESP', 'TSLMTIMP', 'VOY1IMP', 'VOY2IMP', 'VOYAGE',
+    'VYMRTIMP', 'VYMRTRAT', 'WOMEN1', 'WOMEN2', 'WOMEN3', 'WOMEN4', 'WOMEN5',
+    'WOMEN6', 'WOMEN7', 'WOMRAT7', 'XMIMPFLAG', 'YEAR10', 'YEAR100', 'YEAR25',
+    'YEAR5', 'YEARAF', 'YEARAM', 'YEARDEP', 'YRCONS', 'YRREG', 'VOYAGEID2',
+    'INTRAAMER', "BOYRAT1", "CHILRAT1", "GIRLRAT1", "MALRAT1", "MENRAT1",
+    "WOMRAT1", "BOYRAT3", "CHILRAT3", "GIRLRAT3", "MALRAT3", "MENRAT3",
+    "WOMRAT3"
+]
 
 # TODO: Some variables are not an exact match to any field in or models,
 # so they either have some correspondence with a computed value from those
@@ -94,11 +92,14 @@ def get_csv_writer(output):
 
 def safe_writerow(writer, item):
     """
-    Ensure that only export SPSS fields are included in the item that will be written.
+    Ensure that only export SPSS fields are included in the item that will be
+    written.
     """
     safe = {
-        k: v for (k, v) in [(field, item.get(field))
-                            for field in _exported_spss_fields] if v is not None
+        k: v for (k, v) in [
+            (field, item.get(field))
+            for field in _exported_spss_fields
+        ] if v is not None
     }
     return writer.writerow(safe)
 
@@ -136,9 +137,11 @@ def export_from_review_requests(review_requests):
         elif req.final_decision == ReviewRequestDecision.rejected_by_editor:
             status_text = 'rejected by editor'
         items = export_contribution(
-            user_contribution, contrib.interim_voyage if hasattr(
-                contrib, 'interim_voyage') else None,
-            req.created_voyage_id if req.requires_created_voyage_id() else None,
+            user_contribution,
+            (contrib.interim_voyage
+             if hasattr(contrib, 'interim_voyage') else None),
+            (req.created_voyage_id
+             if req.requires_created_voyage_id() else None),
             status_text, req.dataset == VoyageDataset.IntraAmerican)
         for data in items:
             yield data
@@ -234,9 +237,11 @@ def publish_accepted_contributions(log_file, skip_backup=False):
                 # Basic validation.
                 count += 1
                 log('Processing ' + req.contribution_id + '\n')
-                if req.final_decision != ReviewRequestDecision.accepted_by_editor:
+                if req.final_decision != (
+                        ReviewRequestDecision.accepted_by_editor):
                     raise Exception(
-                        'Review cannot be published since it was not accepted by editor'
+                        'Review cannot be published since it was not accepted '
+                        'by editor'
                     )
                 if req.contribution_id.startswith('delete'):
                     _publish_single_review_delete(req, all_deleted_ids)
@@ -323,11 +328,18 @@ def get_contrib_default_query(model):
 
 
 def get_filtered_contributions(filter_args):
-    return [{'type': 'edit', 'id': x.pk, 'contribution': x} for x in get_contrib_default_query(EditVoyageContribution).filter(**filter_args)] +\
-        [{'type': 'merge', 'id': x.pk, 'contribution': x} for x in get_contrib_default_query(MergeVoyagesContribution).filter(**filter_args)] +\
-        [{'type': 'delete', 'id': x.pk, 'contribution': x} for x in get_contrib_default_query(DeleteVoyageContribution).filter(**filter_args)] +\
-        [{'type': 'new', 'id': x.pk, 'contribution': x}
-         for x in get_contrib_default_query(NewVoyageContribution).filter(**filter_args)]
+    return [
+        [{
+            'type': name,
+            'id': x.pk,
+            'contribution': x
+        } for x in get_contrib_default_query(contrib).filter(**filter_args)]
+        for name, contrib
+        in [('edit', EditVoyageContribution),
+            ('merge', MergeVoyagesContribution),
+            ('delete', DeleteVoyageContribution),
+            ('new', NewVoyageContribution)]
+    ]
 
 
 def _fetch_active_reviews_by_status(statuses):
@@ -615,10 +627,10 @@ def _map_voyage_to_spss(voyage):
     data['SLAVEMA7'] = numbers.total_slaves_dept_or_arr_age_identified
     data['SLAVEMX7'] = numbers.total_slaves_dept_or_arr_gender_identified
     data['SLAVMAX1'] = numbers.total_slaves_embarked_age_gender_identified
-    data[
-        'SLAVMAX3'] = numbers.total_slaves_by_age_gender_identified_among_landed
-    data[
-        'SLAVMAX7'] = numbers.total_slaves_by_age_gender_identified_departure_or_arrival
+    data['SLAVMAX3'] = (
+        numbers.total_slaves_by_age_gender_identified_among_landed)
+    data['SLAVMAX7'] = (
+        numbers.total_slaves_by_age_gender_identified_departure_or_arrival)
     data['TSLMTIMP'] = numbers.imp_slaves_embarked_for_mortality
     data['MEN7'] = numbers.imp_num_men_total
     data['WOMEN7'] = numbers.imp_num_women_total
@@ -739,8 +751,8 @@ def _map_interim_to_spss(interim):
     data['REGEM3'] = _get_region_value(interim.third_place_of_slave_purchase)
     data['NPAFTTRA'] = _get_label_value(
         interim.place_of_call_before_atlantic_crossing)
-    data[
-        'NPPRIOR'] = interim.number_of_new_world_ports_called_prior_to_disembarkation
+    data['NPPRIOR'] = (
+        interim.number_of_new_world_ports_called_prior_to_disembarkation)
     data['SLA1PORT'] = _get_label_value(interim.first_place_of_landing)
     data['ADPSALE1'] = _get_label_value(interim.second_place_of_landing)
     data['ADPSALE2'] = _get_label_value(interim.third_place_of_landing)
@@ -749,8 +761,8 @@ def _map_interim_to_spss(interim):
     data['REGDIS3'] = _get_region_value(interim.third_place_of_landing)
     data['PORTRET'] = _get_label_value(interim.port_voyage_ended)
     data['RETRNREG'] = _get_region_value(interim.port_voyage_ended)
-    data[
-        'RETRNREG1'] = interim.port_voyage_ended.region.broad_region.value if interim.port_voyage_ended else None
+    data['RETRNREG1'] = (interim.port_voyage_ended.region.broad_region.value
+                         if interim.port_voyage_ended else None)
     data['MAJBUYPT'] = _get_label_value(
         interim.principal_place_of_slave_purchase)
     data['MAJSELPT'] = _get_label_value(
@@ -773,7 +785,8 @@ def _map_interim_to_spss(interim):
         interim.imputed_principal_port_of_slave_disembarkation)
     data['DEPTREGIMP'] = _get_label_value(
         interim.imputed_region_where_voyage_began)
-    # TODO: we should check why we have REGDIS1/REGEM vars being both imputed and not imputed. Is this a design error?
+    # TODO: we should check why we have REGDIS1/REGEM vars being both imputed
+    # and not imputed. Is this a design error?
     data['REGDIS1'] = _get_label_value(
         interim.imputed_first_region_of_slave_landing)
     data['REGDIS2'] = _get_label_value(
@@ -793,24 +806,28 @@ def _map_interim_to_spss(interim):
     data['YEAR10'] = interim.imputed_decade_in_which_voyage_occurred
     data['YEAR25'] = interim.imputed_quarter_century_in_which_voyage_occurred
     data['YEAR100'] = interim.imputed_century_in_which_voyage_occurred
-    data[
-        'VOY1IMP'] = interim.imputed_voyage_length_home_port_to_first_port_of_disembarkation
+    data['VOY1IMP'] = (
+        interim.imputed_voyage_length_home_port_to_first_port_of_disembarkation)
     data['VOY2IMP'] = interim.imputed_length_of_middle_passage
     data['XMIMPFLAG'] = _get_label_value(
         interim.imputed_voyage_groupings_for_estimating_imputed_slaves)
     data['SLAXIMP'] = interim.imputed_total_slaves_embarked
     data['SLAMIMP'] = interim.imputed_total_slaves_disembarked
-    data[
-        'TSLMTIMP'] = interim.imputed_number_of_slaves_embarked_for_mortality_calculation
-    data['VYMRTIMP'] = interim.imputed_total_slave_deaths_during_middle_passage
+    data['TSLMTIMP'] = (
+        interim.imputed_number_of_slaves_embarked_for_mortality_calculation)
+    data['VYMRTIMP'] = (
+        interim.imputed_total_slave_deaths_during_middle_passage)
     data['VYMRTRAT'] = interim.imputed_mortality_rate
     data['JAMCASPR'] = interim.imputed_standardized_price_of_slaves
 
     # Sources
-    created_sources = list(interim.article_sources.all()) + list(interim.book_sources.all()) + \
-        list(interim.newspaper_sources.all()) + list(interim.private_note_or_collection_sources.all()) + \
-        list(interim.unpublished_secondary_sources.all()) + \
-        list(interim.primary_sources.all())
+    created_sources = list(chain(
+        interim.article_sources.all(),
+        interim.book_sources.all(),
+        interim.newspaper_sources.all(),
+        interim.private_note_or_collection_sources.all(),
+        interim.unpublished_secondary_sources.all(),
+        interim.primary_sources.all()))
     source_refs = [x.source_ref_text for x in created_sources] + \
         [x.full_ref for x in interim.pre_existing_sources.all()]
     aux = 'ABCDEFGHIJKLMNOPQR'
@@ -830,9 +847,11 @@ def _save_editorial_version(review_request,
                             contrib_type,
                             in_cd_rom_override=None):
     editor_contribution = review_request.editor_contribution.first()
-    if editor_contribution is None or editor_contribution.interim_voyage is None:
+    if editor_contribution is None or \
+            editor_contribution.interim_voyage is None:
         raise Exception(
-            'This type of contribution requires an editor review interim voyage for publication'
+            'This type of contribution requires an editor review interim '
+            'voyage for publication'
         )
     interim = editor_contribution.interim_voyage
     # Create or load a voyage with the appropriate voyage id.
@@ -841,7 +860,8 @@ def _save_editorial_version(review_request,
     if contrib_type in ('merge', 'new'):
         if not review_request.created_voyage_id:
             raise Exception(
-                'For new or merged contributions, an explicit voyage_id must be set'
+                'For new or merged contributions, an explicit voyage_id '
+                'must be set'
             )
         voyage.voyage_id = review_request.created_voyage_id
     elif contrib_type == 'edit':
@@ -852,7 +872,9 @@ def _save_editorial_version(review_request,
 
     # Edit field values and create child records for the voyage.
     if contrib_type != 'edit':
-        voyage.voyage_in_cd_rom = in_cd_rom_override if in_cd_rom_override is not None else False
+        voyage.voyage_in_cd_rom = (in_cd_rom_override
+                                   if in_cd_rom_override is not None
+                                   else False)
     else:
         _delete_child_fk(voyage, 'voyage_ship')
         _delete_child_fk(voyage, 'voyage_itinerary')
@@ -866,7 +888,8 @@ def _save_editorial_version(review_request,
 
     voyage.dataset = review_request.dataset
     # Save voyage so that the database generates a primary key for it.
-    voyage.voyage_groupings = interim.imputed_voyage_groupings_for_estimating_imputed_slaves
+    voyage.voyage_groupings = (
+        interim.imputed_voyage_groupings_for_estimating_imputed_slaves)
     voyage.save()
 
     def region(place):
@@ -942,24 +965,32 @@ def _save_editorial_version(review_request,
         interim.first_port_intended_embarkation)
     itinerary.int_second_region_purchase_slaves = region(
         interim.second_port_intended_embarkation)
-    itinerary.int_first_port_dis = interim.first_port_intended_disembarkation
-    itinerary.int_second_port_dis = interim.second_port_intended_disembarkation
+    itinerary.int_first_port_dis = (
+        interim.first_port_intended_disembarkation)
+    itinerary.int_second_port_dis = (
+        interim.second_port_intended_disembarkation)
     itinerary.int_first_region_slave_landing = region(
         interim.first_port_intended_disembarkation)
     itinerary.int_second_place_region_slave_landing = region(
         interim.second_port_intended_disembarkation)
-    itinerary.ports_called_buying_slaves = interim.number_of_ports_called_prior_to_slave_purchase
-    itinerary.first_place_slave_purchase = interim.first_place_of_slave_purchase
-    itinerary.second_place_slave_purchase = interim.second_place_of_slave_purchase
-    itinerary.third_place_slave_purchase = interim.third_place_of_slave_purchase
+    itinerary.ports_called_buying_slaves = (
+        interim.number_of_ports_called_prior_to_slave_purchase)
+    itinerary.first_place_slave_purchase = (
+        interim.first_place_of_slave_purchase)
+    itinerary.second_place_slave_purchase = (
+        interim.second_place_of_slave_purchase)
+    itinerary.third_place_slave_purchase = (
+        interim.third_place_of_slave_purchase)
     itinerary.first_region_slave_emb = region(
         interim.first_place_of_slave_purchase)
     itinerary.second_region_slave_emb = region(
         interim.second_place_of_slave_purchase)
     itinerary.third_region_slave_emb = region(
         interim.third_place_of_slave_purchase)
-    itinerary.port_of_call_before_atl_crossing = interim.place_of_call_before_atlantic_crossing
-    itinerary.number_of_ports_of_call = interim.number_of_new_world_ports_called_prior_to_disembarkation
+    itinerary.port_of_call_before_atl_crossing = (
+        interim.place_of_call_before_atlantic_crossing)
+    itinerary.number_of_ports_of_call = (
+        interim.number_of_new_world_ports_called_prior_to_disembarkation)
     itinerary.first_landing_place = interim.first_place_of_landing
     itinerary.second_landing_place = interim.second_place_of_landing
     itinerary.third_landing_place = interim.third_place_of_landing
@@ -970,17 +1001,22 @@ def _save_editorial_version(review_request,
     itinerary.region_of_return = region(interim.port_voyage_ended)
     itinerary.broad_region_of_return = broad_region(interim.port_voyage_ended)
     itinerary.imp_port_voyage_begin = interim.imputed_port_where_voyage_began
-    itinerary.imp_region_voyage_begin = interim.imputed_region_where_voyage_began
+    itinerary.imp_region_voyage_begin = (
+        interim.imputed_region_where_voyage_began)
     itinerary.imp_broad_region_voyage_begin = broad_region(
         interim.imputed_port_where_voyage_began)
-    itinerary.principal_place_of_slave_purchase = interim.principal_place_of_slave_purchase
-    itinerary.imp_principal_place_of_slave_purchase = interim.imputed_principal_place_of_slave_purchase
+    itinerary.principal_place_of_slave_purchase = (
+        interim.principal_place_of_slave_purchase)
+    itinerary.imp_principal_place_of_slave_purchase = (
+        interim.imputed_principal_place_of_slave_purchase)
     itinerary.imp_principal_region_of_slave_purchase = region(
         interim.imputed_principal_place_of_slave_purchase)
     itinerary.imp_broad_region_of_slave_purchase = broad_region(
         interim.imputed_principal_place_of_slave_purchase)
-    itinerary.principal_port_of_slave_dis = interim.principal_place_of_slave_disembarkation
-    itinerary.imp_principal_port_slave_dis = interim.imputed_principal_port_of_slave_disembarkation
+    itinerary.principal_port_of_slave_dis = (
+        interim.principal_place_of_slave_disembarkation)
+    itinerary.imp_principal_port_slave_dis = (
+        interim.imputed_principal_port_of_slave_disembarkation)
     itinerary.imp_principal_region_slave_dis = region(
         interim.imputed_principal_port_of_slave_disembarkation)
     itinerary.imp_broad_region_slave_dis = broad_region(
@@ -993,7 +1029,8 @@ def _save_editorial_version(review_request,
     outcome.particular_outcome = interim.voyage_outcome
     outcome.resistance = interim.african_resistance
     outcome.outcome_slaves = interim.imputed_outcome_of_voyage_for_slaves
-    outcome.vessel_captured_outcome = interim.imputed_outcome_of_voyage_if_ship_captured
+    outcome.vessel_captured_outcome = (
+        interim.imputed_outcome_of_voyage_if_ship_captured)
     outcome.outcome_owner = interim.imputed_outcome_of_voyage_for_owner
     outcome.save()
 
@@ -1012,7 +1049,8 @@ def _save_editorial_version(review_request,
     dates.vessel_left_port = interim.date_vessel_left_last_slaving_port
     dates.first_dis_of_slaves = interim.date_first_slave_disembarkation
     # dates.date_departed_africa = interim.???  TODO: check this
-    dates.arrival_at_second_place_landing = interim.date_second_slave_disembarkation
+    dates.arrival_at_second_place_landing = (
+        interim.date_second_slave_disembarkation)
     dates.third_dis_of_slaves = interim.date_third_slave_disembarkation
     dates.departure_last_place_of_landing = interim.date_return_departure
     dates.voyage_completed = interim.date_voyage_completed
@@ -1022,8 +1060,10 @@ def _save_editorial_version(review_request,
         interim.imputed_year_departed_africa)
     dates.imp_arrival_at_port_of_dis = year_dummies(
         interim.imputed_year_arrived_at_port_of_disembarkation)
-    dates.imp_length_home_to_disembark = interim.imputed_voyage_length_home_port_to_first_port_of_disembarkation
-    dates.imp_length_leaving_africa_to_disembark = interim.imputed_length_of_middle_passage
+    dates.imp_length_home_to_disembark = (
+        interim.imputed_voyage_length_home_port_to_first_port_of_disembarkation)
+    dates.imp_length_leaving_africa_to_disembark = (
+        interim.imputed_length_of_middle_passage)
     dates.save()
 
     numbers = {
@@ -1068,10 +1108,14 @@ def _save_editorial_version(review_request,
     slaves_numbers.num_slaves_disembark_first_place = numbers.get('SLAS32')
     slaves_numbers.num_slaves_disembark_second_place = numbers.get('SLAS36')
     slaves_numbers.num_slaves_disembark_third_place = numbers.get('SLAS39')
-    slaves_numbers.imp_total_num_slaves_embarked = interim.imputed_total_slaves_embarked
-    slaves_numbers.imp_total_num_slaves_disembarked = interim.imputed_total_slaves_disembarked
-    slaves_numbers.imp_jamaican_cash_price = interim.imputed_standardized_price_of_slaves
-    slaves_numbers.imp_mortality_during_voyage = interim.imputed_total_slave_deaths_during_middle_passage
+    slaves_numbers.imp_total_num_slaves_embarked = (
+        interim.imputed_total_slaves_embarked)
+    slaves_numbers.imp_total_num_slaves_disembarked = (
+        interim.imputed_total_slaves_disembarked)
+    slaves_numbers.imp_jamaican_cash_price = (
+        interim.imputed_standardized_price_of_slaves)
+    slaves_numbers.imp_mortality_during_voyage = (
+        interim.imputed_total_slave_deaths_during_middle_passage)
     slaves_numbers.num_men_embark_first_port_purchase = numbers.get('MEN1')
     slaves_numbers.num_women_embark_first_port_purchase = numbers.get('WOMEN1')
     slaves_numbers.num_boy_embark_first_port_purchase = numbers.get('BOY1')
@@ -1159,7 +1203,8 @@ def _save_editorial_version(review_request,
         'SLAVEMA7')
     slaves_numbers.total_slaves_dept_or_arr_gender_identified = numbers.get(
         'SLAVEMX7')
-    slaves_numbers.imp_slaves_embarked_for_mortality = interim.imputed_number_of_slaves_embarked_for_mortality_calculation
+    slaves_numbers.imp_slaves_embarked_for_mortality = (
+        interim.imputed_number_of_slaves_embarked_for_mortality_calculation)
     slaves_numbers.imp_num_men_total = numbers.get('MEN7')
     slaves_numbers.imp_num_women_total = numbers.get('WOMEN7')
     slaves_numbers.imp_num_boy_total = numbers.get('BOY7')
@@ -1174,15 +1219,19 @@ def _save_editorial_version(review_request,
     slaves_numbers.percentage_girl = numbers.get('GIRLRAT7')
     slaves_numbers.percentage_male = numbers.get('MALRAT7')
     slaves_numbers.percentage_child = numbers.get('CHILRAT7')
-    slaves_numbers.percentage_adult = 1.0 - \
-        slaves_numbers.percentage_child if slaves_numbers.percentage_child is not None else None
-    slaves_numbers.percentage_female = 1.0 - \
-        slaves_numbers.percentage_male if slaves_numbers.percentage_male is not None else None
+    slaves_numbers.percentage_adult = (
+        1.0 - slaves_numbers.percentage_child
+        if slaves_numbers.percentage_child is not None
+        else None)
+    slaves_numbers.percentage_female = (
+        1.0 - slaves_numbers.percentage_male
+        if slaves_numbers.percentage_male is not None
+        else None)
     slaves_numbers.imp_mortality_ratio = interim.imputed_mortality_rate
     slaves_numbers.total_slaves_embarked_age_gender_identified = numbers.get(
         u'SLAVMAX1')
-    slaves_numbers.total_slaves_by_age_gender_identified_among_landed = numbers.get(
-        u'SLAVMAX3')
+    slaves_numbers.total_slaves_by_age_gender_identified_among_landed = (
+        numbers.get(u'SLAVMAX3'))
     slaves_numbers.total_slaves_by_age_gender_identified_departure_or_arrival = numbers.get(
         u'SLAVMAX7')
     slaves_numbers.percentage_boys_among_embarked_slaves = numbers.get(
@@ -1222,10 +1271,13 @@ def _save_editorial_version(review_request,
             raise Exception('Source "' + short_ref + '" not found')
         create_source_connection(src, conn_ref, order)
 
-    created_sources = list(interim.article_sources.all()) + list(interim.book_sources.all()) + \
-        list(interim.newspaper_sources.all()) + list(interim.private_note_or_collection_sources.all()) + \
-        list(interim.unpublished_secondary_sources.all()) + \
-        list(interim.primary_sources.all())
+    created_sources = list(chain(
+        interim.article_sources.all(),
+        interim.book_sources.all(),
+        interim.newspaper_sources.all(),
+        interim.private_note_or_collection_sources.all(),
+        interim.unpublished_secondary_sources.all(),
+        interim.primary_sources.all()))
     pre_existing_sources = list(interim.pre_existing_sources.all())
     if contrib_type != 'edit' and contrib_type != 'merge' and len(
             pre_existing_sources) > 0:
@@ -1249,7 +1301,8 @@ def _save_editorial_version(review_request,
                                 source_order)
         source_order += 1
 
-    # Set voyage foreign keys (this is redundant, but we are keeping the original model design)
+    # Set voyage foreign keys (this is redundant, but we are keeping the
+    # original model design)
     voyage.voyage_ship = ship
     voyage.voyage_itinerary = itinerary
     voyage.voyage_dates = dates

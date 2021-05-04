@@ -45,11 +45,13 @@ class Migration(migrations.Migration):
                                   verbose_name=b'Notes')),
                 ('status',
                  models.IntegerField(
-                     help_text=b'Indicates whether the contribution is still being edited, committed, discarded etc',
+                     help_text=b'Indicates whether the contribution is still '
+                     b'being edited, committed, discarded etc',
                      verbose_name=b'Status')),
                 ('deleted_voyages_ids',
                  models.CommaSeparatedIntegerField(
-                     help_text=b'The voyage_id of each Voyage being deleted by this contribution',
+                     help_text=b'The voyage_id of each Voyage being deleted '
+                     b'by this contribution',
                      max_length=255,
                      verbose_name=b'Deleted voyage ids')),
                 ('contributor',
@@ -75,11 +77,13 @@ class Migration(migrations.Migration):
                                   verbose_name=b'Notes')),
                 ('status',
                  models.IntegerField(
-                     help_text=b'Indicates whether the contribution is still being edited, committed, discarded etc',
+                     help_text=b'Indicates whether the contribution is still '
+                     b'being edited, committed, discarded etc',
                      verbose_name=b'Status')),
                 ('edited_voyage_id',
                  models.IntegerField(
-                     help_text=b'The voyage_id of the Voyage edited by this contribution',
+                     help_text=b'The voyage_id of the Voyage edited by this '
+                     b'bcontribution',
                      verbose_name=b'Edited voyage id')),
                 ('contributor',
                  models.ForeignKey(related_name='+',
@@ -413,11 +417,13 @@ class Migration(migrations.Migration):
                                   verbose_name=b'Notes')),
                 ('status',
                  models.IntegerField(
-                     help_text=b'Indicates whether the contribution is still being edited, committed, discarded etc',
+                     help_text=b'Indicates whether the contribution is still '
+                     b'being edited, committed, discarded etc',
                      verbose_name=b'Status')),
                 ('merged_voyages_ids',
                  models.CommaSeparatedIntegerField(
-                     help_text=b'The voyage_id of each Voyage being merged by this contribution',
+                     help_text=b'The voyage_id of each Voyage being merged by '
+                     b'this contribution',
                      max_length=255,
                      verbose_name=b'Merged voyage ids')),
                 ('contributor',
@@ -447,7 +453,8 @@ class Migration(migrations.Migration):
                                   verbose_name=b'Notes')),
                 ('status',
                  models.IntegerField(
-                     help_text=b'Indicates whether the contribution is still being edited, committed, discarded etc',
+                     help_text=b'Indicates whether the contribution is still '
+                     b'being edited, committed, discarded etc',
                      verbose_name=b'Status')),
                 ('contributor',
                  models.ForeignKey(related_name='+',
@@ -471,7 +478,8 @@ class Migration(migrations.Migration):
                                   auto_created=True,
                                   primary_key=True)),
                 ('institution', models.CharField(max_length=255)),
-                ('new_material_and_sources', models.TextField(max_length=1000)),
+                ('new_material_and_sources',
+                 models.TextField(max_length=1000)),
                 ('user', models.OneToOneField(to=settings.AUTH_USER_MODEL,
                                               on_delete=models.CASCADE)),
             ],

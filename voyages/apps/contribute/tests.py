@@ -131,7 +131,8 @@ class TestAuthentication(TestCase):
 
 class TestImputedDataCalculation(TestCase):
     """
-    Here we test the converted SPSS script that should generate imputed variables
+    Here we test the converted SPSS script that should generate imputed
+    variables
     """
 
     fixtures = [
@@ -160,8 +161,8 @@ class TestImputedDataCalculation(TestCase):
         self.assertEqual(0, len(errors), '\n'.join(list(errors.values())))
 
     def compute_imputed_csv(self, input_csv, output_csv, dump_file=None):
-        # The test dataset is divided into two CSV files, one contains the source
-        # variable data and the other contains the expected output.
+        # The test dataset is divided into two CSV files, one contains the
+        # source variable data and the other contains the expected output.
         test_input = self.parse_csv(input_csv)
         test_output = self.parse_csv(output_csv)
         if len(test_input) != len(test_output):
@@ -220,11 +221,17 @@ class TestImputedDataCalculation(TestCase):
             computed_data.append(all_vars)
             if len(mismatches) > 0:
                 mismatches = sorted(mismatches, key=lambda m: m[0])
-                errors[voyage_id] = 'Mismatches on voyage id ' + voyage_id + ':\n' + \
-                    ',\n'.join(['\t' + mismatch_text(m) for m in mismatches]) + \
-                    '\nInterim numbers:\n' + str_dict({sn.var_name: sn.number for sn in interim.slave_numbers.all()}) + \
-                    '\nInterim:\n' + str_dict(vars(interim)) + \
-                    '\nAll variables:\n' + str_dict(all_vars)
+                errors[voyage_id] = (
+                    'Mismatches on voyage id'
+                    ' ' + voyage_id + ':\n' + ',\n'.join([
+                        '\t' + mismatch_text(m) for m in mismatches
+                    ]) + '\nInterim numbers:\n' + str_dict({
+                        sn.var_name:
+                        sn.number
+                        for sn in interim.slave_numbers.all()
+                    }) + '\nInterim:\n' + str_dict(
+                        vars(interim)
+                    ) + '\nAll variables:\n' + str_dict(all_vars))
             first = False
             interim.delete()
 
@@ -237,7 +244,7 @@ class TestImputedDataCalculation(TestCase):
 
         return errors
 
-    def interim_voyage(self, dictionary):
+    def interim_voyage(self, dikt):
         # TODO: this code may be placed somewhere else so that
         # it can be reused.
         nat_from_value = fn_from_value(Nationality)
@@ -248,62 +255,62 @@ class TestImputedDataCalculation(TestCase):
         resistance_from_value = fn_from_value(Resistance)
 
         def date_from_triple(m, d, y):
-            arr = [dictionary[m], dictionary[d], dictionary[y]]
+            arr = [dikt[m], dikt[d], dikt[y]]
             arr = [str(x) if x else '' for x in arr]
             result = ','.join(arr)
             return result if result != ',,' else None
 
         interim = InterimVoyage()
-        interim.name_of_vessel = dictionary['shipname']
-        interim.year_ship_constructed = dictionary['yrcons']
-        interim.year_ship_registered = dictionary['yrreg']
+        interim.name_of_vessel = dikt['shipname']
+        interim.year_ship_constructed = dikt['yrcons']
+        interim.year_ship_registered = dikt['yrreg']
         interim.ship_construction_place = place_from_value(
-            dictionary['placcons'])
+            dikt['placcons'])
         interim.ship_registration_place = place_from_value(
-            dictionary['placreg'])
-        interim.national_carrier = nat_from_value(dictionary['national'])
-        interim.rig_of_vessel = rig_from_value(dictionary['rig'])
-        interim.tonnage_of_vessel = dictionary['tonnage']
-        interim.ton_type = tontype_from_value(dictionary['tontype'])
-        interim.guns_mounted = dictionary['guns']
-        interim.first_ship_owner = dictionary['ownera']
-        interim.second_ship_owner = dictionary['ownerb']
-        # interim.additional_ship_owners = dictionary['ownerc' d, e, f...]
-        interim.voyage_outcome = outcome_from_value(dictionary['fate'])
+            dikt['placreg'])
+        interim.national_carrier = nat_from_value(dikt['national'])
+        interim.rig_of_vessel = rig_from_value(dikt['rig'])
+        interim.tonnage_of_vessel = dikt['tonnage']
+        interim.ton_type = tontype_from_value(dikt['tontype'])
+        interim.guns_mounted = dikt['guns']
+        interim.first_ship_owner = dikt['ownera']
+        interim.second_ship_owner = dikt['ownerb']
+        # interim.additional_ship_owners = dikt['ownerc' d, e, f...]
+        interim.voyage_outcome = outcome_from_value(dikt['fate'])
         interim.african_resistance = resistance_from_value(
-            dictionary['resistance'])
+            dikt['resistance'])
         interim.first_port_intended_embarkation = place_from_value(
-            dictionary['embport'])
+            dikt['embport'])
         interim.second_port_intended_embarkation = place_from_value(
-            dictionary['embport2'])
+            dikt['embport2'])
         interim.first_port_intended_disembarkation = place_from_value(
-            dictionary['arrport'])
+            dikt['arrport'])
         interim.second_port_intended_disembarkation = place_from_value(
-            dictionary['arrport2'])
-        interim.port_of_departure = place_from_value(dictionary['portdep'])
-        interim.number_of_ports_called_prior_to_slave_purchase = dictionary[
+            dikt['arrport2'])
+        interim.port_of_departure = place_from_value(dikt['portdep'])
+        interim.number_of_ports_called_prior_to_slave_purchase = dikt[
             'nppretra']
         interim.first_place_of_slave_purchase = place_from_value(
-            dictionary['plac1tra'])
+            dikt['plac1tra'])
         interim.second_place_of_slave_purchase = place_from_value(
-            dictionary['plac2tra'])
+            dikt['plac2tra'])
         interim.third_place_of_slave_purchase = place_from_value(
-            dictionary['plac3tra'])
+            dikt['plac3tra'])
         interim.principal_place_of_slave_purchase = place_from_value(
-            dictionary['majbuypt'])
+            dikt['majbuypt'])
         interim.place_of_call_before_atlantic_crossing = place_from_value(
-            dictionary['npafttra'])
-        interim.number_of_new_world_ports_called_prior_to_disembarkation = dictionary[
-            'nppretra']
+            dikt['npafttra'])
+        interim.number_of_new_world_ports_called_prior_to_disembarkation = (
+            dikt['nppretra'])
         interim.first_place_of_landing = place_from_value(
-            dictionary['sla1port'])
+            dikt['sla1port'])
         interim.second_place_of_landing = place_from_value(
-            dictionary['adpsale1'])
+            dikt['adpsale1'])
         interim.third_place_of_landing = place_from_value(
-            dictionary['adpsale2'])
+            dikt['adpsale2'])
         interim.principal_place_of_slave_disembarkation = place_from_value(
-            dictionary['majselpt'])
-        interim.port_voyage_ended = place_from_value(dictionary['portret'])
+            dikt['majselpt'])
+        interim.port_voyage_ended = place_from_value(dikt['portret'])
         interim.date_departure = date_from_triple('datedepb', 'datedepa',
                                                   'datedepc')
         interim.date_slave_purchase_began = date_from_triple(
@@ -320,25 +327,26 @@ class TestImputedDataCalculation(TestCase):
             'ddepamb', 'ddepam', 'ddepamc')
         interim.date_voyage_completed = date_from_triple(
             'datarr44', 'datarr43', 'datarr45')
-        interim.length_of_middle_passage = dictionary['voyage']
-        interim.first_captain = dictionary['captaina']
-        interim.second_captain = dictionary['captainb']
-        interim.third_captain = dictionary['captainc']
+        interim.length_of_middle_passage = dikt['voyage']
+        interim.first_captain = dikt['captaina']
+        interim.second_captain = dikt['captainb']
+        interim.third_captain = dikt['captainc']
         interim.save()
         number_variables = [
             'ncar13', 'ncar15', 'ncar17', 'tslavesd', 'tslavesp', 'slas32',
             'slas36', 'slas39', 'slaarriv', 'sladvoy', 'men1', 'men4', 'men5',
-            'women1', 'women4', 'women5', 'adult1', 'adult4', 'adult5', 'girl1',
-            'girl4', 'girl5', 'boy1', 'boy4', 'boy5', 'child1', 'child4',
-            'child5', 'infant1', 'infant4', 'male1', 'male4', 'male5',
-            'female1', 'female4', 'female5', 'men3', 'men6', 'women3', 'women6',
-            'adult3', 'adult6', 'girl3', 'girl6', 'boy3', 'boy6', 'child3',
-            'child6', 'infant3', 'male3', 'male6', 'female3', 'female6', 'men2',
-            'women2', 'adult2', 'girl2', 'boy2', 'child2', 'male2', 'female2'
+            'women1', 'women4', 'women5', 'adult1', 'adult4', 'adult5',
+            'girl1', 'girl4', 'girl5', 'boy1', 'boy4', 'boy5', 'child1',
+            'child4', 'child5', 'infant1', 'infant4', 'male1', 'male4',
+            'male5', 'female1', 'female4', 'female5', 'men3', 'men6', 'women3',
+            'women6', 'adult3', 'adult6', 'girl3', 'girl6', 'boy3', 'boy6',
+            'child3', 'child6', 'infant3', 'male3', 'male6', 'female3',
+            'female6', 'men2', 'women2', 'adult2', 'girl2', 'boy2', 'child2',
+            'male2', 'female2'
         ]
         numbers_added = {}
         for var_name in number_variables:
-            var_value = dictionary.get(var_name)
+            var_value = dikt.get(var_name)
             if var_value is None:
                 continue
             number = InterimSlaveNumber()
@@ -392,7 +400,8 @@ class TestEditorialPlatform(TransactionTestCase):
         self.assertNotEqual(form, None)
         self.assertEqual(numbers, {})
 
-        # Check that the fields are blank (just a sample, there are too many to check).
+        # Check that the fields are blank (just a sample, there are too many to
+        # check).
         self.assertEqual(interim.name_of_vessel, None)
         self.assertEqual(interim.date_departure, None)
 
@@ -528,25 +537,24 @@ class TestEditorialPlatform(TransactionTestCase):
         # Now submit sources.
         source_type_inverse = {v: k for k, v in list(source_type_dict.items())}
         new_sources = [{
-            u'place_of_publication': u'Cambridge',
-            u'information': None,
-            u'source_ref_text': None,
-            u'page_end': 34,
-            u'book_title': u'Transatlantic History',
-            u'url': None,
-            u'publisher': u'CUP',
-            u'year': 2015,
-            u'created_voyage_sources': None,
-            u'source_is_essay_in_book': True,
-            u'editors': u'Jenkins, Frederick',
+            u'__index': 1,
             u'authors': u'Fellows, John',
+            u'book_title': u'Transatlantic History',
+            u'created_voyage_sources_id': None,
+            u'created_voyage_sources': None,
+            u'editors': u'Jenkins, Frederick',
             u'essay_title': u'Early English Slave Trade',
+            u'information': None,
+            u'page_end': 34,
             u'page_start': 33,
             u'pk': None,
-            u'created_voyage_sources_id': None,
+            u'place_of_publication': u'Cambridge',
+            u'publisher': u'CUP',
+            u'source_is_essay_in_book': True,
             u'source_ref_text': None,
             u'type': source_type_inverse[InterimBookSource],
-            u'__index': 1
+            u'url': None,
+            u'year': 2015,
         }]
         sources = new_sources
         ajax_data['sources'] = json.dumps(sources)
@@ -630,8 +638,8 @@ class TestEditorialPlatform(TransactionTestCase):
         }
         self.assertDictEqual(slave_numbers, editor_numbers)
         # Impute data.
-        ajax_data[
-            'editorial_decision'] = u'Should accept this contribution in the test'
+        ajax_data['editorial_decision'] = (u'Should accept this contribution '
+                                           u'in the test')
         json_response = self.client.post(
             reverse('contribute:impute_contribution',
                     kwargs={'editor_contribution_id': editor_contribution_id}),
@@ -758,7 +766,8 @@ class TestEditorialPlatform(TransactionTestCase):
                                    delta=0.001)
         are_same_numbers(expected_imputed_numbers, editor_numbers, 0.001)
 
-        # If we try to accept the contribution, it should fail since the new reference is not yet created.
+        # If we try to accept the contribution, it should fail since the new
+        # reference is not yet created.
         form = InterimVoyageForm(model_to_dict(editor_interim),
                                  instance=interim)
         is_valid = form.is_valid()
@@ -792,7 +801,8 @@ class TestEditorialPlatform(TransactionTestCase):
                                     source_post_data)
         data = response.context
         form = data['form']
-        # The form should correspond to a VoyageSourcesAdminForm initialized with our fictitious info.
+        # The form should correspond to a VoyageSourcesAdminForm initialized
+        # with our fictitious info.
         form_p = form.as_p()
         self.assertTrue(form_p.find('Transatlantic History') > 0)
         self.assertTrue(form_p.find('Fellows, John') > 0)
@@ -812,7 +822,8 @@ class TestEditorialPlatform(TransactionTestCase):
         parsed_response = json.loads(json_response.content)
         self.assertEqual(parsed_response['result'], 'OK',
                          str(parsed_response.get('errors')))
-        created_voyage_sources_id = parsed_response['created_voyage_sources_id']
+        created_voyage_sources_id = parsed_response[
+            'created_voyage_sources_id']
         created_source = VoyageSources.objects.get(
             pk=created_voyage_sources_id)
         self.assertEqual(created_source.short_ref, 'TEST_SOURCE_1')
@@ -821,7 +832,8 @@ class TestEditorialPlatform(TransactionTestCase):
         self.assertEqual(created_source.source_type.group_name,
                          'Published source')
 
-        # If we try to accept the contribution, it should fail since the new reference is not yet created.
+        # If we try to accept the contribution, it should fail since the new
+        # reference is not yet created.
         submit_data['created_voyage_id'] = None
         editor_source_dict = new_sources[0]
         editor_source_dict[
@@ -875,7 +887,8 @@ class TestEditorialPlatform(TransactionTestCase):
         self.assertEqual(data['review_request_id'], active_reviews[0].pk)
         self.assertEqual(data['voyage_ids'], [999999])
 
-        # Next we will publish the contribution and see if it is now included in the database.
+        # Next we will publish the contribution and see if it is now included
+        # in the database.
         json_response = self.client.post(
             reverse('contribute:json_publish_pending'), {'skip_backup': True})
         parsed_response = json.loads(json_response.content)
@@ -906,7 +919,8 @@ class TestEditorialPlatform(TransactionTestCase):
         self.assertTrue(line_count > 0)
         self.assertTrue(text.find('new/' + str(original_contribution_pk)) >= 0)
 
-        # Check that the voyage is indeed published and that fields match (just a sample of all fields).
+        # Check that the voyage is indeed published and that fields match (just
+        # a sample of all fields).
         pub_voyage = Voyage.all_dataset_objects.filter(
             voyage_id=999999).first()
         error_dump = serializers.serialize("json", [
@@ -958,11 +972,15 @@ class TestEditorialPlatform(TransactionTestCase):
 
         pub_owners = [
             x.owner.name
-            for x in sorted(VoyageShipOwnerConnection.objects.select_related(
-                'owner').filter(voyage=pub_voyage), key=lambda o: o.owner_order)
+            for x in sorted(
+                VoyageShipOwnerConnection.objects.select_related(
+                    'owner').filter(voyage=pub_voyage),
+                key=lambda o: o.owner_order)
         ]
         self.assertSequenceEqual(
-            pub_owners, ["Smart, Jonathan", "Spring, Martin", "McCall, Seamus"])
+            pub_owners, ["Smart, Jonathan",
+                         "Spring, Martin",
+                         "McCall, Seamus"])
 
         # Check references.
         pub_sources = list(

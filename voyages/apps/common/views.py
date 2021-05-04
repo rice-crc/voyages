@@ -19,7 +19,7 @@ from voyages.apps.voyage.models import Nationality, Place
 
 
 @cache_page(3600)
-def get_nations(request):
+def get_nations(_):
     nations = {
         n.pk: {
             'name': n.label,
@@ -154,7 +154,8 @@ def get_flat_page_tree(prefix, language=None):
         path = [x for x in page.url[prefix_length:].split('/') if x != '']
         if len(path) < 3:
             continue
-        # URL should look like {prefix}/top_level/optional_nested_level/order_number/language_code/
+        # URL should look like
+        # {prefix}/top_level/optional_nested_level/order_number/language_code/
         # There can be as many nested levels as required.
         lang = path.pop()
         order_str = path.pop()
@@ -184,7 +185,7 @@ def get_flat_page_tree(prefix, language=None):
 
 
 @cache_page(3600)
-def get_flat_page_content(request, url):
+def get_flat_page_content(_, url):
     page = get_object_or_404(FlatPage, url=url)
     # Remove CDATA before we return
     content = page.content.replace("// <![CDATA[", "").replace("// ]]>", "")
@@ -232,7 +233,8 @@ def _default_solr_value_adapter(pair):
     if val == '[]':
         val = ''
     if key.endswith('_partial') and val is not None:
-        # This is a partial date so we map from [MM],[DD],[YYYY] to [YYYY]-[MM]-[DD]
+        # This is a partial date so we map from [MM],[DD],[YYYY] to
+        # [YYYY]-[MM]-[DD]
         comps = str(val).split(',')
         if len(comps) == 3:
             try:
@@ -258,9 +260,10 @@ def get_datatable_json_result(results,
                               key_adapter=lambda t: t[0],
                               value_adapter=_default_solr_value_adapter):
     """
-    Produce a JSON output that can be parsed by a paginated DataTable in the front-end.
-    The argument results should be a SearchQuerySet and post should be a dict that
-    contains a key tableParams with the DataTable corresponding parameters.
+    Produce a JSON output that can be parsed by a paginated DataTable in the
+    front-end. The argument results should be a SearchQuerySet and post should
+    be a dict that contains a key tableParams with the DataTable corresponding
+    parameters.
     """
     table_params = {}
     try:
@@ -287,7 +290,8 @@ def get_datatable_json_result(results,
 
 def set_language(request, lang_code):
     """
-    A wrapper around django.views.i18n.set_language suitable for an AJAX GET request.
+    A wrapper around django.views.i18n.set_language suitable for an AJAX GET
+    request.
     :param request: web request.
     :param lang_code: language code of the new language to use site-wise.
     :return: a plain text response with the given lang_code.

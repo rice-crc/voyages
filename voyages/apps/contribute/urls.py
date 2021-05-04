@@ -19,7 +19,8 @@ urlpatterns = [
         name='delete_review'),
     url(r'^places_ajax', views.get_places, name='places_ajax'),
     url(r'^voyage_ajax', views.get_voyage_by_id, name='voyage_ajax'),
-    url(r'^interim/(?P<contribution_type>\w+)/(?P<contribution_id>\d+)/save_ajax$',
+    url(r'^interim/(?P<contribution_type>\w+)/(?P<contribution_id>\d+)/'
+        r'save_ajax$',
         views.interim_save_ajax,
         name='interim_save_ajax'),
     url(r'interim/(?P<contribution_type>\w+)/(?P<contribution_id>\d+)',
@@ -28,13 +29,16 @@ urlpatterns = [
     url(r'interim_commit/(?P<contribution_type>\w+)/(?P<contribution_id>\d+)',
         views.interim_commit,
         name='interim_commit'),
-    url(r'interim_summary/(?P<contribution_type>\w+)/(?P<contribution_id>\d+)$',
+    url(r'interim_summary/(?P<contribution_type>\w+)/'
+        r'(?P<contribution_id>\d+)$',
         views.interim_summary,
         name='interim_summary'),
-    url(r'interim_summary/(?P<contribution_type>\w+)/(?P<contribution_id>\d+)/(?P<mode>reviewer)$',
+    url(r'interim_summary/(?P<contribution_type>\w+)/'
+        r'(?P<contribution_id>\d+)/(?P<mode>reviewer)$',
         views.interim_summary,
         name='interim_summary_reviewer'),
-    url(r'interim_summary/(?P<contribution_type>\w+)/(?P<contribution_id>\d+)/(?P<mode>editor)$',
+    url(r'interim_summary/(?P<contribution_type>\w+)/'
+        r'(?P<contribution_id>\d+)/(?P<mode>editor)$',
         views.interim_summary,
         name='interim_summary_editor'),
     url(r'legal', views.legal, name='legal'),
@@ -51,7 +55,8 @@ urlpatterns = [
     url(r'editorial_review/(?P<editor_contribution_id>\d+)/save_ajax',
         views.editorial_review_interim_save_ajax,
         name='editorial_review_interim_save_ajax'),
-    url(r'editorial_review/(?P<editor_contribution_id>\d+)/submit_editorial_decision',
+    url(r'editorial_review/(?P<editor_contribution_id>\d+)'
+        r'/submit_editorial_decision',
         views.submit_editorial_decision,
         name='submit_editorial_decision'),
     url(r'editorial_review/(?P<review_request_id>\d+)',

@@ -146,22 +146,22 @@ class EstimateManager(models.Manager):
                 }
 
                 # Build hierarchies
-                def keyfunc(r):
+                def exp_key(r):
                     return r.export_area
 
                 sorted_regions = sorted(list(cls.export_regions.values()),
-                                        key=keyfunc)
+                                        key=exp_key)
                 cls.export_hierarchy = {
-                    k: list(g) for k, g in groupby(sorted_regions, key=keyfunc)
+                    k: list(g) for k, g in groupby(sorted_regions, key=exp_key)
                 }
 
-                def keyfunc(r):
+                def imp_key(r):
                     return r.import_area
 
                 sorted_regions = sorted(list(cls.import_regions.values()),
-                                        key=keyfunc)
+                                        key=imp_key)
                 cls.import_hierarchy = {
-                    k: list(g) for k, g in groupby(sorted_regions, key=keyfunc)
+                    k: list(g) for k, g in groupby(sorted_regions, key=imp_key)
                 }
 
                 cls.nations = {n.pk: n for n in Nation.objects.all()}

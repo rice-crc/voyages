@@ -98,18 +98,20 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='voyagesources',
             name='source_type',
-            field=models.ForeignKey(default=None,
-                                    on_delete=django.db.models.deletion.CASCADE,
-                                    to='voyage.VoyageSourcesType'),
+            field=models.ForeignKey(
+                default=None,
+                on_delete=django.db.models.deletion.CASCADE,
+                to='voyage.VoyageSourcesType'),
             preserve_default=False,
         ),
         migrations.AlterField(
             model_name='voyagesourcesconnection',
             name='source',
-            field=models.ForeignKey(blank=True,
-                                    on_delete=django.db.models.deletion.CASCADE,
-                                    related_name='source',
-                                    to='voyage.VoyageSources'),
+            field=models.ForeignKey(
+                blank=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name='source',
+                to='voyage.VoyageSources'),
         ),
         migrations.AlterField(
             model_name='voyagesourcesconnection',

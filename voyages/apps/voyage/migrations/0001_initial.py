@@ -69,7 +69,8 @@ class Migration(migrations.Migration):
                 ('label',
                  models.CharField(max_length=200,
                                   verbose_name=b'Outcome label')),
-                ('value', models.IntegerField(verbose_name=b'Code of outcome')),
+                ('value',
+                 models.IntegerField(verbose_name=b'Code of outcome')),
             ],
             options={
                 'ordering': ['value'],
@@ -86,12 +87,14 @@ class Migration(migrations.Migration):
                 ('label',
                  models.CharField(max_length=200,
                                   verbose_name=b'Outcome label')),
-                ('value', models.IntegerField(verbose_name=b'Code of outcome')),
+                ('value',
+                 models.IntegerField(verbose_name=b'Code of outcome')),
             ],
             options={
                 'ordering': ['value'],
                 'verbose_name': 'Fate (particular outcome of voyage)',
-                'verbose_name_plural': 'Fates (particular outcomes of voyages)',
+                'verbose_name_plural':
+                'Fates (particular outcomes of voyages)',
             },
         ),
         migrations.CreateModel(
@@ -207,7 +210,8 @@ class Migration(migrations.Migration):
                 ('label',
                  models.CharField(max_length=200,
                                   verbose_name=b'Outcome label')),
-                ('value', models.IntegerField(verbose_name=b'Code of outcome')),
+                ('value',
+                 models.IntegerField(verbose_name=b'Code of outcome')),
             ],
             options={
                 'ordering': ['value'],
@@ -241,7 +245,8 @@ class Migration(migrations.Migration):
                 ('label',
                  models.CharField(max_length=200,
                                   verbose_name=b'Outcome label')),
-                ('value', models.IntegerField(verbose_name=b'Code of outcome')),
+                ('value',
+                 models.IntegerField(verbose_name=b'Code of outcome')),
             ],
             options={
                 'ordering': ['value'],
@@ -319,7 +324,8 @@ class Migration(migrations.Migration):
                 ('crew_departure_last_port',
                  models.IntegerField(
                      null=True,
-                     verbose_name=b'Crew at departure from last port of slave purchase',
+                     verbose_name=b'Crew at departure from last port of slave '
+                                  b'purchase',
                      blank=True)),
                 ('crew_first_landing',
                  models.IntegerField(
@@ -337,12 +343,14 @@ class Migration(migrations.Migration):
                                      blank=True)),
                 ('unspecified_crew',
                  models.IntegerField(null=True,
-                                     verbose_name=b'Number of crew unspecified',
+                                     verbose_name=b'Number of crew '
+                                                  b'unspecified',
                                      blank=True)),
                 ('crew_died_before_first_trade',
                  models.IntegerField(
                      null=True,
-                     verbose_name=b'Crew died before first place of trade in Africa',
+                     verbose_name=b'Crew died before first place of trade in '
+                                  b'Africa',
                      blank=True)),
                 ('crew_died_while_ship_african',
                  models.IntegerField(
@@ -360,7 +368,8 @@ class Migration(migrations.Migration):
                                      blank=True)),
                 ('crew_died_on_return_voyage',
                  models.IntegerField(null=True,
-                                     verbose_name=b'Crew died on return voyage',
+                                     verbose_name=b'Crew died on return '
+                                                  b'voyage',
                                      blank=True)),
                 ('crew_died_complete_voyage',
                  models.IntegerField(
@@ -404,21 +413,24 @@ class Migration(migrations.Migration):
                      help_text=b'Date in format: MM,DD,YYYY',
                      max_length=10,
                      null=True,
-                     verbose_name=b'Date that slave purchase began (D1SLATRB,A,C)',
+                     verbose_name=b'Date that slave purchase began '
+                                  b'(D1SLATRB,A,C)',
                      blank=True)),
                 ('vessel_left_port',
                  models.CommaSeparatedIntegerField(
                      help_text=b'Date in format: MM,DD,YYYY',
                      max_length=10,
                      null=True,
-                     verbose_name=b'Date that vessel left last slaving port (DLSLATRB,A,C)',
+                     verbose_name=b'Date that vessel left last slaving port '
+                                  b'(DLSLATRB,A,C)',
                      blank=True)),
                 ('first_dis_of_slaves',
                  models.CommaSeparatedIntegerField(
                      help_text=b'Date in format: MM,DD,YYYY',
                      max_length=10,
                      null=True,
-                     verbose_name=b'Date of first disembarkation of slaves (DATARR33,32,34)',
+                     verbose_name=b'Date of first disembarkation of slaves '
+                                  b'(DATARR33,32,34)',
                      blank=True)),
                 ('date_departed_africa',
                  models.CommaSeparatedIntegerField(
@@ -432,33 +444,38 @@ class Migration(migrations.Migration):
                      help_text=b'Date in format: MM,DD,YYYY',
                      max_length=10,
                      null=True,
-                     verbose_name=b'Date of arrival at second place of landing (DATARR37,36,38)',
+                     verbose_name=b'Date of arrival at second place of '
+                                  b'landing (DATARR37,36,38)',
                      blank=True)),
                 ('third_dis_of_slaves',
                  models.CommaSeparatedIntegerField(
                      help_text=b'Date in format: MM,DD,YYYY',
                      max_length=10,
                      null=True,
-                     verbose_name=b'Date of third disembarkation of slaves (DATARR40,39,41)',
+                     verbose_name=b'Date of third disembarkation of slaves '
+                                  b'(DATARR40,39,41)',
                      blank=True)),
                 ('departure_last_place_of_landing',
                  models.CommaSeparatedIntegerField(
                      help_text=b'Date in format: MM,DD,YYYY',
                      max_length=10,
                      null=True,
-                     verbose_name=b'Date of departure from last place of landing (DDEPAMB,*,C)',
+                     verbose_name=b'Date of departure from last place of '
+                                  b'landing (DDEPAMB,*,C)',
                      blank=True)),
                 ('voyage_completed',
                  models.CommaSeparatedIntegerField(
                      help_text=b'Date in format: MM,DD,YYYY',
                      max_length=10,
                      null=True,
-                     verbose_name=b'Date on which slave voyage completed (DATARR44,43,45)',
+                     verbose_name=b'Date on which slave voyage completed '
+                                  b'(DATARR44,43,45)',
                      blank=True)),
                 ('length_middle_passage_days',
                  models.IntegerField(
                      null=True,
-                     verbose_name=b'Length of Middle Passage in (days) (VOYAGE)',
+                     verbose_name=b'Length of Middle Passage in (days) '
+                                  b'(VOYAGE)',
                      blank=True)),
                 ('imp_voyage_began',
                  models.CommaSeparatedIntegerField(
@@ -479,17 +496,20 @@ class Migration(migrations.Migration):
                      help_text=b'Date in format: MM,DD,YYYY',
                      max_length=10,
                      null=True,
-                     verbose_name=b'Year of arrival at port of disembarkation (YEARAM)',
+                     verbose_name=b'Year of arrival at port of '
+                                  b'disembarkation (YEARAM)',
                      blank=True)),
                 ('imp_length_home_to_disembark',
                  models.IntegerField(
                      null=True,
-                     verbose_name=b'Voyage length from home port to disembarkation (days) (VOY1IMP)',
+                     verbose_name=b'Voyage length from home port to '
+                                  b'disembarkation (days) (VOY1IMP)',
                      blank=True)),
                 ('imp_length_leaving_africa_to_disembark',
                  models.IntegerField(
                      null=True,
-                     verbose_name=b'Voyage length from leaving Africa to disembarkation (days) (VOY2IMP)',
+                     verbose_name=b'Voyage length from leaving Africa to '
+                                  b'disembarkation (days) (VOY2IMP)',
                      blank=True)),
                 ('voyage',
                  models.ForeignKey(related_name='voyage_name_dates',
@@ -532,12 +552,14 @@ class Migration(migrations.Migration):
                 ('ports_called_buying_slaves',
                  models.IntegerField(
                      null=True,
-                     verbose_name=b'Number of ports of call prior to buying slaves (NPPRETRA)',
+                     verbose_name=b'Number of ports of call prior to buying '
+                                  b'slaves (NPPRETRA)',
                      blank=True)),
                 ('number_of_ports_of_call',
                  models.IntegerField(
                      null=True,
-                     verbose_name=b'Number of ports of call in Americas prior to sale of slaves (NPPRIOR)',
+                     verbose_name=b'Number of ports of call in Americas prior '
+                                  b'to sale of slaves (NPPRIOR)',
                      blank=True)),
                 ('broad_region_of_return',
                  models.ForeignKey(
@@ -574,7 +596,8 @@ class Migration(migrations.Migration):
                 ('first_region_slave_emb',
                  models.ForeignKey(
                      related_name='first_region_slave_emb',
-                     verbose_name=b'First region of embarkation of slaves (REGEM1)',
+                     verbose_name=b'First region of embarkation of slaves '
+                                  b'(REGEM1)',
                      blank=True,
                      to='voyage.Region',
                      null=True,
@@ -582,7 +605,8 @@ class Migration(migrations.Migration):
                 ('imp_broad_region_of_slave_purchase',
                  models.ForeignKey(
                      related_name='imp_broad_region_of_slave_purchase',
-                     verbose_name=b'Imputed principal broad region of slave purchase (MAJBYIMP1)',
+                     verbose_name=b'Imputed principal broad region of slave '
+                                  b'purchase (MAJBYIMP1)',
                      blank=True,
                      to='voyage.BroadRegion',
                      null=True,
@@ -590,7 +614,8 @@ class Migration(migrations.Migration):
                 ('imp_broad_region_slave_dis',
                  models.ForeignKey(
                      related_name='imp_broad_region_slave_dis',
-                     verbose_name=b'Imputed broad region of slave disembarkation (MJSELIMP1)',
+                     verbose_name=b'Imputed broad region of slave '
+                                  b'disembarkation (MJSELIMP1)',
                      blank=True,
                      to='voyage.BroadRegion',
                      null=True,
@@ -598,7 +623,8 @@ class Migration(migrations.Migration):
                 ('imp_broad_region_voyage_begin',
                  models.ForeignKey(
                      related_name='imp_broad_region_voyage_begin',
-                     verbose_name=b'Imputed broad region where voyage began (DEPTREGIMP1)',
+                     verbose_name=b'Imputed broad region where voyage began '
+                                  b'(DEPTREGIMP1)',
                      blank=True,
                      to='voyage.BroadRegion',
                      null=True,
@@ -606,7 +632,8 @@ class Migration(migrations.Migration):
                 ('imp_port_voyage_begin',
                  models.ForeignKey(
                      related_name='imp_port_voyage_begin',
-                     verbose_name=b'Imputed port where voyage began (PTDEPIMP)',
+                     verbose_name=b'Imputed port where voyage began '
+                                  b'(PTDEPIMP)',
                      blank=True,
                      to='voyage.Place',
                      null=True,
@@ -614,7 +641,8 @@ class Migration(migrations.Migration):
                 ('imp_principal_place_of_slave_purchase',
                  models.ForeignKey(
                      related_name='imp_principal_place_of_slave_purchase',
-                     verbose_name=b'Imputed principal place of slave purchase (MJBYPTIMP)',
+                     verbose_name=b'Imputed principal place of slave purchase '
+                                  b'(MJBYPTIMP)',
                      blank=True,
                      to='voyage.Place',
                      null=True,
@@ -622,7 +650,8 @@ class Migration(migrations.Migration):
                 ('imp_principal_port_slave_dis',
                  models.ForeignKey(
                      related_name='imp_principal_port_slave_dis',
-                     verbose_name=b'Imputed principal port of slave disembarkation (MJSLPTIMP)',
+                     verbose_name=b'Imputed principal port of slave '
+                                  b'disembarkation (MJSLPTIMP)',
                      blank=True,
                      to='voyage.Place',
                      null=True,
@@ -630,7 +659,8 @@ class Migration(migrations.Migration):
                 ('imp_principal_region_of_slave_purchase',
                  models.ForeignKey(
                      related_name='imp_principal_region_of_slave_purchase',
-                     verbose_name=b'Imputed principal region of slave purchase (MAJBYIMP)',
+                     verbose_name=b'Imputed principal region of slave '
+                                  b'purchase (MAJBYIMP)',
                      blank=True,
                      to='voyage.Region',
                      null=True,
@@ -638,7 +668,8 @@ class Migration(migrations.Migration):
                 ('imp_principal_region_slave_dis',
                  models.ForeignKey(
                      related_name='imp_principal_region_slave_dis',
-                     verbose_name=b'Imputed principal region of slave disembarkation (MJSELIMP)',
+                     verbose_name=b'Imputed principal region of slave '
+                                  b'disembarkation (MJSELIMP)',
                      blank=True,
                      to='voyage.Region',
                      null=True,
@@ -646,7 +677,8 @@ class Migration(migrations.Migration):
                 ('imp_region_voyage_begin',
                  models.ForeignKey(
                      related_name='imp_region_voyage_begin',
-                     verbose_name=b'Imputed region where voyage began (DEPTREGIMP)',
+                     verbose_name=b'Imputed region where voyage began '
+                                  b'(DEPTREGIMP)',
                      blank=True,
                      to='voyage.Region',
                      null=True,
@@ -654,7 +686,8 @@ class Migration(migrations.Migration):
                 ('int_first_port_dis',
                  models.ForeignKey(
                      related_name='int_first_port_dis',
-                     verbose_name=b'First intended port of disembarkation (ARRPORT)',
+                     verbose_name=b'First intended port of disembarkation '
+                                  b'(ARRPORT)',
                      blank=True,
                      to='voyage.Place',
                      null=True,
@@ -662,7 +695,8 @@ class Migration(migrations.Migration):
                 ('int_first_port_emb',
                  models.ForeignKey(
                      related_name='int_first_port_emb',
-                     verbose_name=b'First intended port of embarkation (EMBPORT)',
+                     verbose_name=b'First intended port of embarkation '
+                                  b'(EMBPORT)',
                      blank=True,
                      to='voyage.Place',
                      null=True,
@@ -670,7 +704,8 @@ class Migration(migrations.Migration):
                 ('int_first_region_purchase_slaves',
                  models.ForeignKey(
                      related_name='int_first_region_purchase_slaves',
-                     verbose_name=b'First intended region of purchase of slaves (EMBREG)',
+                     verbose_name=b'First intended region of purchase of '
+                                  b'slaves (EMBREG)',
                      blank=True,
                      to='voyage.Region',
                      null=True,
@@ -678,7 +713,8 @@ class Migration(migrations.Migration):
                 ('int_first_region_slave_landing',
                  models.ForeignKey(
                      related_name='int_first_region_slave_landing',
-                     verbose_name=b'First intended region of slave landing (REGARR)',
+                     verbose_name=b'First intended region of slave landing '
+                                  b'(REGARR)',
                      blank=True,
                      to='voyage.Region',
                      null=True,
@@ -686,7 +722,8 @@ class Migration(migrations.Migration):
                 ('int_second_place_region_slave_landing',
                  models.ForeignKey(
                      related_name='int_second_region_slave_landing',
-                     verbose_name=b'Second intended region of slave landing (REGARR2)',
+                     verbose_name=b'Second intended region of slave landing '
+                                  b'(REGARR2)',
                      blank=True,
                      to='voyage.Region',
                      null=True,
@@ -694,7 +731,8 @@ class Migration(migrations.Migration):
                 ('int_second_port_dis',
                  models.ForeignKey(
                      related_name='int_second_port_dis',
-                     verbose_name=b'Second intended port of disembarkation (ARRPORT2)',
+                     verbose_name=b'Second intended port of disembarkation '
+                                  b'(ARRPORT2)',
                      blank=True,
                      to='voyage.Place',
                      null=True,
@@ -702,7 +740,8 @@ class Migration(migrations.Migration):
                 ('int_second_port_emb',
                  models.ForeignKey(
                      related_name='int_second_port_emb',
-                     verbose_name=b'Second intended port of embarkation (EMBPORT2)',
+                     verbose_name=b'Second intended port of embarkation '
+                                  b'(EMBPORT2)',
                      blank=True,
                      to='voyage.Place',
                      null=True,
@@ -710,7 +749,8 @@ class Migration(migrations.Migration):
                 ('int_second_region_purchase_slaves',
                  models.ForeignKey(
                      related_name='int_second_region_purchase_slaves',
-                     verbose_name=b'Second intended region of purchase of slaves (EMBREG2)',
+                     verbose_name=b'Second intended region of purchase of '
+                                  b'slaves (EMBREG2)',
                      blank=True,
                      to='voyage.Region',
                      null=True,
@@ -726,7 +766,8 @@ class Migration(migrations.Migration):
                 ('port_of_call_before_atl_crossing',
                  models.ForeignKey(
                      related_name='port_of_call_before_atl_crossing',
-                     verbose_name=b'Port of call before Atlantic crossing (NPAFTTRA)',
+                     verbose_name=b'Port of call before Atlantic crossing '
+                                  b'(NPAFTTRA)',
                      blank=True,
                      to='voyage.Place',
                      null=True,
@@ -741,7 +782,8 @@ class Migration(migrations.Migration):
                 ('principal_place_of_slave_purchase',
                  models.ForeignKey(
                      related_name='principal_place_of_slave_purchase',
-                     verbose_name=b'Principal place of slave purchase (MAJBUYPT)',
+                     verbose_name=b'Principal place of slave purchase '
+                                  b'(MAJBUYPT)',
                      blank=True,
                      to='voyage.Place',
                      null=True,
@@ -749,7 +791,8 @@ class Migration(migrations.Migration):
                 ('principal_port_of_slave_dis',
                  models.ForeignKey(
                      related_name='principal_port_of_slave_dis',
-                     verbose_name=b'Principal port of slave disembarkation (MAJSELPT)',
+                     verbose_name=b'Principal port of slave disembarkation '
+                                  b'(MAJSELPT)',
                      blank=True,
                      to='voyage.Place',
                      null=True,
@@ -788,7 +831,8 @@ class Migration(migrations.Migration):
                 ('second_region_slave_emb',
                  models.ForeignKey(
                      related_name='second_region_slave_emb',
-                     verbose_name=b'Second region of embarkation of slaves (REGEM2)',
+                     verbose_name=b'Second region of embarkation of '
+                                  b'slaves (REGEM2)',
                      blank=True,
                      to='voyage.Region',
                      null=True,
@@ -820,7 +864,8 @@ class Migration(migrations.Migration):
                 ('third_region_slave_emb',
                  models.ForeignKey(
                      related_name='third_region_slave_emb',
-                     verbose_name=b'Third region of embarkation of slaves (REGEM3)',
+                     verbose_name=b'Third region of embarkation '
+                                  b'of slaves (REGEM3)',
                      blank=True,
                      to='voyage.Region',
                      null=True,
@@ -921,7 +966,8 @@ class Migration(migrations.Migration):
                 ('tonnage_mod',
                  models.DecimalField(
                      null=True,
-                     verbose_name=b'Tonnage standardized on Britishmeasured tons, 1773-1870',
+                     verbose_name=b'Tonnage standardized on British '
+                                  b'measured tons, 1773-1870',
                      max_digits=8,
                      decimal_places=1,
                      blank=True)),
@@ -1030,37 +1076,44 @@ class Migration(migrations.Migration):
                 ('slave_deaths_before_africa',
                  models.IntegerField(
                      null=True,
-                     verbose_name=b'Slaves death before leaving Africa (SLADAFRI)',
+                     verbose_name=b'Slaves death before leaving '
+                                  b'Africa (SLADAFRI)',
                      blank=True)),
                 ('slave_deaths_between_africa_america',
                  models.IntegerField(
                      null=True,
-                     verbose_name=b'Slaves death before arrival and sale (SLADAMER)',
+                     verbose_name=b'Slaves death before arrival and '
+                                  b'sale (SLADAMER)',
                      blank=True)),
                 ('num_slaves_intended_first_port',
                  models.IntegerField(
                      null=True,
-                     verbose_name=b'Number of slaves intended from first port of purchase (SLINTEND)',
+                     verbose_name=b'Number of slaves intended from first port '
+                                  b'of purchase (SLINTEND)',
                      blank=True)),
                 ('num_slaves_intended_second_port',
                  models.IntegerField(
                      null=True,
-                     verbose_name=b'Number of slaves intended from second port of purchase (SLINTEN2)',
+                     verbose_name=b'Number of slaves intended from second '
+                                  b'port of purchase (SLINTEN2)',
                      blank=True)),
                 ('num_slaves_carried_first_port',
                  models.IntegerField(
                      null=True,
-                     verbose_name=b'Number of slaves carried from first port of purchase (NCAR13)',
+                     verbose_name=b'Number of slaves carried from first port '
+                                  b'of purchase (NCAR13)',
                      blank=True)),
                 ('num_slaves_carried_second_port',
                  models.IntegerField(
                      null=True,
-                     verbose_name=b'Number of slaves carried from second port of purchase (NCAR15)',
+                     verbose_name=b'Number of slaves carried from second port '
+                                  b'of purchase (NCAR15)',
                      blank=True)),
                 ('num_slaves_carried_third_port',
                  models.IntegerField(
                      null=True,
-                     verbose_name=b'Number of slaves carried from third port of purchase (NCAR17)',
+                     verbose_name=b'Number of slaves carried from third port '
+                                  b'of purchase (NCAR17)',
                      blank=True)),
                 ('total_num_slaves_purchased',
                  models.IntegerField(
@@ -1070,27 +1123,32 @@ class Migration(migrations.Migration):
                 ('total_num_slaves_dep_last_slaving_port',
                  models.IntegerField(
                      null=True,
-                     verbose_name=b'Total slaves on board at departure from last slaving port (TSLAVESD)',
+                     verbose_name=b'Total slaves on board at departure from '
+                                  b'last slaving port (TSLAVESD)',
                      blank=True)),
                 ('total_num_slaves_arr_first_port_embark',
                  models.IntegerField(
                      null=True,
-                     verbose_name=b'Total slaves arrived at first port of disembarkation (SLAARRIV)',
+                     verbose_name=b'Total slaves arrived at first port '
+                                  b'of disembarkation (SLAARRIV)',
                      blank=True)),
                 ('num_slaves_disembark_first_place',
                  models.IntegerField(
                      null=True,
-                     verbose_name=b'Number of slaves disembarked at first place (SLAS32)',
+                     verbose_name=b'Number of slaves disembarked '
+                                  b'at first place (SLAS32)',
                      blank=True)),
                 ('num_slaves_disembark_second_place',
                  models.IntegerField(
                      null=True,
-                     verbose_name=b'Number of slaves disembarked at second place (SLAS36)',
+                     verbose_name=b'Number of slaves disembarked '
+                                  b'at second place (SLAS36)',
                      blank=True)),
                 ('num_slaves_disembark_third_place',
                  models.IntegerField(
                      null=True,
-                     verbose_name=b'Number of slaves disembarked at third place (SLAS39)',
+                     verbose_name=b'Number of slaves disembarked '
+                                  b'at third place (SLAS39)',
                      blank=True)),
                 ('imp_total_num_slaves_embarked',
                  models.IntegerField(
@@ -1100,7 +1158,8 @@ class Migration(migrations.Migration):
                 ('imp_total_num_slaves_disembarked',
                  models.IntegerField(
                      null=True,
-                     verbose_name=b'Total slaves disembarked imputed * (SLAMIMP)',
+                     verbose_name=b'Total slaves disembarked '
+                                  b'imputed * (SLAMIMP)',
                      blank=True)),
                 ('imp_jamaican_cash_price',
                  models.DecimalField(
@@ -1112,337 +1171,420 @@ class Migration(migrations.Migration):
                 ('imp_mortality_during_voyage',
                  models.IntegerField(
                      null=True,
-                     verbose_name=b'Imputed number of slave deaths during Middle Passage (VYMRTIMP)',
+                     verbose_name=b'Imputed number of slave deaths '
+                                  b'during Middle Passage (VYMRTIMP)',
                      blank=True)),
                 ('num_men_embark_first_port_purchase',
                  models.IntegerField(
                      null=True,
-                     verbose_name=b'Number of men (MEN1) embarked at first port of purchase',
+                     verbose_name=b'Number of men (MEN1) embarked at first '
+                                  b'port of purchase',
                      blank=True)),
                 ('num_women_embark_first_port_purchase',
                  models.IntegerField(
                      null=True,
-                     verbose_name=b'Number of women (WOMEN1) embarked at first port of purchase',
+                     verbose_name=b'Number of women (WOMEN1) embarked at '
+                                  b'first port of purchase',
                      blank=True)),
                 ('num_boy_embark_first_port_purchase',
                  models.IntegerField(
                      null=True,
-                     verbose_name=b'Number of boys (BOY1) embarked at first port of purchase',
+                     verbose_name=b'Number of boys (BOY1) embarked at first '
+                                  b'port of purchase',
                      blank=True)),
                 ('num_girl_embark_first_port_purchase',
                  models.IntegerField(
                      null=True,
-                     verbose_name=b'Number of girls (GIRL1) embarked at first port of purchase',
+                     verbose_name=b'Number of girls (GIRL1) embarked at first '
+                                  b'port of purchase',
                      blank=True)),
                 ('num_adult_embark_first_port_purchase',
                  models.IntegerField(
                      null=True,
-                     verbose_name=b'Number of adults (gender unspecified) (ADULT1) embarked at first port of purchase',
+                     verbose_name=b'Number of adults (gender unspecified) '
+                                  b'(ADULT1) embarked at first port '
+                                  b'of purchase',
                      blank=True)),
                 ('num_child_embark_first_port_purchase',
                  models.IntegerField(
                      null=True,
-                     verbose_name=b'Number of children (gender unspecified) (CHILD1) embarked at first port of purchase',
+                     verbose_name=b'Number of children (gender unspecified) '
+                                  b'(CHILD1) embarked at first port '
+                                  b'of purchase',
                      blank=True)),
                 ('num_infant_embark_first_port_purchase',
                  models.IntegerField(
                      null=True,
-                     verbose_name=b'Number of infants (INFANT1) embarked at first port of purchase',
+                     verbose_name=b'Number of infants (INFANT1) embarked at '
+                                  b'first port of purchase',
                      blank=True)),
                 ('num_males_embark_first_port_purchase',
                  models.IntegerField(
                      null=True,
-                     verbose_name=b'Number of males (age unspecified) (MALE1) embarked at first port of purchase',
+                     verbose_name=b'Number of males (age unspecified) (MALE1) '
+                                  b'embarked at first port of purchase',
                      blank=True)),
                 ('num_females_embark_first_port_purchase',
                  models.IntegerField(
                      null=True,
-                     verbose_name=b'Number of females (age unspecified) (FEMALE1) embarked at first port of purchase',
+                     verbose_name=b'Number of females (age unspecified) '
+                                  b'(FEMALE1) embarked at first port '
+                                  b'of purchase',
                      blank=True)),
                 ('num_men_died_middle_passage',
                  models.IntegerField(
                      null=True,
-                     verbose_name=b'Number of men (MEN2) died on Middle Passage',
+                     verbose_name=b'Number of men '
+                                  b'(MEN2) died on Middle Passage',
                      blank=True)),
                 ('num_women_died_middle_passage',
                  models.IntegerField(
                      null=True,
-                     verbose_name=b'Number of women (WOMEN2) died on Middle Passage',
+                     verbose_name=b'Number of women (WOMEN2) '
+                                  b'died on Middle Passage',
                      blank=True)),
                 ('num_boy_died_middle_passage',
                  models.IntegerField(
                      null=True,
-                     verbose_name=b'Number of boys (BOY2) died on Middle Passage',
+                     verbose_name=b'Number of boys '
+                                  b'(BOY2) died on Middle Passage',
                      blank=True)),
                 ('num_girl_died_middle_passage',
                  models.IntegerField(
                      null=True,
-                     verbose_name=b'Number of girls (GIRL2) died on Middle Passage',
+                     verbose_name=b'Number of girls '
+                                  b'(GIRL2) died on Middle Passage',
                      blank=True)),
                 ('num_adult_died_middle_passage',
                  models.IntegerField(
                      null=True,
-                     verbose_name=b'Number of adults (gender unspecified) (ADULT2) died on Middle Passage',
+                     verbose_name=b'Number of adults (gender unspecified) '
+                                  b'(ADULT2) died on Middle Passage',
                      blank=True)),
                 ('num_child_died_middle_passage',
                  models.IntegerField(
                      null=True,
-                     verbose_name=b'Number of children (gender unspecified) (CHILD2) died on Middle Passage',
+                     verbose_name=b'Number of children (gender unspecified) '
+                                  b'(CHILD2) died on Middle Passage',
                      blank=True)),
                 ('num_infant_died_middle_passage',
                  models.IntegerField(
                      null=True,
-                     verbose_name=b'Number of infants (INFANT2) died on Middle Passage',
+                     verbose_name=b'Number of infants '
+                                  b'(INFANT2) died on Middle Passage',
                      blank=True)),
                 ('num_males_died_middle_passage',
                  models.IntegerField(
                      null=True,
-                     verbose_name=b'Number of males (age unspecified) (MALE2) died on Middle Passage',
+                     verbose_name=b'Number of males (age unspecified) '
+                                  b'(MALE2) died on Middle Passage',
                      blank=True)),
                 ('num_females_died_middle_passage',
                  models.IntegerField(
                      null=True,
-                     verbose_name=b'Number of females (age unspecified) (FEMALE2) died on Middle Passage',
+                     verbose_name=b'Number of females (age unspecified) '
+                                  b'(FEMALE2) died on Middle Passage',
                      blank=True)),
                 ('num_men_disembark_first_landing',
                  models.IntegerField(
                      null=True,
-                     verbose_name=b'Number of men (MEN3) disembarked at first place of landing',
+                     verbose_name=b'Number of men (MEN3) disembarked at '
+                                  b'first place of landing',
                      blank=True)),
                 ('num_women_disembark_first_landing',
                  models.IntegerField(
                      null=True,
-                     verbose_name=b'Number of women (WOMEN3) disembarked at first place of landing',
+                     verbose_name=b'Number of women (WOMEN3) disembarked at '
+                                  b'first place of landing',
                      blank=True)),
                 ('num_boy_disembark_first_landing',
                  models.IntegerField(
                      null=True,
-                     verbose_name=b'Number of boys (BOY3) disembarked at first place of landing',
+                     verbose_name=b'Number of boys (BOY3) disembarked at '
+                                  b'first place of landing',
                      blank=True)),
                 ('num_girl_disembark_first_landing',
                  models.IntegerField(
                      null=True,
-                     verbose_name=b'Number of girls (GIRL3) disembarked at first place of landing',
+                     verbose_name=b'Number of girls (GIRL3) disembarked at '
+                                  b'first place of landing',
                      blank=True)),
                 ('num_adult_disembark_first_landing',
                  models.IntegerField(
                      null=True,
-                     verbose_name=b'Number of adults (gender unspecified) (ADULT3) disembarked at first place of landing',
+                     verbose_name=b'Number of adults (gender unspecified) '
+                                  b'(ADULT3) disembarked at first place '
+                                  b'of landing',
                      blank=True)),
                 ('num_child_disembark_first_landing',
                  models.IntegerField(
                      null=True,
-                     verbose_name=b'Number of children (gender unspecified) (CHILD3) disembarked at first place of landing',
+                     verbose_name=b'Number of children (gender unspecified) '
+                                  b'(CHILD3) disembarked at first place '
+                                  b'of landing',
                      blank=True)),
                 ('num_infant_disembark_first_landing',
                  models.IntegerField(
                      null=True,
-                     verbose_name=b'Number of infants (INFANT3) disembarked at first place of landing',
+                     verbose_name=b'Number of infants (INFANT3) disembarked '
+                                  b'at first place of landing',
                      blank=True)),
                 ('num_males_disembark_first_landing',
                  models.IntegerField(
                      null=True,
-                     verbose_name=b'Number of males (age unspecified) (MALE3) disembarked at first place of landing',
+                     verbose_name=b'Number of males (age unspecified) (MALE3) '
+                                  b'disembarked at first place of landing',
                      blank=True)),
                 ('num_females_disembark_first_landing',
                  models.IntegerField(
                      null=True,
-                     verbose_name=b'Number of females (age unspecified) (FEMALE3) disembarked at first place of landing',
+                     verbose_name=b'Number of females (age unspecified) '
+                                  b'(FEMALE3) disembarked at first place '
+                                  b'of landing',
                      blank=True)),
                 ('num_men_embark_second_port_purchase',
                  models.IntegerField(
                      null=True,
-                     verbose_name=b'Number of men (MEN4) embarked at second port of purchase',
+                     verbose_name=b'Number of men (MEN4) embarked at second '
+                                  b'port of purchase',
                      blank=True)),
                 ('num_women_embark_second_port_purchase',
                  models.IntegerField(
                      null=True,
-                     verbose_name=b'Number of women (WOMEN4) embarked at second port of purchase',
+                     verbose_name=b'Number of women (WOMEN4) embarked at '
+                                  b'second port of purchase',
                      blank=True)),
                 ('num_boy_embark_second_port_purchase',
                  models.IntegerField(
                      null=True,
-                     verbose_name=b'Number of boys (BOY4) embarked at second port of purchase',
+                     verbose_name=b'Number of boys (BOY4) embarked at second '
+                                  b'port of purchase',
                      blank=True)),
                 ('num_girl_embark_second_port_purchase',
                  models.IntegerField(
                      null=True,
-                     verbose_name=b'Number of girls (GIRL4) embarked at second port of purchase',
+                     verbose_name=b'Number of girls (GIRL4) embarked at '
+                                  b'second port of purchase',
                      blank=True)),
                 ('num_adult_embark_second_port_purchase',
                  models.IntegerField(
                      null=True,
-                     verbose_name=b'Number of adults (gender unspecified) (ADULT4) embarked at second port of purchase',
+                     verbose_name=b'Number of adults (gender unspecified) '
+                                  b'(ADULT4) embarked at second port '
+                                  b'of purchase',
                      blank=True)),
                 ('num_child_embark_second_port_purchase',
                  models.IntegerField(
                      null=True,
-                     verbose_name=b'Number of children (gender unspecified) (CHILD4) embarked at second port of purchase',
+                     verbose_name=b'Number of children (gender unspecified) '
+                                  b'(CHILD4) embarked at second port '
+                                  b'of purchase',
                      blank=True)),
                 ('num_infant_embark_second_port_purchase',
                  models.IntegerField(
                      null=True,
-                     verbose_name=b'Number of infants (INFANT4) embarked at second port of purchase',
+                     verbose_name=b'Number of infants (INFANT4) embarked at '
+                                  b'second port of purchase',
                      blank=True)),
                 ('num_males_embark_second_port_purchase',
                  models.IntegerField(
                      null=True,
-                     verbose_name=b'Number of males (age unspecified) (MALE4) embarked at second port of purchase',
+                     verbose_name=b'Number of males (age unspecified) (MALE4) '
+                                  b'embarked at second port of purchase',
                      blank=True)),
                 ('num_females_embark_second_port_purchase',
                  models.IntegerField(
                      null=True,
-                     verbose_name=b'Number of females (age unspecified) (FEMALE4) embarked at second port of purchase',
+                     verbose_name=b'Number of females (age unspecified) '
+                                  b'(FEMALE4) embarked at second port '
+                                  b'of purchase',
                      blank=True)),
                 ('num_men_embark_third_port_purchase',
                  models.IntegerField(
                      null=True,
-                     verbose_name=b'Number of men (MEN5) embarked at third port of purchase',
+                     verbose_name=b'Number of men (MEN5) embarked at third '
+                                  b'port of purchase',
                      blank=True)),
                 ('num_women_embark_third_port_purchase',
                  models.IntegerField(
                      null=True,
-                     verbose_name=b'Number of women (WOMEN5) embarked at third port of purchase',
+                     verbose_name=b'Number of women (WOMEN5) embarked at '
+                                  b'third port of purchase',
                      blank=True)),
                 ('num_boy_embark_third_port_purchase',
                  models.IntegerField(
                      null=True,
-                     verbose_name=b'Number of boys (BOY5) embarked at third port of purchase',
+                     verbose_name=b'Number of boys (BOY5) embarked at third '
+                                  b'port of purchase',
                      blank=True)),
                 ('num_girl_embark_third_port_purchase',
                  models.IntegerField(
                      null=True,
-                     verbose_name=b'Number of girls (GIRL5) embarked at third port of purchase',
+                     verbose_name=b'Number of girls (GIRL5) embarked at third '
+                                  b'port of purchase',
                      blank=True)),
                 ('num_adult_embark_third_port_purchase',
                  models.IntegerField(
                      null=True,
-                     verbose_name=b'Number of adults (gender unspecified) (ADULT5) embarked at third port of purchase',
+                     verbose_name=b'Number of adults (gender unspecified) '
+                                  b'(ADULT5) embarked at third port '
+                                  b'of purchase',
                      blank=True)),
                 ('num_child_embark_third_port_purchase',
                  models.IntegerField(
                      null=True,
-                     verbose_name=b'Number of children (gender unspecified) (CHILD5) embarked at third port of purchase',
+                     verbose_name=b'Number of children (gender unspecified) '
+                                  b'(CHILD5) embarked at third port '
+                                  b'of purchase',
                      blank=True)),
                 ('num_infant_embark_third_port_purchase',
                  models.IntegerField(
                      null=True,
-                     verbose_name=b'Number of infants (INFANT5) embarked at third port of purchase',
+                     verbose_name=b'Number of infants (INFANT5) embarked at '
+                                  b'third port of purchase',
                      blank=True)),
                 ('num_males_embark_third_port_purchase',
                  models.IntegerField(
                      null=True,
-                     verbose_name=b'Number of males (age unspecified) (MALE5) embarked at third port of purchase',
+                     verbose_name=b'Number of males (age unspecified) (MALE5) '
+                                  b'embarked at third port of purchase',
                      blank=True)),
                 ('num_females_embark_third_port_purchase',
                  models.IntegerField(
                      null=True,
-                     verbose_name=b'Number of females (age unspecified) (FEMALE5) embarked at third port of purchase',
+                     verbose_name=b'Number of females (age unspecified) '
+                                  b'(FEMALE5) embarked at third port '
+                                  b'of purchase',
                      blank=True)),
                 ('num_men_disembark_second_landing',
                  models.IntegerField(
                      null=True,
-                     verbose_name=b'Number of men (MEN6) disembarked at second place of landing',
+                     verbose_name=b'Number of men (MEN6) disembarked at '
+                                  b'second place of landing',
                      blank=True)),
                 ('num_women_disembark_second_landing',
                  models.IntegerField(
                      null=True,
-                     verbose_name=b'Number of women (WOMEN6) disembarked at second place of landing',
+                     verbose_name=b'Number of women (WOMEN6) disembarked at '
+                                  b'second place of landing',
                      blank=True)),
                 ('num_boy_disembark_second_landing',
                  models.IntegerField(
                      null=True,
-                     verbose_name=b'Number of boys (BOY6) disembarked at second place of landing',
+                     verbose_name=b'Number of boys (BOY6) disembarked at '
+                                  b'second place of landing',
                      blank=True)),
                 ('num_girl_disembark_second_landing',
                  models.IntegerField(
                      null=True,
-                     verbose_name=b'Number of girls (GIRL6) disembarked at second place of landing',
+                     verbose_name=b'Number of girls (GIRL6) disembarked at '
+                                  b'second place of landing',
                      blank=True)),
                 ('num_adult_disembark_second_landing',
                  models.IntegerField(
                      null=True,
-                     verbose_name=b'Number of adults (gender unspecified) (ADULT6) disembarked at second place of landing',
+                     verbose_name=b'Number of adults (gender unspecified) '
+                                  b'(ADULT6) disembarked at second place '
+                                  b'of landing',
                      blank=True)),
                 ('num_child_disembark_second_landing',
                  models.IntegerField(
                      null=True,
-                     verbose_name=b'Number of children (gender unspecified) (CHILD6) disembarked at second place of landing',
+                     verbose_name=b'Number of children (gender unspecified) '
+                                  b'(CHILD6) disembarked at second place '
+                                  b'of landing',
                      blank=True)),
                 ('num_infant_disembark_second_landing',
                  models.IntegerField(
                      null=True,
-                     verbose_name=b'Number of infants (INFANT6) disembarked at second place of landing',
+                     verbose_name=b'Number of infants (INFANT6) disembarked '
+                                  b'at second place of landing',
                      blank=True)),
                 ('num_males_disembark_second_landing',
                  models.IntegerField(
                      null=True,
-                     verbose_name=b'Number of males (age unspecified) (MALE6) disembarked at second place of landing',
+                     verbose_name=b'Number of males (age unspecified) '
+                                  b'(MALE6) disembarked at second place '
+                                  b'of landing',
                      blank=True)),
                 ('num_females_disembark_second_landing',
                  models.IntegerField(
                      null=True,
-                     verbose_name=b'Number of females (age unspecified) (FEMALE6) disembarked at second place of landing',
+                     verbose_name=b'Number of females (age unspecified) '
+                                  b'(FEMALE6) disembarked at second place '
+                                  b'of landing',
                      blank=True)),
                 ('imp_num_adult_embarked',
                  models.IntegerField(
                      null=True,
-                     verbose_name=b'Imputed number of adults embarked (ADLT1IMP)',
+                     verbose_name=b'Imputed number of adults embarked '
+                                  b'(ADLT1IMP)',
                      blank=True)),
                 ('imp_num_children_embarked',
                  models.IntegerField(
                      null=True,
-                     verbose_name=b'Imputed number of adults embarked (CHIL1IMP)',
+                     verbose_name=b'Imputed number of adults embarked '
+                                  b'(CHIL1IMP)',
                      blank=True)),
                 ('imp_num_male_embarked',
                  models.IntegerField(
                      null=True,
-                     verbose_name=b'Imputed number of males embarked (MALE1IMP)',
+                     verbose_name=b'Imputed number of males embarked '
+                                  b'(MALE1IMP)',
                      blank=True)),
                 ('imp_num_female_embarked',
                  models.IntegerField(
                      null=True,
-                     verbose_name=b'Imputed number of females embarked (FEML1IMP)',
+                     verbose_name=b'Imputed number of females embarked '
+                                  b'(FEML1IMP)',
                      blank=True)),
                 ('total_slaves_embarked_age_identified',
                  models.IntegerField(
                      null=True,
-                     verbose_name=b'Total slaves embarked with age identified (SLAVEMA1)',
+                     verbose_name=b'Total slaves embarked with age identified '
+                                  b'(SLAVEMA1)',
                      blank=True)),
                 ('total_slaves_embarked_gender_identified',
                  models.IntegerField(
                      null=True,
-                     verbose_name=b'Total slaves embarked with gender identified (SLAVEMX1)',
+                     verbose_name=b'Total slaves embarked with gender '
+                                  b'bidentified (SLAVEMX1)',
                      blank=True)),
                 ('imp_adult_death_middle_passage',
                  models.IntegerField(
                      null=True,
-                     verbose_name=b'Imputed number of adults who died on Middle Passage (ADLT2IMP)',
+                     verbose_name=b'Imputed number of adults who died on '
+                                  b'Middle Passage (ADLT2IMP)',
                      blank=True)),
                 ('imp_child_death_middle_passage',
                  models.IntegerField(
                      null=True,
-                     verbose_name=b'Imputed number of children who died on Middle Passage (CHIL2IMP)',
+                     verbose_name=b'Imputed number of children who died on '
+                                  b'Middle Passage (CHIL2IMP)',
                      blank=True)),
                 ('imp_male_death_middle_passage',
                  models.IntegerField(
                      null=True,
-                     verbose_name=b'Imputed number of males who died on Middle Passage (MALE2IMP)',
+                     verbose_name=b'Imputed number of males who died on '
+                                  b'Middle Passage (MALE2IMP)',
                      blank=True)),
                 ('imp_female_death_middle_passage',
                  models.IntegerField(
                      null=True,
-                     verbose_name=b'Imputed number of females who died on Middle Passage (FEML2IMP)',
+                     verbose_name=b'Imputed number of females who died on '
+                                  b'Middle Passage (FEML2IMP)',
                      blank=True)),
                 ('imp_num_adult_landed',
                  models.IntegerField(
                      null=True,
-                     verbose_name=b'Imputed number of adults landed (ADLT3IMP)',
+                     verbose_name=b'Imputed number of adults landed '
+                                  b'(ADLT3IMP)',
                      blank=True)),
                 ('imp_num_child_landed',
                  models.IntegerField(
                      null=True,
-                     verbose_name=b'Imputed number of children landed (CHIL3IMP)',
+                     verbose_name=b'Imputed number of children landed '
+                                  b'(CHIL3IMP)',
                      blank=True)),
                 ('imp_num_male_landed',
                  models.IntegerField(
@@ -1452,32 +1594,38 @@ class Migration(migrations.Migration):
                 ('imp_num_female_landed',
                  models.IntegerField(
                      null=True,
-                     verbose_name=b'Imputed number of females landed (FEML3IMP)',
+                     verbose_name=b'Imputed number of females landed '
+                                  b'(FEML3IMP)',
                      blank=True)),
                 ('total_slaves_landed_age_identified',
                  models.IntegerField(
                      null=True,
-                     verbose_name=b'Total slaves identified by age among landed slaves (SLAVEMA3)',
+                     verbose_name=b'Total slaves identified by age among '
+                                  b'landed slaves (SLAVEMA3)',
                      blank=True)),
                 ('total_slaves_landed_gender_identified',
                  models.IntegerField(
                      null=True,
-                     verbose_name=b'Total slaves identified by gender among landed slaves (SLAVEMX3)',
+                     verbose_name=b'Total slaves identified by gender among '
+                                  b'landed slaves (SLAVEMX3)',
                      blank=True)),
                 ('total_slaves_dept_or_arr_age_identified',
                  models.IntegerField(
                      null=True,
-                     verbose_name=b'Total slaves identified by age at departure or arrival (SLAVEMA7)',
+                     verbose_name=b'Total slaves identified by age at '
+                                  b'departure or arrival (SLAVEMA7)',
                      blank=True)),
                 ('total_slaves_dept_or_arr_gender_identified',
                  models.IntegerField(
                      null=True,
-                     verbose_name=b'Total slaves identified by gender at departure or arrival(SLAVEMX7)',
+                     verbose_name=b'Total slaves identified by gender at '
+                                  b'departure or arrival(SLAVEMX7)',
                      blank=True)),
                 ('imp_slaves_embarked_for_mortality',
                  models.IntegerField(
                      null=True,
-                     verbose_name=b'Imputed number of slaves embarked for mortality calculation (TSLMTIMP)',
+                     verbose_name=b'Imputed number of slaves embarked for '
+                                  b'mortality calculation (TSLMTIMP)',
                      blank=True)),
                 ('imp_num_men_total',
                  models.IntegerField(null=True,
@@ -1498,12 +1646,14 @@ class Migration(migrations.Migration):
                 ('imp_num_adult_total',
                  models.IntegerField(
                      null=True,
-                     verbose_name=b'Number of adults (gender unspecified) (ADULT7)',
+                     verbose_name=b'Number of adults (gender unspecified) '
+                                  b'(ADULT7)',
                      blank=True)),
                 ('imp_num_child_total',
                  models.IntegerField(
                      null=True,
-                     verbose_name=b'Number of children (gender unspecified) (CHILD7)',
+                     verbose_name=b'Number of children (gender unspecified) '
+                                  b'(CHILD7)',
                      blank=True)),
                 ('imp_num_males_total',
                  models.IntegerField(
@@ -1513,7 +1663,8 @@ class Migration(migrations.Migration):
                 ('imp_num_females_total',
                  models.IntegerField(
                      null=True,
-                     verbose_name=b'Number of females (age unspecified) (FEMALE7) ',
+                     verbose_name=b'Number of females (age unspecified) '
+                                  b'(FEMALE7) ',
                      blank=True)),
                 ('percentage_men',
                  models.FloatField(null=True,

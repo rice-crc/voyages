@@ -34,18 +34,15 @@ def spaces_to_underscores(words):
 
 @register.filter
 def decode_language(code):
-    if code == "en":
-        return "English"
-    if code == "fr":
-        return "French"
-    if code == "de":
-        return "German"
-    if code == "pt":
-        return "Portuguese"
-    if code == "nl":
-        return "Dutch"
-    if code == "la":
-        return "Latin"
-    if code == "es":
-        return "Spanish"
+    xlate = {
+        "en": "English",
+        "fr": "French",
+        "de": "German",
+        "pt": "Portuguese",
+        "nl": "Dutch",
+        "la": "Latin",
+        "es": "Spanish"
+    }
+    if code in xlate:
+        return xlate[code]
     return None

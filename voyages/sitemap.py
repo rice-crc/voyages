@@ -43,6 +43,7 @@ class StaticSitemap(Sitemap):
     def _initialize(self, patterns):
         do_not_show = []
         for p in patterns:
+            temp = set({'template_name', 'template'})
             if getattr(p, 'url_patterns', False):
                 for q in p.url_patterns:
                     # urls.py in other apps
@@ -52,12 +53,15 @@ class StaticSitemap(Sitemap):
                         continue
                     if q.regex.groups:
                         continue
-                    temp = set({'template_name', 'template'})
-                    if (hasattr(q, 'default_args') and not temp.isdisjoint(q.default_args)) or \
-                            (hasattr(q, 'default_kwargs') and not temp.isdisjoint(q.default_kwargs)):
-                        # only urls with templates, because we get mtime from the file
+                    if ((hasattr(q, 'default_args') and
+                         not temp.isdisjoint(q.default_args)) or
+                            (hasattr(q, 'default_kwargs') and
+                             not temp.isdisjoint(q.default_kwargs))):
+                        # only urls with templates, because we get mtime from
+                        # the file
                         if getattr(q, 'name', False):
-                            # only views with names so reverse() can work on them
+                            # only views with names so reverse() can work on
+                            # them
                             self._items[
                                 f'{p.namespace}:{q.name}'
                             ] = self._get_modification_date(q, p.namespace)
@@ -67,8 +71,9 @@ class StaticSitemap(Sitemap):
                     continue
                 if p.regex.groups:
                     continue
-                if 'template_name' in p.default_args or 'template' in p.default_args:
-                    # only urls with templates, because we get mtime from the file
+                if not temp.isdisjoint(p.default_args):
+                    # only urls with templates, because we get mtime from the
+                    # file
                     if getattr(p, 'name', False):
                         # only views with names so reverse() can work on them
                         self._items[p.name] = self._get_modification_date(
@@ -91,7 +96,8 @@ class StaticSitemap(Sitemap):
 
     def _get_template_path(self, template_path, appname):
         # check the app directory
-        path = settings.BASE_DIR + '/apps/' + appname + '/templates/' + template_path
+        path = '/'.join([settings.BASE_DIR, 'apps', appname, 'templates',
+                         template_path])
         if os.path.exists(path):
             return path
 

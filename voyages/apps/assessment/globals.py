@@ -15,7 +15,7 @@ def nation_reset(search_configuration):
     return post_config["submit_nation"] == "Reset to default"
 
 
-def get_flags(search_configuration=None, mode=None):
+def get_flags(search_configuration=None, _=None):
     if search_configuration is None:
         nations = [(k.name, 1) for k in SearchQuerySet().models(Nation)]
         return [
@@ -35,7 +35,7 @@ def get_flags(search_configuration=None, mode=None):
     ]
 
 
-def get_broad_regions(search_configuration=None, mode=None):
+def get_broad_regions(search_configuration=None, _=None):
     areas_from_query = SearchQuerySet().models(ImportArea)
 
     if nation_reset(search_configuration):
@@ -53,20 +53,23 @@ def get_broad_regions(search_configuration=None, mode=None):
     ]
 
 
-def get_regions(search_configuration=None, mode=None):
+def get_regions(search_configuration=None, _=None):
     return_areas = []
     return_regions = []
     areas = SearchQuerySet().models(ImportArea)
 
-    # For each area, retrieve list of regions and add to the list with an appropriate length
+    # For each area, retrieve list of regions and add to the list with an
+    # appropriate length
     for local_area in areas:
 
         # Retrieve regions
         local_regions = SearchQuerySet().models(ImportRegion).filter(
             import_area__exact=local_area.name)
 
-        if nation_reset(search_configuration) or \
-                (len(local_regions) == 1 and "darea-button-" + local_area.pk in search_configuration["post"]):
+        if (nation_reset(search_configuration) or
+                (len(local_regions) == 1 and
+                 "darea-button-" + local_area.pk
+                 in search_configuration["post"])):
             local_regions_filtered = local_regions
         elif search_configuration is not None:
             local_regions_filtered = [
@@ -88,7 +91,7 @@ def get_regions(search_configuration=None, mode=None):
     return [return_areas, return_regions]
 
 
-def get_embarkation_regions(search_configuration=None, mode=None):
+def get_embarkation_regions(search_configuration=None, _=None):
     areas = SearchQuerySet().models(ExportRegion)
 
     if nation_reset(search_configuration):
@@ -164,8 +167,8 @@ table_columns = [(_("Flag"), "nation__exact", get_flags),
                   "embarkation_region__exact", get_embarkation_regions),
                  (_("Broad disembarkation regions"),
                   "broad_disembarkation_region__exact", get_broad_regions),
-                 (_("Specific disembarkation regions"), "disembarkation_region__exact",
-                  get_regions)]
+                 (_("Specific disembarkation regions"),
+                  "disembarkation_region__exact", get_regions)]
 
 table_cells = [(_("Embarked/Disembarked"),),
                (_("Only embarked"),),
@@ -177,9 +180,10 @@ default_first_year = 1501
 default_last_year = 1866
 
 
-def get_map_year(frame_from_year, frame_to_year):
+def get_map_year(frame_from_year, _):
     """
-    Determine which base map should be loaded depending on the query's year range.
+    Determine which base map should be loaded depending on the query's year
+    range.
     :param frame_from_year: begin year.
     :param frame_to_year: end year.
     :return: one of four possible base map identifiers.

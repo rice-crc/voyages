@@ -7,7 +7,8 @@ import voyages.apps.past.views
 import voyages.apps.static_content.views
 
 urlpatterns = [
-    url(r'^api/search', voyages.apps.past.views.search_enslaved, name='search'),
+    url(r'^api/search',
+        voyages.apps.past.views.search_enslaved, name='search'),
     url(r'^api/modern-countries',
         voyages.apps.past.views.get_modern_countries,
         name='modern-countries'),
@@ -25,7 +26,7 @@ urlpatterns = [
         name='contribute'),
     url(r'^enslaved_contribution',
         voyages.apps.past.views.enslaved_contribution),
-    url(
-        r'^store-audio/(?P<contrib_pk>[0-9]+)/(?P<name_pk>[0-9]+)/(?P<token>.*)',
+    url(r'^store-audio/(?P<contrib_pk>[0-9]+)/'
+        r'(?P<name_pk>[0-9]+)/(?P<token>.*)',
         voyages.apps.past.views.store_audio)
 ]

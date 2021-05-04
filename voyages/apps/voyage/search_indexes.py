@@ -2,7 +2,7 @@ from __future__ import (absolute_import, division, print_function,
                         unicode_literals)
 
 import re
-from builtins import range, str
+from builtins import str
 from datetime import date
 
 from django.utils import translation
@@ -20,9 +20,9 @@ def split_date(value):
     if value is None:
         return []
     arr = value.split(",") if isinstance(value, six.string_types) else []
-    for i in range(0, len(arr)):
+    for i, elem in enumerate(arr):
         try:
-            arr[i] = int(arr[i])
+            arr[i] = int(elem)
         except Exception:
             arr[i] = ''
     return arr
@@ -88,7 +88,7 @@ class VoyageSourcesIndex(indexes.SearchIndex, indexes.Indexable):
     def get_model(self):
         return VoyageSources
 
-    def index_queryset(self, using=None):
+    def index_queryset(self, _=None):
         """Used when the entire index for model is updated."""
         return self.get_model().objects.all()
 
@@ -730,7 +730,7 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
     def get_updated_field(self):
         return 'last_update'
 
-    def index_queryset(self, using=None):
+    def index_queryset(self, _=None):
         """Used when the entire index for model is updated."""
         helper = VoyagesFullQueryHelper()
         return helper.get_query()

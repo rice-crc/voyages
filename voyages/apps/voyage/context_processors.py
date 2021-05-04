@@ -3,7 +3,7 @@ from __future__ import unicode_literals
 from voyages.apps.voyage.globals import calculate_maxmin_years
 
 
-def voyage_span(request):
+def voyage_span(_):
     """
     Obtain the first and last year when voyages began
     """
