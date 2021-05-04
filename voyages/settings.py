@@ -142,8 +142,8 @@ INSTALLED_APPS = (
     # used to index django models
     'haystack',
 
-    # used to highlight translated strings to easily find which translations are missing
-    # 'i18n_helper',
+    # used to highlight translated strings to easily find which translations
+    # are missing 'i18n_helper',
     'voyages.apps.common',
     'voyages.apps.past',
     'voyages.apps.voyage',
@@ -162,9 +162,11 @@ INSTALLED_APPS = (
 )
 
 I18N_HELPER_DEBUG = False
-I18N_HELPER_HTML = "<div class='i18n-helper' style='display: inline; background-color: #FAF9A7; color: red;'>{0}</div> "
+I18N_HELPER_HTML = "<div class='i18n-helper' style='display: inline; "
+"background-color: #FAF9A7; color: red;'>{0}</div> "
 
-# Indicates whether the map path flows should include paths with missing source.
+# Indicates whether the map path flows should include paths with missing
+# source.
 MAP_MISSING_SOURCE_ENABLED = True
 
 SESSION_ENGINE = "django.contrib.sessions.backends.file"
@@ -231,7 +233,8 @@ try:
         del HAYSTACK_SIGNAL_PROCESSOR
 except Exception as e:
     print(
-        '''*** HAYSTACK settings not modified because something went wrong %s ***'''
+        '''*** HAYSTACK settings not modified because something went wrong %s
+        ***'''
         % e.message,
         file=sys.stderr)
 

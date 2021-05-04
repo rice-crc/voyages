@@ -24,7 +24,8 @@ class Migration(migrations.Migration):
                 validators=[
                     django.core.validators.RegexValidator(
                         re.compile(b'^(\\d{1,2}|),(\\d{1,2}|),(\\d{4}|)$'),
-                        message=b'Please type a date in the format MM,DD,YYYY (individual entries may be blank)',
+                        message=b'Please type a date in the format MM,DD,YYYY '
+                        b'(individual entries may be blank)',
                         code=b'invalid')
                 ]),
         ),
@@ -38,7 +39,8 @@ class Migration(migrations.Migration):
                 validators=[
                     django.core.validators.RegexValidator(
                         re.compile(b'^(\\d{1,2}|),(\\d{1,2}|),(\\d{4}|)$'),
-                        message=b'Please type a date in the format MM,DD,YYYY (individual entries may be blank)',
+                        message=b'Please type a date in the format MM,DD,YYYY '
+                        b'(individual entries may be blank)',
                         code=b'invalid')
                 ]),
         ),
@@ -52,7 +54,8 @@ class Migration(migrations.Migration):
                 validators=[
                     django.core.validators.RegexValidator(
                         re.compile(b'^(\\d{1,2}|),(\\d{1,2}|),(\\d{4}|)$'),
-                        message=b'Please type a date in the format MM,DD,YYYY (individual entries may be blank)',
+                        message=b'Please type a date in the format MM,DD,YYYY '
+                        b'(individual entries may be blank)',
                         code=b'invalid')
                 ]),
         ),
@@ -66,7 +69,8 @@ class Migration(migrations.Migration):
                 validators=[
                     django.core.validators.RegexValidator(
                         re.compile(b'^(\\d{1,2}|),(\\d{1,2}|),(\\d{4}|)$'),
-                        message=b'Please type a date in the format MM,DD,YYYY (individual entries may be blank)',
+                        message=b'Please type a date in the format MM,DD,YYYY '
+                        b'(individual entries may be blank)',
                         code=b'invalid')
                 ]),
         ),
@@ -80,7 +84,8 @@ class Migration(migrations.Migration):
                 validators=[
                     django.core.validators.RegexValidator(
                         re.compile(b'^(\\d{1,2}|),(\\d{1,2}|),(\\d{4}|)$'),
-                        message=b'Please type a date in the format MM,DD,YYYY (individual entries may be blank)',
+                        message=b'Please type a date in the format MM,DD,YYYY '
+                        b'(individual entries may be blank)',
                         code=b'invalid')
                 ]),
         ),
@@ -94,7 +99,8 @@ class Migration(migrations.Migration):
                 validators=[
                     django.core.validators.RegexValidator(
                         re.compile(b'^(\\d{1,2}|),(\\d{1,2}|),(\\d{4}|)$'),
-                        message=b'Please type a date in the format MM,DD,YYYY (individual entries may be blank)',
+                        message=b'Please type a date in the format MM,DD,YYYY '
+                        b'(individual entries may be blank)',
                         code=b'invalid')
                 ]),
         ),
@@ -108,7 +114,8 @@ class Migration(migrations.Migration):
                 validators=[
                     django.core.validators.RegexValidator(
                         re.compile(b'^(\\d{1,2}|),(\\d{1,2}|),(\\d{4}|)$'),
-                        message=b'Please type a date in the format MM,DD,YYYY (individual entries may be blank)',
+                        message=b'Please type a date in the format MM,DD,YYYY '
+                        b'(individual entries may be blank)',
                         code=b'invalid')
                 ]),
         ),
@@ -122,7 +129,8 @@ class Migration(migrations.Migration):
                 validators=[
                     django.core.validators.RegexValidator(
                         re.compile(b'^(\\d{1,2}|),(\\d{1,2}|),(\\d{4}|)$'),
-                        message=b'Please type a date in the format MM,DD,YYYY (individual entries may be blank)',
+                        message=b'Please type a date in the format MM,DD,YYYY '
+                        b'(individual entries may be blank)',
                         code=b'invalid')
                 ]),
         ),

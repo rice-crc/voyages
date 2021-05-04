@@ -68,7 +68,7 @@ def _get_alt_named(alt_model, parent_fk, parent_map):
 
 @csrf_exempt
 @cache_page(3600)
-def get_modern_countries(request):
+def get_modern_countries(_):
     mcs = {
         mc.id: {
             'name': mc.name,
@@ -81,7 +81,7 @@ def get_modern_countries(request):
 
 @csrf_exempt
 @cache_page(3600)
-def get_ethnicities(request):
+def get_ethnicities(_):
 
     def parent_map(e):
         return {'name': e.name, 'language_group_id': e.language_group_id}
@@ -92,7 +92,7 @@ def get_ethnicities(request):
 
 @csrf_exempt
 @cache_page(3600)
-def get_language_groups(request):
+def get_language_groups(_):
 
     def parent_map(lg):
         return {
@@ -109,7 +109,7 @@ def get_language_groups(request):
     return JsonResponse(_get_alt_named(models, 'language_group', parent_map))
 
 
-def restore_permalink(request, link_id):
+def restore_permalink(_, link_id):
     """Redirect the page with a URL param"""
     return redirect("/past/database#searchId=" + link_id)
 
@@ -128,9 +128,12 @@ def search_enslaved(request):
         'voyage__id', 'voyage__voyage_ship__ship_name',
         'voyage__voyage_dates__first_dis_of_slaves',
         'voyage__voyage_itinerary__int_first_port_dis__place',
-        'voyage__voyage_itinerary__imp_principal_place_of_slave_purchase__place',
-        'voyage__voyage_itinerary__imp_principal_place_of_slave_purchase__latitude',
-        'voyage__voyage_itinerary__imp_principal_place_of_slave_purchase__longitude',
+        'voyage__voyage_itinerary__imp_principal_place_of_slave_purchase_'
+        '_place',
+        'voyage__voyage_itinerary__imp_principal_place_of_slave_purchase_'
+        '_latitude',
+        'voyage__voyage_itinerary__imp_principal_place_of_slave_purchase_'
+        '_longitude',
         'voyage__voyage_itinerary__imp_principal_port_slave_dis__place'
     ] + _name_fields + _modern_name_fields
     query = search.execute(_fields)
@@ -236,9 +239,9 @@ def enslaved_contribution(request):
             lang_entry.save()
             language_ids.append(lang_entry.pk)
         result['language_ids'] = language_ids
-    # The audio token is used so that the client can upload audio files for storage.
-    # The token is used to avoid overwriting any files by accident and to prevent
-    # malicious players from storing arbitrary data in our servers.
+    # The audio token is used so that the client can upload audio files for
+    # storage. The token is used to avoid overwriting any files by accident and
+    # to prevent malicious players from storing arbitrary data in our servers.
     result['audio_token'] = token
     return JsonResponse(result)
 

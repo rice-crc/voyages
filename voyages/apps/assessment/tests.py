@@ -25,7 +25,8 @@ class SimpleGetPageTest(TestCase):
 
     def test_valid_pages(self):
         """
-        Attempt to load pages in the valid range 1 to 11 for section 1, 1 to 9 for section 2
+        Attempt to load pages in the valid range 1 to 11 for section 1, 1 to 9
+        for section 2
         """
         for i in range(1, 9):
             # Test pages c01_s01_p01 to c01_s01_p09

@@ -28,7 +28,8 @@ class Migration(migrations.Migration):
                 ('published',
                  models.BooleanField(
                      default=False,
-                     help_text=b'The contribution has been published to the database')),
+                     help_text=b'The contribution has been published to the '
+                     b'database')),
                 ('interim_voyage',
                  models.ForeignKey(related_name='+',
                                    to='contribute.InterimVoyage',

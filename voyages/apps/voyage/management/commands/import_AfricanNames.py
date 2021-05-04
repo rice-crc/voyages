@@ -139,8 +139,8 @@ class Command(BaseCommand):
                     failed += ' plus ' + str(len(l) - 3) + ' other rows'
                 print(e + ": " + failed)
         else:
-            # At this point any remaining elements in names is no longer present
-            # in the CSV so we might delete them.
+            # At this point any remaining elements in names is no longer
+            # present in the CSV so we might delete them.
             delete = len(names) > 0 and input(
                 'Delete pre-existing records '
                 '(' + str(len(names)) + ')'
@@ -176,5 +176,7 @@ class Command(BaseCommand):
                 for a in updated:
                     a.save()
             print(
-                "Changes saved to the database, don't forget to run 'manage.py update_index resources.AfricanNames --remove' to update Solr"
+                "Changes saved to the database, don't forget to run "
+                "'manage.py update_index resources.AfricanNames --remove' "
+                "to update Solr"
             )

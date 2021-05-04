@@ -30,8 +30,8 @@ def filtersource(value):
     for source in sources:
         try:
             ref = source.split("<>")
-            result += "<div class='source_entry'>" + ref[0] + "</div><span class='source_full_ref hidden'>" \
-                      + ref[1] + "</span>"
+            result += f"<div class='source_entry'>{ref[0]}</div>"
+            result += f"<span class='source_full_ref hidden'>{ref[1]}</span>"
         except IndexError:
             continue
     return result

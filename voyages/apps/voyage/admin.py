@@ -84,7 +84,7 @@ class VoyageShipInline(admin.StackedInline):
     extra = 1
     max_num = 1
 
-    def get_model_perms(self, request):
+    def get_model_perms(self, _):
         """
         Return empty perms dict thus hiding the model from admin index.
         """
@@ -150,7 +150,7 @@ class VoyageOutcomeInline(admin.TabularInline):
     extra = 1
     max_num = 1
 
-    def get_model_perms(self, request):
+    def get_model_perms(self, _):
         """
         Return empty perms dict thus hiding the model from admin index.
         """
@@ -193,7 +193,7 @@ class VoyageItineraryInline(admin.StackedInline):
     extra = 1
     max_num = 1
 
-    def get_model_perms(self, request):
+    def get_model_perms(self, _):
         """
         Return empty perms dict thus hiding the model from admin index.
         """
@@ -207,7 +207,7 @@ class VoyageDatesInline(admin.StackedInline):
     extra = 1
     max_num = 1
 
-    def get_model_perms(self, request):
+    def get_model_perms(self, _):
         """
         Return empty perms dict thus hiding the model from admin index.
         """
@@ -258,7 +258,7 @@ class VoyageCrewInline(admin.TabularInline):
     extra = 1
     max_num = 1
 
-    def get_model_perms(self, request):
+    def get_model_perms(self, _):
         """
         Return empty perms dict thus hiding the model from admin index.
         """
@@ -275,7 +275,7 @@ class VoyageSlavesNumbersInline(admin.StackedInline):
     extra = 1
     max_num = 1
 
-    def get_model_perms(self, request):
+    def get_model_perms(self, _):
         """
         Return empty perms dict thus hiding the model from admin index.
         """

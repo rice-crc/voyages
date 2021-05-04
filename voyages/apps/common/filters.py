@@ -28,7 +28,8 @@ def trans_log(val):
     """
     if not isinstance(val, basestring) or len(val) == 0:
         return val
-    # Heuristically check whether this looks like a string that should be translated.
+    # Heuristically check whether this looks like a string that should be
+    # translated.
     if re_has_alpha_chars.match(val) and not val.startswith('var_'):
         result = _(val)
     else:

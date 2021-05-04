@@ -4,7 +4,8 @@ import sys
 
 import unicodecsv
 
-# We require three arguments, the TAST CSV file, the IntraAmerican CSV file, and an Output file.
+# We require three arguments, the TAST CSV file, the IntraAmerican CSV file,
+# and an Output file.
 
 if len(sys.argv) != 4:
     print("You must pass 3 args: TAST CSV, IAm CSV, Output CSV")

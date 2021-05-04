@@ -32,7 +32,9 @@ class EstimateSelectionForm(forms.Form):
 
 
 class EstimateYearForm(forms.Form):
-    frame_from_year = forms.IntegerField(label=_('From'), widget=forms.TextInput(
-        attrs={'class': "short_field_white"}))
-    frame_to_year = forms.IntegerField(label=_('To'), widget=forms.TextInput(
-        attrs={'class': "short_field_white"}))
+    frame_from_year = forms.IntegerField(
+        label=_('From'),
+        widget=forms.TextInput(attrs={'class': "short_field_white"}))
+    frame_to_year = forms.IntegerField(
+        label=_('To'),
+        widget=forms.TextInput(attrs={'class': "short_field_white"}))

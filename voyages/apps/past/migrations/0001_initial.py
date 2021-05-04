@@ -353,22 +353,25 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='languagegroup',
             name='modern_country',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE,
-                                    related_name='language_groups',
-                                    to='past.ModernCountry'),
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name='language_groups',
+                to='past.ModernCountry'),
         ),
         migrations.AddField(
             model_name='ethnicity',
             name='language_group',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE,
-                                    related_name='ethnicities',
-                                    to='past.LanguageGroup'),
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name='ethnicities',
+                to='past.LanguageGroup'),
         ),
         migrations.AddField(
             model_name='enslaveralias',
             name='identity',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE,
-                                    to='past.EnslaverIdentity'),
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                to='past.EnslaverIdentity'),
         ),
         migrations.AlterUniqueTogether(
             name='enslavedname',
@@ -377,44 +380,50 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='enslavedcontributionlanguageentry',
             name='ethnicity',
-            field=models.ForeignKey(null=True,
-                                    on_delete=django.db.models.deletion.CASCADE,
-                                    to='past.Ethnicity'),
+            field=models.ForeignKey(
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                to='past.Ethnicity'),
         ),
         migrations.AddField(
             model_name='enslavedcontributionlanguageentry',
             name='language_group',
-            field=models.ForeignKey(null=True,
-                                    on_delete=django.db.models.deletion.CASCADE,
-                                    to='past.LanguageGroup'),
+            field=models.ForeignKey(
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                to='past.LanguageGroup'),
         ),
         migrations.AddField(
             model_name='enslaved',
             name='ethnicity',
-            field=models.ForeignKey(null=True,
-                                    on_delete=django.db.models.deletion.CASCADE,
-                                    to='past.Ethnicity'),
+            field=models.ForeignKey(
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                to='past.Ethnicity'),
         ),
         migrations.AddField(
             model_name='enslaved',
             name='language_group',
-            field=models.ForeignKey(null=True,
-                                    on_delete=django.db.models.deletion.CASCADE,
-                                    to='past.LanguageGroup'),
+            field=models.ForeignKey(
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                to='past.LanguageGroup'),
         ),
         migrations.AddField(
             model_name='enslaved',
             name='post_disembark_location',
-            field=models.ForeignKey(null=True,
-                                    on_delete=django.db.models.deletion.CASCADE,
-                                    to='voyage.Place'),
+            field=models.ForeignKey(
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                to='voyage.Place'),
         ),
         migrations.AddField(
             model_name='enslaved',
             name='register_country',
-            field=models.ForeignKey(null=True,
-                                    on_delete=django.db.models.deletion.CASCADE,
-                                    to='past.RegisterCountry'),
+            field=models.ForeignKey(
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                to='past.RegisterCountry'),
         ),
         migrations.AddField(
             model_name='enslaved',
@@ -427,24 +436,28 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='enslaved',
             name='voyage',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE,
-                                    to='voyage.Voyage'),
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                to='voyage.Voyage'),
         ),
         migrations.AddField(
             model_name='altlanguagegroupname',
             name='language_group',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE,
-                                    related_name='alt_names',
-                                    to='past.LanguageGroup'),
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name='alt_names',
+                to='past.LanguageGroup'),
         ),
         migrations.AddField(
             model_name='altethnicityname',
             name='ethnicity',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE,
-                                    related_name='alt_names',
-                                    to='past.Ethnicity'),
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name='alt_names',
+                to='past.Ethnicity'),
         ),
-        # Make sure that accented letters are considered different in indices and searches.
+        # Make sure that accented letters are considered different in indices
+        # and searches.
         migrations.RunSQL([
             'ALTER TABLE `past_enslavedname` '
             'CHANGE COLUMN `name` `name` '

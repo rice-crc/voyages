@@ -3,7 +3,7 @@ from __future__ import print_function, unicode_literals
 import itertools
 import re
 import sys
-from builtins import input, next, range, str
+from builtins import input, next, str
 
 from django.core.management.base import BaseCommand
 from django.db import connection
@@ -30,7 +30,8 @@ empty = re.compile(r"^\s*\.?$")
 
 
 class Command(BaseCommand):
-    help = 'Imports a CSV file with the full data-set and converts the data to the Django models.'
+    help = ('Imports a CSV file with the full data-set and converts the data '
+            'to the Django models.')
 
     def add_arguments(self, parser):
         parser.add_argument('csv_file', nargs='+')
@@ -38,8 +39,8 @@ class Command(BaseCommand):
             '--db',
             dest='db',
             default='mysql',
-            help='Specifies the DB backend so that the appropriate raw sql is generated. '
-            'Supported values: "mysql" and "pgsql"')
+            help=('Specifies the DB backend so that the appropriate raw sql '
+                  'is generated. Supported values: "mysql" and "pgsql"'))
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -54,7 +55,8 @@ class Command(BaseCommand):
             return
         print('Targetting db: ' + target_db)
 
-        # Store related models that need to be persisted in the following lists/dicts
+        # Store related models that need to be persisted in the following
+        # lists/dicts
         voyages = {}
         captains = {}
         ship_owners = {}
@@ -160,7 +162,7 @@ class Command(BaseCommand):
         trie = {}
         _end = '_end'
 
-        def add_to_trie(key, value):
+        def add_to_trie(_, value):
             dictionary = trie
             for letter in plain:
                 if filter_out_source_letter(letter):
@@ -241,9 +243,9 @@ class Command(BaseCommand):
 
         def date_from_sep_values(value):
             """
-            Converts a date with the format MM[sep]DD[sep]YYYY or YYYY[sep]MM[sep]DD---
-            where sep can be '-' or '/' or ','---into
-            CSV format MM,DD,YYYY
+            Converts a date with the format MM[sep]DD[sep]YYYY or
+            YYYY[sep]MM[sep]DD--- where sep can be '-' or '/' or ','---into CSV
+            format MM,DD,YYYY
             :param value: the formatted date
             :return: the CSV date
             """
@@ -261,12 +263,13 @@ class Command(BaseCommand):
             try:
                 coords = [2, 0, 1]
                 if len(components[0].strip()) == 4:
-                    # This date format starts with year, so we assume YYYY[sep]MM[sep]DD
+                    # This date format starts with year, so we assume
+                    # YYYY[sep]MM[sep]DD
                     coords = [0, 1, 2]
                 year = int(components[coords[0]].strip())
                 month = int(components[coords[1]].strip())
                 day = int(components[coords[2]].strip())
-                if 1 <= day <= 31 and 1 <= month <= 12 and 1000 <= year <= 1900:
+                if 1 <= day <= 31 and 1 <= month <= 12 and 999 < year <= 1900:
                     return f'{month},{day},{year}'
                 self.errors += 1
                 sys.stderr.write('Invalid date ' + value + '\n')
@@ -280,6 +283,412 @@ class Command(BaseCommand):
             return itertools.chain([next(iterator).lower().replace("_", "")],
                                    iterator)
 
+        def row_to_ship(row, voyage):
+            # Ship
+            ship_model = VoyageShip()
+            ship_model.ship_name = row.get(u'shipname')
+            ship_model.nationality_ship = get_by_value(
+                'nationalities', 'national')
+            ship_model.tonnage = cint(row.get(u'tonnage'))
+            ship_model.ton_type = get_by_value('ton_types', 'tontype')
+            ship_model.rig_of_vessel = get_by_value('rigs', 'rig')
+            ship_model.guns_mounted = cint(row.get(u'guns'))
+            ship_model.year_of_construction = cint(row.get(u'yrcons'))
+            ship_model.vessel_construction_place = get_by_value(
+                'places', 'placcons')
+            ship_model.vessel_construction_region = get_by_value(
+                'regions', 'constreg')
+            ship_model.registered_year = cint(row.get(u'yrreg'))
+            ship_model.registered_place = get_by_value(
+                'places', 'placreg')
+            ship_model.registered_region = get_by_value(
+                'regions', 'regisreg')
+            ship_model.imputed_nationality = get_by_value(
+                'nationalities', 'natinimp')
+            ship_model.tonnage_mod = cfloat(row.get(u'tonmod'))
+            ship_model.voyage = voyage
+            # voyage.voyage_ship = ship_model
+            return ship_model
+
+        def row_to_itinerary(row, voyage):
+            itinerary = VoyageItinerary()
+            itinerary.port_of_departure = get_by_value(
+                'places', 'portdep')
+            itinerary.int_first_port_emb = get_by_value(
+                'places', 'embport')
+            itinerary.int_second_port_emb = get_by_value(
+                'places', 'embport2')
+            itinerary.int_first_region_purchase_slaves = get_by_value(
+                'regions', 'embreg')
+            itinerary.int_second_region_purchase_slaves = get_by_value(
+                'regions', 'embreg2')
+            itinerary.int_first_port_dis = get_by_value(
+                'places', 'arrport')
+            itinerary.int_second_port_dis = get_by_value(
+                'places', 'arrport2')
+            itinerary.int_first_region_slave_landing = get_by_value(
+                'regions', 'regarr')
+            itinerary.int_second_place_region_slave_landing = (
+                get_by_value('regions', 'regarr2'))
+            itinerary.ports_called_buying_slaves = cint(
+                row.get(u'nppretra'))
+            itinerary.first_place_slave_purchase = get_by_value(
+                'places', 'plac1tra')
+            itinerary.second_place_slave_purchase = get_by_value(
+                'places', 'plac2tra')
+            itinerary.third_place_slave_purchase = get_by_value(
+                'places', 'plac3tra')
+            itinerary.first_region_slave_emb = get_by_value(
+                'regions', 'regem1')
+            itinerary.second_region_slave_emb = get_by_value(
+                'regions', 'regem2')
+            itinerary.third_region_slave_emb = get_by_value(
+                'regions', 'regem3')
+            itinerary.port_of_call_before_atl_crossing = get_by_value(
+                'places', 'npafttra')
+            itinerary.number_of_ports_of_call = cint(
+                row.get(u'npprior'))
+            itinerary.first_landing_place = get_by_value(
+                'places', 'sla1port')
+            itinerary.second_landing_place = get_by_value(
+                'places', 'adpsale1')
+            itinerary.third_landing_place = get_by_value(
+                'places', 'adpsale2')
+            itinerary.first_landing_region = get_by_value(
+                'regions', 'regdis1')
+            itinerary.second_landing_region = get_by_value(
+                'regions', 'regdis2')
+            itinerary.third_landing_region = get_by_value(
+                'regions', 'regdis3')
+            itinerary.place_voyage_ended = get_by_value(
+                'places', 'portret')
+            itinerary.region_of_return = get_by_value(
+                'regions', 'retrnreg')
+            itinerary.broad_region_of_return = get_by_value(
+                'broad_regions', 'retrnreg1')
+            itinerary.imp_port_voyage_begin = get_by_value(
+                'places', 'ptdepimp')
+            itinerary.imp_region_voyage_begin = get_by_value(
+                'regions', 'deptregimp')
+            itinerary.imp_broad_region_voyage_begin = get_by_value(
+                'broad_regions', 'deptregimp1')
+            itinerary.principal_place_of_slave_purchase = get_by_value(
+                'places', 'majbuypt')
+            itinerary.imp_principal_place_of_slave_purchase = (
+                get_by_value('places', 'mjbyptimp'))
+            itinerary.imp_principal_region_of_slave_purchase = (
+                get_by_value('regions', 'majbyimp'))
+            itinerary.imp_broad_region_of_slave_purchase = (
+                get_by_value('broad_regions', 'majbyimp1'))
+            itinerary.principal_port_of_slave_dis = get_by_value(
+                'places', 'majselpt')
+            itinerary.imp_principal_port_slave_dis = get_by_value(
+                'places', 'mjslptimp')
+            itinerary.imp_principal_region_slave_dis = get_by_value(
+                'regions', 'mjselimp')
+            itinerary.imp_broad_region_slave_dis = get_by_value(
+                'broad_regions', 'mjselimp1')
+            itinerary.voyage = voyage
+            check_hierarchy(voyage.voyage_id, 'ptdepimp',
+                            itinerary.imp_port_voyage_begin,
+                            itinerary.imp_region_voyage_begin,
+                            itinerary.imp_broad_region_voyage_begin)
+            check_hierarchy(voyage.voyage_id, 'mjbyptimp',
+                            itinerary.imp_principal_place_of_slave_purchase,
+                            itinerary.imp_principal_region_of_slave_purchase,
+                            itinerary.imp_broad_region_of_slave_purchase)
+            check_hierarchy(voyage.voyage_id, 'mjslptimp',
+                            itinerary.imp_principal_port_slave_dis,
+                            itinerary.imp_principal_region_slave_dis,
+                            itinerary.imp_broad_region_slave_dis)
+            # voyage.voyage_itinerary = itinerary
+            return itinerary
+
+        def row_to_dates(row, voyage):
+            dates = VoyageDates()
+            dates.voyage_began = date_csv('datedep')
+            dates.slave_purchase_began = date_csv('d1slatr')
+            dates.vessel_left_port = date_csv('dlslatr')
+            dates.first_dis_of_slaves = date_csv(
+                'datarr', ['32', '33', '34'])
+            dates.date_departed_africa = date_from_sep_values(
+                row.get(u'dateleftafr'))
+            dates.arrival_at_second_place_landing = date_csv(
+                'datarr', ['36', '37', '38'])
+            dates.third_dis_of_slaves = date_csv(
+                'datarr', ['39', '40', '41'])
+            dates.departure_last_place_of_landing = date_csv(
+                'ddepam', ['', 'b', 'c'])
+            dates.voyage_completed = date_csv('datarr',
+                                              ['43', '44', '45'])
+            dates.length_middle_passage_days = cint(row.get(u'voyage'))
+            dates.imp_voyage_began = date_csv('yeardep',
+                                              [None, None, ''])
+            dates.imp_departed_africa = date_csv(
+                'yearaf', [None, None, ''])
+            dates.imp_arrival_at_port_of_dis = date_csv(
+                'yearam', [None, None, ''])
+            dates.imp_length_home_to_disembark = cint(
+                row.get(u'voy1imp'))
+            dates.imp_length_leaving_africa_to_disembark = cint(
+                row.get(u'voy2imp'))
+            dates.voyage = voyage
+            # voyage.voyage_dates = dates
+            return dates
+
+        def row_to_crew(row, voyage):
+            crew = VoyageCrew()
+            crew.crew_voyage_outset = cint(row.get(u'crew1'))
+            crew.crew_departure_last_port = cint(row.get(u'crew2'))
+            crew.crew_first_landing = cint(row.get(u'crew3'))
+            crew.crew_return_begin = cint(row.get(u'crew4'))
+            crew.crew_end_voyage = cint(row.get(u'crew5'))
+            crew.unspecified_crew = cint(row.get(u'crew'))
+            crew.crew_died_before_first_trade = cint(
+                row.get(u'saild1'))
+            crew.crew_died_while_ship_african = cint(
+                row.get(u'saild2'))
+            crew.crew_died_middle_passage = cint(row.get(u'saild3'))
+            crew.crew_died_in_americas = cint(row.get(u'saild4'))
+            crew.crew_died_on_return_voyage = cint(row.get(u'saild5'))
+            crew.crew_died_complete_voyage = cint(row.get(u'crewdied'))
+            crew.crew_deserted = cint(row.get(u'ndesert'))
+            crew.voyage = voyage
+            # voyage.voyage_crew = crew
+            return crew
+
+        def row_to_numbers(row, voyage):
+            nums = VoyageSlavesNumbers()
+            nums.slave_deaths_before_africa = cint(
+                row.get(u'sladafri'))
+            nums.slave_deaths_between_africa_america = cint(
+                row.get(u'sladvoy'))
+            nums.slave_deaths_between_arrival_and_sale = cint(
+                row.get(u'sladamer'))
+            nums.num_slaves_intended_first_port = cint(
+                row.get(u'slintend'))
+            nums.num_slaves_intended_second_port = cint(
+                row.get(u'slinten2'))
+            nums.num_slaves_carried_first_port = cint(
+                row.get(u'ncar13'))
+            nums.num_slaves_carried_second_port = cint(
+                row.get(u'ncar15'))
+            nums.num_slaves_carried_third_port = cint(
+                row.get(u'ncar17'))
+            nums.total_num_slaves_purchased = cint(
+                row.get(u'tslavesp'))
+            nums.total_num_slaves_dep_last_slaving_port = cint(
+                row.get(u'tslavesd'))
+            nums.total_num_slaves_arr_first_port_embark = cint(
+                row.get(u'slaarriv'))
+            nums.num_slaves_disembark_first_place = cint(
+                row.get(u'slas32'))
+            nums.num_slaves_disembark_second_place = cint(
+                row.get(u'slas36'))
+            nums.num_slaves_disembark_third_place = cint(
+                row.get(u'slas39'))
+            nums.imp_total_num_slaves_embarked = cint(
+                row.get(u'slaximp'))
+            nums.imp_total_num_slaves_disembarked = cint(
+                row.get(u'slamimp'))
+            nums.imp_jamaican_cash_price = cfloat(
+                row.get(u'jamcaspr'))
+            nums.imp_mortality_during_voyage = cint(
+                row.get(u'vymrtimp'))
+            nums.num_men_embark_first_port_purchase = cint(
+                row.get(u'men1'))
+            nums.num_women_embark_first_port_purchase = cint(
+                row.get(u'women1'))
+            nums.num_boy_embark_first_port_purchase = cint(
+                row.get(u'boy1'))
+            nums.num_girl_embark_first_port_purchase = cint(
+                row.get(u'girl1'))
+            nums.num_adult_embark_first_port_purchase = cint(
+                row.get(u'adult1'))
+            nums.num_child_embark_first_port_purchase = cint(
+                row.get(u'child1'))
+            nums.num_infant_embark_first_port_purchase = cint(
+                row.get(u'infant1'))
+            nums.num_males_embark_first_port_purchase = cint(
+                row.get(u'male1'))
+            nums.num_females_embark_first_port_purchase = cint(
+                row.get(u'female1'))
+            nums.num_men_died_middle_passage = cint(
+                row.get(u'men2'))
+            nums.num_women_died_middle_passage = cint(
+                row.get(u'women2'))
+            nums.num_boy_died_middle_passage = cint(
+                row.get(u'boy2'))
+            nums.num_girl_died_middle_passage = cint(
+                row.get(u'girl2'))
+            nums.num_adult_died_middle_passage = cint(
+                row.get(u'adult2'))
+            nums.num_child_died_middle_passage = cint(
+                row.get(u'child2'))
+            nums.num_infant_died_middle_passage = cint(
+                row.get(u'infant2'))
+            nums.num_males_died_middle_passage = cint(
+                row.get(u'male2'))
+            nums.num_females_died_middle_passage = cint(
+                row.get(u'female2'))
+            nums.num_men_disembark_first_landing = cint(
+                row.get(u'men3'))
+            nums.num_women_disembark_first_landing = cint(
+                row.get(u'women3'))
+            nums.num_boy_disembark_first_landing = cint(
+                row.get(u'boy3'))
+            nums.num_girl_disembark_first_landing = cint(
+                row.get(u'girl3'))
+            nums.num_adult_disembark_first_landing = cint(
+                row.get(u'adult3'))
+            nums.num_child_disembark_first_landing = cint(
+                row.get(u'child3'))
+            nums.num_infant_disembark_first_landing = cint(
+                row.get(u'infant3'))
+            nums.num_males_disembark_first_landing = cint(
+                row.get(u'male3'))
+            nums.num_females_disembark_first_landing = cint(
+                row.get(u'female3'))
+            nums.num_men_embark_second_port_purchase = cint(
+                row.get(u'men4'))
+            nums.num_women_embark_second_port_purchase = cint(
+                row.get(u'women4'))
+            nums.num_boy_embark_second_port_purchase = cint(
+                row.get(u'boy4'))
+            nums.num_girl_embark_second_port_purchase = cint(
+                row.get(u'girl4'))
+            nums.num_adult_embark_second_port_purchase = cint(
+                row.get(u'adult4'))
+            nums.num_child_embark_second_port_purchase = cint(
+                row.get(u'child4'))
+            nums.num_infant_embark_second_port_purchase = cint(
+                row.get(u'infant4'))
+            nums.num_males_embark_second_port_purchase = cint(
+                row.get(u'male4'))
+            nums.num_females_embark_second_port_purchase = cint(
+                row.get(u'female4'))
+            nums.num_men_embark_third_port_purchase = cint(
+                row.get(u'men5'))
+            nums.num_women_embark_third_port_purchase = cint(
+                row.get(u'women5'))
+            nums.num_boy_embark_third_port_purchase = cint(
+                row.get(u'boy5'))
+            nums.num_girl_embark_third_port_purchase = cint(
+                row.get(u'girl5'))
+            nums.num_adult_embark_third_port_purchase = cint(
+                row.get(u'adult5'))
+            nums.num_child_embark_third_port_purchase = cint(
+                row.get(u'child5'))
+            nums.num_infant_embark_third_port_purchase = cint(
+                row.get(u'infant5'))
+            nums.num_males_embark_third_port_purchase = cint(
+                row.get(u'male5'))
+            nums.num_females_embark_third_port_purchase = cint(
+                row.get(u'female5'))
+            nums.num_men_disembark_second_landing = cint(
+                row.get(u'men6'))
+            nums.num_women_disembark_second_landing = cint(
+                row.get(u'women6'))
+            nums.num_boy_disembark_second_landing = cint(
+                row.get(u'boy6'))
+            nums.num_girl_disembark_second_landing = cint(
+                row.get(u'girl6'))
+            nums.num_adult_disembark_second_landing = cint(
+                row.get(u'adult6'))
+            nums.num_child_disembark_second_landing = cint(
+                row.get(u'child6'))
+            nums.num_infant_disembark_second_landing = cint(
+                row.get(u'infant6'))
+            nums.num_males_disembark_second_landing = cint(
+                row.get(u'male6'))
+            nums.num_females_disembark_second_landing = cint(
+                row.get(u'female6'))
+            nums.imp_num_adult_embarked = cint(row.get(u'adlt1imp'))
+            nums.imp_num_children_embarked = cint(
+                row.get(u'chil1imp'))
+            nums.imp_num_male_embarked = cint(row.get(u'male1imp'))
+            nums.imp_num_female_embarked = cint(
+                row.get(u'feml1imp'))
+            nums.total_slaves_embarked_age_identified = cint(
+                row.get(u'slavema1'))
+            nums.total_slaves_embarked_gender_identified = cint(
+                row.get(u'slavemx1'))
+            nums.imp_adult_death_middle_passage = cint(
+                row.get(u'adlt2imp'))
+            nums.imp_child_death_middle_passage = cint(
+                row.get(u'chil2imp'))
+            nums.imp_male_death_middle_passage = cint(
+                row.get(u'male2imp'))
+            nums.imp_female_death_middle_passage = cint(
+                row.get(u'feml2imp'))
+            nums.imp_num_adult_landed = cint(row.get(u'adlt3imp'))
+            nums.imp_num_child_landed = cint(row.get(u'chil3imp'))
+            nums.imp_num_male_landed = cint(row.get(u'male3imp'))
+            nums.imp_num_female_landed = cint(row.get(u'feml3imp'))
+            nums.total_slaves_landed_age_identified = cint(
+                row.get(u'slavema3'))
+            nums.total_slaves_landed_gender_identified = cint(
+                row.get(u'slavemx3'))
+            nums.total_slaves_dept_or_arr_age_identified = cint(
+                row.get(u'slavema7'))
+            nums.total_slaves_dept_or_arr_gender_identified = cint(
+                row.get(u'slavemx7'))
+            nums.total_slaves_embarked_age_gender_identified = cint(
+                row.get(u'slavmax1'))
+            nums.total_slaves_by_age_gender_identified_among_landed = cint(
+                row.get(u'slavmax3'))
+            nums.total_slaves_by_age_gender_identified_departure_or_arrival = (
+                cint(row.get(u'slavmax7')))
+            nums.imp_slaves_embarked_for_mortality = cint(
+                row.get(u'tslmtimp'))
+            nums.imp_num_men_total = cint(row.get(u'men7'))
+            nums.imp_num_women_total = cint(row.get(u'women7'))
+            nums.imp_num_boy_total = cint(row.get(u'boy7'))
+            nums.imp_num_girl_total = cint(row.get(u'girl7'))
+            nums.imp_num_adult_total = cint(row.get(u'adult7'))
+            nums.imp_num_child_total = cint(row.get(u'child7'))
+            nums.imp_num_males_total = cint(row.get(u'male7'))
+            nums.imp_num_females_total = cint(row.get(u'female7'))
+            nums.percentage_men = cfloat(row.get(u'menrat7'))
+            nums.percentage_women = cfloat(row.get(u'womrat7'))
+            nums.percentage_boy = cfloat(row.get(u'boyrat7'))
+            nums.percentage_girl = cfloat(row.get(u'girlrat7'))
+            nums.percentage_male = cfloat(row.get(u'malrat7'))
+            nums.percentage_child = cfloat(row.get(u'chilrat7'))
+            nums.percentage_adult = 1 - nums.percentage_child \
+                if nums.percentage_child is not None else None
+            nums.percentage_female = 1 - nums.percentage_male \
+                if nums.percentage_male is not None else None
+            nums.imp_mortality_ratio = cfloat(row.get(u'vymrtrat'))
+            nums.percentage_boys_among_embarked_slaves = cfloat(
+                row.get(u'boyrat1'))
+            nums.child_ratio_among_embarked_slaves = cfloat(
+                row.get(u'chilrat1'))
+            nums.percentage_girls_among_embarked_slaves = cfloat(
+                row.get(u'girlrat1'))
+            nums.male_ratio_among_embarked_slaves = cfloat(
+                row.get(u'malrat1'))
+            nums.percentage_men_among_embarked_slaves = cfloat(
+                row.get(u'menrat1'))
+            nums.percentage_women_among_embarked_slaves = cfloat(
+                row.get(u'womrat1'))
+            nums.percentage_boys_among_landed_slaves = cfloat(
+                row.get(u'boyrat3'))
+            nums.child_ratio_among_landed_slaves = cfloat(
+                row.get(u'chilrat3'))
+            nums.percentage_girls_among_landed_slaves = cfloat(
+                row.get(u'girlrat3'))
+            nums.male_ratio_among_landed_slaves = cfloat(
+                row.get(u'malrat3'))
+            nums.percentage_men_among_landed_slaves = cfloat(
+                row.get(u'menrat3'))
+            nums.percentage_women_among_landed_slaves = cfloat(
+                row.get(u'womrat3'))
+            # INSERT HERE any new number variables [import CSV]
+            nums.voyage = voyage
+            # voyage.voyage_slaves_numbers = numbers
+            return nums
+
         count_tast = 0
         count_iam = 0
         voyage_links = []
@@ -288,430 +697,37 @@ class Command(BaseCommand):
                 reader = unicodecsv.DictReader(lower_headers(f), delimiter=',')
                 # Ensure lower case is used.
                 for row in reader:
-                    # Create a voyage corresponding to this row
-                    voyage = Voyage()
                     voyage_id = cint(row.get(u'voyageid'), False)
                     if voyage_id in voyages:
                         sys.stderr.write('Duplicate voyage found'
                                          ': ' + str(voyage_id) + '\n')
                         return
+                    # Create a voyage corresponding to this row
+                    voyage = Voyage()
                     voyage.pk = voyage_id
                     voyage.voyage_id = voyage_id
                     voyages[voyage_id] = voyage
                     # Next we set up voyage direct and nested members
                     in_cd_room = row.get(u'evgreen', '0')
-                    voyage.voyage_in_cd_rom = in_cd_room == '1' or in_cd_room.lower(
-                    ) == 'true'
+                    if in_cd_room.lower() == 'true':
+                        in_cd_room = '1'
+                    voyage.voyage_in_cd_rom = in_cd_room == '1'
                     voyage.voyage_groupings = get_by_value(
                         'groupings', 'xmimpflag')
                     intra_american = cint(row.get(u'intraamer')) == 1
-                    # NOTE: if we implement other datasets, there should be a field to specify which
-                    voyage.dataset = VoyageDataset.IntraAmerican if intra_american else VoyageDataset.Transatlantic
+                    # NOTE: if we implement other datasets, there should be a
+                    # field to specify which
                     if intra_american:
+                        voyage.dataset = VoyageDataset.IntraAmerican
                         count_iam += 1
                     else:
+                        voyage.dataset = VoyageDataset.Transatlantic
                         count_tast += 1
-                    # Ship
-                    ship_model = VoyageShip()
-                    ship_model.ship_name = row.get(u'shipname')
-                    ship_model.nationality_ship = get_by_value(
-                        'nationalities', 'national')
-                    ship_model.tonnage = cint(row.get(u'tonnage'))
-                    ship_model.ton_type = get_by_value('ton_types', 'tontype')
-                    ship_model.rig_of_vessel = get_by_value('rigs', 'rig')
-                    ship_model.guns_mounted = cint(row.get(u'guns'))
-                    ship_model.year_of_construction = cint(row.get(u'yrcons'))
-                    ship_model.vessel_construction_place = get_by_value(
-                        'places', 'placcons')
-                    ship_model.vessel_construction_region = get_by_value(
-                        'regions', 'constreg')
-                    ship_model.registered_year = cint(row.get(u'yrreg'))
-                    ship_model.registered_place = get_by_value(
-                        'places', 'placreg')
-                    ship_model.registered_region = get_by_value(
-                        'regions', 'regisreg')
-                    ship_model.imputed_nationality = get_by_value(
-                        'nationalities', 'natinimp')
-                    ship_model.tonnage_mod = cfloat(row.get(u'tonmod'))
-                    ship_model.voyage = voyage
-                    ships.append(ship_model)
-                    # voyage.voyage_ship = ship_model
-                    # Itinerary
-                    itinerary = VoyageItinerary()
-                    itinerary.port_of_departure = get_by_value(
-                        'places', 'portdep')
-                    itinerary.int_first_port_emb = get_by_value(
-                        'places', 'embport')
-                    itinerary.int_second_port_emb = get_by_value(
-                        'places', 'embport2')
-                    itinerary.int_first_region_purchase_slaves = get_by_value(
-                        'regions', 'embreg')
-                    itinerary.int_second_region_purchase_slaves = get_by_value(
-                        'regions', 'embreg2')
-                    itinerary.int_first_port_dis = get_by_value(
-                        'places', 'arrport')
-                    itinerary.int_second_port_dis = get_by_value(
-                        'places', 'arrport2')
-                    itinerary.int_first_region_slave_landing = get_by_value(
-                        'regions', 'regarr')
-                    itinerary.int_second_place_region_slave_landing = get_by_value(
-                        'regions', 'regarr2')
-                    itinerary.ports_called_buying_slaves = cint(
-                        row.get(u'nppretra'))
-                    itinerary.first_place_slave_purchase = get_by_value(
-                        'places', 'plac1tra')
-                    itinerary.second_place_slave_purchase = get_by_value(
-                        'places', 'plac2tra')
-                    itinerary.third_place_slave_purchase = get_by_value(
-                        'places', 'plac3tra')
-                    itinerary.first_region_slave_emb = get_by_value(
-                        'regions', 'regem1')
-                    itinerary.second_region_slave_emb = get_by_value(
-                        'regions', 'regem2')
-                    itinerary.third_region_slave_emb = get_by_value(
-                        'regions', 'regem3')
-                    itinerary.port_of_call_before_atl_crossing = get_by_value(
-                        'places', 'npafttra')
-                    itinerary.number_of_ports_of_call = cint(
-                        row.get(u'npprior'))
-                    itinerary.first_landing_place = get_by_value(
-                        'places', 'sla1port')
-                    itinerary.second_landing_place = get_by_value(
-                        'places', 'adpsale1')
-                    itinerary.third_landing_place = get_by_value(
-                        'places', 'adpsale2')
-                    itinerary.first_landing_region = get_by_value(
-                        'regions', 'regdis1')
-                    itinerary.second_landing_region = get_by_value(
-                        'regions', 'regdis2')
-                    itinerary.third_landing_region = get_by_value(
-                        'regions', 'regdis3')
-                    itinerary.place_voyage_ended = get_by_value(
-                        'places', 'portret')
-                    itinerary.region_of_return = get_by_value(
-                        'regions', 'retrnreg')
-                    itinerary.broad_region_of_return = get_by_value(
-                        'broad_regions', 'retrnreg1')
-                    itinerary.imp_port_voyage_begin = get_by_value(
-                        'places', 'ptdepimp')
-                    itinerary.imp_region_voyage_begin = get_by_value(
-                        'regions', 'deptregimp')
-                    itinerary.imp_broad_region_voyage_begin = get_by_value(
-                        'broad_regions', 'deptregimp1')
-                    itinerary.principal_place_of_slave_purchase = get_by_value(
-                        'places', 'majbuypt')
-                    itinerary.imp_principal_place_of_slave_purchase = get_by_value(
-                        'places', 'mjbyptimp')
-                    itinerary.imp_principal_region_of_slave_purchase = get_by_value(
-                        'regions', 'majbyimp')
-                    itinerary.imp_broad_region_of_slave_purchase = get_by_value(
-                        'broad_regions', 'majbyimp1')
-                    itinerary.principal_port_of_slave_dis = get_by_value(
-                        'places', 'majselpt')
-                    itinerary.imp_principal_port_slave_dis = get_by_value(
-                        'places', 'mjslptimp')
-                    itinerary.imp_principal_region_slave_dis = get_by_value(
-                        'regions', 'mjselimp')
-                    itinerary.imp_broad_region_slave_dis = get_by_value(
-                        'broad_regions', 'mjselimp1')
-                    itinerary.voyage = voyage
-                    itineraries.append(itinerary)
-                    check_hierarchy(voyage_id, 'ptdepimp',
-                                    itinerary.imp_port_voyage_begin,
-                                    itinerary.imp_region_voyage_begin,
-                                    itinerary.imp_broad_region_voyage_begin)
-                    check_hierarchy(
-                        voyage_id, 'mjbyptimp',
-                        itinerary.imp_principal_place_of_slave_purchase,
-                        itinerary.imp_principal_region_of_slave_purchase,
-                        itinerary.imp_broad_region_of_slave_purchase)
-                    check_hierarchy(voyage_id, 'mjslptimp',
-                                    itinerary.imp_principal_port_slave_dis,
-                                    itinerary.imp_principal_region_slave_dis,
-                                    itinerary.imp_broad_region_slave_dis)
-                    # voyage.voyage_itinerary = itinerary
-                    # Dates
-                    dates = VoyageDates()
-                    dates.voyage_began = date_csv('datedep')
-                    dates.slave_purchase_began = date_csv('d1slatr')
-                    dates.vessel_left_port = date_csv('dlslatr')
-                    dates.first_dis_of_slaves = date_csv(
-                        'datarr', ['32', '33', '34'])
-                    dates.date_departed_africa = date_from_sep_values(
-                        row.get(u'dateleftafr'))
-                    dates.arrival_at_second_place_landing = date_csv(
-                        'datarr', ['36', '37', '38'])
-                    dates.third_dis_of_slaves = date_csv(
-                        'datarr', ['39', '40', '41'])
-                    dates.departure_last_place_of_landing = date_csv(
-                        'ddepam', ['', 'b', 'c'])
-                    dates.voyage_completed = date_csv('datarr',
-                                                      ['43', '44', '45'])
-                    dates.length_middle_passage_days = cint(row.get(u'voyage'))
-                    dates.imp_voyage_began = date_csv('yeardep',
-                                                      [None, None, ''])
-                    dates.imp_departed_africa = date_csv(
-                        'yearaf', [None, None, ''])
-                    dates.imp_arrival_at_port_of_dis = date_csv(
-                        'yearam', [None, None, ''])
-                    dates.imp_length_home_to_disembark = cint(
-                        row.get(u'voy1imp'))
-                    dates.imp_length_leaving_africa_to_disembark = cint(
-                        row.get(u'voy2imp'))
-                    dates.voyage = voyage
-                    voyage_dates.append(dates)
-                    # voyage.voyage_dates = dates
-                    # Crew
-                    crew = VoyageCrew()
-                    crew.crew_voyage_outset = cint(row.get(u'crew1'))
-                    crew.crew_departure_last_port = cint(row.get(u'crew2'))
-                    crew.crew_first_landing = cint(row.get(u'crew3'))
-                    crew.crew_return_begin = cint(row.get(u'crew4'))
-                    crew.crew_end_voyage = cint(row.get(u'crew5'))
-                    crew.unspecified_crew = cint(row.get(u'crew'))
-                    crew.crew_died_before_first_trade = cint(
-                        row.get(u'saild1'))
-                    crew.crew_died_while_ship_african = cint(
-                        row.get(u'saild2'))
-                    crew.crew_died_middle_passage = cint(row.get(u'saild3'))
-                    crew.crew_died_in_americas = cint(row.get(u'saild4'))
-                    crew.crew_died_on_return_voyage = cint(row.get(u'saild5'))
-                    crew.crew_died_complete_voyage = cint(row.get(u'crewdied'))
-                    crew.crew_deserted = cint(row.get(u'ndesert'))
-                    crew.voyage = voyage
-                    crews.append(crew)
-                    # voyage.voyage_crew = crew
-                    # Slave numbers
-                    numbers = VoyageSlavesNumbers()
-                    numbers.slave_deaths_before_africa = cint(
-                        row.get(u'sladafri'))
-                    numbers.slave_deaths_between_africa_america = cint(
-                        row.get(u'sladvoy'))
-                    numbers.slave_deaths_between_arrival_and_sale = cint(
-                        row.get(u'sladamer'))
-                    numbers.num_slaves_intended_first_port = cint(
-                        row.get(u'slintend'))
-                    numbers.num_slaves_intended_second_port = cint(
-                        row.get(u'slinten2'))
-                    numbers.num_slaves_carried_first_port = cint(
-                        row.get(u'ncar13'))
-                    numbers.num_slaves_carried_second_port = cint(
-                        row.get(u'ncar15'))
-                    numbers.num_slaves_carried_third_port = cint(
-                        row.get(u'ncar17'))
-                    numbers.total_num_slaves_purchased = cint(
-                        row.get(u'tslavesp'))
-                    numbers.total_num_slaves_dep_last_slaving_port = cint(
-                        row.get(u'tslavesd'))
-                    numbers.total_num_slaves_arr_first_port_embark = cint(
-                        row.get(u'slaarriv'))
-                    numbers.num_slaves_disembark_first_place = cint(
-                        row.get(u'slas32'))
-                    numbers.num_slaves_disembark_second_place = cint(
-                        row.get(u'slas36'))
-                    numbers.num_slaves_disembark_third_place = cint(
-                        row.get(u'slas39'))
-                    numbers.imp_total_num_slaves_embarked = cint(
-                        row.get(u'slaximp'))
-                    numbers.imp_total_num_slaves_disembarked = cint(
-                        row.get(u'slamimp'))
-                    numbers.imp_jamaican_cash_price = cfloat(
-                        row.get(u'jamcaspr'))
-                    numbers.imp_mortality_during_voyage = cint(
-                        row.get(u'vymrtimp'))
-                    numbers.num_men_embark_first_port_purchase = cint(
-                        row.get(u'men1'))
-                    numbers.num_women_embark_first_port_purchase = cint(
-                        row.get(u'women1'))
-                    numbers.num_boy_embark_first_port_purchase = cint(
-                        row.get(u'boy1'))
-                    numbers.num_girl_embark_first_port_purchase = cint(
-                        row.get(u'girl1'))
-                    numbers.num_adult_embark_first_port_purchase = cint(
-                        row.get(u'adult1'))
-                    numbers.num_child_embark_first_port_purchase = cint(
-                        row.get(u'child1'))
-                    numbers.num_infant_embark_first_port_purchase = cint(
-                        row.get(u'infant1'))
-                    numbers.num_males_embark_first_port_purchase = cint(
-                        row.get(u'male1'))
-                    numbers.num_females_embark_first_port_purchase = cint(
-                        row.get(u'female1'))
-                    numbers.num_men_died_middle_passage = cint(
-                        row.get(u'men2'))
-                    numbers.num_women_died_middle_passage = cint(
-                        row.get(u'women2'))
-                    numbers.num_boy_died_middle_passage = cint(
-                        row.get(u'boy2'))
-                    numbers.num_girl_died_middle_passage = cint(
-                        row.get(u'girl2'))
-                    numbers.num_adult_died_middle_passage = cint(
-                        row.get(u'adult2'))
-                    numbers.num_child_died_middle_passage = cint(
-                        row.get(u'child2'))
-                    numbers.num_infant_died_middle_passage = cint(
-                        row.get(u'infant2'))
-                    numbers.num_males_died_middle_passage = cint(
-                        row.get(u'male2'))
-                    numbers.num_females_died_middle_passage = cint(
-                        row.get(u'female2'))
-                    numbers.num_men_disembark_first_landing = cint(
-                        row.get(u'men3'))
-                    numbers.num_women_disembark_first_landing = cint(
-                        row.get(u'women3'))
-                    numbers.num_boy_disembark_first_landing = cint(
-                        row.get(u'boy3'))
-                    numbers.num_girl_disembark_first_landing = cint(
-                        row.get(u'girl3'))
-                    numbers.num_adult_disembark_first_landing = cint(
-                        row.get(u'adult3'))
-                    numbers.num_child_disembark_first_landing = cint(
-                        row.get(u'child3'))
-                    numbers.num_infant_disembark_first_landing = cint(
-                        row.get(u'infant3'))
-                    numbers.num_males_disembark_first_landing = cint(
-                        row.get(u'male3'))
-                    numbers.num_females_disembark_first_landing = cint(
-                        row.get(u'female3'))
-                    numbers.num_men_embark_second_port_purchase = cint(
-                        row.get(u'men4'))
-                    numbers.num_women_embark_second_port_purchase = cint(
-                        row.get(u'women4'))
-                    numbers.num_boy_embark_second_port_purchase = cint(
-                        row.get(u'boy4'))
-                    numbers.num_girl_embark_second_port_purchase = cint(
-                        row.get(u'girl4'))
-                    numbers.num_adult_embark_second_port_purchase = cint(
-                        row.get(u'adult4'))
-                    numbers.num_child_embark_second_port_purchase = cint(
-                        row.get(u'child4'))
-                    numbers.num_infant_embark_second_port_purchase = cint(
-                        row.get(u'infant4'))
-                    numbers.num_males_embark_second_port_purchase = cint(
-                        row.get(u'male4'))
-                    numbers.num_females_embark_second_port_purchase = cint(
-                        row.get(u'female4'))
-                    numbers.num_men_embark_third_port_purchase = cint(
-                        row.get(u'men5'))
-                    numbers.num_women_embark_third_port_purchase = cint(
-                        row.get(u'women5'))
-                    numbers.num_boy_embark_third_port_purchase = cint(
-                        row.get(u'boy5'))
-                    numbers.num_girl_embark_third_port_purchase = cint(
-                        row.get(u'girl5'))
-                    numbers.num_adult_embark_third_port_purchase = cint(
-                        row.get(u'adult5'))
-                    numbers.num_child_embark_third_port_purchase = cint(
-                        row.get(u'child5'))
-                    numbers.num_infant_embark_third_port_purchase = cint(
-                        row.get(u'infant5'))
-                    numbers.num_males_embark_third_port_purchase = cint(
-                        row.get(u'male5'))
-                    numbers.num_females_embark_third_port_purchase = cint(
-                        row.get(u'female5'))
-                    numbers.num_men_disembark_second_landing = cint(
-                        row.get(u'men6'))
-                    numbers.num_women_disembark_second_landing = cint(
-                        row.get(u'women6'))
-                    numbers.num_boy_disembark_second_landing = cint(
-                        row.get(u'boy6'))
-                    numbers.num_girl_disembark_second_landing = cint(
-                        row.get(u'girl6'))
-                    numbers.num_adult_disembark_second_landing = cint(
-                        row.get(u'adult6'))
-                    numbers.num_child_disembark_second_landing = cint(
-                        row.get(u'child6'))
-                    numbers.num_infant_disembark_second_landing = cint(
-                        row.get(u'infant6'))
-                    numbers.num_males_disembark_second_landing = cint(
-                        row.get(u'male6'))
-                    numbers.num_females_disembark_second_landing = cint(
-                        row.get(u'female6'))
-                    numbers.imp_num_adult_embarked = cint(row.get(u'adlt1imp'))
-                    numbers.imp_num_children_embarked = cint(
-                        row.get(u'chil1imp'))
-                    numbers.imp_num_male_embarked = cint(row.get(u'male1imp'))
-                    numbers.imp_num_female_embarked = cint(
-                        row.get(u'feml1imp'))
-                    numbers.total_slaves_embarked_age_identified = cint(
-                        row.get(u'slavema1'))
-                    numbers.total_slaves_embarked_gender_identified = cint(
-                        row.get(u'slavemx1'))
-                    numbers.imp_adult_death_middle_passage = cint(
-                        row.get(u'adlt2imp'))
-                    numbers.imp_child_death_middle_passage = cint(
-                        row.get(u'chil2imp'))
-                    numbers.imp_male_death_middle_passage = cint(
-                        row.get(u'male2imp'))
-                    numbers.imp_female_death_middle_passage = cint(
-                        row.get(u'feml2imp'))
-                    numbers.imp_num_adult_landed = cint(row.get(u'adlt3imp'))
-                    numbers.imp_num_child_landed = cint(row.get(u'chil3imp'))
-                    numbers.imp_num_male_landed = cint(row.get(u'male3imp'))
-                    numbers.imp_num_female_landed = cint(row.get(u'feml3imp'))
-                    numbers.total_slaves_landed_age_identified = cint(
-                        row.get(u'slavema3'))
-                    numbers.total_slaves_landed_gender_identified = cint(
-                        row.get(u'slavemx3'))
-                    numbers.total_slaves_dept_or_arr_age_identified = cint(
-                        row.get(u'slavema7'))
-                    numbers.total_slaves_dept_or_arr_gender_identified = cint(
-                        row.get(u'slavemx7'))
-                    numbers.total_slaves_embarked_age_gender_identified = cint(
-                        row.get(u'slavmax1'))
-                    numbers.total_slaves_by_age_gender_identified_among_landed = cint(
-                        row.get(u'slavmax3'))
-                    numbers.total_slaves_by_age_gender_identified_departure_or_arrival = cint(
-                        row.get(u'slavmax7'))
-                    numbers.imp_slaves_embarked_for_mortality = cint(
-                        row.get(u'tslmtimp'))
-                    numbers.imp_num_men_total = cint(row.get(u'men7'))
-                    numbers.imp_num_women_total = cint(row.get(u'women7'))
-                    numbers.imp_num_boy_total = cint(row.get(u'boy7'))
-                    numbers.imp_num_girl_total = cint(row.get(u'girl7'))
-                    numbers.imp_num_adult_total = cint(row.get(u'adult7'))
-                    numbers.imp_num_child_total = cint(row.get(u'child7'))
-                    numbers.imp_num_males_total = cint(row.get(u'male7'))
-                    numbers.imp_num_females_total = cint(row.get(u'female7'))
-                    numbers.percentage_men = cfloat(row.get(u'menrat7'))
-                    numbers.percentage_women = cfloat(row.get(u'womrat7'))
-                    numbers.percentage_boy = cfloat(row.get(u'boyrat7'))
-                    numbers.percentage_girl = cfloat(row.get(u'girlrat7'))
-                    numbers.percentage_male = cfloat(row.get(u'malrat7'))
-                    numbers.percentage_child = cfloat(row.get(u'chilrat7'))
-                    numbers.percentage_adult = 1 - numbers.percentage_child \
-                        if numbers.percentage_child is not None else None
-                    numbers.percentage_female = 1 - numbers.percentage_male \
-                        if numbers.percentage_male is not None else None
-                    numbers.imp_mortality_ratio = cfloat(row.get(u'vymrtrat'))
-                    numbers.percentage_boys_among_embarked_slaves = cfloat(
-                        row.get(u'boyrat1'))
-                    numbers.child_ratio_among_embarked_slaves = cfloat(
-                        row.get(u'chilrat1'))
-                    numbers.percentage_girls_among_embarked_slaves = cfloat(
-                        row.get(u'girlrat1'))
-                    numbers.male_ratio_among_embarked_slaves = cfloat(
-                        row.get(u'malrat1'))
-                    numbers.percentage_men_among_embarked_slaves = cfloat(
-                        row.get(u'menrat1'))
-                    numbers.percentage_women_among_embarked_slaves = cfloat(
-                        row.get(u'womrat1'))
-                    numbers.percentage_boys_among_landed_slaves = cfloat(
-                        row.get(u'boyrat3'))
-                    numbers.child_ratio_among_landed_slaves = cfloat(
-                        row.get(u'chilrat3'))
-                    numbers.percentage_girls_among_landed_slaves = cfloat(
-                        row.get(u'girlrat3'))
-                    numbers.male_ratio_among_landed_slaves = cfloat(
-                        row.get(u'malrat3'))
-                    numbers.percentage_men_among_landed_slaves = cfloat(
-                        row.get(u'menrat3'))
-                    numbers.percentage_women_among_landed_slaves = cfloat(
-                        row.get(u'womrat3'))
-                    # INSERT HERE any new number variables [import CSV]
-                    numbers.voyage = voyage
-                    voyage_numbers.append(numbers)
-                    # voyage.voyage_slaves_numbers = numbers
+                    ships.append(row_to_ship(row, voyage))
+                    itineraries.append(row_to_itinerary(row, voyage))
+                    voyage_dates.append(row_to_dates(row, voyage))
+                    crews.append(row_to_crew(row, voyage))
+                    voyage_numbers.append(row_to_numbers(row, voyage))
                     # Captains
                     order = 1
                     for key in 'abc':
@@ -799,7 +815,8 @@ class Command(BaseCommand):
                 'please check the messages above.')
 
         confirm = input(
-            "Are you sure you want to continue? The existing data will be deleted! (yes/[no]): "
+            "Are you sure you want to continue? "
+            "The existing data will be deleted! (yes/[no]): "
         )
         print('"' + confirm + '"')
         if confirm != 'yes':
@@ -861,8 +878,7 @@ class Command(BaseCommand):
         # At this point we have primary keys for voyages.
 
         # Create voyage links.
-        for i in range(0, len(voyage_links)):
-            triple = voyage_links[i]
+        for i, triple in enumerate(voyage_links):
             if triple[0] in voyages and triple[1] in voyages:
                 link = LinkedVoyages()
                 link.first = voyages.get(triple[0])
@@ -919,11 +935,14 @@ class Command(BaseCommand):
                         fk_on_voyages,
                         fk_on_related='voyage_id'):
             if target_db == 'mysql':
-                update_query_template = 'UPDATE {0}{1}{0} a JOIN {0}{2}{0} b ON a.{0}id{0}=b.{0}{3}{0} ' \
-                                        'SET a.{0}{4}{0}=b.{0}id{0}'
+                update_query_template = (
+                    'UPDATE {0}{1}{0} a JOIN {0}{2}{0} b '
+                    'ON a.{0}id{0}=b.{0}{3}{0} '
+                    'SET a.{0}{4}{0}=b.{0}id{0}')
             elif target_db == 'pgsql':
-                update_query_template = 'UPDATE {0}{1}{0} as a SET {0}{4}{0}=b.{0}id{0} ' \
-                                        'FROM {0}{2}{0} as b WHERE a.{0}id{0}=b.{0}{3}{0}'
+                update_query_template = (
+                    'UPDATE {0}{1}{0} as a SET {0}{4}{0}=b.{0}id{0} '
+                    'FROM {0}{2}{0} as b WHERE a.{0}id{0}=b.{0}{3}{0}')
             sql = update_query_template.format(quote_char,
                                                Voyage._meta.db_table,
                                                related_model._meta.db_table,

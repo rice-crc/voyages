@@ -82,10 +82,12 @@ class PivotTable:
             # Delete any column or row for which all the entries are zero/None.
             def safe_num(x):
                 try:
-                    return (float(x[default_cell_key]) if default_cell_key in x
-                            else (sum([float(v)
-                                  for k, v in list(x.items())
-                                  if k not in excluded_bucket_keys])))
+                    return (float(x[default_cell_key])
+                            if default_cell_key in x
+                            else (
+                                sum([float(v)
+                                     for k, v in list(x.items())
+                                     if k not in excluded_bucket_keys])))
                 except Exception:
                     return 0
 
@@ -107,9 +109,9 @@ class PivotTable:
                         if col in r[1]
                 ]) <= zero_threshold:
                     deleted_columns.append(j)
-            for k in range(0, len(deleted_columns)):
+            for k, colm in enumerate(deleted_columns):
                 # The index needs to account for already deleted columns.
-                del_index = deleted_columns[k] - k
+                del_index = colm - k
                 del self.columns[del_index]
                 del self.original_columns[del_index]
                 # Update indices from sparse cell data and exclude those that

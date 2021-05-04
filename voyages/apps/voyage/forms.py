@@ -3,7 +3,7 @@ from __future__ import absolute_import, unicode_literals
 from builtins import map, str
 
 from django import forms
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import ugettext_lazy as u_
 from autocomplete_light import shortcuts as autocomplete_light
 
 from voyages.extratools import AdvancedEditor
@@ -19,7 +19,7 @@ from .models import (VoyageCaptainConnection, VoyageCrew, VoyageDates,
 
 class UploadFileForm(forms.Form):
     """Form to uploading files in download section"""
-    downloadfile = forms.FileField(label=_('Select your file'))
+    downloadfile = forms.FileField(label=u_('Select your file'))
 
 
 class VoyageBaseForm(forms.Form):
@@ -173,8 +173,8 @@ class SimpleNumericSearchForm(VoyageBaseForm):
     Simple numeric search form
     """
     type_str = "numeric"
-    OPERATORS = (('1', _('Between')), ('2', _('At most')),
-                 ('3', _('At least')), ('4', _('Is equal to')))
+    OPERATORS = (('1', u_('Between')), ('2', u_('At most')),
+                 ('3', u_('At least')), ('4', u_('Is equal to')))
     options = forms.ChoiceField(
         choices=OPERATORS,
         widget=forms.Select(attrs={'class': "select_field newly_inserted"}))
@@ -195,8 +195,8 @@ class SimpleDateSearchForm(VoyageBaseForm):
     """
     type_str = "date"
     list_months = list_months
-    OPERATORS = (('1', _('Between')), ('2', _('Before')),
-                 ('3', _('After')), ('4', _('In')))
+    OPERATORS = (('1', u_('Between')), ('2', u_('Before')),
+                 ('3', u_('After')), ('4', u_('In')))
     options = forms.ChoiceField(
         choices=OPERATORS,
         widget=forms.Select(attrs={'class': "date_field newly_inserted"}))
@@ -271,7 +271,7 @@ class SimplePlaceSearchForm(VoyageBaseForm):
 
 
 class SimpleSelectBooleanForm(VoyageBaseForm):
-    BOOLEAN_CHOICES = (('1', _('Yes')), ('2', _('No')))
+    BOOLEAN_CHOICES = (('1', u_('Yes')), ('2', u_('No')))
     type_str = "boolean"
     choice_field = forms.MultipleChoiceField(
         widget=forms.CheckboxSelectMultiple(attrs={'class': 'var-checkbox'}),
@@ -280,11 +280,11 @@ class SimpleSelectBooleanForm(VoyageBaseForm):
 
 class TimeFrameSpanSearchForm(forms.Form):
     frame_from_year = forms.IntegerField(
-        label=_('From'),
+        label=u_('From'),
         widget=forms.TextInput(
             attrs={'class': "short_field_white"}))
     frame_to_year = forms.IntegerField(
-        label=_('To'),
+        label=u_('To'),
         widget=forms.TextInput(
             attrs={'class': "short_field_white"}))
 
@@ -351,7 +351,7 @@ class GraphRemovePlotForm(forms.Form):
     def get_to_del(self):
         result = []
         if self.is_valid():
-            for i, field in list(self.fields.items()):
+            for i, _ in list(self.fields.items()):
                 if self.cleaned_data[i]:
                     result.append(int(i))
         return result
@@ -375,13 +375,13 @@ class GraphSelectionForm(forms.Form):
         self.xchoices = [lmbd(x) for x in enumerate(xfunctions)]
         self.ychoices = list(map(lmbd, enumerate(graphs.graphs_y_axes)))
         self.fields['xselect'] = forms.ChoiceField(
-            label=_(xfield_label), choices=self.xchoices)
+            label=u_(xfield_label), choices=self.xchoices)
         self.fields['yselect'] = forms.ChoiceField(
-            label=_(yfield_label), choices=self.ychoices)
+            label=u_(yfield_label), choices=self.ychoices)
 
 
 class TimelineVariableForm(forms.Form):
     var_choices = [(v[0], v[1]) for v in voyage_timeline_variables]
     variable_select = forms.ChoiceField(
-        label=_('Timeline variable'),
+        label=u_('Timeline variable'),
         choices=var_choices, initial=var_choices[23])

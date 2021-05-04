@@ -50,7 +50,8 @@ class Migration(migrations.Migration):
             field=models.FloatField(
                 blank=True,
                 null=True,
-                verbose_name=b'Percentage of boys among embarked slaves (BOYRAT1)'),
+                verbose_name=b'Percentage of boys '
+                             b'among embarked slaves (BOYRAT1)'),
         ),
         migrations.AddField(
             model_name='voyageslavesnumbers',
@@ -58,7 +59,8 @@ class Migration(migrations.Migration):
             field=models.FloatField(
                 blank=True,
                 null=True,
-                verbose_name=b'Percentage of boys among landed slaves (BOYRAT3)'
+                verbose_name=b'Percentage of boys '
+                             b'among landed slaves (BOYRAT3)'
             ),
         ),
         migrations.AddField(
@@ -67,7 +69,8 @@ class Migration(migrations.Migration):
             field=models.FloatField(
                 blank=True,
                 null=True,
-                verbose_name=b'Percentage of girls among embarked slaves (GIRLRAT1)'),
+                verbose_name=b'Percentage of girls '
+                             b'among embarked slaves (GIRLRAT1)'),
         ),
         migrations.AddField(
             model_name='voyageslavesnumbers',
@@ -75,7 +78,8 @@ class Migration(migrations.Migration):
             field=models.FloatField(
                 blank=True,
                 null=True,
-                verbose_name=b'Percentage of girls among landed slaves (GIRLRAT3)'),
+                verbose_name=b'Percentage of girls '
+                             b'among landed slaves (GIRLRAT3)'),
         ),
         migrations.AddField(
             model_name='voyageslavesnumbers',
@@ -83,7 +87,8 @@ class Migration(migrations.Migration):
             field=models.FloatField(
                 blank=True,
                 null=True,
-                verbose_name=b'Percentage of men among embarked slaves (MENRAT1)'
+                verbose_name=b'Percentage of men '
+                             b'among embarked slaves (MENRAT1)'
             ),
         ),
         migrations.AddField(
@@ -101,7 +106,8 @@ class Migration(migrations.Migration):
             field=models.FloatField(
                 blank=True,
                 null=True,
-                verbose_name=b'Percentage of women among embarked slaves (WOMRAT1)'),
+                verbose_name=b'Percentage of women '
+                             b'among embarked slaves (WOMRAT1)'),
         ),
         migrations.AddField(
             model_name='voyageslavesnumbers',
@@ -109,7 +115,8 @@ class Migration(migrations.Migration):
             field=models.FloatField(
                 blank=True,
                 null=True,
-                verbose_name=b'Percentage of women among landed slaves (WOMRAT3)'
+                verbose_name=b'Percentage of women '
+                             b'among landed slaves (WOMRAT3)'
             ),
         ),
         migrations.AddField(
@@ -118,7 +125,8 @@ class Migration(migrations.Migration):
             field=models.IntegerField(
                 blank=True,
                 null=True,
-                verbose_name=b'Total slaves identified by age and gender among landed (SLAVMAX3)'
+                verbose_name=b'Total slaves identified by age and gender '
+                             b'among landed (SLAVMAX3)'
             ),
         ),
         migrations.AddField(
@@ -127,7 +135,8 @@ class Migration(migrations.Migration):
             field=models.IntegerField(
                 blank=True,
                 null=True,
-                verbose_name=b'Total slavesidentified by age and gender at departure or arrival (SLAVMAX7)'
+                verbose_name=b'Total slavesidentified by age and gender '
+                             b'at departure or arrival (SLAVMAX7)'
             ),
         ),
         migrations.AddField(
@@ -136,7 +145,8 @@ class Migration(migrations.Migration):
             field=models.IntegerField(
                 blank=True,
                 null=True,
-                verbose_name=b'Total slaves embarked wi th age and gender identified (SLAVMAX1)'
+                verbose_name=b'Total slaves embarked with age and gender '
+                             b'identified (SLAVMAX1)'
             ),
         ),
     ]

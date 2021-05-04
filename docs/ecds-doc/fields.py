@@ -1,5 +1,5 @@
-# PATCH to [virtual environment path]/lib/python2.7/site-packages/haystack/fields.py
-# encoding: utf-8
+# PATCH to [virtual environment
+# path]/lib/python2.7/site-packages/haystack/fields.py encoding: utf-8
 from __future__ import (absolute_import, division, print_function,
                         unicode_literals)
 
@@ -17,12 +17,14 @@ class NotProvided:
     pass
 
 
-# Note that dates in the full ISO 8601 format will be accepted as long as the hour/minute/second components
-# are zeroed for compatibility with search backends which lack a date time distinct from datetime:
+# Note that dates in the full ISO 8601 format will be accepted as long as the
+# hour/minute/second components are zeroed for compatibility with search
+# backends which lack a date time distinct from datetime:
 DATE_REGEX = re.compile(
     r'^(?P<year>\d{4})-(?P<month>\d{2})-(?P<day>\d{2})(?:|T00:00:00Z?)$')
 DATETIME_REGEX = re.compile(
-    r'^(?P<year>\d{4})-(?P<month>\d{2})-(?P<day>\d{2})(T|\s+)(?P<hour>\d{2}):(?P<minute>\d{2}):(?P<second>\d{2}).*?$'
+    r'^(?P<year>\d{4})-(?P<month>\d{2})-(?P<day>\d{2})'
+    r'(T|\s+)(?P<hour>\d{2}):(?P<minute>\d{2}):(?P<second>\d{2}).*?$'
 )
 
 # All the SearchFields variants.
@@ -112,8 +114,8 @@ class SearchField:
 
     def resolve_attributes_lookup(self, current_objects, attributes):
         """
-        Recursive method that looks, for one or more objects, for an attribute that can be multiple
-        objects (relations) deep.
+        Recursive method that looks, for one or more objects, for an attribute
+        that can be multiple objects (relations) deep.
         """
         values = []
 
@@ -138,9 +140,9 @@ class SearchField:
                     current_object = None
                 else:
                     raise SearchFieldError(
-                        "The model '%s' combined with model_attr '%s' returned None, but doesn't allow "
-                        "a default or null value." %
-                        (repr(current_object), self.model_attr))
+                        "The model '%s' combined with model_attr '%s' "
+                        "returned None, but doesn't allow a default or null "
+                        "value." % (repr(current_object), self.model_attr))
 
             if callable(current_object):
                 values.append(current_object())
@@ -150,14 +152,16 @@ class SearchField:
         return values
 
     def split_model_attr_lookups(self):
-        """Returns list of nested attributes for looking through the relation."""
+        """Returns list of nested attributes for looking through the
+        relation."""
         return self.model_attr.split('__')
 
     @classmethod
     def get_iterable_objects(cls, current_objects):
         """
-        Returns iterable of objects that contain data. For example, resolves Django ManyToMany relationship
-        so the attributes of the related models can then be accessed.
+        Returns iterable of objects that contain data. For example, resolves
+        Django ManyToMany relationship so the attributes of the related models
+        can then be accessed.
         """
         if current_objects is None:
             return []
@@ -184,7 +188,9 @@ class SearchField:
         """
         if self.instance_name is None and self.template_name is None:
             raise SearchFieldError(
-                "This field requires either its instance_name variable to be populated or an explicit template_name in order to load the correct template."
+                "This field requires either its instance_name variable to be "
+                "populated or an explicit template_name in order to load the "
+                "correct template."
             )
 
         if self.template_name is not None:
@@ -376,10 +382,11 @@ class DateField(SearchField):
 
             if match:
                 data = match.groupdict()
-                return datetime_safe.date(int(data['year']), int(data['month']),
-                                          int(data['day']))
+                return datetime_safe.date(
+                    int(data['year']), int(data['month']), int(data['day']))
             raise SearchFieldError(
-                "Date provided to '%s' field doesn't appear to be a valid date string: '%s'"
+                "Date provided to '%s' field doesn't appear to be a valid "
+                "date string: '%s'"
                 % (self.instance_name, value))
 
         return value
@@ -413,7 +420,8 @@ class DateTimeField(SearchField):
                                               int(data['minute']),
                                               int(data['second']))
             raise SearchFieldError(
-                "Datetime provided to '%s' field doesn't appear to be a valid datetime string: '%s'"
+                "Datetime provided to '%s' field doesn't appear to be a valid "
+                "datetime string: '%s'"
                 % (self.instance_name, value))
 
         return value
@@ -469,12 +477,14 @@ class FacetField(SearchField):
 
         if not kwargs.get('null', True):
             raise SearchFieldError(
-                "FacetField (%s) does not accept False for the 'null' argument."
+                "FacetField (%s) does not accept False for the 'null' "
+                "argument."
                 % self.instance_name)
 
         if not kwargs.get('indexed', True):
             raise SearchFieldError(
-                "FacetField (%s) does not accept False for the 'indexed' argument."
+                "FacetField (%s) does not accept False for the 'indexed' "
+                "argument."
                 % self.instance_name)
 
         if kwargs.get('facet_class'):

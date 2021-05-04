@@ -12,7 +12,7 @@ class CachedGeo:
     Caches a geographical place (could be a port, region, or broad region)
     """
 
-    def __init__(self, pk, value, name, lat, lng, show, parent):
+    def __init__(self, pk, value, name, lat, lng, _, parent):
         self.pk = pk
         self.value = value
         self.name = name

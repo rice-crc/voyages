@@ -29,7 +29,8 @@ class SavedQuery(models.Model):
 
     ID_LENGTH = 8
 
-    # This is the short sequence of characters that will be used when repeating the query.
+    # This is the short sequence of characters that will be used when repeating
+    # the query.
     id = models.CharField(max_length=ID_LENGTH, primary_key=True)
     # A hash string so that the query can be quickly located.
     hash = models.CharField(max_length=255, db_index=True, default='')
@@ -42,14 +43,18 @@ class SavedQuery(models.Model):
         """
         This method can be called directly in Views that need to have
         permanent linking functionality.
-        :param request: The web request containing POST data that needs to be persisted.
-        :param url_name: The URL name that is used to revert a permanent link URL as specified in the urls.py file.
+        :param request: The web request containing POST data that needs to be
+        persisted.
+        :param url_name: The URL name that is used to revert a permanent link
+        URL as specified in the urls.py file.
         :return: A plain text response containing the link or an Http405 error.
         """
         self.query = request.POST.urlencode()
         self.save()
-        link = ('https://' if request.is_secure() else 'http://') + request.get_host() + \
-            reverse(url_name, kwargs={'link_id': self.id})
+        link = ''.join([
+            'https://' if request.is_secure() else 'http://',
+            request.get_host(),
+            reverse(url_name, kwargs={'link_id': self.id})])
         return HttpResponse(link, content_type='text/plain')
 
     def get_post(self):
@@ -99,9 +104,11 @@ def restore_link(link_id, session, session_key, redirect_url_name):
     If the link_id is not found, return Http404
     :param link_id: The id of the link.
     :param session: The web session.
-    :param session_key: The key that will be used to set the restored POST data to the session.
+    :param session_key: The key that will be used to set the restored POST data
+    to the session.
     :param redirect_url_name: The name of the redirect url as in urls.py.
-    :return: A redirect response to the appropriate page or an Http404 exception.
+    :return: A redirect response to the appropriate page or an Http404
+    exception.
     """
     permalink = get_object_or_404(SavedQuery, pk=link_id)
     # Save the query in the session and redirect.
