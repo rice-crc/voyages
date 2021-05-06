@@ -14,6 +14,11 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='interimvoyage',
             name='persisted_form_data',
-            field=models.TextField(help_text=b'Auxiliary form data that is persisted in JSON format', max_length=10000, null=True, blank=True),
+            field=models.TextField(
+                help_text=b'Auxiliary form data that is persisted in JSON '
+                b'format',
+                max_length=10000,
+                null=True,
+                blank=True),
         ),
     ]

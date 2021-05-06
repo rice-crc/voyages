@@ -1,14 +1,7 @@
 @import "colors";
 @import "variables";
 
-// 
-.nav-header {
-  color: white;
-  background: $past-secondary-color !important;
-  padding: 0.5rem 4rem 0;
-  font-size: 1rem;
-  font-weight: bold;
-}
+//
 
 .pagination.pagination-sm {
 	float: right;
@@ -44,6 +37,13 @@
 
 table {
 	font-size: $regular-font-size;
+}
+
+.table thead th {
+  color: $past-color !important;
+  span.column-header:after {
+    color: black;
+  }
 }
 
 // past database table padding override
@@ -91,6 +91,16 @@ table {
 	}
 }
 
+.btn-info {
+    background-color: $past-color;
+    border-color: $past-color;
+
+    &:hover, &:active, &:focus, &:not(:disabled):not(.disabled):active {
+      background-color: $past-hover-color;
+      border-color: $past-hover-color;
+    }
+}
+
 .navbar {
   background: $past-color !important;
 }
@@ -117,6 +127,24 @@ a {
   padding-left: 25px;
   border-left: 4px solid $past-color;
   font-weight: bold;
+}
+
+.nav-header {
+  color: white;
+  background: $past-secondary-color !important;
+  padding: 0.5rem 4rem 0;
+  font-size: 1rem;
+  font-weight: bold;
+}
+
+.past-search-bar {
+  z-index: 1;
+  background: $past-secondary-color !important;
+  @media (min-width: 1199px) {
+    .nav-item {
+      padding-top: 0;
+    }
+  }
 }
 
 .datatable-options {
@@ -223,4 +251,21 @@ input.button-save:hover {
   cursor: pointer;
   font-size: $regular-font-size !important;
   font-weight: 500;
+}
+
+.btn-transparent {
+  color: #212529;
+  background-color: transparent;
+}
+.btn-transparent.active.focus,
+.btn-transparent.active:focus,
+.btn-transparent.focus,
+.btn-transparent.focus:active,
+.btn-transparent:active:focus,
+.btn-transparent:focus {
+  outline: 0;
+  outline-offset: 0;
+  background-image: none;
+  -webkit-box-shadow: none;
+  box-shadow: none;
 }

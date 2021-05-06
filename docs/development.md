@@ -129,17 +129,17 @@ host:~/Projects/voyages$ docker exec -i voyages-solr solr create_core -c voyages
 Run the process to build the index. This will take a very long time (around 60-90 minutes).
 
 ```bash
-host:~/Projects/voyages$ docker exec -i voyages-django bash -c 'python manage.py rebuild_index --noinput'
+host:~/Projects/voyages$ docker exec -i voyages-django bash -c 'python3 manage.py rebuild_index --noinput'
 ```
 
 Run media asset tasks. These may also take a very long time.
 
 ```bash
-host:~/Projects/voyages$ docker exec -i voyages-django bash -c 'python manage.py compilemessages'
-host:~/Projects/voyages$ docker exec -i voyages-django bash -c 'python manage.py compilescss'
-host:~/Projects/voyages$ docker exec -i voyages-django bash -c 'python manage.py collectstatic --noinput'
-host:~/Projects/voyages$ docker exec -i voyages-django bash -c 'python manage.py compress --force'
-host:~/Projects/voyages$ docker exec -i voyages-django bash -c 'python manage.py thumbnail cleanup'
+host:~/Projects/voyages$ docker exec -i voyages-django bash -c 'python3 manage.py compilemessages'
+host:~/Projects/voyages$ docker exec -i voyages-django bash -c 'python3 manage.py compilescss'
+host:~/Projects/voyages$ docker exec -i voyages-django bash -c 'python3 manage.py collectstatic --noinput'
+host:~/Projects/voyages$ docker exec -i voyages-django bash -c 'python3 manage.py compress --force'
+host:~/Projects/voyages$ docker exec -i voyages-django bash -c 'python3 manage.py thumbnail cleanup'
 ```
 
 Note the following project resources:

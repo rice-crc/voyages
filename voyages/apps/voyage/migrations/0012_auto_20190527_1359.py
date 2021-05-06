@@ -15,76 +15,138 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='voyageslavesnumbers',
             name='child_ratio_among_embarked_slaves',
-            field=models.FloatField(blank=True, null=True, verbose_name=b'Child ratio among embarked slaves (CHILRAT1)'),
+            field=models.FloatField(
+                blank=True,
+                null=True,
+                verbose_name=b'Child ratio among embarked slaves (CHILRAT1)'),
         ),
         migrations.AddField(
             model_name='voyageslavesnumbers',
             name='child_ratio_among_landed_slaves',
-            field=models.FloatField(blank=True, null=True, verbose_name=b'Child ratio among landed slaves (CHILRAT3)'),
+            field=models.FloatField(
+                blank=True,
+                null=True,
+                verbose_name=b'Child ratio among landed slaves (CHILRAT3)'),
         ),
         migrations.AddField(
             model_name='voyageslavesnumbers',
             name='male_ratio_among_embarked_slaves',
-            field=models.FloatField(blank=True, null=True, verbose_name=b'Male ratio among embarked slaves (MALRAT1)'),
+            field=models.FloatField(
+                blank=True,
+                null=True,
+                verbose_name=b'Male ratio among embarked slaves (MALRAT1)'),
         ),
         migrations.AddField(
             model_name='voyageslavesnumbers',
             name='male_ratio_among_landed_slaves',
-            field=models.FloatField(blank=True, null=True, verbose_name=b'Male ratio among landed slaves (MALRAT3)'),
+            field=models.FloatField(
+                blank=True,
+                null=True,
+                verbose_name=b'Male ratio among landed slaves (MALRAT3)'),
         ),
         migrations.AddField(
             model_name='voyageslavesnumbers',
             name='percentage_boys_among_embarked_slaves',
-            field=models.FloatField(blank=True, null=True, verbose_name=b'Percentage of boys among embarked slaves (BOYRAT1)'),
+            field=models.FloatField(
+                blank=True,
+                null=True,
+                verbose_name=b'Percentage of boys '
+                             b'among embarked slaves (BOYRAT1)'),
         ),
         migrations.AddField(
             model_name='voyageslavesnumbers',
             name='percentage_boys_among_landed_slaves',
-            field=models.FloatField(blank=True, null=True, verbose_name=b'Percentage of boys among landed slaves (BOYRAT3)'),
+            field=models.FloatField(
+                blank=True,
+                null=True,
+                verbose_name=b'Percentage of boys '
+                             b'among landed slaves (BOYRAT3)'
+            ),
         ),
         migrations.AddField(
             model_name='voyageslavesnumbers',
             name='percentage_girls_among_embarked_slaves',
-            field=models.FloatField(blank=True, null=True, verbose_name=b'Percentage of girls among embarked slaves (GIRLRAT1)'),
+            field=models.FloatField(
+                blank=True,
+                null=True,
+                verbose_name=b'Percentage of girls '
+                             b'among embarked slaves (GIRLRAT1)'),
         ),
         migrations.AddField(
             model_name='voyageslavesnumbers',
             name='percentage_girls_among_landed_slaves',
-            field=models.FloatField(blank=True, null=True, verbose_name=b'Percentage of girls among landed slaves (GIRLRAT3)'),
+            field=models.FloatField(
+                blank=True,
+                null=True,
+                verbose_name=b'Percentage of girls '
+                             b'among landed slaves (GIRLRAT3)'),
         ),
         migrations.AddField(
             model_name='voyageslavesnumbers',
             name='percentage_men_among_embarked_slaves',
-            field=models.FloatField(blank=True, null=True, verbose_name=b'Percentage of men among embarked slaves (MENRAT1)'),
+            field=models.FloatField(
+                blank=True,
+                null=True,
+                verbose_name=b'Percentage of men '
+                             b'among embarked slaves (MENRAT1)'
+            ),
         ),
         migrations.AddField(
             model_name='voyageslavesnumbers',
             name='percentage_men_among_landed_slaves',
-            field=models.FloatField(blank=True, null=True, verbose_name=b'Percentage of men among landed slaves (MENRAT3)'),
+            field=models.FloatField(
+                blank=True,
+                null=True,
+                verbose_name=b'Percentage of men among landed slaves (MENRAT3)'
+            ),
         ),
         migrations.AddField(
             model_name='voyageslavesnumbers',
             name='percentage_women_among_embarked_slaves',
-            field=models.FloatField(blank=True, null=True, verbose_name=b'Percentage of women among embarked slaves (WOMRAT1)'),
+            field=models.FloatField(
+                blank=True,
+                null=True,
+                verbose_name=b'Percentage of women '
+                             b'among embarked slaves (WOMRAT1)'),
         ),
         migrations.AddField(
             model_name='voyageslavesnumbers',
             name='percentage_women_among_landed_slaves',
-            field=models.FloatField(blank=True, null=True, verbose_name=b'Percentage of women among landed slaves (WOMRAT3)'),
+            field=models.FloatField(
+                blank=True,
+                null=True,
+                verbose_name=b'Percentage of women '
+                             b'among landed slaves (WOMRAT3)'
+            ),
         ),
         migrations.AddField(
             model_name='voyageslavesnumbers',
             name='total_slaves_by_age_gender_identified_among_landed',
-            field=models.IntegerField(blank=True, null=True, verbose_name=b'Total slaves identified by age and gender among landed (SLAVMAX3)'),
+            field=models.IntegerField(
+                blank=True,
+                null=True,
+                verbose_name=b'Total slaves identified by age and gender '
+                             b'among landed (SLAVMAX3)'
+            ),
         ),
         migrations.AddField(
             model_name='voyageslavesnumbers',
             name='total_slaves_by_age_gender_identified_departure_or_arrival',
-            field=models.IntegerField(blank=True, null=True, verbose_name=b'Total slavesidentified by age and gender at departure or arrival (SLAVMAX7)'),
+            field=models.IntegerField(
+                blank=True,
+                null=True,
+                verbose_name=b'Total slavesidentified by age and gender '
+                             b'at departure or arrival (SLAVMAX7)'
+            ),
         ),
         migrations.AddField(
             model_name='voyageslavesnumbers',
             name='total_slaves_embarked_age_gender_identified',
-            field=models.IntegerField(blank=True, null=True, verbose_name=b'Total slaves embarked wi th age and gender identified (SLAVMAX1)'),
+            field=models.IntegerField(
+                blank=True,
+                null=True,
+                verbose_name=b'Total slaves embarked with age and gender '
+                             b'identified (SLAVMAX1)'
+            ),
         ),
     ]

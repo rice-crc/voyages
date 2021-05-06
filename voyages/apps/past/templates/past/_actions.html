@@ -1,0 +1,21 @@
+{% load i18n %}
+
+<!-- Actions -->
+<li class="nav-item dropdown nav-item-compact" v-if="activated">
+  <a class="nav-link" data-toggle="collapse" href="#panelCollapse" role="button" aria-expanded="false" aria-controls="panelCollapse">
+    <div class="btn-navbar">
+      <i class="fa fa-filter"></i>
+      {% trans 'View all' %}
+    </div>
+  </a>
+</li>
+
+<li class="nav-item dropdown nav-item-compact" v-if="activated">
+  <a class="nav-link" @click="resetAll" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+    <div class="btn-navbar">
+      <i class="fa fa-times"></i>
+      {% trans 'Reset all' %}
+    </div>
+  </a>
+</li>
+<!-- Actions -->

@@ -1,21 +1,27 @@
-from django.shortcuts import render
-from django.core.cache import cache
+from __future__ import absolute_import, unicode_literals
+
+from builtins import str
+from collections import OrderedDict
+from itertools import groupby
+
+from django.core.paginator import Paginator
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
-from collections import OrderedDict
-from django.core.paginator import Paginator
-from haystack.query import SearchQuerySet
+from django.shortcuts import render
+from django.utils.translation import ugettext as u_
 from haystack.forms import SearchForm
-from .forms import *
-from .globals import *
-from search_indexes import AfricanNamesIndex
-from voyages.apps.common.models import get_values_from_haystack_results
-from voyages.apps.common.export import download_xls
+from haystack.query import SearchQuerySet
 
-from voyages.apps.voyage.views import prepare_paginator_variables
+from voyages.apps.common.export import download_xls
+from voyages.apps.common.models import get_values_from_haystack_results
 from voyages.apps.voyage.globals import structure_places
-from itertools import groupby
-from django.utils.translation import ugettext as _
+from voyages.apps.voyage.views import prepare_paginator_variables
+
+from .forms import ResultsPerPageOptionForm
+from .globals import names_search_strict_text, names_sort_fields
+from .models import (AfricanName, AfricanNamesIndex, Country, Image,
+                     ImageCategory, Place)
+
 
 def image_search_results(adapt_query_set=lambda cat, q: q):
     images = []
@@ -26,16 +32,24 @@ def image_search_results(adapt_query_set=lambda cat, q: q):
             category_images["label_name"] = i.label
             category_images["label_code"] = i.value
             category_images["images"] = []
-            search_set = SearchQuerySet().models(Image).filter(category_label__exact=i.label, ready_to_go=True)\
-                .order_by('date')
+            search_set = SearchQuerySet().models(Image).filter(
+                category_label__exact=i.label,
+                ready_to_go=True
+            ).order_by('date')
             category_images["number_of_images"] = search_set.count()
             for j in adapt_query_set(i.label, search_set):
-                category_images["images"].append(OrderedDict({'file': j.file, 'year': j.date, 'title': j.title}))
+                category_images["images"].append(
+                    OrderedDict({
+                        'file': j.file,
+                        'year': j.date,
+                        'title': j.title
+                    }))
 
             images.append(category_images)
 
     images = sorted(images, key=lambda k: k["label_name"])
     return images
+
 
 def get_all_images(request):
     """
@@ -57,8 +71,10 @@ def get_images_category(request, category):
 
     category = " ".join(category.split("_"))
     images = image_search_results(lambda cat, q: q if cat == category else [])
-    return render(request, 'resources/images-category.html',
-                              {'images': images, 'category': category})
+    return render(request, 'resources/images-category.html', {
+        'images': images,
+        'category': category
+    })
 
 
 def get_images_category_detail(request, category, page):
@@ -70,7 +86,8 @@ def get_images_category_detail(request, category, page):
     """
 
     category = " ".join(category.split("_"))
-    manu = SearchQuerySet().filter(category_label__exact=category, ready_to_go=True).order_by('date')
+    manu = SearchQuerySet().filter(category_label__exact=category,
+                                   ready_to_go=True).order_by('date')
     images = []
 
     # Pack all images from category with needed data.
@@ -80,8 +97,10 @@ def get_images_category_detail(request, category, page):
             category_images["label_name"] = i.label
             category_images["label_code"] = i.value
             category_images["images"] = []
-            search_set = SearchQuerySet().models(Image).filter(category_label__exact=i.label, ready_to_go=True)\
-                .order_by('date')
+            search_set = SearchQuerySet().models(Image).filter(
+                category_label__exact=i.label,
+                ready_to_go=True
+            ).order_by('date')
             category_images["number_of_images"] = search_set.count()
             if i.label == category:
                 # Set paginator on proper page.
@@ -92,10 +111,11 @@ def get_images_category_detail(request, category, page):
 
     images = sorted(images, key=lambda k: k["label_name"])
 
-    return render(request, 'resources/image-category-detail.html',
-                              {'images': images,
-                               'pagins': pagins,
-                               'category': category})
+    return render(request, 'resources/image-category-detail.html', {
+        'images': images,
+        'pagins': pagins,
+        'category': category
+    })
 
 
 def get_image_detail(request, category, page):
@@ -107,9 +127,14 @@ def get_image_detail(request, category, page):
     """
 
     category = " ".join(category.split("_"))
-    image = SearchQuerySet().filter(category_label__exact=category, ready_to_go=True).order_by('date')[int(page)-1]
+    image = SearchQuerySet().filter(
+        category_label__exact=category,
+        ready_to_go=True).order_by('date')[int(page) - 1]
     images = image_search_results(lambda cat, q: [])
-    return render(request, 'resources/image-detail.html', {'image': image, 'images': images})
+    return render(request, 'resources/image-detail.html', {
+        'image': image,
+        'images': images
+    })
 
 
 def images_search(request):
@@ -128,16 +153,17 @@ def images_search(request):
     if request.method == 'GET' and request.GET.get('q') is not None:
         request.method = 'POST'
         enable_checkboxes = True
-        post = {'q': request.GET['q'],
-                'time_start': request.GET.get('time_start', ''),
-                'time_end': request.GET.get('time_end', '')}
+        post = {
+            'q': request.GET['q'],
+            'time_start': request.GET.get('time_start', ''),
+            'time_end': request.GET.get('time_end', '')
+        }
 
     if request.method == 'POST':
 
         # Check if session have to be deleted
         if post.get('clear_form'):
             request.session.flush()
-            pass
 
         # New search, clear data stored in session
         results = None
@@ -157,10 +183,12 @@ def images_search(request):
                 category_images["label_name"] = i.label
                 category_images["label_code"] = i.value
                 category_images["images"] = []
-                search_set = base_query.filter(category_label__exact=i.label,
-                                                                   ready_to_go=True).order_by('date')
+                search_set = base_query.filter(
+                    category_label__exact=i.label,
+                    ready_to_go=True).order_by('date')
                 category_images["number_of_images"] = len(search_set)
-                if restart or enable_checkboxes or post.get("checkbox" + str(i.value)):
+                if restart or enable_checkboxes or post.get(
+                        "checkbox" + str(i.value)):
                     categories_to_search.append(i.label)
 
                 images.append(category_images)
@@ -173,73 +201,81 @@ def images_search(request):
             # Options if query is provided
             if query != "":
                 if time_start != "" and time_end != "":
-                    results = \
-                        base_query.filter(imgtext__icontains=query, ready_to_go=True,
-                                                category_label__in=categories_to_search,
-                                                date__gte=time_start,
-                                                date__lte=time_end).\
-                            order_by('date')
+                    results = base_query.filter(
+                        imgtext__icontains=query,
+                        ready_to_go=True,
+                        category_label__in=categories_to_search,
+                        date__gte=time_start,
+                        date__lte=time_end
+                    ).order_by('date')
 
                 elif time_start != "":
-                    results = \
-                        base_query.filter(imgtext__icontains=query, ready_to_go=True,
-                                                category_label__in=categories_to_search,
-                                                date__gte=time_start).\
-                            order_by('date')
+                    results = base_query.filter(
+                        imgtext__icontains=query, ready_to_go=True,
+                        category_label__in=categories_to_search,
+                        date__gte=time_start
+                    ).order_by('date')
 
                 elif time_end != "":
-                    results = \
-                        base_query.filter(imgtext__icontains=query, ready_to_go=True,
-                                                category_label__in=categories_to_search,
-                                                date__lte=time_end).\
-                            order_by('date')
+                    results = base_query.filter(
+                        imgtext__icontains=query, ready_to_go=True,
+                        category_label__in=categories_to_search,
+                        date__lte=time_end
+                    ).order_by('date')
 
                 else:
-                    results = \
-                        base_query.filter(imgtext__icontains=query, ready_to_go=True,
-                                                category_label__in=categories_to_search).\
-                            order_by('date')
+                    results = base_query.filter(
+                        imgtext__icontains=query,
+                        ready_to_go=True,
+                        category_label__in=categories_to_search
+                    ).order_by('date')
 
             elif time_start != "" or time_end != "":
                 if time_start != "" and time_end != "":
-                    results = \
-                        base_query.filter(ready_to_go=True,
-                                                category_label__in=categories_to_search,
-                                                date__gte=time_start,
-                                                date__lte=time_end).\
-                            order_by('date')
+                    results = base_query.filter(
+                        ready_to_go=True,
+                        category_label__in=categories_to_search,
+                        date__gte=time_start,
+                        date__lte=time_end
+                    ).order_by('date')
 
                 elif time_start != "":
-                    results = \
-                        base_query.filter(ready_to_go=True,
-                                                category_label__in=categories_to_search,
-                                                date__gte=time_start).\
-                            order_by('date')
+                    results = base_query.filter(
+                        ready_to_go=True,
+                        category_label__in=categories_to_search,
+                        date__gte=time_start
+                    ).order_by('date')
 
                 elif time_end != "":
-                    results = \
-                        base_query.filter(ready_to_go=True,
-                                                category_label__in=categories_to_search,
-                                                date__lte=time_end).\
-                            order_by('date')
+                    results = base_query.filter(
+                        ready_to_go=True,
+                        category_label__in=categories_to_search,
+                        date__lte=time_end
+                    ).order_by('date')
 
                 else:
                     if len(categories_to_search) == 1:
-                        return HttpResponseRedirect(reverse('resources:images-category',
-                                                        kwargs={'category': categories_to_search.pop()}))
-                    else:
-                        results = base_query.all().filter(ready_to_go=True,
-                                                            category_label__in=categories_to_search).\
-                            order_by('date')
+                        return HttpResponseRedirect(
+                            reverse('resources:images-category',
+                                    kwargs={
+                                        'category': categories_to_search.pop()
+                                    }))
+                    results = base_query.all().filter(
+                        ready_to_go=True,
+                        category_label__in=categories_to_search
+                    ).order_by('date')
 
             else:
                 if len(categories_to_search) > 1:
-                    results = base_query.all().filter(ready_to_go=True,
-                                                            category_label__in=categories_to_search).\
-                            order_by('date')
+                    results = base_query.all().filter(
+                        ready_to_go=True,
+                        category_label__in=categories_to_search
+                    ).order_by('date')
                 elif len(categories_to_search) == 1:
-                    return HttpResponseRedirect(reverse('resources:images-category',
-                                                        kwargs={'category': categories_to_search.pop()}))
+                    return HttpResponseRedirect(
+                        reverse('resources:images-category',
+                                kwargs={'category': categories_to_search.pop()
+                                        }))
 
         if results is None:
             results = base_query.all()
@@ -255,18 +291,21 @@ def images_search(request):
     else:
         results = request.session.get('results_images')
         images = request.session.get('images_images')
-    
-    categorized = {cat: sorted(g, key=lambda x: _(x.title)) 
+
+    categorized = {
+        cat: sorted(g, key=lambda x: u_(x.title))
         for cat, g in groupby(results, key=lambda x: x.category_label)}
 
-    return render(request, 'resources/images-search-results.html',
-            {'results': results,
-             'images': images,
-             'query': request.session['query'],
-             'time_start': request.session['time_start'],
-             'time_end': request.session['time_end'],
-             'enabled_categories': request.session['enabled_categories'],
-             'categorized': categorized})
+    return render(
+        request, 'resources/images-search-results.html', {
+            'results': results,
+            'images': images,
+            'query': request.session['query'],
+            'time_start': request.session['time_start'],
+            'time_end': request.session['time_end'],
+            'enabled_categories': request.session['enabled_categories'],
+            'categorized': categorized
+        })
 
 
 def images_search_detail(request, page):
@@ -283,14 +322,16 @@ def images_search_detail(request, page):
     paginator = Paginator(results, 1)
     pagins = paginator.page(page)
 
-    return render(request, 'resources/images-search-detail.html',
-                              {'images': images,
-                               'results': pagins,
-                               'category': "Search",
-                               'query': request.session['query'],
-                               'time_start': request.session['time_start'],
-                               'time_end': request.session['time_end'],
-                               'enabled_categories': request.session['enabled_categories']})
+    return render(
+        request, 'resources/images-search-detail.html', {
+            'images': images,
+            'results': pagins,
+            'category': "Search",
+            'query': request.session['query'],
+            'time_start': request.session['time_start'],
+            'time_end': request.session['time_end'],
+            'enabled_categories': request.session['enabled_categories']
+        })
 
 
 def get_image_search_detail(request, page):
@@ -301,18 +342,26 @@ def get_image_search_detail(request, page):
     :param page: Number of page to serve details
     """
 
-    image = request.session['results_images'][int(page)-1]
+    image = request.session['results_images'][int(page) - 1]
     images = image_search_results(lambda cat, q: [])
-    return render(request, 'resources/image-search-detail-window.html',  {'image': image, 'images': images})
+    return render(request, 'resources/image-search-detail-window.html', {
+        'image': image,
+        'images': images
+    })
 
-AFRICAN_NAME_SOLR_FIELDS = [field_name for field_name in AfricanNamesIndex.fields]
+
+AFRICAN_NAME_SOLR_FIELDS = list(AfricanNamesIndex.fields)
+
+
 def download_slaves_helper(data):
     """
     Generate a spreadsheet file with slave data.
     :param data: A list of dicts each representing an African name.
     :return:
     """
-    rows = [[x.get(field_name) for field_name in AFRICAN_NAME_SOLR_FIELDS] for x in data]
+    rows = [[x.get(field_name)
+             for field_name in AFRICAN_NAME_SOLR_FIELDS]
+            for x in data]
     return download_xls([[(f, 1) for f in AFRICAN_NAME_SOLR_FIELDS]], rows)
 
 
@@ -341,7 +390,7 @@ def get_all_slaves(request):
         current_query = {}
 
     try:
-        query_dict = request.session["names_query_dict"];
+        query_dict = request.session["names_query_dict"]
     except KeyError:
         query_dict = {}
 
@@ -360,9 +409,11 @@ def get_all_slaves(request):
     try:
         opened_tabs = request.session["names_opened_tabs"]
     except KeyError:
-        opened_tabs = {'section_1': True,
-                       'section_2': False,
-                       'section_3': False}
+        opened_tabs = {
+            'section_1': True,
+            'section_2': False,
+            'section_3': False
+        }
         request.session["names_opened_tabs"] = opened_tabs
 
     # If there is no requested page number, serve 1
@@ -370,16 +421,19 @@ def get_all_slaves(request):
     if desired_page:
         current_page = desired_page
 
-    # Collect Origins (it's now done by sql query, in the Haystack there is no easy way to
-    # get this list (facet is similar, but not what we want to have)
-    countries_from_names = AfricanName.objects.exclude(country__isnull=True).values('country__name')
-    countries = Country.objects.filter(name__in=countries_from_names).order_by('name')
+    # Collect Origins (it's now done by sql query, in the Haystack there is no
+    # easy way to get this list (facet is similar, but not what we want to
+    # have)
+    countries_from_names = AfricanName.objects.exclude(
+        country__isnull=True).values('country__name')
+    countries = Country.objects.filter(
+        name__in=countries_from_names).order_by('name')
 
     # Collect places
-    places_from_embarkation = AfricanName.objects.exclude(embarkation_port__isnull=True).\
-        values('embarkation_port__place')
-    places_from_disembarkation = AfricanName.objects.exclude(disembarkation_port__isnull=True).\
-        values('disembarkation_port__place')
+    places_from_embarkation = AfricanName.objects.exclude(
+        embarkation_port__isnull=True).values('embarkation_port__place')
+    places_from_disembarkation = AfricanName.objects.exclude(
+        disembarkation_port__isnull=True).values('disembarkation_port__place')
     places = Place.objects.all()
 
     used = []
@@ -389,14 +443,16 @@ def get_all_slaves(request):
     # For embarkation and disembarkation collect ids of places
     for i in places_from_embarkation:
         if i['embarkation_port__place'] not in used:
-            places_separated_embarkation.append(places.filter(place=i['embarkation_port__place']).
-                                                 values('id')[0]['id'])
+            places_separated_embarkation.append(
+                places.filter(
+                    place=i['embarkation_port__place']).values('id')[0]['id'])
             used.append(i['embarkation_port__place'])
     used = []
     for i in places_from_disembarkation:
         if i['disembarkation_port__place'] not in used:
-            places_separated_disembarkation.append(places.filter(place=i['disembarkation_port__place']).
-                                                    values('id')[0]['id'])
+            places_separated_disembarkation.append(
+                places.filter(place=i['disembarkation_port__place']).values(
+                    'id')[0]['id'])
             used.append(i['disembarkation_port__place'])
 
     # Retrieve structured places
@@ -408,16 +464,17 @@ def get_all_slaves(request):
 
         # If no results in session, retrieve
         if len(results) == 0:
-            if sort_mode is "1":
+            if sort_mode == "1":
                 sort_string = sort_column
-            if sort_mode is "2":
+            if sort_mode == "2":
                 sort_string = "-" + sort_column
 
             # If this is ngram, sort by string field
             if sort_column in names_sort_fields:
                 sort_string += "_sort"
 
-            results = SearchQuerySet().models(AfricanName).order_by(sort_string)
+            results = SearchQuerySet().models(
+                AfricanName).order_by(sort_string)
 
             request.session['names_results'] = results
             request.session['sort_column'] = sort_column
@@ -426,7 +483,8 @@ def get_all_slaves(request):
     if request.method == "POST":
         results_per_page_form = ResultsPerPageOptionForm(request.POST)
 
-        if request.POST.get("action") is not None and request.POST.get("action") == "New Query":
+        if request.POST.get("action") is not None and request.POST.get(
+                "action") == "New Query":
             # Clicked "New Query", reset all session variables
             results = SearchQuerySet().models(AfricanName).order_by("slave_id")
             query_dict = {}
@@ -442,15 +500,18 @@ def get_all_slaves(request):
             request.session['slaves_per_page_choice'] = None
             request.session['slaves_per_page'] = results_per_page
             current_page = 1
-            opened_tabs = {'section_1': True,
-                           'section_2': False,
-                           'section_3': False}
+            opened_tabs = {
+                'section_1': True,
+                'section_2': False,
+                'section_3': False
+            }
             request.session["names_opened_tabs"] = opened_tabs
 
         elif request.POST.get("sort_column") is not None:
             # One of the headers clicked, perform sort
             # If column has changed, reset the sort_mode
-            if request.session["sort_column"] != request.POST.get("sort_column"):
+            if request.session["sort_column"] != request.POST.get(
+                    "sort_column"):
                 sort_column = request.POST.get("sort_column")
                 sort_mode = "2"
 
@@ -468,9 +529,11 @@ def get_all_slaves(request):
 
             # Perform query and store results
             if len(query_dict) > 0:
-                results = SearchQuerySet().filter(**query_dict).models(AfricanName).order_by(sort_string)
+                results = SearchQuerySet().filter(
+                    **query_dict).models(AfricanName).order_by(sort_string)
             else:
-                results = SearchQuerySet().models(AfricanName).order_by(sort_string)
+                results = SearchQuerySet().models(AfricanName).order_by(
+                    sort_string)
 
             request.session['names_results'] = results
             request.session["sort_column"] = sort_column
@@ -478,8 +541,8 @@ def get_all_slaves(request):
 
         elif request.POST.get("action") == "Search":
             # Encode and store query dict/opened tabs/current query
-            query_dict, opened_tabs, current_query = create_query_dict(request.POST, embarkation_list,
-                                                                       disembarkation_list, countries)
+            query_dict, opened_tabs, current_query = create_query_dict(
+                request.POST, embarkation_list, disembarkation_list, countries)
             request.session['names_query_dict'] = query_dict
             request.session['names_opened_tabs'] = opened_tabs
             request.session['names_current_query'] = current_query
@@ -496,51 +559,65 @@ def get_all_slaves(request):
 
             # Filter only if query_dict is not empty
             if len(query_dict) > 0:
-                results = SearchQuerySet().filter(**query_dict).models(AfricanName).order_by(sort_string)
+                results = SearchQuerySet().filter(
+                    **query_dict).models(AfricanName).order_by(sort_string)
             else:
-                results = SearchQuerySet().models(AfricanName).order_by(sort_string)
+                results = SearchQuerySet().models(AfricanName).order_by(
+                    sort_string)
             request.session['names_results'] = results
         elif request.POST.get("action") == "download_all":
             # Build download file.
-            data = get_values_from_haystack_results(results, AFRICAN_NAME_SOLR_FIELDS)
+            data = get_values_from_haystack_results(results,
+                                                    AFRICAN_NAME_SOLR_FIELDS)
             return download_slaves_helper(data)
 
         # Manage results per page
         if results_per_page_form.is_valid():
             results_per_page = results_per_page_form.cleaned_option()
-            request.session['slaves_per_page_choice'] = results_per_page_form.cleaned_data['option']
+            request.session[
+                'slaves_per_page_choice'] = results_per_page_form.cleaned_data[
+                    'option']
             request.session['slaves_per_page'] = results_per_page
-        elif 'results_per_page' in request.session and 'results_per_page_choice' in request.session:
+        elif set({'results_per_page', 'results_per_page_choice'}).issubset(
+                set(request.session)):
             results_per_page = request.session['slaves_per_page']
-            results_per_page_form.fields['option'].initial = request.session['slaves_per_page_choice']
-            results_per_page_form = ResultsPerPageOptionForm({u'option': request.session['slaves_per_page_choice']})
+            results_per_page_form.fields['option'].initial = request.session[
+                'slaves_per_page_choice']
+            results_per_page_form = ResultsPerPageOptionForm(
+                {u'option': request.session['slaves_per_page_choice']})
 
     # Paginate results to pages
     paginator = Paginator(results, results_per_page)
     pagins = paginator.page(current_page)
-    if request.method == "POST" and request.POST.get("action") == "download_current_view":
+    if request.method == "POST" and request.POST.get(
+            "action") == "download_current_view":
         data = [x.get_stored_fields() for x in pagins.object_list]
         return download_slaves_helper(data)
 
     # Get ranges and number of pages
-    (paginator_range, pages_range) = prepare_paginator_variables(paginator, current_page, results_per_page)
+    (paginator_range,
+     pages_range) = prepare_paginator_variables(paginator, current_page,
+                                                results_per_page)
 
-    return render(request, 'resources/names-index.html',
-                  {'results': pagins,
-                   'paginator_range': paginator_range,
-                   'pages_range': pages_range,
-                   'options_results_per_page_form': results_per_page_form,
-                   'sort_column': sort_column,
-                   'sort_mode': sort_mode,
-                   'origins': countries,
-                   'embarkation_list': embarkation_list,
-                   'disembarkation_list': disembarkation_list,
-                   'query_dict': query_dict,
-                   'opened_tabs': opened_tabs,
-                   'current_query': current_query})
+    return render(
+        request, 'resources/names-index.html', {
+            'results': pagins,
+            'paginator_range': paginator_range,
+            'pages_range': pages_range,
+            'options_results_per_page_form': results_per_page_form,
+            'sort_column': sort_column,
+            'sort_mode': sort_mode,
+            'origins': countries,
+            'embarkation_list': embarkation_list,
+            'disembarkation_list': disembarkation_list,
+            'query_dict': query_dict,
+            'opened_tabs': opened_tabs,
+            'current_query': current_query
+        })
 
 
-def create_query_dict(var_list, embarkation_list, disembarkation_list, countries):
+def create_query_dict(var_list, embarkation_list, disembarkation_list,
+                      countries):
     query_dict = {}
     sex_list = []
     origins = []
@@ -552,7 +629,7 @@ def create_query_dict(var_list, embarkation_list, disembarkation_list, countries
 
     # Iterate and collect all options
     # Mark sections as True/False (collapsed/expanded)
-    for key, value in var_list.iteritems():
+    for key, value in var_list.items():
         if key in names_search_strict_text:
             if value != "":
                 query_dict[key] = value
@@ -560,7 +637,8 @@ def create_query_dict(var_list, embarkation_list, disembarkation_list, countries
 
                 # Create appropriate entry in current query dict
                 if key == "slave_name":
-                    fill_current_query_dict(current_query, "African name", value)
+                    fill_current_query_dict(current_query, "African name",
+                                            value)
                 elif key == "slave_ship_name":
                     fill_current_query_dict(current_query, "Ship name", value)
                 elif key == "slave_voyage_number":
@@ -571,15 +649,15 @@ def create_query_dict(var_list, embarkation_list, disembarkation_list, countries
                 sex_list.append(key.split("_")[1])
                 opened_tabs['section_1'] = True
         elif key.startswith("origin_"):
-            origins.append(long(key.split("_")[1]))
+            origins.append(int(key.split("_")[1]))
             opened_tabs['section_2'] = True
         elif key.startswith("checkbox_"):
-            embarkation.append(long(key.split("_")[-1]))
+            embarkation.append(int(key.split("_")[-1]))
             if len(key.split("_")[-1]) == 4:
                 embarkation_cq.append(key.split("_")[-1])
             opened_tabs['section_3'] = True
         elif key.startswith("disembarkation_"):
-            disembarkation.append(long(key.split("_")[-1]))
+            disembarkation.append(int(key.split("_")[-1]))
             opened_tabs['section_3'] = True
 
     # Include list-like fields if any of these have been chosen
@@ -587,7 +665,7 @@ def create_query_dict(var_list, embarkation_list, disembarkation_list, countries
         query_dict['slave_sex_age__in'] = sex_list
         sex_list_str = ""
         for i in sex_list:
-            if i == "Boy" or i == "Girl" or i == "Male" or i == "Female":
+            if i in ("Boy", "Girl", "Male", "Female"):
                 sex_list_str += i + "s "
             elif i == "Man":
                 sex_list_str += "Men "
@@ -601,10 +679,12 @@ def create_query_dict(var_list, embarkation_list, disembarkation_list, countries
         # Collect names of checked origins and add to the current query
         value = ""
         if len(origins) == len(countries):
-            fill_current_query_dict(current_query, "Place of origin", "all places selected")
+            fill_current_query_dict(current_query, "Place of origin",
+                                    "all places selected")
         else:
             for j in origins:
-                value += countries.filter(country_id=j).values('name')[0]['name'] + ", "
+                value += countries.filter(
+                    country_id=j).values('name')[0]['name'] + ", "
             value = value.rstrip().rstrip(",")
             fill_current_query_dict(current_query, "Place of origin", value)
 
@@ -612,48 +692,45 @@ def create_query_dict(var_list, embarkation_list, disembarkation_list, countries
         query_dict['slave_embarkation_port__in'] = embarkation
 
         # Get list of checked embarkation and add to the current query
-        fill_current_query_dict(current_query, "Place of embarkation",
-                                get_embarkation_checked(embarkation_list, embarkation))
+        fill_current_query_dict(
+            current_query, "Place of embarkation",
+            get_embarkation_checked(embarkation_list, embarkation))
 
     if len(disembarkation) > 0:
         query_dict['slave_disembarkation_port__in'] = disembarkation
         value = ""
 
-        # Find names of checked disembarkation ports and add to the current query
-        for broad_region, region_list in disembarkation_list.iteritems():
-            for region, ports_list in region_list.iteritems():
+        # Find names of checked disembarkation ports and add to the current
+        # query
+        for _, region_list in disembarkation_list.items():
+            for _, ports_list in region_list.items():
                 for port in ports_list:
                     if port.value in disembarkation:
                         value += port.place + ", "
 
         value = value.rstrip().rstrip(",")
-        fill_current_query_dict(current_query, "Place of disembarkation", value)
+        fill_current_query_dict(
+            current_query, "Place of disembarkation", value)
 
     # Include 'gte' and 'lte' fields in current query
-    if "slave_date_arrived__gte" in query_dict and "slave_date_arrived__lte" in query_dict:
-        fill_current_query_dict(current_query, "Time frame", query_dict["slave_date_arrived__gte"] + " - " +
-                                query_dict["slave_date_arrived__lte"])
-    elif "slave_date_arrived__gte" in query_dict:
-        fill_current_query_dict(current_query, "Time frame", "from " + query_dict["slave_date_arrived__gte"])
-    elif "slave_date_arrived__lte" in query_dict:
-        fill_current_query_dict(current_query, "Time frame", "up to " + query_dict["slave_date_arrived__lte"])
+    def fill_query_dict_with(query_dict, dkey, current_query, qkey):
+        from_to = None
+        gte = dkey + "__gte"
+        lte = dkey + "__lte"
+        if gte in query_dict and lte in query_dict:
+            from_to = query_dict[gte] + " - " + query_dict[lte]
+        elif gte in query_dict:
+            from_to = "from " + query_dict[gte]
+        elif lte in query_dict:
+            from_to = "up to " + query_dict[lte]
+        if from_to is not None:
+            fill_current_query_dict(current_query, qkey, from_to)
 
-    if "slave_age__gte" in query_dict and "slave_age__lte" in query_dict:
-        fill_current_query_dict(current_query, "Age", query_dict["slave_age__gte"] + " - " +
-                                query_dict["slave_age__lte"])
-    elif "slave_age__gte" in query_dict:
-        fill_current_query_dict(current_query, "Age", "from " + query_dict["slave_age__gte"])
-    elif "slave_age__lte" in query_dict:
-        fill_current_query_dict(current_query, "Age", "up to " + query_dict["slave_age__lte"])
-
-    if "slave_height__gte" in query_dict and "slave_height__lte" in query_dict:
-        fill_current_query_dict(current_query, "Height (inches)", query_dict["slave_height__gte"] + " - " +
-                                query_dict["slave_height__lte"])
-    elif "slave_height__gte" in query_dict:
-        fill_current_query_dict(current_query, "Height (inches)", "from " + query_dict["slave_height__gte"])
-    elif "slave_height__lte" in query_dict:
-        fill_current_query_dict(current_query, "Height (inches)", "up to " + query_dict["slave_height__lte"])
-
+    fill_query_dict_with(
+        query_dict, "slave_date_arrived", current_query, "Time frame")
+    fill_query_dict_with(query_dict, "slave_age", current_query, "Age")
+    fill_query_dict_with(
+        query_dict, "slave_height", current_query, "Height (inches)")
     return query_dict, opened_tabs, sorted(current_query.items())
 
 
@@ -661,20 +738,21 @@ def get_embarkation_checked(embarkation_list, checked):
     emb_str = ""
 
     # Iterate through broad regions and their children (regions)
-    for broad_region, region_list in embarkation_list.iteritems():
+    for broad_region, region_list in embarkation_list.items():
         regions_to_add = []
 
         # Iterate through regions and their children (ports)
-        for region, port_list in region_list.iteritems():
+        for region, port_list in region_list.items():
             ports_to_add = []
 
-            # Iterate through ports in region and collect ports to add to the current query
+            # Iterate through ports in region and collect ports to add to the
+            # current query
             for port in port_list:
                 if port.value in checked:
                     ports_to_add.append(port.place)
 
-            # If all ports have been selected in region, the entire region is marked as "all ports"
-            # Otherwise, add ports to the string
+            # If all ports have been selected in region, the entire region is
+            # marked as "all ports" Otherwise, add ports to the string
             if len(ports_to_add) == len(port_list):
                 regions_to_add.append(region.region + " - all ports selected")
             else:
@@ -687,31 +765,25 @@ def get_embarkation_checked(embarkation_list, checked):
         if len(regions_to_add) == len(region_list):
             emb_str += broad_region.broad_region + " - all ports selected, "
         elif len(regions_to_add) > 0:
-                emb_str += ", ".join(regions_to_add) + ", "
+            emb_str += ", ".join(regions_to_add) + ", "
 
     return emb_str.rstrip().rstrip(",")
 
 
-def fill_current_query_dict(dict=None, key=None, value=None):
+def fill_current_query_dict(dictionary=None, key=None, value=None):
     # Find a key and put the value
-    if key == "African name":
-        val = 1
-    elif key == "Ship name":
-        val = 2
-    elif key == "Voyage ID":
-        val = 3
-    elif key == "Time frame":
-        val = 4
-    elif key == "Age":
-        val = 5
-    elif key == "Height (inches)":
-        val = 6
-    elif key == "Sex/Age":
-        val = 7
-    elif key == "Place of origin":
-        val = 8
-    elif key == "Place of embarkation":
-        val = 9
-    elif key == "Place of disembarkation":
-        val = 10
-    dict[val] = {key: value}
+    name_to_idx = {
+        "African name": 1,
+        "Ship name": 2,
+        "Voyage ID": 3,
+        "Time frame": 4,
+        "Age": 5,
+        "Height (inches)": 6,
+        "Sex/Age": 7,
+        "Place of origin": 8,
+        "Place of embarkation": 9,
+        "Place of disembarkation": 10
+    }
+    val = name_to_idx.get(key, None)
+    if val:
+        dictionary[val] = {key: value}

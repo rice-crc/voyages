@@ -2,13 +2,17 @@
 
 FROM ubuntu:18.04 AS base
 
-RUN apt-get update \
+RUN apt-get update -y \
   && apt-get install --yes --no-upgrade --no-install-recommends \
     gettext=0.19.8.1-6ubuntu0.3 \
     mysql-client=5.7.33-0ubuntu0.18.04.1 \
     libmysqlclient-dev=5.7.33-0ubuntu0.18.04.1 \
-    python=2.7.15~rc1-1 \
-    python-pip=9.0.1-2.3~ubuntu1.18.04.4 \
+    python3.7 \
+    python3-pip \
+    python3-dev \
+    python3-future \
+    python3-setuptools \
+    python3-venv \
   && apt-get clean \
   && rm -rf \
     /tmp/* \
@@ -37,13 +41,13 @@ RUN apt-get update \
 
 WORKDIR /srv/voyages
 
-RUN python -m pip install --user --no-cache-dir --upgrade \
-    pip==20.3.4  \
+RUN python3 -m pip install --user --no-cache-dir --upgrade \
+    pip==21.0.1  \
     setuptools==44.1.1 \
     wheel==0.36.2
 
 COPY requirements/common.txt requirements/
-RUN python -m pip install --user --no-warn-script-location --no-cache-dir -r requirements/common.txt
+RUN pip3 install --user --no-cache-dir -r requirements/common.txt
 
 # -- Release --
 
