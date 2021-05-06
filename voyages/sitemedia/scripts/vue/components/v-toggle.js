@@ -1,9 +1,20 @@
 template = `
     <div class="v-form-group">
       <div class="v-title">
-        <span>{{filter.label}}</span>
         <span>
-            
+          {{filter.label}}
+          <b-badge pill
+              v-if="filter.options.isToDo"
+              v-b-tooltip.hover title="` +
+                gettext('To be implemented.') +
+              `" variant="secondary"
+              class="v-badge-imputed">` +
+
+  gettext('TO-DO') +
+            `</b-badge>
+        </span>
+        <span>
+
             <b-badge pill
               v-if="filter.options.isImputed"
               v-b-tooltip.hover title="` +
@@ -13,7 +24,7 @@ template = `
 
   gettext('IMPUTED') +
             `</b-badge>
-            
+
             <!--
             <b-badge
               v-if="filter.options.isAdvanced"
@@ -49,7 +60,7 @@ template = `
 
     </div>
   `;
-  
+
   Vue.component('v-toggle', {
   props: ['filter'],
   template: template,

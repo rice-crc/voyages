@@ -14,6 +14,10 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='voyagesources',
             name='short_ref',
-            field=models.CharField(max_length=255, unique=True, null=True, verbose_name='Short reference', blank=True),
+            field=models.CharField(max_length=255,
+                                   unique=True,
+                                   null=True,
+                                   verbose_name='Short reference',
+                                   blank=True),
         ),
     ]

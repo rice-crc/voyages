@@ -275,7 +275,7 @@
 	<script src="js/leaflet-src.js"></script>
 	<script src="js/leaflet.markercluster.js"></script>
 	<script src="js/leaflet.polylineDecorator.js"></script>
-	<script src="js/routeNodes.js"></script>
+	<script src="js/route_nodes.js"></script>
 	<script src="js/voyagesMap.js"></script>
 	<script>
 		var queryParams = '{"searchData":{"items":[{"op":"is between","searchTerm":[1514,1866],"varName":"imp_arrival_at_port_of_dis"}],"orderBy":[]},"output":"mapFlow"}'
@@ -311,13 +311,13 @@
 		})();
 
 		// A dictionary type element that maps a uid to a position in
-		// the routeNodes array. This is used so that nodes can be
+		// the route_nodes array. This is used so that nodes can be
 		// deleted efficiently.
 		var uidToArrayIndex = {};
 
 		// Global Object to store tool data.
 		var toolData = { locked: false, undoActions: [] };
-		var network = { routeNodes: routeNodes, links: links }
+		var network = { route_nodes: route_nodes, links: links }
 		var baseMap = '1650';
 
 		function adjustSizes() {
@@ -338,13 +338,13 @@
 			uidToArrayIndex = {};
 			toolData.undoActions = [];
 			toolData.links = [];
-			voyagesMap.init(baseMap || '1650', '/static/maps/', network.routeNodes, network.links);
-			for (var k = 0; k < network.routeNodes.length; ++k) {
+			voyagesMap.init(baseMap || '1650', '/static/maps/', network.route_nodes, network.links);
+			for (var k = 0; k < network.route_nodes.length; ++k) {
 				addMarker(k);
 			}
 			for (var k = 0; k < network.links.length; ++k) {
 				var link = network.links[k];
-				addLink(network.routeNodes[link.start].marker.id, network.routeNodes[link.end].marker.id);
+				addLink(network.route_nodes[link.start].marker.id, network.route_nodes[link.end].marker.id);
 			}
 			voyagesMap.postDraw = function () {
 				for (var i = 0; i < toolData.links.length; ++i) {
@@ -360,7 +360,7 @@
 			if (!confirm('Confirm deletion of ALL nodes and links? This operation cannot be undone!')) return;
 			toolData = { links: [], locked: toolData.locked, undoActions: [] };
 			network.links = [];
-			network.routeNodes = [];
+			network.route_nodes = [];
 			uidToArrayIndex = {};
 			loadMap();
 		}
@@ -372,9 +372,9 @@
 		function downloadNetwork(python) {
 			python = !!python;
 
-			var out = (python ? "" : "var ") + "routeNodes = [\r\n";
-			for (var i = 0; i < network.routeNodes.length; ++i) {
-				out += "\t" + (python ? "" : "new L.LatLng") + "(" + network.routeNodes[i].lat + ", " + network.routeNodes[i].lng + "),\r\n";
+			var out = (python ? "" : "var ") + "route_nodes = [\r\n";
+			for (var i = 0; i < network.route_nodes.length; ++i) {
+				out += "\t" + (python ? "" : "new L.LatLng") + "(" + network.route_nodes[i].lat + ", " + network.route_nodes[i].lng + "),\r\n";
 			}
 			if (python) {
 				out += "]\r\nlinks = [\r\n";
@@ -393,7 +393,7 @@
 			if (!python) out += ";";
 			var pom = document.createElement('a');
 			pom.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(out));
-			pom.setAttribute('download', python ? 'network.py' : 'routeNodes.js');
+			pom.setAttribute('download', python ? 'network.py' : 'route_nodes.js');
 			pom.style.display = 'none';
 			document.body.appendChild(pom);
 			pom.click();
@@ -408,7 +408,7 @@
 		});
 
 		function addMarker(k) {
-			var marker = L.marker(network.routeNodes[k], {
+			var marker = L.marker(network.route_nodes[k], {
 				icon: normalIcon,
 				draggable: true,
 				title: 'node ' + k
@@ -417,7 +417,7 @@
 			marker.inLinks = [];
 			marker.outLinks = [];
 			uidToArrayIndex[marker.id] = k;
-			network.routeNodes[k].marker = marker;
+			network.route_nodes[k].marker = marker;
 			marker.on('click', function () {
 				var selectedTool = getSelectedTool();
 				if (selectedTool == TOOL_DELETE) {
@@ -529,8 +529,8 @@
 
 		function addRouteNode(latLng, canUndo) {
 			if (!latLng) return;
-			var index = network.routeNodes.length;
-			network.routeNodes.push(latLng);
+			var index = network.route_nodes.length;
+			network.route_nodes.push(latLng);
 			var marker = addMarker(index);
 			if (canUndo) {
 				toolData.undoActions.push(function () {
@@ -564,8 +564,8 @@
 				$("input:radio[name=tools]").filter('[value=lock]').prop("checked", true);
 				$("#lockBtn").addClass("active");
 			}
-			for (var i = 0; i < network.routeNodes.length; ++i) {
-				var d = network.routeNodes[i].marker.dragging;
+			for (var i = 0; i < network.route_nodes.length; ++i) {
+				var d = network.route_nodes[i].marker.dragging;
 				if (locked) {
 					d.disable();
 				} else {
@@ -577,8 +577,8 @@
 		function moveMarker(marker) {
 			var nodeIndex = uidToArrayIndex[marker.id];
 			var latLng = marker.getLatLng();
-			network.routeNodes[nodeIndex].lat = latLng.lat;
-			network.routeNodes[nodeIndex].lng = latLng.lng;
+			network.route_nodes[nodeIndex].lat = latLng.lat;
+			network.route_nodes[nodeIndex].lng = latLng.lng;
 			// Update links adjacent to marker's node.
 			for (var i = 0; i < marker.inLinks.length; ++i) {
 				marker.inLinks[i].changeLine(null, latLng);
@@ -590,8 +590,8 @@
 
 		function nodeById(id) {
 			var index = uidToArrayIndex[id];
-			if (index >= 0 && index < network.routeNodes.length) {
-				return network.routeNodes[index];
+			if (index >= 0 && index < network.route_nodes.length) {
+				return network.route_nodes[index];
 			}
 			return null;
 		}
@@ -599,7 +599,7 @@
 		function redoLinks() {
 			// Convert drawn links to the voyageMaps link array.
 			links = [];
-			var nodeCount = network.routeNodes.length;
+			var nodeCount = network.route_nodes.length;
 			for (var i = 0; i < toolData.links.length; ++i) {
 				var link = toolData.links[i];
 				var netLink = { start: uidToArrayIndex[link.idStart], end: uidToArrayIndex[link.idEnd] };
@@ -650,11 +650,11 @@
 				var inLinks = marker.inLinks.slice();
 				var outLinks = marker.outLinks.slice();
 				toolData.undoActions.push(function () {
-					var index = network.routeNodes.length;
+					var index = network.route_nodes.length;
 					var tmp = marker.getLatLng();
 					var node = new L.LatLng(tmp.lat, tmp.lng);
 					node.marker = marker;
-					network.routeNodes.push(node);
+					network.route_nodes.push(node);
 					uidToArrayIndex[marker.id] = index;
 					voyagesMap.addLayer(marker);
 					marker.inLinks = inLinks;
@@ -676,10 +676,10 @@
 			}
 			var nodeIndex = uidToArrayIndex[marker.id];
 			// Pop last item from array.
-			var lastItem = network.routeNodes.splice(-1, 1)[0];
+			var lastItem = network.route_nodes.splice(-1, 1)[0];
 			// Replace deleted item with last node.
-			if (nodeIndex >= 0 && nodeIndex < network.routeNodes.length) {
-				network.routeNodes[nodeIndex] = lastItem;
+			if (nodeIndex >= 0 && nodeIndex < network.route_nodes.length) {
+				network.route_nodes[nodeIndex] = lastItem;
 				uidToArrayIndex[lastItem.marker.id] = nodeIndex;
 			}
 			uidToArrayIndex[marker.id] = -1;
@@ -687,8 +687,8 @@
 		}
 
 		function splitLink(link) {
-			var a = network.routeNodes[uidToArrayIndex[link.idStart]];
-			var b = network.routeNodes[uidToArrayIndex[link.idEnd]];
+			var a = network.route_nodes[uidToArrayIndex[link.idStart]];
+			var b = network.route_nodes[uidToArrayIndex[link.idEnd]];
 			var mid = new L.LatLng((a.lat + b.lat) / 2, (a.lng + b.lng) / 2);
 			removeLink(link, true);
 			addRouteNode(mid, true);
@@ -739,7 +739,7 @@
 				var reader = new FileReader();
 				reader.onload = function (e) {
 					eval(reader.result);
-					network.routeNodes = routeNodes;
+					network.route_nodes = route_nodes;
 					network.links = links;
 					loadMap();
 				};

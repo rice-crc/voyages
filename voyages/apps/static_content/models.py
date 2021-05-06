@@ -1,3 +1,5 @@
+from __future__ import unicode_literals
+
 from django.db import models
 
 
@@ -24,7 +26,7 @@ class ContentPage(models.Model):
     title = models.TextField(max_length=50)
     description = models.TextField(max_length=2000)
     order = models.IntegerField()
-    group = models.ForeignKey(ContentGroup)
+    group = models.ForeignKey(ContentGroup, on_delete=models.CASCADE)
 
     class Meta:
         verbose_name = "Static content page"

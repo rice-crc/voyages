@@ -1,5 +1,4 @@
-import settings
-import os
+from __future__ import absolute_import
 
 # Django local settings for voyages project.
 
@@ -20,12 +19,18 @@ SECRET_KEY = 'fz1GAeu/MuPkUIsV7sR6m+BmRc3/K6CCzaBVuYBNz2eD1MPylu'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',   # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': 'voyages',                      # Or path to database file if using sqlite3.
-        'USER': 'voyages',                      # Not used with sqlite3.
-        'PASSWORD': 'voyages',                  # Not used with sqlite3.
-        'HOST': 'voyages-mysql',                # Set to empty string for localhost. Not used with sqlite3.
-        'PORT': '3306',                         # Set to empty string for default. Not used with sqlite3.
+        'ENGINE':  # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
+        'django.db.backends.mysql',
+        'NAME':
+            'voyages',  # Or path to database file if using sqlite3.
+        'USER':
+            'voyages',  # Not used with sqlite3.
+        'PASSWORD':
+            'voyages',  # Not used with sqlite3.
+        'HOST':  # Set to empty string for localhost. Not used with sqlite3.
+            'voyages-mysql',
+        'PORT':
+            '3306',  # Set to empty string for default. Not used with sqlite3.
     },
 }
 
@@ -33,11 +38,11 @@ STATICFILES_DIRS = (
     # Put strings here, like "/home/html/static" or "C:/www/django/static".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
-    '/mnt/sv_share/sitemedia',
-)
+    '/mnt/sv_share/sitemedia',)
 
 # Absolute filesystem path to the directory that will hold user-uploaded files.
-# Should be in a location outside the deploy like /home/httpd/sites/voyages/media
+# Should be in a location outside the deploy like
+# /home/httpd/sites/voyages/media
 MEDIA_ROOT = '/mnt/sv_share/documents/'
 
 # Absolute path to the directory static files should be collected to.
@@ -50,13 +55,9 @@ STATIC_ROOT = '/mnt/sv_share/static/'
 # Example: "http://media.lawrence.com/static/"
 STATIC_URL = 'http://127.0.0.1:8100/static/'
 
-LOCALE_PATHS = (
-    ['voyages/locale']
-)
+LOCALE_PATHS = (['voyages/locale'])
 
-LOCALE_PATHS = (
-    '/srv/voyages/voyages/locale',
-)
+LOCALE_PATHS = ('/srv/voyages/voyages/locale',)
 
 # Used to index Django models, in our case using Solr
 HAYSTACK_CONNECTIONS = {
@@ -79,7 +80,8 @@ TIME_ZONE = 'America/New_York'
 # http://www.i18nguy.com/unicode/language-identifiers.html
 LANGUAGE_CODE = 'en-us'
 
-# when using an ImageField setting this DEBUG to Ture will give debug info about ImageFields and thumbnails
+# when using an ImageField setting this DEBUG to True will give debug info
+# about ImageFields and thumbnails
 THUMBNAIL_DEBUG = False
 
 CACHES = {
@@ -131,15 +133,15 @@ LOGGING = {
         }
     },
     'handlers': {
-        'console':{
-            'class':'logging.StreamHandler',
+        'console': {
+            'class': 'logging.StreamHandler',
             'formatter': 'console'
         },
         'file': {
             'level': 'DEBUG',
             'class': 'logging.FileHandler',
             'formatter': 'file',
-            'filename' : './logs/debug.log',
+            'filename': './logs/debug.log',
         }
     },
     'loggers': {

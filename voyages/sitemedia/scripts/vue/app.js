@@ -224,7 +224,6 @@ var searchBar = new Vue({
       handler: function() {
         this.rowModalShow = true;
         var results = [];
-        // console.log(JSON.stringify(this.row.data));
         for (group in this.filter) {
           if (group !== "year" && group !== "settings") {
             var datum = {
@@ -555,7 +554,6 @@ var searchBar = new Vue({
       axios
         .post("/voyage/save-query", {
           items: serializeFilter(items)
-          // query: serializeFilter({"filter": vm.filter}),
         })
         .then(function(response) {
           var exists = false;
@@ -579,7 +577,7 @@ var searchBar = new Vue({
           }
         })
         .catch(function(error) {
-          options.errorMessage = error;
+          vm.options.errorMessage = error;
           $("#sv-loader").addClass("display-none");
           $("#sv-loader-error").removeClass("display-none");
           console.log(error);

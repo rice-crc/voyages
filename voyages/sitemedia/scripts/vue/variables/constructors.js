@@ -14,6 +14,9 @@ function TreeselectVariable(varInfo, searchTerms, options) {
   this.options = {
     isImputed: options["isImputed"],
     isAdvanced: options["isAdvanced"],
+    isMultiple: typeof options["isMultiple"] !== 'undefined' ? options["isMultiple"] : true,
+    disableBranchNodes: typeof options["disableBranchNodes"] !== 'undefined' ? options["disableBranchNodes"] : false,
+    maxLength: typeof options["maxLength"] !== 'undefined' ? options["maxLength"] : 0,
     caption: options["caption"],
     data: [{
       id: "0",
@@ -155,6 +158,9 @@ function PlaceVariable(varInfo, searchTerms, options) {
   this.options = {
     isImputed: options["isImputed"],
     isAdvanced: options["isAdvanced"],
+    isMultiple: typeof options["isMultiple"] !== 'undefined' ? options["isMultiple"] : true,
+    disableBranchNodes: typeof options["disableBranchNodes"] !== 'undefined' ? options["disableBranchNodes"] : false,
+    maxLength: typeof options["maxLength"] !== 'undefined' ? options["maxLength"] : 0,
     caption: options["caption"]
   };
   this.changed = false;
@@ -178,6 +184,7 @@ function BooleanVariable(varInfo, searchTerms, options) {
   this.options = {
     isImputed: options["isImputed"],
     isAdvanced: options["isAdvanced"],
+    isToDo: typeof options["isToDo"] !== 'undefined' ? options["isToDo"] : false,
   };
   this.changed = false;
   this.activated = false;

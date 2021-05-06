@@ -15,11 +15,11 @@ function activateSubmenu(row) {
 
 		// var parentWidth = $row.width();
 		var parentWidth = 301;
-	
+
 		// responsive design
 		var vpWidth = document.documentElement.clientWidth;
 		var MOBILE_CUTOFF_WIDTH = 1200;
-		
+
 		var top = -1;
 		var left = parentWidth + 27; // main should overlay submenu
 		// var height = height - 4; // padding for main dropdown's arrow
@@ -29,14 +29,14 @@ function activateSubmenu(row) {
 		// 	top = 75;
 		// 	left = 40;
 		// }
-		
+
 		// Show the submenu
 		$submenu.css({
 			display: "block",
 			top: top,
 			left: left,
 		});
-		
+
 		// Keep the currently activated row's highlighted look
 		$row.addClass("maintainHover");
 }
@@ -73,7 +73,7 @@ $( document ).ready(function() {
 	$(document).click(function() {
 			// Simply hide the submenu on any click. Again, this is just a hacked
 			// together menu/submenu structure to show the use of jQuery-menu-aim.
-			$(".popover").css("display", "none");
+			$(".search-submenu.popover").css("display", "none");
 			$("a.maintainHover").removeClass("maintainHover");
 	});
 

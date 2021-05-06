@@ -61,6 +61,7 @@
   <div class="page-section">
     <button class="btn btn-solid" id="download_selection">{% trans "Download" %}</button>
     <div id="download_link_retry"></div>
+    <span id="download_generation_status"></span>
   </div>
 
 <div>
@@ -118,6 +119,7 @@
                   clearInterval(timedCheck);
                   $('#download_link_retry').html('<a href="' + downloadUrl + '">If the download does not start, click here.</a>');
                   $('#download_selection').prop('disabled', false);
+                  $('#download_generation_status').text('');
                 };
                 var checkCounter = 0;
                 var canCheck = true;
@@ -139,6 +141,7 @@
                             alert('The CSV generation has started and may take a while to complete. The download will start once it is ready');
                           }
                           ++checkCounter;
+                          $('#download_generation_status').text(statusResult);
                         }
                       });
                   },

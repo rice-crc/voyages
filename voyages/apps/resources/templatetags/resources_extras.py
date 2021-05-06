@@ -1,9 +1,13 @@
+from __future__ import unicode_literals
+
 from django import template
 from django.template.defaultfilters import stringfilter
+
 from voyages.apps.common.filters import trans_log
 
 register = template.Library()
 register.filter('trans_log', trans_log)
+
 
 @register.filter
 @stringfilter
@@ -13,7 +17,7 @@ def get_year_value(value):
     """
     try:
         ret = value.split(",")[2]
-    except:
+    except Exception:
         ret = ""
     return ret
 
@@ -22,23 +26,23 @@ def get_year_value(value):
 def modulo(num, val):
     return num % val
 
+
 @register.filter
-def spaces_to_underscores(str):
-    return "_".join(str.split(" "))
+def spaces_to_underscores(words):
+    return "_".join(words.split(" "))
+
 
 @register.filter
 def decode_language(code):
-    if code == "en":
-        return "English"
-    if code == "fr":
-        return "French"
-    if code == "de":
-        return "German"
-    if code == "pt":
-        return "Portuguese"
-    if code == "nl":
-        return "Dutch"
-    if code == "la":
-        return "Latin"
-    if code == "es":
-        return "Spanish"
+    xlate = {
+        "en": "English",
+        "fr": "French",
+        "de": "German",
+        "pt": "Portuguese",
+        "nl": "Dutch",
+        "la": "Latin",
+        "es": "Spanish"
+    }
+    if code in xlate:
+        return xlate[code]
+    return None

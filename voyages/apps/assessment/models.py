@@ -1,5 +1,11 @@
-from django.db import models
+from __future__ import unicode_literals
+
+import threading
+from builtins import str
 from itertools import groupby
+
+from django.db import models
+
 
 class ExportArea(models.Model):
     """
@@ -12,6 +18,9 @@ class ExportArea(models.Model):
     longitude = models.FloatField(null=True, blank=True)
     show_at_zoom = models.IntegerField()
     show_on_map = models.BooleanField()
+
+    def __lt__(self, other):
+        return (self.name, self.order_num) < (other.name, other.order_num)
 
     def __unicode__(self):
         return self.name
@@ -28,7 +37,7 @@ class ExportRegion(models.Model):
     longitude = models.FloatField(null=True, blank=True)
     show_at_zoom = models.IntegerField()
     show_on_map = models.BooleanField()
-    export_area = models.ForeignKey(ExportArea)
+    export_area = models.ForeignKey(ExportArea, on_delete=models.CASCADE)
 
     def __unicode__(self):
         return self.name
@@ -49,6 +58,9 @@ class ImportArea(models.Model):
     def __unicode__(self):
         return self.name
 
+    def __lt__(self, other):
+        return (self.name, self.order_num) < (other.name, other.order_num)
+
 
 class ImportRegion(models.Model):
     """
@@ -61,7 +73,7 @@ class ImportRegion(models.Model):
     longitude = models.FloatField(null=True, blank=True)
     show_at_zoom = models.IntegerField()
     show_on_map = models.BooleanField()
-    import_area = models.ForeignKey(ImportArea)
+    import_area = models.ForeignKey(ImportArea, on_delete=models.CASCADE)
 
     def __unicode__(self):
         return self.name
@@ -80,10 +92,12 @@ class Estimate(models.Model):
     Class represents Estimate entity
     """
 
-    nation = models.ForeignKey(Nation)
+    nation = models.ForeignKey(Nation, on_delete=models.CASCADE)
     year = models.IntegerField()
-    embarkation_region = models.ForeignKey(ExportRegion, null=True, blank=True)
-    disembarkation_region = models.ForeignKey(ImportRegion, null=True, blank=True)
+    embarkation_region = models.ForeignKey(
+        ExportRegion, null=True, blank=True, on_delete=models.CASCADE)
+    disembarkation_region = models.ForeignKey(
+        ImportRegion, null=True, blank=True, on_delete=models.CASCADE)
     embarked_slaves = models.FloatField(null=True, blank=True)
     disembarked_slaves = models.FloatField(null=True, blank=True)
 
@@ -103,8 +117,6 @@ class EstimateManager(models.Manager):
     import_hierarchy = {}
 
     _has_loaded = False
-    import threading
-
     _lock = threading.Lock()
 
     @classmethod
@@ -119,29 +131,50 @@ class EstimateManager(models.Manager):
                     r.export_area = cls.export_areas[r.export_area_id]
                     return r
 
-                cls.export_regions = {r.pk: extract_export_region(r) for r in ExportRegion.objects.all()}
+                cls.export_regions = {
+                    r.pk: extract_export_region(r)
+                    for r in ExportRegion.objects.all()
+                }
 
                 def extract_import_region(r):
                     r.import_area = cls.import_areas[r.import_area_id]
                     return r
 
-                cls.import_regions = {r.pk: extract_import_region(r) for r in ImportRegion.objects.all()}
+                cls.import_regions = {
+                    r.pk: extract_import_region(r)
+                    for r in ImportRegion.objects.all()
+                }
 
                 # Build hierarchies
-                keyfunc = lambda r: r.export_area
-                sorted_regions = sorted(cls.export_regions.values(), key=keyfunc)
-                cls.export_hierarchy = {k: list(g) for k, g in groupby(sorted_regions, key=keyfunc)}
-                keyfunc = lambda r: r.import_area
-                sorted_regions = sorted(cls.import_regions.values(), key=keyfunc)
-                cls.import_hierarchy = {k: list(g) for k, g in groupby(sorted_regions, key=keyfunc)}
+                def exp_key(r):
+                    return r.export_area
+
+                sorted_regions = sorted(list(cls.export_regions.values()),
+                                        key=exp_key)
+                cls.export_hierarchy = {
+                    k: list(g) for k, g in groupby(sorted_regions, key=exp_key)
+                }
+
+                def imp_key(r):
+                    return r.import_area
+
+                sorted_regions = sorted(list(cls.import_regions.values()),
+                                        key=imp_key)
+                cls.import_hierarchy = {
+                    k: list(g) for k, g in groupby(sorted_regions, key=imp_key)
+                }
 
                 cls.nations = {n.pk: n for n in Nation.objects.all()}
 
                 def extract_estimate(e):
                     e.nation = cls.nations[e.nation_id]
-                    e.embarkation_region = cls.export_regions[e.embarkation_region_id]
-                    e.disembarkation_region = cls.import_regions[e.disembarkation_region_id]
+                    e.embarkation_region = cls.export_regions[
+                        e.embarkation_region_id]
+                    e.disembarkation_region = cls.import_regions[
+                        e.disembarkation_region_id]
                     return e
 
-                cls.estimates = {e.pk: extract_estimate(e) for e in Estimate.objects.all()}
+                cls.estimates = {
+                    e.pk: extract_estimate(e) for e in Estimate.objects.all()
+                }
         return cls.estimates
