@@ -62,7 +62,7 @@ For more information, check GitHub's documentation on [forking repositories](htt
 Clone the fork to your local machine.
 
 ```bash
-host:~/Projects$ git clone --depth 1 https://github.com/<username>/voyages.git
+host:~/Projects$ git clone https://github.com/<username>/voyages.git
 ```
 
 Add the parent repository as an upstream remote.
@@ -115,9 +115,9 @@ host:~/Projects/voyages$ docker exec -i voyages-mysql mysql -uroot -pvoyages voy
 Verify the data import.
 
 ```mysql
-host:~/Projects/voyages$ docker exec -i voyages-mysql mysql -uroot -pvoyages -e "show databases"
-host:~/Projects/voyages$ docker exec -i voyages-mysql mysql -uroot -pvoyages -e "show tables from voyages"
-host:~/Projects/voyages$ docker exec -i voyages-mysql mysql -uroot -pvoyages -e "select * from voyages.voyage_voyage limit 1"
+host:~/Projects/voyages$ docker exec -i voyages-mysql mysql -uvoyages -pvoyages -e "show databases"
+host:~/Projects/voyages$ docker exec -i voyages-mysql mysql -uvoyages -pvoyages -e "show tables from voyages"
+host:~/Projects/voyages$ docker exec -i voyages-mysql mysql -uvoyages -pvoyages -e "select * from voyages.voyage_voyage limit 1"
 ```
 
 Create the Solr index.

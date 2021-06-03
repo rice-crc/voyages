@@ -20,52 +20,41 @@ var recentNews = new Vue({
   created: function() {
     var vm = this;
     var host = window.location.origin;
-    var prefix = "/common/flatpagehierarchy/";
-    var pathname = "about";
+    var prefix = '/common/flatpagehierarchy/';
+    var pathname = 'about/news';
     var url = host + prefix + pathname;
+
+    var articleMaxNum = 3;
     var articles = [];
 
     axios.get(url)
     .then(function (response) {
       vm.response = response.data;
-      for (var i = 0; i < response.data.items.length; i++) {
-        if (
-          response.data.items[i].url.match(
-            /\/about\/news\/[0-9]+\/.*?\/[0-9]+\//
-          )
-        ) {
-          articleURL = response.data.items[i].url;
-          articleURL = articleURL.replace(/^http:\/\//i, 'https://');
-          var title, timestamp;
-          axios.get(articleURL).then(function (artileResponse) {
-            var htmlStr = artileResponse.data;
-            var el = $("<div></div>");
-            el.html(htmlStr);
-            title = $(".page-title-1", el)[0].innerText;
-            timestamp = $(".method-date", el)[0].innerText;
-            text = $("p", el)[0].innerText.substring(0, 200) + "...";
-            url = response.data.items[i - 1].url.replace(
-              "common/getflatpage/about/",
-              "about/about#"
-            );
-            var article = {
-              url: url,
-              title: title,
-              id: i,
-              timestamp: timestamp,
-              text: text,
-            };
 
-            articles.push(article);
-            Vue.set(vm, "news", articles);
-          });
-        }
-      }
-    })
-    .catch(function (error) {
-      console.log(error);
+      articles = [...response.data.items].reverse().slice(0, articleMaxNum);
+
+      var article = [];
+      articles.forEach((article, i) => {
+        article.url = article.url.replace(/^http:\/\//i, '//');
+
+        axios.get(article.url)
+        .then(function (articleResponse) {
+          var el = $("<div></div>");
+          el.html(articleResponse.data);
+
+          article.id = i;
+          article.title = $(".page-title-1", el)[0].innerText;
+          article.timestamp = $(".method-date", el)[0].innerText;
+          article.text = $("p", el)[0].innerText.substring(0, 200) + "...";
+          article.url = article.url.replace(
+            "common/getflatpage/about/",
+            "about/about#"
+          );
+        });
+      });
+
+      Vue.set(vm, "news", articles);
     });
-
-
   }
+
 })

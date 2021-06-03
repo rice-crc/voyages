@@ -18,5 +18,5 @@ function onFormSubmit(e) {
   htmlBody += "<p><a href='#'>View all submissions on Google Spreadsheet</a><p>";
   htmlBody += "<p>If you are looking for full access to this spreadsheet, please contact voyages@emory.edu for details. Thank you!</p>"
   htmlBody += "<p>This automated Email is sent through Google Apps Script made for Slave Voyages Feedback form under pastdata2020@gmail.com.</p>";
-  GmailApp.sendEmail('voyages@emory.edu', 'Slave Voyages Feedback Submission', '', {htmlBody: htmlBody});
+  GmailApp.sendEmail('svopcom@googlegroups.com', 'Slave Voyages Feedback Submission', '', {htmlBody: htmlBody});
 }
