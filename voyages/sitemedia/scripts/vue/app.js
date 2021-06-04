@@ -591,7 +591,7 @@ var searchBar = new Vue({
 
     reportError() {
       // draft an email
-      var voyagesTeamEmail = "voyages@emory.edu";
+      var voyagesTeamEmail = "svopcom@googlegroups.com";
       var title = "[ISSUE] Report an issue with Slave Voyages";
       var message =
         "There is an issue with Slave Voyages and is reported in this Email by a user.";

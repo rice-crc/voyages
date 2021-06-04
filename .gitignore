@@ -7,7 +7,8 @@ localsettings.py*
 *~
 documents/cache/*
 .idea
-*.log
+logs/*
+!logs/empty
 .vscode
 voyages/sitemedia/scss/**/*.css
 voyages/sitemedia/scss/**/*.map
