@@ -244,7 +244,7 @@ var searchBar = new Vue({
                   var isImputed = item.options ? item.options.isImputed : false;
 
                   // Patch source variable
-                  if (varName == "var_sources_plaintext") {
+                  if (varName == "var_sources_plaintext_search") {
                     value = ""; // empty value string
                     var sources = this.row.data["var_sources_raw"];
                     value = getFormattedSource(sources);
