@@ -9,7 +9,7 @@ from django.utils import translation
 from django.utils.translation import ugettext as _
 import six
 from haystack import indexes
-import unidecode
+from unidecode import unidecode
 
 from .cache import CachedGeo
 from .globals import no_mangle, search_mangle_methods
@@ -88,7 +88,7 @@ class VoyageSourcesIndex(indexes.SearchIndex, indexes.Indexable):
     def get_model(self):
         return VoyageSources
 
-    def index_queryset(self, _=None):
+    def index_queryset(self, using=None):
         """Used when the entire index for model is updated."""
         return self.get_model().objects.all()
 
@@ -730,7 +730,7 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
     def get_updated_field(self):
         return 'last_update'
 
-    def index_queryset(self, _=None):
+    def index_queryset(self, using=None):
         """Used when the entire index for model is updated."""
         helper = VoyagesFullQueryHelper()
         return helper.get_query()
@@ -900,7 +900,7 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
     def prepare_var_sources_plaintext_search(self, obj):
         mangle_method = search_mangle_methods.get('var_sources', no_mangle)
         return mangle_method(
-            unidecode.unidecode(self.prepare_var_sources_plaintext(obj)))
+            unidecode(self.prepare_var_sources_plaintext(obj)))
 
     def prepare_var_voyage_links(self, obj):
         return [
