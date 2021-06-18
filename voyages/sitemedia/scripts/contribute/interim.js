@@ -836,7 +836,7 @@ function SlaveNumbersTable(table_id, numbers, editable, column_count, row_count,
                 var value = parseFloat($(self.rows[i][j]).html());
                 if (!isNaN(value)) {
                     var name = position_to_var_name(i, j);
-                    form.append('<input class="' + APPENDED_FIELD_CLASS + '" type="hidden" name="' + name + '" value="' + value + '" />');
+                    form.append('<input class="' + APPENDED_FIELD_CLASS + '" type="hidden" id="' + name + '" name="' + name + '" value="' + value + '" />');
                 }
             }
         }
