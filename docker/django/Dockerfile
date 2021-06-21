@@ -28,9 +28,12 @@ FROM base AS build
 RUN apt-get update \
   && apt-get install --yes --no-upgrade --no-install-recommends \
     gcc=4:7.4.0-1ubuntu2.3 \
-    libxml2-dev=2.9.4+dfsg1-6.1ubuntu1.3 \
+    libxml2-dev=2.9.4+dfsg1-6.1ubuntu1.4 \
     libxslt1-dev=1.1.29-5ubuntu0.2 \
     python-dev=2.7.15~rc1-1 \
+    g++ \
+    postgresql-server-dev-10 \
+    musl-dev \
   && apt-get clean \
   && rm -rf \
     /tmp/* \
