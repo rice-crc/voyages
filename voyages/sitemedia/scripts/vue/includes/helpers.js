@@ -281,7 +281,7 @@ var variableMapping = {
   crew_voyage_outset: "var_crew_voyage_outset",
   crew_first_landing: "var_crew_first_landing",
   crew_died_complete_voyage: "var_crew_died_complete_voyage",
-  sources_plaintext: "var_sources_plaintext"
+  sources_plaintext: "var_sources_plaintext_search"
 };
 
 // mark a variable as changed and activated state
@@ -1138,10 +1138,10 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
       return function() {
         // TODO (20190710): Remove the next few lines when proper column
         // headers and a canonical order are defined for the download.
-        if (!isVisibleColumns) {
-          alert("The download option with all columns is not available yet.");
-          return;
-        }
+        // if (!isVisibleColumns) {
+        //   alert("The download option with all columns is not available yet.");
+        //   return;
+        // }
         // decides if it's returning visible columns or all columns
         var visibleColumns = isVisibleColumns
           ? mainDatatable.columns().visible().context[0].aoColumns.map(function(variable){if (variable.bVisible) return variable.data }).filter(Boolean)
