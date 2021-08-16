@@ -57,6 +57,9 @@ def perform_search(search, lang):
     for item in items:
         term = item['searchTerm']
         operator = _operators_dict[item['op']]
+        # Enable Solr search on voyage sources using an ngram field instead.
+        if item['varName'] == u'sources_plaintext':
+            item['varName'] = u'sources_plaintext_search'
         is_list = isinstance(term, list)
         if is_list and not operator.list_type:
             term = term[0]
