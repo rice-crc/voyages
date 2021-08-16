@@ -281,7 +281,7 @@ var variableMapping = {
   crew_voyage_outset: "var_crew_voyage_outset",
   crew_first_landing: "var_crew_first_landing",
   crew_died_complete_voyage: "var_crew_died_complete_voyage",
-  sources_plaintext: "var_sources_plaintext_search"
+  sources_plaintext: "var_sources_plaintext"
 };
 
 // mark a variable as changed and activated state

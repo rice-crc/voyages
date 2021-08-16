@@ -244,7 +244,7 @@ var searchBar = new Vue({
                   var isImputed = item.options ? item.options.isImputed : false;
 
                   // Patch source variable
-                  if (varName == "var_sources_plaintext_search") {
+                  if (varName == "var_sources_plaintext") {
                     value = ""; // empty value string
                     var sources = this.row.data["var_sources_raw"];
                     value = getFormattedSource(sources);
@@ -657,7 +657,7 @@ var searchBar = new Vue({
 
     // load a search when present in URL
     if (location.href.includes(SAVED_SEARCH_LABEL)) {
-      var savedSearchId = location.href.split(SAVED_SEARCH_LABEL).pop();
+      var savedSearchId = location.href.split(SAVED_LABEL).pop();
       this.load(savedSearchId);
     } else {
       this.refresh();
