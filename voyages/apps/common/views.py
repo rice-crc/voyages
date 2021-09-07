@@ -299,4 +299,9 @@ def set_language(request, lang_code):
     request.method = 'POST'
     request.POST = {'language': lang_code}
     django.views.i18n.set_language(request)
-    return django.http.HttpResponse(lang_code, content_type="text/plain")
+
+    django.utils.translation.activate(lang_code);
+    response = django.http.HttpResponse(lang_code, content_type="text/plain");
+    response.set_cookie(settings.LANGUAGE_COOKIE_NAME, lang_code);
+
+    return response;
