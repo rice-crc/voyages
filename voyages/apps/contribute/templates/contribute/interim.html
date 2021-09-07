@@ -2530,7 +2530,7 @@
             for (var i = 0; i < nkeys.length; ++i)
             {
                 var k = nkeys[i];
-                if (form.children('#' + k).length == 0) {
+                if (form.find('#' + k).length == 0) {
                     var num_field = $('<input class="' + APPENDED_FIELD_CLASS + '" type="hidden" id="' + k + '" name="' + k + '" />');
                     num_field.val(numbers[k]);
                     form.append(num_field);
