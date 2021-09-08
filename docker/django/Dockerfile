@@ -5,8 +5,8 @@ FROM ubuntu:18.04 AS base
 RUN apt-get update -y \
   && apt-get install --yes --no-upgrade --no-install-recommends \
     gettext=0.19.8.1-6ubuntu0.3 \
-    mysql-client=5.7.33-0ubuntu0.18.04.1 \
-    libmysqlclient-dev=5.7.33-0ubuntu0.18.04.1 \
+    mysql-client=5.7.35-0ubuntu0.18.04.1 \
+    libmysqlclient-dev=5.7.35-0ubuntu0.18.04.1 \
     python3.7 \
     python3-pip \
     python3-dev \
@@ -28,7 +28,7 @@ FROM base AS build
 RUN apt-get update \
   && apt-get install --yes --no-upgrade --no-install-recommends \
     gcc=4:7.4.0-1ubuntu2.3 \
-    libxml2-dev=2.9.4+dfsg1-6.1ubuntu1.3 \
+    libxml2-dev=2.9.4+dfsg1-6.1ubuntu1.4 \
     libxslt1-dev=1.1.29-5ubuntu0.2 \
     python-dev=2.7.15~rc1-1 \
   && apt-get clean \

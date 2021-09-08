@@ -88,7 +88,7 @@ class VoyageSourcesIndex(indexes.SearchIndex, indexes.Indexable):
     def get_model(self):
         return VoyageSources
 
-    def index_queryset(self, _=None):
+    def index_queryset(self,using=None):
         """Used when the entire index for model is updated."""
         return self.get_model().objects.all()
 
@@ -129,7 +129,7 @@ class TranslatedTextField(indexes.SearchField):
             translated = _(str(original).replace('\n', '').replace('\r', ''))
             if not self.unidecode:
                 return translated
-            return unidecode(translated)
+            return unidecode.unidecode(translated)
 
 
 # Index for Voyage
@@ -730,7 +730,7 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
     def get_updated_field(self):
         return 'last_update'
 
-    def index_queryset(self, _=None):
+    def index_queryset(self,using=None):
         """Used when the entire index for model is updated."""
         helper = VoyagesFullQueryHelper()
         return helper.get_query()
