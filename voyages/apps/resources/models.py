@@ -118,7 +118,7 @@ class ImagesIndex(indexes.SearchIndex, indexes.Indexable):
             return obj.voyage.voyage_dates.imp_voyage_began
         return None
 
-    def index_queryset(self, _=None):
+    def index_queryset(self,using=None):
         """Used when the entire index for model is updated."""
         return self.get_model().objects.all()
 
@@ -150,7 +150,7 @@ class CountryIndex(indexes.SearchIndex, indexes.Indexable):
     def get_model(self):
         return Country
 
-    def index_queryset(self, _=None):
+    def index_queryset(self,using=None):
         """Used when the entire index for model is updated."""
         return self.get_model().objects.all()
 
@@ -316,7 +316,7 @@ class AfricanNamesIndex(indexes.SearchIndex, indexes.Indexable):
             return obj.disembarkation_port.place
         return None
 
-    def index_queryset(self, _=None):
+    def index_queryset(self,using=None):
         """Used when the entire index for model is updated."""
         return self.get_model().objects.all()
 
