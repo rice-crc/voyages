@@ -29,7 +29,7 @@ class Migration(migrations.Migration):
                 ('notes',
                  models.TextField(blank=True, max_length=1000, null=True)),
                 ('interim_voyage',
-                 models.ForeignKey(on_delete=django.db.models.deletion.CASCADE,
+                 models.ForeignKey(
                                    related_name='pre_existing_sources',
                                    to='contribute.InterimVoyage',
                                    on_delete=models.CASCADE)),
