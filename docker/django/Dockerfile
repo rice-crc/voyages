@@ -1,3 +1,7 @@
+###
+### Ubuntu 1804 with default Python 3.6
+###
+
 # -- Base --
 
 FROM ubuntu:18.04 AS base
@@ -7,12 +11,9 @@ RUN apt-get update -y \
     gettext=0.19.8.1-6ubuntu0.3 \
     mysql-client=5.7.35-0ubuntu0.18.04.1 \
     libmysqlclient-dev=5.7.35-0ubuntu0.18.04.1 \
-    python3.7 \
-    python3-pip \
-    python3-dev \
-    python3-future \
-    python3-setuptools \
-    python3-venv \
+    python3=3.6.7-1~18.04 \
+    python3-pip=9.0.1-2.3~ubuntu1.18.04.5 \
+    python3-future=0.15.2-4ubuntu2 \
   && apt-get clean \
   && rm -rf \
     /tmp/* \
@@ -30,7 +31,7 @@ RUN apt-get update \
     gcc=4:7.4.0-1ubuntu2.3 \
     libxml2-dev=2.9.4+dfsg1-6.1ubuntu1.4 \
     libxslt1-dev=1.1.29-5ubuntu0.2 \
-    python-dev=2.7.15~rc1-1 \
+    python3-dev=3.6.7-1~18.04 \
   && apt-get clean \
   && rm -rf \
     /tmp/* \
@@ -47,7 +48,7 @@ RUN python3 -m pip install --user --no-cache-dir --upgrade \
     wheel==0.36.2
 
 COPY requirements/common.txt requirements/
-RUN pip3 install --user --no-cache-dir -r requirements/common.txt
+RUN python3 -m pip install --user --no-cache-dir -r requirements/common.txt
 
 # -- Release --
 
