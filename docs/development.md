@@ -128,6 +128,12 @@ host:~/Projects/voyages$ docker exec -i voyages-solr solr create_core -c voyages
 
 Run the process to build the index. This will take a very long time (around 60-90 minutes).
 
+If some of the reindex submissions fail due to timeouts, you may want to:
+
+* Check your Docker memory allocation. Again, set a minimum of 4GB (see [System Requirements](#system-requirements))
+* Check your Solr memory allocation in the docker-compose.yml file and consider allocating 2gb rather than the 1gb default we have set it to
+* Use the pysolr "--batch-size" flag in the below command to make smaller requests, e.g., `--batch-size=200`
+
 ```bash
 host:~/Projects/voyages$ docker exec -i voyages-django bash -c 'python3 manage.py rebuild_index --noinput'
 ```

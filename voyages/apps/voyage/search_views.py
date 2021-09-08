@@ -85,6 +85,9 @@ def perform_search(search, lang):
     for item in items:
         term = item['searchTerm']
         operator = _operators_dict[item['op']]
+        # Enable Solr search on voyage sources using an ngram field instead.
+        if item['varName'] == u'sources_plaintext':
+            item['varName'] = u'sources_plaintext_search'
         is_list = isinstance(term, list)
         if is_list and not operator.list_type:
             term = term[0]
@@ -702,42 +705,30 @@ def ajax_download(request):
     data = json.loads(request.POST['data'])
     search = data['searchData']
     lang = request.LANGUAGE_CODE
-    results = perform_search(search, lang)
     columns = data['cols']
     excel_mode = data.get('excel_mode', True)
-    if len(columns) == 0:
-        # Get all columns.
-        lang_version = 'lang_' + lang
-        columns = [
-            col for col in list(results[0].get_stored_fields().keys())
-            if 'lang' not in col or lang_version in col
-        ]
-        # Remove columns which have a name matching a prefix of another column.
-        copy = list(columns)
-        columns = [
-            col for col in copy
-            if len([x for x in copy if len(x) > len(col) and col in x]) == 0
-        ]
-    else:
-        columns = [
-            col if 'lang' not in col or 'lang_' in col else col + '_' + lang
-            for col in columns
-        ]
-    if excel_mode:
-        return download_xls(
-            [[(_(get_download_header(col)), 1) for col in columns]],
-            [[item[col] for col in columns]
-             for item in [x.get_stored_fields() for x in results]])
-    response = HttpResponse(content_type='text/csv')
-    response['Content-Disposition'] = 'attachment; filename="data.csv"'
-    writer = unicodecsv.DictWriter(response, fieldnames=columns)
-    # writer.writeheader()
-    writer.writerow({col: _(get_download_header(col)) for col in columns})
-    for x in results:
-        item = x.get_stored_fields()
-        writer.writerow({col: item[col] for col in columns})
-    return response
 
+    if len(columns) == 0:
+        columns = [col if 'lang' not in col or 'lang_' in col else col + '_' + lang
+                   for col in download_header_map.keys()]
+    else:
+        columns = [col if 'lang' not in col or 'lang_' in col else col + '_' + lang for col in columns]
+
+    results = perform_search(search, lang)
+    data = get_values_from_haystack_results(results, columns)
+    rows = [[x.get(field_name) for field_name in columns] for x in data]
+
+    if excel_mode:
+        return download_xls([[(_(get_download_header(col)), 1) for col in columns]], rows)
+    else:
+        response = HttpResponse(content_type='text/csv')
+        response['Content-Disposition'] = 'attachment; filename="data.csv"'
+        writer = unicodecsv.DictWriter(response, fieldnames=columns)
+        #writer.writeheader()
+        writer.writerow({col: _(get_download_header(col)) for col in columns})
+        for x in rows:
+            writer.writerow({columns[colNum]: x[colNum] for colNum in range(len(columns))})
+        return response
 
 _options_model = {
     'var_outcome_voyage':
