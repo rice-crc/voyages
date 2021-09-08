@@ -1170,10 +1170,10 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
       return function() {
         // TODO (20190710): Remove the next few lines when proper column
         // headers and a canonical order are defined for the download.
-        if (!isVisibleColumns) {
-          alert("The download option with all columns is not available yet.");
-          return;
-        }
+        // if (!isVisibleColumns) {
+        //   alert("The download option with all columns is not available yet.");
+        //   return;
+        // }
         // decides if it's returning visible columns or all columns
         var visibleColumns = isVisibleColumns
           ? mainDatatable.columns().visible().context[0].aoColumns.map(function(variable){if (variable.bVisible) return variable.data }).filter(Boolean)
