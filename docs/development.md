@@ -323,6 +323,12 @@ Yes, using Docker named volumes.
 
 Be careful if you remove the MySQL and Solr volumes as you'll need to rerun the lengthy reindex.
 
+_first, why would I want to remove these volumes?_
+Because docker named volumes persist between container restarts, that means that if you switch between branches that, say, have different SQL or Solr schemas, you'll find conflicts arising.
+
+_what are my alternatives to wiping out the volumes?_
+If you're going to be switching frequently between different branches that have breaking changes to components that use persistent data, then consider, for instance, changing the names of [the database](https://github.com/JohnMulligan/voyages/blob/develop/voyages/localsettings.py.dist#L18) and [solr core](https://github.com/JohnMulligan/voyages/blob/develop/voyages/localsettings-local.py.default#L65) you use between these in your localsettings file.
+
 ### How can I blow away my local copy of the project and restart?
 
 Remove the containers.
