@@ -7,6 +7,7 @@ from builtins import input, next, str
 
 from django.core.management.base import BaseCommand
 from django.db import connection
+from django.db import transaction
 from django.utils.encoding import smart_str
 from unidecode import unidecode
 import unicodecsv
@@ -27,6 +28,18 @@ from voyages.apps.voyage.models import (BroadRegion, LinkedVoyages,
                                         VoyageSourcesConnection)
 
 empty = re.compile(r"^\s*\.?$")
+
+class ErrorReporting:
+    line = 0
+
+    @classmethod
+    def next_row(cls):
+        cls.line += 1
+
+    @classmethod
+    def report(cls, msg):
+        if cls.line > 0: msg = '[' + str(cls.line) +'] ' + msg
+        sys.stderr.write(msg)
 
 
 class Command(BaseCommand):
@@ -50,7 +63,7 @@ class Command(BaseCommand):
         self.errors = 0
         target_db = options.get('db')
         if target_db not in ('mysql', 'pgsql'):
-            sys.stderr.write(
+            ErrorReporting.report(
                 'Supported dbs are "mysql" and "pgsql". Aborting...\n')
             return
         print('Targetting db: ' + target_db)
@@ -127,7 +140,7 @@ class Command(BaseCommand):
                 return None
             model = prefetch[model_name].get(val)
             if model is None:
-                sys.stderr.write('Failed to locate '
+                ErrorReporting.report('Failed to locate '
                                  '"' + model_name + '"'
                                  ' with value: ' + str(val) + ' for '
                                  'field "' + field_name + '"\n')
@@ -144,14 +157,14 @@ class Command(BaseCommand):
             if place is not None:
                 reg_pk = region.pk if region else None
                 if place.region.pk != reg_pk:
-                    sys.stderr.write("Region mismatch for "
+                    ErrorReporting.report("Region mismatch for "
                                      "voyage_id " + str(voyage_id) + " on "
                                      "field '" + str(field) + "'\n")
                     self.errors += 1
                 if reg_pk:
                     breg_pk = broad_region.pk if broad_region else None
                     if breg_pk != region.broad_region.pk:
-                        sys.stderr.write(
+                        ErrorReporting.report(
                             "Broad region mismatch for "
                             "voyage_id " + str(voyage_id) + " on "
                             "field '" + str(field) + "'\n")
@@ -251,36 +264,44 @@ class Command(BaseCommand):
             """
             if value is None or empty.match(value):
                 return ''
-            components = value.split('-')
+            components = value.split(',')
             if len(components) != 3:
-                components = value.split(',')
+                components = value.split('-')
             if len(components) != 3:
                 components = value.split('/')
             if len(components) != 3:
                 self.errors += 1
-                sys.stderr.write('Error with date ' + value + '\n')
+                ErrorReporting.report('Error with date ' + value + '\n')
                 return ''
+            
+            def get_component_val(cval, min, max, mandatory):
+                cval = cval.strip()
+                if len(cval) > 0:
+                    ival = int(cval)
+                    if ival < min or ival > max:
+                        raise Exception('Value outside range [' + str(min) + ', ' + str(max) + ']')
+                    return ival
+                if mandatory:
+                    raise Exception('Missing mandatory date component')
+                return ''
+
             try:
                 coords = [2, 0, 1]
                 if len(components[0].strip()) == 4:
                     # This date format starts with year, so we assume
                     # YYYY[sep]MM[sep]DD
                     coords = [0, 1, 2]
-                year = int(components[coords[0]].strip())
-                month = int(components[coords[1]].strip())
-                day = int(components[coords[2]].strip())
-                if 1 <= day <= 31 and 1 <= month <= 12 and 999 < year <= 1900:
-                    return f'{month},{day},{year}'
+                day = get_component_val(components[coords[2]], 1, 31, False)
+                month = get_component_val(components[coords[1]], 1, 12, bool(day))
+                year = get_component_val(components[coords[0]], 999, 1900, bool(month))
+                return f'{month},{day},{year}'
+            except Exception as e:
                 self.errors += 1
-                sys.stderr.write('Invalid date ' + value + '\n')
-                return ''
-            except Exception:
-                self.errors += 1
-                sys.stderr.write('Invalid date ' + value + '\n')
+                ErrorReporting.report('Invalid date "' + value + '" ' + str(e) + '\n')
             return ''
 
         def lower_headers(iterator):
-            return itertools.chain([next(iterator).lower().replace("_", "")],
+            return itertools.chain([next(iterator).decode("utf-8-sig").lower().replace("_", "").encode('utf-8')],
                                    iterator)
 
         def row_to_ship(row, voyage):
@@ -692,14 +713,16 @@ class Command(BaseCommand):
         count_tast = 0
         count_iam = 0
         voyage_links = []
+        print("Please ensure that all csv files are UTF8-BOM encoded")
         for file in csv_file:
-            with open(file, 'rU') as f:
-                reader = unicodecsv.DictReader(lower_headers(f), delimiter=',')
+            with open(file, 'rb') as f:
+                reader = unicodecsv.DictReader(lower_headers(f), delimiter=',', encoding='utf-8')
                 # Ensure lower case is used.
                 for row in reader:
+                    ErrorReporting.next_row()
                     voyage_id = cint(row.get(u'voyageid'), False)
                     if voyage_id in voyages:
-                        sys.stderr.write('Duplicate voyage found'
+                        ErrorReporting.report('Duplicate voyage found'
                                          ': ' + str(voyage_id) + '\n')
                         return
                     # Create a voyage corresponding to this row
@@ -771,9 +794,9 @@ class Command(BaseCommand):
                         (source, match) = get_source(source_ref)
                         if source is None:
                             self.errors += 1
-                            sys.stderr.write(
+                            ErrorReporting.report(
                                 'Source not found for '
-                                'voyage id: ' + str(id) + ' '
+                                'voyage id: ' + str(voyage_id) + ' '
                                 'source_ref: '
                                 '"' + smart_str(source_ref) + '"'
                                 ', longest partial '
@@ -803,7 +826,7 @@ class Command(BaseCommand):
                     # Links
                     if intra_american and 'voyageid2' in row:
                         voyage_links.append(
-                            (id, cint(row['voyageid2']),
+                            (voyage_id, cint(row['voyageid2']),
                              LinkedVoyages.INTRA_AMERICAN_LINK_MODE))
 
         print('Constructed ' + str(len(voyages)) + ' voyages from CSV'
@@ -817,7 +840,7 @@ class Command(BaseCommand):
         confirm = input(
             "Are you sure you want to continue? "
             "The existing data will be deleted! (yes/[no]): "
-        )
+        ).strip()
         print('"' + confirm + '"')
         if confirm != 'yes':
             return
@@ -825,137 +848,152 @@ class Command(BaseCommand):
         print('Deleting old data...')
 
         quote_char = '`' if target_db == 'mysql' else '"'
-        cursor = connection.cursor()
+        with transaction.atomic():
+            with connection.cursor() as cursor:
 
-        def clear_fk(fk_field):
-            sql = 'UPDATE {0}{1}{0} SET {0}{2}{0}=NULL'
-            sql = sql.format(quote_char, Voyage._meta.db_table, fk_field)
-            print(sql)
-            cursor.execute(sql)
+                def clear_fk(fk_field):
+                    sql = 'UPDATE {0}{1}{0} SET {0}{2}{0}=NULL'
+                    sql = sql.format(quote_char, Voyage._meta.db_table, fk_field)
+                    print(sql)
+                    cursor.execute(sql)
 
-        def delete_all(model):
-            sql = 'DELETE FROM {0}' + model._meta.db_table + '{0}'
-            sql = sql.format(quote_char)
-            print(sql)
-            cursor.execute(sql)
+                def delete_all(model):
+                    sql = 'DELETE FROM {0}' + model._meta.db_table + '{0}'
+                    sql = sql.format(quote_char)
+                    print(sql)
+                    cursor.execute(sql)
 
-        clear_fk('voyage_ship_id')
-        clear_fk('voyage_itinerary_id')
-        clear_fk('voyage_dates_id')
-        clear_fk('voyage_crew_id')
-        clear_fk('voyage_slaves_numbers_id')
-        delete_all(LinkedVoyages)
-        delete_all(VoyageCaptainConnection)
-        delete_all(VoyageShipOwnerConnection)
-        delete_all(VoyageSourcesConnection)
-        delete_all(VoyageCaptain)
-        delete_all(VoyageCrew)
-        delete_all(VoyageDates)
-        delete_all(VoyageItinerary)
-        delete_all(VoyageOutcome)
-        delete_all(VoyageShip)
-        delete_all(VoyageShipOwner)
-        delete_all(VoyageSlavesNumbers)
-        delete_all(AfricanName)
-        delete_all(Image)
-        delete_all(Voyage)
+                if target_db == 'mysql':
+                    # Disable foreign keys so that we are free to delete the
+                    # current voyages even if related tables reference them.
+                    cursor.execute("SET FOREIGN_KEY_CHECKS=0;")
+                elif target_db == 'pgsql':
+                    # This has not been tested: the idea is that
+                    # the FK might be broken temporarily, but at
+                    # the end of the transaction they should all
+                    # be satisfied.
+                    cursor.execute("SET CONSTRAINTS ALL DEFERRED;")
+                clear_fk('voyage_ship_id')
+                clear_fk('voyage_itinerary_id')
+                clear_fk('voyage_dates_id')
+                clear_fk('voyage_crew_id')
+                clear_fk('voyage_slaves_numbers_id')
+                delete_all(LinkedVoyages)
+                delete_all(VoyageCaptainConnection)
+                delete_all(VoyageShipOwnerConnection)
+                delete_all(VoyageSourcesConnection)
+                delete_all(VoyageCaptain)
+                delete_all(VoyageCrew)
+                delete_all(VoyageDates)
+                delete_all(VoyageItinerary)
+                delete_all(VoyageOutcome)
+                delete_all(VoyageShip)
+                delete_all(VoyageShipOwner)
+                delete_all(VoyageSlavesNumbers)
+                delete_all(AfricanName)
+                delete_all(Image)
+                delete_all(Voyage)
 
-        print('Inserting new records...')
+                print('Inserting new records...')
 
-        def bulk_insert(model, lst, attr_key=None, manager=None):
-            print('Bulk inserting ' + str(model))
-            if manager is None:
-                manager = model.objects
-            manager.bulk_create(lst, batch_size=100)
-            return None if attr_key is None else \
-                {getattr(x, attr_key): x for x in manager.all()}
+                def bulk_insert(model, lst, attr_key=None, manager=None):
+                    print('Bulk inserting ' + str(model))
+                    if manager is None:
+                        manager = model.objects
+                    manager.bulk_create(lst, batch_size=100)
+                    return None if attr_key is None else \
+                        {getattr(x, attr_key): x for x in manager.all()}
 
-        voyages = bulk_insert(Voyage, list(voyages.values()), 'voyage_id',
-                              Voyage.all_dataset_objects)
-        captains = bulk_insert(VoyageCaptain, list(captains.values()), 'name')
-        ship_owners = bulk_insert(VoyageShipOwner, list(ship_owners.values()),
-                                  'name')
-        # At this point we have primary keys for voyages.
+                voyages = bulk_insert(Voyage, list(voyages.values()), 'voyage_id',
+                                    Voyage.all_dataset_objects)
+                captains = bulk_insert(VoyageCaptain, list(captains.values()), 'name')
+                ship_owners = bulk_insert(VoyageShipOwner, list(ship_owners.values()),
+                                        'name')
+                # At this point we have primary keys for voyages.
 
-        # Create voyage links.
-        for i, triple in enumerate(voyage_links):
-            if triple[0] in voyages and triple[1] in voyages:
-                link = LinkedVoyages()
-                link.first = voyages.get(triple[0])
-                link.second = voyages.get(triple[1])
-                link.mode = triple[2]
-                voyage_links[i] = link
-            else:
-                voyage_links[i] = None
-        voyage_links = [link for link in voyage_links if link]
+                # Create voyage links.
+                for i, triple in enumerate(voyage_links):
+                    if triple[0] in voyages and triple[1] in voyages:
+                        link = LinkedVoyages()
+                        link.first = voyages.get(triple[0])
+                        link.second = voyages.get(triple[1])
+                        link.mode = triple[2]
+                        voyage_links[i] = link
+                    else:
+                        voyage_links[i] = None
+                voyage_links = [link for link in voyage_links if link]
 
-        def set_foreign_keys(items, dictionary, key_func, fk_field):
-            for item in items:
-                x = dictionary[key_func(item)]
-                setattr(item, fk_field + '_id', x.pk)
+                def set_foreign_keys(items, dictionary, key_func, fk_field):
+                    for item in items:
+                        x = dictionary[key_func(item)]
+                        setattr(item, fk_field + '_id', x.pk)
 
-        def set_voyages_fk(items):
-            set_foreign_keys(items, voyages, lambda x: x.voyage.voyage_id,
-                             'voyage')
+                def set_voyages_fk(items):
+                    set_foreign_keys(items, voyages, lambda x: x.voyage.voyage_id,
+                                    'voyage')
 
-        # Insert dependent models in bulk
-        set_voyages_fk(ships)
-        set_voyages_fk(itineraries)
-        set_voyages_fk(voyage_dates)
-        set_voyages_fk(crews)
-        set_voyages_fk(voyage_numbers)
-        set_voyages_fk(outcomes)
-        bulk_insert(VoyageShip, ships)
-        bulk_insert(VoyageItinerary, itineraries)
-        bulk_insert(VoyageDates, voyage_dates)
-        bulk_insert(VoyageCrew, crews)
-        bulk_insert(VoyageSlavesNumbers, voyage_numbers)
-        bulk_insert(VoyageOutcome, outcomes)
-        bulk_insert(AfricanName, africans)
-        bulk_insert(Image, images)
+                # Insert dependent models in bulk
+                set_voyages_fk(ships)
+                set_voyages_fk(itineraries)
+                set_voyages_fk(voyage_dates)
+                set_voyages_fk(crews)
+                set_voyages_fk(voyage_numbers)
+                set_voyages_fk(outcomes)
+                bulk_insert(VoyageShip, ships)
+                bulk_insert(VoyageItinerary, itineraries)
+                bulk_insert(VoyageDates, voyage_dates)
+                bulk_insert(VoyageCrew, crews)
+                bulk_insert(VoyageSlavesNumbers, voyage_numbers)
+                bulk_insert(VoyageOutcome, outcomes)
+                bulk_insert(AfricanName, africans)
+                bulk_insert(Image, images)
 
-        # Now insert the many-to-many connections
-        set_voyages_fk(captain_connections)
-        set_foreign_keys(captain_connections, captains,
-                         lambda x: x.captain.name, 'captain')
-        set_voyages_fk(ship_owner_connections)
-        set_foreign_keys(ship_owner_connections, ship_owners,
-                         lambda x: x.owner.name, 'owner')
-        set_foreign_keys(source_connections, voyages,
-                         lambda x: x.group.voyage_id, 'group')
-        bulk_insert(LinkedVoyages, voyage_links)
-        bulk_insert(VoyageCaptainConnection, captain_connections)
-        bulk_insert(VoyageShipOwnerConnection, ship_owner_connections)
-        bulk_insert(VoyageSourcesConnection, source_connections)
+                # Now insert the many-to-many connections
+                set_voyages_fk(captain_connections)
+                set_foreign_keys(captain_connections, captains,
+                                lambda x: x.captain.name, 'captain')
+                set_voyages_fk(ship_owner_connections)
+                set_foreign_keys(ship_owner_connections, ship_owners,
+                                lambda x: x.owner.name, 'owner')
+                set_foreign_keys(source_connections, voyages,
+                                lambda x: x.group.voyage_id, 'group')
+                bulk_insert(LinkedVoyages, voyage_links)
+                bulk_insert(VoyageCaptainConnection, captain_connections)
+                bulk_insert(VoyageShipOwnerConnection, ship_owner_connections)
+                bulk_insert(VoyageSourcesConnection, source_connections)
 
-        # Update the one-to-one references for Voyages' models
-        # This is a redundant foreign key, however, this design
-        # choice precedes the development of this command.
-        def get_raw_sql(related_model,
-                        fk_on_voyages,
-                        fk_on_related='voyage_id'):
-            if target_db == 'mysql':
-                update_query_template = (
-                    'UPDATE {0}{1}{0} a JOIN {0}{2}{0} b '
-                    'ON a.{0}id{0}=b.{0}{3}{0} '
-                    'SET a.{0}{4}{0}=b.{0}id{0}')
-            elif target_db == 'pgsql':
-                update_query_template = (
-                    'UPDATE {0}{1}{0} as a SET {0}{4}{0}=b.{0}id{0} '
-                    'FROM {0}{2}{0} as b WHERE a.{0}id{0}=b.{0}{3}{0}')
-            sql = update_query_template.format(quote_char,
-                                               Voyage._meta.db_table,
-                                               related_model._meta.db_table,
-                                               fk_on_related, fk_on_voyages)
-            print('Executing query...')
-            print(sql)
-            return sql
+                # Update the one-to-one references for Voyages' models
+                # This is a redundant foreign key, however, this design
+                # choice precedes the development of this command.
+                def get_raw_sql(related_model,
+                                fk_on_voyages,
+                                fk_on_related='voyage_id'):
+                    if target_db == 'mysql':
+                        update_query_template = (
+                            'UPDATE {0}{1}{0} a JOIN {0}{2}{0} b '
+                            'ON a.{0}id{0}=b.{0}{3}{0} '
+                            'SET a.{0}{4}{0}=b.{0}id{0}')
+                    elif target_db == 'pgsql':
+                        update_query_template = (
+                            'UPDATE {0}{1}{0} as a SET {0}{4}{0}=b.{0}id{0} '
+                            'FROM {0}{2}{0} as b WHERE a.{0}id{0}=b.{0}{3}{0}')
+                    sql = update_query_template.format(quote_char,
+                                                    Voyage._meta.db_table,
+                                                    related_model._meta.db_table,
+                                                    fk_on_related, fk_on_voyages)
+                    print('Executing query...')
+                    print(sql)
+                    return sql
 
-        cursor.execute(get_raw_sql(VoyageShip, 'voyage_ship_id'))
-        cursor.execute(get_raw_sql(VoyageItinerary, 'voyage_itinerary_id'))
-        cursor.execute(get_raw_sql(VoyageDates, 'voyage_dates_id'))
-        cursor.execute(get_raw_sql(VoyageCrew, 'voyage_crew_id'))
-        cursor.execute(
-            get_raw_sql(VoyageSlavesNumbers, 'voyage_slaves_numbers_id'))
+                cursor.execute(get_raw_sql(VoyageShip, 'voyage_ship_id'))
+                cursor.execute(get_raw_sql(VoyageItinerary, 'voyage_itinerary_id'))
+                cursor.execute(get_raw_sql(VoyageDates, 'voyage_dates_id'))
+                cursor.execute(get_raw_sql(VoyageCrew, 'voyage_crew_id'))
+                cursor.execute(
+                    get_raw_sql(VoyageSlavesNumbers, 'voyage_slaves_numbers_id'))
 
-        print("Completed! Don't forget to rebuild_index on Solr.")
+                if target_db == 'mysql':
+                    # Re-enable foreign key checks.
+                    cursor.execute("SET FOREIGN_KEY_CHECKS=1;")
+
+                print("Completed! Don't forget to rebuild_index on Solr.")

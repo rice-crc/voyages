@@ -9,8 +9,8 @@ FROM ubuntu:18.04 AS base
 RUN apt-get update -y \
   && apt-get install --yes --no-upgrade --no-install-recommends \
     gettext=0.19.8.1-6ubuntu0.3 \
-    mysql-client=5.7.35-0ubuntu0.18.04.1 \
-    libmysqlclient-dev=5.7.35-0ubuntu0.18.04.1 \
+    mysql-client=5.7.35-0ubuntu0.18.04.2 \
+    libmysqlclient-dev=5.7.35-0ubuntu0.18.04.2 \
     python3=3.6.7-1~18.04 \
     python3-pip=9.0.1-2.3~ubuntu1.18.04.5 \
     python3-future=0.15.2-4ubuntu2 \
@@ -47,8 +47,8 @@ RUN python3 -m pip install --user --no-cache-dir --upgrade \
     setuptools==44.1.1 \
     wheel==0.36.2
 
-COPY requirements/common.txt requirements/
-RUN python3 -m pip install --user --no-cache-dir -r requirements/common.txt
+COPY requirements/*.txt requirements/
+RUN python3 -m pip install --user --no-cache-dir -r requirements/dev.txt
 
 # -- Release --
 
