@@ -5,8 +5,8 @@ FROM ubuntu:18.04 AS base
 RUN apt-get update \
   && apt-get install --yes --no-upgrade --no-install-recommends \
     gettext=0.19.8.1-6ubuntu0.3 \
-    mysql-client=5.7.35-0ubuntu0.18.04.1 \
-    libmysqlclient-dev=5.7.35-0ubuntu0.18.04.1 \
+    mysql-client=5.7.35-0ubuntu0.18.04.2 \
+    libmysqlclient-dev=5.7.35-0ubuntu0.18.04.2 \
     python=2.7.15~rc1-1 \
     python-pip=9.0.1-2.3~ubuntu1.18.04.5 \
   && apt-get clean \
