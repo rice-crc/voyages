@@ -211,11 +211,12 @@ SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 # This will override any previously set value
 try:
     from .localsettings import *
-except ImportError:
-    print('''Settings not defined. Please configure a version
-        of localsettings.py for this site. See localsettings.py.dist for
+except ImportError as e:
+    print('''The settings could not be imported (error details below). Please configure
+        a version of localsettings.py for this site. See localsettings-local.py.default for
         setup details.''',
           file=sys.stderr)
+    print(str(e))
 
 # Modify HAYSTACK config for fixture loading durring tests
 # It is not possible to use override_settings decorator
