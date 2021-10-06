@@ -76,8 +76,8 @@ host:~/Projects/voyages$ git remote add upstream https://github.com/rice-crc/voy
 Note: if you are cloning for development, it is likely that you will be working
 on different branches at different times. It is very important to create
 separate DB and Solr Cores for each branch since the schema/data could be
-different. In the localsettings.py.dist example file, there is support for
-automatically using a branch-dependent DB and Solr Core name in the
+different. In the localsettings-local.py.default example file, there is support
+for automatically using a branch-dependent DB and Solr Core name in the
 configuration files. The convention for both names is: *voyage_{branch name,
 removing the prefix 'feature/' if present}*
 
