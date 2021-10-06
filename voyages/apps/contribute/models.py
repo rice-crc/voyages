@@ -22,6 +22,9 @@ class AdminFaq(models.Model):
     question = models.TextField(max_length=1000)
     answer = models.TextField(max_length=1000)
 
+    def __str__(self):
+        return self.__unicode__()
+
     def __unicode__(self):
         return "%s" % self.question
 
@@ -641,6 +644,9 @@ class ReviewVoyageContribution(models.Model):
                              max_length=10000,
                              help_text='Reviewer notes')
 
+    def __str__(self):
+        return self.__unicode__()
+
     def __unicode__(self):
         return _('Review a contribution')
 
@@ -664,6 +670,9 @@ class EditorVoyageContribution(models.Model):
                              max_length=10000,
                              help_text='Editor notes')
     ran_impute = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.__unicode__()
 
     def __unicode__(self):
         return _('Editorial review of contribution')
@@ -755,6 +764,9 @@ class EditVoyageContribution(BaseVoyageContribution):
 
     type = 'edit'
 
+    def __str__(self):
+        return self.__unicode__()
+
     def __unicode__(self):
         return _('Edit an existing voyage')
 
@@ -782,6 +794,9 @@ class MergeVoyagesContribution(BaseVoyageContribution):
 
     type = 'merge'
 
+    def __str__(self):
+        return self.__unicode__()
+
     def __unicode__(self):
         return _('Merge two or more voyages into one')
 
@@ -801,6 +816,9 @@ class NewVoyageContribution(BaseVoyageContribution):
         'Complete as many boxes in each category as your source(s) allow.')
 
     type = 'new'
+
+    def __str__(self):
+        return self.__unicode__()
 
     def __unicode__(self):
         return _('New voyage')
