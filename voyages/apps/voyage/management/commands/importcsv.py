@@ -37,9 +37,13 @@ class ErrorReporting:
         cls.line += 1
 
     @classmethod
+    def reset(cls):
+        cls.line = 0
+
+    @classmethod
     def report(cls, msg):
         if cls.line > 0: msg = '[' + str(cls.line) +'] ' + msg
-        sys.stderr.write(msg)
+        sys.stderr.write(msg + '\n')
 
 
 class Command(BaseCommand):
@@ -64,7 +68,7 @@ class Command(BaseCommand):
         target_db = options.get('db')
         if target_db not in ('mysql', 'pgsql'):
             ErrorReporting.report(
-                'Supported dbs are "mysql" and "pgsql". Aborting...\n')
+                'Supported dbs are "mysql" and "pgsql". Aborting...')
             return
         print('Targetting db: ' + target_db)
 
@@ -124,6 +128,18 @@ class Command(BaseCommand):
             'ton_types': ton_types
         }
 
+        def get_multi_valued_column_suffix(max):
+            ALPHABET = 26
+            if max > 2 * ALPHABET: raise Exception("Too many columns!")
+            first_char = ord('a')
+            single_char_limit = min(max, ALPHABET)
+            for i in range(0, single_char_limit):
+                yield chr(first_char + i)
+            max -= ALPHABET
+            if max > 0:
+                for i in range(0, max):
+                    yield 'a' + chr(first_char + i)
+
         def get_by_value(model_name, field_name, allow_null=True):
             """
             Gets the pre-fetched model corresponding to the given
@@ -143,7 +159,7 @@ class Command(BaseCommand):
                 ErrorReporting.report('Failed to locate '
                                  '"' + model_name + '"'
                                  ' with value: ' + str(val) + ' for '
-                                 'field "' + field_name + '"\n')
+                                 'field "' + field_name + '"')
                 self.errors += 1
             return model
 
@@ -159,7 +175,7 @@ class Command(BaseCommand):
                 if place.region.pk != reg_pk:
                     ErrorReporting.report("Region mismatch for "
                                      "voyage_id " + str(voyage_id) + " on "
-                                     "field '" + str(field) + "'\n")
+                                     "field '" + str(field) + "'")
                     self.errors += 1
                 if reg_pk:
                     breg_pk = broad_region.pk if broad_region else None
@@ -167,7 +183,7 @@ class Command(BaseCommand):
                         ErrorReporting.report(
                             "Broad region mismatch for "
                             "voyage_id " + str(voyage_id) + " on "
-                            "field '" + str(field) + "'\n")
+                            "field '" + str(field) + "'")
                         self.errors += 1
 
         # Prefetch data: Sources
@@ -242,17 +258,20 @@ class Command(BaseCommand):
             :return: the CSV date.
             """
 
-            def get_component(suffix):
+            def get_component(suffix, expected_len):
                 component = (row.get(var_name_prefix + suffix, '')
                              if suffix is not None else '').strip()
-                if len(component) == 1:
+                if expected_len == 2 and len(component) == 1:
                     component = '0' + component
+                if len(component) != 0 and len(component) != expected_len:
+                    ErrorReporting.report('Invalid date component length in: ' + component)
+                    return ''
                 return component
             if suffixes is None:
                 suffixes = [u'a', u'b', u'c']
-            return get_component(suffixes[1]) + ',' + \
-                get_component(suffixes[0]) + ',' + \
-                get_component(suffixes[2])
+            return get_component(suffixes[1], 2) + ',' + \
+                get_component(suffixes[0], 2) + ',' + \
+                get_component(suffixes[2], 4)
 
         def date_from_sep_values(value):
             """
@@ -271,7 +290,7 @@ class Command(BaseCommand):
                 components = value.split('/')
             if len(components) != 3:
                 self.errors += 1
-                ErrorReporting.report('Error with date ' + value + '\n')
+                ErrorReporting.report('Error with date ' + value)
                 return ''
             
             def get_component_val(cval, min, max, mandatory):
@@ -297,7 +316,7 @@ class Command(BaseCommand):
                 return f'{month},{day},{year}'
             except Exception as e:
                 self.errors += 1
-                ErrorReporting.report('Invalid date "' + value + '" ' + str(e) + '\n')
+                ErrorReporting.report('Invalid date "' + value + '" ' + str(e))
             return ''
 
         def lower_headers(iterator):
@@ -717,13 +736,15 @@ class Command(BaseCommand):
         for file in csv_file:
             with open(file, 'rb') as f:
                 reader = unicodecsv.DictReader(lower_headers(f), delimiter=',', encoding='utf-8')
+                print("Importing " + file)
+                ErrorReporting.reset()
                 # Ensure lower case is used.
                 for row in reader:
                     ErrorReporting.next_row()
                     voyage_id = cint(row.get(u'voyageid'), False)
                     if voyage_id in voyages:
                         ErrorReporting.report('Duplicate voyage found'
-                                         ': ' + str(voyage_id) + '\n')
+                                         ': ' + str(voyage_id))
                         return
                     # Create a voyage corresponding to this row
                     voyage = Voyage()
@@ -753,7 +774,7 @@ class Command(BaseCommand):
                     voyage_numbers.append(row_to_numbers(row, voyage))
                     # Captains
                     order = 1
-                    for key in 'abc':
+                    for key in get_multi_valued_column_suffix(3):
                         captain_name = row.get(u'captain' + key)
                         if captain_name is None or empty.match(captain_name):
                             continue
@@ -770,7 +791,7 @@ class Command(BaseCommand):
                         order += 1
                     # Ship owners
                     order = 1
-                    for key in 'abcdefghijklmnop':
+                    for key in get_multi_valued_column_suffix(45):
                         owner_name = row.get(u'owner' + key)
                         if owner_name is None or empty.match(owner_name):
                             continue
@@ -787,7 +808,7 @@ class Command(BaseCommand):
                         order += 1
                     # Sources
                     order = 1
-                    for key in 'abcdefghijklmnopqr':
+                    for key in get_multi_valued_column_suffix(18):
                         source_ref = row.get(u'source' + key)
                         if source_ref is None or empty.match(source_ref):
                             break
@@ -800,7 +821,7 @@ class Command(BaseCommand):
                                 'source_ref: '
                                 '"' + smart_str(source_ref) + '"'
                                 ', longest partial '
-                                'match: ' + smart_str(match) + '\n')
+                                'match: ' + smart_str(match))
                             continue
                         source_connection = VoyageSourcesConnection()
                         source_connection.group = voyage

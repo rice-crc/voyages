@@ -18,24 +18,12 @@ var searchBar = new Vue({
     },
     filterData: {
       treeselectOptions: {
-        age_gender: [{
+        gender: [{
           id: "male",
           label: gettext("Male")
         },{
           id: "female",
           label: gettext("Female")
-        },{
-          id: "man",
-          label: gettext("Man")
-        },{
-          id: "boy",
-          label: gettext("Boy")
-        },{
-          id: "woman",
-          label: gettext("Woman")
-        },{
-          id: "girl",
-          label: gettext("Girl")
         }],
         dataset: [{
           id: "trans",
