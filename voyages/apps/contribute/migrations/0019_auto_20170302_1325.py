@@ -23,10 +23,10 @@ class Migration(migrations.Migration):
                 null=True,
                 validators=[
                     django.core.validators.RegexValidator(
-                        re.compile(b'^(\\d{1,2}|),(\\d{1,2}|),(\\d{4}|)$'),
-                        message=b'Please type a date in the format MM,DD,YYYY '
-                        b'(individual entries may be blank)',
-                        code=b'invalid')
+                        re.compile('^(\\d{1,2}|),(\\d{1,2}|),(\\d{4}|)$'),
+                        message='Please type a date in the format MM,DD,YYYY '
+                        '(individual entries may be blank)',
+                        code='invalid')
                 ]),
         ),
         migrations.AlterField(
@@ -38,10 +38,10 @@ class Migration(migrations.Migration):
                 null=True,
                 validators=[
                     django.core.validators.RegexValidator(
-                        re.compile(b'^(\\d{1,2}|),(\\d{1,2}|),(\\d{4}|)$'),
-                        message=b'Please type a date in the format MM,DD,YYYY '
-                        b'(individual entries may be blank)',
-                        code=b'invalid')
+                        re.compile('^(\\d{1,2}|),(\\d{1,2}|),(\\d{4}|)$'),
+                        message='Please type a date in the format MM,DD,YYYY '
+                        '(individual entries may be blank)',
+                        code='invalid')
                 ]),
         ),
         migrations.AlterField(
@@ -53,10 +53,10 @@ class Migration(migrations.Migration):
                 null=True,
                 validators=[
                     django.core.validators.RegexValidator(
-                        re.compile(b'^(\\d{1,2}|),(\\d{1,2}|),(\\d{4}|)$'),
-                        message=b'Please type a date in the format MM,DD,YYYY '
-                        b'(individual entries may be blank)',
-                        code=b'invalid')
+                        re.compile('^(\\d{1,2}|),(\\d{1,2}|),(\\d{4}|)$'),
+                        message='Please type a date in the format MM,DD,YYYY '
+                        '(individual entries may be blank)',
+                        code='invalid')
                 ]),
         ),
         migrations.AlterField(
@@ -68,10 +68,10 @@ class Migration(migrations.Migration):
                 null=True,
                 validators=[
                     django.core.validators.RegexValidator(
-                        re.compile(b'^(\\d{1,2}|),(\\d{1,2}|),(\\d{4}|)$'),
-                        message=b'Please type a date in the format MM,DD,YYYY '
-                        b'(individual entries may be blank)',
-                        code=b'invalid')
+                        re.compile('^(\\d{1,2}|),(\\d{1,2}|),(\\d{4}|)$'),
+                        message='Please type a date in the format MM,DD,YYYY '
+                        '(individual entries may be blank)',
+                        code='invalid')
                 ]),
         ),
         migrations.AlterField(
@@ -83,10 +83,10 @@ class Migration(migrations.Migration):
                 null=True,
                 validators=[
                     django.core.validators.RegexValidator(
-                        re.compile(b'^(\\d{1,2}|),(\\d{1,2}|),(\\d{4}|)$'),
-                        message=b'Please type a date in the format MM,DD,YYYY '
-                        b'(individual entries may be blank)',
-                        code=b'invalid')
+                        re.compile('^(\\d{1,2}|),(\\d{1,2}|),(\\d{4}|)$'),
+                        message='Please type a date in the format MM,DD,YYYY '
+                        '(individual entries may be blank)',
+                        code='invalid')
                 ]),
         ),
         migrations.AlterField(
@@ -98,10 +98,10 @@ class Migration(migrations.Migration):
                 null=True,
                 validators=[
                     django.core.validators.RegexValidator(
-                        re.compile(b'^(\\d{1,2}|),(\\d{1,2}|),(\\d{4}|)$'),
-                        message=b'Please type a date in the format MM,DD,YYYY '
-                        b'(individual entries may be blank)',
-                        code=b'invalid')
+                        re.compile('^(\\d{1,2}|),(\\d{1,2}|),(\\d{4}|)$'),
+                        message='Please type a date in the format MM,DD,YYYY '
+                        '(individual entries may be blank)',
+                        code='invalid')
                 ]),
         ),
         migrations.AlterField(
@@ -113,10 +113,10 @@ class Migration(migrations.Migration):
                 null=True,
                 validators=[
                     django.core.validators.RegexValidator(
-                        re.compile(b'^(\\d{1,2}|),(\\d{1,2}|),(\\d{4}|)$'),
-                        message=b'Please type a date in the format MM,DD,YYYY '
-                        b'(individual entries may be blank)',
-                        code=b'invalid')
+                        re.compile('^(\\d{1,2}|),(\\d{1,2}|),(\\d{4}|)$'),
+                        message='Please type a date in the format MM,DD,YYYY '
+                        '(individual entries may be blank)',
+                        code='invalid')
                 ]),
         ),
         migrations.AlterField(
@@ -128,10 +128,10 @@ class Migration(migrations.Migration):
                 null=True,
                 validators=[
                     django.core.validators.RegexValidator(
-                        re.compile(b'^(\\d{1,2}|),(\\d{1,2}|),(\\d{4}|)$'),
-                        message=b'Please type a date in the format MM,DD,YYYY '
-                        b'(individual entries may be blank)',
-                        code=b'invalid')
+                        re.compile('^(\\d{1,2}|),(\\d{1,2}|),(\\d{4}|)$'),
+                        message='Please type a date in the format MM,DD,YYYY '
+                        '(individual entries may be blank)',
+                        code='invalid')
                 ]),
         ),
     ]

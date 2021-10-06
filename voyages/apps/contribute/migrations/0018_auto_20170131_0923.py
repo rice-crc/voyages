@@ -23,10 +23,10 @@ class Migration(migrations.Migration):
             model_name='deletevoyagecontribution',
             name='deleted_voyages_ids',
             field=models.CharField(
-                help_text=b'The voyage_id of each Voyage being deleted by '
-                b'this contribution',
+                help_text='The voyage_id of each Voyage being deleted by '
+                'this contribution',
                 max_length=255,
-                verbose_name=b'Deleted voyage ids',
+                verbose_name='Deleted voyage ids',
                 validators=[
                     django.core.validators.RegexValidator(
                         re.compile('^[\\d,]+\\Z'),
@@ -152,10 +152,10 @@ class Migration(migrations.Migration):
             model_name='mergevoyagescontribution',
             name='merged_voyages_ids',
             field=models.CharField(
-                help_text=b'The voyage_id of each Voyage being merged by this '
-                b'contribution',
+                help_text='The voyage_id of each Voyage being merged by this '
+                'contribution',
                 max_length=255,
-                verbose_name=b'Merged voyage ids',
+                verbose_name='Merged voyage ids',
                 validators=[
                     django.core.validators.RegexValidator(
                         re.compile('^[\\d,]+\\Z'),
