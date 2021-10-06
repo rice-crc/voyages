@@ -236,7 +236,7 @@ except Exception as e:
     print(
         '''*** HAYSTACK settings not modified because something went wrong %s
         ***'''
-        % e.message,
+        % str(e),
         file=sys.stderr)
 
 del sys
