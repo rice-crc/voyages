@@ -4,7 +4,8 @@
 
 # Include specific files and folders:
 #
-!requirements/*.txt
+!requirements/common.txt
+!requirements/dev.txt
 !solr
 !tmp
 !tools
