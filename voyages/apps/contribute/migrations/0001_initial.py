@@ -40,20 +40,20 @@ class Migration(migrations.Migration):
                                   auto_created=True,
                                   primary_key=True)),
                 ('notes',
-                 models.TextField(help_text=b'Notes for the contribution',
+                 models.TextField(help_text='Notes for the contribution',
                                   max_length=10000,
-                                  verbose_name=b'Notes')),
+                                  verbose_name='Notes')),
                 ('status',
                  models.IntegerField(
-                     help_text=b'Indicates whether the contribution is still '
-                     b'being edited, committed, discarded etc',
-                     verbose_name=b'Status')),
+                     help_text='Indicates whether the contribution is still '
+                     'being edited, committed, discarded etc',
+                     verbose_name='Status')),
                 ('deleted_voyages_ids',
                  models.CommaSeparatedIntegerField(
-                     help_text=b'The voyage_id of each Voyage being deleted '
-                     b'by this contribution',
+                     help_text='The voyage_id of each Voyage being deleted '
+                     'by this contribution',
                      max_length=255,
-                     verbose_name=b'Deleted voyage ids')),
+                     verbose_name='Deleted voyage ids')),
                 ('contributor',
                  models.ForeignKey(related_name='+',
                                    to=settings.AUTH_USER_MODEL,
@@ -72,19 +72,19 @@ class Migration(migrations.Migration):
                                   auto_created=True,
                                   primary_key=True)),
                 ('notes',
-                 models.TextField(help_text=b'Notes for the contribution',
+                 models.TextField(help_text='Notes for the contribution',
                                   max_length=10000,
-                                  verbose_name=b'Notes')),
+                                  verbose_name='Notes')),
                 ('status',
                  models.IntegerField(
-                     help_text=b'Indicates whether the contribution is still '
-                     b'being edited, committed, discarded etc',
-                     verbose_name=b'Status')),
+                     help_text='Indicates whether the contribution is still '
+                     'being edited, committed, discarded etc',
+                     verbose_name='Status')),
                 ('edited_voyage_id',
                  models.IntegerField(
-                     help_text=b'The voyage_id of the Voyage edited by this '
-                     b'bcontribution',
-                     verbose_name=b'Edited voyage id')),
+                     help_text='The voyage_id of the Voyage edited by this '
+                     'contribution',
+                     verbose_name='Edited voyage id')),
                 ('contributor',
                  models.ForeignKey(related_name='+',
                                    to=settings.AUTH_USER_MODEL,
@@ -192,8 +192,8 @@ class Migration(migrations.Migration):
                 ('var_name',
                  models.CharField(
                      max_length=20,
-                     verbose_name=b'Slave number code-book variable name')),
-                ('number', models.IntegerField(verbose_name=b'Number')),
+                     verbose_name='Slave number code-book variable name')),
+                ('number', models.IntegerField(verbose_name='Number')),
             ],
         ),
         migrations.CreateModel(
@@ -264,10 +264,10 @@ class Migration(migrations.Migration):
                 ('third_captain',
                  models.CharField(max_length=255, null=True, blank=True)),
                 ('notes',
-                 models.TextField(help_text=b'Notes for the interim voyage',
+                 models.TextField(help_text='Notes for the interim voyage',
                                   max_length=10000,
                                   null=True,
-                                  verbose_name=b'Notes',
+                                  verbose_name='Notes',
                                   blank=True)),
                 ('african_resistance',
                  models.ForeignKey(related_name='+',
@@ -412,20 +412,20 @@ class Migration(migrations.Migration):
                                   auto_created=True,
                                   primary_key=True)),
                 ('notes',
-                 models.TextField(help_text=b'Notes for the contribution',
+                 models.TextField(help_text='Notes for the contribution',
                                   max_length=10000,
-                                  verbose_name=b'Notes')),
+                                  verbose_name='Notes')),
                 ('status',
                  models.IntegerField(
-                     help_text=b'Indicates whether the contribution is still '
-                     b'being edited, committed, discarded etc',
-                     verbose_name=b'Status')),
+                     help_text='Indicates whether the contribution is still '
+                     'being edited, committed, discarded etc',
+                     verbose_name='Status')),
                 ('merged_voyages_ids',
                  models.CommaSeparatedIntegerField(
-                     help_text=b'The voyage_id of each Voyage being merged by '
-                     b'this contribution',
+                     help_text='The voyage_id of each Voyage being merged by '
+                     'this contribution',
                      max_length=255,
-                     verbose_name=b'Merged voyage ids')),
+                     verbose_name='Merged voyage ids')),
                 ('contributor',
                  models.ForeignKey(related_name='+',
                                    to=settings.AUTH_USER_MODEL,
@@ -448,14 +448,14 @@ class Migration(migrations.Migration):
                                   auto_created=True,
                                   primary_key=True)),
                 ('notes',
-                 models.TextField(help_text=b'Notes for the contribution',
+                 models.TextField(help_text='Notes for the contribution',
                                   max_length=10000,
-                                  verbose_name=b'Notes')),
+                                  verbose_name='Notes')),
                 ('status',
                  models.IntegerField(
-                     help_text=b'Indicates whether the contribution is still '
-                     b'being edited, committed, discarded etc',
-                     verbose_name=b'Status')),
+                     help_text='Indicates whether the contribution is still '
+                     'being edited, committed, discarded etc',
+                     verbose_name='Status')),
                 ('contributor',
                  models.ForeignKey(related_name='+',
                                    to=settings.AUTH_USER_MODEL,

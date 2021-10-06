@@ -235,7 +235,7 @@ class VoyageShip(models.Model):
                                             blank=True,
                                             on_delete=models.CASCADE)
     tonnage_mod = models.DecimalField(
-        "Tonnage standardized on British"
+        "Tonnage standardized on British "
         "measured tons, 1773-1870",
         max_digits=8,
         decimal_places=1,
@@ -1482,7 +1482,7 @@ class VoyageSlavesNumbers(models.Model):
         null=True, blank=True)
 
     total_slaves_embarked_age_gender_identified = models.IntegerField(
-        "Total slaves embarked wi th age and gender identified (SLAVMAX1)",
+        "Total slaves embarked with age and gender identified (SLAVMAX1)",
         null=True,
         blank=True)
     total_slaves_by_age_gender_identified_among_landed = models.IntegerField(

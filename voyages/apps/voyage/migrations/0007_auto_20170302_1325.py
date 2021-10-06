@@ -20,31 +20,31 @@ class Migration(migrations.Migration):
             field=models.CharField(
                 validators=[
                     django.core.validators.RegexValidator(
-                        re.compile(b'^(\\d{1,2}|),(\\d{1,2}|),(\\d{4}|)$'),
-                        message=b'Please type a date in the format MM,DD,YYYY '
-                                b'(individual entries may be blank)',
-                        code=b'invalid')],
+                        re.compile('^(\\d{1,2}|),(\\d{1,2}|),(\\d{4}|)$'),
+                        message='Please type a date in the format MM,DD,YYYY '
+                                '(individual entries may be blank)',
+                        code='invalid')],
                 max_length=10,
                 blank=True,
-                help_text=b'Date in format: MM,DD,YYYY',
+                help_text='Date in format: MM,DD,YYYY',
                 null=True,
-                verbose_name=b'Date of arrival at second place of landing '
-                             b'(DATARR37,36,38)'),
+                verbose_name='Date of arrival at second place of landing '
+                             '(DATARR37,36,38)'),
         ),
         migrations.AlterField(
             model_name='voyagedates',
             name='date_departed_africa',
             field=models.CharField(
                 validators=[django.core.validators.RegexValidator(
-                    re.compile(b'^(\\d{1,2}|),(\\d{1,2}|),(\\d{4}|)$'),
-                    message=b'Please type a date in the format MM,DD,YYYY '
-                            b'(individual entries may be blank)',
-                    code=b'invalid')],
+                    re.compile('^(\\d{1,2}|),(\\d{1,2}|),(\\d{4}|)$'),
+                    message='Please type a date in the format MM,DD,YYYY '
+                            '(individual entries may be blank)',
+                    code='invalid')],
                 max_length=10,
                 blank=True,
-                help_text=b'Date in format: MM,DD,YYYY',
+                help_text='Date in format: MM,DD,YYYY',
                 null=True,
-                verbose_name=b'Date vessel departed Africa (DATELEFTAFR)'
+                verbose_name='Date vessel departed Africa (DATELEFTAFR)'
             ),
         ),
         migrations.AlterField(
@@ -53,16 +53,16 @@ class Migration(migrations.Migration):
             field=models.CharField(
                 validators=[
                     django.core.validators.RegexValidator(
-                        re.compile(b'^(\\d{1,2}|),(\\d{1,2}|),(\\d{4}|)$'),
-                        message=b'Please type a date in the format MM,DD,YYYY '
-                                b'(individual entries may be blank)',
-                        code=b'invalid')],
+                        re.compile('^(\\d{1,2}|),(\\d{1,2}|),(\\d{4}|)$'),
+                        message='Please type a date in the format MM,DD,YYYY '
+                                '(individual entries may be blank)',
+                        code='invalid')],
                 max_length=10,
                 blank=True,
-                help_text=b'Date in format: MM,DD,YYYY',
+                help_text='Date in format: MM,DD,YYYY',
                 null=True,
-                verbose_name=b'Date of departure from last place of landing '
-                             b'(DDEPAMB,*,C)'),
+                verbose_name='Date of departure from last place of landing '
+                             '(DDEPAMB,*,C)'),
         ),
         migrations.AlterField(
             model_name='voyagedates',
@@ -70,16 +70,16 @@ class Migration(migrations.Migration):
             field=models.CharField(
                 validators=[
                     django.core.validators.RegexValidator(
-                        re.compile(b'^(\\d{1,2}|),(\\d{1,2}|),(\\d{4}|)$'),
-                        message=b'Please type a date in the format MM,DD,YYYY '
-                                b'(individual entries may be blank)',
-                        code=b'invalid')],
+                        re.compile('^(\\d{1,2}|),(\\d{1,2}|),(\\d{4}|)$'),
+                        message='Please type a date in the format MM,DD,YYYY '
+                                '(individual entries may be blank)',
+                        code='invalid')],
                 max_length=10,
                 blank=True,
-                help_text=b'Date in format: MM,DD,YYYY',
+                help_text='Date in format: MM,DD,YYYY',
                 null=True,
-                verbose_name=b'Date of first disembarkation of slaves '
-                             b'(DATARR33,32,34)'),
+                verbose_name='Date of first disembarkation of slaves '
+                             '(DATARR33,32,34)'),
         ),
         migrations.AlterField(
             model_name='voyagedates',
@@ -87,61 +87,61 @@ class Migration(migrations.Migration):
             field=models.CharField(
                 validators=[
                     django.core.validators.RegexValidator(
-                        re.compile(b'^(\\d{1,2}|),(\\d{1,2}|),(\\d{4}|)$'),
-                        message=b'Please type a date in the format MM,DD,YYYY '
-                                b'(individual entries may be blank)',
-                        code=b'invalid')],
+                        re.compile('^(\\d{1,2}|),(\\d{1,2}|),(\\d{4}|)$'),
+                        message='Please type a date in the format MM,DD,YYYY '
+                                '(individual entries may be blank)',
+                        code='invalid')],
                 max_length=10,
                 blank=True,
-                help_text=b'Date in format: MM,DD,YYYY',
+                help_text='Date in format: MM,DD,YYYY',
                 null=True,
-                verbose_name=b'Year of arrival at port of disembarkation '
-                             b'(YEARAM)'),
+                verbose_name='Year of arrival at port of disembarkation '
+                             '(YEARAM)'),
         ),
         migrations.AlterField(
             model_name='voyagedates',
             name='imp_departed_africa',
             field=models.CharField(
                 validators=[django.core.validators.RegexValidator(
-                    re.compile(b'^(\\d{1,2}|),(\\d{1,2}|),(\\d{4}|)$'),
-                    message=b'Please type a date in the format MM,DD,YYYY '
-                            b'(individual entries may be blank)',
-                    code=b'invalid')],
+                    re.compile('^(\\d{1,2}|),(\\d{1,2}|),(\\d{4}|)$'),
+                    message='Please type a date in the format MM,DD,YYYY '
+                            '(individual entries may be blank)',
+                    code='invalid')],
                 max_length=10,
                 blank=True,
-                help_text=b'Date in format: MM,DD,YYYY',
+                help_text='Date in format: MM,DD,YYYY',
                 null=True,
-                verbose_name=b'Year departed Africa'),
+                verbose_name='Year departed Africa'),
         ),
         migrations.AlterField(
             model_name='voyagedates',
             name='imp_voyage_began',
             field=models.CharField(
                 validators=[django.core.validators.RegexValidator(
-                    re.compile(b'^(\\d{1,2}|),(\\d{1,2}|),(\\d{4}|)$'),
-                    message=b'Please type a date in the format MM,DD,YYYY '
-                            b'(individual entries may be blank)',
-                    code=b'invalid')],
+                    re.compile('^(\\d{1,2}|),(\\d{1,2}|),(\\d{4}|)$'),
+                    message='Please type a date in the format MM,DD,YYYY '
+                            '(individual entries may be blank)',
+                    code='invalid')],
                 max_length=10,
                 blank=True,
-                help_text=b'Date in format: MM,DD,YYYY',
+                help_text='Date in format: MM,DD,YYYY',
                 null=True,
-                verbose_name=b'Year voyage began'),
+                verbose_name='Year voyage began'),
         ),
         migrations.AlterField(
             model_name='voyagedates',
             name='slave_purchase_began',
             field=models.CharField(
                 validators=[django.core.validators.RegexValidator(
-                    re.compile(b'^(\\d{1,2}|),(\\d{1,2}|),(\\d{4}|)$'),
-                    message=b'Please type a date in the format MM,DD,YYYY '
-                            b'(individual entries may be blank)',
-                    code=b'invalid')],
+                    re.compile('^(\\d{1,2}|),(\\d{1,2}|),(\\d{4}|)$'),
+                    message='Please type a date in the format MM,DD,YYYY '
+                            '(individual entries may be blank)',
+                    code='invalid')],
                 max_length=10,
                 blank=True,
-                help_text=b'Date in format: MM,DD,YYYY',
+                help_text='Date in format: MM,DD,YYYY',
                 null=True,
-                verbose_name=b'Date that slave purchase began (D1SLATRB,A,C)'
+                verbose_name='Date that slave purchase began (D1SLATRB,A,C)'
             ),
         ),
         migrations.AlterField(
@@ -150,16 +150,16 @@ class Migration(migrations.Migration):
             field=models.CharField(
                 validators=[
                     django.core.validators.RegexValidator(
-                        re.compile(b'^(\\d{1,2}|),(\\d{1,2}|),(\\d{4}|)$'),
-                        message=b'Please type a date in the format MM,DD,YYYY '
-                                b'(individual entries may be blank)',
-                        code=b'invalid')],
+                        re.compile('^(\\d{1,2}|),(\\d{1,2}|),(\\d{4}|)$'),
+                        message='Please type a date in the format MM,DD,YYYY '
+                                '(individual entries may be blank)',
+                        code='invalid')],
                 max_length=10,
                 blank=True,
-                help_text=b'Date in format: MM,DD,YYYY',
+                help_text='Date in format: MM,DD,YYYY',
                 null=True,
-                verbose_name=b'Date of third disembarkation of slaves '
-                             b'(DATARR40,39,41)'),
+                verbose_name='Date of third disembarkation of slaves '
+                             '(DATARR40,39,41)'),
         ),
         migrations.AlterField(
             model_name='voyagedates',
@@ -167,16 +167,16 @@ class Migration(migrations.Migration):
             field=models.CharField(
                 validators=[
                     django.core.validators.RegexValidator(
-                        re.compile(b'^(\\d{1,2}|),(\\d{1,2}|),(\\d{4}|)$'),
-                        message=b'Please type a date in the format MM,DD,YYYY '
-                                b'(individual entries may be blank)',
-                        code=b'invalid')],
+                        re.compile('^(\\d{1,2}|),(\\d{1,2}|),(\\d{4}|)$'),
+                        message='Please type a date in the format MM,DD,YYYY '
+                                '(individual entries may be blank)',
+                        code='invalid')],
                 max_length=10,
                 blank=True,
-                help_text=b'Date in format: MM,DD,YYYY',
+                help_text='Date in format: MM,DD,YYYY',
                 null=True,
-                verbose_name=b'Date that vessel left last slaving port '
-                             b'(DLSLATRB,A,C)'),
+                verbose_name='Date that vessel left last slaving port '
+                             '(DLSLATRB,A,C)'),
         ),
         migrations.AlterField(
             model_name='voyagedates',
@@ -184,15 +184,15 @@ class Migration(migrations.Migration):
             field=models.CharField(
                 validators=[
                     django.core.validators.RegexValidator(
-                        re.compile(b'^(\\d{1,2}|),(\\d{1,2}|),(\\d{4}|)$'),
-                        message=b'Please type a date in the format MM,DD,YYYY '
-                                b'(individual entries may be blank)',
-                        code=b'invalid')],
+                        re.compile('^(\\d{1,2}|),(\\d{1,2}|),(\\d{4}|)$'),
+                        message='Please type a date in the format MM,DD,YYYY '
+                                '(individual entries may be blank)',
+                        code='invalid')],
                 max_length=10,
                 blank=True,
-                help_text=b'Date in format: MM,DD,YYYY',
+                help_text='Date in format: MM,DD,YYYY',
                 null=True,
-                verbose_name=b'Date that voyage began (DATEDEPB,A,C)'),
+                verbose_name='Date that voyage began (DATEDEPB,A,C)'),
         ),
         migrations.AlterField(
             model_name='voyagedates',
@@ -200,15 +200,15 @@ class Migration(migrations.Migration):
             field=models.CharField(
                 validators=[
                     django.core.validators.RegexValidator(
-                        re.compile(b'^(\\d{1,2}|),(\\d{1,2}|),(\\d{4}|)$'),
-                        message=b'Please type a date in the format MM,DD,YYYY '
-                                b'(individual entries may be blank)',
-                        code=b'invalid')],
+                        re.compile('^(\\d{1,2}|),(\\d{1,2}|),(\\d{4}|)$'),
+                        message='Please type a date in the format MM,DD,YYYY '
+                                '(individual entries may be blank)',
+                        code='invalid')],
                 max_length=10,
                 blank=True,
-                help_text=b'Date in format: MM,DD,YYYY',
+                help_text='Date in format: MM,DD,YYYY',
                 null=True,
-                verbose_name=b'Date on which slave voyage completed '
-                             b'(DATARR44,43,45)'),
+                verbose_name='Date on which slave voyage completed '
+                             '(DATARR44,43,45)'),
         ),
     ]
