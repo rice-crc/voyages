@@ -49,6 +49,9 @@ class Image(models.Model):
         """
         return basename(self.file.name)
 
+    def __str__(self):
+        return self.__unicode__()
+
     def __unicode__(self):
         return str(self.id) + ", " + self.get_file_name()
 
@@ -71,6 +74,9 @@ class ImageCategory(models.Model):
         ordering = [
             'value',
         ]
+
+    def __str__(self):
+        return self.__unicode__()
 
     def __unicode__(self):
         return self.label
@@ -138,6 +144,9 @@ class Country(models.Model):
             'country_id',
         ]
 
+    def __str__(self):
+        return self.__unicode__()
+
     def __unicode__(self):
         return str(self.country_id)
 
@@ -169,6 +178,9 @@ class SexAge(models.Model):
         ordering = [
             'sex_age_id',
         ]
+
+    def __str__(self):
+        return self.__unicode__()
 
     def __unicode__(self):
         return self.name
@@ -241,6 +253,9 @@ class AfricanName(models.Model):
         ordering = [
             'slave_id',
         ]
+
+    def __str__(self):
+        return self.__unicode__()
 
     def __unicode__(self):
         return self.name
