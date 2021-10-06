@@ -125,6 +125,7 @@ def search_enslaved(request):
     _fields = [
         'enslaved_id', 'age', 'gender', 'height', 'ethnicity__name',
         'language_group__name', 'language_group__modern_country__name',
+        'register_country', 'sources_list',
         'voyage__id', 'voyage__voyage_ship__ship_name',
         'voyage__voyage_dates__first_dis_of_slaves',
         'voyage__voyage_itinerary__int_first_port_dis__place',
@@ -136,6 +137,9 @@ def search_enslaved(request):
         '_longitude',
         'voyage__voyage_itinerary__imp_principal_port_slave_dis__place'
     ] + _name_fields + _modern_name_fields
+    # TODO: decide how to fetch M2M fields (sources).
+    # e.g. when using values(), this is a workaround the weird Django
+    # result https://gist.github.com/pamelafox-coursera/3707015
     query = search.execute(_fields)
     output_type = data.get('output', 'resultsTable')
     # For now we only support outputing the results to DataTables.
