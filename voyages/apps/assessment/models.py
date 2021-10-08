@@ -22,6 +22,9 @@ class ExportArea(models.Model):
     def __lt__(self, other):
         return (self.name, self.order_num) < (other.name, other.order_num)
 
+    def __str__(self):
+        return self.__unicode__()
+
     def __unicode__(self):
         return self.name
 
@@ -39,6 +42,9 @@ class ExportRegion(models.Model):
     show_on_map = models.BooleanField()
     export_area = models.ForeignKey(ExportArea, on_delete=models.CASCADE)
 
+    def __str__(self):
+        return self.__unicode__()
+
     def __unicode__(self):
         return self.name
 
@@ -54,6 +60,9 @@ class ImportArea(models.Model):
     longitude = models.FloatField(null=True, blank=True)
     show_at_zoom = models.IntegerField()
     show_on_map = models.BooleanField()
+
+    def __str__(self):
+        return self.__unicode__()
 
     def __unicode__(self):
         return self.name
@@ -75,6 +84,9 @@ class ImportRegion(models.Model):
     show_on_map = models.BooleanField()
     import_area = models.ForeignKey(ImportArea, on_delete=models.CASCADE)
 
+    def __str__(self):
+        return self.__unicode__()
+
     def __unicode__(self):
         return self.name
 
@@ -82,6 +94,9 @@ class ImportRegion(models.Model):
 class Nation(models.Model):
     name = models.CharField(max_length=200, null=True, blank=True)
     order_num = models.IntegerField()
+
+    def __str__(self):
+        return self.__unicode__()
 
     def __unicode__(self):
         return self.name
@@ -100,6 +115,9 @@ class Estimate(models.Model):
         ImportRegion, null=True, blank=True, on_delete=models.CASCADE)
     embarked_slaves = models.FloatField(null=True, blank=True)
     disembarked_slaves = models.FloatField(null=True, blank=True)
+
+    def __str__(self):
+        return self.__unicode__()
 
     def __unicode__(self):
         return str(self.id)

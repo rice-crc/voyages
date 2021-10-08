@@ -24,8 +24,8 @@ class Migration(migrations.Migration):
             name='dataset',
             field=models.IntegerField(
                 default=0,
-                help_text=b'Which dataset the voyage belongs to '
-                          b'(e.g. Transatlantic, IntraAmerican)'
+                help_text='Which dataset the voyage belongs to '
+                          '(e.g. Transatlantic, IntraAmerican)'
             ),
         ),
         # Set dataset for intra American voyages.

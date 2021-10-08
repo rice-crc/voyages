@@ -3,7 +3,8 @@ documents/publication_logs
 build/
 dist/
 test-results/
-localsettings.py*
+localsettings*
+!localsettings-local.py.default
 *~
 documents/cache/*
 .idea
@@ -15,3 +16,4 @@ voyages/sitemedia/scss/**/*.map
 .DS_Store
 voyages/static
 data/
+tmp/

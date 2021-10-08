@@ -137,7 +137,7 @@ def get_voyage_by_id(request):
     # Check whether the voyage already has an open contribution.
     active_statuses = ContributionStatus.active_statuses
     regex = '(^' + str(voyage_id) + '|,' + str(voyage_id) + ')(,|$)'
-    is_blocked = any(
+    is_blocked = any([
         EditVoyageContribution.objects.filter(
             edited_voyage_id=voyage_id,
             status__in=active_statuses).count() > 0,
@@ -146,8 +146,8 @@ def get_voyage_by_id(request):
             status__in=active_statuses).count() > 0,
         DeleteVoyageContribution.objects.filter(
             deleted_voyages_ids__iregex=regex,
-            status__in=active_statuses).count()
-    )
+            status__in=active_statuses).count() > 0
+    ])
     summary['is_blocked'] = is_blocked
     return JsonResponse(summary)
 
@@ -168,7 +168,7 @@ def delete(request):
             'form': form,
             'voyage_selection': []
         })
-    form = ContributionVoyageSelectionForm(request.POST)
+    form = ContributionVoyageSelectionForm(data=request.POST)
     if not form.is_valid():
         ids = form.selected_voyages
         voyage_selection = [
@@ -238,40 +238,32 @@ def delete_review_render(request, contribution, readonly, mode):
 
 @login_required
 def edit(request):
-    if request.method != 'POST':
+    voyage_selection = []
+    if request.method == 'POST':
+        form = ContributionVoyageSelectionForm(data=request.POST, max_selection=1)
+        if form.is_valid():
+            ids = form.cleaned_data['ids']
+            print(ids)
+            with transaction.atomic():
+                interim_voyage = InterimVoyage()
+                interim_voyage.save()
+                contribution = EditVoyageContribution()
+                contribution.interim_voyage = interim_voyage
+                contribution.contributor = request.user
+                contribution.edited_voyage_id = ids[0]
+                contribution.status = ContributionStatus.pending
+                contribution.save()
+                init_interim_voyage(interim_voyage, contribution)
+            return HttpResponseRedirect(reverse(
+                'contribute:interim', kwargs={'contribution_type': 'edit', 'contribution_id': contribution.pk}
+            ))
+        else:
+            ids = form.selected_voyages
+            voyage_selection = [get_summary(v) for v in Voyage.both_objects.filter(voyage_id=ids[0])] \
+                if len(ids) != 0 else []
+    else:
         form = ContributionVoyageSelectionForm(max_selection=1)
-        return render(request, 'contribute/edit.html', {
-            'form': form,
-            'voyage_selection': []
-        })
-    form = ContributionVoyageSelectionForm(request.POST, max_selection=1)
-    if not form.is_valid():
-        ids = form.selected_voyages
-        voyage_selection = [
-            get_summary(v)
-            for v in Voyage.all_dataset_objects.filter(voyage_id=ids[0])
-        ] if len(ids) != 0 else []
-        return render(request, 'contribute/edit.html', {
-            'form': form,
-            'voyage_selection': voyage_selection
-        })
-    ids = form.cleaned_data['ids']
-    with transaction.atomic():
-        interim_voyage = InterimVoyage()
-        interim_voyage.save()
-        contribution = EditVoyageContribution()
-        contribution.interim_voyage = interim_voyage
-        contribution.contributor = request.user
-        contribution.edited_voyage_id = ids[0]
-        contribution.status = ContributionStatus.pending
-        contribution.save()
-        init_interim_voyage(interim_voyage, contribution)
-    return HttpResponseRedirect(
-        reverse('contribute:interim',
-                kwargs={
-                    'contribution_type': 'edit',
-                    'contribution_id': contribution.pk
-                }))
+    return render(request, 'contribute/edit.html', {'form': form, 'voyage_selection': voyage_selection})
 
 
 @login_required
@@ -282,7 +274,7 @@ def merge(request):
             'form': form,
             'voyage_selection': []
         })
-    form = ContributionVoyageSelectionForm(request.POST, min_selection=2)
+    form = ContributionVoyageSelectionForm(data=request.POST, min_selection=2)
     if not form.is_valid():
         ids = form.selected_voyages
         voyage_selection = [
@@ -1043,20 +1035,24 @@ def get_reviews_by_status(statuses, display_interim_data=False):
     ]
     interim_voyages_dict = {
         interim.pk:
-        (interim for interim in
+        interim for interim in
          InterimVoyage.objects.
          select_related('imputed_national_carrier').
          select_related('imputed_principal_place_'
                         'of_slave_purchase__region').
          select_related('imputed_principal_port_'
                         'of_slave_disembarkation__region').
-         filter(pk__in=interim_ids))
+         filter(pk__in=interim_ids)
     }
 
     def get_contribution_info(info):
         contrib = info['contribution']
         voyage_ids = contrib.get_related_voyage_ids()
-        voyages = [fetched_voyages_dict[id] for id in voyage_ids]
+        # A voyage might have been deleted (and thus the contribution
+        # points to a non-existent entry), so we make sure to
+        # safely get them from the fetched dict.
+        voyages = [v for v in [fetched_voyages_dict.get(id) for id in voyage_ids] if v is not None]
+        voyage_ids = [v.voyage_id for v in voyages]
         voyage_ship = [v.voyage_ship.ship_name for v in voyages]
         voyage_years = [
             VoyageDates.get_date_year(

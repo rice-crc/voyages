@@ -107,6 +107,8 @@ class ContributionVoyageSelectionForm(forms.Form):
     A class for contribution forms that select one or
     more voyage ids.
     """
+    
+    ids = forms.CharField(max_length=255, required=True)
 
     def __init__(self,
                  *args,
@@ -118,7 +120,6 @@ class ContributionVoyageSelectionForm(forms.Form):
         self.min_selection = min_selection
         self.max_selection = max_selection
         self.selected_voyages = []
-        self.ids = forms.CharField(max_length=255, required=True)
 
     def clean_ids(self):
         data = self.cleaned_data['ids']
