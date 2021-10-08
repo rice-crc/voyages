@@ -32,6 +32,7 @@ RUN apt-get update \
     libxml2-dev=2.9.4+dfsg1-6.1ubuntu1.4 \
     libxslt1-dev=1.1.29-5ubuntu0.2 \
     python3-dev=3.6.7-1~18.04 \
+    python3-pygit2=0.26.2-2 \
   && apt-get clean \
   && rm -rf \
     /tmp/* \
