@@ -17,7 +17,7 @@ class Migration(migrations.Migration):
                                   serialize=False,
                                   primary_key=True)),
                 ('hash',
-                 models.CharField(default=b'', max_length=255, db_index=True)),
+                 models.CharField(default='', max_length=255, db_index=True)),
                 ('query', models.TextField()),
             ],
         ),

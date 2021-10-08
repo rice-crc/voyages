@@ -26,7 +26,7 @@ class Migration(migrations.Migration):
             field=models.FloatField(
                 blank=True,
                 null=True,
-                verbose_name=b'Imputed mortality ratio (VYMRTRAT)'),
+                verbose_name='Imputed mortality ratio (VYMRTRAT)'),
         ),
         migrations.AlterField(
             model_name='voyageslavesnumbers',
@@ -34,7 +34,7 @@ class Migration(migrations.Migration):
             field=models.FloatField(
                 blank=True,
                 null=True,
-                verbose_name=b'Percentage boy on voyage (BOYRAT7)'),
+                verbose_name='Percentage boy on voyage (BOYRAT7)'),
         ),
         migrations.AlterField(
             model_name='voyageslavesnumbers',
@@ -42,7 +42,7 @@ class Migration(migrations.Migration):
             field=models.FloatField(
                 blank=True,
                 null=True,
-                verbose_name=b'Percentage children on voyage (CHILRAT7)'),
+                verbose_name='Percentage children on voyage (CHILRAT7)'),
         ),
         migrations.AlterField(
             model_name='voyageslavesnumbers',
@@ -50,7 +50,7 @@ class Migration(migrations.Migration):
             field=models.FloatField(
                 blank=True,
                 null=True,
-                verbose_name=b'Percentage girl on voyage (GIRLRAT7)'),
+                verbose_name='Percentage girl on voyage (GIRLRAT7)'),
         ),
         migrations.AlterField(
             model_name='voyageslavesnumbers',
@@ -58,7 +58,7 @@ class Migration(migrations.Migration):
             field=models.FloatField(
                 blank=True,
                 null=True,
-                verbose_name=b'Percentage male on voyage (MALRAT7)'),
+                verbose_name='Percentage male on voyage (MALRAT7)'),
         ),
         migrations.AlterField(
             model_name='voyageslavesnumbers',
@@ -66,7 +66,7 @@ class Migration(migrations.Migration):
             field=models.FloatField(
                 blank=True,
                 null=True,
-                verbose_name=b'Percentage men on voyage (MENRAT7)'),
+                verbose_name='Percentage men on voyage (MENRAT7)'),
         ),
         migrations.AlterField(
             model_name='voyageslavesnumbers',
@@ -74,7 +74,7 @@ class Migration(migrations.Migration):
             field=models.FloatField(
                 blank=True,
                 null=True,
-                verbose_name=b'Percentage women on voyage (WOMRAT7)'),
+                verbose_name='Percentage women on voyage (WOMRAT7)'),
         ),
         migrations.AlterField(
             model_name='voyagesources',

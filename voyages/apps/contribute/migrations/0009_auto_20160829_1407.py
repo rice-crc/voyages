@@ -14,6 +14,6 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='interimslavenumber',
             name='number',
-            field=models.FloatField(verbose_name=b'Number'),
+            field=models.FloatField(verbose_name='Number'),
         ),
     ]

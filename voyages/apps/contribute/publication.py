@@ -328,7 +328,7 @@ def get_contrib_default_query(model):
 
 
 def get_filtered_contributions(filter_args):
-    return [
+    all_types = [
         [{
             'type': name,
             'id': x.pk,
@@ -340,6 +340,7 @@ def get_filtered_contributions(filter_args):
             ('delete', DeleteVoyageContribution),
             ('new', NewVoyageContribution)]
     ]
+    return sum(all_types, [])
 
 
 def _fetch_active_reviews_by_status(statuses):

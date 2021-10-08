@@ -29,6 +29,9 @@ class BroadRegion(models.Model):
     value = models.IntegerField("Numeric code", unique=True)
     show_on_map = models.BooleanField(default=True)
 
+    def __str__(self):
+        return self.__unicode__()
+
     def __unicode__(self):
         return self.broad_region
 
@@ -66,6 +69,9 @@ class Region(models.Model):
         verbose_name_plural = "Regions"
         ordering = ['value']
 
+    def __str__(self):
+        return self.__unicode__()
+
     def __unicode__(self):
         return self.region
 
@@ -97,6 +103,9 @@ class Place(models.Model):
         verbose_name_plural = "Places (Ports or Locations)"
         ordering = ['value']
 
+    def __str__(self):
+        return self.__unicode__()
+
     def __unicode__(self):
         return self.place
 
@@ -112,6 +121,9 @@ class VoyageGroupings(models.Model):
     class Meta:
         verbose_name = "Grouping for estimating imputed slaves"
         verbose_name_plural = "Groupings for estimating imputed slaves"
+
+    def __str__(self):
+        return self.__unicode__()
 
     def __unicode__(self):
         return self.label
@@ -130,6 +142,9 @@ class Nationality(models.Model):
         verbose_name_plural = "Nationalities"
         ordering = ['value']
 
+    def __str__(self):
+        return self.__unicode__()
+
     def __unicode__(self):
         return self.label
 
@@ -146,6 +161,9 @@ class TonType(models.Model):
         verbose_name_plural = "Types of tons"
         ordering = ['value']
 
+    def __str__(self):
+        return self.__unicode__()
+
     def __unicode__(self):
         return self.label
 
@@ -161,6 +179,9 @@ class RigOfVessel(models.Model):
         verbose_name = "Rig of vessel"
         verbose_name_plural = "Rigs of vessel"
         ordering = ['value']
+
+    def __str__(self):
+        return self.__unicode__()
 
     def __unicode__(self):
         return self.label
@@ -235,7 +256,7 @@ class VoyageShip(models.Model):
                                             blank=True,
                                             on_delete=models.CASCADE)
     tonnage_mod = models.DecimalField(
-        "Tonnage standardized on British"
+        "Tonnage standardized on British "
         "measured tons, 1773-1870",
         max_digits=8,
         decimal_places=1,
@@ -247,6 +268,9 @@ class VoyageShip(models.Model):
                                blank=True,
                                related_name="voyage_name_ship",
                                on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.__unicode__()
 
     def __unicode__(self):
         return self.ship_name if self.ship_name is not None else "None"
@@ -262,6 +286,9 @@ class VoyageShipOwner(models.Model):
     Represents first_owner, second_owner, ...
     """
     name = models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.__unicode__()
 
     def __unicode__(self):
         return self.name
@@ -279,6 +306,9 @@ class VoyageShipOwnerConnection(models.Model):
                                on_delete=models.CASCADE)
     owner_order = models.IntegerField()
 
+    def __str__(self):
+        return self.__unicode__()
+
     def __unicode__(self):
         return "Ship owner:"
 
@@ -290,6 +320,9 @@ class ParticularOutcome(models.Model):
     """
     label = models.CharField("Outcome label", max_length=200)
     value = models.IntegerField("Code of outcome")
+
+    def __str__(self):
+        return self.__unicode__()
 
     def __unicode__(self):
         return self.label
@@ -307,6 +340,9 @@ class SlavesOutcome(models.Model):
     label = models.CharField("Outcome label", max_length=200)
     value = models.IntegerField("Code of outcome")
 
+    def __str__(self):
+        return self.__unicode__()
+
     def __unicode__(self):
         return self.label
 
@@ -320,6 +356,9 @@ class VesselCapturedOutcome(models.Model):
     """
     label = models.CharField("Outcome label", max_length=200)
     value = models.IntegerField("Code of outcome")
+
+    def __str__(self):
+        return self.__unicode__()
 
     def __unicode__(self):
         return self.label
@@ -335,6 +374,9 @@ class OwnerOutcome(models.Model):
     label = models.CharField("Outcome label", max_length=200)
     value = models.IntegerField("Code of outcome")
 
+    def __str__(self):
+        return self.__unicode__()
+
     def __unicode__(self):
         return self.label
 
@@ -348,6 +390,9 @@ class Resistance(models.Model):
     """
     label = models.CharField("Resistance label", max_length=255)
     value = models.IntegerField("Code of resistance")
+
+    def __str__(self):
+        return self.__unicode__()
 
     def __unicode__(self):
         return self.label
@@ -396,6 +441,9 @@ class VoyageOutcome(models.Model):
                                blank=True,
                                related_name="voyage_name_outcome",
                                on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.__unicode__()
 
     def __unicode__(self):
         # TODO: We may want to change this.
@@ -902,6 +950,9 @@ class VoyageCaptain(models.Model):
     """
     name = models.CharField("Captain's name", max_length=255)
 
+    def __str__(self):
+        return self.__unicode__()
+
     def __unicode__(self):
         return self.name
 
@@ -924,6 +975,9 @@ class VoyageCaptainConnection(models.Model):
     class Meta:
         verbose_name = 'Voyage captain information'
         verbose_name_plural = 'Voyage captain information'
+
+    def __str__(self):
+        return self.__unicode__()
 
     def __unicode__(self):
         return "Captain: %d %s" % (self.captain_order, str(self.captain))
@@ -1482,7 +1536,7 @@ class VoyageSlavesNumbers(models.Model):
         null=True, blank=True)
 
     total_slaves_embarked_age_gender_identified = models.IntegerField(
-        "Total slaves embarked wi th age and gender identified (SLAVMAX1)",
+        "Total slaves embarked with age and gender identified (SLAVMAX1)",
         null=True,
         blank=True)
     total_slaves_by_age_gender_identified_among_landed = models.IntegerField(
@@ -1608,6 +1662,9 @@ class VoyageSourcesType(models.Model):
         verbose_name_plural = "Sources types"
         ordering = ['group_id']
 
+    def __str__(self):
+        return self.__unicode__()
+
     def __unicode__(self):
         return self.group_name
 
@@ -1644,6 +1701,9 @@ class VoyageSources(models.Model):
         verbose_name = 'Source'
         verbose_name_plural = "Sources"
         ordering = ['short_ref', 'full_ref']
+
+    def __str__(self):
+        return self.__unicode__()
 
     def __unicode__(self):
         return self.full_ref
@@ -1791,6 +1851,9 @@ class Voyage(models.Model):
         ]
         verbose_name = 'Voyage'
         verbose_name_plural = "Voyages"
+
+    def __str__(self):
+        return self.__unicode__()
 
     def __unicode__(self):
         return "Voyage #%s" % str(self.voyage_id)

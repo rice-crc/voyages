@@ -9,11 +9,12 @@ from functools import reduce
 from django.contrib.auth.models import User
 from django.db import models
 from django.db.models import (Case, CharField, F, Func, IntegerField, Q, Value,
-                              When)
+                              When, Prefetch, Count)
 from django.db.models.functions import Coalesce, Length, Substr
 import Levenshtein_search
 
 from voyages.apps.voyage.models import Place, Voyage, VoyageSources
+from voyages.apps.common.validators import date_csv_field_validator
 
 # Levenshtein-distance based search with ranked results.
 # https://en.wikipedia.org/wiki/Levenshtein_distance
@@ -276,6 +277,10 @@ class AltEthnicityName(NamedModelAbstractBase):
 
 # TODO: this model will replace resources.AfricanName
 
+class EnslavedDataset:
+    AFRICAN_ORIGINS = 0
+    OCEANS_OF_KINFOLK = 1
+
 
 class Enslaved(models.Model):
     """
@@ -287,23 +292,19 @@ class Enslaved(models.Model):
     name_first = models.CharField(max_length=25, null=True, blank=True)
     name_second = models.CharField(max_length=25, null=True, blank=True)
     name_third = models.CharField(max_length=25, null=True, blank=True)
-
-    modern_name_first = models.CharField(max_length=25, null=True, blank=True)
-    modern_name_second = models.CharField(max_length=25, null=True, blank=True)
-    modern_name_third = models.CharField(max_length=25, null=True, blank=True)
-
+    # For African Origins dataset modern_name is the current spelling
+    # of the African Name. For Oceans of Kinfolk, this field is used
+    # to store the Western Name of the enslaved.
+    modern_name = models.CharField(max_length=25, null=True, blank=True)
+    # Certainty is used for African Origins only.
     editor_modern_names_certainty = models.CharField(max_length=255,
                                                      null=True,
                                                      blank=True)
-
     # Personal data
     age = models.IntegerField(null=True)
-    # For some records, the exact age may be unknown and only
-    # an adult/child status is determined.
-    is_adult = models.NullBooleanField(null=True)
     gender = models.IntegerField(null=True)
     height = models.FloatField(null=True, verbose_name="Height in inches")
-
+    skin_color = models.IntegerField(null=True)
     # The ethnicity, language and country could be null.
     # The possibility of including 'Unknown' values in the
     # reference tables and using them instead of null was
@@ -314,11 +315,19 @@ class Enslaved(models.Model):
                                        on_delete=models.CASCADE)
     register_country = models.ForeignKey(RegisterCountry, null=True,
                                          on_delete=models.CASCADE)
-
+    # For Kinfolk, this is the Last known location field.
     post_disembark_location = models.ForeignKey(Place, null=True,
                                                 on_delete=models.CASCADE)
-
+    last_known_date = models.CharField(
+        max_length=10,
+        validators=[date_csv_field_validator],
+        blank=True,
+        null=True,
+        help_text="Date in format: MM,DD,YYYY")
+    captive_status = models.IntegerField(null=False, default=1)
     voyage = models.ForeignKey(Voyage, null=False, on_delete=models.CASCADE)
+    dataset = models.IntegerField(null=False, default=0)
+    notes = models.CharField(null=True, max_length=8192)
     sources = models.ManyToManyField(VoyageSources,
                                      through='EnslavedSourceConnection',
                                      related_name='+')
@@ -327,7 +336,7 @@ class Enslaved(models.Model):
 class EnslavedSourceConnection(models.Model):
     enslaved = models.ForeignKey(Enslaved,
                                  on_delete=models.CASCADE,
-                                 related_name='sources_conn')
+                                 related_name='sources')
     # Sources are shared with Voyages.
     source = models.ForeignKey(VoyageSources,
                                on_delete=models.CASCADE,
@@ -382,9 +391,9 @@ _special_empty_string_fields = {
 }
 
 _name_fields = ['documented_name', 'name_first', 'name_second', 'name_third']
-_modern_name_fields = [
-    'modern_name_first', 'modern_name_second', 'modern_name_third'
-]
+# Note: we started with three modern name fields, but it
+# was decided (2021-10-05) to drop all but one.
+_modern_name_fields = ['modern_name']
 
 
 class EnslavedSearch:
@@ -393,9 +402,10 @@ class EnslavedSearch:
     """
 
     def __init__(self,
+                 enslaved_dataset=None,
                  searched_name=None,
                  exact_name_search=False,
-                 age_gender=None,
+                 gender=None,
                  age_range=None,
                  height_range=None,
                  year_range=None,
@@ -409,20 +419,20 @@ class EnslavedSearch:
                  enslaved_id=None,
                  source=None,
                  order_by=None,
-                 dataset=None):
+                 voyage_dataset=None):
         """
         Search the Enslaved database. If a parameter is set to None, it will
         not be included in the search.
+        @param: enslaved_dataset The enslaved dataset to be searched
+                (either None to search all or an integer code).
         @param: searched_name A name string to be searched
         @param: exact_name_search Boolean indicating whether the search is
                 exact or fuzzy
-        @param: age_gender A list of pairs (bool is_adult, male = 1/female = 2)
-                with all combinations filtered.
+        @param: gender The gender ('male' or 'female').
         @param: age_range A pair (a, b) where a is the min and b is maximum age
-        @param: dataset A list of datasets
+        @param: voyage_dataset A list of voyage datasets that restrict the search.
         @param: height_range A pair (a, b) where a is the min and b is maximum
                 height
-        @param: is_adult Whether the search is for adults or children only
         @param: year_range A pair (a, b) where a is the min voyage year and b
                 the max
         @param: embarkation_ports A list of port ids where the enslaved
@@ -443,9 +453,10 @@ class EnslavedSearch:
                 Note that if the search is fuzzy, then the fallback value of
                 order_by is the ranking of the fuzzy search.
         """
+        self.enslaved_dataset = enslaved_dataset
         self.searched_name = searched_name
         self.exact_name_search = exact_name_search
-        self.age_gender = age_gender
+        self.gender = gender
         self.age_range = age_range
         self.height_range = height_range
         self.year_range = year_range
@@ -459,7 +470,7 @@ class EnslavedSearch:
         self.enslaved_id = enslaved_id
         self.source = source
         self.order_by = order_by
-        self.dataset = dataset
+        self.voyage_dataset = voyage_dataset
 
     def get_order_for_field(self, field):
         if isinstance(self.order_by, list):
@@ -474,6 +485,10 @@ class EnslavedSearch:
         representing an Enslaved record.
         @param: fields A list of fields that are fetched.
         """
+        sources_prefetch = Prefetch('sources',
+            queryset=EnslavedSourceConnection.objects.prefetch_related(
+                'source').order_by('source_order'),
+            to_attr='ordered_sources_list'),
         q = Enslaved.objects \
             .select_related('ethnicity') \
             .select_related('language_group') \
@@ -486,6 +501,7 @@ class EnslavedSearch:
             .select_related('voyage__voyage_itinerary_'
                             '_imp_principal_port_slave_dis') \
             .select_related('register_country') \
+            .prefetch_related(*sources_prefetch) \
             .all()
         ranking = None
         is_fuzzy = False
@@ -503,26 +519,10 @@ class EnslavedSearch:
                 ranking = {x[1]: x[0] for x in enumerate(fuzzy_ids)}
                 q = q.filter(pk__in=fuzzy_ids)
                 is_fuzzy = True
-        if self.age_gender:
-
-            def get_ag_query(x):
-                if x == 'male':
-                    return Q(gender=1)
-                if x == 'female':
-                    return Q(gender=2)
-                if x == 'man':
-                    return Q(is_adult=True, gender=1)
-                if x == 'woman':
-                    return Q(is_adult=True, gender=2)
-                if x == 'boy':
-                    return Q(is_adult=False, gender=1)
-                if x == 'girl':
-                    return Q(is_adult=False, gender=2)
-                raise Exception('Invalid AgeGender value')
-
-            conditions = [get_ag_query(x) for x in self.age_gender]
-            q = q.filter(reduce(operator.or_, conditions))
-        if self.dataset:
+        if self.gender:
+            gender_val = 1 if self.gender == 'male' else 2
+            q = q.filter(gender=gender_val)
+        if self.voyage_dataset:
 
             def get_dataset_query(x):
                 if x == 'trans':
@@ -531,10 +531,12 @@ class EnslavedSearch:
                     return Q(voyage__dataset=1)
                 if x == 'african':
                     return Q(voyage__dataset=2)
-                raise Exception('Invalid Dataset value')
+                raise Exception('Invalid Voyage Dataset value')
 
-            conditions = [get_dataset_query(x) for x in self.dataset]
+            conditions = [get_dataset_query(x) for x in self.voyage_dataset]
             q = q.filter(reduce(operator.or_, conditions))
+        if self.enslaved_dataset:
+            q = q.filter(dataset=self.enslaved_dataset)
         if self.age_range:
             q = q.filter(age__range=self.age_range)
         if self.height_range:
@@ -668,7 +670,16 @@ class EnslavedSearch:
                     order_field = order_field.asc(nulls_last=nulls_last)
                 orm_orderby.append(order_field)
             q = q.order_by(*orm_orderby)
+
+        # We introduce a dummy to force the ORM to produce a GROUP BY clause on
+        # the enslaved_id field. This is because newer versions of MySQL do not
+        # allow (in the default config) GROUP_CONCAT to be used without an explicit
+        # group by clause.
+        q = q.annotate(dummy=Count(F('enslaved_id')))
+        # NOTE: this is MySQL-only. If the DB is migrated, the function needs to be updated.
+        q = q.annotate(sources_list=Func(F("sources__full_ref"), function='GROUP_CONCAT'))
         q = q.values(*fields)
+        print(q.query)
         if is_fuzzy:
             # Convert the QuerySet to a concrete list and include the ranking
             # as a member of each object in that list.
@@ -680,3 +691,39 @@ class EnslavedSearch:
                            key=lambda x: x['ranking'],
                            reverse=(order_by_ranking == 'desc'))
         return q
+
+class EnslavementRelation(models.Model):
+    """
+    Represents a relation involving enslavers and enslaved individuals.
+    """
+    
+    id = models.IntegerField(primary_key=True)
+    relation_type = models.IntegerField()
+    place = models.ForeignKey(Place, null=True, on_delete=models.SET_NULL)
+    date = models.CharField(max_length=12, null=True,
+        help_text="Date in MM,DD,YYYY format with optional fields.")
+    amount = models.DecimalField(null=True, decimal_places=2, max_digits=6)
+    voyage = models.ForeignKey(Voyage, related_name="+",
+                               null=True, on_delete=models.CASCADE)
+    source = models.ForeignKey(VoyageSources, related_name="+",
+                               null=True, on_delete=models.CASCADE)
+    text_ref = models.CharField(max_length=255, null=False, blank=True, help_text="Source text reference")
+                               
+class EnslavedInRelation(models.Model):
+    """
+    Associates an enslaved in a slave relation.
+    """
+
+    id = models.IntegerField(primary_key=True)
+    transaction = models.ForeignKey(EnslavementRelation, null=False, on_delete=models.CASCADE)
+    enslaved = models.ForeignKey(Enslaved, null=False, on_delete=models.CASCADE)
+
+class EnslaverInRelation(models.Model):
+    """
+    Associates an enslaver in a slave relation.
+    """
+
+    id = models.IntegerField(primary_key=True)
+    transaction = models.ForeignKey(EnslavementRelation, null=False, on_delete=models.CASCADE)
+    enslaver_alias = models.ForeignKey(EnslaverAlias, null=False, on_delete=models.CASCADE)
+    role = models.IntegerField(null=False, help_text="The role of the enslaver in this relation")
