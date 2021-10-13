@@ -18,9 +18,9 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 from past.utils import old_div
 
-from .models import (AltEthnicityName, AltLanguageGroupName, Enslaved,
+from .models import (AltLanguageGroupName, Enslaved,
                      EnslavedContribution, EnslavedContributionLanguageEntry,
-                     EnslavedContributionNameEntry, EnslavedSearch, Ethnicity,
+                     EnslavedContributionNameEntry, EnslavedSearch,
                      LanguageGroup, ModernCountry, NameSearchCache,
                      _modern_name_fields, _name_fields)
 
@@ -81,17 +81,6 @@ def get_modern_countries(_):
 
 @csrf_exempt
 @cache_page(3600)
-def get_ethnicities(_):
-
-    def parent_map(e):
-        return {'name': e.name, 'language_group_id': e.language_group_id}
-
-    models = AltEthnicityName.objects.prefetch_related('ethnicity')
-    return JsonResponse(_get_alt_named(models, 'ethnicity', parent_map))
-
-
-@csrf_exempt
-@cache_page(3600)
 def get_language_groups(_):
 
     def parent_map(lg):
@@ -123,7 +112,7 @@ def search_enslaved(request):
     data = json.loads(request.body)
     search = EnslavedSearch(**data['search_query'])
     _fields = [
-        'enslaved_id', 'age', 'gender', 'height', 'ethnicity__name',
+        'enslaved_id', 'age', 'gender', 'height',
         'language_group__name', 'language_group__modern_country__name',
         'register_country', 'sources_list',
         'voyage__id', 'voyage__voyage_ship__ship_name',
@@ -229,14 +218,11 @@ def enslaved_contribution(request):
             lang_entry = EnslavedContributionLanguageEntry()
             lang_entry.contribution = contrib
             lang_entry.order = i + 1
-            ethnicity_id = lang.get('ethnicity_id', None)
             lang_group_id = lang.get('lang_group_id', None)
-            if ethnicity_id is None and lang_group_id is None:
+            if lang_group_id is None:
                 transaction.rollback()
                 return HttpResponseBadRequest(
                     'Invalid language entry in contribution')
-            lang_entry.ethnicity = Ethnicity.objects.get(
-                pk=ethnicity_id) if ethnicity_id else None
             lang_entry.language_group = LanguageGroup.objects.get(
                 pk=lang_group_id) if lang_group_id else None
             lang_entry.notes = lang.get('notes', '')
