@@ -288,13 +288,13 @@ class Enslaved(models.Model):
     """
     enslaved_id = models.IntegerField(primary_key=True)
 
+    # For African Origins dataset documented_name is an African Name.
+    # For Oceans of Kinfolk, this field is used to store the Western
+    # Name of the enslaved.
     documented_name = models.CharField(max_length=25, blank=True)
     name_first = models.CharField(max_length=25, null=True, blank=True)
     name_second = models.CharField(max_length=25, null=True, blank=True)
     name_third = models.CharField(max_length=25, null=True, blank=True)
-    # For African Origins dataset modern_name is the current spelling
-    # of the African Name. For Oceans of Kinfolk, this field is used
-    # to store the Western Name of the enslaved.
     modern_name = models.CharField(max_length=25, null=True, blank=True)
     # Certainty is used for African Origins only.
     editor_modern_names_certainty = models.CharField(max_length=255,
@@ -303,12 +303,9 @@ class Enslaved(models.Model):
     # Personal data
     age = models.IntegerField(null=True)
     gender = models.IntegerField(null=True)
-    height = models.FloatField(null=True, verbose_name="Height in inches")
+    height = models.DecimalField(null=True, decimal_places=2, max_digits=6, verbose_name="Height in inches")
     skin_color = models.IntegerField(null=True)
-    # The ethnicity, language and country could be null.
-    # The possibility of including 'Unknown' values in the
-    # reference tables and using them instead of null was
-    # proposed and discarded.
+    # TODO: check if we need to delete ethnicity (and its table...)
     ethnicity = models.ForeignKey(Ethnicity, null=True,
                                   on_delete=models.CASCADE)
     language_group = models.ForeignKey(LanguageGroup, null=True,
@@ -336,7 +333,7 @@ class Enslaved(models.Model):
 class EnslavedSourceConnection(models.Model):
     enslaved = models.ForeignKey(Enslaved,
                                  on_delete=models.CASCADE,
-                                 related_name='sources')
+                                 related_name='+')
     # Sources are shared with Voyages.
     source = models.ForeignKey(VoyageSources,
                                on_delete=models.CASCADE,
