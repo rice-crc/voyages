@@ -261,25 +261,18 @@ class AltLanguageGroupName(NamedModelAbstractBase):
                                        on_delete=models.CASCADE)
 
 
-class Ethnicity(NamedModelAbstractBase):
-    language_group = models.ForeignKey(LanguageGroup,
-                                       null=False,
-                                       related_name='ethnicities',
-                                       on_delete=models.CASCADE)
-
-
-class AltEthnicityName(NamedModelAbstractBase):
-    ethnicity = models.ForeignKey(Ethnicity,
-                                  null=False,
-                                  related_name='alt_names',
-                                  on_delete=models.CASCADE)
-
-
 # TODO: this model will replace resources.AfricanName
 
 class EnslavedDataset:
     AFRICAN_ORIGINS = 0
     OCEANS_OF_KINFOLK = 1
+
+
+class CaptiveFate(NamedModelAbstractBase):
+    pass
+
+class CaptiveStatus(NamedModelAbstractBase):
+    pass
 
 
 class Enslaved(models.Model):
@@ -305,9 +298,6 @@ class Enslaved(models.Model):
     gender = models.IntegerField(null=True)
     height = models.DecimalField(null=True, decimal_places=2, max_digits=6, verbose_name="Height in inches")
     skin_color = models.IntegerField(null=True)
-    # TODO: check if we need to delete ethnicity (and its table...)
-    ethnicity = models.ForeignKey(Ethnicity, null=True,
-                                  on_delete=models.CASCADE)
     language_group = models.ForeignKey(LanguageGroup, null=True,
                                        on_delete=models.CASCADE)
     register_country = models.ForeignKey(RegisterCountry, null=True,
@@ -321,7 +311,8 @@ class Enslaved(models.Model):
         blank=True,
         null=True,
         help_text="Date in format: MM,DD,YYYY")
-    captive_status = models.IntegerField(null=False, default=1)
+    captive_fate = models.ForeignKey(CaptiveFate, null=True, on_delete=models.SET_NULL)
+    captive_status = models.ForeignKey(CaptiveStatus, null=True, on_delete=models.SET_NULL)
     voyage = models.ForeignKey(Voyage, null=False, on_delete=models.CASCADE)
     dataset = models.IntegerField(null=False, default=0)
     notes = models.CharField(null=True, max_length=8192)
@@ -365,8 +356,6 @@ class EnslavedContributionNameEntry(models.Model):
 class EnslavedContributionLanguageEntry(models.Model):
     contribution = models.ForeignKey(EnslavedContribution,
                                      on_delete=models.CASCADE)
-    ethnicity = models.ForeignKey(Ethnicity, null=True,
-                                  on_delete=models.CASCADE)
     language_group = models.ForeignKey(LanguageGroup, null=True,
                                        on_delete=models.CASCADE)
     order = models.IntegerField()
@@ -487,7 +476,6 @@ class EnslavedSearch:
                 'source').order_by('source_order'),
             to_attr='ordered_sources_list'),
         q = Enslaved.objects \
-            .select_related('ethnicity') \
             .select_related('language_group') \
             .select_related('language_group__modern_country') \
             .select_related('voyage__voyage_dates') \
