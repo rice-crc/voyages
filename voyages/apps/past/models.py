@@ -261,8 +261,6 @@ class AltLanguageGroupName(NamedModelAbstractBase):
                                        on_delete=models.CASCADE)
 
 
-# TODO: this model will replace resources.AfricanName
-
 class EnslavedDataset:
     AFRICAN_ORIGINS = 0
     OCEANS_OF_KINFOLK = 1
@@ -275,6 +273,7 @@ class CaptiveStatus(NamedModelAbstractBase):
     pass
 
 
+# TODO: this model will replace resources.AfricanName
 class Enslaved(models.Model):
     """
     Enslaved person.
