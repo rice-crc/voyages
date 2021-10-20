@@ -14,6 +14,7 @@ RUN apt-get update -y \
     python3=3.6.7-1~18.04 \
     python3-pip=9.0.1-2.3~ubuntu1.18.04.5 \
     python3-future=0.15.2-4ubuntu2 \
+    python3-pygit2=0.26.2-2 \
   && apt-get clean \
   && rm -rf \
     /tmp/* \
