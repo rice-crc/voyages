@@ -76,7 +76,7 @@ class RowHelper:
         """
         return self.row.get(field_name, default)
 
-    def get_by_value(self, model_type, field_name, key_name = 'value', allow_null=True):
+    def get_by_value(self, model_type, field_name, key_name = 'value', allow_null=True, manager=None):
         """
         Gets a model object of the given type by
         using its (integer) key code.
@@ -86,8 +86,10 @@ class RowHelper:
         model_type_name = str(model_type)
         cached_cols = self.__class__.cached
         col = cached_cols.get(model_type_name)
+        if manager is None:
+            manager = model_type.objects
         if col is None:
-            col = {getattr(x, key_name): x for x in model_type.objects.all()}
+            col = {getattr(x, key_name): x for x in manager.all()}
             cached_cols[model_type_name] = col
         ival = self.cint(field_name, allow_null)
         if ival is None:
@@ -110,7 +112,8 @@ class BulkImportationHelper:
     def __init__(self, target_db):
         self.target_db = target_db
 
-    def read_to_dict(self, file):
+    @staticmethod
+    def read_to_dict(file):
         """
         Read the file and produce a DictReader where the keys are lower case.
         """
@@ -121,6 +124,30 @@ class BulkImportationHelper:
                 iterator)
 
         return unicodecsv.DictReader(lower_headers(file), delimiter=',', encoding='utf-8')
+
+    @staticmethod
+    def bulk_insert(model, lst, attr_key=None, manager=None):
+        """
+        Bulk insert model entries
+        """
+
+        print('Bulk inserting ' + str(model))
+        if manager is None:
+            manager = model.objects
+        manager.bulk_create(lst, batch_size=100)
+        return None if attr_key is None else \
+            {getattr(x, attr_key): x for x in manager.all()}
+
+    def delete_all(self, cursor, model):
+        """
+        Delete all records of the given model by running a raw query.
+        """
+
+        quote_char = self.get_quote_char()
+        sql = 'DELETE FROM {0}' + model._meta.db_table + '{0}'
+        sql = sql.format(quote_char)
+        print(sql)
+        cursor.execute(sql)
 
     def disable_fks(self, cursor):
         """
@@ -138,7 +165,13 @@ class BulkImportationHelper:
         else:
             self._raise_not_supported()
 
+    def get_quote_char(self):
+        return '`' if self.target_db == 'mysql' else '"'
+
     def re_enable_fks(self, cursor):
+        """
+        Re-enable ForeignKeys after the data importation.
+        """ 
         if self.target_db == 'mysql':
             # Re-enable foreign key checks.
             cursor.execute("SET FOREIGN_KEY_CHECKS=1;")
@@ -166,7 +199,7 @@ class ErrorReporting:
         """
         Add 1 to the error count.
         """
-        
+
         self.errors += 1
 
     def next_row(self):

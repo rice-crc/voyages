@@ -604,19 +604,13 @@ class Command(BaseCommand):
 
         print('Deleting old data...')
 
-        quote_char = '`' if target_db == 'mysql' else '"'
+        quote_char = helper.get_quote_char()
         with transaction.atomic():
             with connection.cursor() as cursor:
 
                 def clear_fk(fk_field):
                     sql = 'UPDATE {0}{1}{0} SET {0}{2}{0}=NULL'
                     sql = sql.format(quote_char, Voyage._meta.db_table, fk_field)
-                    print(sql)
-                    cursor.execute(sql)
-
-                def delete_all(model):
-                    sql = 'DELETE FROM {0}' + model._meta.db_table + '{0}'
-                    sql = sql.format(quote_char)
                     print(sql)
                     cursor.execute(sql)
 
@@ -628,21 +622,21 @@ class Command(BaseCommand):
                 clear_fk('voyage_dates_id')
                 clear_fk('voyage_crew_id')
                 clear_fk('voyage_slaves_numbers_id')
-                delete_all(LinkedVoyages)
-                delete_all(VoyageCaptainConnection)
-                delete_all(VoyageShipOwnerConnection)
-                delete_all(VoyageSourcesConnection)
-                delete_all(VoyageCaptain)
-                delete_all(VoyageCrew)
-                delete_all(VoyageDates)
-                delete_all(VoyageItinerary)
-                delete_all(VoyageOutcome)
-                delete_all(VoyageShip)
-                delete_all(VoyageShipOwner)
-                delete_all(VoyageSlavesNumbers)
-                delete_all(AfricanName)
-                delete_all(Image)
-                delete_all(Voyage)
+                helper.delete_all(cursor, LinkedVoyages)
+                helper.delete_all(cursor, VoyageCaptainConnection)
+                helper.delete_all(cursor, VoyageShipOwnerConnection)
+                helper.delete_all(cursor, VoyageSourcesConnection)
+                helper.delete_all(cursor, VoyageCaptain)
+                helper.delete_all(cursor, VoyageCrew)
+                helper.delete_all(cursor, VoyageDates)
+                helper.delete_all(cursor, VoyageItinerary)
+                helper.delete_all(cursor, VoyageOutcome)
+                helper.delete_all(cursor, VoyageShip)
+                helper.delete_all(cursor, VoyageShipOwner)
+                helper.delete_all(cursor, VoyageSlavesNumbers)
+                helper.delete_all(cursor, AfricanName)
+                helper.delete_all(cursor, Image)
+                helper.delete_all(cursor, Voyage)
 
                 print('Inserting new records...')
 
@@ -654,10 +648,10 @@ class Command(BaseCommand):
                     return None if attr_key is None else \
                         {getattr(x, attr_key): x for x in manager.all()}
 
-                voyages = bulk_insert(Voyage, list(voyages.values()), 'voyage_id',
+                voyages = helper.bulk_insert(Voyage, list(voyages.values()), 'voyage_id',
                                     Voyage.all_dataset_objects)
-                captains = bulk_insert(VoyageCaptain, list(captains.values()), 'name')
-                ship_owners = bulk_insert(VoyageShipOwner, list(ship_owners.values()),
+                captains = helper.bulk_insert(VoyageCaptain, list(captains.values()), 'name')
+                ship_owners = helper.bulk_insert(VoyageShipOwner, list(ship_owners.values()),
                                         'name')
                 # At this point we have primary keys for voyages.
 

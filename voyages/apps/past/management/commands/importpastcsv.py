@@ -6,6 +6,7 @@ from django.utils.encoding import smart_str
 
 from voyages.apps.common.utils import *
 from voyages.apps.past.models import Enslaved, EnslavedSourceConnection, EnslaverAlias, LanguageGroup, RegisterCountry
+from voyages.apps.voyage.models import Place, Voyage
 
 class Command(BaseCommand):    
     help = ('Imports CSV files with the full PAST data-set and converts the data '
@@ -51,6 +52,7 @@ class Command(BaseCommand):
                     enslaved.enslaved_id = rh.cint('uniqueid')
                     dataset = rh.cint('dataset')
                     enslaved.dataset = dataset
+                    enslaved.voyage = rh.get_by_value(Voyage, 'voyageid', 'voyage_id', False, manager=Voyage.all_dataset_objects)
                     # This importation script handles datasets
                     # slightly different since the columns have
                     # context-dependent meaning.
@@ -71,6 +73,7 @@ class Command(BaseCommand):
                     enslaved.height = rh.cfloat('height')
                     enslaved.skin_color = rh.cint('skincolor')
                     enslaved.notes = rh.get('notes')
+                    enslaved.post_disembark_location = rh.get_by_value(Place, 'lastknownlocation')
                     all_enslaved[enslaved.enslaved_id] = enslaved
                     order = 1
                     for key in get_multi_valued_column_suffix(18):
@@ -97,7 +100,24 @@ class Command(BaseCommand):
                         source_connections.append(source_connection)
                         order += 1
 
+        print('Constructed ' + str(len(all_enslaved)) + ' Enslaved from CSV.')
+
         if error_reporting.errors > 0:
             print(str(error_reporting.errors) + ' total errors reported!')
 
-        print('Constructed ' + str(len(all_enslaved)) + ' Enslaved from CSV.')
+        confirm = input(
+            "Are you sure you want to continue? "
+            "The existing data will be deleted! (yes/[no]): "
+        ).strip()
+        print('"' + confirm + '"')
+        if confirm != 'yes':
+            return
+
+        print('Deleting old data...')
+
+        with transaction.atomic():
+            with connection.cursor() as cursor:
+                helper.disable_fks(cursor)
+                helper.delete_all(cursor, Enslaved)
+                helper.bulk_insert(Enslaved, all_enslaved.values())
+                helper.re_enable_fks(cursor)
