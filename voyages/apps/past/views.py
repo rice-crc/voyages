@@ -195,6 +195,7 @@ def enslaved_contribution(request):
     ) else None
     contrib.is_multilingual = bool(data.get('is_multilingual', False))
     contrib.token = token
+    contrib.status = 0
     result = {}
     with transaction.atomic():
         contrib.save()
