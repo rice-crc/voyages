@@ -283,11 +283,11 @@ class Enslaved(models.Model):
     # For African Origins dataset documented_name is an African Name.
     # For Oceans of Kinfolk, this field is used to store the Western
     # Name of the enslaved.
-    documented_name = models.CharField(max_length=25, blank=True)
-    name_first = models.CharField(max_length=25, null=True, blank=True)
-    name_second = models.CharField(max_length=25, null=True, blank=True)
-    name_third = models.CharField(max_length=25, null=True, blank=True)
-    modern_name = models.CharField(max_length=25, null=True, blank=True)
+    documented_name = models.CharField(max_length=100, blank=True)
+    name_first = models.CharField(max_length=100, null=True, blank=True)
+    name_second = models.CharField(max_length=100, null=True, blank=True)
+    name_third = models.CharField(max_length=100, null=True, blank=True)
+    modern_name = models.CharField(max_length=100, null=True, blank=True)
     # Certainty is used for African Origins only.
     editor_modern_names_certainty = models.CharField(max_length=255,
                                                      null=True,
