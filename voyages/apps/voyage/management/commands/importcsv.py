@@ -466,8 +466,7 @@ class Command(BaseCommand):
             # voyage.voyage_slaves_numbers = numbers
             return nums
 
-        count_tast = 0
-        count_iam = 0
+        counts = {}
         voyage_links = []
         helper = BulkImportationHelper(target_db)
         print("Please ensure that all csv files are UTF8-BOM encoded")
@@ -494,15 +493,9 @@ class Command(BaseCommand):
                         in_cd_room = '1'
                     voyage.voyage_in_cd_rom = in_cd_room == '1'
                     voyage.voyage_groupings = rh.get_by_value(VoyageGroupings, 'xmimpflag')
-                    intra_american = rh.cint('intraamer') == 1
-                    # NOTE: if we implement other datasets, there should be a
-                    # field to specify which
-                    if intra_american:
-                        voyage.dataset = VoyageDataset.IntraAmerican
-                        count_iam += 1
-                    else:
-                        voyage.dataset = VoyageDataset.Transatlantic
-                        count_tast += 1
+                    voyage.dataset = rh.cint('dataset', False)
+                    intra_american = voyage.dataset == 1
+                    counts[voyage.dataset] = counts.get(voyage.dataset, 0) + 1
                     ships.append(row_to_ship(rh, voyage))
                     itineraries.append(row_to_itinerary(rh, voyage))
                     voyage_dates.append(row_to_dates(rh, voyage))
@@ -586,9 +579,9 @@ class Command(BaseCommand):
                             (voyage_id, rh.cint('voyageid2'),
                              LinkedVoyages.INTRA_AMERICAN_LINK_MODE))
 
-        print('Constructed ' + str(len(voyages)) + ' voyages from CSV'
-              '. ' + str(count_tast) + ' transatlantic '
-              'and ' + str(count_iam) + ' intra-American.')
+        print('Constructed ' + str(len(voyages)) + ' voyages from CSV')
+        for k, v in counts.items():
+            print('Dataset ' + str(k) + ': ' + str(v))
         if self.errors > 0:
             print(
                 str(self.errors) + ' errors occurred, '

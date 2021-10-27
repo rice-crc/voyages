@@ -42,7 +42,7 @@ class RowHelper:
         if (val is None or empty.match(val)) and not allow_null:
             self.error_reporting.add_error()
             return None
-        if val is None:
+        if val is None and allow_null:
             return None
         try:
             return int(round(float(val)))
@@ -60,7 +60,7 @@ class RowHelper:
         if (val is None or empty.match(val)) and not allow_null:
             self.error_reporting.add_error()
             return None
-        if val is None:
+        if val is None and allow_null:
             return None
         try:
             return float(val)
@@ -70,11 +70,14 @@ class RowHelper:
                 return None
             raise Exception("Invalid value for float: " + str(val))
 
-    def get(self, field_name, default=None):
+    def get(self, field_name, default=None, max_chars=None):
         """
         Get the raw value for the field in this row.
         """
-        return self.row.get(field_name, default)
+        val = self.row.get(field_name, default)
+        if max_chars and len(val) > max_chars:
+            self.error_reporting.report('Field ' + field_name + ' is too long (>' + str(max_chars) + ' chars)')
+        return val
 
     def get_by_value(self, model_type, field_name, key_name = 'value', allow_null=True, manager=None):
         """
@@ -96,11 +99,11 @@ class RowHelper:
             return None
         val = col.get(ival)
         if val is None:
-            self.error_reporting.report('Failed to locate '
-                '"' + model_type_name + '"'
-                ' with value: ' + str(ival) + ' for '
-                'field "' + field_name + '"',
-                field_name + str(ival))
+            msg = 'Failed to locate "' + model_type_name + '" with value: ' + \
+                str(ival) + ' for field "' + field_name + '"'
+            if not allow_null:
+                raise Exception(msg)
+            self.error_reporting.report(msg, field_name + str(ival))
         return val
 
 

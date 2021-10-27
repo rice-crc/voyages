@@ -14,6 +14,7 @@ class Command(BaseCommand):
 
     def add_arguments(self, parser):
         parser.add_argument('enslaved_csv_files', nargs='+')
+        parser.add_argument('--skip_invalid', dest='skip_invalid', default=False)
         parser.add_argument(
             '--db',
             dest='db',
@@ -28,6 +29,9 @@ class Command(BaseCommand):
     def handle(self, enslaved_csv_files, *args, **options):
         self.errors = 0
         target_db = options.get('db')
+        skip_invalid = options.get('skip_invalid', False)
+        if skip_invalid:
+            print('WARNING: skipping invalid may produce an inconsistent importation')
         error_reporting = ErrorReporting()
         if target_db not in ('mysql', 'pgsql'):
             error_reporting.report(
@@ -48,24 +52,33 @@ class Command(BaseCommand):
                 error_reporting.reset_row()
                 for r in reader:
                     rh = RowHelper(r, error_reporting)
+                    v = rh.get_by_value(Voyage, 'voyageid', 'voyage_id', True, manager=Voyage.all_dataset_objects)
+                    if v is None:
+                        if skip_invalid:
+                            # We need to skip this entry.
+                            continue
+                        abort_msg = 'Voyage id not found, aborting!'
+                        error_reporting.report(abort_msg)
+                        raise Exception(abort_msg)
                     enslaved = Enslaved()
+                    enslaved.voyage = v
                     enslaved.enslaved_id = rh.cint('uniqueid')
                     dataset = rh.cint('dataset')
                     enslaved.dataset = dataset
-                    enslaved.voyage = rh.get_by_value(Voyage, 'voyageid', 'voyage_id', False, manager=Voyage.all_dataset_objects)
                     # This importation script handles datasets
                     # slightly different since the columns have
                     # context-dependent meaning.
+                    NAME_MAX_CHARS = 100
                     if dataset == 0:
-                        enslaved.documented_name = rh.get('africanname')
-                        enslaved.name_first = rh.get('africanname2')
-                        enslaved.name_second = rh.get('africanname3')
-                        enslaved.modern_name = rh.get('modernafricanname')
+                        enslaved.documented_name = rh.get('africanname', max_chars=NAME_MAX_CHARS)
+                        enslaved.name_first = rh.get('africanname2', max_chars=NAME_MAX_CHARS)
+                        enslaved.name_second = rh.get('africanname3', max_chars=NAME_MAX_CHARS)
+                        enslaved.modern_name = rh.get('modernafricanname', max_chars=NAME_MAX_CHARS)
                         enslaved.editor_modern_names_certainty = rh.cint('certainty')
                         enslaved.language_group = rh.get_by_value(LanguageGroup, 'africanlanguagegroup', 'id')
                         enslaved.register_country = rh.get_by_value(RegisterCountry, 'africancountry', 'id')
                     elif dataset == 1:
-                        enslaved.documented_name = rh.get('westernname')
+                        enslaved.documented_name = rh.get('westernname', max_chars=NAME_MAX_CHARS)
                     else:
                         raise Exception('Unknown dataset ' + str(dataset))
                     enslaved.age = rh.cint('age')
@@ -119,5 +132,7 @@ class Command(BaseCommand):
             with connection.cursor() as cursor:
                 helper.disable_fks(cursor)
                 helper.delete_all(cursor, Enslaved)
+                helper.delete_all(cursor, EnslavedSourceConnection)
                 helper.bulk_insert(Enslaved, all_enslaved.values())
+                helper.bulk_insert(EnslavedSourceConnection, source_connections)
                 helper.re_enable_fks(cursor)
