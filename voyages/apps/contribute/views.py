@@ -1250,16 +1250,15 @@ def override_empty_fields_with_single_value(interim_voyage, review_request):
         if isinstance(f, Field) and f.get_internal_type() == 'ForeignKey'
     }
     single_values = {}
-    for k, v in list(chain(*existing_data.values())):
-        if v is None or v == '':
-            continue
-        if k.startswith('date') and v == ',,':
-            continue
-        k = foreign_keys.get(k, k)
-        if k in single_values and single_values[k] != v:
-            single_values[k] = None
-        else:
-            single_values[k] = v
+    for data in existing_data.values():
+        for k, v in data.items():
+            if v is None or v == '': continue
+            if k.startswith('date') and v == ',,': continue
+            k = foreign_keys.get(k, k)
+            if k in single_values and single_values[k] != v:
+                single_values[k] = None
+            else:
+                single_values[k] = v
     # Second pass, set values of interim_voyage.
     numbers = []
     for k, v in list(single_values.items()):
