@@ -164,8 +164,8 @@
                         '</td><td class="review_cell" data-id="' + key + '">' +
                         '<div class="dropdown"><button aria-expanded="false" class="btn dropdown-toggle admin-dropdown-btn" type="button" data-toggle="dropdown"></button><ul class="dropdown-menu"><li>' +
                         (row['review_request_id'] == 0
-                            ? '<a class="dropdown-item" href="#">{% trans "Assign" %}</a>'
-                            : '<a class="dropdown-item" href="#">{% trans "Archive request" %}</a>') + '</li>' +
+                            ? '<a class="dropdown-item reviewer_assign_btn" href="#">{% trans "Assign" %}</a>'
+                            : '<a class="dropdown-item review_archive_btn" href="#">{% trans "Archive request" %}</a>') + '</li>' +
                         (row['editor_contribution_id']
                             ? '<li><a class="dropdown-item" href="/contribute/editorial_review/' + row['review_request_id'] + '">{% trans "Editorial Review" %}</a></li>'
                             : '') + '</ul></div></td><td>' +

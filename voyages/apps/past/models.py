@@ -261,41 +261,33 @@ class AltLanguageGroupName(NamedModelAbstractBase):
                                        on_delete=models.CASCADE)
 
 
-class Ethnicity(NamedModelAbstractBase):
-    language_group = models.ForeignKey(LanguageGroup,
-                                       null=False,
-                                       related_name='ethnicities',
-                                       on_delete=models.CASCADE)
-
-
-class AltEthnicityName(NamedModelAbstractBase):
-    ethnicity = models.ForeignKey(Ethnicity,
-                                  null=False,
-                                  related_name='alt_names',
-                                  on_delete=models.CASCADE)
-
-
-# TODO: this model will replace resources.AfricanName
-
 class EnslavedDataset:
     AFRICAN_ORIGINS = 0
     OCEANS_OF_KINFOLK = 1
 
 
+class CaptiveFate(NamedModelAbstractBase):
+    pass
+
+class CaptiveStatus(NamedModelAbstractBase):
+    pass
+
+
+# TODO: this model will replace resources.AfricanName
 class Enslaved(models.Model):
     """
     Enslaved person.
     """
     enslaved_id = models.IntegerField(primary_key=True)
 
-    documented_name = models.CharField(max_length=25, blank=True)
-    name_first = models.CharField(max_length=25, null=True, blank=True)
-    name_second = models.CharField(max_length=25, null=True, blank=True)
-    name_third = models.CharField(max_length=25, null=True, blank=True)
-    # For African Origins dataset modern_name is the current spelling
-    # of the African Name. For Oceans of Kinfolk, this field is used
-    # to store the Western Name of the enslaved.
-    modern_name = models.CharField(max_length=25, null=True, blank=True)
+    # For African Origins dataset documented_name is an African Name.
+    # For Oceans of Kinfolk, this field is used to store the Western
+    # Name of the enslaved.
+    documented_name = models.CharField(max_length=100, blank=True)
+    name_first = models.CharField(max_length=100, null=True, blank=True)
+    name_second = models.CharField(max_length=100, null=True, blank=True)
+    name_third = models.CharField(max_length=100, null=True, blank=True)
+    modern_name = models.CharField(max_length=100, null=True, blank=True)
     # Certainty is used for African Origins only.
     editor_modern_names_certainty = models.CharField(max_length=255,
                                                      null=True,
@@ -303,14 +295,8 @@ class Enslaved(models.Model):
     # Personal data
     age = models.IntegerField(null=True)
     gender = models.IntegerField(null=True)
-    height = models.FloatField(null=True, verbose_name="Height in inches")
+    height = models.DecimalField(null=True, decimal_places=2, max_digits=6, verbose_name="Height in inches")
     skin_color = models.IntegerField(null=True)
-    # The ethnicity, language and country could be null.
-    # The possibility of including 'Unknown' values in the
-    # reference tables and using them instead of null was
-    # proposed and discarded.
-    ethnicity = models.ForeignKey(Ethnicity, null=True,
-                                  on_delete=models.CASCADE)
     language_group = models.ForeignKey(LanguageGroup, null=True,
                                        on_delete=models.CASCADE)
     register_country = models.ForeignKey(RegisterCountry, null=True,
@@ -324,7 +310,8 @@ class Enslaved(models.Model):
         blank=True,
         null=True,
         help_text="Date in format: MM,DD,YYYY")
-    captive_status = models.IntegerField(null=False, default=1)
+    captive_fate = models.ForeignKey(CaptiveFate, null=True, on_delete=models.SET_NULL)
+    captive_status = models.ForeignKey(CaptiveStatus, null=True, on_delete=models.SET_NULL)
     voyage = models.ForeignKey(Voyage, null=False, on_delete=models.CASCADE)
     dataset = models.IntegerField(null=False, default=0)
     notes = models.CharField(null=True, max_length=8192)
@@ -336,7 +323,7 @@ class Enslaved(models.Model):
 class EnslavedSourceConnection(models.Model):
     enslaved = models.ForeignKey(Enslaved,
                                  on_delete=models.CASCADE,
-                                 related_name='sources')
+                                 related_name='+')
     # Sources are shared with Voyages.
     source = models.ForeignKey(VoyageSources,
                                on_delete=models.CASCADE,
@@ -368,8 +355,6 @@ class EnslavedContributionNameEntry(models.Model):
 class EnslavedContributionLanguageEntry(models.Model):
     contribution = models.ForeignKey(EnslavedContribution,
                                      on_delete=models.CASCADE)
-    ethnicity = models.ForeignKey(Ethnicity, null=True,
-                                  on_delete=models.CASCADE)
     language_group = models.ForeignKey(LanguageGroup, null=True,
                                        on_delete=models.CASCADE)
     order = models.IntegerField()
@@ -490,7 +475,6 @@ class EnslavedSearch:
                 'source').order_by('source_order'),
             to_attr='ordered_sources_list'),
         q = Enslaved.objects \
-            .select_related('ethnicity') \
             .select_related('language_group') \
             .select_related('language_group__modern_country') \
             .select_related('voyage__voyage_dates') \
