@@ -75,6 +75,8 @@ class RowHelper:
         Get the raw value for the field in this row.
         """
         val = self.row.get(field_name, default)
+        if val:
+            val = val.strip()
         if max_chars and len(val) > max_chars:
             self.error_reporting.report('Field ' + field_name + ' is too long (>' + str(max_chars) + ' chars)')
         return val
