@@ -25,7 +25,7 @@ var searchBar = new Vue({
           id: "female",
           label: gettext("Female")
         }],
-        dataset: [{
+        voyage_dataset: [{
           id: "trans",
           label: gettext("Transatlantic")
         },{

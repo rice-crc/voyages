@@ -10,7 +10,7 @@ from django.contrib.auth.models import User
 from django.db import models
 from django.db.models import (Case, CharField, F, Func, IntegerField, Q, Value,
                               When, Prefetch, Count)
-from django.db.models.functions import Coalesce, Length, Substr
+from django.db.models.functions import Coalesce, Concat, Length, Substr
 import Levenshtein_search
 
 from voyages.apps.voyage.models import Place, Voyage, VoyageSources
@@ -224,21 +224,6 @@ class NamedModelAbstractBase(models.Model):
         abstract = True
 
 
-class ModernCountry(NamedModelAbstractBase):
-    longitude = models.DecimalField("Longitude of Country",
-                                    max_digits=10,
-                                    decimal_places=7,
-                                    null=False)
-    latitude = models.DecimalField("Latitude of Country",
-                                   max_digits=10,
-                                   decimal_places=7,
-                                   null=False)
-
-
-class RegisterCountry(NamedModelAbstractBase):
-    pass
-
-
 class LanguageGroup(NamedModelAbstractBase):
     longitude = models.DecimalField("Longitude of point",
                                     max_digits=10,
@@ -248,10 +233,22 @@ class LanguageGroup(NamedModelAbstractBase):
                                    max_digits=10,
                                    decimal_places=7,
                                    null=False)
-    modern_country = models.ForeignKey(ModernCountry,
-                                       null=False,
-                                       related_name='language_groups',
-                                       on_delete=models.CASCADE)
+
+
+class ModernCountry(NamedModelAbstractBase):
+    longitude = models.DecimalField("Longitude of Country",
+                                    max_digits=10,
+                                    decimal_places=7,
+                                    null=False)
+    latitude = models.DecimalField("Latitude of Country",
+                                   max_digits=10,
+                                   decimal_places=7,
+                                   null=False)
+    languages = models.ManyToManyField(LanguageGroup)
+
+
+class RegisterCountry(NamedModelAbstractBase):
+    pass
 
 
 class AltLanguageGroupName(NamedModelAbstractBase):
@@ -293,27 +290,30 @@ class Enslaved(models.Model):
                                                      null=True,
                                                      blank=True)
     # Personal data
-    age = models.IntegerField(null=True)
-    gender = models.IntegerField(null=True)
-    height = models.DecimalField(null=True, decimal_places=2, max_digits=6, verbose_name="Height in inches")
-    skin_color = models.IntegerField(null=True)
+    age = models.IntegerField(null=True, db_index=True)
+    gender = models.IntegerField(null=True, db_index=True)
+    height = models.DecimalField(null=True, decimal_places=2, max_digits=6, verbose_name="Height in inches", db_index=True)
+    skin_color = models.IntegerField(null=True, db_index=True)
     language_group = models.ForeignKey(LanguageGroup, null=True,
-                                       on_delete=models.CASCADE)
+                                       on_delete=models.CASCADE,
+                                       db_index=True)
     register_country = models.ForeignKey(RegisterCountry, null=True,
-                                         on_delete=models.CASCADE)
+                                         on_delete=models.CASCADE,
+                                        db_index=True)
     # For Kinfolk, this is the Last known location field.
     post_disembark_location = models.ForeignKey(Place, null=True,
-                                                on_delete=models.CASCADE)
+                                                on_delete=models.CASCADE,
+                                                db_index=True)
     last_known_date = models.CharField(
         max_length=10,
         validators=[date_csv_field_validator],
         blank=True,
         null=True,
         help_text="Date in format: MM,DD,YYYY")
-    captive_fate = models.ForeignKey(CaptiveFate, null=True, on_delete=models.SET_NULL)
-    captive_status = models.ForeignKey(CaptiveStatus, null=True, on_delete=models.SET_NULL)
-    voyage = models.ForeignKey(Voyage, null=False, on_delete=models.CASCADE)
-    dataset = models.IntegerField(null=False, default=0)
+    captive_fate = models.ForeignKey(CaptiveFate, null=True, on_delete=models.SET_NULL, db_index=True)
+    captive_status = models.ForeignKey(CaptiveStatus, null=True, on_delete=models.SET_NULL, db_index=True)
+    voyage = models.ForeignKey(Voyage, null=False, on_delete=models.CASCADE, db_index=True)
+    dataset = models.IntegerField(null=False, default=0, db_index=True)
     notes = models.CharField(null=True, max_length=8192)
     sources = models.ManyToManyField(VoyageSources,
                                      through='EnslavedSourceConnection',
@@ -323,7 +323,7 @@ class Enslaved(models.Model):
 class EnslavedSourceConnection(models.Model):
     enslaved = models.ForeignKey(Enslaved,
                                  on_delete=models.CASCADE,
-                                 related_name='+')
+                                 related_name='sources_conn')
     # Sources are shared with Voyages.
     source = models.ForeignKey(VoyageSources,
                                on_delete=models.CASCADE,
@@ -380,6 +380,9 @@ _name_fields = ['documented_name', 'name_first', 'name_second', 'name_third']
 # was decided (2021-10-05) to drop all but one.
 _modern_name_fields = ['modern_name']
 
+_SEP_TEXTREF = "#@@@#"
+_SEP_SOURCEREF = "@###@"
+
 
 class EnslavedSearch:
     """
@@ -398,7 +401,6 @@ class EnslavedSearch:
                  disembarkation_ports=None,
                  post_disembark_location=None,
                  language_groups=None,
-                 modern_country=None,
                  ship_name=None,
                  voyage_id=None,
                  enslaved_id=None,
@@ -427,7 +429,6 @@ class EnslavedSearch:
         @param: post_disembark_location A list of place ids where the enslaved
                 was located after disembarkation
         @param: language_groups A list of language groups ids for the enslaved
-        @param: modern_country A list of country ids
         @param: ship_name The ship name that the enslaved embarked
         @param: voyage_id A pair (a, b) where the a <= voyage_id <= b
         @param: enslaved_id A pair (a, b) where the a <= enslaved_id <= b
@@ -449,7 +450,6 @@ class EnslavedSearch:
         self.disembarkation_ports = disembarkation_ports
         self.post_disembark_location = post_disembark_location
         self.language_groups = language_groups
-        self.modern_country = modern_country
         self.ship_name = ship_name
         self.voyage_id = voyage_id
         self.enslaved_id = enslaved_id
@@ -470,13 +470,12 @@ class EnslavedSearch:
         representing an Enslaved record.
         @param: fields A list of fields that are fetched.
         """
-        sources_prefetch = Prefetch('sources',
+        sources_prefetch = Prefetch('sources_conn',
             queryset=EnslavedSourceConnection.objects.prefetch_related(
                 'source').order_by('source_order'),
-            to_attr='ordered_sources_list'),
+            to_attr='ordered_sources_list')
         q = Enslaved.objects \
             .select_related('language_group') \
-            .select_related('language_group__modern_country') \
             .select_related('voyage__voyage_dates') \
             .select_related('voyage__voyage_ship') \
             .select_related('voyage__voyage_itinerary__int_first_port_dis') \
@@ -485,8 +484,7 @@ class EnslavedSearch:
             .select_related('voyage__voyage_itinerary_'
                             '_imp_principal_port_slave_dis') \
             .select_related('register_country') \
-            .prefetch_related(*sources_prefetch) \
-            .all()
+            .prefetch_related(sources_prefetch)
         ranking = None
         is_fuzzy = False
         if self.searched_name and len(self.searched_name):
@@ -519,15 +517,12 @@ class EnslavedSearch:
 
             conditions = [get_dataset_query(x) for x in self.voyage_dataset]
             q = q.filter(reduce(operator.or_, conditions))
-        if self.enslaved_dataset:
+        if self.enslaved_dataset is not None:
             q = q.filter(dataset=self.enslaved_dataset)
         if self.age_range:
             q = q.filter(age__range=self.age_range)
         if self.height_range:
             q = q.filter(height__range=self.height_range)
-        if self.modern_country:
-            q = q.filter(
-                language_group__modern_country__pk__in=self.modern_country)
         if self.post_disembark_location:
             q = q.filter(
                 post_disembark_location__pk__in=self.post_disembark_location)
@@ -652,18 +647,28 @@ class EnslavedSearch:
                     order_field = order_field.desc(nulls_last=nulls_last)
                 else:
                     order_field = order_field.asc(nulls_last=nulls_last)
-                orm_orderby.append(order_field)
-            q = q.order_by(*orm_orderby)
+                if order_field:
+                    orm_orderby.append(order_field)
+            if orm_orderby:
+                print(orm_orderby)
+                q = q.order_by(*orm_orderby)
+            else:
+                q = q.order_by('enslaved_id')
 
-        # We introduce a dummy to force the ORM to produce a GROUP BY clause on
-        # the enslaved_id field. This is because newer versions of MySQL do not
-        # allow (in the default config) GROUP_CONCAT to be used without an explicit
-        # group by clause.
-        q = q.annotate(dummy=Count(F('enslaved_id')))
-        # NOTE: this is MySQL-only. If the DB is migrated, the function needs to be updated.
-        q = q.annotate(sources_list=Func(F("sources__full_ref"), function='GROUP_CONCAT'))
+        if "sources_list" in fields:
+            # We introduce a dummy to force the ORM to produce a GROUP BY clause on
+            # the enslaved_id field. This is because newer versions of MySQL do not
+            # allow (in the default config) GROUP_CONCAT to be used without an explicit
+            # group by clause.
+            q = q.annotate(dummy=Count(F('enslaved_id')))
+            # NOTE: this is MySQL-only. If the DB is migrated, the function needs to be updated.
+            # TODO (Django upgrade): it is possible that this can be simplified using
+            # a specialized GroupConcat expression from newer Django versions.
+            q = q.annotate(sources_list=Func(
+                Concat(F("sources_conn__text_ref"), Value(_SEP_TEXTREF), F("sources__full_ref")), Value(""),
+                arg_joiner=" SEPARATOR '" + _SEP_SOURCEREF + "'", function='GROUP_CONCAT'))
+
         q = q.values(*fields)
-        print(q.query)
         if is_fuzzy:
             # Convert the QuerySet to a concrete list and include the ranking
             # as a member of each object in that list.
@@ -675,6 +680,12 @@ class EnslavedSearch:
                            key=lambda x: x['ranking'],
                            reverse=(order_by_ranking == 'desc'))
         return q
+
+def extract_sources(sources_str):
+    for src in sources_str.split(_SEP_SOURCEREF):
+        values = src.split(_SEP_TEXTREF)
+        if len(values) == 2:
+            yield { "text_ref": values[0], "full_ref": values[1] }
 
 class EnslavementRelation(models.Model):
     """

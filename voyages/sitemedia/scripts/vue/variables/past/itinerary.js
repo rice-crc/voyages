@@ -84,9 +84,9 @@ var_intended_disembarkation_port = new PlaceVariable({
     isAdvanced: false
   });
 
-var_dataset = new TreeselectVariable({
-    varName: "dataset",
-    label: gettext("Dataset"),
+var_voyage_dataset = new TreeselectVariable({
+    varName: "voyage_dataset",
+    label: gettext("Voyages Dataset"),
     description: "",
   },{
     op: "is one of",
@@ -106,7 +106,7 @@ itinerary = {
     var_geocode: var_geocode,
     var_year_range: var_year_range,
     var_intended_disembarkation_port: var_intended_disembarkation_port,
-    var_dataset: var_dataset,
+    var_voyage_dataset: var_voyage_dataset,
 
     count: {
       changed: 0,
