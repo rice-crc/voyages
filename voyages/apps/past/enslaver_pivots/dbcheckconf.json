@@ -1,0 +1,7 @@
+{
+  "user": "voyages",
+  "password": "voyages",
+  "database":"voyages_HEAD",
+  "host": "voyages-mysql",
+  "auth_plugin":"mysql_native_password"
+}

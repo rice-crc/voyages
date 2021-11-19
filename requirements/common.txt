@@ -30,3 +30,5 @@ six==1.10.0
 Levenshtein_search
 ijson==2.6.1
 requests==2.24.0
+mysql-connector-python-8.0.27
+protobuf-3.19.1
