@@ -5,11 +5,12 @@ import threading
 import unicodedata
 from builtins import range, str
 from functools import reduce
+from django.conf import settings
 
 from django.contrib.auth.models import User
 from django.db import models
-from django.db.models import (Case, CharField, F, Func, IntegerField, Q, Value,
-                              When, Prefetch, Count)
+from django.db.models import (Case, CharField, F, Func, IntegerField, Q, Value, When)
+from django.db.models.expressions import Subquery, OuterRef
 from django.db.models.functions import Coalesce, Concat, Length, Substr
 import Levenshtein_search
 
@@ -370,6 +371,56 @@ class EnslavedName(models.Model):
         unique_together = ('name', 'language')
 
 
+class EnslavementRelation(models.Model):
+    """
+    Represents a relation involving enslavers and enslaved individuals.
+    """
+    
+    id = models.IntegerField(primary_key=True)
+    relation_type = models.IntegerField()
+    place = models.ForeignKey(Place, null=True, on_delete=models.SET_NULL)
+    date = models.CharField(max_length=12, null=True,
+        help_text="Date in MM,DD,YYYY format with optional fields.")
+    amount = models.DecimalField(null=True, decimal_places=2, max_digits=6)
+    voyage = models.ForeignKey(Voyage, related_name="+",
+                               null=True, on_delete=models.CASCADE)
+    source = models.ForeignKey(VoyageSources, related_name="+",
+                               null=True, on_delete=models.CASCADE)
+    text_ref = models.CharField(max_length=255, null=False, blank=True, help_text="Source text reference")
+
+
+class EnslavedInRelation(models.Model):
+    """
+    Associates an enslaved in a slave relation.
+    """
+
+    id = models.IntegerField(primary_key=True)
+    transaction = models.ForeignKey(
+        EnslavementRelation,
+        related_name="enslaved",
+        null=False,
+        on_delete=models.CASCADE)
+    enslaved = models.ForeignKey(Enslaved,
+        related_name="transactions",
+        null=False,
+        on_delete=models.CASCADE)
+
+
+class EnslaverInRelation(models.Model):
+    """
+    Associates an enslaver in a slave relation.
+    """
+
+    id = models.IntegerField(primary_key=True)
+    transaction = models.ForeignKey(
+        EnslavementRelation,
+        related_name="enslavers",
+        null=False,
+        on_delete=models.CASCADE)
+    enslaver_alias = models.ForeignKey(EnslaverAlias, null=False, on_delete=models.CASCADE)
+    role = models.IntegerField(null=False, help_text="The role of the enslaver in this relation")
+
+
 _special_empty_string_fields = {
     'voyage__voyage_ship__ship_name': 1,
     'voyage__voyage_dates__first_dis_of_slaves': '2'
@@ -380,14 +431,84 @@ _name_fields = ['documented_name', 'name_first', 'name_second', 'name_third']
 # was decided (2021-10-05) to drop all but one.
 _modern_name_fields = ['modern_name']
 
-_SEP_TEXTREF = "#@@@#"
-_SEP_SOURCEREF = "@###@"
+
+class ManyToManyHelper:
+    """
+    This helper uses the GROUP_CONCAT function to fetch many to many
+    relationship values as a single string value for the query and
+    supports mapping this single string back to a structure
+    (list of dicts).
+    """
+
+    _FIELD_SEP = "#@@@#"
+    _GROUP_SEP = "@###@"
+    _FIELD_SEP_VALUE = Value(_FIELD_SEP)
+
+    def __init__(self, projected_name, model, fk_name, **field_mappings):
+        self.field_mappings = field_mappings
+        self.projected_name = projected_name
+        self.model = model
+        self.fk_name = fk_name
+
+    def adapt_query(self, q):
+        """
+        This method adapts the query by including a computed field aliased "projected_name".
+        The computed field groups multiple related rows and field by concatenating them into
+        a single string. The parse_group method can be used to parse this concatenated
+        string and obtain a list of dictionaries, where each entry corresponds to the fields
+        in a related row.
+        """
+        fields_concatenated = []
+        for field_path in self.field_mappings.values():
+            fields_concatenated.append(F(field_path))
+            fields_concatenated.append(self._FIELD_SEP_VALUE)
+        # Drop the last entry which is a field separator.
+        fields_concatenated.pop()
+        # TODO (Django upgrade): it is possible that this can be simplified using
+        # a specialized GroupConcat expression from newer Django versions.
+        group_concat_field = Func(
+            Concat(*fields_concatenated) if len(fields_concatenated) > 1 else fields_concatenated[0],
+            # This empty value is needed so that the ORM produces the right syntax for GROUP_CONCAT.
+            Value(""),
+            arg_joiner=" SEPARATOR '" + self._GROUP_SEP + "'",
+            function='GROUP_CONCAT')
+        sub_query = self.model.objects.filter(**{ self.fk_name: OuterRef('pk') }) \
+            .annotate(group_concat_field=group_concat_field) \
+            .values('group_concat_field')
+        return q.annotate(**{ self.projected_name: Subquery(sub_query) })
+
+    def parse_grouped(self, value):
+        """
+        Produce an iterable of dicts by parsing the field produced by this helper.
+        """
+        if value is None:
+            return
+        flen = len(self.field_mappings)
+        for item in value.split(self._GROUP_SEP):
+            values = item.split(self._FIELD_SEP)
+            if len(values) == flen:
+                yield { name: values[index] for (index, name) in enumerate(self.field_mappings.keys()) }
+
+    def patch_row(self, row):
+        """
+        For a dict row that is obtained by executing the query with the GROUP_CONCAT in this
+        helper, patch the projected name to contain a list of entries, each being a dict
+        corresponding to an associated entry.
+        """
+        if self.projected_name in row:
+            row[self.projected_name] = list(self.parse_grouped(row[self.projected_name]))
 
 
 class EnslavedSearch:
     """
     Search parameters for enslaved persons.
     """
+
+    SOURCES_LIST = "sources_list"
+    ENSLAVERS_LIST = "enslavers_list"
+
+    sources_helper = ManyToManyHelper(SOURCES_LIST, EnslavedSourceConnection, 'enslaved_id', text_ref="text_ref", full_ref="source__full_ref")
+    enslavers_helper = ManyToManyHelper(ENSLAVERS_LIST, EnslavedInRelation, 'enslaved_id', enslaver_name="transaction__enslavers__enslaver_alias__alias", date="transaction__date")
 
     def __init__(self,
                  enslaved_dataset=None,
@@ -470,10 +591,6 @@ class EnslavedSearch:
         representing an Enslaved record.
         @param: fields A list of fields that are fetched.
         """
-        sources_prefetch = Prefetch('sources_conn',
-            queryset=EnslavedSourceConnection.objects.prefetch_related(
-                'source').order_by('source_order'),
-            to_attr='ordered_sources_list')
         q = Enslaved.objects \
             .select_related('language_group') \
             .select_related('voyage__voyage_dates') \
@@ -483,8 +600,8 @@ class EnslavedSearch:
                             '_imp_principal_place_of_slave_purchase') \
             .select_related('voyage__voyage_itinerary_'
                             '_imp_principal_port_slave_dis') \
-            .select_related('register_country') \
-            .prefetch_related(sources_prefetch)
+            .select_related('register_country')
+
         ranking = None
         is_fuzzy = False
         if self.searched_name and len(self.searched_name):
@@ -650,23 +767,17 @@ class EnslavedSearch:
                 if order_field:
                     orm_orderby.append(order_field)
             if orm_orderby:
-                print(orm_orderby)
                 q = q.order_by(*orm_orderby)
             else:
                 q = q.order_by('enslaved_id')
 
-        if "sources_list" in fields:
-            # We introduce a dummy to force the ORM to produce a GROUP BY clause on
-            # the enslaved_id field. This is because newer versions of MySQL do not
-            # allow (in the default config) GROUP_CONCAT to be used without an explicit
-            # group by clause.
-            q = q.annotate(dummy=Count(F('enslaved_id')))
-            # NOTE: this is MySQL-only. If the DB is migrated, the function needs to be updated.
-            # TODO (Django upgrade): it is possible that this can be simplified using
-            # a specialized GroupConcat expression from newer Django versions.
-            q = q.annotate(sources_list=Func(
-                Concat(F("sources_conn__text_ref"), Value(_SEP_TEXTREF), F("sources__full_ref")), Value(""),
-                arg_joiner=" SEPARATOR '" + _SEP_SOURCEREF + "'", function='GROUP_CONCAT'))
+        if self.SOURCES_LIST in fields:
+            q = self.sources_helper.adapt_query(q)
+        if self.ENSLAVERS_LIST in fields:
+            q = self.enslavers_helper.adapt_query(q)
+
+        if settings.DEBUG:
+            print(q.query)
 
         q = q.values(*fields)
         if is_fuzzy:
@@ -681,44 +792,7 @@ class EnslavedSearch:
                            reverse=(order_by_ranking == 'desc'))
         return q
 
-def extract_sources(sources_str):
-    for src in sources_str.split(_SEP_SOURCEREF):
-        values = src.split(_SEP_TEXTREF)
-        if len(values) == 2:
-            yield { "text_ref": values[0], "full_ref": values[1] }
-
-class EnslavementRelation(models.Model):
-    """
-    Represents a relation involving enslavers and enslaved individuals.
-    """
-    
-    id = models.IntegerField(primary_key=True)
-    relation_type = models.IntegerField()
-    place = models.ForeignKey(Place, null=True, on_delete=models.SET_NULL)
-    date = models.CharField(max_length=12, null=True,
-        help_text="Date in MM,DD,YYYY format with optional fields.")
-    amount = models.DecimalField(null=True, decimal_places=2, max_digits=6)
-    voyage = models.ForeignKey(Voyage, related_name="+",
-                               null=True, on_delete=models.CASCADE)
-    source = models.ForeignKey(VoyageSources, related_name="+",
-                               null=True, on_delete=models.CASCADE)
-    text_ref = models.CharField(max_length=255, null=False, blank=True, help_text="Source text reference")
-                               
-class EnslavedInRelation(models.Model):
-    """
-    Associates an enslaved in a slave relation.
-    """
-
-    id = models.IntegerField(primary_key=True)
-    transaction = models.ForeignKey(EnslavementRelation, null=False, on_delete=models.CASCADE)
-    enslaved = models.ForeignKey(Enslaved, null=False, on_delete=models.CASCADE)
-
-class EnslaverInRelation(models.Model):
-    """
-    Associates an enslaver in a slave relation.
-    """
-
-    id = models.IntegerField(primary_key=True)
-    transaction = models.ForeignKey(EnslavementRelation, null=False, on_delete=models.CASCADE)
-    enslaver_alias = models.ForeignKey(EnslaverAlias, null=False, on_delete=models.CASCADE)
-    role = models.IntegerField(null=False, help_text="The role of the enslaver in this relation")
+    @classmethod
+    def patch_row(cls, row):
+        cls.sources_helper.patch_row(row)
+        cls.enslavers_helper.patch_row(row)

@@ -18,11 +18,11 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 from past.utils import old_div
 
-from .models import (AltLanguageGroupName, Enslaved,
+from .models import (Enslaved,
                      EnslavedContribution, EnslavedContributionLanguageEntry,
                      EnslavedContributionNameEntry, EnslavedSearch,
                      LanguageGroup, ModernCountry, NameSearchCache,
-                     _modern_name_fields, _name_fields, extract_sources)
+                     _modern_name_fields, _name_fields)
 
 
 def _generate_table(query, table_params, data_adapter=None):
@@ -78,8 +78,6 @@ def restore_permalink(_, link_id):
     """Redirect the page with a URL param"""
     return redirect("/past/database#searchId=" + link_id)
 
-_SOURCES_FIELD = 'sources_list'
-
 def is_valid_name(name):
     return name is not None and name.strip() != ""
 
@@ -107,7 +105,7 @@ def search_enslaved(request):
             'voyage__voyage_itinerary__imp_principal_place_of_slave_purchase_'
             '_longitude',
             'voyage__voyage_itinerary__imp_principal_port_slave_dis__place',
-            _SOURCES_FIELD
+            'sources_list', 'enslavers_list'
         ] + _name_fields + _modern_name_fields
     query = search.execute(fields)
     output_type = data.get('output', 'resultsTable')
@@ -136,11 +134,9 @@ def search_enslaved(request):
                 for k in keys:
                     if k.startswith('_'):
                         row.pop(k)
-                # Our ORM query returns all source data as a single string. Here
-                # we extract structured source data (e.g. an array of dicts)
-                # so that the API consumer has a better experience.
-                if _SOURCES_FIELD in row:
-                    row[_SOURCES_FIELD] = list(extract_sources(row[_SOURCES_FIELD]))
+                # Patch the rows so that special fields (e.g. sources_list)
+                # are converted to a list of dicts.
+                EnslavedSearch.patch_row(row)
             return page
 
         table = _generate_table(query, data.get('tableParams', {}), adapter)
