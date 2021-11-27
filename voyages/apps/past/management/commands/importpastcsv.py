@@ -75,7 +75,7 @@ class Command(BaseCommand):
                         enslaved.name_second = rh.get('africanname3', max_chars=NAME_MAX_CHARS)
                         enslaved.modern_name = rh.get('modernafricanname', max_chars=NAME_MAX_CHARS)
                         enslaved.editor_modern_names_certainty = rh.cint('certainty')
-                        enslaved.language_group = rh.get_by_value(LanguageGroup, 'africanlanguagegroup', 'id')
+                        enslaved.language_group = rh.get_by_value(LanguageGroup, 'africlanggroup', 'id')
                         enslaved.register_country = rh.get_by_value(RegisterCountry, 'africancountry', 'id')
                     elif dataset == 1:
                         enslaved.documented_name = rh.get('westernname', max_chars=NAME_MAX_CHARS)

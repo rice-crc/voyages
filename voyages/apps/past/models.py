@@ -11,6 +11,7 @@ from django.contrib.auth.models import User
 from django.db import models
 from django.db.models import (Case, CharField, F, Func, IntegerField, Q, Value, When)
 from django.db.models.expressions import Subquery, OuterRef
+from django.db.models.fields import TextField
 from django.db.models.functions import Coalesce, Concat, Length, Substr
 import Levenshtein_search
 
@@ -229,11 +230,11 @@ class LanguageGroup(NamedModelAbstractBase):
     longitude = models.DecimalField("Longitude of point",
                                     max_digits=10,
                                     decimal_places=7,
-                                    null=False)
+                                    null=True)
     latitude = models.DecimalField("Latitude of point",
                                    max_digits=10,
                                    decimal_places=7,
-                                   null=False)
+                                   null=True)
 
 
 class ModernCountry(NamedModelAbstractBase):
@@ -294,7 +295,7 @@ class Enslaved(models.Model):
     age = models.IntegerField(null=True, db_index=True)
     gender = models.IntegerField(null=True, db_index=True)
     height = models.DecimalField(null=True, decimal_places=2, max_digits=6, verbose_name="Height in inches", db_index=True)
-    skin_color = models.IntegerField(null=True, db_index=True)
+    skin_color = models.CharField(max_length=100, null=True, db_index=True)
     language_group = models.ForeignKey(LanguageGroup, null=True,
                                        on_delete=models.CASCADE,
                                        db_index=True)
@@ -432,22 +433,22 @@ _name_fields = ['documented_name', 'name_first', 'name_second', 'name_third']
 _modern_name_fields = ['modern_name']
 
 
-class ManyToManyHelper:
+class MultiValueHelper:
     """
-    This helper uses the GROUP_CONCAT function to fetch many to many
-    relationship values as a single string value for the query and
-    supports mapping this single string back to a structure
-    (list of dicts).
+    This helper uses the GROUP_CONCAT function to fetch multiple values as a
+    single string value for the query and supports mapping this single string
+    back to a structure (list of dicts, or list of flat values if only one field
+    mapping is used).
     """
 
     _FIELD_SEP = "#@@@#"
     _GROUP_SEP = "@###@"
     _FIELD_SEP_VALUE = Value(_FIELD_SEP)
 
-    def __init__(self, projected_name, model, fk_name, **field_mappings):
+    def __init__(self, projected_name, m2m_connection_model, fk_name, **field_mappings):
         self.field_mappings = field_mappings
         self.projected_name = projected_name
-        self.model = model
+        self.model = m2m_connection_model
         self.fk_name = fk_name
 
     def adapt_query(self, q):
@@ -459,18 +460,17 @@ class ManyToManyHelper:
         in a related row.
         """
         fields_concatenated = []
-        for field_path in self.field_mappings.values():
-            fields_concatenated.append(F(field_path))
+        for field_map in self.field_mappings.values():
+            fields_concatenated.append(F(field_map) if isinstance(field_map, str) else field_map)
             fields_concatenated.append(self._FIELD_SEP_VALUE)
         # Drop the last entry which is a field separator.
         fields_concatenated.pop()
-        # TODO (Django upgrade): it is possible that this can be simplified using
-        # a specialized GroupConcat expression from newer Django versions.
         group_concat_field = Func(
-            Concat(*fields_concatenated) if len(fields_concatenated) > 1 else fields_concatenated[0],
-            # This empty value is needed so that the ORM produces the right syntax for GROUP_CONCAT.
-            Value(""),
-            arg_joiner=" SEPARATOR '" + self._GROUP_SEP + "'",
+            Concat(*fields_concatenated, output_field=TextField()) if len(fields_concatenated) > 1 else fields_concatenated[0],
+            # This value and the arg_joiner is needed so that the ORM produces the right syntax
+            # for GROUP_CONCAT(CONCAT(<FieldsToConcatenate>) SEPARATOR <quoted _GROUP_SEP>).
+            Value(self._GROUP_SEP),
+            arg_joiner=" SEPARATOR ",
             function='GROUP_CONCAT')
         sub_query = self.model.objects.filter(**{ self.fk_name: OuterRef('pk') }) \
             .annotate(group_concat_field=group_concat_field) \
@@ -481,13 +481,14 @@ class ManyToManyHelper:
         """
         Produce an iterable of dicts by parsing the field produced by this helper.
         """
-        if value is None:
-            return
         flen = len(self.field_mappings)
+        if value is None or flen == 0:
+            return
         for item in value.split(self._GROUP_SEP):
             values = item.split(self._FIELD_SEP)
             if len(values) == flen:
-                yield { name: values[index] for (index, name) in enumerate(self.field_mappings.keys()) }
+                # Return a dict when multiple values are mapped otherwise return just the value.
+                yield { name: values[index] for (index, name) in enumerate(self.field_mappings.keys()) } if flen > 1 else values[0]
 
     def patch_row(self, row):
         """
@@ -497,6 +498,9 @@ class ManyToManyHelper:
         """
         if self.projected_name in row:
             row[self.projected_name] = list(self.parse_grouped(row[self.projected_name]))
+        else:
+            row[self.projected_name] = []
+        return row
 
 
 class EnslavedSearch:
@@ -507,8 +511,19 @@ class EnslavedSearch:
     SOURCES_LIST = "sources_list"
     ENSLAVERS_LIST = "enslavers_list"
 
-    sources_helper = ManyToManyHelper(SOURCES_LIST, EnslavedSourceConnection, 'enslaved_id', text_ref="text_ref", full_ref="source__full_ref")
-    enslavers_helper = ManyToManyHelper(ENSLAVERS_LIST, EnslavedInRelation, 'enslaved_id', enslaver_name="transaction__enslavers__enslaver_alias__alias", date="transaction__date")
+    sources_helper = MultiValueHelper(
+        SOURCES_LIST,
+        EnslavedSourceConnection,
+        'enslaved_id',
+        text_ref="text_ref",
+        full_ref="source__full_ref")
+    enslavers_helper = MultiValueHelper(
+        ENSLAVERS_LIST,
+        EnslavedInRelation,
+        'enslaved_id',
+        enslaver_name="transaction__enslavers__enslaver_alias__alias",
+        relation_date="transaction__date",
+        enslaver_role="transaction__enslavers__role")
 
     def __init__(self,
                  enslaved_dataset=None,
@@ -527,7 +542,8 @@ class EnslavedSearch:
                  enslaved_id=None,
                  source=None,
                  order_by=None,
-                 voyage_dataset=None):
+                 voyage_dataset=None,
+                 skin_color=None):
         """
         Search the Enslaved database. If a parameter is set to None, it will
         not be included in the search.
@@ -559,6 +575,7 @@ class EnslavedSearch:
                 'columnName': 'NAME', 'direction': 'ASC or DESC' }.
                 Note that if the search is fuzzy, then the fallback value of
                 order_by is the ranking of the fuzzy search.
+        @param: skin_color a textual description for skin color (Racial Descriptor)
         """
         self.enslaved_dataset = enslaved_dataset
         self.searched_name = searched_name
@@ -577,6 +594,7 @@ class EnslavedSearch:
         self.source = source
         self.order_by = order_by
         self.voyage_dataset = voyage_dataset
+        self.skin_color = skin_color
 
     def get_order_for_field(self, field):
         if isinstance(self.order_by, list):
@@ -770,6 +788,9 @@ class EnslavedSearch:
                 q = q.order_by(*orm_orderby)
             else:
                 q = q.order_by('enslaved_id')
+
+        if self.skin_color:
+            q = q.filter(skin_color__contains=self.skin_color)
 
         if self.SOURCES_LIST in fields:
             q = self.sources_helper.adapt_query(q)
