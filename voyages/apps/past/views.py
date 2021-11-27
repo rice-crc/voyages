@@ -18,10 +18,10 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 from past.utils import old_div
 
-from .models import (Enslaved,
+from .models import (AltLanguageGroupName, Enslaved,
                      EnslavedContribution, EnslavedContributionLanguageEntry,
                      EnslavedContributionNameEntry, EnslavedSearch,
-                     LanguageGroup, ModernCountry, NameSearchCache,
+                     LanguageGroup, MultiValueHelper, ModernCountry, NameSearchCache,
                      _modern_name_fields, _name_fields)
 
 
@@ -66,12 +66,16 @@ def get_modern_countries(_):
 @csrf_exempt
 @cache_page(3600)
 def get_language_groups(_):
-    qlg = LanguageGroup.objects.prefetch_related('alt_names')
-    qmc = ModernCountry.objects.prefetch_related(Prefetch('languages', queryset=qlg)).filter(languages__name__isnull=False).order_by('name', 'languages__name')
-    flat = qmc.values('name', 'languages__id', "languages__latitude", "languages__longitude", 'languages__name', 'languages__alt_names__name')
-    grouped = {k: list(g) for k, g in itertools.groupby(flat, key=lambda value: (value['name'], value['languages__name']))}
-    data = { g[0]['languages__id']: { "country": k[0], "name": k[1], "latitude": float(g[0]["languages__latitude"]), "longitude": float(g[0]["languages__longitude"]), "alts": [alt for alt in [x['languages__alt_names__name'] for x in g] if alt and alt != k[1]]} for k, g in grouped.items() }
-    return JsonResponse(data)
+    countries_list_key = "countries_list"
+    alt_names_key = "alt_names_list"
+    country_helper = MultiValueHelper(countries_list_key, ModernCountry.languages.through, 'languagegroup_id', country_name='moderncountry__name')
+    alt_names_helper = MultiValueHelper(alt_names_key, AltLanguageGroupName, 'language_group_id', alt_name='name')
+    q = LanguageGroup.objects.all()
+    q = country_helper.adapt_query(q)
+    q = alt_names_helper.adapt_query(q)
+    items = [country_helper.patch_row(alt_names_helper.patch_row(row)) for row in q.values()]
+    return JsonResponse([{ "id": item["id"], "name": item["name"], "lat": item["latitude"], "lng": item["longitude"], "alts": item[alt_names_key], "countries": item[countries_list_key] }
+        for item in items], safe=False)
 
 
 def restore_permalink(_, link_id):
@@ -105,7 +109,7 @@ def search_enslaved(request):
             'voyage__voyage_itinerary__imp_principal_place_of_slave_purchase_'
             '_longitude',
             'voyage__voyage_itinerary__imp_principal_port_slave_dis__place',
-            'sources_list', 'enslavers_list'
+            EnslavedSearch.SOURCES_LIST, EnslavedSearch.ENSLAVERS_LIST
         ] + _name_fields + _modern_name_fields
     query = search.execute(fields)
     output_type = data.get('output', 'resultsTable')
