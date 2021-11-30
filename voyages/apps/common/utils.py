@@ -42,7 +42,7 @@ class RowHelper:
         is_null = val is None or empty.match(val)
         if is_null:
             if not allow_null:
-                self.error_reporting.add_error()
+                self.error_reporting.report('Null value for ' + field_name)
             return None
         try:
             return int(round(float(val)))
@@ -60,7 +60,7 @@ class RowHelper:
         is_null = val is None or empty.match(val)
         if is_null:
             if not allow_null:
-                self.error_reporting.add_error()
+                self.error_reporting.report('Null value for ' + field_name)
             return None
         try:
             return float(val)

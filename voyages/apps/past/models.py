@@ -503,6 +503,12 @@ class MultiValueHelper:
         return row
 
 
+class NullIf(Func):
+    # TODO (Django update): this is implemented in latest version of Django...
+    function = 'NULLIF'
+    arity = 2
+
+
 class EnslavedSearch:
     """
     Search parameters for enslaved persons.
@@ -704,8 +710,7 @@ class EnslavedSearch:
                 is_desc = x['direction'].lower() == 'desc'
                 nulls_last = True
                 order_field = F(col_name)
-                empty_string_field_min_char_len = (
-                    _special_empty_string_fields.get(col_name))
+                empty_string_field_min_char_len = _special_empty_string_fields.get(col_name)
                 if empty_string_field_min_char_len:
                     nulls_last = True
                     # Add a "length > min_char_len_for_field" field and sort it
@@ -748,10 +753,10 @@ class EnslavedSearch:
                     names_concat = [names_sep] * \
                         (2 * len(sorted_name_fields) - 1)
                     names_concat[0::2] = sorted_name_fields
-                    # We now properly handle
+                    # We now properly handle empty/null values in sorting.
                     fallback_name_val = Value('AAAAA' if is_desc else 'ZZZZZ')
                     expressions = [
-                        Coalesce(F(name_field),
+                        Coalesce(NullIf(NullIf(F(name_field), Value('')), Value('?')),
                                  fallback_name_val,
                                  output_field=CharField())
                         for name_field in sorted_name_fields
