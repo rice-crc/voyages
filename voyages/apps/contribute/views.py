@@ -97,8 +97,7 @@ def get_voyage_by_id(request):
         error = 'POST request required'
     return JsonResponse({'error': error})
 
-#@cache_page(24 * 60 * 60)
-@cache_page(0)
+@cache_page(24 * 60 * 60)
 @csrf_exempt
 def get_places(request):
     # retrieve list of places in the system.

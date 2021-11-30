@@ -11,7 +11,7 @@ from django.views.decorators.cache import cache_page
 import django
 import re
 
-@cache_page(0)
+@cache_page(3600)
 def get_nations(request):
     nations = {n.pk: { 'name': n.label, 'code': n.value } for n in Nationality.objects.all()}
     return JsonResponse(nations)
@@ -159,7 +159,7 @@ def get_flat_page_tree(prefix, language=None):
 
     return recursive_create(structure, None)
 
-@cache_page(0)
+@cache_page(3600)
 def get_flat_page_content(request, url):
     page = get_object_or_404(FlatPage, url=url)
     # Remove CDATA before we return
@@ -167,7 +167,7 @@ def get_flat_page_content(request, url):
     content = re.sub(r'\{\{\s*MEDIA_URL\s*\}\}', settings.MEDIA_URL, content, flags=re.MULTILINE)
     return HttpResponse(content, 'text/html; charset=utf-8')
 
-@cache_page(0)
+@cache_page(3600)
 def get_flat_page_hierarchy(request, prefix):
     tree = get_flat_page_tree(prefix)
     lang = get_language()
