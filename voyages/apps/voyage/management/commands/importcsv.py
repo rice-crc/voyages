@@ -493,7 +493,7 @@ class Command(BaseCommand):
                         in_cd_room = '1'
                     voyage.voyage_in_cd_rom = in_cd_room == '1'
                     voyage.voyage_groupings = rh.get_by_value(VoyageGroupings, 'xmimpflag')
-                    voyage.dataset = rh.cint('dataset', False)
+                    voyage.dataset = rh.cint('dataset', allow_null=False)
                     intra_american = voyage.dataset == 1
                     counts[voyage.dataset] = counts.get(voyage.dataset, 0) + 1
                     ships.append(row_to_ship(rh, voyage))

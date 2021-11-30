@@ -5,7 +5,7 @@ gunicorn==19.10.0
 Django==1.11.6
 lxml
 pymysql
-mysqlclient
+mysqlclient==2.0.3
 hurry.filesize==0.9
 pysolr==3.9.0
 mock==2.0.0
@@ -30,3 +30,4 @@ six==1.10.0
 Levenshtein_search
 ijson==2.6.1
 requests==2.24.0
+mysql-connector-python==8.0.26

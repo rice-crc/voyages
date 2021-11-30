@@ -63,7 +63,7 @@ class Command(BaseCommand):
                     enslaved = Enslaved()
                     enslaved.voyage = v
                     enslaved.enslaved_id = rh.cint('uniqueid')
-                    dataset = rh.cint('dataset')
+                    dataset = rh.cint('dataset', allow_null=False)
                     enslaved.dataset = dataset
                     # This importation script handles datasets
                     # slightly different since the columns have
