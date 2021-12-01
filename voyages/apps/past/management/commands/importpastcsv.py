@@ -63,28 +63,28 @@ class Command(BaseCommand):
                     enslaved = Enslaved()
                     enslaved.voyage = v
                     enslaved.enslaved_id = rh.cint('uniqueid')
-                    dataset = rh.cint('dataset')
+                    dataset = rh.cint('dataset', allow_null=False)
                     enslaved.dataset = dataset
                     # This importation script handles datasets
                     # slightly different since the columns have
                     # context-dependent meaning.
-                    NAME_MAX_CHARS = 100
+                    MAX_CHARS = 100
                     if dataset == 0:
-                        enslaved.documented_name = rh.get('africanname', max_chars=NAME_MAX_CHARS)
-                        enslaved.name_first = rh.get('africanname2', max_chars=NAME_MAX_CHARS)
-                        enslaved.name_second = rh.get('africanname3', max_chars=NAME_MAX_CHARS)
-                        enslaved.modern_name = rh.get('modernafricanname', max_chars=NAME_MAX_CHARS)
+                        enslaved.documented_name = rh.get('africanname', max_chars=MAX_CHARS)
+                        enslaved.name_first = rh.get('africanname2', max_chars=MAX_CHARS)
+                        enslaved.name_second = rh.get('africanname3', max_chars=MAX_CHARS)
+                        enslaved.modern_name = rh.get('modernafricanname', max_chars=MAX_CHARS)
                         enslaved.editor_modern_names_certainty = rh.cint('certainty')
-                        enslaved.language_group = rh.get_by_value(LanguageGroup, 'africanlanguagegroup', 'id')
+                        enslaved.language_group = rh.get_by_value(LanguageGroup, 'africlanggroup', 'id')
                         enslaved.register_country = rh.get_by_value(RegisterCountry, 'africancountry', 'id')
                     elif dataset == 1:
-                        enslaved.documented_name = rh.get('westernname', max_chars=NAME_MAX_CHARS)
+                        enslaved.documented_name = rh.get('westernname', max_chars=MAX_CHARS)
                     else:
                         raise Exception('Unknown dataset ' + str(dataset))
                     enslaved.age = rh.cint('age')
                     enslaved.gender = rh.cint('gender')
                     enslaved.height = rh.cfloat('height')
-                    enslaved.skin_color = rh.cint('skincolor')
+                    enslaved.skin_color = rh.get('skincolor', max_chars=MAX_CHARS)
                     enslaved.notes = rh.get('notes')
                     enslaved.post_disembark_location = rh.get_by_value(Place, 'lastknownlocation')
                     all_enslaved[enslaved.enslaved_id] = enslaved

@@ -21,7 +21,7 @@ from past.utils import old_div
 from .models import (AltLanguageGroupName, Enslaved,
                      EnslavedContribution, EnslavedContributionLanguageEntry,
                      EnslavedContributionNameEntry, EnslavedSearch,
-                     LanguageGroup, ModernCountry, NameSearchCache,
+                     LanguageGroup, MultiValueHelper, ModernCountry, NameSearchCache,
                      _modern_name_fields, _name_fields)
 
 
@@ -36,7 +36,7 @@ def _generate_table(query, table_params, data_adapter=None):
         page = query
     response_data = {}
     try:
-        total_results = query.count()
+        total_results = paginator.count
     except Exception:
         total_results = len(query)
     response_data['recordsTotal'] = total_results
@@ -48,22 +48,6 @@ def _generate_table(query, table_params, data_adapter=None):
             page = changed
     response_data['data'] = list(page)
     return response_data
-
-
-def _get_alt_named(alt_model, parent_fk, parent_map):
-
-    def key_fn(x):
-        return getattr(x, parent_fk + '_id')
-
-    res = {}
-    for k, g in itertools.groupby(sorted(alt_model.all(), key=key_fn),
-                                  key=key_fn):
-        alts = list(g)
-        parent = getattr(alts[0], parent_fk)
-        item = parent_map(parent)
-        item['alts'] = sorted([a.name for a in alts])
-        res[k] = item
-    return res
 
 
 @csrf_exempt
@@ -82,26 +66,24 @@ def get_modern_countries(_):
 @csrf_exempt
 @cache_page(3600)
 def get_language_groups(_):
-
-    def parent_map(lg):
-        return {
-            'name': lg.name,
-            'lat': lg.latitude,
-            'lng': lg.longitude,
-            'country': lg.modern_country.name
-        }
-
-    models = AltLanguageGroupName.objects.prefetch_related(
-        Prefetch(
-            'language_group',
-            queryset=LanguageGroup.objects.select_related('modern_country')))
-    return JsonResponse(_get_alt_named(models, 'language_group', parent_map))
+    countries_list_key = "countries_list"
+    alt_names_key = "alt_names_list"
+    country_helper = MultiValueHelper(countries_list_key, ModernCountry.languages.through, 'languagegroup_id', country_name='moderncountry__name')
+    alt_names_helper = MultiValueHelper(alt_names_key, AltLanguageGroupName, 'language_group_id', alt_name='name')
+    q = LanguageGroup.objects.all()
+    q = country_helper.adapt_query(q)
+    q = alt_names_helper.adapt_query(q)
+    items = [country_helper.patch_row(alt_names_helper.patch_row(row)) for row in q.values()]
+    return JsonResponse([{ "id": item["id"], "name": item["name"], "lat": item["latitude"], "lng": item["longitude"], "alts": item[alt_names_key], "countries": item[countries_list_key] }
+        for item in items], safe=False)
 
 
 def restore_permalink(_, link_id):
     """Redirect the page with a URL param"""
     return redirect("/past/database#searchId=" + link_id)
 
+def is_valid_name(name):
+    return name is not None and name.strip() != ""
 
 @require_POST
 @csrf_exempt
@@ -111,25 +93,25 @@ def search_enslaved(request):
     # constructor.
     data = json.loads(request.body)
     search = EnslavedSearch(**data['search_query'])
-    _fields = [
-        'enslaved_id', 'age', 'gender', 'height',
-        'language_group__name', 'language_group__modern_country__name',
-        'register_country', 'sources_list',
-        'voyage__id', 'voyage__voyage_ship__ship_name',
-        'voyage__voyage_dates__first_dis_of_slaves',
-        'voyage__voyage_itinerary__int_first_port_dis__place',
-        'voyage__voyage_itinerary__imp_principal_place_of_slave_purchase_'
-        '_place',
-        'voyage__voyage_itinerary__imp_principal_place_of_slave_purchase_'
-        '_latitude',
-        'voyage__voyage_itinerary__imp_principal_place_of_slave_purchase_'
-        '_longitude',
-        'voyage__voyage_itinerary__imp_principal_port_slave_dis__place'
-    ] + _name_fields + _modern_name_fields
-    # TODO: decide how to fetch M2M fields (sources).
-    # e.g. when using values(), this is a workaround the weird Django
-    # result https://gist.github.com/pamelafox-coursera/3707015
-    query = search.execute(_fields)
+    fields = data.get('fields')
+    if fields is None:
+        fields = [
+            'enslaved_id', 'age', 'gender', 'height', 'skin_color',
+            'language_group__name',
+            'register_country', 'sources_list',
+            'voyage__id', 'voyage__voyage_ship__ship_name',
+            'voyage__voyage_dates__first_dis_of_slaves',
+            'voyage__voyage_itinerary__int_first_port_dis__place',
+            'voyage__voyage_itinerary__imp_principal_place_of_slave_purchase_'
+            '_place',
+            'voyage__voyage_itinerary__imp_principal_place_of_slave_purchase_'
+            '_latitude',
+            'voyage__voyage_itinerary__imp_principal_place_of_slave_purchase_'
+            '_longitude',
+            'voyage__voyage_itinerary__imp_principal_port_slave_dis__place',
+            EnslavedSearch.SOURCES_LIST, EnslavedSearch.ENSLAVERS_LIST
+        ] + _name_fields + _modern_name_fields
+    query = search.execute(fields)
     output_type = data.get('output', 'resultsTable')
     # For now we only support outputing the results to DataTables.
     if output_type == 'resultsTable':
@@ -139,14 +121,14 @@ def search_enslaved(request):
                 all_names = list({
                     row[name_field]
                     for name_field in _name_fields
-                    if row[name_field]
+                    if is_valid_name(row.get(name_field))
                 })
                 all_names.sort(
                     reverse=(search.get_order_for_field('names') == 'desc'))
                 all_modern_names = list({
                     row[name_field]
                     for name_field in _modern_name_fields
-                    if row[name_field]
+                    if is_valid_name(row.get(name_field))
                 })
                 all_modern_names.sort(reverse=(
                     search.get_order_for_field('modern_names') == 'desc'))
@@ -156,14 +138,17 @@ def search_enslaved(request):
                 for k in keys:
                     if k.startswith('_'):
                         row.pop(k)
+                # Patch the rows so that special fields (e.g. sources_list)
+                # are converted to a list of dicts.
+                EnslavedSearch.patch_row(row)
             return page
 
         table = _generate_table(query, data.get('tableParams', {}), adapter)
         page = table.get('data', [])
         NameSearchCache.load()
-        for x in page:
-            x['recordings'] = NameSearchCache.get_recordings(
-                [x[f] for f in _name_fields if f in x])
+        for entry in page:
+            entry['recordings'] = NameSearchCache.get_recordings(
+                [entry[f] for f in _name_fields if f in entry])
         return JsonResponse(table)
     return JsonResponse({'error': 'Unsupported'})
 

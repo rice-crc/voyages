@@ -1,6 +1,6 @@
 {% load i18n %}
 
-<li class="nav-item dropdown">
+<li class="nav-item dropdown" v-if="enslavedDataset==0">
   <v-menu-title :count="filter.africanName.count" title="{% trans 'African Name' %}"></v-menu-title>
 
   <v-panel-singular @apply="apply" @reset="reset" group="africanName" title="{% trans 'Name' %}" sub-group="name" :filters="filter.africanName.name" align="left">
@@ -21,10 +21,6 @@
 
       <v-toggle @change="changed"
         :filter="scope.filters.var_exact_name_search">
-      </v-toggle>
-
-      <v-toggle @change="changed"
-        :filter="scope.filters.var_show_only_african_names">
       </v-toggle>
     </div>
   </v-panel-singular>

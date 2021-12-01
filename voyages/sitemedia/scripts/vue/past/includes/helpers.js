@@ -113,7 +113,7 @@ var voyageColumns = [
 
 function getColumnIndex(column) {
   var index = null;
-  allColumns.forEach(function(columnItem, columnIndex) {
+  allColumns[enslavedDataset].forEach(function(columnItem, columnIndex) {
     if (columnItem.data == column) {
       index = columnIndex;
       return true;
@@ -149,18 +149,40 @@ function processResponse(json, mainDatatable, fuzzySearch) {
     row.gender = gender;
 
     if (!row.ranking) {
-      row.ranking = '';
+      row.ranking = '1';
+    } else {
+      row.ranking++;
     }
+
+    if (row.enslavers_list) {
+      var enslaversList = {};
+      row.enslavers_list.forEach((value, index) => {
+        if (enslaversList[value.enslaver_name] === undefined) {
+          enslaversList[value.enslaver_name] = [];
+        }
+
+        enslaversList[value.enslaver_name].push(gettext(searchBar.enslaverRoles[value.enslaver_role]));
+      });
+      row.enslavers_list = enslaversList;
+    }
+
+    // source formatting
+    row.sources_raw = row.sources_list;
+    row.sources_list = getFormattedSourceInTable(
+      row.sources_list
+    );
 
     data.push(row);
   });
 
-  if (fuzzySearch) {
-    if (!mainDatatable.column(rankingIndex).visible()) {
-      mainDatatable.column(rankingIndex).visible(true);
+  if (rankingIndex !== null) {
+    if (fuzzySearch) {
+      if (!mainDatatable.column(rankingIndex).visible()) {
+        mainDatatable.column(rankingIndex).visible(true);
+      }
+    } else {
+      mainDatatable.column(rankingIndex).visible(false);
     }
-  } else {
-    mainDatatable.column(rankingIndex).visible(false);
   }
 
   return data;
@@ -201,6 +223,24 @@ function getVoyageFormattedSource(sources) {
     value += "<div><span class='source-title'>" + first + ": </span>";
     value += "<span class='source-content'>" + second + "</span></div>";
   });
+  return value;
+}
+
+function getFormattedSourceInTable(sources) {
+  var value = ""; // empty value string
+  try {
+    sources.forEach(function(source) {
+      value +=
+        "<div><span data-toggle='tooltip' data-placement='top' data-html='true' data-original-title='" +
+        source.full_ref +
+        "'>" +
+        source.text_ref +
+        "</span></div>";
+    });
+  }
+  catch(err) {
+    console.log(`Error in getFormattedSourceInTable: ${err.message}`);
+  }
   return value;
 }
 
@@ -269,7 +309,7 @@ function serializeFilter(filter) {
 }
 
 function searchAll(filter, filterData) {
-  var items = {};
+  var items = {enslaved_dataset: enslavedDataset};
   for (key1 in filter) {
     if (key1 !== "count") {
       for (key2 in filter[key1]) {
@@ -725,10 +765,14 @@ var parseLanguageGroups = function(response) {
   ];
 
   // fill countries
-  var countries = {};
+  var countries = [];
   $.each(response.data, function(id, languageGroup) {
-    countries[languageGroup.country] = languageGroup.country;
+    $.each(languageGroup.countries, (id, country) => {
+      countries.push(country);
+    });
   });
+  countries = [...new Set(countries)].sort()
+
   $.each(countries, function(key, country) {
     options[0].children.push({
       id: country,
@@ -753,10 +797,23 @@ var parseLanguageGroups = function(response) {
       }
     }
     $.each(options[0].children, function(key, country) {
-      if (languageGroup.country == country.label) {
-        options[0].children[key].children.push({'id': id, 'label' : label, 'isDisabled': false});
-      }
+      $.each(languageGroup.countries, (index, languageGroupCountry) => {
+        if (languageGroupCountry == country.label) {
+          options[0].children[key].children.push({'id': id, 'label' : label, 'isDisabled': false});
+        }
+      });
     });
+  });
+  $.each(options[0].children, function(key, country) {
+    country.children.sort(function (a, b) {
+      if ( a.label < b.label ){
+        return -1;
+      }
+      if ( a.label > b.label ){
+        return 1;
+      }
+      return 0;
+    })
   });
 
   return options;
@@ -832,10 +889,12 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
         data: function(d) {
           if (d.order) {
             var rankingIndex = getColumnIndex('ranking');
-            var rankingVisible = $('#results_main_table').DataTable().column(rankingIndex).visible();
+            if (rankingIndex !== null) {
+              var rankingVisible = $('#results_main_table').DataTable().column(rankingIndex).visible();
 
-            if (fuzzySearch && !rankingVisible) {
-                d.order[0]['column'] = rankingIndex;
+              if (fuzzySearch && !rankingVisible) {
+                  d.order[0]['column'] = rankingIndex;
+              }
             }
 
             currentSearchObj.order_by = $.map(d.order, function(item) {
@@ -843,7 +902,7 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
                 ? mainDatatable.colReorder.order()[item.column]
                 : item.column;
               return {
-                columnName: allColumns[columnIndex].data,
+                columnName: allColumns[enslavedDataset][columnIndex].data,
                 direction: item.dir
               };
             });
@@ -902,7 +961,7 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
       bFilter: false,
       processing: true,
       serverSide: true,
-      columns: allColumns,
+      columns: allColumns[enslavedDataset],
       stateSave: true,
       stateDuration: -1,
       initComplete: function() {
@@ -918,7 +977,13 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
       displayColumnOrder(order);
     });
 
+    mainDatatable.on("column-visibility", function(e, settings, column, state, recalc) {
+      $('[data-toggle="tooltip"]').tooltip();
+      // initAudioActions();
+    });
+
     mainDatatable.on('draw', function(){
+      $('[data-toggle="tooltip"]').tooltip();
       initAudioActions();
     });
   }
