@@ -48,7 +48,7 @@ var allColumns = [
     // { data: "post_disembarkation_location", category: 4, header: gettext("Post Disembarkation Location"), isImputed: false },
 
     // sources
-    { data: "sources_list", category: 5, header: gettext("Sources"), isImputed: false, visible: false },
+    { data: "sources_list", category: 5, header: gettext("Sources"), isImputed: false, visible: false, orderable: false },
 
     { data: "recordings", category: 6, header: '<i class="fa fa-volume-up" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></i>', isImputed: false, isAudible: true, orderable: false },
     { data: "enslaved_id", category: 6, header: gettext("Contribute"), isImputed: false, isContribute: true, orderable: false  },
@@ -68,10 +68,10 @@ var allColumns = [
     { data: "voyage__voyage_itinerary__imp_principal_port_slave_dis__place", category: 1, header: gettext("Disembarkation Port"), isImputed: false },
 
     // Enslavement
-    { data: "enslavers_list", category: 2, header: gettext("Enslavers"), isImputed: false, isEnslaversList: true },
+    { data: "enslavers_list", category: 2, header: gettext("Enslavers"), isImputed: false, isEnslaversList: true, orderable: false },
 
     // sources
-    { data: "sources_list", category: 3, header: gettext("Sources"), isImputed: false, visible: false },
+    { data: "sources_list", category: 3, header: gettext("Sources"), isImputed: false, visible: false, orderable: false },
   ]
 ];
 
