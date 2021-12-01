@@ -39,10 +39,10 @@ class RowHelper:
         Get the value of the column as an integer.
         """
         val = self.row.get(field_name)
-        if (val is None or empty.match(val)) and not allow_null:
-            self.error_reporting.add_error()
-            return None
-        if val is None and allow_null:
+        is_null = val is None or empty.match(val)
+        if is_null:
+            if not allow_null:
+                self.error_reporting.report('Null value for ' + field_name)
             return None
         try:
             return int(round(float(val)))
@@ -57,10 +57,10 @@ class RowHelper:
         Get the value of the column as a float.
         """
         val = self.row.get(field_name)
-        if (val is None or empty.match(val)) and not allow_null:
-            self.error_reporting.add_error()
-            return None
-        if val is None and allow_null:
+        is_null = val is None or empty.match(val)
+        if is_null:
+            if not allow_null:
+                self.error_reporting.report('Null value for ' + field_name)
             return None
         try:
             return float(val)
@@ -75,6 +75,8 @@ class RowHelper:
         Get the raw value for the field in this row.
         """
         val = self.row.get(field_name, default)
+        if val:
+            val = val.strip()
         if max_chars and len(val) > max_chars:
             self.error_reporting.report('Field ' + field_name + ' is too long (>' + str(max_chars) + ' chars)')
         return val
@@ -202,7 +204,6 @@ class ErrorReporting:
         """
         Add 1 to the error count.
         """
-
         self.errors += 1
 
     def next_row(self):

@@ -18,6 +18,7 @@
 
       <v-text @change="changed"
         :filter="scope.filters.var_ship_name"
+        v-if="localStorage.enslavedDataset==0"
       ></v-text>
 
       <v-treeselect
@@ -41,11 +42,13 @@
 
       <v-treeselect
         :filter="scope.filters.var_intended_disembarkation_port"
+        v-if="localStorage.enslavedDataset==0"
         @change="changed">
       </v-treeselect>
 
       <v-treeselect
-        :filter="scope.filters.var_dataset"
+        :filter="scope.filters.var_voyage_dataset"
+        v-if="localStorage.enslavedDataset==0"
         @change="changed">
       </v-treeselect>
     </div>

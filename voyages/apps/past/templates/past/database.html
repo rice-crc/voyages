@@ -28,19 +28,32 @@
 {% block content %}
 
 <div id="search-bar" v-cloak>
-	<div class="nav-header">{% trans 'African Names - Database' %}</div>
+	<div class="nav-header">
+		<div class="row">
+			<div class="col-md-6">
+				<div v-if="enslavedDataset==0">{% trans 'African Origins - Database' %}</div>
+				<div v-if="enslavedDataset==1">{% trans 'Oceans of Kinfolk - Database' %}</div>
+			</div>
+			<div class="col-md-6 text-right">
+				<b-btn size="sm" class="btn-outline py-0 change-datasets" @click="enslavedDatasetModalShow=true">
+					{% trans 'Change Datasets' %}
+				</b-btn>
+			</div>
+		</div>
+	</div>
 	<nav class="navbar navbar-expand-xl navbar-dark bg-dark past-search-bar">
 		<div class="nav-container">
 			<button class="navbar-toggler float-right" type="button" data-toggle="collapse" data-target="#searchNav">
 				<span class="navbar-toggler-icon"></span>
 			</button>
 			<div class="navbar-collapse collapse" id="searchNav">
-				<ul class="navbar-nav">
+				<ul class="navbar-nav" v-if="enslavedDataset">
 					{% include "past/_african-name.html" %}
+					{% include "past/_identity.html" %}
 					{% include "past/_personal-data.html" %}
 					{% include "past/_itinerary.html" %}
 					{% include "past/_cultural-association.html" %}
-					{% include "past/_fate.html" %}
+					<!-- {% include "past/_fate.html" %} -->
 					{% include "past/_sources.html" %}
 					{% include "past/_actions.html" %}
 				</ul>
@@ -72,13 +85,14 @@
 
 	{% include "past/_panel.html" %}
 	<div class="trans-container">
-		<div class="row">
+		<div class="row" :class="{'blur-content': enslavedDatasetModalShow}">
 			<div class="col-md-12">
 				<div id="center-content-inner">
 					{% include "past/_tabs.html" %}
 				</div>
 			</div>
 		</div>
+		{% include "past/_enslaved_dataset_select_modal.html" %}
 	</div>
 </div>
 
@@ -119,6 +133,7 @@
 
 <script src="{{ STATIC_URL }}scripts/vue/variables/constructors.js"></script>
 <script src="{{ STATIC_URL }}scripts/vue/variables/past/african-name.js"></script>
+<script src="{{ STATIC_URL }}scripts/vue/variables/past/identity.js"></script>
 <script src="{{ STATIC_URL }}scripts/vue/variables/past/personal-data.js"></script>
 <script src="{{ STATIC_URL }}scripts/vue/variables/past/itinerary.js"></script>
 <script src="{{ STATIC_URL }}scripts/vue/variables/past/cultural-association.js"></script>

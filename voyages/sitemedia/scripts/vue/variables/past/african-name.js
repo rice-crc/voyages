@@ -35,25 +35,11 @@ var_exact_name_search = new BooleanVariable({
     isAdvanced: false
   });
 
-var_show_only_african_names = new BooleanVariable({
-    varName: "show_only_african_names",
-    label: gettext("Show only African names"),
-    description: "",
-  },{
-    op: "equals",
-    searchTerm: false,
-  },{
-    isImputed: false,
-    isAdvanced: false,
-    isToDo: true
-  });
-
 // all
 africanName = {
   name: {
     var_searched_name: var_searched_name,
     var_exact_name_search: var_exact_name_search,
-    var_show_only_african_names: var_show_only_african_names,
     var_enslaved_id: var_enslaved_id,
 
     count: {

@@ -9,6 +9,7 @@ var searchBar = new Vue({
     isAdvanced: false,
     filter: {
       africanName: africanName,
+      identity: identity,
       personalData: personalData,
       itinerary: itinerary,
       culturalAssociation: culturalAssociation,
@@ -25,7 +26,7 @@ var searchBar = new Vue({
           id: "female",
           label: gettext("Female")
         }],
-        dataset: [{
+        voyage_dataset: [{
           id: "trans",
           label: gettext("Transatlantic")
         },{
@@ -36,6 +37,15 @@ var searchBar = new Vue({
           label: gettext("Intra-African")
         }]
       }
+    },
+    enslaverRoles: {
+      1: "Captain",
+      2: "Investor",
+      3: "Buyer",
+      4: "Seller",
+      5: "Owner",
+      6: "Shipper",
+      7: "Consignor",
     },
     activated: false,
     saved: [],
@@ -53,6 +63,7 @@ var searchBar = new Vue({
     currentQuery: {},
     hasCurrentQuery: false,
     rowModalShow: false,
+    enslavedDatasetModalShow: false,
     currentTab: "results", // currently active tab
     timelapse: {
       ui: {},
@@ -289,6 +300,9 @@ var searchBar = new Vue({
     displayChanged() {
       return this.filter.settings.settings.var_display_settings.value
         .searchTerm;
+    },
+    enslavedDataset() {
+      return localStorage.enslavedDataset !== undefined ? localStorage.enslavedDataset : null;
     }
   },
 
@@ -614,7 +628,26 @@ var searchBar = new Vue({
       var savedSearchId = location.href.split(SAVED_SEARCH_LABEL).pop();
       this.load(savedSearchId);
     } else {
-      this.refresh();
+      if (this.enslavedDataset) {
+        if (localStorage.directLinkFilter) {
+          var filter;
+          if (this.enslavedDataset == 0) {
+            this.filter.africanName.name.var_enslaved_id.activated = true;
+            this.filter.africanName.name.var_enslaved_id.changed = true;
+            this.filter.africanName.name.var_enslaved_id.value.op = "is equal to";
+            this.filter.africanName.name.var_enslaved_id.value.searchTerm0 = localStorage.directLinkFilter;
+            this.filter.africanName.name.var_enslaved_id.value.searchTerm1 = localStorage.directLinkFilter;
+          } else if (this.enslavedDataset == 1) {
+            this.filter.identity.name.var_enslaved_id.activated = true;
+            this.filter.identity.name.var_enslaved_id.changed = true;
+            this.filter.identity.name.var_enslaved_id.value.op = "is equal to";
+            this.filter.identity.name.var_enslaved_id.value.searchTerm0 = localStorage.directLinkFilter;
+            this.filter.identity.name.var_enslaved_id.value.searchTerm1 = localStorage.directLinkFilter;
+          }
+          localStorage.removeItem("directLinkFilter");
+        }
+        this.refresh();
+      }
     }
   },
 
