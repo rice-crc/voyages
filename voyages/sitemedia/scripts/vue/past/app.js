@@ -629,6 +629,23 @@ var searchBar = new Vue({
       this.load(savedSearchId);
     } else {
       if (this.enslavedDataset) {
+        if (localStorage.directLinkFilter) {
+          var filter;
+          if (this.enslavedDataset == 0) {
+            this.filter.africanName.name.var_enslaved_id.activated = true;
+            this.filter.africanName.name.var_enslaved_id.changed = true;
+            this.filter.africanName.name.var_enslaved_id.value.op = "is equal to";
+            this.filter.africanName.name.var_enslaved_id.value.searchTerm0 = localStorage.directLinkFilter;
+            this.filter.africanName.name.var_enslaved_id.value.searchTerm1 = localStorage.directLinkFilter;
+          } else if (this.enslavedDataset == 1) {
+            this.filter.identity.name.var_enslaved_id.activated = true;
+            this.filter.identity.name.var_enslaved_id.changed = true;
+            this.filter.identity.name.var_enslaved_id.value.op = "is equal to";
+            this.filter.identity.name.var_enslaved_id.value.searchTerm0 = localStorage.directLinkFilter;
+            this.filter.identity.name.var_enslaved_id.value.searchTerm1 = localStorage.directLinkFilter;
+          }
+          localStorage.removeItem("directLinkFilter");
+        }
         this.refresh();
       }
     }
