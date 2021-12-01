@@ -1,0 +1,101 @@
+{% load i18n %}
+
+<!-- Show Enslaved Dataset Select -->
+<b-modal id="enslavedDatasetModal" v-model="enslavedDatasetModalShow" size="lg" no-close-on-esc hide-header hide-footer no-close-on-backdrop modal-class="modal-top" centered @show="selectRadio">
+  <div class="row pt-3">
+    <div class="col-md-12">
+      <p class="h3 font-weight-bold text-secondary text-center">{% trans "Select dataset of enslaved people to search" %}<p>
+      <p class="h5 text-muted text-center">{% trans "You may choose search within one of the following datasets." %}<p>
+    </div>
+  </div>
+
+  <div class="row justify-content-center">
+    <div class="col-md-10">
+      <b-card class="border-light select-dataset-card" :class="{'selected': localStorage.enslavedDataset==0}" id="cardDataset0" body-class="pb-0">
+        <div class="row ml-2 mt-1">
+          <div class="col-md-10">
+            <div class="custom-control custom-radio custom-radio-md">
+              <input class="custom-control-input" type="radio" name="enslaved-dataset-radio" id="exampleRadios1" value="0" :checked="localStorage.enslavedDataset==0">
+              <label class="custom-control-label form-control-lg py-0 px-2" for="exampleRadios1">
+                African Origins
+              </label>
+            </div>
+            
+            <p class="h6 pt-2">The African Origins Database provides personal details of 93,605 Africans taken from
+            captured slave ships or from African trading sites. It displays the African name, age, gender, and
+            places of embarkation and disembarkation of each individual. The database invites users to make
+            contributions to the site to identify the likely ethnolinguistic origins of the names from the
+            historical records.</p>
+          </div>
+          <div class="col-md-2 align-self-end text-right">
+            <img style="width: 100px;" src="{{ STATIC_URL }}images/site/past/origins_pic.png" />
+          </div>
+        </div>
+      </b-card>
+      <div class="text-right">
+        <span class="picture-subtitle">Pictured: <a href="#">Manchuella</a>, alias "Katie Noble"</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="row justify-content-center pt-2">
+    <div class="col-md-10">
+      <b-card class="border-light select-dataset-card" :class="{'selected': localStorage.enslavedDataset==1}" id="cardDataset1" body-class="pb-0">
+        <div class="row ml-2 mt-1">
+          <div class="col-md-10">
+            <div class="custom-control custom-radio custom-radio-md">
+              <input class="custom-control-input" type="radio" name="enslaved-dataset-radio" id="exampleRadios2" value="1" :checked="localStorage.enslavedDataset==1">
+              <label class="custom-control-label form-control-lg py-0 px-2" for="exampleRadios2">
+                Oceans of Kinfolk (United States)
+              </label>
+            </div>
+            
+            <p class="h6 pt-2">The Oceans of Kinfolk Database provides personal details of more than 63,000 enslaved African Americans forcibly transported to New Orleans from various ports in the United States during the 19th century. The database includes the name, age, gender, and places of embarkation and disembarkation of each individual.</p>
+          </div>
+          <div class="col-md-2 align-self-end text-right">
+            <img style="width: 100px;" src="{{ STATIC_URL }}images/site/past/ook_pic.png" />
+          </div>
+        </div>
+      </b-card>
+      <div class="text-right">
+        <span class="picture-subtitle">Pictured: <a href="#">Solomon Northup</a>, alias "Hamilton, Plat"</span>
+      </div>
+      
+    </div>
+  </div>
+
+  <div class="row justify-content-center pt-2">
+    <button class="btn btn-light mr-4" v-if="localStorage.enslavedDataset!==undefined" @click="enslavedDatasetModalShow=false">
+      {% trans 'Cancel' %}
+    </button>
+    <button class="btn btn-info apply-button" :disabled="localStorage.enslavedDataset===undefined">
+      {% trans 'Apply' %}
+    </button>
+  </div>
+
+</b-modal>
+
+<script type="text/javascript">
+  function selectRadio() {
+    if (localStorage.enslavedDataset !== undefined) {
+      $("#cardDataset"+localStorage.enslavedDataset).trigger("click");
+    }
+  }
+
+  $(function(){
+    $(".custom-control-input").on( 'click', function (e) {
+      e.stopPropagation();
+      $('.select-dataset-card').removeClass('selected');
+      $(this).parents('.select-dataset-card').addClass('selected');
+      $('.apply-button').prop('disabled', false);
+    });
+
+    $(".select-dataset-card").on( 'click', function (e) {
+      $(this).find('.custom-control-input').prop('checked', true).trigger('click');
+    } );
+    $(".apply-button").on( 'click', function (e) {
+      localStorage.enslavedDataset = $('input[name=enslaved-dataset-radio]:checked').val();
+      window.location.reload();
+    });
+  });
+</script>

@@ -89,6 +89,13 @@ table {
 		border-color: $past-color;
     color: white;
 	}
+  &.change-datasets {
+    &:hover {
+      color: $past-color;
+      background-color: $grey-1;
+      border-color: $past-color;
+    }
+  }
 }
 
 .btn-info {
@@ -268,4 +275,69 @@ input.button-save:hover {
   background-image: none;
   -webkit-box-shadow: none;
   box-shadow: none;
+}
+
+.blur-content {
+  filter: blur(3px) grayscale(90%);
+}
+
+.select-dataset-card {
+  border-width: 2px;
+  &:hover, &.selected {
+    border-color: $past-secondary-color !important;
+  }
+}
+
+@mixin radio($res: 'sm') {
+    $index: 1rem;
+    $mainVal: 1rem;
+  
+    @if $res == 'md' {
+        $index: 2rem;
+        $mainVal: 1.5rem;
+    } @else if $res == 'lg' {
+        $index: 3rem;
+        $mainVal: 2rem;
+    } @else if $res == 'xl' {
+        $index: 4rem;
+        $mainVal: 2.5rem;
+    }
+
+    .custom-control-label {
+      font-weight: bold;
+    }
+
+    .custom-control-label::before {
+        height: $mainVal;
+        width: $mainVal;
+        border-radius: $mainVal * 2;
+    }
+
+    .custom-control-label::after {
+        width: $mainVal;
+        height: $mainVal;
+        border-radius: calc(#{$index} - (#{$mainVal} / 2));
+    }
+
+    .custom-control-input:checked ~ .custom-control-label::after {
+        background-color: $past-color;
+    }
+}
+
+// YOU CAN PUT ALL RESOLUTION HERE
+// sm - DEFAULT, md, lg, xl
+.custom-radio.custom-radio-sm {
+    @include radio();
+}
+
+.custom-radio.custom-radio-md {
+    @include radio('md');
+}
+
+.custom-radio.custom-radio-lg {
+    @include radio('lg');
+}
+
+.custom-radio.custom-radio-xl {
+    @include radio('xl');
 }
