@@ -302,7 +302,7 @@ var searchBar = new Vue({
         .searchTerm;
     },
     enslavedDataset() {
-      return localStorage.enslavedDataset !== undefined ? localStorage.enslavedDataset : 0;
+      return localStorage.enslavedDataset !== undefined ? localStorage.enslavedDataset : null;
     }
   },
 
@@ -628,7 +628,9 @@ var searchBar = new Vue({
       var savedSearchId = location.href.split(SAVED_SEARCH_LABEL).pop();
       this.load(savedSearchId);
     } else {
-      this.refresh();
+      if (this.enslavedDataset) {
+        this.refresh();
+      }
     }
   },
 
