@@ -639,6 +639,8 @@ class EnslavedSearch:
                 # Perform a fuzzy search on our cached names.
                 NameSearchCache.load()
                 fuzzy_ids = NameSearchCache.search(self.searched_name)
+                if len(fuzzy_ids) == 0:
+                    return []
                 ranking = {x[1]: x[0] for x in enumerate(fuzzy_ids)}
                 q = q.filter(pk__in=fuzzy_ids)
                 is_fuzzy = True
@@ -668,8 +670,8 @@ class EnslavedSearch:
             q = q.filter(
                 post_disembark_location__pk__in=self.post_disembark_location)
         if self.source:
-            qmask = Q(sources_conn__text_ref__contains=self.source)
-            qmask |= Q(sources__full_ref__contains=self.source)
+            qmask = Q(sources_conn__text_ref__icontains=self.source)
+            qmask |= Q(sources__full_ref__icontains=self.source)
             q = q.filter(qmask)
         if self.voyage_id:
             q = q.filter(voyage__pk__range=self.voyage_id)
@@ -795,7 +797,7 @@ class EnslavedSearch:
                 q = q.order_by('enslaved_id')
 
         if self.skin_color:
-            q = q.filter(skin_color__contains=self.skin_color)
+            q = q.filter(skin_color__icontains=self.skin_color)
 
         if self.SOURCES_LIST in fields:
             q = self.sources_helper.adapt_query(q)

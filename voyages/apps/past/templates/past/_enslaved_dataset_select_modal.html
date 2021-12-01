@@ -33,7 +33,7 @@
         </div>
       </b-card>
       <div class="text-right">
-        <span class="picture-subtitle">Pictured: <a href="#">Manchuella</a>, alias "Katie Noble"</span>
+        <span class="picture-subtitle">Pictured: <a href="#" class="direct-link-filter" data-enslaved-id="202541" data-enslaved-dataset="0">Manchuella</a>, alias "Katie Noble"</span>
       </div>
     </div>
   </div>
@@ -58,7 +58,7 @@
         </div>
       </b-card>
       <div class="text-right">
-        <span class="picture-subtitle">Pictured: <a href="#">Solomon Northup</a>, alias "Hamilton, Plat"</span>
+        <span class="picture-subtitle">Pictured: <a href="#" class="direct-link-filter" data-enslaved-id="552570" data-enslaved-dataset="1">Solomon Northup</a>, alias "Hamilton, Plat"</span>
       </div>
       
     </div>
@@ -93,9 +93,12 @@
     $(".select-dataset-card").on( 'click', function (e) {
       $(this).find('.custom-control-input').prop('checked', true).trigger('click');
     } );
+
     $(".apply-button").on( 'click', function (e) {
       localStorage.enslavedDataset = $('input[name=enslaved-dataset-radio]:checked').val();
       window.location.reload();
     });
+
+    // $(".direct-link-filter")
   });
 </script>
