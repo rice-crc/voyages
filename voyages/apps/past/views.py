@@ -96,7 +96,7 @@ def search_enslaved(request):
     fields = data.get('fields')
     if fields is None:
         fields = [
-            'enslaved_id', 'age', 'gender', 'height',
+            'enslaved_id', 'age', 'gender', 'height', 'skin_color',
             'language_group__name',
             'register_country', 'sources_list',
             'voyage__id', 'voyage__voyage_ship__ship_name',
