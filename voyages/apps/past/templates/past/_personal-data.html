@@ -1,6 +1,6 @@
 {% load i18n %}
 
-<li class="nav-item dropdown">
+<li class="nav-item dropdown" v-if="localStorage.enslavedDataset==0">
   <v-menu-title :count="filter.personalData.count" title="{% trans 'Personal Data' %}"></v-menu-title>
 
   <v-panel-singular @apply="apply" @reset="reset" group="personalData" title="{% trans 'Personal Data' %}" sub-group="personalData"
