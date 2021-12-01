@@ -9,6 +9,7 @@ var searchBar = new Vue({
     isAdvanced: false,
     filter: {
       africanName: africanName,
+      identity: identity,
       personalData: personalData,
       itinerary: itinerary,
       culturalAssociation: culturalAssociation,
@@ -37,6 +38,15 @@ var searchBar = new Vue({
         }]
       }
     },
+    enslaverRoles: {
+      1: "Captain",
+      2: "Investor",
+      3: "Buyer",
+      4: "Seller",
+      5: "Owner",
+      6: "Shipper",
+      7: "Consignor",
+    },
     activated: false,
     saved: [],
     options: {
@@ -53,6 +63,7 @@ var searchBar = new Vue({
     currentQuery: {},
     hasCurrentQuery: false,
     rowModalShow: false,
+    enslavedDatasetModalShow: false,
     currentTab: "results", // currently active tab
     timelapse: {
       ui: {},
@@ -289,6 +300,9 @@ var searchBar = new Vue({
     displayChanged() {
       return this.filter.settings.settings.var_display_settings.value
         .searchTerm;
+    },
+    enslavedDataset() {
+      return localStorage.enslavedDataset !== undefined ? localStorage.enslavedDataset : 0;
     }
   },
 

@@ -13,7 +13,7 @@ var_age_range = new NumberVariable({
 
 var_gender = new TreeselectVariable({
     varName: "gender",
-    label: gettext("Gender"),
+    label: gettext("Sex"),
     description: "",
   },{
     op: "is one of",
