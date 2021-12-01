@@ -5,7 +5,7 @@ from django.db import transaction
 from django.utils.encoding import smart_str
 
 from voyages.apps.common.utils import *
-from voyages.apps.past.models import Enslaved, EnslavedSourceConnection, EnslaverAlias, LanguageGroup, RegisterCountry
+from voyages.apps.past.models import CaptiveFate, CaptiveStatus, Enslaved, EnslavedSourceConnection, EnslaverAlias, LanguageGroup, RegisterCountry
 from voyages.apps.voyage.models import Place, Voyage
 
 class Command(BaseCommand):    
@@ -81,8 +81,14 @@ class Command(BaseCommand):
                         enslaved.documented_name = rh.get('westernname', max_chars=MAX_CHARS)
                     else:
                         raise Exception('Unknown dataset ' + str(dataset))
+                    enslaved.captive_fate = rh.get_by_value(CaptiveFate, 'captivefate', 'id')
+                    enslaved.captive_status = rh.get_by_value(CaptiveStatus, 'captivestatus', 'id')
                     enslaved.age = rh.cint('age')
-                    enslaved.gender = rh.cint('gender')
+                    # Note: the gender/sex code from the CSV files has 1 -
+                    # Female, 2 - Male, which is the opposite of our internal
+                    # representation.
+                    gender_code  = rh.cint('gender')
+                    enslaved.gender = 1 if gender_code == 2 else (2 if gender_code == 1 else gender_code)
                     enslaved.height = rh.cfloat('height')
                     enslaved.skin_color = rh.get('skincolor', max_chars=MAX_CHARS)
                     enslaved.notes = rh.get('notes')
