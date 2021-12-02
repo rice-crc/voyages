@@ -66,8 +66,8 @@ var_height_range = new NumberVariable({
     description: "",
   },{
     op: "is between",
-    searchTerm0: 12,
-    searchTerm1: 85
+    searchTerm0: null,
+    searchTerm1: null
   },{
     isImputed: false,
     isAdvanced: false

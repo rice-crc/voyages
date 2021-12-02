@@ -60,6 +60,8 @@ var allColumns = [
     { data: "ranking", category: 0, header: gettext("Search Ranking"), isImputed: false, isUserSearchBased: true, visible: false },
     { data: "age", category: 0, header: gettext("Age"), isImputed: false },
     { data: "gender", category: 0, header: gettext("Sex"), isImputed: false },
+    { data: "height", category: 0, header: gettext("Height"), isImputed: false },
+    { data: "skin_color", category: 0, header: gettext("Racial Descriptor"), isImputed: false },
 
     // Itinerary
     { data: "voyage__voyage_ship__ship_name", category: 1, header: gettext("Ship Name"), isImputed: false },
@@ -160,13 +162,9 @@ allColumns[enslavedDataset].forEach(function(c, index) {
             roles: value.join(', '),
           };
         });
-        if (enslaversList.length == 1) {
-          formattedString += "<span class=\"tooltip-pointer\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"\" data-original-title=\""+enslaversList[0].roles+"\">"+enslaversList[0].name+"</span>";
-        } else {
-          enslaversList.forEach((value) => {
-            formattedString += "<span class=\"h6 pr-2\"><span class=\"badge badge-pill badge-secondary tooltip-pointer\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"\" data-original-title=\""+value.roles+"\">"+value.name+"</span></span>";
-          });
-        }
+        enslaversList.forEach((value) => {
+          formattedString += "<span class=\"h6 pr-2\"><span class=\"badge badge-pill badge-secondary tooltip-pointer\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"\" data-original-title=\""+value.roles+"\">"+value.name+"</span></span>";
+        });
       } else {
         formattedString = "<span>" + data + "</span>";
         var column = c.data;

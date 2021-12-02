@@ -439,8 +439,8 @@ function searchAll(filter, filterData) {
                         searchTerm0 = filter[key1][key2][key3].value["searchTerm0"];
                       break;
                       case "is between":
-                        searchTerm0 = filter[key1][key2][key3].value["searchTerm0"];
-                        searchTerm1 = filter[key1][key2][key3].value["searchTerm1"];
+                        searchTerm0 = filter[key1][key2][key3].value["searchTerm0"] ?? searchTerm0;
+                        searchTerm1 = filter[key1][key2][key3].value["searchTerm1"] ?? searchTerm1;
                       break;
                     }
 
