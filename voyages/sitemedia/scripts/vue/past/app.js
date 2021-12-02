@@ -302,7 +302,7 @@ var searchBar = new Vue({
         .searchTerm;
     },
     enslavedDataset() {
-      return localStorage.enslavedDataset !== undefined ? localStorage.enslavedDataset : 0;
+      return localStorage.enslavedDataset !== undefined ? localStorage.enslavedDataset : null;
     }
   },
 
@@ -628,7 +628,26 @@ var searchBar = new Vue({
       var savedSearchId = location.href.split(SAVED_SEARCH_LABEL).pop();
       this.load(savedSearchId);
     } else {
-      this.refresh();
+      if (this.enslavedDataset) {
+        if (localStorage.directLinkFilter) {
+          var filter;
+          if (this.enslavedDataset == 0) {
+            this.filter.africanName.name.var_enslaved_id.activated = true;
+            this.filter.africanName.name.var_enslaved_id.changed = true;
+            this.filter.africanName.name.var_enslaved_id.value.op = "is equal to";
+            this.filter.africanName.name.var_enslaved_id.value.searchTerm0 = localStorage.directLinkFilter;
+            this.filter.africanName.name.var_enslaved_id.value.searchTerm1 = localStorage.directLinkFilter;
+          } else if (this.enslavedDataset == 1) {
+            this.filter.identity.name.var_enslaved_id.activated = true;
+            this.filter.identity.name.var_enslaved_id.changed = true;
+            this.filter.identity.name.var_enslaved_id.value.op = "is equal to";
+            this.filter.identity.name.var_enslaved_id.value.searchTerm0 = localStorage.directLinkFilter;
+            this.filter.identity.name.var_enslaved_id.value.searchTerm1 = localStorage.directLinkFilter;
+          }
+          localStorage.removeItem("directLinkFilter");
+        }
+        this.refresh();
+      }
     }
   },
 
