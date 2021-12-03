@@ -11,6 +11,7 @@ var categoryNames = [
   [
     gettext("Identity"),
     gettext("Itinerary"),
+    gettext("Fate"),
     gettext("Enslavement"),
     gettext("Sources"),
   ]
@@ -68,11 +69,14 @@ var allColumns = [
     { data: "voyage__voyage_itinerary__imp_principal_place_of_slave_purchase__place", category: 1, header: gettext("Embarkation Port"), isImputed: false },
     { data: "voyage__voyage_itinerary__imp_principal_port_slave_dis__place", category: 1, header: gettext("Disembarkation Port"), isImputed: false },
 
+    //fate
+    { data: "post_disembark_location__place", category: 2, header: gettext("Last Known Location"), isImputed: false },
+
     // Enslavement
-    { data: "enslavers_list", category: 2, header: gettext("Enslavers"), isImputed: false, isEnslaversList: true, orderable: false },
+    { data: "enslavers_list", category: 3, header: gettext("Enslavers"), isImputed: false, isEnslaversList: true, orderable: false },
 
     // sources
-    { data: "sources_list", category: 3, header: gettext("Sources"), isImputed: false, visible: false, orderable: false },
+    { data: "sources_list", category: 4, header: gettext("Sources"), isImputed: false, visible: false, orderable: false },
   ]
 ];
 
