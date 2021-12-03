@@ -34,18 +34,17 @@ var allColumns = [
     { data: "voyage__voyage_ship__ship_name", category: 2, header: gettext("Ship Name"), isImputed: false },
     { data: "voyage__voyage_itinerary__imp_principal_place_of_slave_purchase__place", category: 2, header: gettext("Embarkation Port"), isImputed: false },
     { data: "voyage__voyage_itinerary__imp_principal_port_slave_dis__place", category: 2, header: gettext("Disembarkation Port"), isImputed: false },
-    // { data: "geocode", category: 2, header: gettext("Geocode"), isImputed: false },
     { data: "voyage__voyage_dates__first_dis_of_slaves", category: 2, header: gettext("Arrival Year"), isImputed: false },
     { data: "voyage__voyage_itinerary__int_first_port_dis__place", category: 2, header: gettext("Intended Disembarkation Port"), isImputed: false },
 
     // cultural association
-    // { data: "register_country", category: 3, header: gettext("Register Country"), isImputed: false },
     { data: "language_group__modern_country__name", category: 3, header: gettext("Modern Country"), isImputed: false, visible: false },
     { data: "ethnicity__name", category: 3, header: gettext("Ethnicity"), isImputed: false, visible: false },
     { data: "language_group__name", category: 3, header: gettext("Language Group"), isImputed: false },
 
     //fate
-    // { data: "post_disembarkation_location", category: 4, header: gettext("Post Disembarkation Location"), isImputed: false },
+    { data: "captive_fate__name", category: 4, header: gettext("Captive Fate"), isImputed: false },
+    { data: "post_disembark_location__place", category: 4, header: gettext("Post Disembarkation Location"), isImputed: false },
 
     // sources
     { data: "sources_list", category: 5, header: gettext("Sources"), isImputed: false, visible: false, orderable: false },
