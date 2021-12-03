@@ -615,16 +615,14 @@ class EnslavedSearch:
         representing an Enslaved record.
         @param: fields A list of fields that are fetched.
         """
-        q = Enslaved.objects \
-            .select_related('language_group') \
-            .select_related('voyage__voyage_dates') \
-            .select_related('voyage__voyage_ship') \
-            .select_related('voyage__voyage_itinerary__int_first_port_dis') \
-            .select_related('voyage__voyage_itinerary_'
-                            '_imp_principal_place_of_slave_purchase') \
-            .select_related('voyage__voyage_itinerary_'
-                            '_imp_principal_port_slave_dis') \
-            .select_related('register_country')
+        # For performance reasons we detect all the fields that are related to
+        # the Enslaved model and force the ORM to select them in the query
+        # (otherwise, they would need to be fetched by separate queries). We use
+        # the convention of double underscores in related field names to detect
+        # those fields and extract only the part that needs to be passed to
+        # select_related().
+        related = [f[:i] for (f, i) in [(f, f.rfind('__')) for f in fields] if i > 0]
+        q = Enslaved.objects.select_related(*related)
 
         ranking = None
         is_fuzzy = False
@@ -804,10 +802,11 @@ class EnslavedSearch:
         if self.ENSLAVERS_LIST in fields:
             q = self.enslavers_helper.adapt_query(q)
 
+        q = q.values(*fields)
+
         if settings.DEBUG:
             print(q.query)
 
-        q = q.values(*fields)
         if is_fuzzy:
             # Convert the QuerySet to a concrete list and include the ranking
             # as a member of each object in that list.
