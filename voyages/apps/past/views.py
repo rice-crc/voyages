@@ -98,17 +98,13 @@ def search_enslaved(request):
         fields = [
             'enslaved_id', 'age', 'gender', 'height', 'skin_color',
             'language_group__name',
-            'register_country', 'sources_list',
-            'voyage__id', 'voyage__voyage_ship__ship_name',
+            'register_country__name',
+            'voyage_id', 'voyage__voyage_ship__ship_name',
             'voyage__voyage_dates__first_dis_of_slaves',
             'voyage__voyage_itinerary__int_first_port_dis__place',
-            'voyage__voyage_itinerary__imp_principal_place_of_slave_purchase_'
-            '_place',
-            'voyage__voyage_itinerary__imp_principal_place_of_slave_purchase_'
-            '_latitude',
-            'voyage__voyage_itinerary__imp_principal_place_of_slave_purchase_'
-            '_longitude',
+            'voyage__voyage_itinerary__imp_principal_place_of_slave_purchase__place',
             'voyage__voyage_itinerary__imp_principal_port_slave_dis__place',
+            'captive_fate__name', 'post_disembark_location__place',
             EnslavedSearch.SOURCES_LIST, EnslavedSearch.ENSLAVERS_LIST
         ] + _name_fields + _modern_name_fields
     query = search.execute(fields)

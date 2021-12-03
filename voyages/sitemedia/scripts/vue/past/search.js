@@ -11,6 +11,7 @@ var categoryNames = [
   [
     gettext("Identity"),
     gettext("Itinerary"),
+    gettext("Fate"),
     gettext("Enslavement"),
     gettext("Sources"),
   ]
@@ -26,7 +27,7 @@ var allColumns = [
 
     // personal data
     { data: "age", category: 1, header: gettext("Age"), isImputed: false },
-    { data: "gender", category: 1, header: gettext("Gender"), isImputed: false },
+    { data: "gender", category: 1, header: gettext("Sex"), isImputed: false },
     { data: "height", category: 1, header: gettext("Height"), isImputed: false },
 
     // itinerary
@@ -34,18 +35,17 @@ var allColumns = [
     { data: "voyage__voyage_ship__ship_name", category: 2, header: gettext("Ship Name"), isImputed: false },
     { data: "voyage__voyage_itinerary__imp_principal_place_of_slave_purchase__place", category: 2, header: gettext("Embarkation Port"), isImputed: false },
     { data: "voyage__voyage_itinerary__imp_principal_port_slave_dis__place", category: 2, header: gettext("Disembarkation Port"), isImputed: false },
-    // { data: "geocode", category: 2, header: gettext("Geocode"), isImputed: false },
     { data: "voyage__voyage_dates__first_dis_of_slaves", category: 2, header: gettext("Arrival Year"), isImputed: false },
     { data: "voyage__voyage_itinerary__int_first_port_dis__place", category: 2, header: gettext("Intended Disembarkation Port"), isImputed: false },
 
     // cultural association
-    // { data: "register_country", category: 3, header: gettext("Register Country"), isImputed: false },
     { data: "language_group__modern_country__name", category: 3, header: gettext("Modern Country"), isImputed: false, visible: false },
     { data: "ethnicity__name", category: 3, header: gettext("Ethnicity"), isImputed: false, visible: false },
     { data: "language_group__name", category: 3, header: gettext("Language Group"), isImputed: false },
 
     //fate
-    // { data: "post_disembarkation_location", category: 4, header: gettext("Post Disembarkation Location"), isImputed: false },
+    { data: "captive_fate__name", category: 4, header: gettext("Captive Fate"), isImputed: false },
+    { data: "post_disembark_location__place", category: 4, header: gettext("Post Disembarkation Location"), isImputed: false },
 
     // sources
     { data: "sources_list", category: 5, header: gettext("Sources"), isImputed: false, visible: false, orderable: false },
@@ -60,6 +60,8 @@ var allColumns = [
     { data: "ranking", category: 0, header: gettext("Search Ranking"), isImputed: false, isUserSearchBased: true, visible: false },
     { data: "age", category: 0, header: gettext("Age"), isImputed: false },
     { data: "gender", category: 0, header: gettext("Sex"), isImputed: false },
+    { data: "height", category: 0, header: gettext("Height"), isImputed: false },
+    { data: "skin_color", category: 0, header: gettext("Racial Descriptor"), isImputed: false },
 
     // Itinerary
     { data: "voyage__voyage_ship__ship_name", category: 1, header: gettext("Ship Name"), isImputed: false },
@@ -67,11 +69,14 @@ var allColumns = [
     { data: "voyage__voyage_itinerary__imp_principal_place_of_slave_purchase__place", category: 1, header: gettext("Embarkation Port"), isImputed: false },
     { data: "voyage__voyage_itinerary__imp_principal_port_slave_dis__place", category: 1, header: gettext("Disembarkation Port"), isImputed: false },
 
+    //fate
+    { data: "post_disembark_location__place", category: 2, header: gettext("Last Known Location"), isImputed: false },
+
     // Enslavement
-    { data: "enslavers_list", category: 2, header: gettext("Enslavers"), isImputed: false, isEnslaversList: true, orderable: false },
+    { data: "enslavers_list", category: 3, header: gettext("Enslavers"), isImputed: false, isEnslaversList: true, orderable: false },
 
     // sources
-    { data: "sources_list", category: 3, header: gettext("Sources"), isImputed: false, visible: false, orderable: false },
+    { data: "sources_list", category: 4, header: gettext("Sources"), isImputed: false, visible: false, orderable: false },
   ]
 ];
 
@@ -160,13 +165,9 @@ allColumns[enslavedDataset].forEach(function(c, index) {
             roles: value.join(', '),
           };
         });
-        if (enslaversList.length == 1) {
-          formattedString += "<span class=\"tooltip-pointer\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"\" data-original-title=\""+enslaversList[0].roles+"\">"+enslaversList[0].name+"</span>";
-        } else {
-          enslaversList.forEach((value) => {
-            formattedString += "<span class=\"h6 pr-2\"><span class=\"badge badge-pill badge-secondary tooltip-pointer\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"\" data-original-title=\""+value.roles+"\">"+value.name+"</span></span>";
-          });
-        }
+        enslaversList.forEach((value) => {
+          formattedString += "<span class=\"h6 pr-2\"><span class=\"badge badge-pill badge-secondary tooltip-pointer\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"\" data-original-title=\""+value.roles+"\">"+value.name+"</span></span>";
+        });
       } else {
         formattedString = "<span>" + data + "</span>";
         var column = c.data;
