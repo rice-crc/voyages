@@ -22,7 +22,7 @@ import unicodecsv
 
 from voyages.apps.common.export import download_xls
 from voyages.apps.common.models import (SavedQuery,
-                                        get_pks_from_haystack_results)
+                                        get_pks_from_haystack_results, get_values_from_haystack_results)
 from voyages.apps.common.views import \
     get_datatable_json_result as get_results_table
 from voyages.apps.common.views import get_ordered_places
