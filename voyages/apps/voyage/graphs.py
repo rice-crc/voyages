@@ -281,7 +281,7 @@ def get_graph_data(search_query_set, x_axis, y_axes):
     def sorting(d):
         return x_axis.get_group_key(d)
 
-    data = sorted(data, key=sorting)
+    data = sorted([datum for datum in data if sorting(datum) is not None], key=sorting)
     result = {y_axis.description: [] for y_axis in y_axes}
     for x_key, e in groupby(data, key=sorting):
         if x_key is None:
