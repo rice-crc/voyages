@@ -62,7 +62,7 @@ var_enslaved_id = new NumberVariable({
 
 var_height_range = new NumberVariable({
     varName: "height_range",
-    label: gettext("Height"),
+    label: gettext("Height (in.)"),
     description: "",
   },{
     op: "is between",
