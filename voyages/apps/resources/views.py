@@ -19,7 +19,8 @@ from voyages.apps.voyage.views import prepare_paginator_variables
 
 from .forms import ResultsPerPageOptionForm
 from .globals import names_search_strict_text, names_sort_fields
-from .models import (AfricanName, AfricanNamesIndex, Country, Image,
+from .search_indexes import AfricanNamesIndex
+from .models import (AfricanName, Country, Image,
                      ImageCategory, Place)
 
 
