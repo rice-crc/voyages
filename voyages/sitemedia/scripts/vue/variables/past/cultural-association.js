@@ -23,7 +23,7 @@ var_ethnicity = new TreeselectVariable({
   });
 
 
-var_language_groups = new TreeselectVariable({
+var_language_groups = new LanguageGroupVariable({
     varName: "language_groups",
     label: gettext("Language Group"),
     description: "",

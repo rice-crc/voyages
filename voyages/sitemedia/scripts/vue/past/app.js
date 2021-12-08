@@ -153,6 +153,7 @@ var searchBar = new Vue({
                           if (currentVariable["value"]["searchTerm"]) {
                             if (
                               currentVariable instanceof PlaceVariable ||
+                              currentVariable instanceof LanguageGroupVariable ||
                               currentVariable instanceof TreeselectVariable
                             ) {
                               labels = getTreeselectLabel(
@@ -482,6 +483,7 @@ var searchBar = new Vue({
                     vm.filter[group][subGroup][varName].changed = true;
 
                     if (vm.filter[group][subGroup][varName] instanceof PlaceVariable ||
+                      vm.filter[group][subGroup][varName] instanceof LanguageGroupVariable ||
                       vm.filter[group][subGroup][varName] instanceof TreeselectVariable)
                     {
                       vm.filter[group][subGroup][varName].value.searchTerm = variable;

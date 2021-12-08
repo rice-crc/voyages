@@ -368,6 +368,34 @@ function searchAll(filter, filterData) {
 
                     item["searchTerm"] = searchTerm;
 
+                    // if it's a LanguageGroupVariable
+                  } else if (filter[key1][key2][key3].constructor.name === "LanguageGroupVariable") {
+                    var sortedSelections = filter[key1][key2][key3].value["searchTerm"].sort(sortNumber);
+                    var searchTerm = [];
+
+                    sortedSelections.forEach(function(selection) {
+                      var varName = filter[key1][key2][key3]["varName"];
+                      if (selection == filterData.treeselectOptions[varName][0].id) {
+                        // select all
+                        searchTerm = filterData.treeselectOptions[varName][0].languageGroupIds;
+                      } else {
+                        // country
+                        filterData.treeselectOptions[varName][0].children.forEach(function(country) {
+                          if (selection == country.id) {
+                            searchTerm = [...new Set([...searchTerm ,...country.languageGroupIds])];
+                          } else {
+                            country.children.forEach(function(languageGroup) {
+                              if (selection == languageGroup.id) {
+                                searchTerm = [...new Set([...searchTerm ,...languageGroup.languageGroupIds])];
+                              }
+                            });
+                          }
+                        });
+                      }
+                    });
+
+                    item["searchTerm"] = searchTerm;
+                    
                     // if it's a TreeselectVariable
                   } else if (filter[key1][key2][key3].constructor.name === "TreeselectVariable") {
                     var sortedSelections = filter[key1][key2][key3].value["searchTerm"].sort(sortNumber);
@@ -521,6 +549,34 @@ function getTreeselectLabel(currentVariable, searchTerms, treeselectOptions) {
           labels.push(treeselectOption.label);
         }
       });
+    });
+  } else if (currentVariable.constructor.name == "LanguageGroupVariable") {
+    treeselectOptions = treeselectOptions[currentVariable.varName][0];
+    searchTerms.forEach(function(searchTerm) {
+      if (searchTerm == treeselectOptions.id) {
+        // ALL SELECTED
+        labels.push(treeselectOptions.label);
+      } else {
+        if (treeselectOptions.children !== undefined) {
+          // COUNTRIES
+          countries = treeselectOptions.children;
+          countries.forEach(function(country) {
+            if (searchTerm == country.id) {
+              labels.push(country.label);
+            } else {
+              if (country.children !== undefined) {
+                // LANGUAGE GROUPS
+                languageGroups = country.children;
+                languageGroups.forEach(function(languageGroup) {
+                  if (searchTerm == languageGroup.id) {
+                    labels.push(languageGroup.label);
+                  }
+                });
+              }
+            }
+          });
+        }
+      }
     });
   } else if (currentVariable.constructor.name == "PlaceVariable") {
     treeselectOptions = treeselectOptions[currentVariable.varName][0];
@@ -690,7 +746,7 @@ var parsePlaces = function(response) {
   // fill broad regions
   for (key in data.broadRegions) {
     options[0].children.push({
-      id: data.broadRegions[key].order,
+      id: 'br'+data.broadRegions[key].order,
       label: data.broadRegions[key].broad_region,
       children: []
     });
@@ -700,7 +756,7 @@ var parsePlaces = function(response) {
   for (regionId in data.regions) {
     var broadRegion = data.regions[regionId].broad_region;
     for (broadRegionId in options[0].children) {
-      if (options[0].children[broadRegionId].id == broadRegion.order) {
+      if (options[0].children[broadRegionId].id == 'br'+broadRegion.order) {
         options[0].children[broadRegionId].children.push({
           id: data.regions[regionId].code,
           label: data.regions[regionId].region,
@@ -722,7 +778,7 @@ var parsePlaces = function(response) {
     var value = data.ports[portId].value;
     var label = data.ports[portId].port;
     var regionId = data.ports[portId].region.code;
-    var broadRegionId = data.ports[portId].region.broad_region.order;
+    var broadRegionId = 'br'+data.ports[portId].region.broad_region.order;
 
     // locate corresponding location in the options tree
     options[0].children.map(function(broadRegion) {
@@ -760,7 +816,8 @@ var parseLanguageGroups = function(response) {
       id: 0,
       code: 0,
       label: gettext("Select All"),
-      children: []
+      children: [],
+      languageGroupIds: [],
     }
   ];
 
@@ -777,13 +834,18 @@ var parseLanguageGroups = function(response) {
     options[0].children.push({
       id: country,
       label: country,
-      children: []
+      children: [],
+      languageGroupIds: []
     });
   });
 
   // fill languageGroups
   $.each(response.data, function(id, languageGroup) {
     var label = languageGroup.name;
+    var languageGroupId = languageGroup.id;
+    if (options[0].languageGroupIds.indexOf(languageGroupId) === -1) {
+      options[0].languageGroupIds.push(languageGroupId);
+    }
     if (languageGroup.alts.length > 0) {
       var altNames = [];
       $.each(languageGroup.alts, function(id, altName) {
@@ -799,7 +861,10 @@ var parseLanguageGroups = function(response) {
     $.each(options[0].children, function(key, country) {
       $.each(languageGroup.countries, (index, languageGroupCountry) => {
         if (languageGroupCountry == country.label) {
-          options[0].children[key].children.push({'id': id, 'label' : label, 'isDisabled': false});
+          if (options[0].children[key].languageGroupIds.indexOf(languageGroupId) === -1) {
+            options[0].children[key].languageGroupIds.push(languageGroupId);
+          }
+          options[0].children[key].children.push({'id': key+'-'+languageGroupId, 'label' : label, 'isDisabled': false, languageGroupIds: [languageGroupId]});
         }
       });
     });

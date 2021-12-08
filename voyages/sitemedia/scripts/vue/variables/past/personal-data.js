@@ -25,7 +25,7 @@ var_gender = new TreeselectVariable({
 
 var_height_range = new NumberVariable({
     varName: "height_range",
-    label: gettext("Height"),
+    label: gettext("Height (in.)"),
     description: "",
   },{
     op: "is between",

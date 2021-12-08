@@ -28,10 +28,10 @@ var allColumns = [
     // personal data
     { data: "age", category: 1, header: gettext("Age"), isImputed: false },
     { data: "gender", category: 1, header: gettext("Sex"), isImputed: false },
-    { data: "height", category: 1, header: gettext("Height"), isImputed: false },
+    { data: "height", category: 1, header: gettext("Height (in.)"), isImputed: false },
 
     // itinerary
-    { data: "voyage__id", category: 2, header: gettext("Voyage ID"), isImputed: false },
+    { data: "voyage_id", category: 2, header: gettext("Voyage ID"), isImputed: false },
     { data: "voyage__voyage_ship__ship_name", category: 2, header: gettext("Ship Name"), isImputed: false },
     { data: "voyage__voyage_itinerary__imp_principal_place_of_slave_purchase__place", category: 2, header: gettext("Embarkation Port"), isImputed: false },
     { data: "voyage__voyage_itinerary__imp_principal_port_slave_dis__place", category: 2, header: gettext("Disembarkation Port"), isImputed: false },
@@ -60,7 +60,7 @@ var allColumns = [
     { data: "ranking", category: 0, header: gettext("Search Ranking"), isImputed: false, isUserSearchBased: true, visible: false },
     { data: "age", category: 0, header: gettext("Age"), isImputed: false },
     { data: "gender", category: 0, header: gettext("Sex"), isImputed: false },
-    { data: "height", category: 0, header: gettext("Height"), isImputed: false },
+    { data: "height", category: 0, header: gettext("Height (in.)"), isImputed: false },
     { data: "skin_color", category: 0, header: gettext("Racial Descriptor"), isImputed: false },
 
     // Itinerary
@@ -171,7 +171,7 @@ allColumns[enslavedDataset].forEach(function(c, index) {
       } else {
         formattedString = "<span>" + data + "</span>";
         var column = c.data;
-        if (column == 'voyage__id') {
+        if (column == 'voyage_id') {
           formattedString = '<a href="javascript:void(0)" onclick="openVoyageModal(' + data + ');">' + formattedString + '</a>'
         }
       }
