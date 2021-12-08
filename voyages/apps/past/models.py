@@ -53,6 +53,8 @@ class NameSearchCache:
         parts = re.split("\\s*,\\s*|\\s+", name)
         if len(parts) == 2:
             yield parts[1] + " " + parts[0]
+        for part in parts:
+            yield part
 
     @classmethod
     def get_recordings(cls, names):
@@ -625,7 +627,7 @@ class EnslavedSearch:
         # the convention of double underscores in related field names to detect
         # those fields and extract only the part that needs to be passed to
         # select_related().
-        related = [f[:i] for (f, i) in [(f, f.rfind('__')) for f in fields] if i > 0]
+        related = list({f[:i] for (f, i) in [(f, f.rfind('__')) for f in fields] if i > 0})
         q = Enslaved.objects.select_related(*related)
 
         ranking = None
