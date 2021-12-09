@@ -2,7 +2,7 @@ from __future__ import absolute_import, unicode_literals
 
 import operator
 import threading
-import unicodedata
+import unidecode
 from builtins import range, str
 from functools import reduce
 from django.conf import settings
@@ -14,6 +14,7 @@ from django.db.models.expressions import Subquery, OuterRef
 from django.db.models.fields import TextField
 from django.db.models.functions import Coalesce, Concat, Length, Substr
 import Levenshtein_search
+import re
 
 from voyages.apps.voyage.models import Place, Voyage, VoyageSources
 from voyages.apps.common.validators import date_csv_field_validator
@@ -35,13 +36,8 @@ def strip_accents(text):
     :returns: The processed String.
     :rtype: String.
     """
-    try:
-        text = str(text, 'utf-8')
-    except (TypeError, NameError):  # unicode is a default on python 3
-        pass
-    text = unicodedata.normalize('NFD', text)
-    text = text.encode('ascii', 'ignore')
-    return str(text.lower())
+    text = unidecode.unidecode(text)
+    return text.replace(',', '').lower()
 
 
 class NameSearchCache:
@@ -50,6 +46,15 @@ class NameSearchCache:
     _index = None
     _name_key = {}
     _sound_recordings = {}
+    
+    @staticmethod
+    def get_composite_names(name):
+        yield name
+        parts = re.split("\\s*,\\s*|\\s+", name)
+        if len(parts) == 2:
+            yield parts[1] + " " + parts[0]
+        for part in parts:
+            yield part
 
     @classmethod
     def get_recordings(cls, names):
@@ -83,11 +88,12 @@ class NameSearchCache:
             q = Enslaved.objects.values_list('enslaved_id', 'documented_name',
                                              'name_first', 'name_second',
                                              'name_third')
+
             for item in q:
                 ns = {
-                    strip_accents(item[i])
-                    for i in range(1, 4)
-                    if item[i] is not None
+                    strip_accents(part)
+                    for i in range(1, len(item)) if item[i] is not None
+                    for part in NameSearchCache.get_composite_names(item[i])
                 }
                 all_names.update(ns)
                 item_0 = item[0]
@@ -621,7 +627,7 @@ class EnslavedSearch:
         # the convention of double underscores in related field names to detect
         # those fields and extract only the part that needs to be passed to
         # select_related().
-        related = [f[:i] for (f, i) in [(f, f.rfind('__')) for f in fields] if i > 0]
+        related = list({f[:i] for (f, i) in [(f, f.rfind('__')) for f in fields] if i > 0})
         q = Enslaved.objects.select_related(*related)
 
         ranking = None

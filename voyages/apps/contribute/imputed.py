@@ -65,6 +65,27 @@ def fn_from_value(model):
 
     return fn
 
+def safe_ge(a, b):
+    # Emulate the Python 2 behavior (anything >= None)
+    if a is None:
+        return b is None
+    return b is None or a >= b
+
+def safe_lt(a, b):
+    return not safe_ge(a, b)
+
+def safe_in_range(a, start_inclusive, end_exclusive):
+    return safe_ge(a, start_inclusive) and safe_lt(a, end_exclusive)
+
+def safe_in_exclusiverange(a, start_exclusive, end_exclusive):
+    return safe_lt(start_exclusive, a) and safe_lt(a, end_exclusive)
+
+def range_id(yearam, base, yearlist):
+    return base + len(list(takewhile(
+        lambda x: safe_ge(yearam, x), yearlist)))
+
+def identity(x):
+    return x
 
 # Construct a dictionary that will map imputed variable names to
 # _interimVoyage model fields, with an adapter function that converts
@@ -75,7 +96,7 @@ region_from_val = fn_from_value(Region)
 # Map between imputed SPSS variables and our model.
 imputed_vars_model_map = {
     'natinimp': ('imputed_national_carrier', fn_from_value(Nationality)),
-    'tonmod': ('imputed_standardized_tonnage', id),
+    'tonmod': ('imputed_standardized_tonnage', identity),
     'fate2': ('imputed_outcome_of_voyage_for_slaves',
               fn_from_value(SlavesOutcome)),
     'fate3': ('imputed_outcome_of_voyage_if_ship_captured',
@@ -96,27 +117,27 @@ imputed_vars_model_map = {
         ('imputed_second_region_of_embarkation_of_slaves', region_from_val),
     'regem3':
         ('imputed_third_region_of_embarkation_of_slaves', region_from_val),
-    'yeardep': ('imputed_year_voyage_began', id),
-    'yearaf': ('imputed_year_departed_africa', id),
-    'yearam': ('imputed_year_arrived_at_port_of_disembarkation', id),
-    'year5': ('imputed_quinquennium_in_which_voyage_occurred', id),
-    'year10': ('imputed_decade_in_which_voyage_occurred', id),
-    'year25': ('imputed_quarter_century_in_which_voyage_occurred', id),
-    'year100': ('imputed_century_in_which_voyage_occurred', id),
+    'yeardep': ('imputed_year_voyage_began', identity),
+    'yearaf': ('imputed_year_departed_africa', identity),
+    'yearam': ('imputed_year_arrived_at_port_of_disembarkation', identity),
+    'year5': ('imputed_quinquennium_in_which_voyage_occurred', identity),
+    'year10': ('imputed_decade_in_which_voyage_occurred', identity),
+    'year25': ('imputed_quarter_century_in_which_voyage_occurred', identity),
+    'year100': ('imputed_century_in_which_voyage_occurred', identity),
     'voy1imp':
         ('imputed_voyage_length_home_port_to_first_port_of_disembarkation',
-         id),
-    'voy2imp': ('imputed_length_of_middle_passage', id),
+         identity),
+    'voy2imp': ('imputed_length_of_middle_passage', identity),
     'xmimpflag': ('imputed_voyage_groupings_for_estimating_imputed_slaves',
                   fn_from_value(VoyageGroupings)),
-    'slaximp': ('imputed_total_slaves_embarked', id),
-    'slamimp': ('imputed_total_slaves_disembarked', id),
+    'slaximp': ('imputed_total_slaves_embarked', identity),
+    'slamimp': ('imputed_total_slaves_disembarked', identity),
     'tslmtimp':
-        ('imputed_number_of_slaves_embarked_for_mortality_calculation', id),
-    'vymrtimp': ('imputed_total_slave_deaths_during_middle_passage', id),
-    'vymrtrat': ('imputed_mortality_rate', id),
+        ('imputed_number_of_slaves_embarked_for_mortality_calculation', identity),
+    'vymrtimp': ('imputed_total_slave_deaths_during_middle_passage', identity),
+    'vymrtrat': ('imputed_mortality_rate', identity),
     # Manually imputed -- 'jamcaspr': ('imputed_standardized_price_of_slaves',
-    # id)
+    # identity)
 }
 
 
@@ -129,7 +150,7 @@ def region_value(x):
 
 
 def broad_value(x):
-    return clear_mod(x, 10000) if x <= 80000 else 80000
+    return clear_mod(x, 10000) if safe_ge(80000, x) else 80000
 
 
 def extract_year(csv_date):
@@ -296,9 +317,9 @@ def compute_imputed_vars(_interim, is_iam=False):
     if tonnage:
 
         def update_tonmod(tonmod, tonnage):
-            if tonmod > 250:
+            if safe_lt(250, tonmod):
                 return 13.1 + 1.1 * tonnage
-            if tonmod > 150:
+            if safe_lt(150, tonmod):
                 return 65.3 + 1.2 * tonnage
             return 2.3 + 1.8 * tonnage
 
@@ -307,26 +328,26 @@ def compute_imputed_vars(_interim, is_iam=False):
         tonmod = tonnage
         if tontype == 13:
             tonmod = tonnage
-        elif (yearam and ((tontype and tontype < 3) or tontype in (4, 5))):
-            tonmod = tonnage if yearam > 1773 else update_tonmod(
+        elif (yearam and ((tontype and safe_lt(tontype, 3)) or tontype in (4, 5))):
+            tonmod = tonnage if safe_lt(1773, yearam) else update_tonmod(
                 tonnage, tonnage)
         if tontype == 4:
-            if yearam and 1783 < yearam < 1794:
+            if yearam and safe_in_exclusiverange(yearam, 1783, 1794):
                 tonmod = None
         elif tontype in (3, 6, 9, 16):
             tonmod = 71 + (0.86 * tonnage)
-            if yearam and yearam < 1774:
+            if yearam and safe_lt(yearam, 1774):
                 tonmod = update_tonmod(tonmod, tonnage)
         elif tontype == 7:
             tonmod = tonnage * 2
-            if yearam > 1773:
+            if safe_lt(1773, yearam):
                 tonmod = update_tonmod(tonmod, tonmod)
         elif tontype == 21:
             tonmod = -6.093 + (0.76155 * tonnage)
-            if yearam > 1773:
+            if safe_lt(1773, yearam):
                 tonmod = update_tonmod(tonmod, tonmod)
-        if all([tontype is None, yearam, 1714 < yearam < 1786,
-                tonnage > 0, natinimp == 7]):
+        if all([tontype is None, yearam, safe_in_exclusiverange(yearam, 1714, 1786),
+                safe_lt(0, tonnage), natinimp == 7]):
             tontype = 22
             tonmod = update_tonmod(tonnage, tonnage)
         elif tontype in (14, 15, 17):
@@ -466,11 +487,11 @@ def compute_imputed_vars(_interim, is_iam=False):
         mjbyptimp = None
 
     if _num_places == 0:
-        if embport >= 1 and not embport2:
+        if safe_ge(embport, 1) and not embport2:
             mjbyptimp = embport
-        elif not embport and embport2 >= 1:
+        elif not embport and safe_ge(embport2, 1):
             mjbyptimp = embport2
-        elif embport >= 1 and embport2 >= 1:
+        elif safe_ge(embport, 1) and safe_ge(embport2, 1):
             embreg = region_value(embport)
             embreg2 = region_value(embport2)
             if embreg == embreg2:
@@ -492,35 +513,35 @@ def compute_imputed_vars(_interim, is_iam=False):
     if regem1 != regem2 and regem1 != regem3 and regem2 != regem3:
         mjbyptimp = 60999
 
-    if ncar13 > ncar15 and ncar13 > ncar17:
+    if safe_lt(ncar15, ncar13) and safe_lt(ncar17, ncar13):
         mjbyptimp = _places[0]
-    if ncar15 > ncar13 and ncar15 > ncar17:
+    if safe_lt(ncar13, ncar15) and safe_lt(ncar17, ncar15):
         mjbyptimp = _places[1]
-    if ncar17 > ncar13 and ncar17 > ncar15:
+    if safe_lt(ncar13, ncar17) and safe_lt(ncar15, ncar17):
         mjbyptimp = _places[2]
 
-    if ncar13 == ncar15 and ncar13 > ncar17 and regem1 and regem1 == regem2:
+    if ncar13 == ncar15 and safe_lt(ncar17, ncar13) and regem1 and regem1 == regem2:
         mjbyptimp = regem1 + 99
-    if ncar13 == ncar15 and ncar13 > ncar17 and regem1 != regem2:
+    if ncar13 == ncar15 and safe_lt(ncar17, ncar13) and regem1 != regem2:
         mjbyptimp = 60999
-    if ncar13 == ncar17 and ncar13 > ncar15 and regem1 and regem1 == regem3:
+    if ncar13 == ncar17 and safe_lt(ncar15, ncar13) and regem1 and regem1 == regem3:
         mjbyptimp = regem1 + 99
-    if ncar13 == ncar17 and ncar13 > ncar15 and regem1 != regem3:
+    if ncar13 == ncar17 and safe_lt(ncar15, ncar13) and regem1 != regem3:
         mjbyptimp = 60999
-    if ncar15 == ncar17 and ncar15 > ncar13 and regem2 and regem2 == regem3:
+    if ncar15 == ncar17 and safe_lt(ncar13, ncar15) and regem2 and regem2 == regem3:
         mjbyptimp = regem2 + 99
-    if ncar15 == ncar17 and ncar15 > ncar17 and regem2 != regem3:
+    if ncar15 == ncar17 and safe_lt(ncar17, ncar15) and regem2 != regem3:
         mjbyptimp = 60999
 
-    if (pctemb and pctemb < 0.5) or (ncartot < 50 and tslaves_unknown):
+    if (pctemb and safe_lt(pctemb, 0.5)) or (safe_lt(ncartot, 50) and tslaves_unknown):
         if ncar13 == 0 and ncar15 == 0:
-            if ncar17 > 0:
+            if safe_lt(0, ncar17):
                 if regem1 == regem2 and regem1 is not None:
                     mjbyptimp = regem1 + 99
                 if regem1 != regem2 and regem1 and regem2:
                     mjbyptimp = 60999
         elif ncar13 == 0:
-            if ncar17 > 0:
+            if safe_lt(0, ncar17):
                 mjbyptimp = _places[0]
             else:
                 if _places[2] is None:
@@ -530,7 +551,7 @@ def compute_imputed_vars(_interim, is_iam=False):
                 if regem1 != regem3 and regem1 and regem3:
                     mjbyptimp = 60999
         elif ncar15 == 0:
-            if ncar17 > 0:
+            if safe_lt(0, ncar17):
                 mjbyptimp = _places[1]
             else:
                 if _places[1] and _places[2] is None:
@@ -543,13 +564,13 @@ def compute_imputed_vars(_interim, is_iam=False):
             mjbyptimp = _places[2]
 
     if not ncartot:
-        if all([_places[0] >= 1, _places[1] >= 1, regem1 == regem2, regem1]):
+        if all([safe_ge(_places[0], 1), safe_ge(_places[1], 1), regem1 == regem2, regem1]):
             mjbyptimp = regem1 + 99
-        elif all([_places[0] >= 1, _places[2] >= 1, regem1 == regem3, regem1]):
+        elif all([safe_ge(_places[0], 1), safe_ge(_places[2], 1), regem1 == regem3, regem1]):
             mjbyptimp = regem1 + 99
-        elif all([_places[1] >= 1, _places[2] >= 1, regem2 == regem3, regem2]):
+        elif all([safe_ge(_places[1], 1), safe_ge(_places[2], 1), regem2 == regem3, regem2]):
             mjbyptimp = regem2 + 99
-        elif _num_places >= 2:
+        elif safe_ge(_num_places, 2):
             mjbyptimp = 60999
 
     if embport and embport2 is None and _num_places == 0:
@@ -557,27 +578,27 @@ def compute_imputed_vars(_interim, is_iam=False):
     if embport2 and _num_places == 0:
         mjbyptimp = embport2
     if not mjbyptimp and (
-            embport or embport2 or ncartot > 0 or _num_places >= 1):
+            embport or embport2 or safe_lt(0, ncartot) or safe_ge(_num_places, 1)):
         if get_obj_value(_interim.imputed_outcome_of_voyage_for_slaves) != 2:
             mjbyptimp = 60999
 
     majbuypt = get_obj_value(_interim.principal_place_of_slave_purchase)
-    if not mjbyptimp and majbuypt >= 1:
+    if not mjbyptimp and safe_ge(majbuypt, 1):
         mjbyptimp = majbuypt
 
     if is_iam:
         # For I-Am use a simpler routine (Greg)
         plac1tra = get_obj_value(_interim.first_place_of_slave_purchase)
         plac2tra = get_obj_value(_interim.second_place_of_slave_purchase)
-        if plac1tra >= 1 and (plac2tra is None or ncar13 > ncar15):
+        if safe_ge(plac1tra, 1) and (plac2tra is None or safe_lt(ncar15, ncar13)):
             mjbyptimp = plac1tra
-        if ncar15 > ncar13:
+        if safe_lt(ncar13, ncar15):
             mjbyptimp = plac2tra
         if ncar13 == ncar15 and regem1 == regem2:
             mjbyptimp = regem1 + 99
         if ncar13 == ncar15 and regem1 != regem2:
             mjbyptimp = 80299
-        if mjbyptimp is None and majbuypt >= 1:
+        if mjbyptimp is None and safe_ge(majbuypt, 1):
             mjbyptimp = majbuypt
 
     # mjslptimp - Principal port of slave disembarkation
@@ -602,13 +623,13 @@ def compute_imputed_vars(_interim, is_iam=False):
 
     have_sale_info = sla1port or adpsale1 or adpsale2
     if not have_sale_info:
-        if arrport >= 1 and not arrport2:
+        if safe_ge(arrport, 1) and not arrport2:
             mjslptimp = arrport
-        if not arrport and arrport2 >= 1:
+        if not arrport and safe_ge(arrport2, 1):
             mjslptimp = arrport2
-        if arrport >= 1 and arrport2 >= 1 and regarr and regarr == regarr2:
+        if safe_ge(arrport, 1) and safe_ge(arrport2, 1) and regarr and regarr == regarr2:
             mjslptimp = regarr + 99
-        if arrport >= 1 and arrport2 >= 1 and regarr != regarr2:
+        if safe_ge(arrport, 1) and safe_ge(arrport2, 1) and regarr != regarr2:
             mjslptimp = 99801
 
     regdis1 = region_value(sla1port)
@@ -637,24 +658,24 @@ def compute_imputed_vars(_interim, is_iam=False):
     slas36 = _numbers.get('SLAS36', 0)
     slas39 = _numbers.get('SLAS39', 0)
 
-    if slas32 > slas36 and slas32 > slas39:
+    if safe_lt(slas36, slas32) and safe_lt(slas39, slas32):
         mjslptimp = sla1port
-    if slas36 > slas32 and slas36 > slas39:
+    if safe_lt(slas32, slas36) and safe_lt(slas39, slas36):
         mjslptimp = adpsale1
-    if slas39 > slas32 and slas39 > slas36:
+    if safe_lt(slas32, slas39) and safe_lt(slas36, slas39):
         mjslptimp = adpsale2
 
-    if slas32 == slas36 and slas32 > slas39 and regdis1 and regdis1 == regdis2:
+    if slas32 == slas36 and safe_lt(slas39, slas32) and regdis1 and regdis1 == regdis2:
         mjslptimp = regdis1 + 99
-    if slas32 == slas36 and slas32 > slas39 and regdis1 != regdis2:
+    if slas32 == slas36 and safe_lt(slas39, slas32) and regdis1 != regdis2:
         mjslptimp = 99801
-    if slas32 == slas39 and slas32 > slas36 and regdis1 and regdis1 == regdis3:
+    if slas32 == slas39 and safe_lt(slas36, slas32) and regdis1 and regdis1 == regdis3:
         mjslptimp = regdis1 + 99
-    if slas32 == slas39 and slas32 > slas36 and regdis1 != regdis3:
+    if slas32 == slas39 and safe_lt(slas36, slas32) and regdis1 != regdis3:
         mjslptimp = 99801
-    if slas36 == slas39 and slas36 > slas32 and regdis2 and regdis2 == regdis3:
+    if slas36 == slas39 and safe_lt(slas32, slas36) and regdis2 and regdis2 == regdis3:
         mjslptimp = regdis2 + 99
-    if slas36 == slas39 and slas36 > slas39 and regdis2 != regdis3:
+    if slas36 == slas39 and safe_lt(slas39, slas36) and regdis2 != regdis3:
         mjslptimp = 99801
 
     slaarriv = _numbers.get('SLAARRIV', 0)
@@ -665,11 +686,11 @@ def compute_imputed_vars(_interim, is_iam=False):
         if adpsale2:
             mjslptimp = 99801
         else:
-            if slas36 >= 1 and slas32 >= 1:
+            if safe_ge(slas36, 1) and safe_ge(slas32, 1):
                 mjslptimp = regdis1 + 99 if regdis1 == regdis2 else 99801
-            elif slas36 >= 1:
+            elif safe_ge(slas36, 1):
                 mjslptimp = sla1port
-            elif slas32 >= 1:
+            elif safe_ge(slas32, 1):
                 mjslptimp = adpsale1
 
     if not slastot and sla1port:
@@ -689,22 +710,22 @@ def compute_imputed_vars(_interim, is_iam=False):
         mjslptimp = arrport
 
     if not mjslptimp and fate2 in (1, 3, 5):
-        if arrport or arrport2 or have_sale_info or slastot > 0:
+        if arrport or arrport2 or have_sale_info or safe_lt(0, slastot):
             mjslptimp = 99801
 
     majselpt = get_obj_value(_interim.principal_place_of_slave_disembarkation)
-    if not mjslptimp and majselpt >= 1:
+    if not mjslptimp and safe_ge(majselpt, 1):
         mjslptimp = majselpt
 
     # ptdepimp - Imputed port where voyage began
     portdep = get_obj_value(_interim.port_of_departure)
     ptdepimp = portdep
-    if portdep is None and mjslptimp <= 50200:
-        if mjslptimp < 50300:
+    if portdep is None and safe_ge(50200, mjslptimp):
+        if safe_lt(mjslptimp, 50300):
             ptdepimp = 50299
-        elif mjslptimp < 50400:
+        elif safe_lt(mjslptimp, 50400):
             ptdepimp = 50399
-        elif mjslptimp < 50500:
+        elif safe_lt(mjslptimp, 50500):
             ptdepimp = 50422
 
     _region_mod = 100
@@ -717,14 +738,10 @@ def compute_imputed_vars(_interim, is_iam=False):
     portret = get_obj_value(_interim.port_voyage_ended)
     retrnreg1 = broad_value(portret)
 
-    def range_id(yearam, base, yearlist):
-        return base + len(list(takewhile(
-            lambda x: x <= yearam, yearlist)))
-
     # xmimpflag - Voyage groupings for estimating imputed slaves
     xmimpflag = None
     rig = get_obj_value(_interim.rig_of_vessel)
-    if 1626 <= yearam < 1876 and (rig is None or rig in (
+    if safe_in_range(yearam, 1626, 1876) and (rig is None or rig in (
             26, 29, 42, 43, 54, 59, 61, 65, 80, 86)):
         xmimpflag = range_id(yearam, 127, [
             1651, 1676, 1701, 1726, 1751, 1776, 1801, 1826, 1851])
@@ -732,9 +749,9 @@ def compute_imputed_vars(_interim, is_iam=False):
         xmimpflag = range_id(yearam, 101, [1700, 1801])
     if yearam and majbyimp == 60200:
         xmimpflag = range_id(yearam, 104, [1700, 1801])
-    if yearam and majbyimp == 60300 and yearam >= 1700:
+    if yearam and majbyimp == 60300 and safe_ge(yearam, 1700):
         xmimpflag = range_id(yearam, 120, [1801])
-    if yearam and majbyimp == 60400 and yearam < 1801:
+    if yearam and majbyimp == 60400 and safe_lt(yearam, 1801):
         xmimpflag = range_id(yearam, 107, [1700])
     if yearam and majbyimp == 60500:
         xmimpflag = range_id(yearam, 110, [1700, 1801])
@@ -742,15 +759,15 @@ def compute_imputed_vars(_interim, is_iam=False):
         xmimpflag = range_id(yearam, 113, [1700, 1801])
     if yearam and majbyimp == 60700:
         xmimpflag = range_id(yearam, 116, [1700, 1801])
-    if yearam and yearam < 1700 and majbyimp == 60800:
+    if yearam and safe_lt(yearam, 1700) and majbyimp == 60800:
         xmimpflag = range_id(yearam, 122, [1700, 1801])
-    if yearam and yearam < 1627:
+    if yearam and safe_lt(yearam, 1627):
         xmimpflag = 1
-    if 1626 <= yearam < 1642 and (
+    if safe_in_range(yearam, 1626, 1642) and (
             mjselimp1 == 40000 or (
-                31100 <= mjselimp < 32000 or mjselimp == 80400)):
+                safe_in_range(mjselimp, 31100, 32000) or mjselimp == 80400)):
         xmimpflag = 2
-    if yearam and yearam < 1716 and 36100 <= mjselimp < 37000:
+    if yearam and safe_lt(yearam, 1716) and safe_in_range(mjselimp, 36100, 37000):
         xmimpflag = 3
     if yearam and mjselimp == 50300:
         xmimpflag = range_id(yearam, 4, [1701, 1800])
@@ -758,24 +775,24 @@ def compute_imputed_vars(_interim, is_iam=False):
         xmimpflag = range_id(yearam, 7, [1650, 1674, 1731])
     if yearam and mjselimp == 50200:
         xmimpflag = range_id(yearam, 11, [1751, 1776, 1801, 1826])
-    if yearam and 1642 <= yearam < 1663 and ((
-            31100 <= mjselimp < 32000
+    if yearam and safe_in_range(yearam, 1642, 1663) and ((
+            safe_in_range(mjselimp, 31100, 32000)
     ) or mjselimp1 == 40000 or mjselimp == 80400):
         xmimpflag = 16
-    if yearam and 1794 <= yearam < 1807 and natinimp == 15:
+    if yearam and safe_in_range(yearam, 1794, 1807) and natinimp == 15:
         xmimpflag = 157
-    if yearam and yearam < 1794 and natinimp == 15:
+    if yearam and safe_lt(yearam, 1794) and natinimp == 15:
         xmimpflag = 159
-    if yearam and natinimp == 9 and yearam < 1876:
+    if yearam and natinimp == 9 and safe_lt(yearam, 1876):
         xmimpflag = range_id(yearam, 99, [1851])
-    if yearam and rig == 1 and yearam < 1876:
-        xmimpflag = 98 if 1751 <= yearam < 1776 else range_id(
+    if yearam and rig == 1 and safe_lt(yearam, 1876):
+        xmimpflag = 98 if safe_in_range(yearam, 1751, 1776) else range_id(
             yearam, 17, [1751, 1801, 1826, 1851])
-    if yearam and rig == 2 and yearam < 1876:
+    if yearam and rig == 2 and safe_lt(yearam, 1876):
         xmimpflag = range_id(yearam, 22, [1776, 1801, 1826, 1851])
-    if yearam and rig == 3 and yearam < 1876:
+    if yearam and rig == 3 and safe_lt(yearam, 1876):
         xmimpflag = range_id(yearam, 27, [1751, 1776, 1801])
-    if yearam and rig == 4 and yearam < 1876:
+    if yearam and rig == 4 and safe_lt(yearam, 1876):
         xmimpflag = range_id(yearam, 31, [1726, 1751, 1776, 1801, 1826, 1851])
     if rig == 5:
         xmimpflag = 38
@@ -783,15 +800,15 @@ def compute_imputed_vars(_interim, is_iam=False):
         xmimpflag = 39
     if rig == 7:
         xmimpflag = 40
-    if yearam and rig == 8 and yearam < 1876:
+    if yearam and rig == 8 and safe_lt(yearam, 1876):
         xmimpflag = range_id(yearam, 41, [1776, 1801, 1826, 1851])
-    if yearam and rig in (9, 31) and yearam < 1876:
+    if yearam and rig in (9, 31) and safe_lt(yearam, 1876):
         xmimpflag = range_id(yearam, 46, [1826, 1851])
     if rig in (10, 24):
         xmimpflag = 49
     if rig in (11, 12):
         xmimpflag = 50
-    if yearam and rig == 13 and yearam < 1877:
+    if yearam and rig == 13 and safe_lt(yearam, 1877):
         xmimpflag = range_id(yearam, 51, [1751, 1776, 1801, 1826])
     if rig == 15:
         xmimpflag = 56
@@ -801,22 +818,22 @@ def compute_imputed_vars(_interim, is_iam=False):
         xmimpflag = 58
     if rig == 23:
         xmimpflag = 59
-    if yearam and rig == 25 and yearam < 1877:
-        xmimpflag = 160 if 1826 <= yearam < 1851 else range_id(
+    if yearam and rig == 25 and safe_lt(yearam, 1877):
+        xmimpflag = 160 if safe_in_range(yearam, 1826, 1851) else range_id(
             yearam, 60, [1751, 1776, 1801, 1826])
-    if yearam and rig == 27 and yearam < 1877:
+    if yearam and rig == 27 and safe_lt(yearam, 1877):
         xmimpflag = range_id(yearam, 65, [1751, 1776, 1801])
     if rig == 28:
         xmimpflag = 69
-    if yearam and rig in (30, 45, 63) and yearam < 1876:
-        xmimpflag = 97 if 1776 <= yearam < 1801 else (
-            85 if 1826 <= yearam < 1876 else range_id(
+    if yearam and rig in (30, 45, 63) and safe_lt(yearam, 1876):
+        xmimpflag = 97 if safe_in_range(yearam, 1776, 1801) else (
+            85 if safe_in_range(yearam, 1826, 1876) else range_id(
                 yearam, 70, [1726, 1776, 1826]))
     if rig in (32, 39):
         xmimpflag = 73
-    if yearam and rig == 35 and yearam < 1877:
+    if yearam and rig == 35 and safe_lt(yearam, 1877):
         xmimpflag = range_id(yearam, 74, [1726, 1751, 1776, 1801])
-    if yearam and rig == 40 and yearam < 1876:
+    if yearam and rig == 40 and safe_lt(yearam, 1876):
         xmimpflag = range_id(yearam, 79, [1776, 1801, 1826])
     if rig in (41, 57):
         xmimpflag = 83
@@ -826,27 +843,27 @@ def compute_imputed_vars(_interim, is_iam=False):
         xmimpflag = 86
     if rig == 48:
         xmimpflag = 87
-    if yearam and rig in (14, 36, 49) and yearam < 1876:
+    if yearam and rig in (14, 36, 49) and safe_lt(yearam, 1876):
         xmimpflag = range_id(yearam, 88, [1826])
-    if yearam and rig in (16, 51) and yearam < 1876:
+    if yearam and rig in (16, 51) and safe_lt(yearam, 1876):
         xmimpflag = range_id(yearam, 90, [1826, 1851])
     if rig in (17, 19, 52, 53):
         xmimpflag = 93
-    if yearam and rig == 60 and yearam < 1876:
+    if yearam and rig == 60 and safe_lt(yearam, 1876):
         xmimpflag = range_id(yearam, 94, [1726, 1826])
     if yearam and rig == 1 and natinimp == 9:
         xmimpflag = range_id(yearam, 137, [1776, 1801, 1826])
-    if yearam and rig in (2, 5) and natinimp == 9 and yearam < 1801:
+    if yearam and rig in (2, 5) and natinimp == 9 and safe_lt(yearam, 1801):
         xmimpflag = range_id(yearam, 141, [1776])
-    if yearam and rig == 5 and natinimp == 9 and 1801 <= yearam < 1826:
+    if yearam and rig == 5 and natinimp == 9 and safe_in_range(yearam, 1801, 1826):
         xmimpflag = 143
-    if yearam and rig in (2, 5) and natinimp == 9 and yearam > 1825:
+    if yearam and rig in (2, 5) and natinimp == 9 and safe_lt(1825, yearam):
         xmimpflag = 145
     if yearam and rig == 4 and natinimp == 9:
         xmimpflag = range_id(yearam, 146, [1776, 1801, 1826])
     if yearam and rig == 8 and natinimp == 9:
         xmimpflag = range_id(yearam, 150, [1776, 1826])
-    if yearam and 1826 <= yearam < 1876 and rig == 9 and natinimp == 9:
+    if yearam and safe_in_range(yearam, 1826, 1876) and rig == 9 and natinimp == 9:
         xmimpflag = 154
     if rig == 27 and natinimp == 9:
         xmimpflag = 155
@@ -858,32 +875,32 @@ def compute_imputed_vars(_interim, is_iam=False):
 
     captive_threshold = 0 if is_iam else 50
     slam_unknown = not slaarriv and not slastot
-    if tslavesd >= 1:
+    if safe_ge(tslavesd, 1):
         slaximp = tslavesd
-    elif tslavesp >= 1:
+    elif safe_ge(tslavesp, 1):
         slaximp = tslavesp
     else:
         slaximp = None
     if tslaves_unknown:
-        if slam_unknown and ncartot < captive_threshold:
+        if slam_unknown and safe_lt(ncartot, captive_threshold):
             ncartot = None
         slaximp = (
             ncartot
-            if (ncartot > slaarriv or
-                (slastot and not slaarriv and ncartot > slastot) or
-                (slam_unknown and ncartot >= captive_threshold))
+            if (safe_lt(slaarriv, ncartot) or
+                (slastot and not slaarriv and safe_lt(slastot, ncartot)) or
+                (slam_unknown and safe_ge(ncartot, captive_threshold)))
             else slaximp)
 
-    if slaarriv >= 1:
+    if safe_ge(slaarriv, 1):
         slamimp = slaarriv
     else:
-        if not (tslaves_unknown or ncartot or slastot >= captive_threshold):
+        if not (tslaves_unknown or ncartot or safe_ge(slastot, captive_threshold)):
             slastot = None
         slamimp = slastot if (
-            not tslavesd and not ncartot and slastot >= captive_threshold) or (
-                tslaves_unknown and slastot <= ncartot) or (
-                    not tslavesd and slastot <= tslavesp) or (
-                        slastot <= tslavesd) else None
+            not tslavesd and not ncartot and safe_ge(slastot, captive_threshold)) or (
+                tslaves_unknown and safe_ge(ncartot, slastot)) or (
+                    not tslavesd and safe_ge(tslavesp, slastot)) or (
+                        safe_ge(tslavesd, slastot)) else None
     slax_unknown = tslaves_unknown and not ncartot
     if slam_unknown or slax_unknown:
         (mortality, population, backup_slam) = {
@@ -1045,16 +1062,16 @@ def compute_imputed_vars(_interim, is_iam=False):
             else:
                 slaximp = population
         if slam_unknown:
-            if slaximp >= 1:
+            if safe_ge(slaximp, 1):
                 slamimp = slaximp * (1 - mortality)
-        elif slamimp >= 1:
+        elif safe_ge(slamimp, 1):
             slaximp = slamimp / (1 - mortality)
     sladvoy = _numbers.get('SLADVOY')
-    if sladvoy > 0 and not slaarriv and slax_unknown and slastot >= 50:
+    if safe_lt(0, sladvoy) and not slaarriv and slax_unknown and safe_ge(slastot, 50):
         slaximp = slastot + sladvoy
-    if sladvoy > 0 and slax_unknown and slaarriv > 1:
+    if safe_lt(0, sladvoy) and slax_unknown and safe_lt(1, slaarriv):
         slaximp = slaarriv + sladvoy
-    if sladvoy > 0 and slam_unknown and slax_unknown:
+    if safe_lt(0, sladvoy) and slam_unknown and slax_unknown:
         slaximp = slamimp + sladvoy
 
     slaximp = round(slaximp) if slaximp else None
@@ -1065,13 +1082,13 @@ def compute_imputed_vars(_interim, is_iam=False):
     # vymrtrat - Slaves died on voyage / Slaves embarked
 
     slaarriv = _numbers.get('SLAARRIV')
-    if sladvoy is None and slaarriv is not None and slaarriv <= tslavesd:
+    if sladvoy is None and slaarriv is not None and safe_ge(tslavesd, slaarriv):
         vymrtimp = tslavesd - slaarriv
     else:
         vymrtimp = sladvoy
-    if vymrtimp < 0:
+    if safe_lt(vymrtimp, 0):
         tslmtimp = None
-    elif not tslavesd and slaarriv >= 1:
+    elif not tslavesd and safe_ge(slaarriv, 1):
         tslmtimp = slaarriv + vymrtimp
     else:
         tslmtimp = tslavesd
@@ -1160,13 +1177,13 @@ def compute_imputed_vars(_interim, is_iam=False):
     womrat1 = None
     boyrat1 = None
     girlrat1 = None
-    if slavmax1 >= 20:
+    if safe_ge(slavmax1, 20):
         menrat1 = (men1 + men4 + men5) / slavmax1
-    if slavmax1 >= 20:
+    if safe_ge(slavmax1, 20):
         womrat1 = (women1 + women4 + women5) / slavmax1
-    if slavmax1 >= 20:
+    if safe_ge(slavmax1, 20):
         boyrat1 = (boy1 + boy4 + boy5) / slavmax1
-    if slavmax1 >= 20:
+    if safe_ge(slavmax1, 20):
         girlrat1 = (girl1 + girl4 + girl5) / slavmax1
 
     # adlt3imp - Imputed number of adults among disembarked slaves
@@ -1237,13 +1254,13 @@ def compute_imputed_vars(_interim, is_iam=False):
     womrat3 = None
     boyrat3 = None
     girlrat3 = None
-    if slavmax3 >= 20:
+    if safe_ge(slavmax3, 20):
         menrat3 = (men3 + men6) / slavmax3
-    if slavmax3 >= 20:
+    if safe_ge(slavmax3, 20):
         womrat3 = (women3 + women6) / slavmax3
-    if slavmax3 >= 20:
+    if safe_ge(slavmax3, 20):
         boyrat3 = (boy3 + boy6) / slavmax3
-    if slavmax3 >= 20:
+    if safe_ge(slavmax3, 20):
         girlrat3 = (girl3 + girl6) / slavmax3
 
     # men7 - Imputed men when leaving Africa or arriving at ports of landing
@@ -1293,74 +1310,74 @@ def compute_imputed_vars(_interim, is_iam=False):
     chilrat7 = None
     malrat7 = None
 
-    if slavema3 >= 20:
+    if safe_ge(slavema3, 20):
         slavema7 = slavema3
-    if slavemx3 >= 20:
+    if safe_ge(slavemx3, 20):
         slavemx7 = slavemx3
-    if slavmax3 >= 20:
+    if safe_ge(slavmax3, 20):
         slavmax7 = slavmax3
-    if slavmax7 >= 20:
+    if safe_ge(slavmax7, 20):
         men7 = men3 + men6
-    if slavmax7 >= 20:
+    if safe_ge(slavmax7, 20):
         women7 = women3 + women6
-    if slavmax7 >= 20:
+    if safe_ge(slavmax7, 20):
         boy7 = boy3 + boy6
-    if slavmax7 >= 20:
+    if safe_ge(slavmax7, 20):
         girl7 = girl3 + girl6
-    if slavema7 >= 20:
+    if safe_ge(slavema7, 20):
         adult7 = adlt3imp
-    if slavema7 >= 20:
+    if safe_ge(slavema7, 20):
         child7 = chil3imp
-    if slavemx7 >= 20:
+    if safe_ge(slavemx7, 20):
         male7 = male3imp
-    if slavemx7 >= 20:
+    if safe_ge(slavemx7, 20):
         female7 = feml3imp
-    if menrat3 >= 0:
+    if safe_ge(menrat3, 0):
         menrat7 = menrat3
-    if womrat3 >= 0:
+    if safe_ge(womrat3, 0):
         womrat7 = womrat3
-    if boyrat3 >= 0:
+    if safe_ge(boyrat3, 0):
         boyrat7 = boyrat3
-    if girlrat3 >= 0:
+    if safe_ge(girlrat3, 0):
         girlrat7 = girlrat3
-    if malrat3 >= 0:
+    if safe_ge(malrat3, 0):
         malrat7 = malrat3
-    if chilrat3 >= 0:
+    if safe_ge(chilrat3, 0):
         chilrat7 = chilrat3
 
-    if slavema3 is None and slavema1 >= 20:
+    if slavema3 is None and safe_ge(slavema1, 20):
         slavema7 = slavema1
-    if slavemx3 is None and slavemx1 >= 20:
+    if slavemx3 is None and safe_ge(slavemx1, 20):
         slavemx7 = slavemx1
-    if slavmax3 is None and slavmax1 >= 20:
+    if slavmax3 is None and safe_ge(slavmax1, 20):
         slavmax7 = slavmax1
-    if slavmax3 is None and slavmax1 >= 20:
+    if slavmax3 is None and safe_ge(slavmax1, 20):
         men7 = men1 + men4 + men5
-    if slavmax3 is None and slavmax1 >= 20:
+    if slavmax3 is None and safe_ge(slavmax1, 20):
         women7 = women1 + women4 + women5
-    if slavmax3 is None and slavmax1 >= 20:
+    if slavmax3 is None and safe_ge(slavmax1, 20):
         boy7 = boy1 + boy4 + boy5
-    if slavmax3 is None and slavmax1 >= 20:
+    if slavmax3 is None and safe_ge(slavmax1, 20):
         girl7 = girl1 + girl4 + girl5
-    if slavema3 is None and slavema1 >= 20:
+    if slavema3 is None and safe_ge(slavema1, 20):
         adult7 = adlt1imp
-    if slavema3 is None and slavema1 >= 20:
+    if slavema3 is None and safe_ge(slavema1, 20):
         child7 = chil1imp
-    if slavemx3 is None and slavemx1 >= 20:
+    if slavemx3 is None and safe_ge(slavemx1, 20):
         male7 = male1imp
-    if slavemx3 is None and slavemx1 >= 20:
+    if slavemx3 is None and safe_ge(slavemx1, 20):
         female7 = feml1imp
-    if menrat3 is None and menrat1 >= 0:
+    if menrat3 is None and safe_ge(menrat1, 0):
         menrat7 = menrat1
-    if womrat3 is None and womrat1 >= 0:
+    if womrat3 is None and safe_ge(womrat1, 0):
         womrat7 = womrat1
-    if boyrat3 is None and boyrat1 >= 0:
+    if boyrat3 is None and safe_ge(boyrat1, 0):
         boyrat7 = boyrat1
-    if girlrat3 is None and girlrat1 >= 0:
+    if girlrat3 is None and safe_ge(girlrat1, 0):
         girlrat7 = girlrat1
-    if malrat3 is None and malrat1 >= 0:
+    if malrat3 is None and safe_ge(malrat1, 0):
         malrat7 = malrat1
-    if chilrat3 is None and chilrat1 >= 0:
+    if chilrat3 is None and safe_ge(chilrat1, 0):
         chilrat7 = chilrat1
 
     # adlt2imp - Imputed number of adults who died on middle passage
@@ -1386,13 +1403,13 @@ def compute_imputed_vars(_interim, is_iam=False):
     if not feml2imp:
         feml2imp = women2 + girl2
 
-    if 1 <= sladvoy < chil2imp and adlt2imp == 0 and chil2imp:
+    if safe_in_range(sladvoy, 1, chil2imp) and adlt2imp == 0 and chil2imp:
         adlt2imp = sladvoy - chil2imp
-    if 1 <= sladvoy < adlt2imp and chil2imp == 0 and adlt2imp:
+    if safe_in_range(sladvoy, 1, adlt2imp) and chil2imp == 0 and adlt2imp:
         chil2imp = sladvoy - adlt2imp
-    if 1 <= sladvoy < feml2imp and male2imp == 0 and feml2imp:
+    if safe_in_range(sladvoy, 1, feml2imp) and male2imp == 0 and feml2imp:
         male2imp = sladvoy - feml2imp
-    if 1 <= sladvoy < male2imp and feml2imp == 0 and male2imp:
+    if safe_in_range(sladvoy, 1, male2imp) and feml2imp == 0 and male2imp:
         feml2imp = sladvoy - male2imp
 
     local_vars = locals()

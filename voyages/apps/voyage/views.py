@@ -92,7 +92,7 @@ reset_fields = [
 
 
 def get_voyages_search_query_set():
-    return SearchQuerySet().models(Voyage).filter(var_dataset=0)
+    return SearchQuerySet().models(Voyage)
 
 
 def get_page(request, chapternum, sectionnum, pagenum):
