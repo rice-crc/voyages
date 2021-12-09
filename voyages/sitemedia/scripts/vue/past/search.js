@@ -70,6 +70,7 @@ var allColumns = [
     { data: "voyage__voyage_itinerary__imp_principal_port_slave_dis__place", category: 1, header: gettext("Disembarkation Port"), isImputed: false },
 
     //fate
+    { data: "captive_fate__name", category: 2, header: gettext("Captive Fate"), isImputed: false },
     { data: "post_disembark_location__place", category: 2, header: gettext("Last Known Location"), isImputed: false },
 
     // Enslavement
