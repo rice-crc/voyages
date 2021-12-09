@@ -262,14 +262,13 @@
 		<div class="row band" data-aos="fade-up" data-aos-easing="ease" data-aos-duration="500">
 			<div class="col-md-8 band-story">
 				<div class="align-self-start">
-					<h1 class="uppercase past-color weight-700 db-title">{% trans 'African Names' %}</h1>
+					<h1 class="uppercase past-color weight-700 db-title">{% trans 'People of the African Slave Trade' %}</h1>
 					<h1 class="uppercase db-title-color weight-700 db-title"> {% trans 'Database' %}</h1>
 				</div>
 				<div class="align-self-center">
 					<p class="past-color margin-top">
 						{% blocktrans %}
-						The African Names Database provides personal details of 91,491 Africans taken from captured slave ships or from African trading sites. It displays the African name, age, gender, origin, country, and places of embarkation and disembarkation
-						of each individual.
+						The People of the African Slave Trade databases provide personal details on 91,491 enslaved people. In the African Origins dataset are the personal details of 91,491 Africans taken from nineteenth-century slave ships captured by anti-slave trade patrols or from African trading sites. In the Oceans of Kinfolk dataset are the personal details of 63,562 people transported to New Orleans, and in many cases records on the people who transported, bought, and sold them there. Analyze the name, age, gender, origin, places of embarkation and disembarkation of these individuals, and some of their linkages to enslavers.
 						{% endblocktrans %}
 					</p>
 				</div>
@@ -277,7 +276,7 @@
 					<a class="" href="{% url 'resources:about' %}">
 						<button class="btn btn-outline-primary past-btn">{% trans 'About' %}</button>
 					</a>
-					<a class="" href="{% url 'resources:origins' %}">
+					<a class="" href="{% url 'past:database' %}">
 						<button class="btn btn-outline-primary past-btn">{% trans 'Database' %}</button>
 					</a>
 					<a class="" href="{% url 'resources:downloads' %}">
@@ -298,22 +297,26 @@
 				<div class="align-self-center">
 					<p class="gallery-color margin-top">
 						{% blocktrans %}
-						Explore several hundred images of the people, places, vessels and manuscripts of the Trans-Atlantic and Intra-American slave trades. Where available, each image contains a link to a corresponding slave voyage in the databases and a reference to the
-						original source.
+						Explore images of the people, places, vessels, and documents linked to the Trans-Atlantic and Intra-American slave trades. Where available, each image contains a link to a corresponding slave voyage in the databases and a reference to the original source.
 						{% endblocktrans %}
 					</p>
 				</div>
 			</div>
 
+
+
+
 			<div class="col-md-3 card-container">
-					<a href="/resources/images/category/Manuscripts" >
-						<img class="card-img-top drop-shadow-1 lazy" data-src="{{STATIC_URL}}images/site/gallery/1.jpg" alt="Manuscripts">
-						<div class="card-block">
-							<h4 class="sv-card-title card-title-color "> {% trans 'manuscripts' %} </h4>
-							<p class="card-text"></p>
-						</div>
-					</a>
+				<a href="/resources/images/category/People" >
+					<img class="card-img-top drop-shadow-1 lazy" data-src="{{STATIC_URL}}images/site/gallery/4.jpg" alt="People">
+					<div class="card-block">
+						<h4 class="sv-card-title card-title-color "> {% trans 'people' %} </h4>
+						<p class="card-text"></p>
+					</div>
+				</a>
 			</div>
+
+
 
 			<div class="col-md-3 card-container">
 					<a href="/resources/images/category/Places" >
@@ -326,13 +329,13 @@
 			</div>
 
 			<div class="col-md-3 card-container">
-				<a href="/resources/images/category/Slaves" >
-					<img class="card-img-top drop-shadow-1 lazy" data-src="{{STATIC_URL}}images/site/gallery/4.jpg" alt="Slaves">
-					<div class="card-block">
-						<h4 class="sv-card-title card-title-color "> {% trans 'slaves' %} </h4>
-						<p class="card-text"></p>
-					</div>
-				</a>
+					<a href="/resources/images/category/Documents" >
+						<img class="card-img-top drop-shadow-1 lazy" data-src="{{STATIC_URL}}images/site/gallery/1.jpg" alt="Documents">
+						<div class="card-block">
+							<h4 class="sv-card-title card-title-color "> {% trans 'documents' %} </h4>
+							<p class="card-text"></p>
+						</div>
+					</a>
 			</div>
 
 			<div class="col-md-3 card-container">
