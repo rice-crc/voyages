@@ -113,13 +113,15 @@ var pastContribute = new Vue({
                 $.each(this.language_groups.value.searchTerm, function(key, value){
                     contrib_languages.push({
                         ethnicity_id: "1",
-                        lang_group_id: value,
+                        lang_group_id: value.slice(value.indexOf('-') + 1),
                     });
                 });
             } else {
+                var value = this.language_groups.value.searchTerm;
+                value = value.slice(value.indexOf('-') + 1);
                 contrib_languages.push({
                     ethnicity_id: "1",
-                    lang_group_id: this.language_groups.value.searchTerm,
+                    lang_group_id: value,
                 });
             }
 

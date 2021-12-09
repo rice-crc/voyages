@@ -1850,32 +1850,40 @@ def impute_contribution(request, editor_contribution_id):
     impute_tuple = imputed.compute_imputed_vars(interim, is_iam)
     result = impute_tuple[0]
     imputed_numbers = impute_tuple[1]
-    with transaction.atomic():
-        contribution.ran_impute = True
-        contribution.save()
-        # Delete old numeric values.
-        InterimSlaveNumber.objects.filter(interim_voyage__id=interim.pk,
-                                          var_name__in=list(
-                                              imputed_numbers.keys())).delete()
-        # Map imputed fields back to the contribution, save it and yield
-        # response.
-        for k, v in list(result.items()):
-            setattr(interim, k, v)
-        interim.save()
-        for k, v in list(imputed_numbers.items()):
-            if not v:
-                continue
-            number = InterimSlaveNumber()
-            number.interim_voyage = interim
-            number.var_name = k.upper()
-            number.number = v
-            number.save()
-    return JsonResponse({
-        'result': 'OK',
-        'is_iam': is_iam,
-        'imputed_vars': impute_tuple[2],
-        'imputed_numbers': imputed_numbers
-    })
+    try:
+        with transaction.atomic():
+            contribution.ran_impute = True
+            contribution.save()
+            # Delete old numeric values.
+            InterimSlaveNumber.objects.filter(interim_voyage__id=interim.pk,
+                                            var_name__in=list(
+                                                imputed_numbers.keys())).delete()
+            # Map imputed fields back to the contribution, save it and yield
+            # response.
+            for k, v in list(result.items()):
+                setattr(interim, k, v)
+            interim.save()
+            for k, v in list(imputed_numbers.items()):
+                if not v:
+                    continue
+                number = InterimSlaveNumber()
+                number.interim_voyage = interim
+                number.var_name = k.upper()
+                number.number = v
+                number.save()
+        return JsonResponse({
+            'result': 'OK',
+            'is_iam': is_iam,
+            'imputed_vars': impute_tuple[2],
+            'imputed_numbers': imputed_numbers
+        })
+    except:
+        return JsonResponse({
+            'result': 'FAILED',
+            'is_iam': is_iam,
+            'imputed_vars': impute_tuple[2],
+            'imputed_numbers': imputed_numbers
+        })
 
 
 @login_required()

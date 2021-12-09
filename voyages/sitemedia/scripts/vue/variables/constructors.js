@@ -189,3 +189,33 @@ function BooleanVariable(varInfo, searchTerms, options) {
   this.changed = false;
   this.activated = false;
 }
+
+function LanguageGroupVariable(varInfo, searchTerms, options) {
+  this.type = "treeselect";
+  this.varName = varInfo["varName"];
+  this.label = varInfo["label"];
+  this.description = varInfo["description"];
+  this.default = {
+    op: searchTerms["op"],
+    searchTerm: searchTerms["searchTerm"],
+  };
+  this.value = {
+    op: searchTerms["op"],
+    searchTerm: searchTerms["searchTerm"],
+  };
+  this.options = {
+    isImputed: options["isImputed"],
+    isAdvanced: options["isAdvanced"],
+    isMultiple: typeof options["isMultiple"] !== 'undefined' ? options["isMultiple"] : true,
+    disableBranchNodes: typeof options["disableBranchNodes"] !== 'undefined' ? options["disableBranchNodes"] : false,
+    maxLength: typeof options["maxLength"] !== 'undefined' ? options["maxLength"] : 0,
+    caption: options["caption"],
+    data: [{
+      id: "0",
+      label: gettext("Select all"),
+      children: []
+    }],
+  };
+  this.changed = false;
+  this.activated = false;
+}
