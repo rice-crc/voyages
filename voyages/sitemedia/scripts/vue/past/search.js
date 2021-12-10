@@ -81,6 +81,14 @@ var allColumns = [
   ]
 ];
 
+const urlParams = new URLSearchParams(window.location.search);
+const selection = urlParams.get('dataset').toLowerCase();
+if (selection === 'african-origins') {
+  localStorage.enslavedDataset = 0;
+} else if (selection === 'oceans-of-kinfolk') {
+  localStorage.enslavedDataset = 1;
+}
+
 var enslavedDataset = localStorage.enslavedDataset === undefined ? 0 : localStorage.enslavedDataset;
 
 var categories = $.map(categoryNames[enslavedDataset], function(name) {
