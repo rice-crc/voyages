@@ -1767,7 +1767,7 @@ def submit_editorial_decision(request, editor_contribution_id):
         msg = escape(msg)
         user_contribution.status = decision
         user_contribution.save()
-        if decision == ContributionStatus.deleted:
+        if decision == ReviewRequestDecision.deleted:
             review_request.archived = True
         review_request.decision_message = msg
         review_request.save()
