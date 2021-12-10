@@ -70,6 +70,7 @@ var allColumns = [
     { data: "voyage__voyage_itinerary__imp_principal_port_slave_dis__place", category: 1, header: gettext("Disembarkation Port"), isImputed: false },
 
     //fate
+    { data: "captive_fate__name", category: 2, header: gettext("Captive Fate"), isImputed: false },
     { data: "post_disembark_location__place", category: 2, header: gettext("Last Known Location"), isImputed: false },
 
     // Enslavement
@@ -79,6 +80,14 @@ var allColumns = [
     { data: "sources_list", category: 4, header: gettext("Sources"), isImputed: false, visible: false, orderable: false },
   ]
 ];
+
+const urlParams = new URLSearchParams(window.location.search);
+const selection = urlParams.get('dataset').toLowerCase();
+if (selection === 'african-origins') {
+  localStorage.enslavedDataset = 0;
+} else if (selection === 'oceans-of-kinfolk') {
+  localStorage.enslavedDataset = 1;
+}
 
 var enslavedDataset = localStorage.enslavedDataset === undefined ? 0 : localStorage.enslavedDataset;
 

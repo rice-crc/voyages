@@ -228,6 +228,12 @@ class NamedModelAbstractBase(models.Model):
     id = models.IntegerField(primary_key=True)
     name = models.CharField(max_length=255)
 
+    def __str__(self):
+        return self.__unicode__()
+
+    def __unicode__(self):
+        return str(self.id) + ", " + self.name
+
     class Meta:
         abstract = True
 
@@ -253,10 +259,17 @@ class ModernCountry(NamedModelAbstractBase):
                                    decimal_places=7,
                                    null=False)
     languages = models.ManyToManyField(LanguageGroup)
+    
+    class Meta:
+        verbose_name = "Modern country"
+        verbose_name_plural = "Modern countries"
 
 
 class RegisterCountry(NamedModelAbstractBase):
-    pass
+    
+    class Meta:
+        verbose_name = "Register country"
+        verbose_name_plural = "Register countries"
 
 
 class AltLanguageGroupName(NamedModelAbstractBase):
@@ -275,7 +288,10 @@ class CaptiveFate(NamedModelAbstractBase):
     pass
 
 class CaptiveStatus(NamedModelAbstractBase):
-    pass
+
+    class Meta:
+        verbose_name = "Captive status"
+        verbose_name_plural = "Captive statuses"
 
 
 # TODO: this model will replace resources.AfricanName
