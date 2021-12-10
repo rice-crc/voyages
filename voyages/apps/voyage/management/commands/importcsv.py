@@ -1,7 +1,5 @@
 from __future__ import print_function, unicode_literals
 
-import itertools
-import re
 from builtins import input, next, str
 
 from django.core.management.base import BaseCommand
@@ -16,7 +14,7 @@ from voyages.apps.voyage.models import (BroadRegion, LinkedVoyages,
                                         Resistance, RigOfVessel, SlavesOutcome,
                                         TonType, VesselCapturedOutcome, Voyage,
                                         VoyageCaptain, VoyageCaptainConnection,
-                                        VoyageCrew, VoyageDataset, VoyageDates,
+                                        VoyageCrew, VoyageDates,
                                         VoyageGroupings, VoyageItinerary,
                                         VoyageOutcome, VoyageShip,
                                         VoyageShipOwner,
