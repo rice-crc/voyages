@@ -82,7 +82,7 @@ var allColumns = [
 ];
 
 const urlParams = new URLSearchParams(window.location.search);
-const selection = urlParams.get('dataset').toLowerCase();
+const selection = urlParams.get('dataset');
 if (selection === 'african-origins') {
   localStorage.enslavedDataset = 0;
 } else if (selection === 'oceans-of-kinfolk') {
