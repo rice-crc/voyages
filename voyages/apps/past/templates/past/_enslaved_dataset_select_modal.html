@@ -4,8 +4,8 @@
 <b-modal id="enslavedDatasetModal" v-model="enslavedDatasetModalShow" size="lg" no-close-on-esc hide-header hide-footer no-close-on-backdrop modal-class="modal-top" centered @show="selectRadio">
   <div class="row pt-3">
     <div class="col-md-12">
-      <p class="h3 font-weight-bold text-secondary text-center">{% trans "Select dataset of enslaved people to search" %}<p>
-      <p class="h5 text-muted text-center">{% trans "You may choose search within one of the following datasets." %}<p>
+      <p class="h3 font-weight-bold text-secondary text-center">{% trans "Select a dataset of enslaved people to search" %}<p>
+      <p class="h5 text-muted text-center">{% trans "You may choose a search within one of the following datasets." %}<p>
     </div>
   </div>
 
@@ -17,15 +17,11 @@
             <div class="custom-control custom-radio custom-radio-md">
               <input class="custom-control-input" type="radio" name="enslaved-dataset-radio" id="exampleRadios1" value="0" :checked="localStorage.enslavedDataset==0">
               <label class="custom-control-label form-control-lg py-0 px-2" for="exampleRadios1">
-                African Origins
+                {% trans "African Origins" %}
               </label>
             </div>
             
-            <p class="h6 pt-2">The African Origins Database provides personal details of 93,605 Africans taken from
-            captured slave ships or from African trading sites. It displays the African name, age, gender, and
-            places of embarkation and disembarkation of each individual. The database invites users to make
-            contributions to the site to identify the likely ethnolinguistic origins of the names from the
-            historical records.</p>
+            <p class="h6 pt-2">{% trans "The African Origins Database provides personal details of 93,605 Africans taken from captured slave ships or from African trading sites. It displays the African name, age, gender, and places of embarkation and disembarkation of each individual. The database invites users to make contributions to the site to identify the likely ethnolinguistic origins of the names from the historical records." %}</p>
           </div>
           <div class="col-md-2 align-self-end text-right">
             <img style="width: 100px;" src="{{ STATIC_URL }}images/site/past/origins_pic.png" />
@@ -46,11 +42,11 @@
             <div class="custom-control custom-radio custom-radio-md">
               <input class="custom-control-input" type="radio" name="enslaved-dataset-radio" id="exampleRadios2" value="1" :checked="localStorage.enslavedDataset==1">
               <label class="custom-control-label form-control-lg py-0 px-2" for="exampleRadios2">
-                Oceans of Kinfolk (United States)
+                {% trans "Oceans of Kinfolk (United States)" %}
               </label>
             </div>
             
-            <p class="h6 pt-2">The Oceans of Kinfolk Database provides personal details of more than 63,000 enslaved African Americans forcibly transported to New Orleans from various ports in the United States during the 19th century. The database includes the name, age, gender, and places of embarkation and disembarkation of each individual.</p>
+            <p class="h6 pt-2">{% trans "The Oceans of Kinfolk Database provides personal details of more than 63,000 enslaved African Americans forcibly transported to New Orleans from various ports in the United States during the 19th century. The database includes the name, age, gender, and places of embarkation and disembarkation of each individual." %}</p>
           </div>
           <div class="col-md-2 align-self-end text-right">
             <img style="width: 100px;" src="{{ STATIC_URL }}images/site/past/ook_pic.png" />
