@@ -26,7 +26,11 @@
 
 
 {% block title %}
-	{% trans 'Trans-Atlantic Slave Trade - Database' %}
+	{% if mode != "intra" %}
+		{% trans 'Trans-Atlantic Slave Trade - Database' %}
+	{% else %}
+		{% trans 'Intra-American Slave Trade - Database' %}
+	{% endif %}
 {% endblock %}
 
 {% block content %}
