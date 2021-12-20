@@ -32,5 +32,8 @@ urlpatterns = [
         voyages.apps.past.views.enslaved_contribution),
     url(r'^store-audio/(?P<contrib_pk>[0-9]+)/'
         r'(?P<name_pk>[0-9]+)/(?P<token>.*)',
-        voyages.apps.past.views.store_audio)
+        voyages.apps.past.views.store_audio),
+    url(r'enslaved-filtered-places',
+        voyages.apps.past.views.get_enslaved_filtered_places,
+        name='enlsaved-filtered-places')
 ]
