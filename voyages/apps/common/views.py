@@ -6,6 +6,7 @@ from builtins import str
 import django
 from django.conf import settings
 from django.contrib.flatpages.models import FlatPage
+from django.core.cache import cache
 from django.core.paginator import Paginator
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404
@@ -27,6 +28,25 @@ def get_nations(_):
         } for n in Nationality.objects.all()
     }
     return JsonResponse(nations)
+
+
+def get_filtered_results(cache_key, place_pks_queryset):
+    result = cache.get(cache_key)
+    is_cached = result is not None
+    if not is_cached:
+        pks = list(place_pks_queryset)
+        place_query = Place.objects.filter(pk__in=pks)
+        result = get_ordered_places(place_query, False)
+        # Cache the data for 24h.
+        cache.set(cache_key, result, 24 * 60 * 60)
+    for d in result:
+        # Translate the corresponding entry.
+        geo_type = d['type']
+        d[geo_type] = _(d[geo_type])
+    return {
+        'is_cached': is_cached,
+        'data': result
+    }
 
 
 def get_ordered_places(place_query=None, translate=True):
