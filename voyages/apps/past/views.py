@@ -64,10 +64,16 @@ def get_enslaved_filtered_places(request):
     if var_name is None or dataset is None:
         return JsonResponse({ "error": "Both dataset and var_name must be set" })
     cache_key = '_filtered_places_ENSLAVED_' + str(dataset) + "_" + var_name
-    filtered = get_filtered_results(cache_key, Enslaved.objects.filter(dataset=dataset).
-        select_related('voyage__voyage_itinerary__' + var_name).
-        values_list('voyage__voyage_itinerary__' + var_name + '_id', flat=True).
-        distinct())
+    # Most location variables come from VoyageItinerary, but
+    # post_disembarkation_location is only present in the Enslaved model
+    # directly.
+    if var_name != 'post_disembark_location_id':
+        var_name = 'voyage__voyage_itinerary__' + var_name
+    qs = Enslaved.objects.filter(dataset=dataset). \
+        select_related(var_name). \
+        values_list(var_name, flat=True). \
+        distinct()
+    filtered = get_filtered_results(cache_key, qs)
     filtered['filtered_var_name'] = var_name
     filtered['dataset'] = dataset
     return JsonResponse(filtered)
