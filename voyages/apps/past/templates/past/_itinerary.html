@@ -28,6 +28,7 @@
 
       <v-treeselect
         :filter="scope.filters.var_disembarkation_ports"
+        v-if="localStorage.enslavedDataset==0"
         @change="changed">
       </v-treeselect>
 
