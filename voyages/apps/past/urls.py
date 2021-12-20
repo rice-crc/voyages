@@ -1,6 +1,7 @@
 from __future__ import unicode_literals
 
 from django.conf.urls import url
+from django.views.generic import RedirectView
 from django.views.generic import TemplateView
 
 import voyages.apps.past.views
@@ -15,6 +16,12 @@ urlpatterns = [
     url(r'^api/language-groups',
         voyages.apps.past.views.get_language_groups,
         name='language-groups'),
+    url(r'^database/african-origins',
+        RedirectView.as_view(url='/past/database?dataset=african-origins'),
+        name='database'),
+    url(r'^database/oceans-of-kinfolk',
+        RedirectView.as_view(url='/past/database?dataset=oceans-of-kinfolk'),
+        name='database'),
     url(r'^database',
         TemplateView.as_view(template_name='past/database.html'),
         name='database'),
