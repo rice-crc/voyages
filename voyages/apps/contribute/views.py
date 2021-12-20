@@ -2049,7 +2049,7 @@ def download_voyages(request):
         if not os.path.exists(dloads):
             os.makedirs(dloads)
         csv_file = tempfile.NamedTemporaryFile(
-            dir=dloads, mode='w', delete=False)
+            dir=dloads, mode='wb', delete=False)
         log_file = tempfile.NamedTemporaryFile(
             dir=dloads, mode='w', delete=False)
         _thread.start_new_thread(
@@ -2122,7 +2122,7 @@ def download_voyages_go(request):
         raise Http404
     file_path = settings.MEDIA_ROOT + '/csv_downloads/' + csv_file
     data = None
-    with open(file_path, "r") as f:
+    with open(file_path, "rb") as f:
         data = f.read()
     response = HttpResponse(data, content_type='application/csv')
     response['Content-Disposition'] = 'attachment; filename=voyages.csv'
@@ -2139,7 +2139,7 @@ def get_voyages_csv_rows(statuses,
     writer = get_csv_writer(buffer)
     header = get_header_csv_text()
     yield header
-    buffer.write(header)
+    buffer.write(str.encode(header))
 
     def row_processor(x):
         return x if not remove_linebreaks else \
