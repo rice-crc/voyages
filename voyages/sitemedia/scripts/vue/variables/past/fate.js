@@ -1,5 +1,5 @@
-var_post_disembarkation_location = new PlaceVariable({
-    varName: "post_disembarkation_location",
+var_post_disembark_location = new PlaceVariable({
+    varName: "post_disembark_location",
     label: gettext("Post Disembarkation Location"),
     description: "",
   },{
@@ -13,7 +13,7 @@ var_post_disembarkation_location = new PlaceVariable({
 // all
 fate = {
   fate: {
-    var_post_disembarkation_location: var_post_disembarkation_location,
+    var_post_disembark_location: var_post_disembark_location,
 
     count: {
       changed: 0,

@@ -92,7 +92,7 @@ def get_csv_writer(output):
 
 def safe_writerow(writer, item):
     """
-    Ensure that only export SPSS fields are included in the item that will be
+    Ensure that only "export SPSS fields" are included in the item that will be
     written.
     """
     safe = {

@@ -19,13 +19,13 @@ from django.views.decorators.http import require_POST
 from haystack.inputs import Raw
 from haystack.query import SearchQuerySet
 import unicodecsv
+from voyages.apps.common.views import get_filtered_results as common_get_filtered_results
 
 from voyages.apps.common.export import download_xls
 from voyages.apps.common.models import (SavedQuery,
                                         get_pks_from_haystack_results, get_values_from_haystack_results)
 from voyages.apps.common.views import \
     get_datatable_json_result as get_results_table
-from voyages.apps.common.views import get_ordered_places
 from voyages.apps.voyage.models import (Nationality, OwnerOutcome,
                                         ParticularOutcome, Place, Resistance,
                                         RigOfVessel, SlavesOutcome, TonType,
@@ -790,6 +790,7 @@ def get_var_options(request):
 
 
 @csrf_exempt
+@require_POST
 def get_filtered_places(request):
     """
     Obtains a list of places and corresponding regions/broad regions
@@ -799,27 +800,10 @@ def get_filtered_places(request):
     blank = '|blank|'
     var_name = data.get('var_name', blank)
     cache_key = '_filtered_places_' + var_name
-    result = cache.get(cache_key)
-    is_cached = result is not None
-    if not is_cached:
-        place_query = None
-        if var_name != blank:
-            pks = list(
-                VoyageItinerary.objects.values_list(var_name,
-                                                    flat=True).distinct())
-            place_query = Place.objects.filter(pk__in=pks)
-        result = get_ordered_places(place_query, False)
-        # Cache the data for 24h.
-        cache.set(cache_key, result, 24 * 60 * 60)
-    for d in result:
-        # Translate the corresponding entry.
-        geo_type = d['type']
-        d[geo_type] = _(d[geo_type])
-    return JsonResponse({
-        'filtered_var_name': var_name if var_name != blank else 'None',
-        'is_cached': is_cached,
-        'data': result
-    })
+    qs = VoyageItinerary.objects.values_list(var_name, flat=True).distinct() if var_name != blank else None
+    filtered = common_get_filtered_results(cache_key, qs)
+    filtered['filtered_var_name'] = var_name if var_name != blank else 'None'
+    return JsonResponse(filtered)
 
 
 @csrf_exempt

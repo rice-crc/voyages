@@ -36,7 +36,7 @@
 			</div>
 			<div class="col-md-6 text-right">
 				<b-btn size="sm" class="btn-outline py-0 change-datasets" @click="enslavedDatasetModalShow=true">
-					{% trans 'Change Datasets' %}
+					{% trans 'Change Database' %}
 				</b-btn>
 			</div>
 		</div>
@@ -52,8 +52,10 @@
 					{% include "past/_identity.html" %}
 					{% include "past/_personal-data.html" %}
 					{% include "past/_itinerary.html" %}
-					{% include "past/_cultural-association.html" %}
-					<!-- {% include "past/_fate.html" %} -->
+					{% comment %}
+						{% include "past/_cultural-association.html" %}
+					{% endcomment %}
+					{% include "past/_fate.html" %}
 					{% include "past/_sources.html" %}
 					{% include "past/_actions.html" %}
 				</ul>
