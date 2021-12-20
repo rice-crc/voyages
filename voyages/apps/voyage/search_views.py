@@ -800,8 +800,8 @@ def get_filtered_places(request):
     blank = '|blank|'
     var_name = data.get('var_name', blank)
     cache_key = '_filtered_places_' + var_name
-    filtered = common_get_filtered_results(cache_key,
-        VoyageItinerary.objects.values_list(var_name, flat=True).distinct())
+    qs = VoyageItinerary.objects.values_list(var_name, flat=True).distinct() if var_name != blank else None
+    filtered = common_get_filtered_results(cache_key, qs)
     filtered['filtered_var_name'] = var_name if var_name != blank else 'None'
     return JsonResponse(filtered)
 

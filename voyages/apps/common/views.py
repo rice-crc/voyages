@@ -34,8 +34,10 @@ def get_filtered_results(cache_key, place_pks_queryset):
     result = cache.get(cache_key)
     is_cached = result is not None
     if not is_cached:
-        pks = list(place_pks_queryset)
-        place_query = Place.objects.filter(pk__in=pks)
+        place_query = None
+        if place_pks_queryset:
+            pks = list(place_pks_queryset)
+            place_query = Place.objects.filter(pk__in=pks)
         result = get_ordered_places(place_query, False)
         # Cache the data for 24h.
         cache.set(cache_key, result, 24 * 60 * 60)
