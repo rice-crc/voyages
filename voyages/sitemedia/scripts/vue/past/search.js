@@ -3,7 +3,7 @@ var categoryNames = [
     gettext("African Name"),
     gettext("Personal Data"),
     gettext("Itinerary"),
-    gettext("Cultural Association"),
+    // gettext("Cultural Association"),
     gettext("Fate"),
     gettext("Sources"),
     gettext("Recordings"),
@@ -39,19 +39,18 @@ var allColumns = [
     { data: "voyage__voyage_itinerary__int_first_port_dis__place", category: 2, header: gettext("Intended Disembarkation Port"), isImputed: false },
 
     // cultural association
-    { data: "language_group__modern_country__name", category: 3, header: gettext("Modern Country"), isImputed: false, visible: false },
-    { data: "ethnicity__name", category: 3, header: gettext("Ethnicity"), isImputed: false, visible: false },
-    { data: "language_group__name", category: 3, header: gettext("Language Group"), isImputed: false },
+    // { data: "language_group__modern_country__name", category: 3, header: gettext("Modern Country"), isImputed: false, visible: false },
+    // { data: "language_group__name", category: 3, header: gettext("Language Group"), isImputed: false },
 
     //fate
-    { data: "captive_fate__name", category: 4, header: gettext("Captive Fate"), isImputed: false },
-    { data: "post_disembark_location__place", category: 4, header: gettext("Post Disembarkation Location"), isImputed: false },
+    { data: "captive_fate__name", category: 3, header: gettext("Captive Fate"), isImputed: false },
+    { data: "post_disembark_location__place", category: 3, header: gettext("Post Disembarkation Location"), isImputed: false },
 
     // sources
-    { data: "sources_list", category: 5, header: gettext("Sources"), isImputed: false, visible: false, orderable: false },
+    { data: "sources_list", category: 4, header: gettext("Sources"), isImputed: false, visible: false, orderable: false },
 
-    { data: "recordings", category: 6, header: '<i class="fa fa-volume-up" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></i>', isImputed: false, isAudible: true, orderable: false },
-    { data: "enslaved_id", category: 6, header: gettext("Contribute"), isImputed: false, isContribute: true, orderable: false  },
+    { data: "recordings", category: 5, header: '<i class="fa fa-volume-up" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></i>', isImputed: false, isAudible: true, orderable: false },
+    { data: "enslaved_id", category: 5, header: gettext("Contribute"), isImputed: false, isContribute: true, orderable: false  },
   ],
   [
     // Identity
