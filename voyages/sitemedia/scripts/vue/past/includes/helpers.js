@@ -630,22 +630,20 @@ function loadTreeselectOptions(vm, vTreeselect, filter, callback) {
   // load only once remotely and then local copy
   if (!vm.filterData.treeselectOptions[varName]) {
     if (loadType == "place") {
-      var apiUrl = '/voyage/filtered-places';
-      switch (varName) {
-        case 'embarkation_ports':
-          var params = {var_name: 'imp_principal_place_of_slave_purchase_id'};
-          break;
-
-        case 'disembarkation_ports':
-        case 'intended_disembarkation_port':
-        case 'post_disembarkation_location':
-          var params = {var_name: 'imp_principal_port_slave_dis_id'};
-          break;
-
-        default:
-          callback("Error: varName " + varName + " is not acceptable");
-          return false;
+      var apiUrl = '/past/api/enslaved-filtered-places';
+      var modelVarName = {
+        embarkation_ports: "imp_principal_place_of_slave_purchase_id",
+        disembarkation_ports: "imp_principal_port_slave_dis_id",
+        // intended_disembarkation_port: "imp_principal_port_slave_dis_id",
+        post_disembark_location: "post_disembark_location_id",
+      };
+      
+      if (modelVarName[varName] === undefined) {
+        callback("Error: varName " + varName + " is not acceptable");
+        return false;
       }
+
+      var params = {var_name: modelVarName[varName], dataset: localStorage.enslavedDataset};
 
       axios
         .post(apiUrl, params)
