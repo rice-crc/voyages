@@ -107,23 +107,27 @@ Vue.component("v-treeselect", {
     },
 
     disableUnselected() {
-      this.treeselectOptions[0].children.forEach((value, index) => {
-        value.children.forEach((childValue, childIndex) => {
-          if (!this.isSelected(childValue.id)) {
-            childValue.isDisabled = true;
-          }
+      if (this.treeselectOptions[0].children !== undefined) {
+        this.treeselectOptions[0].children.forEach((value, index) => {
+          value.children.forEach((childValue, childIndex) => {
+            if (!this.isSelected(childValue.id)) {
+              childValue.isDisabled = true;
+            }
+          });
         });
-      });
+      }
     },
 
     enableAll() {
-      this.treeselectOptions[0].children.forEach((value, index) => {
-        value.children.forEach((childValue, childIndex) => {
-          if (!this.isSelected(childValue.id)) {
-            childValue.isDisabled = false;
-          }
+      if (this.treeselectOptions[0].children !== undefined) {
+        this.treeselectOptions[0].children.forEach((value, index) => {
+          value.children.forEach((childValue, childIndex) => {
+            if (!this.isSelected(childValue.id)) {
+              childValue.isDisabled = false;
+            }
+          });
         });
-      });
+      }
     }
   },
 

@@ -398,16 +398,21 @@ function searchAll(filter, filterData) {
                     
                     // if it's a TreeselectVariable
                   } else if (filter[key1][key2][key3].constructor.name === "TreeselectVariable") {
-                    var sortedSelections = filter[key1][key2][key3].value["searchTerm"].sort(sortNumber);
-                    var searchTerm = [];
+                    if (Array.isArray(filter[key1][key2][key3].value["searchTerm"])) {
+                      var sortedSelections = filter[key1][key2][key3].value["searchTerm"].sort(sortNumber);
+                      var searchTerm = [];
 
-                    if (sortedSelections.includes("0")) {
-                      // select all
-                      filterData.treeselectOptions[varName][0].children.forEach(
-                        function(options) {
-                          searchTerm.push(options.id);
-                        }
-                      );
+                      console.log(sortedSelections);
+                      if (sortedSelections.includes("0")) {
+                        // select all
+                        filterData.treeselectOptions[varName][0].children.forEach(
+                          function(options) {
+                            searchTerm.push(options.id);
+                          }
+                        );
+                      } else {
+                        searchTerm = filter[key1][key2][key3].value["searchTerm"];
+                      }
                     } else {
                       searchTerm = filter[key1][key2][key3].value["searchTerm"];
                     }
@@ -543,13 +548,21 @@ function getTreeselectLabel(currentVariable, searchTerms, treeselectOptions) {
 
   if (currentVariable.constructor.name == "TreeselectVariable") {
     treeselectOptions = treeselectOptions[currentVariable.varName];
-    searchTerms.forEach(function(searchTerm) {
+    if (Array.isArray(searchTerms)) {
+      searchTerms.forEach(function(searchTerm) {
+        treeselectOptions.forEach(function(treeselectOption) {
+          if (treeselectOption.value == searchTerm) {
+            labels.push(treeselectOption.label);
+          }
+        });
+      });
+    } else {
       treeselectOptions.forEach(function(treeselectOption) {
-        if (treeselectOption.value == searchTerm) {
+        if (treeselectOption.value == searchTerms || treeselectOption.id == searchTerms) {
           labels.push(treeselectOption.label);
         }
       });
-    });
+    }
   } else if (currentVariable.constructor.name == "LanguageGroupVariable") {
     treeselectOptions = treeselectOptions[currentVariable.varName][0];
     searchTerms.forEach(function(searchTerm) {
