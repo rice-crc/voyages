@@ -91,14 +91,14 @@
     } );
     $(".apply-button").on( 'click', function (e) {
       localStorage.enslavedDataset = $('input[name=enslaved-dataset-radio]:checked').val();
-      window.location.reload();
+      window.location.replace('/past/database');
     });
 
     $(".direct-link-filter").on('click', function (e) {
       $("#cardDataset"+$(this).data('enslaved-dataset')).trigger('click');
       localStorage.enslavedDataset = $(this).data('enslaved-dataset');
       localStorage.directLinkFilter = $(this).data('enslaved-id');
-      window.location.reload();
+      window.location.replace('/past/database');
     });
   });
 </script>
