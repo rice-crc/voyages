@@ -80,16 +80,14 @@ var allColumns = [
   ]
 ];
 
-const urlParams = new URLSearchParams(window.location.search);
-const selection = urlParams.get('dataset');
-const datasets = ['african-origins', 'oceans-of-kinfolk'];
-const dsIndex = datasets.indexOf(selection);
-if (dsIndex >= 0) {
-  localStorage.enslavedDataset = dsIndex;
-  window.history.replaceState({}, document.title, window.location.href.split('?')[0]);
+// The override can be set in the html produced by the Django view.
+// If it is set, we update the local storage to switch to the override.
+if (Number.isInteger(enslavedDatasetOverride)) {
+  localStorage.enslavedDataset = enslavedDatasetOverride;
 }
 
 var enslavedDataset = localStorage.enslavedDataset === undefined ? 0 : localStorage.enslavedDataset;
+
 
 var categories = $.map(categoryNames[enslavedDataset], function(name) {
   return {
@@ -105,7 +103,7 @@ $(function(){
     searchBar.enslavedDatasetModalShow = true;
   }
 
-  $("#results_main_table").on( 'page.dt', function () {
+  $("#results_main_table").on('page.dt', function () {
       $('audio').remove();
   } );
 

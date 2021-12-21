@@ -658,7 +658,10 @@ var searchBar = new Vue({
 
     // load a search when present in URL
     if (location.href.includes(SAVED_SEARCH_LABEL)) {
-      var savedSearchId = location.href.split(SAVED_SEARCH_LABEL).pop();
+      var parts = location.href.split(SAVED_SEARCH_LABEL);
+      var savedSearchId = parts.pop();
+      // Remove the search slug from URL.
+      window.history.replaceState({}, document.title, parts[0]);
       this.load(savedSearchId);
     } else {
       this.refresh();
