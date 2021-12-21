@@ -37,9 +37,9 @@ urlpatterns = [
     url(r'^voyages/(?P<link_id>\w+)',
         voyages.apps.voyage.views.restore_permalink,
         name='restore_v_permalink'),
-    url(r'^past-db/(?P<link_id>\w+)',
-        voyages.apps.past.views.restore_permalink,
-        name='restore_past_permalink'),
+    url(r'^enslaved/(?P<link_id>\w+)',
+        voyages.apps.past.views.restore_enslaved_permalink,
+        name='restore_enslaved_permalink'),
 
     # Include url handlers of each section
     url(r'^voyage/', include('voyages.apps.voyage.urls', namespace='voyage')),
