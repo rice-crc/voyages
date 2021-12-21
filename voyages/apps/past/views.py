@@ -11,11 +11,12 @@ from django.db import transaction
 from django.db.models import Prefetch
 from django.http import JsonResponse
 from django.http.response import HttpResponseBadRequest
-from django.shortcuts import redirect
+from django.shortcuts import redirect, render
 from django.views.decorators.cache import cache_page
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 from past.utils import old_div
+from voyages.apps.common.models import SavedQuery
 
 from voyages.apps.common.views import get_filtered_results
 from .models import (AltLanguageGroupName, Enslaved,
@@ -24,6 +25,7 @@ from .models import (AltLanguageGroupName, Enslaved,
                      LanguageGroup, MultiValueHelper, ModernCountry, NameSearchCache,
                      _modern_name_fields, _name_fields)
 
+ENSLAVED_DATASETS = ['african-origins', 'oceans-of-kinfolk']
 
 def _generate_table(query, table_params, data_adapter=None):
     try:
@@ -49,6 +51,16 @@ def _generate_table(query, table_params, data_adapter=None):
     response_data['data'] = list(page)
     return response_data
 
+def enslaved_database(request, dataset=None):
+    if dataset is not None:
+        try:
+            dataset = ENSLAVED_DATASETS.index(dataset)
+        except:
+            dataset = None
+    return render(
+        request,
+        'past/database.html',
+        { 'dataset': str(dataset) if dataset is not None else None })
 
 @csrf_exempt
 @require_POST
@@ -107,9 +119,18 @@ def get_language_groups(_):
         for item in items], safe=False)
 
 
-def restore_permalink(_, link_id):
+def restore_enslaved_permalink(_, link_id):
     """Redirect the page with a URL param"""
-    return redirect("/past/database#searchId=" + link_id)
+    q = SavedQuery.objects.get(pk=link_id)
+    query = json.loads(q.query)
+    # Detect the dataset of the query.
+    dataset = query.get('items', {}).get('enslaved_dataset')
+    ds_name = ''
+    try:
+        ds_name = '/' + ENSLAVED_DATASETS[int(dataset)]
+    except:
+        pass
+    return redirect("/past/database" + ds_name + "#searchId=" + link_id)
 
 def is_valid_name(name):
     return name is not None and name.strip() != ""

@@ -102,10 +102,10 @@
 
 {% include '_scripts.html' %}
 
-<!-- Highcharts -->
 <script>
 	const SV_MODE = "past";
 	const minVoyageYear = 1808;
+	const enslavedDatasetOverride = {{ dataset|default:"null" }};
 </script>
 
 {% compress js %}
