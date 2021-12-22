@@ -94,13 +94,20 @@ var flatpage = new Vue({
     },
 
     getArticleIndex(url) {
-      var index = 0;
-      this.articles.forEach(function(article, currentArticleIdx) {
-        if (article.url.includes(url.slice(0, -3))) { // trim off language tag
-          index = currentArticleIdx;
+      if (!!url && url.length > 4) {
+        if (url[url.length - 1] === '/') {
+          url = url.slice(0, -1);
         }
-      });
-      return index;
+        if (url[url.length - 3] === '/') {
+          url = url.slice(0, -3); // trim off language tag
+        }
+        for (var i = 0; i < this.articles.length; ++i) {
+          if (this.articles[i].url.includes(url)) {
+            return i;
+          }        
+        }
+      }
+      return 0;
     },
 
     updateNav() {
@@ -178,9 +185,9 @@ var flatpage = new Vue({
       }
       vm.articles = articles;
 
-      var hashURL = window.location.href.match(/\#(.*)/); // get the URL with the #
-      if (hashURL != null && hashURL.length > 0) { // if the URL with the # is matched
-        var articleIndex = vm.getArticleIndex(hashURL[1]); 
+      var locationSplit = window.location.href.match(/.*\#(.*)/); // get the URL with the #
+      if (locationSplit != null && locationSplit.length === 2) { // if the URL with the # is matched
+        var articleIndex = vm.getArticleIndex(locationSplit[1]); 
         vm.navigate(articleIndex); // load a page from URL
       } else {
         vm.navigate("0"); // load initial page

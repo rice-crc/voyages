@@ -41,10 +41,11 @@ var_gender = new TreeselectVariable({
     description: "",
   },{
     op: "is one of",
-    searchTerm: [],
+    searchTerm: null,
   },{
     isImputed: false,
     isAdvanced: false,
+    isMultiple: false,
   });
 
 var_enslaved_id = new NumberVariable({
