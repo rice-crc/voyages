@@ -1871,19 +1871,20 @@ def impute_contribution(request, editor_contribution_id):
                 number.var_name = k.upper()
                 number.number = v
                 number.save()
-        return JsonResponse({
+        res = {
             'result': 'OK',
             'is_iam': is_iam,
             'imputed_vars': impute_tuple[2],
             'imputed_numbers': imputed_numbers
-        })
+        }
     except:
-        return JsonResponse({
+        res = {
             'result': 'FAILED',
             'is_iam': is_iam,
             'imputed_vars': impute_tuple[2],
             'imputed_numbers': imputed_numbers
-        })
+        }
+    return JsonResponse(res)
 
 
 @login_required()
