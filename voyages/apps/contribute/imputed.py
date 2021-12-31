@@ -9,6 +9,7 @@ import inspect
 from builtins import map, next, range, str
 from datetime import datetime
 from itertools import takewhile
+import types
 
 from django.core.exceptions import ObjectDoesNotExist
 
@@ -621,8 +622,8 @@ def compute_imputed_vars(_interim, is_iam=False):
     regarr = region_value(arrport)
     regarr2 = region_value(arrport2)
 
-    have_sale_info = sla1port or adpsale1 or adpsale2
-    if not have_sale_info:
+    _have_sale_info = sla1port or adpsale1 or adpsale2
+    if not _have_sale_info:
         if safe_ge(arrport, 1) and not arrport2:
             mjslptimp = arrport
         if not arrport and safe_ge(arrport2, 1):
@@ -706,11 +707,11 @@ def compute_imputed_vars(_interim, is_iam=False):
     elif not slastot and adpsale1 and adpsale2:
         mjslptimp = regdis2 + 99 if regdis2 == regdis3 else 99801
 
-    if arrport and not have_sale_info:
+    if arrport and not _have_sale_info:
         mjslptimp = arrport
 
     if not mjslptimp and fate2 in (1, 3, 5):
-        if arrport or arrport2 or have_sale_info or safe_lt(0, slastot):
+        if arrport or arrport2 or _have_sale_info or safe_lt(0, slastot):
             mjslptimp = 99801
 
     majselpt = get_obj_value(_interim.principal_place_of_slave_disembarkation)
@@ -1414,7 +1415,7 @@ def compute_imputed_vars(_interim, is_iam=False):
 
     local_vars = locals()
     local_vars = {
-        k: v for k, v in list(local_vars.items()) if not k.startswith('_')
+        k: v for k, v in list(local_vars.items()) if not k.startswith('_') and not isinstance(v, types.FunctionType)
     }
 
     # Recode zero numerical values to None and vice versa with an 'all or
