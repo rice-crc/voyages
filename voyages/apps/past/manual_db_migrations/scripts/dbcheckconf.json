@@ -1,0 +1,6 @@
+{
+  "user": "voyages",
+  "password": "voyages",
+  "database":"voyages_python3",
+  "host": "voyages-mysql"
+}
