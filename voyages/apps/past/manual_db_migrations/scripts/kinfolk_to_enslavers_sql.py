@@ -357,7 +357,7 @@ cursor = cnx.cursor()
 
 '''then load in the data from the csvs:'''
 '''main sheet, and immediately isolate Jennies rows'''
-df = pd.read_csv('../data/NewAO2Jennie5f_rev2.csv',quotechar='"',low_memory=False)
+df = pd.read_csv('../data/NewAO3Jennie5g-cleaned.csv',quotechar='"',low_memory=False)
 columns=['Uniqueid','AfricanName','AfricanName2','AfricanName3','ModernAfricanName','Certainty','Westernname','Gender','Age','Height','CaptiveStatus','SkinColor','VoyageID','Voyagestatus','Vesselfate','Captivefate','ShipName','Yearam','Mjbyptimp','Dateleftlastslavingport','Mjslptimp','Datelanded','AfricanLanguagegroup','Africancountry','SourceA','ShortrefA','SourceB','ShortrefB','SourceC','ShortrefC','LastKnownLocation','Lastknowndate','NameOwnerEmployer','OwnerEmployerLocation','OccupationOwnerEmployerBuyer','ShipperName','ShipperLocation','ConsignorName','ConsignorLocation','TransactionDate','CaptivePrice','Currency','TransactionNumber','SellerName','BuyerName','BuyerLocation','TransactionLocation','Notes','filter_$']
 df= df[df['Uniqueid']>500000]
 

@@ -14,7 +14,7 @@ role_id_dict={}
 
 '''for the captain and owner tables we:'''
 for role in [['captain','captain','captain'],['shipowner','owner','investor']]:
-	
+	print(role)
 	'''pull the all the records (rowids and names)'''
 	cursor.execute('select id,name from voyage_voyage'+role[0])
 	enslavers=cursor.fetchall()
