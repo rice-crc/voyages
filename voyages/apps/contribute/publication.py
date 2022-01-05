@@ -72,7 +72,7 @@ _exported_spss_fields = [
     'VYMRTIMP', 'VYMRTRAT', 'WOMEN1', 'WOMEN2', 'WOMEN3', 'WOMEN4', 'WOMEN5',
     'WOMEN6', 'WOMEN7', 'WOMRAT7', 'XMIMPFLAG', 'YEAR10', 'YEAR100', 'YEAR25',
     'YEAR5', 'YEARAF', 'YEARAM', 'YEARDEP', 'YRCONS', 'YRREG', 'VOYAGEID2',
-    'INTRAAMER', "BOYRAT1", "CHILRAT1", "GIRLRAT1", "MALRAT1", "MENRAT1",
+    'DATASET', "BOYRAT1", "CHILRAT1", "GIRLRAT1", "MALRAT1", "MENRAT1",
     "WOMRAT1", "BOYRAT3", "CHILRAT3", "GIRLRAT3", "MALRAT3", "MENRAT3",
     "WOMRAT3"
 ]
@@ -142,7 +142,7 @@ def export_from_review_requests(review_requests):
              if hasattr(contrib, 'interim_voyage') else None),
             (req.created_voyage_id
              if req.requires_created_voyage_id() else None),
-            status_text, req.dataset == VoyageDataset.IntraAmerican)
+            status_text, req.dataset)
         for data in items:
             yield data
 
@@ -151,7 +151,7 @@ def export_contribution(user_contrib,
                         interim_voyage,
                         created_voyage_id,
                         status_text,
-                        is_intra_american=False):
+                        dataset=0):
     if isinstance(user_contrib, DeleteVoyageContribution):
         delete_ids = user_contrib.deleted_voyages_ids.split(',')
         voyages = Voyage.all_dataset_objects.filter(voyage_id__in=delete_ids)
@@ -170,7 +170,7 @@ def export_contribution(user_contrib,
         data['VOYAGEID'] = created_voyage_id
     else:
         data['VOYAGEID'] = ' '.join([str(id) for id in ids])
-    data['INTRAAMER'] = 1 if is_intra_american else 0
+    data['DATASET'] = dataset
     if isinstance(user_contrib, NewVoyageContribution):
         data['STATUS'] = 'NEW (%s)' % status_text
     elif isinstance(user_contrib, EditVoyageContribution):
@@ -392,7 +392,7 @@ def _get_region_value(place):
 def _map_voyage_to_spss(voyage):
     data = {'STATUS': 'PUBLISHED'}
     data['VOYAGEID'] = voyage.voyage_id
-    data['INTRAAMER'] = 1 if voyage.dataset == 1 else 0
+    data['DATASET'] = voyage.dataset
 
     # Dates
     dates = voyage.voyage_dates
