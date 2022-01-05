@@ -145,7 +145,13 @@ class EnslaverInfoAbstractBase(models.Model):
     will_value_dollars = models.CharField(max_length=12, null=True)
     will_court = models.CharField(max_length=12, null=True)
     text_id=models.CharField(max_length=50)
-	
+    first_active_year=models.IntegerField(null=True)
+    last_active_year=models.IntegerField(null=True)
+    number_enslaved=models.IntegerField(null=True)
+    principal_location=models.ForeignKey(Place, null=True,
+                                                on_delete=models.CASCADE,
+                                                db_index=True)
+	 
     class Meta:
         abstract = True
 
