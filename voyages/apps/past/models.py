@@ -144,7 +144,8 @@ class EnslaverInfoAbstractBase(models.Model):
     will_value_pounds = models.CharField(max_length=12, null=True)
     will_value_dollars = models.CharField(max_length=12, null=True)
     will_court = models.CharField(max_length=12, null=True)
-
+    text_id=models.CharField(max_length=50)
+	
     class Meta:
         abstract = True
 
@@ -162,7 +163,6 @@ class EnslaverIdentitySourceConnection(models.Model):
                                null=False, on_delete=models.CASCADE)
     source_order = models.IntegerField()
     text_ref = models.CharField(max_length=255, null=False, blank=True)
-
 
 class EnslaverAlias(models.Model):
     """
