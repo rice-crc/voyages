@@ -25,7 +25,7 @@ def precompile_paths(dataset_name, two_way_links):
     region_from = get_module("region_from").region_from
     region_to = get_module("region_to").region_to
     region_network = get_module("region_network")
-    route_nodes = region_network.route_nodes
+    routeNodes = region_network.routeNodes
     links = set(region_network.links)
 
     VoyageCache.load()
@@ -35,10 +35,10 @@ def precompile_paths(dataset_name, two_way_links):
         return min(enumerate(choices),
                    key=lambda __pt: hs_dist(__pt[1], origin))[0]
 
-    region_from_nodes = [get_closest(r, route_nodes) for r in region_from]
-    region_to_nodes = [get_closest(r, route_nodes) for r in region_to]
+    region_from_nodes = [get_closest(r, routeNodes) for r in region_from]
+    region_to_nodes = [get_closest(r, routeNodes) for r in region_to]
     # We now compute the regional routes.
-    route_finder = VoyageRoutes(route_nodes, links, two_way_links)
+    route_finder = VoyageRoutes(routeNodes, links, two_way_links)
 
     def get_coords(geo_entry):
         if geo_entry is not None:
@@ -53,7 +53,7 @@ def precompile_paths(dataset_name, two_way_links):
     def smooth_path(source, target):
         nodes = route_finder.find_route(source, target)
         if nodes is None or source == target:
-            return [route_nodes[source], route_nodes[target]]
+            return [routeNodes[source], routeNodes[target]]
         points = np.array([[pt[0] for pt in nodes], [pt[1] for pt in nodes]]).T
         # Linear length along the points:
         distance = np.cumsum(np.sqrt(np.sum(np.diff(points, axis=0)**2,
@@ -71,7 +71,7 @@ def precompile_paths(dataset_name, two_way_links):
             except Exception:
                 pass
         print(str(source) + " " + str(target))
-        return [route_nodes[source], route_nodes[target]]
+        return [routeNodes[source], routeNodes[target]]
 
     warnings = []
 
