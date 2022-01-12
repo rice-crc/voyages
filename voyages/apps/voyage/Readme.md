@@ -19,5 +19,6 @@ To bulk import new voyages, do the following:
 		1. Don't check the "remove line breaks" option
 1. Once you have this csv, create a temp folder in your test server: voyage/apps/voyage/tmp
 	1. Place your new csv dump file and your spss export csv file in here
-1. Log into your django app container like ```docker execute -it voyages-django /bin/bash```
+1. Log into your django app container like ```docker exec -it voyages-django /bin/bash```
 1. In your django app container, kick off the export with ```python3 manage.py importcsv tmp/SITE_DUMP_FILENAME.csv tmp/SPSS_EXPORT_FILENAME.csv```
+1. Now run your reindex and see how it looks!
