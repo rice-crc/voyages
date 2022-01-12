@@ -1,6 +1,35 @@
 # This folder should contain auxiliary development tools.
 # Each script/program under this folder should be documented in this README file.
 
+
+==================================================================================
+mapping tool(s)
+==================================================================================
+
+
+
+The graphical tool is here:
+Voyages - Directed Network Design Tool (slavevoyages.org)
+However there are some missing JS files and it is not rendering properly at the moment. It might be broken due to Doug's changes or something else (it has been a while since the tool was used last).
+
+When properly working, it should allow exporting a Python file like this:
+voyages/region_network.py at develop · rice-crc/voyages (github.com)
+(Note that we have different files for Transatlantic and IntraAmerican)
+
+There are other files in that folder and they basically represent the inbound and outbound regional "ocean" geo codes (see region_from.py and region_to.py). You can think of those regional geo codes as hubs. Now, to put it together, we have the following strategy:
+
+    Each in/outbound port is matched to the nearest in/outbound region coordinate, a short, direct path is expected between the port coordinate and the region coordinate (this is why sometimes you see some path going over land in the case of island ports... it can be fixed by adding more regional coordinates).
+    Our tool then precomputes all pairs of paths between any two hubs that are actually used by a voyage (so if there are N inbound and M outbound hubs there can be at most N*M different paths).
+    In the front-end, the animation constructs the voyage path by a short direct path from inbound port to the hub, then followed by the hub-to-hub precomputed path, then another direct hub-to-outbound-port path. It also applies some small random perturbation to the dots navigating the path, so that the ships are a bit more spread out during their voyage.
+
+Once the Python file is updated, the "smooth.py" script can be used to generate the .js file as documented here:
+https://github.com/rice-crc/voyages/blob/13caccd48fdb711fdacf7ae81ca91a9a1138c4d9/tools/animation/smooth.py#L124
+
+It's definitely not the most ergonomic workflow but it (used to) get the job done. If there is funding for this, we could spin off a project to rewrite these tools in a more user friendly/automatic way and open source it so others could use it as well.
+
+
+
+
 ==================================================================================
 get_dumpdata_commands.sh
 ==================================================================================
