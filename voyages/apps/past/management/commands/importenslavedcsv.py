@@ -1,4 +1,3 @@
-
 from django.core.management.base import BaseCommand
 from django.db import connection
 from django.db import transaction
@@ -8,9 +7,9 @@ from voyages.apps.common.utils import *
 from voyages.apps.past.models import CaptiveFate, CaptiveStatus, Enslaved, EnslavedSourceConnection, EnslaverAlias, LanguageGroup, RegisterCountry
 from voyages.apps.voyage.models import Place, Voyage
 
-class Command(BaseCommand):    
-    help = ('Imports CSV files with the full PAST data-set and converts the data '
-            'to the Django models. TODO: implement enslavers import!')
+class Command(BaseCommand):
+    help = ('Imports CSV files with the full Enslaved data-set and converts the data '
+            'to the Django models.')
 
     def add_arguments(self, parser):
         parser.add_argument('enslaved_csv_files', nargs='+')

@@ -21,7 +21,7 @@ from voyages.apps.common.models import SavedQuery
 from voyages.apps.common.views import get_filtered_results
 from .models import (AltLanguageGroupName, Enslaved,
                      EnslavedContribution, EnslavedContributionLanguageEntry,
-                     EnslavedContributionNameEntry, EnslavedSearch,
+                     EnslavedContributionNameEntry, EnslavedSearch, EnslaverRole,
                      LanguageGroup, MultiValueHelper, ModernCountry, NameSearchCache,
                      _modern_name_fields, _name_fields)
 
@@ -119,6 +119,14 @@ def get_language_groups(_):
         for item in items], safe=False)
 
 
+@csrf_exempt
+@cache_page(3600)
+def get_enumeration(req, model_name):
+    from django.apps import apps
+    model = apps.get_model(app_label="past", model_name=model_name.replace('-', ''))
+    return JsonResponse({x.value: x.name for x in model.objects.all()})
+
+
 def restore_enslaved_permalink(_, link_id):
     """Redirect the page with a URL param"""
     q = SavedQuery.objects.get(pk=link_id)
@@ -132,8 +140,10 @@ def restore_enslaved_permalink(_, link_id):
         pass
     return redirect("/past/database" + ds_name + "#searchId=" + link_id)
 
+
 def is_valid_name(name):
     return name is not None and name.strip() != ""
+
 
 @require_POST
 @csrf_exempt

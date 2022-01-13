@@ -131,7 +131,7 @@ def perform_search(search, lang):
             pass
     else:
         try:
-            dataset = int(dataset)
+            dataset = int(dataset) if dataset != '*' else -1
         except Exception:
             dataset = VoyageDataset.Transatlantic
     if dataset >= 0:

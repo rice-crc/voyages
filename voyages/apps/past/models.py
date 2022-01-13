@@ -117,6 +117,31 @@ class NameSearchCache:
             cls._loaded = True
 
 
+class NamedModelAbstractBase(models.Model):
+    id = models.IntegerField(primary_key=True)
+    name = models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.__unicode__()
+
+    def __unicode__(self):
+        return str(self.id) + ", " + self.name
+
+    class Meta:
+        abstract = True
+
+        
+class SourceConnectionAbstractBase(models.Model):
+    # Sources are shared with Voyages.
+    source = models.ForeignKey(VoyageSources, related_name="+",
+                               null=False, on_delete=models.CASCADE)
+    source_order = models.IntegerField()
+    text_ref = models.CharField(max_length=255, null=False, blank=True)
+
+    class Meta:
+        abstract = True
+
+
 class EnslaverInfoAbstractBase(models.Model):
     principal_alias = models.CharField(max_length=255)
 
@@ -135,15 +160,18 @@ class EnslaverInfoAbstractBase(models.Model):
     father_occupation = models.CharField(max_length=255, null=True)
     mother_name = models.CharField(max_length=255, null=True)
 
-    first_spouse_name = models.CharField(max_length=255, null=True)
-    first_marriage_date = models.CharField(max_length=12, null=True)
-    second_spouse_name = models.CharField(max_length=255, null=True)
-    second_marriage_date = models.CharField(max_length=12, null=True)
+    # We will include the spouses in the Enslaver table and use
+    # EnslavementRelation to join the individuals by a marriage
+    # relationship.
+    # first_spouse_name = models.CharField(max_length=255, null=True)
+    # first_marriage_date = models.CharField(max_length=12, null=True)
+    # second_spouse_name = models.CharField(max_length=255, null=True)
+    # second_marriage_date = models.CharField(max_length=12, null=True)
 
-    probate_date = models.CharField(max_length=12, null=True)
-    will_value_pounds = models.CharField(max_length=12, null=True)
-    will_value_dollars = models.CharField(max_length=12, null=True)
-    will_court = models.CharField(max_length=12, null=True)
+    probate_date = models.CharField(max_length=100, null=True)
+    will_value_pounds = models.CharField(max_length=100, null=True)
+    will_value_dollars = models.CharField(max_length=100, null=True)
+    will_court = models.CharField(max_length=100, null=True)
     text_id=models.CharField(max_length=50)
 	
     class Meta:
@@ -163,6 +191,7 @@ class EnslaverIdentitySourceConnection(models.Model):
                                null=False, on_delete=models.CASCADE)
     source_order = models.IntegerField()
     text_ref = models.CharField(max_length=255, null=False, blank=True)
+
 
 class EnslaverAlias(models.Model):
     """
@@ -199,24 +228,22 @@ class EnslaverMergerItem(models.Model):
     enslaver_identity_id = models.IntegerField(null=False)
 
 
+class EnslaverRole(NamedModelAbstractBase):
+    pass
+
+
 class EnslaverVoyageConnection(models.Model):
     """
     Associates an enslaver with a voyage at some particular role.
     """
 
-    class Role:
-        CAPTAIN = 1
-        OWNER = 2
-        BUYER = 3
-        SELLER = 4
-
-    enslaver_alias = models.ForeignKey('EnslaverAlias',
+    enslaver_alias = models.ForeignKey(EnslaverAlias,
                                        null=False,
                                        on_delete=models.CASCADE)
     voyage = models.ForeignKey('voyage.Voyage',
                                null=False,
                                on_delete=models.CASCADE)
-    role = models.IntegerField(null=False)
+    role = models.ForeignKey(EnslaverRole, null=False, on_delete=models.CASCADE)
     # There might be multiple persons with the same role for the same voyage
     # and they can be ordered (ranked) using the following field.
     order = models.IntegerField(null=True)
@@ -224,18 +251,10 @@ class EnslaverVoyageConnection(models.Model):
     # models/tables by this entity.
 
 
-class NamedModelAbstractBase(models.Model):
-    id = models.IntegerField(primary_key=True)
-    name = models.CharField(max_length=255)
-
-    def __str__(self):
-        return self.__unicode__()
-
-    def __unicode__(self):
-        return str(self.id) + ", " + self.name
-
-    class Meta:
-        abstract = True
+class EnslaverVoyageConnectionSource(SourceConnectionAbstractBase):
+    enlaver_voyage_connection = models.ForeignKey(EnslaverVoyageConnection,
+                                       null=False,
+                                       on_delete=models.CASCADE)
 
 
 class LanguageGroup(NamedModelAbstractBase):
@@ -286,6 +305,7 @@ class EnslavedDataset:
 
 class CaptiveFate(NamedModelAbstractBase):
     pass
+
 
 class CaptiveStatus(NamedModelAbstractBase):
 
@@ -344,17 +364,10 @@ class Enslaved(models.Model):
                                      related_name='+')
 
 
-class EnslavedSourceConnection(models.Model):
+class EnslavedSourceConnection(SourceConnectionAbstractBase):
     enslaved = models.ForeignKey(Enslaved,
                                  on_delete=models.CASCADE,
                                  related_name='sources_conn')
-    # Sources are shared with Voyages.
-    source = models.ForeignKey(VoyageSources,
-                               on_delete=models.CASCADE,
-                               related_name='+',
-                               null=False)
-    source_order = models.IntegerField()
-    text_ref = models.CharField(max_length=255, null=False, blank=True)
 
 
 class EnslavedContribution(models.Model):
@@ -394,13 +407,18 @@ class EnslavedName(models.Model):
         unique_together = ('name', 'language')
 
 
+class EnslavementRelationType(NamedModelAbstractBase):
+    pass
+
+
 class EnslavementRelation(models.Model):
     """
-    Represents a relation involving enslavers and enslaved individuals.
+    Represents a relation involving any number of enslavers and enslaved
+    individuals.
     """
     
     id = models.IntegerField(primary_key=True)
-    relation_type = models.IntegerField()
+    relation_type = models.ForeignKey(EnslavementRelationType, null=False, on_delete=models.CASCADE)
     place = models.ForeignKey(Place, null=True, on_delete=models.SET_NULL)
     date = models.CharField(max_length=12, null=True,
         help_text="Date in MM,DD,YYYY format with optional fields.")
@@ -418,13 +436,13 @@ class EnslavedInRelation(models.Model):
     """
 
     id = models.IntegerField(primary_key=True)
-    transaction = models.ForeignKey(
+    relation = models.ForeignKey(
         EnslavementRelation,
         related_name="enslaved",
         null=False,
         on_delete=models.CASCADE)
     enslaved = models.ForeignKey(Enslaved,
-        related_name="transactions",
+        related_name="relations",
         null=False,
         on_delete=models.CASCADE)
 
@@ -435,13 +453,13 @@ class EnslaverInRelation(models.Model):
     """
 
     id = models.IntegerField(primary_key=True)
-    transaction = models.ForeignKey(
+    relation = models.ForeignKey(
         EnslavementRelation,
         related_name="enslavers",
         null=False,
         on_delete=models.CASCADE)
     enslaver_alias = models.ForeignKey(EnslaverAlias, null=False, on_delete=models.CASCADE)
-    role = models.IntegerField(null=False, help_text="The role of the enslaver in this relation")
+    role = models.ForeignKey(EnslaverRole, null=False, on_delete=models.CASCADE, help_text="The role of the enslaver in this relation")
 
 
 _special_empty_string_fields = {
@@ -549,9 +567,9 @@ class EnslavedSearch:
         ENSLAVERS_LIST,
         EnslavedInRelation,
         'enslaved_id',
-        enslaver_name="transaction__enslavers__enslaver_alias__alias",
-        relation_date="transaction__date",
-        enslaver_role="transaction__enslavers__role")
+        enslaver_name="relation__enslavers__enslaver_alias__alias",
+        relation_date="relation__date",
+        enslaver_role="relation__enslavers__role__name")
 
     def __init__(self,
                  enslaved_dataset=None,

@@ -90,12 +90,13 @@ class RowHelper:
         """
         model_type_name = str(model_type)
         cached_cols = self.__class__.cached
-        col = cached_cols.get(model_type_name)
+        cache_key = model_type_name + '>>' + key_name
+        col = cached_cols.get(cache_key)
         if manager is None:
             manager = model_type.objects
         if col is None:
             col = {getattr(x, key_name): x for x in manager.all()}
-            cached_cols[model_type_name] = col
+            cached_cols[cache_key] = col
         ival = self.cint(field_name, allow_null)
         if ival is None:
             return None
