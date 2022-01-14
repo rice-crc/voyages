@@ -131,13 +131,13 @@ class Command(BaseCommand):
         if confirm != 'yes':
             return
 
-        print('Deleting old data...')
-
         with transaction.atomic():
             with connection.cursor() as cursor:
+                print('Deleting old data...')
                 helper.disable_fks(cursor)
                 helper.delete_all(cursor, Enslaved)
                 helper.delete_all(cursor, EnslavedSourceConnection)
+                print('Inserting new enslaved records...')
                 helper.bulk_insert(Enslaved, all_enslaved.values())
                 helper.bulk_insert(EnslavedSourceConnection, source_connections)
                 helper.re_enable_fks(cursor)

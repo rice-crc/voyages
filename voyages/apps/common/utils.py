@@ -78,7 +78,9 @@ class RowHelper:
         if val:
             val = val.strip()
         if max_chars and len(val) > max_chars:
-            self.error_reporting.report('Field ' + field_name + ' is too long (>' + str(max_chars) + ' chars)')
+            self.error_reporting.report('Field "' + field_name + '" is too long (>' + str(max_chars) + ' chars)')
+            # Truncate the field
+            val = val[:max_chars]
         return val
 
     def get_by_value(self, model_type, field_name, key_name = 'value', allow_null=True, manager=None):
@@ -95,18 +97,20 @@ class RowHelper:
         if manager is None:
             manager = model_type.objects
         if col is None:
-            col = {getattr(x, key_name): x for x in manager.all()}
+            col = {str(getattr(x, key_name)): x for x in manager.all()}
             cached_cols[cache_key] = col
-        ival = self.cint(field_name, allow_null)
-        if ival is None:
+        src_val = self.get(field_name)
+        if src_val is None:
+            if not allow_null:
+                self.error_reporting.report('Null value for ' + field_name)
             return None
-        val = col.get(ival)
+        val = col.get(src_val)
         if val is None:
             msg = 'Failed to locate "' + model_type_name + '" with value: ' + \
-                str(ival) + ' for field "' + field_name + '"'
+                str(src_val) + ' for field "' + field_name + '"'
             if not allow_null:
                 raise Exception(msg)
-            self.error_reporting.report(msg, field_name + str(ival))
+            self.error_reporting.report(msg, field_name + str(src_val))
         return val
 
 
@@ -137,7 +141,7 @@ class BulkImportationHelper:
         Bulk insert model entries
         """
 
-        print('Bulk inserting ' + str(model))
+        print('Bulk inserting [' + str(len(lst)) + '] ' + str(model))
         if manager is None:
             manager = model.objects
         manager.bulk_create(lst, batch_size=100)
