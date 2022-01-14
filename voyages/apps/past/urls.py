@@ -36,4 +36,7 @@ urlpatterns = [
     url(r'get-enum/(enslaver-role)s',
         voyages.apps.past.views.get_enumeration,
         name='enslaver-roles-enum'),
+    url(r'get-enum/(enslavement-relation-type)s',
+        voyages.apps.past.views.get_enumeration,
+        name='enslaver-roles-enum'),
 ]

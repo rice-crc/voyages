@@ -130,7 +130,8 @@ class Command(BaseCommand):
                             voyage = None
                         if voyage is None:
                             fatal_error("Voyage id not found: " + str(voyage_id))
-                        voyage_list.append(voyage)
+                        else:
+                            voyage_list.append(voyage)
                     if len(voyage_list) == 0:
                         fatal_error("No voyages associated with enslaver")
                     # TODO Q: how should we represent composite roles?
@@ -264,6 +265,7 @@ class Command(BaseCommand):
                 helper.delete_all(cursor, EnslaverInRelation)
                 helper.delete_all(cursor, EnslavedInRelation)
                 helper.delete_all(cursor, EnslavementRelation)
+                helper.delete_all(cursor, EnslaverVoyageConnection)
                 helper.delete_all(cursor, EnslaverAlias)
                 helper.delete_all(cursor, EnslaverIdentitySourceConnection)
                 helper.delete_all(cursor, EnslaverIdentity)
@@ -271,6 +273,7 @@ class Command(BaseCommand):
                 helper.bulk_insert(EnslaverIdentity, [eid for (eid, _) in all_enslavers.values()])
                 helper.bulk_insert(EnslaverIdentitySourceConnection, source_connections)
                 helper.bulk_insert(EnslaverAlias, all_aliases)
+                helper.bulk_insert(EnslaverVoyageConnection, enslaver_voyage_conn)
                 helper.bulk_insert(EnslavementRelation, [rel for (rel, _, _) in enslavement_relations])
                 helper.bulk_insert(EnslavedInRelation, [enslaved_in_rel for (_, enslaved, _) in enslavement_relations for enslaved_in_rel in enslaved])
                 helper.bulk_insert(EnslaverInRelation, [enslaver_in_rel for (_, _, enslaver) in enslavement_relations for enslaver_in_rel in enslaver])
