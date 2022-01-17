@@ -21,8 +21,8 @@ from voyages.apps.common.models import SavedQuery
 from voyages.apps.common.views import get_filtered_results
 from .models import (AltLanguageGroupName, Enslaved,
                      EnslavedContribution, EnslavedContributionLanguageEntry,
-                     EnslavedContributionNameEntry, EnslavedSearch, EnslaverRole,
-                     LanguageGroup, MultiValueHelper, ModernCountry, NameSearchCache,
+                     EnslavedContributionNameEntry, EnslavedSearch, EnslaverRole, EnslaverSearch,
+                     LanguageGroup, MultiValueHelper, ModernCountry, EnslavedNameSearchCache,
                      _modern_name_fields, _name_fields)
 
 ENSLAVED_DATASETS = ['african-origins', 'oceans-of-kinfolk']
@@ -201,13 +201,40 @@ def search_enslaved(request):
 
         table = _generate_table(query, data.get('tableParams', {}), adapter)
         page = table.get('data', [])
-        NameSearchCache.load()
+        EnslavedNameSearchCache.load()
         for entry in page:
-            entry['recordings'] = NameSearchCache.get_recordings(
+            entry['recordings'] = EnslavedNameSearchCache.get_recordings(
                 [entry[f] for f in _name_fields if f in entry])
         return JsonResponse(table)
     return JsonResponse({'error': 'Unsupported'})
 
+
+@require_POST
+@csrf_exempt
+def search_enslaver(request):
+    data = json.loads(request.body)
+    search = EnslaverSearch(**data['search_query'])
+    fields = data.get('fields')
+    if fields is None:
+        fields = [
+            'principal_alias',
+            'birth_year', 'birth_month', 'birth_day',
+            'death_year', 'death_month', 'death_day',
+            EnslavedSearch.SOURCES_LIST
+        ]
+    query = search.execute(fields)
+    output_type = data.get('output', 'resultsTable')
+    # For now we only support outputing the results to DataTables.
+    if output_type == 'resultsTable':
+
+        def adapter(page):
+            for row in page:
+                EnslaverSearch.patch_row(row)
+            return page
+
+        table = _generate_table(query, data.get('tableParams', {}), adapter)
+        return JsonResponse(table)
+    return JsonResponse({'error': 'Unsupported'})
 
 @require_POST
 @csrf_exempt

@@ -141,3 +141,5 @@ class Command(BaseCommand):
                 helper.bulk_insert(Enslaved, all_enslaved.values())
                 helper.bulk_insert(EnslavedSourceConnection, source_connections)
                 helper.re_enable_fks(cursor)
+
+        print("Completed!")

@@ -26,7 +26,7 @@ from voyages.apps.common.validators import date_csv_field_validator
 # function obtained from
 # https://stackoverflow.com/questions/517923/
 # what-is-the-best-way-to-remove-accents-in-a-python-unicode-string
-def strip_accents(text):
+def _strip_accents(text):
     """
     Strip accents from input String.
 
@@ -39,22 +39,31 @@ def strip_accents(text):
     text = unidecode.unidecode(text)
     return text.replace(',', '').lower()
 
+COMMON_NAME_EXCLUSION_LIST = ['van', 'der', 'de', 'del', 'da', 'do']
 
-class NameSearchCache:
+def _get_composite_names(name):
+    yield name
+    parts = re.split("\\s*,\\s*", name)
+    if len(parts) == 2:
+        # When the name is split by a comma, we assume that its format is
+        # LastName, FirstName and also yield a string to represent the name as
+        # FirstName LastName.
+        yield parts[1] + " " + parts[0]
+    parts = re.split("\\s*,\\s*|\\s+", name)
+    for part in parts:
+        # Heuristic: drop small segments that are common to names, such as "de",
+        # "del", "van" as they add nothing to the search.
+        if len(part) > 3 or (len(part) > 2 and not part in COMMON_NAME_EXCLUSION_LIST):
+            yield part
+
+
+class EnslavedNameSearchCache:
+    WORDSET_INDEX = None
+
     _loaded = False
     _lock = threading.Lock()
-    _index = None
     _name_key = {}
     _sound_recordings = {}
-    
-    @staticmethod
-    def get_composite_names(name):
-        yield name
-        parts = re.split("\\s*,\\s*|\\s+", name)
-        if len(parts) == 2:
-            yield parts[1] + " " + parts[0]
-        for part in parts:
-            yield part
 
     @classmethod
     def get_recordings(cls, names):
@@ -72,7 +81,7 @@ class NameSearchCache:
 
     @classmethod
     def search_full(cls, name, max_cost, max_results):
-        res = sorted(Levenshtein_search.lookup(0, strip_accents(name),
+        res = sorted(Levenshtein_search.lookup(cls.WORDSET_INDEX, _strip_accents(name),
                                                max_cost),
                      key=lambda x: x[1])
         return [(cls._name_key[x[0]], x[1], x[0]) for x in res[0:max_results]]
@@ -82,7 +91,8 @@ class NameSearchCache:
         with cls._lock:
             if not force_reload and cls._loaded:
                 return
-            Levenshtein_search.clear_wordset(0)
+            if cls.WORDSET_INDEX:
+                Levenshtein_search.clear_wordset(cls.WORDSET_INDEX)
             cls._name_key = {}
             all_names = set()
             q = Enslaved.objects.values_list('enslaved_id', 'documented_name',
@@ -91,16 +101,16 @@ class NameSearchCache:
 
             for item in q:
                 ns = {
-                    strip_accents(part)
+                    _strip_accents(part)
                     for i in range(1, len(item)) if item[i] is not None
-                    for part in NameSearchCache.get_composite_names(item[i])
+                    for part in _get_composite_names(item[i])
                 }
                 all_names.update(ns)
                 item_0 = item[0]
                 for name in ns:
                     ids = cls._name_key.setdefault(name, [])
                     ids.append(item_0)
-            Levenshtein_search.populate_wordset(0, list(all_names))
+            cls.WORDSET_INDEX = Levenshtein_search.populate_wordset(-1, list(all_names))
             q = EnslavedName.objects.values_list('id', 'name', 'language',
                                                  'recordings_count')
             for item in q:
@@ -114,6 +124,49 @@ class NameSearchCache:
                     for index in range(1, 1 + item[3])
                 ]
                 langs.append(lang)
+            cls._loaded = True
+
+
+class EnslaverNameSearchCache:
+    WORDSET_INDEX = None
+
+    _loaded = False
+    _lock = threading.Lock()
+    _name_key = {}
+    
+    @classmethod
+    def search(cls, name, max_cost=3, max_results=100):
+        res = cls.search_full(name, max_cost, max_results)
+        return [id for x in res for id in x[0]]
+
+    @classmethod
+    def search_full(cls, name, max_cost, max_results):
+        res = sorted(Levenshtein_search.lookup(cls.WORDSET_INDEX, _strip_accents(name),
+                                               max_cost),
+                     key=lambda x: x[1])
+        return [(cls._name_key[x[0]], x[1], x[0]) for x in res[0:max_results]]
+
+    @classmethod
+    def load(cls, force_reload=False):
+        with cls._lock:
+            if not force_reload and cls._loaded:
+                return
+            if cls.WORDSET_INDEX:
+                Levenshtein_search.clear_wordset(cls.WORDSET_INDEX)
+            cls._name_key = {}
+            all_names = set()
+            q = EnslaverAlias.objects.values_list('identity_id', 'alias')
+            for item in q:
+                ns = {
+                    _strip_accents(part)
+                    for part in _get_composite_names(item[1])
+                }
+                all_names.update(ns)
+                item_0 = item[0]
+                for name in ns:
+                    ids = cls._name_key.setdefault(name, [])
+                    ids.append(item_0)
+            cls.WORDSET_INDEX = Levenshtein_search.populate_wordset(-1, list(all_names))
             cls._loaded = True
 
 
@@ -199,7 +252,7 @@ class EnslaverAlias(models.Model):
     a consolidated identity. The same individual may appear in multiple
     records under different names (aliases).
     """
-    identity = models.ForeignKey(EnslaverIdentity, on_delete=models.CASCADE)
+    identity = models.ForeignKey(EnslaverIdentity, on_delete=models.CASCADE, related_name='aliases')
     alias = models.CharField(max_length=255)
 
     class Meta:
@@ -549,6 +602,19 @@ class NullIf(Func):
     arity = 2
 
 
+def _auto_select_related_fields(q, fields):
+    """
+    For performance reasons it is better if we detect all the fields that are
+    related to the main model and force the ORM to select them in the query
+    (otherwise, they would need to be fetched by separate queries). We use the
+    convention of double underscores in related field names to detect those
+    fields and extract only the part that needs to be passed to
+    select_related().
+    """
+    related = list({f[:i] for (f, i) in [(f, f.rfind('__')) for f in fields] if i > 0})
+    return q.select_related(*related)
+
+
 class EnslavedSearch:
     """
     Search parameters for enslaved persons.
@@ -655,33 +721,28 @@ class EnslavedSearch:
         representing an Enslaved record.
         @param: fields A list of fields that are fetched.
         """
-        # For performance reasons we detect all the fields that are related to
-        # the Enslaved model and force the ORM to select them in the query
-        # (otherwise, they would need to be fetched by separate queries). We use
-        # the convention of double underscores in related field names to detect
-        # those fields and extract only the part that needs to be passed to
-        # select_related().
-        related = list({f[:i] for (f, i) in [(f, f.rfind('__')) for f in fields] if i > 0})
-        q = Enslaved.objects.select_related(*related)
+        q = _auto_select_related_fields(Enslaved.objects, fields)
 
         ranking = None
         is_fuzzy = False
         if self.searched_name and len(self.searched_name):
             if self.exact_name_search:
-                qmask = Q(documented_name=self.searched_name)
-                qmask |= Q(name_first=self.searched_name)
-                qmask |= Q(name_second=self.searched_name)
-                qmask |= Q(name_third=self.searched_name)
+                qmask = Q(documented_name__icontains=self.searched_name)
+                qmask |= Q(name_first__icontains=self.searched_name)
+                qmask |= Q(name_second__icontains=self.searched_name)
+                qmask |= Q(name_third__icontains=self.searched_name)
                 q = q.filter(qmask)
             else:
                 # Perform a fuzzy search on our cached names.
-                NameSearchCache.load()
-                fuzzy_ids = NameSearchCache.search(self.searched_name)
+                EnslavedNameSearchCache.load()
+                fuzzy_ids = EnslavedNameSearchCache.search(self.searched_name)
                 if len(fuzzy_ids) == 0:
                     return []
                 ranking = {x[1]: x[0] for x in enumerate(fuzzy_ids)}
                 q = q.filter(pk__in=fuzzy_ids)
                 is_fuzzy = True
+                if 'enslaved_id' not in fields:
+                    fields.append('enslaved_id')
         if self.gender:
             gender_val = 1 if self.gender == 'male' else 2
             q = q.filter(gender=gender_val)
@@ -863,3 +924,107 @@ class EnslavedSearch:
     def patch_row(cls, row):
         cls.sources_helper.patch_row(row)
         cls.enslavers_helper.patch_row(row)
+
+
+class EnslaverSearch:
+    SOURCES_LIST = "sources_list"
+
+    sources_helper = MultiValueHelper(
+        SOURCES_LIST,
+        EnslaverIdentitySourceConnection,
+        'identity_id',
+        text_ref="text_ref",
+        full_ref="source__full_ref")
+
+    def __init__(self,
+                 searched_name=None,
+                 exact_name_search=False,
+                 year_range=None,
+                 embarkation_ports=None,
+                 disembarkation_ports=None,
+                 ship_name=None,
+                 voyage_id=None,
+                 source=None,
+                 order_by=None,
+                 voyage_dataset=None):
+        """
+        Search the Enslaver database. If a parameter is set to None, it will
+        not be included in the search.
+        @param: searched_name A name string to be searched
+        @param: exact_name_search Boolean indicating whether the search is
+                exact or fuzzy
+        @param: voyage_dataset A list of voyage datasets that restrict the search.
+        @param: year_range A pair (a, b) where a is the min voyage year and b
+                the max
+        @param: embarkation_ports A list of port ids where the enslaved
+                embarked
+        @param: disembarkation_ports A list of port ids where the enslaved
+                disembarked
+        @param: ship_name The ship name that the enslaved embarked
+        @param: voyage_id A pair (a, b) where the a <= voyage_id <= b
+        @param: source A text fragment that should match Source's text_ref or
+                full_ref
+        @param: order_by An array of dicts {
+                'columnName': 'NAME', 'direction': 'ASC or DESC' }.
+                Note that if the search is fuzzy, then the fallback value of
+                order_by is the ranking of the fuzzy search.
+        """
+        self.searched_name = searched_name
+        self.exact_name_search = exact_name_search
+        self.year_range = year_range
+        self.embarkation_ports = embarkation_ports
+        self.disembarkation_ports = disembarkation_ports
+        self.ship_name = ship_name
+        self.voyage_id = voyage_id
+        self.source = source
+        self.order_by = order_by
+        self.voyage_dataset = voyage_dataset
+
+    def execute(self, fields):
+        """
+        Execute the search and output an enumerable of dictionaries, each
+        representing an Enslaved record.
+        @param: fields A list of fields that are fetched.
+        """
+        q = _auto_select_related_fields(EnslaverIdentity.objects, fields)
+
+        ranking = None
+        is_fuzzy = False
+        if self.searched_name and len(self.searched_name):
+            if self.exact_name_search:
+                q = q.filter(aliases__alias__icontains=self.searched_name)
+            else:
+                # Perform a fuzzy search on our cached names.
+                EnslaverNameSearchCache.load()
+                fuzzy_ids = EnslaverNameSearchCache.search(self.searched_name)
+                if len(fuzzy_ids) == 0:
+                    return []
+                ranking = {x[1]: x[0] for x in enumerate(fuzzy_ids)}
+                q = q.filter(pk__in=fuzzy_ids)
+                is_fuzzy = True
+                if 'id' not in fields:
+                    fields.append('id')
+
+        if self.SOURCES_LIST in fields:
+            q = self.sources_helper.adapt_query(q)
+
+        q = q.values(*fields)
+
+        if settings.DEBUG:
+            print(q.query)
+
+        if is_fuzzy:
+            # Convert the QuerySet to a concrete list and include the ranking
+            # as a member of each object in that list.
+            q = list(q)
+            for x in q:
+                x['ranking'] = ranking[x['id']]
+            #if order_by_ranking:
+            #    q = sorted(q,
+            #               key=lambda x: x['ranking'],
+            #               reverse=(order_by_ranking == 'desc'))
+        return q
+
+    @classmethod
+    def patch_row(cls, row):
+        cls.sources_helper.patch_row(row)

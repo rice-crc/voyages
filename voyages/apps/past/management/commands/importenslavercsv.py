@@ -84,6 +84,14 @@ class Command(BaseCommand):
                 except:
                     error_reporting.report("Could not parse year: " + val)
             return None
+        
+        def match_month(val):
+            month = None
+            for i in range(0, 12):
+                if val.startswith(MONTHS[i]):
+                    month = i + 1
+                    break
+            return month
 
         def parse_day_and_month(val):
             month = None
@@ -92,14 +100,17 @@ class Command(BaseCommand):
                 match = re.match("^(\d+)[-/]([\w]+)", val)
                 if match:
                     day = int(match[1])
-                    for i in range(0, 12):
-                        if match[2].upper().startswith(MONTHS[i]):
-                            month = i + 1
-                            break
+                    month = match_month(match[2].upper())
                     if month is None:
+                        # If there is a day, then the month should be valid.
                         error_reporting.report("Could not parse month: " + val)
                 else:
-                    error_reporting.report("Could not parse date: " + val)
+                    # Maybe we can match just the month.
+                    match = re.match("^([\w]{3,})", val)
+                    if match:
+                        month = match_month(match[1].upper())
+                    if month is None:
+                        error_reporting.report("Could not parse date: " + val)
             return (day, month)
 
         def get_voyage_ids(val):
@@ -278,3 +289,5 @@ class Command(BaseCommand):
                 helper.bulk_insert(EnslavedInRelation, [enslaved_in_rel for (_, enslaved, _) in enslavement_relations for enslaved_in_rel in enslaved])
                 helper.bulk_insert(EnslaverInRelation, [enslaver_in_rel for (_, _, enslaver) in enslavement_relations for enslaver_in_rel in enslaver])
                 helper.re_enable_fks(cursor)
+
+        print("Completed!")

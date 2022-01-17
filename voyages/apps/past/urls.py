@@ -8,8 +8,10 @@ import voyages.apps.past.views
 import voyages.apps.static_content.views
 
 urlpatterns = [
-    url(r'^api/search',
-        voyages.apps.past.views.search_enslaved, name='search'),
+    url(r'^api/search_enslaved',
+        voyages.apps.past.views.search_enslaved, name='search_enslaved'),
+    url(r'^api/search_enslaver',
+        voyages.apps.past.views.search_enslaver, name='search_enslaver'),
     url(r'^api/modern-countries',
         voyages.apps.past.views.get_modern_countries,
         name='modern-countries'),
