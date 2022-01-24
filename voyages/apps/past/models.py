@@ -202,12 +202,12 @@ class EnslaverInfoAbstractBase(models.Model):
     birth_year = models.IntegerField(null=True)
     birth_month = models.IntegerField(null=True)
     birth_day = models.IntegerField(null=True)
-    birth_place = models.CharField(max_length=255, null=True)
+    birth_place = models.ForeignKey(Place, null=True, on_delete=models.SET_NULL, related_name='+')
 
     death_year = models.IntegerField(null=True)
     death_month = models.IntegerField(null=True)
     death_day = models.IntegerField(null=True)
-    death_place = models.CharField(max_length=255, null=True)
+    death_place = models.ForeignKey(Place, null=True, on_delete=models.SET_NULL, related_name='+')
 
     father_name = models.CharField(max_length=255, null=True)
     father_occupation = models.CharField(max_length=255, null=True)
@@ -304,12 +304,6 @@ class EnslaverVoyageConnection(models.Model):
     # models/tables by this entity.
 
 
-class EnslaverVoyageConnectionSource(SourceConnectionAbstractBase):
-    enlaver_voyage_connection = models.ForeignKey(EnslaverVoyageConnection,
-                                       null=False,
-                                       on_delete=models.CASCADE)
-
-
 class LanguageGroup(NamedModelAbstractBase):
     longitude = models.DecimalField("Longitude of point",
                                     max_digits=10,
@@ -400,7 +394,8 @@ class Enslaved(models.Model):
     # For Kinfolk, this is the Last known location field.
     post_disembark_location = models.ForeignKey(Place, null=True,
                                                 on_delete=models.CASCADE,
-                                                db_index=True)
+                                                db_index=True,
+                                                related_name='+')
     last_known_date = models.CharField(
         max_length=10,
         validators=[date_csv_field_validator],
@@ -472,7 +467,7 @@ class EnslavementRelation(models.Model):
     
     id = models.IntegerField(primary_key=True)
     relation_type = models.ForeignKey(EnslavementRelationType, null=False, on_delete=models.CASCADE)
-    place = models.ForeignKey(Place, null=True, on_delete=models.SET_NULL)
+    place = models.ForeignKey(Place, null=True, on_delete=models.SET_NULL, related_name='+')
     date = models.CharField(max_length=12, null=True,
         help_text="Date in MM,DD,YYYY format with optional fields.")
     amount = models.DecimalField(null=True, decimal_places=2, max_digits=6)

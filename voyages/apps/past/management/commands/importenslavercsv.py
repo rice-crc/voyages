@@ -78,11 +78,10 @@ class Command(BaseCommand):
 
         def parse_year(val):
             if val is not None and val != "":
-                re.sub("^c?\.?\s*", "", val)
-                try:
-                    return int(val)
-                except:
-                    error_reporting.report("Could not parse year: " + val)
+                match = re.match(".*(\d{4}).*", val)
+                if match:
+                    return int(match[1])
+                error_reporting.report("Could not parse year: " + val)
             return None
         
         def match_month(val):
@@ -193,6 +192,7 @@ class Command(BaseCommand):
                     enslaver.will_court = rh.get("will court/s", max_chars=MAX_WILL_FIELDS_CHARS)
                     enslaver.text_id = rh.get("## person id")
                     enslaver.birth_place = rh.get_by_value(Place, "birth place", "place")
+                    enslaver.death_place = rh.get_by_value(Place, "death place", "place")
                     # TODO Q: sheet's NOTE field goes where??
                     # Parse sources associated with this enslaver.
                     order = 1

@@ -100,14 +100,14 @@ class RowHelper:
             col = {str(getattr(x, key_name)): x for x in manager.all()}
             cached_cols[cache_key] = col
         src_val = self.get(field_name)
-        if src_val is None:
+        if src_val is None or src_val == '':
             if not allow_null:
                 self.error_reporting.report('Null value for ' + field_name)
             return None
         val = col.get(src_val)
         if val is None:
-            msg = 'Failed to locate "' + model_type_name + '" with value: ' + \
-                str(src_val) + ' for field "' + field_name + '"'
+            msg = 'Failed to locate "' + model_type_name + '" with value: "' + \
+                str(src_val) + '" for field "' + field_name + '"'
             if not allow_null:
                 raise Exception(msg)
             self.error_reporting.report(msg, field_name + str(src_val))
