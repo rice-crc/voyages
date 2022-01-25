@@ -226,6 +226,12 @@ class EnslaverInfoAbstractBase(models.Model):
     will_value_dollars = models.CharField(max_length=100, null=True)
     will_court = models.CharField(max_length=100, null=True)
     text_id = models.CharField(max_length=50)
+
+    def __str__(self):
+        return self.__unicode__()
+
+    def __unicode__(self):
+        return "Enslaver info: " + self.principal_alias
 	
     class Meta:
         abstract = True
@@ -254,6 +260,12 @@ class EnslaverAlias(models.Model):
     """
     identity = models.ForeignKey(EnslaverIdentity, on_delete=models.CASCADE, related_name='aliases')
     alias = models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.__unicode__()
+
+    def __unicode__(self):
+        return "EnslaverAlias: " + self.alias
 
     class Meta:
         verbose_name = 'Enslaver alias'
@@ -610,6 +622,13 @@ def _auto_select_related_fields(q, fields):
     return q.select_related(*related)
 
 
+def _year_range_conv(range):
+    """
+    When searching by year on CSV date-value fields, apply this conversion.
+    """
+    return [',,' + str(y) for y in range]
+
+
 class EnslavedSearch:
     """
     Search parameters for enslaved persons.
@@ -775,9 +794,7 @@ class EnslavedSearch:
             # Search on YEARAM field. Note that we have a 'MM,DD,YYYY' format
             # even though the only year should be present.
             q = q.filter(
-                voyage__voyage_dates__imp_arrival_at_port_of_dis__range=[
-                    ',,' + str(y) for y in self.year_range
-                ])
+                voyage__voyage_dates__imp_arrival_at_port_of_dis__range=_year_range_conv(self.year_range))
         if self.embarkation_ports:
             # Search on MJBYPTIMP field.
             q = q.filter(
@@ -919,10 +936,18 @@ class EnslavedSearch:
     def patch_row(cls, row):
         cls.sources_helper.patch_row(row)
         cls.enslavers_helper.patch_row(row)
+        return row
 
 
 class EnslaverSearch:
+    ALIASES_LIST = "alias_list"
     SOURCES_LIST = "sources_list"
+
+    aliases_helper = MultiValueHelper(
+        ALIASES_LIST,
+        EnslaverAlias,
+        'identity_id',
+        alias='alias')
 
     sources_helper = MultiValueHelper(
         SOURCES_LIST,
@@ -1000,9 +1025,61 @@ class EnslaverSearch:
                 if 'id' not in fields:
                     fields.append('id')
 
+        if self.source:
+            qmask = Q(enslaveridentitysourceconnection__text_ref__icontains=self.source)
+            qmask |= Q(enslaveridentitysourceconnection__source__full_ref__icontains=self.source)
+            q = q.filter(qmask)
+        
+        # Voyage related search fields: since an enslaver can be associated with
+        # multiple voyages, it is enough to match any of them.
+        voyage_search_prefix = 'aliases__enslavervoyageconnection__voyage__'
+
+        def add_voyage_field(q, field, op, val):
+            return q.filter(**{voyage_search_prefix + field + '__' + op: val })
+
+        if self.voyage_id:
+            q = add_voyage_field(q, 'pk', 'range', self.voyage_id)
+        if self.ship_name:
+            q = add_voyage_field(q, 'voyage_ship__ship_name', 'icontains', self.ship_name)
+        if self.embarkation_ports:
+            # Search on MJBYPTIMP field.
+            q = add_voyage_field(q, 'voyage_itinerary__imp_principal_place_of_slave_purchase__pk', 'in', self.embarkation_ports)
+        if self.disembarkation_ports:
+            # Search on MJSLPTIMP field.
+            q = add_voyage_field(q, 'voyage_itinerary__imp_principal_port_slave_dis__pk', 'in', self.disembarkation_ports)
+        if self.year_range:
+            # Search on YEARAM field. Note that we have a 'MM,DD,YYYY' format
+            # even though the only year should be present.
+            q = add_voyage_field('voyage_dates__imp_arrival_at_port_of_dis', 'range', _year_range_conv(self.year_range))
+
+        if self.ALIASES_LIST in fields:
+            q = self.aliases_helper.adapt_query(q)
         if self.SOURCES_LIST in fields:
             q = self.sources_helper.adapt_query(q)
 
+        order_by_ranking = 'asc'
+        orm_orderby = None
+        if isinstance(self.order_by, list):
+            order_by_ranking = None
+            orm_orderby = []
+            for x in self.order_by:
+                col_name = x['columnName']
+                if col_name == 'ranking':
+                    order_by_ranking = x['direction']
+                is_desc = x['direction'].lower() == 'desc'
+                order_field = F(col_name)
+                if is_desc:
+                    order_field = order_field.desc(nulls_last=True)
+                else:
+                    order_field = order_field.asc(nulls_last=True)
+                orm_orderby.append(order_field)
+
+        if orm_orderby:
+            q = q.order_by(*orm_orderby)
+        else:
+            q = q.order_by('pk')
+
+        q = q.distinct()
         q = q.values(*fields)
 
         if settings.DEBUG:
@@ -1014,12 +1091,14 @@ class EnslaverSearch:
             q = list(q)
             for x in q:
                 x['ranking'] = ranking[x['id']]
-            #if order_by_ranking:
-            #    q = sorted(q,
-            #               key=lambda x: x['ranking'],
-            #               reverse=(order_by_ranking == 'desc'))
+            if order_by_ranking:
+                q = sorted(q,
+                           key=lambda x: x['ranking'],
+                           reverse=(order_by_ranking == 'desc'))
         return q
 
     @classmethod
     def patch_row(cls, row):
+        cls.aliases_helper.patch_row(row)
         cls.sources_helper.patch_row(row)
+        return row

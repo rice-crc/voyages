@@ -220,7 +220,8 @@ def search_enslaver(request):
             'principal_alias',
             'birth_year', 'birth_month', 'birth_day',
             'death_year', 'death_month', 'death_day',
-            EnslavedSearch.SOURCES_LIST
+            EnslaverSearch.ALIASES_LIST,
+            EnslaverSearch.SOURCES_LIST
         ]
     query = search.execute(fields)
     output_type = data.get('output', 'resultsTable')
