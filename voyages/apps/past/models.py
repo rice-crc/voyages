@@ -570,6 +570,7 @@ class MultiValueHelper:
             # This value and the arg_joiner is needed so that the ORM produces the right syntax
             # for GROUP_CONCAT(CONCAT(<FieldsToConcatenate>) SEPARATOR <quoted _GROUP_SEP>).
             Value(self._GROUP_SEP),
+            template = "%(function)s(DISTINCT %(expressions)s)",
             arg_joiner=" SEPARATOR ",
             function='GROUP_CONCAT')
         sub_query = self.model.objects.filter(**{ self.fk_name: OuterRef('pk') }) \
@@ -941,6 +942,7 @@ class EnslavedSearch:
 
 class EnslaverSearch:
     ALIASES_LIST = "alias_list"
+    VOYAGES_LIST = "voyages_list"
     SOURCES_LIST = "sources_list"
 
     aliases_helper = MultiValueHelper(
@@ -949,12 +951,24 @@ class EnslaverSearch:
         'identity_id',
         alias='alias')
 
+    voyages_helper = MultiValueHelper(
+        VOYAGES_LIST,
+        EnslaverVoyageConnection,
+        'enslaver_alias__identity_id',
+        voyage_id='voyage_id',
+        role='role__name',
+        ship_name='voyage__voyage_ship__ship_name',
+        embarkation_port='voyage__voyage_itinerary__imp_principal_place_of_slave_purchase__place',
+        disembarkation_port='voyage__voyage_itinerary__imp_principal_port_slave_dis__place')
+
     sources_helper = MultiValueHelper(
         SOURCES_LIST,
         EnslaverIdentitySourceConnection,
         'identity_id',
         text_ref="text_ref",
         full_ref="source__full_ref")
+
+    all_helpers = [aliases_helper, voyages_helper, sources_helper]
 
     def __init__(self,
                  searched_name=None,
@@ -1052,10 +1066,8 @@ class EnslaverSearch:
             # even though the only year should be present.
             q = add_voyage_field('voyage_dates__imp_arrival_at_port_of_dis', 'range', _year_range_conv(self.year_range))
 
-        if self.ALIASES_LIST in fields:
-            q = self.aliases_helper.adapt_query(q)
-        if self.SOURCES_LIST in fields:
-            q = self.sources_helper.adapt_query(q)
+        for helper in self.all_helpers:
+            q = helper.adapt_query(q)
 
         order_by_ranking = 'asc'
         orm_orderby = None
@@ -1099,6 +1111,6 @@ class EnslaverSearch:
 
     @classmethod
     def patch_row(cls, row):
-        cls.aliases_helper.patch_row(row)
-        cls.sources_helper.patch_row(row)
+        for helper in cls.all_helpers:
+            row = helper.patch_row(row)
         return row

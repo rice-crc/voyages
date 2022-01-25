@@ -221,6 +221,7 @@ def search_enslaver(request):
             'birth_year', 'birth_month', 'birth_day',
             'death_year', 'death_month', 'death_day',
             EnslaverSearch.ALIASES_LIST,
+            EnslaverSearch.VOYAGES_LIST,
             EnslaverSearch.SOURCES_LIST
         ]
     query = search.execute(fields)
