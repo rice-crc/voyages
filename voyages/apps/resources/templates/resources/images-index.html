@@ -59,7 +59,7 @@
 										{% for image in images_set.images %}
 										<div class="col-md-3 col-sm-6 col-xs-12 col-lg-3 col-xl-3">
 												<div class="grid-image">
-												{% for key, value in image.iteritems %}
+												{% for key, value in image.items %}
 														{% if key == "file" %}
 																{% thumbnail value "100x100" as im %}
 																		<a href="{% url 'resources:images-category-detail' category=images_set.label_name|spaces_to_underscores page=forloop.parentloop.counter %}">
@@ -75,7 +75,7 @@
 												</div>
 
 												<div class="grid-text">
-												{% for key, value in image.iteritems %}
+												{% for key, value in image.items %}
 																{% if key == "title" %}
 																<div class="gallery-image-label">
 																<a href="{% url 'resources:images-category-detail' category=images_set.label_name|spaces_to_underscores page=forloop.parentloop.counter %}">

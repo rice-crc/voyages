@@ -73,6 +73,14 @@ host:~/Projects$ cd voyages
 host:~/Projects/voyages$ git remote add upstream https://github.com/rice-crc/voyages.git
 ```
 
+Note: if you are cloning for development, it is likely that you will be working
+on different branches at different times. It is very important to create
+separate DB and Solr Cores for each branch since the schema/data could be
+different. In the localsettings-local.py.default example file, there is support
+for automatically using a branch-dependent DB and Solr Core name in the
+configuration files. The convention for both names is: *voyage_{branch name,
+removing the prefix 'feature/' if present}*
+
 [Return to Top](#table-of-contents)
 
 ## Installation
@@ -91,13 +99,15 @@ For details, see `docker-compose.yml`.
 host:~/Projects/voyages$ docker-compose up -d --build
 ```
 
-Create the database.
+Create the database. Note: append a suffix for the branch (e.g.
+voyages_develop).
 
 ```bash
 host:~/Projects/voyages$ docker exec -i voyages-mysql mysql -uroot -pvoyages -e "create database voyages"
 ```
 
-Create the database user and grant privileges.
+Create the database user and grant privileges. Note: append a suffix for the
+branch (e.g. voyages_develop).
 
 ```bash
 host:~/Projects/voyages$ docker exec -i voyages-mysql mysql -uroot -pvoyages -e "create user 'voyages'@'%' identified by 'voyages'"
@@ -120,7 +130,8 @@ host:~/Projects/voyages$ docker exec -i voyages-mysql mysql -uvoyages -pvoyages 
 host:~/Projects/voyages$ docker exec -i voyages-mysql mysql -uvoyages -pvoyages -e "select * from voyages.voyage_voyage limit 1"
 ```
 
-Create the Solr index.
+Create the Solr index. Note: append a suffix for the branch (e.g.
+voyages_develop).
 
 ```bash
 host:~/Projects/voyages$ docker exec -i voyages-solr solr create_core -c voyages -d /srv/voyages/solr
@@ -128,18 +139,24 @@ host:~/Projects/voyages$ docker exec -i voyages-solr solr create_core -c voyages
 
 Run the process to build the index. This will take a very long time (around 60-90 minutes).
 
+If some of the reindex submissions fail due to timeouts, you may want to:
+
+* Check your Docker memory allocation. Again, set a minimum of 4GB (see [System Requirements](#system-requirements))
+* Check your Solr memory allocation in the docker-compose.yml file and consider allocating 2gb rather than the 1gb default we have set it to
+* Use the pysolr "--batch-size" flag in the below command to make smaller requests, e.g., `--batch-size=200`
+
 ```bash
-host:~/Projects/voyages$ docker exec -i voyages-django bash -c 'python manage.py rebuild_index --noinput'
+host:~/Projects/voyages$ docker exec -i voyages-django bash -c 'python3 manage.py rebuild_index --noinput'
 ```
 
 Run media asset tasks. These may also take a very long time.
 
 ```bash
-host:~/Projects/voyages$ docker exec -i voyages-django bash -c 'python manage.py compilemessages'
-host:~/Projects/voyages$ docker exec -i voyages-django bash -c 'python manage.py compilescss'
-host:~/Projects/voyages$ docker exec -i voyages-django bash -c 'python manage.py collectstatic --noinput'
-host:~/Projects/voyages$ docker exec -i voyages-django bash -c 'python manage.py compress --force'
-host:~/Projects/voyages$ docker exec -i voyages-django bash -c 'python manage.py thumbnail cleanup'
+host:~/Projects/voyages$ docker exec -i voyages-django bash -c 'python3 manage.py compilemessages'
+host:~/Projects/voyages$ docker exec -i voyages-django bash -c 'python3 manage.py compilescss'
+host:~/Projects/voyages$ docker exec -i voyages-django bash -c 'python3 manage.py collectstatic --noinput'
+host:~/Projects/voyages$ docker exec -i voyages-django bash -c 'python3 manage.py compress --force'
+host:~/Projects/voyages$ docker exec -i voyages-django bash -c 'python3 manage.py thumbnail cleanup'
 ```
 
 Note the following project resources:

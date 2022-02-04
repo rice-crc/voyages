@@ -1,0 +1,40 @@
+<html>
+<body>
+<script>
+	const req = { audio: true, video: false };
+	let stopAction = null;
+	let chunks = [];
+	// THIS IS SAMPLE CODE TO TEST AUDIO RECORDINGS!
+	function start() {
+		navigator.mediaDevices.getUserMedia(req)
+			.then(stream => {
+				mediaRecorder = new MediaRecorder(stream);
+				mediaRecorder.start();
+				mediaRecorder.ondataavailable = function(e) {
+					chunks.push(e.data);
+				};
+				mediaRecorder.onstop = function(e) {
+					const blob = new Blob(chunks, { 'type' : chunks[0].type });
+					fetch('http://localhost:8000/past/store-audio/1234', { method:"POST", body: blob }).
+						then(response => console.log(response));
+					chunks = [];
+				};
+				stopAction = function() {
+					var track = stream.getTracks()[0];
+					track.stop();
+					mediaRecorder.stop();
+				};
+			})
+			.catch(err => alert('Cannot start mic'));
+	}
+	
+	function stop() {
+		if (stopAction) {
+			stopAction();
+		}
+	}
+</script>
+<button onclick="start()">Start</button>
+<button onclick="stop()">Stop</button>
+</body>
+</html>

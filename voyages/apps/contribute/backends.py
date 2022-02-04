@@ -1,7 +1,10 @@
-from django.conf import settings
+from __future__ import unicode_literals
+
 from django.contrib.auth.models import User
 
-class EmailOrUsernameModelBackend(object):
+
+class EmailOrUsernameModelBackend:
+
     def authenticate(self, username=None, password=None):
         if '@' in username:
             kwargs = {'email': username}
@@ -11,6 +14,7 @@ class EmailOrUsernameModelBackend(object):
             user = User.objects.get(**kwargs)
             if user.check_password(password):
                 return user
+            return None
         except User.DoesNotExist:
             return None
 

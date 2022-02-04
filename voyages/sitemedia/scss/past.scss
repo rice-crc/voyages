@@ -1,14 +1,7 @@
 @import "colors";
 @import "variables";
 
-// 
-.nav-header {
-  color: white;
-  background: $past-secondary-color !important;
-  padding: 0.5rem 4rem 0;
-  font-size: 1rem;
-  font-weight: bold;
-}
+//
 
 .pagination.pagination-sm {
 	float: right;
@@ -44,6 +37,13 @@
 
 table {
 	font-size: $regular-font-size;
+}
+
+.table thead th {
+  color: $past-color !important;
+  span.column-header:after {
+    color: black;
+  }
 }
 
 // past database table padding override
@@ -89,6 +89,23 @@ table {
 		border-color: $past-color;
     color: white;
 	}
+  &.change-datasets {
+    &:hover {
+      color: $past-color;
+      background-color: $grey-1;
+      border-color: $past-color;
+    }
+  }
+}
+
+.btn-info {
+    background-color: $past-color;
+    border-color: $past-color;
+
+    &:hover, &:active, &:focus, &:not(:disabled):not(.disabled):active {
+      background-color: $past-hover-color;
+      border-color: $past-hover-color;
+    }
 }
 
 .navbar {
@@ -117,6 +134,24 @@ a {
   padding-left: 25px;
   border-left: 4px solid $past-color;
   font-weight: bold;
+}
+
+.nav-header {
+  color: white;
+  background: $past-secondary-color !important;
+  padding: 0.5rem 4rem 0;
+  font-size: 1rem;
+  font-weight: bold;
+}
+
+.past-search-bar {
+  z-index: 1;
+  background: $past-secondary-color !important;
+  @media (min-width: 1199px) {
+    .nav-item {
+      padding-top: 0;
+    }
+  }
 }
 
 .datatable-options {
@@ -223,4 +258,86 @@ input.button-save:hover {
   cursor: pointer;
   font-size: $regular-font-size !important;
   font-weight: 500;
+}
+
+.btn-transparent {
+  color: #212529;
+  background-color: transparent;
+}
+.btn-transparent.active.focus,
+.btn-transparent.active:focus,
+.btn-transparent.focus,
+.btn-transparent.focus:active,
+.btn-transparent:active:focus,
+.btn-transparent:focus {
+  outline: 0;
+  outline-offset: 0;
+  background-image: none;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+}
+
+.blur-content {
+  filter: blur(3px) grayscale(90%);
+}
+
+.select-dataset-card {
+  border-width: 2px;
+  &:hover, &.selected {
+    border-color: $past-secondary-color !important;
+  }
+}
+
+@mixin radio($res: 'sm') {
+    $index: 1rem;
+    $mainVal: 1rem;
+  
+    @if $res == 'md' {
+        $index: 2rem;
+        $mainVal: 1.5rem;
+    } @else if $res == 'lg' {
+        $index: 3rem;
+        $mainVal: 2rem;
+    } @else if $res == 'xl' {
+        $index: 4rem;
+        $mainVal: 2.5rem;
+    }
+
+    .custom-control-label {
+      font-weight: bold;
+    }
+
+    .custom-control-label::before {
+        height: $mainVal;
+        width: $mainVal;
+        border-radius: $mainVal * 2;
+    }
+
+    .custom-control-label::after {
+        width: $mainVal;
+        height: $mainVal;
+        border-radius: calc(#{$index} - (#{$mainVal} / 2));
+    }
+
+    .custom-control-input:checked ~ .custom-control-label::after {
+        background-color: $past-color;
+    }
+}
+
+// YOU CAN PUT ALL RESOLUTION HERE
+// sm - DEFAULT, md, lg, xl
+.custom-radio.custom-radio-sm {
+    @include radio();
+}
+
+.custom-radio.custom-radio-md {
+    @include radio('md');
+}
+
+.custom-radio.custom-radio-lg {
+    @include radio('lg');
+}
+
+.custom-radio.custom-radio-xl {
+    @include radio('xl');
 }
