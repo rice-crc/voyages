@@ -1,12 +1,19 @@
+from __future__ import unicode_literals
+
+from builtins import range
+
 from django import template
+
 from voyages.apps.common.filters import trans_log
 
 register = template.Library()
 register.filter('trans_log', trans_log)
 
+
 @register.filter
-def multiply(number, *args, **kwargs):
+def multiply(number, *_):
     return number * 2
+
 
 @register.filter
 def get_range(value):
@@ -27,7 +34,7 @@ def get_range(value):
 
     Instead of 3 one may use the variable set in the views
     """
-    return range(value)
+    return list(range(value))
 
 
 @register.filter

@@ -8,7 +8,7 @@
       {% if None != lblmain.0 %}
       <td class="detail-label-main" rowspan="{{ lblmain.0 }}">{{ lblmain.1|trans_log }}</td>
       {% endif %}
-      <td class="detail-label">{{ lbllabel|replaceStar:' <span class="badge badge-pill badge-secondary tooltip-pointer" data-toggle="tooltip" data-placement="top" data-original-title="Imputed results are calculated by an algorithm."> IMP </span>'|trans_log }}</td>
+      <td class="detail-label">{{ lbllabel|replace_star:' <span class="badge badge-pill badge-secondary tooltip-pointer" data-toggle="tooltip" data-placement="top" data-original-title="Imputed results are calculated by an algorithm."> IMP </span>'|trans_log }}</td>
       <td class="detail-data">{{ lbldata | safe }}</td>
     </tr>
     {% endfor %}

@@ -1,0 +1,45 @@
+{% load i18n %}
+
+<li class="nav-item dropdown" v-if="enslavedDataset==1">
+  <v-menu-title :count="filter.identity.count" title="{% trans 'Identity' %}"></v-menu-title>
+
+  <v-panel-singular @apply="apply" @reset="reset" group="identity" title="{% trans 'Name' %}" sub-group="name" :filters="filter.identity.name" align="left">
+    <div slot="v-panel-header">
+      <v-panel-header title="{% trans 'Identity' %}">
+        <div slot="v-modal-content"></div>
+      </v-panel-header>
+    </div>
+
+    <div slot="v-panel-content" slot-scope="scope">
+      <v-text @change="changed"
+        :filter="scope.filters.var_searched_name"
+      ></v-text>
+
+      <v-toggle @change="changed"
+        :filter="scope.filters.var_exact_name_search">
+      </v-toggle>
+
+      <v-treeselect
+        :filter="scope.filters.var_gender"
+        @change="changed">
+      </v-treeselect>
+
+      <v-number @change="changed"
+        :filter="scope.filters.var_age_range">
+      </v-number>
+
+      <v-text @change="changed"
+        :filter="scope.filters.var_skin_color"
+      ></v-text>
+
+      <v-number @change="changed"
+        :filter="scope.filters.var_height_range">
+      </v-number>
+
+      <v-number @change="changed"
+        :filter="scope.filters.var_enslaved_id">
+      </v-number>
+
+    </div>
+  </v-panel-singular>
+</li>

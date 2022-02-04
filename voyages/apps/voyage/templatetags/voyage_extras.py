@@ -1,16 +1,24 @@
-from django.template import Template, Context
+from __future__ import unicode_literals
+
+import re
+from builtins import str
+
+from django.template import Context, Template
 from django.template.defaultfilters import stringfilter
-from voyages.apps.common.filters import *
+
+from voyages.apps.common.filters import (jsonify, replace_star, settings,
+                                         template, trans_log)
 
 register = template.Library()
 register.filter('trans_log', trans_log)
 register.filter('jsonify', jsonify)
-register.filter('replaceStar', replaceStar)
+register.filter('replace_star', replace_star)
+
 
 @register.filter
 @stringfilter
 def parse_blocks(value):
-    """ use the django template loader and response object to spit 
+    """ use the django template loader and response object to spit
     out rendered content
     """
     t = Template(value)
@@ -25,10 +33,9 @@ def get_year_value(value):
     out rendered content
     """
     try:
-        ret = value.split(",")[2]
-    except:
-        ret = ""
-    return ret
+        return value.split(",")[2]
+    except Exception:
+        return ""
 
 
 @register.filter
@@ -45,13 +52,14 @@ def translate_source_name(label_name):
 def create_page_name(name, number):
     return str(name + "-" + str(number))
 
+
 @register.filter
 def replace(text, args):
     tmp = args.split('/')
     search_val = tmp[1]
     replace_val = tmp[2]
-    import re
     return re.sub(search_val, replace_val, text)
+
 
 @register.filter
 def selected_choice(f):
