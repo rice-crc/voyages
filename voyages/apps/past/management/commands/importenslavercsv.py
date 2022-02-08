@@ -267,6 +267,10 @@ class Command(BaseCommand):
         ).strip()
         print('"' + confirm + '"')
         if confirm != 'yes':
+            for model_name, missing_keys in error_reporting.missing.items():
+                print("Missing entries for " + str(model_name) + ":")
+                for key in missing_keys:
+                    print(key)
             return
 
         with transaction.atomic():

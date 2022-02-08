@@ -77,7 +77,7 @@ class RowHelper:
         val = self.row.get(field_name, default)
         if val:
             val = val.strip()
-        if max_chars and len(val) > max_chars:
+        if max_chars and val and len(val) > max_chars:
             self.error_reporting.report('Field "' + field_name + '" is too long (>' + str(max_chars) + ' chars)')
             # Truncate the field
             val = val[:max_chars]
@@ -108,6 +108,7 @@ class RowHelper:
         if val is None:
             msg = 'Failed to locate "' + model_type_name + '" with value: "' + \
                 str(src_val) + '" for field "' + field_name + '"'
+            self.error_reporting.add_missing(model_type_name, src_val)
             if not allow_null:
                 raise Exception(msg)
             self.error_reporting.report(msg, field_name + str(src_val))
@@ -133,7 +134,8 @@ class BulkImportationHelper:
                 [next(iterator).decode("utf-8-sig").lower().replace("_", "").encode('utf-8')],
                 iterator)
 
-        return unicodecsv.DictReader(lower_headers(file), delimiter=',', encoding='utf-8')
+        #return unicodecsv.DictReader(lower_headers(file), delimiter=',', encoding='utf-8')
+        return unicodecsv.DictReader(lower_headers(file), delimiter=',', encoding='utf-8-sig')
 
     @staticmethod
     def bulk_insert(model, lst, attr_key=None, manager=None):
@@ -204,12 +206,16 @@ class ErrorReporting:
         self.line = 0
         self.errors = 0
         self.reported = {}
+        self.missing = {}
 
     def add_error(self):
         """
         Add 1 to the error count.
         """
         self.errors += 1
+
+    def add_missing(self, model, search_key):
+        self.missing.setdefault(model, []).append(search_key)
 
     def next_row(self):
         """
