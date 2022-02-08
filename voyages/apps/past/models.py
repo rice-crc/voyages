@@ -545,11 +545,13 @@ class MultiValueHelper:
     _GROUP_SEP = "@###@"
     _FIELD_SEP_VALUE = Value(_FIELD_SEP)
 
-    def __init__(self, projected_name, m2m_connection_model, fk_name, **field_mappings):
+    def __init__(self, projected_name, m2m_connection_model, fk_name, data_adapter = None, group_adapter = None, **field_mappings):
         self.field_mappings = field_mappings
         self.projected_name = projected_name
         self.model = m2m_connection_model
         self.fk_name = fk_name
+        self.data_adapter = data_adapter
+        self.group_adapter = group_adapter
 
     def adapt_query(self, q):
         """
@@ -584,12 +586,20 @@ class MultiValueHelper:
         """
         flen = len(self.field_mappings)
         if value is None or flen == 0:
-            return
+            return []
+        res = []
         for item in value.split(self._GROUP_SEP):
             values = item.split(self._FIELD_SEP)
             if len(values) == flen:
+                if self.data_adapter:
+                    values = self.data_adapter(values)
+                if values is None:
+                    continue
                 # Return a dict when multiple values are mapped otherwise return just the value.
-                yield { name: values[index] for (index, name) in enumerate(self.field_mappings.keys()) } if flen > 1 else values[0]
+                res.append({ name: values[index] for (index, name) in enumerate(self.field_mappings.keys()) } if flen > 1 else values[0])
+        if self.group_adapter:
+            res = self.group_adapter(res)
+        return res if res is not None else []
 
     def patch_row(self, row):
         """
@@ -598,7 +608,7 @@ class MultiValueHelper:
         corresponding to an associated entry.
         """
         if self.projected_name in row:
-            row[self.projected_name] = list(self.parse_grouped(row[self.projected_name]))
+            row[self.projected_name] = self.parse_grouped(row[self.projected_name])
         else:
             row[self.projected_name] = []
         return row
@@ -940,10 +950,41 @@ class EnslavedSearch:
         return row
 
 
+def _voyages_data_adapter(values):
+    values[0] = int(values[0])
+    values[5] = int(values[5])
+    return values
+
+def _split_id_and_name(s, name_field):
+    match = re.match('([0-9]+)\|(.*)', s)
+    return {'id': int(match[1]), name_field: match[2]} if match else None
+
+def _relations_group_adapter(rel_group):
+    relations = {}
+    for r in rel_group:
+        rid = int(r['relation_id'])
+        current = relations.get(rid)
+        if current is None:
+            current = { 'relation_id': rid }
+            relations[rid] = current
+        current['role'] = r['role']
+        current['date'] = r['relation_date']
+        cur_enslavers = current.setdefault('enslavers', {})
+        enslaver = _split_id_and_name(r['relation_enslaver'], 'alias')
+        if enslaver:
+            cur_enslavers[enslaver['id']] = enslaver
+        cur_enslaved = current.setdefault('enslaved', {})
+        enslaved = _split_id_and_name(r['relation_enslaved'], 'name')
+        if enslaved:
+            cur_enslaved[enslaved['id']] = enslaved
+    return [{k: list(v.values()) if type(v) is dict else v for k, v in r.items()} for r in relations.values()]
+
+
 class EnslaverSearch:
     ALIASES_LIST = "alias_list"
     VOYAGES_LIST = "voyages_list"
     SOURCES_LIST = "sources_list"
+    RELATIONS_LIST = "relations_list"
 
     aliases_helper = MultiValueHelper(
         ALIASES_LIST,
@@ -955,11 +996,13 @@ class EnslaverSearch:
         VOYAGES_LIST,
         EnslaverVoyageConnection,
         'enslaver_alias__identity_id',
+        _voyages_data_adapter,
         voyage_id='voyage_id',
         role='role__name',
         ship_name='voyage__voyage_ship__ship_name',
         embarkation_port='voyage__voyage_itinerary__imp_principal_place_of_slave_purchase__place',
-        disembarkation_port='voyage__voyage_itinerary__imp_principal_port_slave_dis__place')
+        disembarkation_port='voyage__voyage_itinerary__imp_principal_port_slave_dis__place',
+        slaves_embarked='voyage__voyage_slaves_numbers__imp_total_num_slaves_embarked')
 
     sources_helper = MultiValueHelper(
         SOURCES_LIST,
@@ -968,7 +1011,27 @@ class EnslaverSearch:
         text_ref="text_ref",
         full_ref="source__full_ref")
 
-    all_helpers = [aliases_helper, voyages_helper, sources_helper]
+    relations_helper = MultiValueHelper(
+        RELATIONS_LIST,
+        EnslaverInRelation,
+        'enslaver_alias__identity_id',
+        None,
+        _relations_group_adapter,
+        relation_id='relation_id',
+        relation_date='relation__date',
+        role='role__name',
+        relation_enslaver=Concat(
+            'relation__enslavers__enslaver_alias__identity_id',
+            Value('|'),
+            'relation__enslavers__enslaver_alias__alias',
+            output_field='relation_enslaver_info'),
+        relation_enslaved=Concat(
+            'relation__enslaved__enslaved__enslaved_id',
+            Value('|'),
+            'relation__enslaved__enslaved__documented_name',
+            output_field='relation_enslaved_info'))
+
+    all_helpers = [aliases_helper, voyages_helper, sources_helper, relations_helper]
 
     def __init__(self,
                  searched_name=None,
