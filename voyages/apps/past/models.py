@@ -952,7 +952,10 @@ class EnslavedSearch:
 
 def _voyages_data_adapter(values):
     values[0] = int(values[0])
-    values[5] = int(values[5])
+    try:
+        values[5] = int(values[5])
+    except:
+        values[5] = None
     return values
 
 def _split_id_and_name(s, name_field):
@@ -1127,7 +1130,7 @@ class EnslaverSearch:
         if self.year_range:
             # Search on YEARAM field. Note that we have a 'MM,DD,YYYY' format
             # even though the only year should be present.
-            q = add_voyage_field('voyage_dates__imp_arrival_at_port_of_dis', 'range', _year_range_conv(self.year_range))
+            q = add_voyage_field(q, 'voyage_dates__imp_arrival_at_port_of_dis', 'range', _year_range_conv(self.year_range))
 
         for helper in self.all_helpers:
             q = helper.adapt_query(q)
