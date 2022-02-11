@@ -928,8 +928,8 @@ class EnslavedSearch:
 
         q = q.values(*fields)
 
-        if settings.DEBUG:
-            print(q.query)
+        #if settings.DEBUG:
+        #    print(q.query)
 
         if is_fuzzy:
             # Convert the QuerySet to a concrete list and include the ranking

@@ -120,8 +120,8 @@ class BulkImportationHelper:
     Helper methods for bulk data importation.
     """
 
-    def __init__(self, target_db):
-        self.target_db = target_db
+    def __init__(self, target_db = None):
+        self.target_db = target_db if target_db else 'mysql'
 
     @staticmethod
     def read_to_dict(file):
@@ -260,8 +260,9 @@ class SourceReferenceFinder:
         """
         return letter in (' ', ',')
 
-    def __init__(self):
-        all_sources = VoyageSources.objects.all()
+    def __init__(self, all_sources = None):
+        if not all_sources:
+            all_sources = VoyageSources.objects.all()
         trie = {}
         self._end = '_end'
 

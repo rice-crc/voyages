@@ -1,7 +1,7 @@
 from voyages.apps.voyage.models import Place, Region
+from django.db import transaction
 import math
 import unicodecsv
-from django.db import transaction
 
 data = [(float(p.latitude), float(p.longitude), p.region_id) for p in Place.objects.all() if p.latitude and p.longitude]
 
