@@ -1105,9 +1105,10 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
     });
 
     // Add event listener for opening and closing details
-    $('#results_main_table tbody').on('click', 'td.dt-control', function () {
+    $('#results_main_table tbody').off('click').on('click', 'td.dt-control', function () {
         var tr = $(this).closest('tr');
-        var row = mainDatatable.row( tr );
+        var tdi = tr.find("i.fa");
+        var row = $('#results_main_table').DataTable().row( tr );
         var data = row.data();
 
         if (data.voyages_list.length > 0) {
@@ -1115,12 +1116,15 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
               // This row is already open - close it
               row.child.hide();
               tr.removeClass('shown');
+              tdi.first().removeClass('fa-minus-square');
+              tdi.first().addClass('fa-plus-square');
           }
           else {
               // Open this row
-              row.child( formatVoyages(row.data()) ).show();
-              console.log($(row.child()));
+              row.child( formatVoyages(data) ).show();
               tr.addClass('shown');
+              tdi.first().removeClass('fa-plus-square');
+              tdi.first().addClass('fa-minus-square');
           }
         }
     } );
