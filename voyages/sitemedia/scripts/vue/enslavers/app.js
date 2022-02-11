@@ -8,7 +8,7 @@ var searchBar = new Vue({
   data: {
     isAdvanced: false,
     filter: {
-      // africanName: africanName,
+      enslaverName: enslaverName,
       // identity: identity,
       // personalData: personalData,
       // itinerary: itinerary,
