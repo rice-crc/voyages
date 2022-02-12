@@ -1,0 +1,60 @@
+{% extends "_base.html" %}
+{% load voyage_extras %}
+{% load sass_tags %}
+{% load i18n %}
+
+
+{% block content %}
+
+<!-- CSS for Trans-Atlantic -->
+<link href="{% sass_src 'scss/library/js-offcanvas@1.0.0.min.css' %}" rel="stylesheet" type="text/css" />
+<link href="{% sass_src 'scss/off-canvas.scss' %}" rel="stylesheet" type="text/css" />
+<link href="{% sass_src 'scss/intra.scss' %}" rel="stylesheet" type="text/css" />
+<link href="{% sass_src 'scss/library/bootstrap-vue-2.0.0-rc.11.css' %}" rel="stylesheet" type="text/css" />
+
+
+
+<div class="nav-header">
+	<div>Blog</div>
+	<div class="navbar-subtitle flex">
+		
+	</div>
+</div>
+
+
+
+
+
+
+<div class="container-new">      
+    <div class="row">
+        <!-- Blog Entries Column -->
+        <div class="col-md-12 mt-3 left">
+            {% for post in post_list %}
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h2 class="card-title">{{ post.title }}</h2>
+                    <p class="card-text text-muted h6">{{ post.author }} | {{ post.created_on}} </p>
+                    <p class="card-text">{{post.content | safe | truncatechars_html:200}}</p>
+                    <a href="{% url 'blog:post_detail' post.slug  post.id   %}" class="btn btn-outline">Read More &rarr;</a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        
+    </div>
+</div>
+
+
+<script src="{{ STATIC_URL }}scripts/library/vue@2.6.7.min.js" type="text/javascript"></script>
+<script src="{{ STATIC_URL }}scripts/library/babel-polyfill@6.26.0.min.js" type="text/javascript"></script>
+<script src="{{ STATIC_URL }}scripts/library/bootstrap-vue@2.0.0-rc.11.js" type="text/javascript"></script>
+<script src="{{ STATIC_URL }}scripts/library/axios@0.18.0.min.js" type="text/javascript"></script>
+<script src="{{ STATIC_URL }}scripts/vue/components/v-breadcrumb.js"></script>
+<script src="{{ STATIC_URL }}scripts/vue/components/v-flatpage.js"></script>
+<script src="{{ STATIC_URL }}scripts/vue/components/v-flatpage-data-intra-downloads.js"></script>
+<script src="{{ STATIC_URL }}scripts/vue/flatpage.js"></script>
+
+<script type="text/javascript" src="https://npmcdn.com/js-offcanvas@1.0/dist/_js/js-offcanvas.pkgd.min.js" charset="utf-8"></script>
+
+{% endblock %}
