@@ -3,8 +3,7 @@ from __future__ import absolute_import, print_function, unicode_literals
 import os
 import sys
 
-#from django.utils.translation import ugettext_lazy as _
-from django.utils.translation import gettext_lazy as _
+from django.utils.translation import ugettext_lazy as _
 
 # Django settings for voyages project.
 
