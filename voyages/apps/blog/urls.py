@@ -5,6 +5,5 @@ from django.conf.urls import url
 urlpatterns = [
     
     url(r'^$', views.PostList.as_view(), name='blog'),
-    url('(?P<slug>[-\w]+)/(?P<pk>\d+)/$', views.PostDetail.as_view(), name='post_detail'),
-    #url('<slug:slug>/', views.PostDetail.as_view(), name='post_detail'),
+    url('(?P<slug>[-\w]+)/(?P<pk>\d+)/$', views.PostDetail.as_view(), name='post_detail'), 
 ]

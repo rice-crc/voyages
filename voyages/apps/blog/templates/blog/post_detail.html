@@ -14,16 +14,12 @@
 
 
 <div class="nav-header">
-	<div>Blog - {{ object.title }}</div>
+	<div>{% trans 'Blog' %} - {{ object.title }}</div>
 	<div class="navbar-subtitle flex">
-		<div class="navbar-subitem">
-			{% if request.user.is_authenticated %}				
-				{% block userlinks %}				
-				<a class="navbar-subitem-link" href="{% url 'blog:blog' %}">{% trans 'All posts' %}</a> 				
-				{% endblock %}
-			{% else %}
-				{% trans "Login to Contribute" %}
-			{% endif %}
+		<div class="navbar-subitem">			
+			{% block userlinks %}				
+			<a class="navbar-subitem-link" href="{% url 'blog:blog' %}">{% trans 'All posts' %}</a> 				
+			{% endblock %}			
 		</div>
 	</div>
 </div>
