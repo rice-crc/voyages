@@ -1,0 +1,76 @@
+{% extends "_base.html" %}
+{% load voyage_extras %}
+{% load sass_tags %}
+{% load i18n %}
+
+
+{% block content %}
+
+<!-- CSS for Trans-Atlantic -->
+<link href="{% sass_src 'scss/library/js-offcanvas@1.0.0.min.css' %}" rel="stylesheet" type="text/css" />
+<link href="{% sass_src 'scss/off-canvas.scss' %}" rel="stylesheet" type="text/css" />
+<link href="{% sass_src 'scss/intra.scss' %}" rel="stylesheet" type="text/css" />
+<link href="{% sass_src 'scss/library/bootstrap-vue-2.0.0-rc.11.css' %}" rel="stylesheet" type="text/css" />
+
+
+<div class="nav-header">
+	<div>{% block title %} {% trans 'Blog' %} {% endblock title %}</div>
+	<div class="navbar-subtitle flex">
+		
+	</div>
+</div>
+
+
+<div class="container-new">      
+    <div class="row">
+        <!-- Blog Entries Column -->
+        <div class="col-md-12 mt-3 left">
+            {% for post in post_list %}
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h2 class="card-title">{{ post.title }}</h2>
+                    <p class="card-text text-muted h6">{{ post.author }} | {{ post.created_on}} </p>
+                    <p class="card-text">{{post.content | safe | truncatechars_html:200}}</p>
+                    <a href="{% url 'blog:post_detail' post.slug  post.id   %}" class="btn btn-outline">{% trans 'Read More' %} &rarr;</a>
+                </div>
+            </div>
+            {% endfor %}
+            {% if is_paginated %}                
+                <nav aria-label="Page navigation container"></nav>                                
+                <div class="dataTables_paginate paging_simple_numbers">
+                    {% trans 'Page' %} {{ page_obj.number }} {% trans 'of' %} {{ page_obj.paginator.num_pages }}.                    
+                <ul class="pagination pagination-sm justify-content-center">                
+                    {% if page_obj.has_previous %}
+                    <li><a href="?page=1" class="page-link">&laquo; {% trans 'First' %}</a></li>
+                    <li><a href="?page={{ page_obj.previous_page_number }}" class="page-link">{% trans 'Previous' %}</a></li>
+                    {% endif %}        
+                    {# Paginator num pages #}
+                    {% for i in paginator_range %}
+                        {% if i == results.number %}
+                            <li class="paginate_button page-item active">
+                            <a href="#" class="page-link">{{ i }}</a>
+                            </li>
+                        {% else %}
+                            <input type="hidden" id="form_page_{{ i }}" value="{{ i }}" name="desired_page" disabled="true">
+                            <li class="paginate_button page-item">
+                            <a href="#" onclick="retrieve_page('form_page_{{ i }}');" class="page-link">{{ i }}</a>
+                            </li>
+                        {% endif %}
+                    {% endfor %}            
+                    {% if page_obj.has_next %}
+                    <li><a href="?page={{ page_obj.next_page_number }}" class="page-link">{% trans 'Next' %}</a></li>
+                    <li><a href="?page={{ page_obj.paginator.num_pages }}" class="page-link">{% trans 'Last' %} &raquo;</a></li>
+
+                    {% endif %}
+                </ul>
+                </nav>
+                </div>
+            {% endif %}
+        </div>        
+    </div>
+</div>
+
+
+
+
+{% endblock %}

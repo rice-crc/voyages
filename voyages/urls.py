@@ -57,6 +57,8 @@ urlpatterns = [
         include('voyages.apps.contribute.urls', namespace='contribute')),
     url(r'^search/', include('haystack.urls', namespace='search')),
     url(r'^autocomplete/', include('autocomplete_light.urls')),
+    url(r'^blog/',
+       include('voyages.apps.blog.urls', namespace='blog')),
 
     # Handle language changes
     url(r'^setlanguage/(?P<lang_code>\w+)',
