@@ -4,8 +4,7 @@ from django.shortcuts import render
 from django.views import generic
 from .models import Post
 
-class PostList(generic.ListView):
-    #queryset = Post.objects.filter(status=1).order_by('-created_on')
+class PostList(generic.ListView):    
     template_name = 'blog/index.html'
     paginate_by = 5
 
@@ -13,8 +12,7 @@ class PostList(generic.ListView):
         if self.kwargs.get('tag') is None:
             return Post.objects.filter(status=1).order_by('-created_on')
         else:
-            return Post.objects.filter(status=1,tags__name__in=[self.kwargs['tag']]).order_by('-created_on')
-        #return CandidateNote.objects.filter(user__username=self.kwargs['username'])
+            return Post.objects.filter(status=1,tags__name__in=[self.kwargs['tag']]).order_by('-created_on')        
 
 
 class PostDetail(generic.DetailView):
