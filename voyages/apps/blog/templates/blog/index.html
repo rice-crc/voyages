@@ -3,6 +3,8 @@
 {% load sass_tags %}
 {% load i18n %}
 
+{% load thumbnail %}
+
 
 {% block content %}
 
@@ -28,9 +30,19 @@
             {% for post in post_list %}
             <div class="card mb-4">
                 <div class="card-body">
+                    {% thumbnail post.thumbnail "150x150" crop="center" as im %}
+                        <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}">
+                    {% endthumbnail %}
                     <h2 class="card-title">{{ post.title }}</h2>
                     <p class="card-text text-muted h6">{{ post.author }} | {{ post.created_on}} </p>
-                    <p class="card-text">{{post.content | safe | truncatechars_html:200}}</p>
+                    <p>
+                        {% for tag in post.tags.all %}
+                        <a href="{% url 'blog:tag' tag   %}">
+                            <span class="badge badge-pill badge-secondary">{{ tag }}</span>
+                        </a>
+                        {% endfor %}
+                    </p>
+                    <div class="card-text">{{post.content | safe | truncatechars_html:200}}</div>
                     <a href="{% url 'blog:post_detail' post.slug  post.id   %}" class="btn btn-outline">{% trans 'Read More' %} &rarr;</a>
                 </div>
             </div>
