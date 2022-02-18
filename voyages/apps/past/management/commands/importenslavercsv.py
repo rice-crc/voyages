@@ -16,6 +16,7 @@ class Command(BaseCommand):
     def add_arguments(self, parser):
         parser.add_argument('enslaver_csv_files', nargs='+')
         parser.add_argument('--skip_invalid', dest='skip_invalid', default=False)
+        parser.add_argument('--start_pk', dest='start_pk', default=None)
         parser.add_argument(
             '--db',
             dest='db',
@@ -35,6 +36,8 @@ class Command(BaseCommand):
         self.errors = 0
         target_db = options.get('db')
         skip_invalid = options.get('skip_invalid', False)
+        start_pk = options.get('start_pk')
+
         error_reporting = ErrorReporting()
         if target_db not in ('mysql', 'pgsql'):
             error_reporting.report(
@@ -55,11 +58,11 @@ class Command(BaseCommand):
         primary_keys = {}
         
         def create(model):
-            key = primary_keys.get(model, 0)
-            key += 1
-            primary_keys[model] = key
+            key = primary_keys.get(model, start_pk)
+            key = 1 if key is None else int(key)
             item = model()
             item.pk = key
+            primary_keys[model] = key + 1
             return item
 
         def fatal_error(msg):
