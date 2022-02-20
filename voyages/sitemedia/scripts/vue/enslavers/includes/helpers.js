@@ -179,6 +179,15 @@ function processResponse(json, mainDatatable, fuzzySearch) {
     if (row.voyages_list) {
       row.voyages_list.forEach((value) => {
         totalSlaves += value.slaves_embarked;
+        var arrivalDateArray = value.voyage_year ? value.voyage_year.split([',']) : '';
+        var arrivalDate = '';
+
+        if (arrivalDateArray.length == 3) {
+          arrivalDate = arrivalDateArray[2];
+        } else if (arrivalDateArray.length == 1) {
+          arrivalDate = arrivalDateArray[0];
+        }
+        value.voyage_year = arrivalDate;
       });
     }
     row.total_slaves = totalSlaves;
@@ -962,23 +971,25 @@ function displayColumnOrder(order) {
 }
 
 function formatVoyages ( d ) {
-  var voyagesTable = '<div style="width: 100%; background-color: #FFFFFF;"><table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">'+
+  var voyagesTable = '<div style="width: 100%; background-color: #FFFFFF;" class="d-flex flex-row-reverse"><table cellpadding="5" cellspacing="0" border="0">'+
     '<tr>'+
-      '<th>Voyage ID</th>'+
-      '<th>Disembarkation Port</th>'+
-      '<th>Embarkation Port</th>'+
-      '<th>Role</th>'+
-      '<th>Ship Name</th>'+
-      '<th>Slaves Embarked</th>'+
+      '<th>'+gettext("Voyage ID")+'</th>'+
+      '<th>'+gettext("Voyage Year")+'</th>'+
+      '<th>'+gettext("Disembarkation Port")+'</th>'+
+      '<th>'+gettext("Embarkation Port")+'</th>'+
+      '<th>'+gettext("Role")+'</th>'+
+      '<th>'+gettext("Ship Name")+'</th>'+
+      '<th><span>' + gettext("Captives Embarked") + '</span> <span class="badge badge-pill badge-secondary" data-toggle="tooltip" data-placement="top" title="' + gettext("Imputed results are calculated by an algorithm.") + '"> IMP </span></th>'+
     '</tr>';
     d.voyages_list.forEach((item) => {
       voyagesTable += '<tr>'+
-        '<td>'+item.voyage_id+'</td>'+
+        '<td class="text-right">'+'<a href="javascript:void(0)" onclick="openVoyageModal(' + item.voyage_id + ');">' + item.voyage_id + '</a>'+'</td>'+
+        '<td class="text-right">'+item.voyage_year+'</td>'+
         '<td>'+item.disembarkation_port+'</td>'+
         '<td>'+item.embarkation_port+'</td>'+
         '<td>'+item.role+'</td>'+
         '<td>'+item.ship_name+'</td>'+
-        '<td>'+item.slaves_embarked+'</td>'+
+        '<td class="text-right">'+item.slaves_embarked+'</td>'+
       '</tr>';
     });
     voyagesTable += '</table></div></td></tr><tr>';
@@ -1113,18 +1124,21 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 
         if (data.voyages_list.length > 0) {
           if ( row.child.isShown() ) {
-              // This row is already open - close it
-              row.child.hide();
-              tr.removeClass('shown');
-              tdi.first().removeClass('fa-minus-square');
-              tdi.first().addClass('fa-plus-square');
+            // This row is already open - close it
+            row.child.hide();
+            tr.removeClass('shown');
+            tdi.first().removeClass('fa-minus-square');
+            tdi.first().addClass('fa-plus-square');
           }
           else {
-              // Open this row
-              row.child( formatVoyages(data) ).show();
-              tr.addClass('shown');
-              tdi.first().removeClass('fa-plus-square');
-              tdi.first().addClass('fa-minus-square');
+            if ( $('#results_main_table').DataTable().row( '.shown' ).length ) {
+              $('.dt-control', $('#results_main_table').DataTable().row( '.shown' ).node()).click();
+            }
+            // Open this row
+            row.child( formatVoyages(data) ).show();
+            tr.addClass('shown');
+            tdi.first().removeClass('fa-plus-square');
+            tdi.first().addClass('fa-minus-square');
           }
         }
     } );

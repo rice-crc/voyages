@@ -1005,7 +1005,9 @@ class EnslaverSearch:
         ship_name='voyage__voyage_ship__ship_name',
         embarkation_port='voyage__voyage_itinerary__imp_principal_place_of_slave_purchase__place',
         disembarkation_port='voyage__voyage_itinerary__imp_principal_port_slave_dis__place',
-        slaves_embarked='voyage__voyage_slaves_numbers__imp_total_num_slaves_embarked')
+        # slaves_embarked='voyage__voyage_slaves_numbers__imp_total_num_slaves_embarked')
+        slaves_embarked='voyage__voyage_slaves_numbers__imp_total_num_slaves_embarked',
+        voyage_year='voyage__voyage_dates__imp_arrival_at_port_of_dis')
 
     sources_helper = MultiValueHelper(
         SOURCES_LIST,

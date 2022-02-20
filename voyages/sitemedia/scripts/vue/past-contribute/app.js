@@ -174,7 +174,7 @@ var pastContribute = new Vue({
                 {
                   "op": "equals",
                   "varName": "voyage_id",
-                  "searchTerm": this.enslaved.voyage__id,
+                  "searchTerm": this.enslaved.voyage_id,
                 },
                 {
                   "op": "equals",
