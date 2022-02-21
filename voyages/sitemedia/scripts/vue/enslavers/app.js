@@ -398,6 +398,48 @@ var searchBar = new Vue({
       }
     },
 
+    openVoyageModal(data) {
+      var columns = [];
+      voyageColumns.forEach(function(group, key){
+        group.fields.forEach(function(field, key){
+          columns.push(field);
+        });
+      });
+      var params = {
+        "searchData": {
+          "items": [
+            {
+              "op": "equals",
+              "varName": "voyage_id",
+              "searchTerm": data,
+            },
+            {
+              "op": "equals",
+              "varName": "dataset",
+              "searchTerm": "-1",
+            }
+          ]
+        },
+        "tableParams": {
+          "columns": columns
+        },
+        "output" : "resultsTable"
+      };
+
+      axios
+        .post('/voyage/api/search', params)
+        .then(function(response) {
+          if (response.data.data[0]) {
+            searchBar.row.data = response.data.data[0];
+            searchBar.rowModalShow = true;
+          }
+          return;
+        })
+        .catch(function(error) {
+          return error;
+        });
+    },
+
     // turn changed items into activated state; then execute search
     apply(group, subGroup, filterValues) {
       // hide all menu upon search

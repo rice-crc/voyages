@@ -11,16 +11,16 @@ var allColumns = [
   { data: "alias_list", category: 0, header: gettext("Alias List"), isImputed: false },
 
   // voyages
-  { data: 'voyages_list', className: 'dt-control', category: 1, header: gettext("Voyages"), isImputed: false, orderable: false, defaultContent: '' },
-  { data: 'total_slaves', category: 1, header: gettext("Slaves"), isImputed: false, orderable: false, defaultContent: '' },
+  { data: "voyages_list", className: "dt-control text-center", category: 1, header: gettext("Voyages"), isImputed: false, orderable: false, defaultContent: '' },
+  { data: "total_slaves", className: "text-right", category: 1, header: gettext("Number of Captives"), isImputed: false, orderable: false, defaultContent: '' },
 
   // personal data
-  { data: "birth_day", category: 2, header: gettext("Birth Day"), isImputed: false },
-  { data: "birth_month", category: 2, header: gettext("Birth Month"), isImputed: false },
-  { data: "birth_year", category: 2, header: gettext("Birth Year"), isImputed: false },
-  { data: "death_day", category: 2, header: gettext("Death Day"), isImputed: false },
-  { data: "death_month", category: 2, header: gettext("Death Month"), isImputed: false },
-  { data: "death_year", category: 2, header: gettext("Death Year"), isImputed: false },
+  { data: "birth_day", className: "text-right", category: 2, header: gettext("Birth Day"), isImputed: false },
+  { data: "birth_month", className: "text-right", category: 2, header: gettext("Birth Month"), isImputed: false },
+  { data: "birth_year", className: "text-right", category: 2, header: gettext("Birth Year"), isImputed: false },
+  { data: "death_day", className: "text-right", category: 2, header: gettext("Death Day"), isImputed: false },
+  { data: "death_month", className: "text-right", category: 2, header: gettext("Death Month"), isImputed: false },
+  { data: "death_year", className: "text-right", category: 2, header: gettext("Death Year"), isImputed: false },
 
   // sources
   { data: "sources_list", category: 3, header: gettext("Sources"), isImputed: false, visible: false, orderable: false },
