@@ -11,8 +11,8 @@ class PostList(generic.ListView):
     def get_queryset(self):
         if self.kwargs.get('tag') is None:
             return Post.objects.filter(status=1).order_by('-created_on')
-        else:
-            return Post.objects.filter(status=1,tags__name__in=[self.kwargs['tag']]).order_by('-created_on')        
+        else:            
+            return Post.objects.filter(status=1,tags__slug__in=[self.kwargs['tag']]).order_by('-created_on')        
 
 
 class PostDetail(generic.DetailView):

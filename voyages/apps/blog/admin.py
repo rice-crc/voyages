@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.db import models
 from .models import Post
+from .models import Tag
 
 from voyages.extratools import AdvancedEditor
 
@@ -13,5 +14,10 @@ class PostAdmin(admin.ModelAdmin):
         models.TextField: {'widget': AdvancedEditor(
         attrs={'class': 'tinymcetextarea'})}
     }
-  
+
+class TagAdmin(admin.ModelAdmin):
+    prepopulated_fields = {'slug':('name',)}
+
 admin.site.register(Post, PostAdmin)
+
+admin.site.register(Tag,TagAdmin)

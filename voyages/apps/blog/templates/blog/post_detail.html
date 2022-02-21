@@ -36,8 +36,8 @@
           <p class=" text-muted">{{ post.author }} | {{ post.created_on }}</p>
           <p>
             {% for tag in post.tags.all %}
-              <a href="{% url 'blog:tag' tag   %}">
-                <span class="badge badge-pill badge-secondary">{{ tag }}</span>
+              <a href="{% url 'blog:tag' tag.slug   %}">
+                <span class="badge badge-pill badge-secondary">{{ tag.name }}</span>
               </a>
             {% endfor %}
           </p>

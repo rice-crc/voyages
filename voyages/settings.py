@@ -160,7 +160,7 @@ INSTALLED_APPS = (
     'allauth.socialaccount.providers.google',
     # 'storages',
     'voyages.apps.blog',
-    'taggit'
+    
 )
 
 I18N_HELPER_DEBUG = False
