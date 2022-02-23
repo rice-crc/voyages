@@ -220,19 +220,22 @@ class EnslaverInfoAbstractBase(models.Model):
     # first_marriage_date = models.CharField(max_length=12, null=True)
     # second_spouse_name = models.CharField(max_length=255, null=True)
     # second_marriage_date = models.CharField(max_length=12, null=True)
-
-    probate_date = models.CharField(max_length=100, null=True)
-    will_value_pounds = models.CharField(max_length=100, null=True)
-    will_value_dollars = models.CharField(max_length=100, null=True)
-    will_court = models.CharField(max_length=100, null=True)
+	
+    probate_date = models.CharField(max_length=12, null=True)
+    will_value_pounds = models.CharField(max_length=12, null=True)
+    will_value_dollars = models.CharField(max_length=12, null=True)
+    will_court = models.CharField(max_length=12, null=True)
     text_id = models.CharField(max_length=50)
+    principal_location = models.ForeignKey(Place, null=True,
+                                                on_delete=models.CASCADE,
+                                                db_index=True)
 
     def __str__(self):
         return self.__unicode__()
 
     def __unicode__(self):
         return "Enslaver info: " + self.principal_alias
-	
+	 
     class Meta:
         abstract = True
 
