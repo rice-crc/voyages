@@ -43,13 +43,13 @@
 			<div class="navbar-collapse collapse" id="searchNav">
 				<ul class="navbar-nav">
 					{% include "past-enslavers/_enslaver-name.html" %}
+					{% include "past-enslavers/_itinerary.html" %}
+					{% include "past-enslavers/_sources.html" %}
 					{% comment %}
 					{% include "past/_identity.html" %}
 					{% include "past/_personal-data.html" %}
-					{% include "past/_itinerary.html" %}
 						{% include "past/_cultural-association.html" %}
 					{% include "past/_fate.html" %}
-					{% include "past/_sources.html" %}
 					{% include "past/_actions.html" %}
 					{% endcomment %}
 				</ul>
@@ -127,10 +127,10 @@
 <script src="{{ STATIC_URL }}scripts/vue/variables/past-enslavers/enslaver-name.js"></script>
 <!-- <script src="{{ STATIC_URL }}scripts/vue/variables/past/identity.js"></script> -->
 <!-- <script src="{{ STATIC_URL }}scripts/vue/variables/past/personal-data.js"></script> -->
-<!-- <script src="{{ STATIC_URL }}scripts/vue/variables/past/itinerary.js"></script> -->
+<script src="{{ STATIC_URL }}scripts/vue/variables/past-enslavers/itinerary.js"></script>
 <!-- <script src="{{ STATIC_URL }}scripts/vue/variables/past/cultural-association.js"></script> -->
 <!-- <script src="{{ STATIC_URL }}scripts/vue/variables/past/fate.js"></script> -->
-<!-- <script src="{{ STATIC_URL }}scripts/vue/variables/past/sources.js"></script> -->
+<script src="{{ STATIC_URL }}scripts/vue/variables/past-enslavers/sources.js"></script>
 
 <script src="{{ STATIC_URL }}scripts/vue/variables/tabs.js"></script>
 <script src="{{ STATIC_URL }}scripts/vue/variables/settings.js"></script>
