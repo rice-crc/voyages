@@ -1,7 +1,8 @@
 // reserved keyword for saved search query identifier
 const SAVED_SEARCH_LABEL = "#searchId=";
-const ENSLAVED_PATH = "enslaved/";
-const SEARCH_URL = "/past/api/search_enslaved";
+// const ENSLAVED_PATH = "enslaved/";
+const ENSLAVER_PATH = "enslaver/";
+const SEARCH_URL = "/past/api/search_enslaver";
 
 var voyageColumns = [
   {
@@ -113,7 +114,7 @@ var voyageColumns = [
 
 function getColumnIndex(column) {
   var index = null;
-  allColumns[enslavedDataset].forEach(function(columnItem, columnIndex) {
+  allColumns.forEach(function(columnItem, columnIndex) {
     if (columnItem.data == column) {
       index = columnIndex;
       return true;
@@ -165,6 +166,31 @@ function processResponse(json, mainDatatable, fuzzySearch) {
       });
       row.enslavers_list = enslaversList;
     }
+
+    if (row.alias_list) {
+      var aliasList = {};
+      aliasList = row.alias_list.filter((element) => {
+        return row.principal_alias != element;
+      });
+      row.alias_list = aliasList;
+    }
+
+    var totalSlaves = 0;
+    if (row.voyages_list) {
+      row.voyages_list.forEach((value) => {
+        totalSlaves += value.slaves_embarked;
+        var arrivalDateArray = value.voyage_year ? value.voyage_year.split([',']) : '';
+        var arrivalDate = '';
+
+        if (arrivalDateArray.length == 3) {
+          arrivalDate = arrivalDateArray[2];
+        } else if (arrivalDateArray.length == 1) {
+          arrivalDate = arrivalDateArray[0];
+        }
+        value.voyage_year = arrivalDate;
+      });
+    }
+    row.total_slaves = totalSlaves;
 
     // source formatting
     row.sources_raw = row.sources_list;
@@ -309,7 +335,7 @@ function serializeFilter(filter) {
 }
 
 function searchAll(filter, filterData) {
-  var items = {enslaved_dataset: enslavedDataset};
+  var items = {};
   for (key1 in filter) {
     if (key1 !== "count") {
       for (key2 in filter[key1]) {
@@ -656,7 +682,7 @@ function loadTreeselectOptions(vm, vTreeselect, filter, callback) {
         return false;
       }
 
-      var params = {var_name: modelVarName[varName], dataset: localStorage.enslavedDataset};
+      var params = {var_name: modelVarName[varName], dataset: 0};
 
       axios
         .post(apiUrl, params)
@@ -944,6 +970,32 @@ function displayColumnOrder(order) {
   }
 }
 
+function formatVoyages ( d ) {
+  var voyagesTable = '<div style="width: 100%; background-color: #FFFFFF;" class="d-flex flex-row-reverse"><table cellpadding="5" cellspacing="0" border="0">'+
+    '<tr>'+
+      '<th>'+gettext("Voyage ID")+'</th>'+
+      '<th>'+gettext("Voyage Year")+'</th>'+
+      '<th>'+gettext("Disembarkation Port")+'</th>'+
+      '<th>'+gettext("Embarkation Port")+'</th>'+
+      '<th>'+gettext("Role")+'</th>'+
+      '<th>'+gettext("Ship Name")+'</th>'+
+      '<th><span>' + gettext("Captives Embarked") + '</span> <span class="badge badge-pill badge-secondary" data-toggle="tooltip" data-placement="top" title="' + gettext("Imputed results are calculated by an algorithm.") + '"> IMP </span></th>'+
+    '</tr>';
+    d.voyages_list.forEach((item) => {
+      voyagesTable += '<tr>'+
+        '<td class="text-right">'+'<a href="javascript:void(0)" onclick="openVoyageModal(' + item.voyage_id + ');">' + item.voyage_id + '</a>'+'</td>'+
+        '<td class="text-right">'+item.voyage_year+'</td>'+
+        '<td>'+item.disembarkation_port+'</td>'+
+        '<td>'+item.embarkation_port+'</td>'+
+        '<td>'+item.role+'</td>'+
+        '<td>'+item.ship_name+'</td>'+
+        '<td class="text-right">'+item.slaves_embarked+'</td>'+
+      '</tr>';
+    });
+    voyagesTable += '</table></div></td></tr><tr>';
+  return voyagesTable;
+}
+
 function refreshUi(filter, filterData, currentTab, tabData, options) {
   if (currentTab == "results") {
     var currentSearchObj = searchAll(filter, filterData);
@@ -978,7 +1030,7 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
                 ? mainDatatable.colReorder.order()[item.column]
                 : item.column;
               return {
-                columnName: allColumns[enslavedDataset][columnIndex].data,
+                columnName: allColumns[columnIndex].data,
                 direction: item.dir
               };
             });
@@ -1037,7 +1089,7 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
       bFilter: false,
       processing: true,
       serverSide: true,
-      columns: allColumns[enslavedDataset],
+      columns: allColumns,
       stateSave: true,
       stateDuration: -1,
       initComplete: function() {
@@ -1062,6 +1114,34 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
       $('[data-toggle="tooltip"]').tooltip();
       initAudioActions();
     });
+
+    // Add event listener for opening and closing details
+    $('#results_main_table tbody').off('click').on('click', 'td.dt-control', function () {
+        var tr = $(this).closest('tr');
+        var tdi = tr.find("i.fa");
+        var row = $('#results_main_table').DataTable().row( tr );
+        var data = row.data();
+
+        if (data.voyages_list.length > 0) {
+          if ( row.child.isShown() ) {
+            // This row is already open - close it
+            row.child.hide();
+            tr.removeClass('shown');
+            tdi.first().removeClass('fa-minus-square');
+            tdi.first().addClass('fa-plus-square');
+          }
+          else {
+            if ( $('#results_main_table').DataTable().row( '.shown' ).length ) {
+              $('.dt-control', $('#results_main_table').DataTable().row( '.shown' ).node()).click();
+            }
+            // Open this row
+            row.child( formatVoyages(data) ).show();
+            tr.addClass('shown');
+            tdi.first().removeClass('fa-plus-square');
+            tdi.first().addClass('fa-minus-square');
+          }
+        }
+    } );
   }
 }
 

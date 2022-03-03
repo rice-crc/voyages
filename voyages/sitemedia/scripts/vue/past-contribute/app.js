@@ -174,7 +174,7 @@ var pastContribute = new Vue({
                 {
                   "op": "equals",
                   "varName": "voyage_id",
-                  "searchTerm": this.enslaved.voyage__id,
+                  "searchTerm": this.enslaved.voyage_id,
                 },
                 {
                   "op": "equals",
@@ -220,7 +220,7 @@ var pastContribute = new Vue({
         };
 
         axios
-        .post('/past/api/search', params)
+        .post('/past/api/search_enslaved', params)
         .then(function(response) {
             pastContribute.enslaved = response.data.data[0];
             var arrivalDateArray = pastContribute.enslaved.voyage__voyage_dates__first_dis_of_slaves ? pastContribute.enslaved.voyage__voyage_dates__first_dis_of_slaves.split([',']) : '';

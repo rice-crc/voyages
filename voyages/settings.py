@@ -159,6 +159,7 @@ INSTALLED_APPS = (
     # 'allauth.socialaccount.providers.facebook',
     'allauth.socialaccount.providers.google',
     # 'storages',
+    'voyages.apps.blog',
 )
 
 I18N_HELPER_DEBUG = False

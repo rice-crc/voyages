@@ -729,4 +729,4 @@ class Command(BaseCommand):
 
                 helper.re_enable_fks(cursor)
 
-                print("Completed! Don't forget to rebuild_index on Solr.")
+        print("Completed! Don't forget to rebuild_index on Solr.")

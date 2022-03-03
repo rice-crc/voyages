@@ -77,8 +77,10 @@ class RowHelper:
         val = self.row.get(field_name, default)
         if val:
             val = val.strip()
-        if max_chars and len(val) > max_chars:
-            self.error_reporting.report('Field ' + field_name + ' is too long (>' + str(max_chars) + ' chars)')
+        if max_chars and val and len(val) > max_chars:
+            self.error_reporting.report('Field "' + field_name + '" is too long (>' + str(max_chars) + ' chars)')
+            # Truncate the field
+            val = val[:max_chars]
         return val
 
     def get_by_value(self, model_type, field_name, key_name = 'value', allow_null=True, manager=None):
@@ -90,22 +92,26 @@ class RowHelper:
         """
         model_type_name = str(model_type)
         cached_cols = self.__class__.cached
-        col = cached_cols.get(model_type_name)
+        cache_key = model_type_name + '>>' + key_name
+        col = cached_cols.get(cache_key)
         if manager is None:
             manager = model_type.objects
         if col is None:
-            col = {getattr(x, key_name): x for x in manager.all()}
-            cached_cols[model_type_name] = col
-        ival = self.cint(field_name, allow_null)
-        if ival is None:
+            col = {str(getattr(x, key_name)): x for x in manager.all()}
+            cached_cols[cache_key] = col
+        src_val = self.get(field_name)
+        if src_val is None or src_val == '':
+            if not allow_null:
+                self.error_reporting.report('Null value for ' + field_name)
             return None
-        val = col.get(ival)
+        val = col.get(src_val)
         if val is None:
-            msg = 'Failed to locate "' + model_type_name + '" with value: ' + \
-                str(ival) + ' for field "' + field_name + '"'
+            msg = 'Failed to locate "' + model_type_name + '" with value: "' + \
+                str(src_val) + '" for field "' + field_name + '"'
+            self.error_reporting.add_missing(model_type_name, src_val)
             if not allow_null:
                 raise Exception(msg)
-            self.error_reporting.report(msg, field_name + str(ival))
+            self.error_reporting.report(msg, field_name + str(src_val))
         return val
 
 
@@ -114,8 +120,8 @@ class BulkImportationHelper:
     Helper methods for bulk data importation.
     """
 
-    def __init__(self, target_db):
-        self.target_db = target_db
+    def __init__(self, target_db = None):
+        self.target_db = target_db if target_db else 'mysql'
 
     @staticmethod
     def read_to_dict(file):
@@ -128,7 +134,8 @@ class BulkImportationHelper:
                 [next(iterator).decode("utf-8-sig").lower().replace("_", "").encode('utf-8')],
                 iterator)
 
-        return unicodecsv.DictReader(lower_headers(file), delimiter=',', encoding='utf-8')
+        #return unicodecsv.DictReader(lower_headers(file), delimiter=',', encoding='utf-8')
+        return unicodecsv.DictReader(lower_headers(file), delimiter=',', encoding='utf-8-sig')
 
     @staticmethod
     def bulk_insert(model, lst, attr_key=None, manager=None):
@@ -136,7 +143,7 @@ class BulkImportationHelper:
         Bulk insert model entries
         """
 
-        print('Bulk inserting ' + str(model))
+        print('Bulk inserting [' + str(len(lst)) + '] ' + str(model))
         if manager is None:
             manager = model.objects
         manager.bulk_create(lst, batch_size=100)
@@ -199,12 +206,16 @@ class ErrorReporting:
         self.line = 0
         self.errors = 0
         self.reported = {}
+        self.missing = {}
 
     def add_error(self):
         """
         Add 1 to the error count.
         """
         self.errors += 1
+
+    def add_missing(self, model, search_key):
+        self.missing.setdefault(model, []).append(search_key)
 
     def next_row(self):
         """
@@ -249,8 +260,9 @@ class SourceReferenceFinder:
         """
         return letter in (' ', ',')
 
-    def __init__(self):
-        all_sources = VoyageSources.objects.all()
+    def __init__(self, all_sources = None):
+        if not all_sources:
+            all_sources = VoyageSources.objects.all()
         trie = {}
         self._end = '_end'
 

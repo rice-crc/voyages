@@ -1,15 +1,16 @@
 from __future__ import unicode_literals
 
 from django.conf.urls import url
-from django.views.generic import RedirectView
 from django.views.generic import TemplateView
 
 import voyages.apps.past.views
 import voyages.apps.static_content.views
 
 urlpatterns = [
-    url(r'^api/search',
-        voyages.apps.past.views.search_enslaved, name='search'),
+    url(r'^api/search_enslaved',
+        voyages.apps.past.views.search_enslaved, name='search_enslaved'),
+    url(r'^api/search_enslaver',
+        voyages.apps.past.views.search_enslaver, name='search_enslaver'),
     url(r'^api/modern-countries',
         voyages.apps.past.views.get_modern_countries,
         name='modern-countries'),
@@ -22,6 +23,9 @@ urlpatterns = [
     url(r'^database',
         voyages.apps.past.views.enslaved_database,
         name='database'),
+     url(r'^enslavers',
+        TemplateView.as_view(template_name='past/enslavers.html'),
+        name='enslavers'),
     url(r'^contribute/(?P<id>.*)',
         TemplateView.as_view(template_name='past/contribute.html'),
         name='contribute'),
@@ -32,5 +36,11 @@ urlpatterns = [
         voyages.apps.past.views.store_audio),
     url(r'enslaved-filtered-places',
         voyages.apps.past.views.get_enslaved_filtered_places,
-        name='enslaved-filtered-places')
+        name='enslaved-filtered-places'),
+    url(r'get-enum/(enslaver-role)s',
+        voyages.apps.past.views.get_enumeration,
+        name='enslaver-roles-enum'),
+    url(r'get-enum/(enslavement-relation-type)s',
+        voyages.apps.past.views.get_enumeration,
+        name='enslaver-roles-enum'),
 ]
