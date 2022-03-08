@@ -1,6 +1,12 @@
-# Django settings for voyages project.
+from __future__ import absolute_import, print_function, unicode_literals
 
 import os
+import sys
+
+from django.utils.translation import ugettext_lazy as _
+
+# Django settings for voyages project.
+
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 SITE_ID = 1
@@ -31,7 +37,6 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 # Example: "http://media.lawrence.com/static/"
 STATIC_URL = '/static/'
 
-
 # SASS_PROCESSOR_ROOT = STATIC_URL
 
 # Additional locations of static files
@@ -39,8 +44,7 @@ STATICFILES_DIRS = (
     # Put strings here, like "/home/html/static" or "C:/www/django/static".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
-     os.path.join(BASE_DIR, 'sitemedia'),
-)
+    os.path.join(BASE_DIR, 'sitemedia'),)
 
 # List of finder classes that know how to find static files in
 # various locations.
@@ -50,7 +54,7 @@ STATICFILES_FINDERS = (
     # other finders..
     'compressor.finders.CompressorFinder',
     # 'sass_processor.finders.CssFinder',
-   # 'django.contrib.staticfiles.finders.DefaultStorageFinder',
+    # 'django.contrib.staticfiles.finders.DefaultStorageFinder',
 )
 
 AUTHENTICATION_BACKENDS = (
@@ -83,9 +87,7 @@ WSGI_APPLICATION = 'voyages.wsgi.application'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [
-            os.path.join(BASE_DIR, 'templates')
-        ],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -110,9 +112,7 @@ TEMPLATES = [
     },
 ]
 
-LOCALE_PATHS = (
-    os.path.join(BASE_DIR, 'locale'),
-)
+LOCALE_PATHS = (os.path.join(BASE_DIR, 'locale'),)
 
 SASS_PROCESSOR_INCLUDE_DIRS = [
     os.path.join(STATIC_URL, 'scss'),
@@ -129,14 +129,12 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'django.contrib.admin',
 
-    #'django_extensions',
-
+    # 'django_extensions',
     'captcha',
-    "compressor", # Django Compressor to compile assets
+    "compressor",  # Django Compressor to compile assets
 
-    #Flatpages apps
+    # Flatpages apps
     'django.contrib.flatpages',
-
     'django.contrib.admindocs',
     'django.contrib.humanize',
     'sorl.thumbnail',
@@ -144,10 +142,10 @@ INSTALLED_APPS = (
     # used to index django models
     'haystack',
 
-    # used to highlight translated strings to easily find which translations are missing
-    #'i18n_helper',
-
+    # used to highlight translated strings to easily find which translations
+    # are missing 'i18n_helper',
     'voyages.apps.common',
+    'voyages.apps.past',
     'voyages.apps.voyage',
     'voyages.apps.american',
     'voyages.apps.assessment',
@@ -155,27 +153,26 @@ INSTALLED_APPS = (
     'voyages.apps.about',
     'voyages.apps.contribute',
     'voyages.apps.static_content',
-
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
-    #'allauth.socialaccount.providers.facebook',
+    # 'allauth.socialaccount.providers.facebook',
     'allauth.socialaccount.providers.google',
     # 'storages',
 )
 
 I18N_HELPER_DEBUG = False
-I18N_HELPER_HTML = "<div class='i18n-helper' style='display: inline; background-color: #FAF9A7; color: red;'>{0}</div> "
+I18N_HELPER_HTML = "<div class='i18n-helper' style='display: inline; "
+"background-color: #FAF9A7; color: red;'>{0}</div> "
 
-# Indicates whether the map path flows should include paths with missing source.
+# Indicates whether the map path flows should include paths with missing
+# source.
 MAP_MISSING_SOURCE_ENABLED = True
 
 SESSION_ENGINE = "django.contrib.sessions.backends.file"
 SESSION_SERIALIZER = 'django.contrib.sessions.serializers.PickleSerializer'
 
-SERIALIZATION_MODULES = {
-    'json': 'voyages.apps.common.json'
-}
+SERIALIZATION_MODULES = {'json': 'voyages.apps.common.json'}
 
 ACCOUNT_SIGNUP_FORM_CLASS = 'voyages.apps.contribute.forms.SignUpForm'
 ACCOUNT_AUTHENTICATION_METHOD = 'email'
@@ -186,7 +183,6 @@ SOCIALACCOUNT_AUTO_SIGNUP = False
 
 LANGUAGE_CODE = 'en'
 
-from django.utils.translation import ugettext_lazy as _
 
 LANGUAGES = (
     ('en', _('English')),
@@ -211,17 +207,16 @@ SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 # requests using HTTP to the django server.
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
-import sys
-
 # import localsettings
 # This will override any previously set value
 try:
-    from localsettings import *
-except ImportError:
-    print >>sys.stderr, '''Settings not defined. Please configure a version
-        of localsettings.py for this site. See localsettings.py.dist for
-        setup details.'''
-
+    from .localsettings import *
+except ImportError as e:
+    print('''The settings could not be imported (error details below). Please configure
+        a version of localsettings.py for this site. See localsettings-local.py.default for
+        setup details.''',
+          file=sys.stderr)
+    print(str(e))
 
 # Modify HAYSTACK config for fixture loading durring tests
 # It is not possible to use override_settings decorator
@@ -230,17 +225,18 @@ except ImportError:
 
 try:
     if 'test' in sys.argv:
-        HAYSTACK_CONNECTIONS = {'default' : {'ENGINE' : 'haystack.backends.simple_backend.SimpleEngine'}}
+        HAYSTACK_CONNECTIONS = {
+            'default': {
+                'ENGINE': 'haystack.backends.simple_backend.SimpleEngine'
+            }
+        }
         HAYSTACK_SIGNAL_PROCESSOR = ''
         del HAYSTACK_SIGNAL_PROCESSOR
 except Exception as e:
-    print >>sys.stderr, '''*** HAYSTACK settings not modified because something went wrong %s ***''' % e.message
+    print(
+        '''*** HAYSTACK settings not modified because something went wrong %s
+        ***'''
+        % str(e),
+        file=sys.stderr)
 
 del sys
-
-# TODO: TEMPORARY HACK TO SUPPORT INCOMPATIBLE HAYSTACK VERSION (remove these lines once the django-haystack package is fixed)
-# We are commenting out so let us make sure that
-#from django.db import models
-#from haystack.utils.app_loading import haystack_get_model
-#models.get_model = haystack_get_model
-# TODO: END OF HACK

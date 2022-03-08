@@ -1,15 +1,19 @@
-from django.utils.safestring import mark_safe
-from django.conf import settings
-from django.core import serializers
-from django import template
-from django.utils.translation import ugettext as _
+from __future__ import unicode_literals
 
 import logging
 import re
 
+from django import template
+from django.conf import settings
+from django.core import serializers
+from django.utils.safestring import mark_safe
+from django.utils.translation import ugettext as _
+from past.builtins import basestring
+
 logger = logging.getLogger('trans')
 register = template.Library()
-re_has_alpha_chars = re.compile('.*[a-zA-Z\.]{2,}')
+re_has_alpha_chars = re.compile(r'.*[a-zA-Z\.]{2,}')
+
 
 @register.filter
 def trans_log(val):
@@ -24,7 +28,8 @@ def trans_log(val):
     """
     if not isinstance(val, basestring) or len(val) == 0:
         return val
-    # Heuristically check whether this looks like a string that should be translated.
+    # Heuristically check whether this looks like a string that should be
+    # translated.
     if re_has_alpha_chars.match(val) and not val.startswith('var_'):
         result = _(val)
     else:
@@ -42,11 +47,12 @@ def trans_log(val):
         logger.info(val.replace('\n', ' ').replace('\r', ' '))
     return mark_safe(result)
 
+
 @register.filter
 def jsonify(lst):
     return mark_safe(serializers.serialize('json', lst))
 
+
 @register.filter
-def replaceStar(value, arg):
+def replace_star(value, arg):
     return value.replace("*", arg)
-    

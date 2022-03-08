@@ -224,7 +224,6 @@ var searchBar = new Vue({
       handler: function() {
         this.rowModalShow = true;
         var results = [];
-        // console.log(JSON.stringify(this.row.data));
         for (group in this.filter) {
           if (group !== "year" && group !== "settings") {
             var datum = {
@@ -417,11 +416,13 @@ var searchBar = new Vue({
       // var searchTerms = searchAll(this.filter, this.filterData);
       // alert(JSON.stringify(searchTerms));
       // search(this.searchFilter, searchTerms);
+      $("#results_main_table").DataTable().state.clear();
       this.refresh();
     },
 
     // reset inputs, filters, and counts back to default state
     reset(group, subGroup) {
+      $("#results_main_table").DataTable().state.clear();
       resetFilter(this.filter, group, subGroup);
       this.refresh();
     },
@@ -439,6 +440,7 @@ var searchBar = new Vue({
     },
 
     resetAll() {
+      $("#results_main_table").DataTable().state.clear();
       this.refreshPage();
       this.resetURL();
     },
@@ -555,7 +557,6 @@ var searchBar = new Vue({
       axios
         .post("/voyage/save-query", {
           items: serializeFilter(items)
-          // query: serializeFilter({"filter": vm.filter}),
         })
         .then(function(response) {
           var exists = false;
@@ -579,7 +580,7 @@ var searchBar = new Vue({
           }
         })
         .catch(function(error) {
-          options.errorMessage = error;
+          vm.options.errorMessage = error;
           $("#sv-loader").addClass("display-none");
           $("#sv-loader-error").removeClass("display-none");
           console.log(error);
@@ -657,7 +658,10 @@ var searchBar = new Vue({
 
     // load a search when present in URL
     if (location.href.includes(SAVED_SEARCH_LABEL)) {
-      var savedSearchId = location.href.split(SAVED_SEARCH_LABEL).pop();
+      var parts = location.href.split(SAVED_SEARCH_LABEL);
+      var savedSearchId = parts.pop();
+      // Remove the search slug from URL.
+      window.history.replaceState({}, document.title, parts[0]);
       this.load(savedSearchId);
     } else {
       this.refresh();
