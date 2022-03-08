@@ -54,7 +54,7 @@
   flex-wrap: nowrap;
 }
 
-@media (min-width: 1199px) {
+@media (min-width: 992px) {
   .nav-container {
     justify-content: space-between;
     display: flex;
@@ -74,7 +74,7 @@
   margin: 1rem 4rem;
 }
 
-@media (max-width: 1199px) {
+@media (max-width: 991px) {
   .navbar {
     padding: 0.5rem 2rem;
   }

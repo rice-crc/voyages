@@ -1,10 +1,23 @@
+from __future__ import unicode_literals
+
 from django.contrib import admin
-from django.contrib.flatpages.models import FlatPage
-from autocomplete_light import shortcuts as autocomplete_light
-from .forms import *
 from django.contrib.flatpages.admin import FlatPageAdmin
 from django.contrib.flatpages.models import FlatPage
 from django.utils.translation import ugettext_lazy as _
+from autocomplete_light import shortcuts as autocomplete_light
+
+from .forms import (VoyageCaptainConnectionForm, VoyageCrewForm,
+                    VoyageDatesForm, VoyageItineraryForm, VoyageOutcomeForm,
+                    VoyageShipForm, VoyageShipOwnerConnectionForm,
+                    VoyageSlavesNumbersForm, VoyageSourcesConnectionForm,
+                    VoyagesSourcesAdminForm)
+from .models import (BroadRegion, Nationality, OwnerOutcome, ParticularOutcome,
+                     Place, Region, RigOfVessel, SlavesOutcome, TonType,
+                     VesselCapturedOutcome, Voyage, VoyageCaptainConnection,
+                     VoyageCrew, VoyageDates, VoyageGroupings, VoyageItinerary,
+                     VoyageOutcome, VoyageShip, VoyageShipOwnerConnection,
+                     VoyageSlavesNumbers, VoyageSources,
+                     VoyageSourcesConnection, VoyageSourcesType)
 
 
 # Define a new FlatPageAdmin
@@ -12,17 +25,19 @@ class FlatPageAdmin(FlatPageAdmin):
     fieldsets = (
         (None, {'fields': ('url', 'title', 'content', 'sites')}),
         (_('Advanced options'), {
-            'classes': ('collapse', ),
+            'classes': ('collapse',),
             'fields': (
                 'registration_required',
                 'template_name',
             ),
         }),
     )
+
     class Media:
-        js = ('scripts/tiny_mce/tinymce.min.js',
-          'scripts/tiny_mce/textareas.js',
-          )
+        js = (
+            'scripts/tiny_mce/tinymce.min.js',
+            'scripts/tiny_mce/textareas.js',
+        )
 
 
 # Voyage Admin
@@ -31,22 +46,24 @@ class BroadRegionAdmin(admin.ModelAdmin):
     list_display = ('broad_region', 'value', 'show_on_map')
     list_display_links = ('broad_region',)
     search_fields = ['broad_region', 'value']
-    list_editable =['show_on_map']
+    list_editable = ['show_on_map']
+
 
 class RegionAdmin(admin.ModelAdmin):
-    list_display = ('region', 'value', 'broad_region', 'show_on_map', 'show_on_main_map')
+    list_display = ('region', 'value', 'broad_region', 'show_on_map',
+                    'show_on_main_map')
     list_display_links = ('region',)
     search_fields = ['region', 'value']
     list_editable = ['show_on_map', 'show_on_main_map']
 
 
 class PlaceAdmin(admin.ModelAdmin):
-    list_display = ('place', 'value', 'region', 'longitude', 'latitude', 'show_on_main_map', 'show_on_voyage_map')
+    list_display = ('place', 'value', 'region', 'longitude', 'latitude',
+                    'show_on_main_map', 'show_on_voyage_map')
     list_display_links = ('place',)
     search_fields = ['place', 'value']
     ordering = ['value']
     list_editable = ['show_on_main_map', 'show_on_voyage_map']
-
 
 
 # Technical
@@ -66,7 +83,8 @@ class VoyageShipInline(admin.StackedInline):
     model = VoyageShip
     extra = 1
     max_num = 1
-    def get_model_perms(self, request):
+
+    def get_model_perms(self, _):
         """
         Return empty perms dict thus hiding the model from admin index.
         """
@@ -89,7 +107,7 @@ class VoyageShipOwnerAdmin(admin.ModelAdmin):
     list_display = ('name',)
     list_display_links = ('name',)
     search_fields = ['name']
-    #def get_model_perms(self, request):
+    # def get_model_perms(self, request):
     #    """
     #    Return empty perms dict thus hiding the model from admin index.
     #    """
@@ -113,7 +131,7 @@ class VoyageRigOfVesselAdmin(admin.ModelAdmin):
     list_display = ('label', 'value')
     list_display_links = ('label',)
     search_fields = ['label', 'value']
-    ordering =['value']
+    ordering = ['value']
 
 
 class VoyageTonTypeAdmin(admin.ModelAdmin):
@@ -132,7 +150,7 @@ class VoyageOutcomeInline(admin.TabularInline):
     extra = 1
     max_num = 1
 
-    def get_model_perms(self, request):
+    def get_model_perms(self, _):
         """
         Return empty perms dict thus hiding the model from admin index.
         """
@@ -147,7 +165,6 @@ class VoyageParticularOutcomeAdmin(admin.ModelAdmin):
     list_display_links = ['label']
     ordering = ['value']
     search_fields = ['label', 'value']
-
 
 
 class VoyageSlavesOutcomeAdmin(admin.ModelAdmin):
@@ -176,7 +193,7 @@ class VoyageItineraryInline(admin.StackedInline):
     extra = 1
     max_num = 1
 
-    def get_model_perms(self, request):
+    def get_model_perms(self, _):
         """
         Return empty perms dict thus hiding the model from admin index.
         """
@@ -190,7 +207,7 @@ class VoyageDatesInline(admin.StackedInline):
     extra = 1
     max_num = 1
 
-    def get_model_perms(self, request):
+    def get_model_perms(self, _):
         """
         Return empty perms dict thus hiding the model from admin index.
         """
@@ -200,7 +217,7 @@ class VoyageDatesInline(admin.StackedInline):
 # Voyage Captain and Crew
 class VoyageCaptainAdmin(admin.ModelAdmin):
     fields = ('name',)
-    #def get_model_perms(self, request):
+    # def get_model_perms(self, request):
     #    """
     #    Return empty perms dict thus hiding the model from admin index.
     #    """
@@ -208,12 +225,15 @@ class VoyageCaptainAdmin(admin.ModelAdmin):
 
 
 class VoyageCaptainConnectionAdmin(admin.ModelAdmin):
-
     """
     Admin for VoyageOutcome.VesselCapturedOutcome
     """
-    list_display = ('voyage', 'captain_order', 'captain',)
-    #def get_model_perms(self, request):
+    list_display = (
+        'voyage',
+        'captain_order',
+        'captain',
+    )
+    # def get_model_perms(self, request):
     #    """
     #    Return empty perms dict thus hiding the model from admin index.
     #    """
@@ -238,7 +258,7 @@ class VoyageCrewInline(admin.TabularInline):
     extra = 1
     max_num = 1
 
-    def get_model_perms(self, request):
+    def get_model_perms(self, _):
         """
         Return empty perms dict thus hiding the model from admin index.
         """
@@ -255,25 +275,30 @@ class VoyageSlavesNumbersInline(admin.StackedInline):
     extra = 1
     max_num = 1
 
-    def get_model_perms(self, request):
+    def get_model_perms(self, _):
         """
         Return empty perms dict thus hiding the model from admin index.
         """
         return {}
 
 
-
 # Voyage Sources
+
 
 class VoyageSourcesAdmin(admin.ModelAdmin):
     """
     Admin for VoyageSources.
     """
-    list_display = ('short_ref', 'source_type', 'full_ref',)
+    list_display = (
+        'short_ref',
+        'source_type',
+        'full_ref',
+    )
     search_fields = ('short_ref', 'full_ref')
     list_filter = ['source_type']
-    list_per_page = 10000000 # no pages
+    list_per_page = 10000000  # no pages
     form = VoyagesSourcesAdminForm
+
 
 class VoyageSourcesTypeAdmin(admin.ModelAdmin):
     """
@@ -292,6 +317,7 @@ class VoyageSourcesConnectionInline(admin.TabularInline):
     extra = 5
     max_num = 18
 
+
 class OwnerOutcomesAdmin(admin.ModelAdmin):
     list_display = ('label', 'value')
     list_display_links = ('label',)
@@ -307,15 +333,15 @@ class VoyageAdmin(admin.ModelAdmin):
     """
     inlines = (VoyageCaptainConnectionInline, VoyageShipInline,
                VoyageShipOwnerInline, VoyageOutcomeInline,
-               VoyageItineraryInline, VoyageDatesInline,
-               VoyageCrewInline, VoyageSlavesNumbersInline,
-               VoyageSourcesConnectionInline)
+               VoyageItineraryInline, VoyageDatesInline, VoyageCrewInline,
+               VoyageSlavesNumbersInline, VoyageSourcesConnectionInline)
     form = autocomplete_light.modelform_factory(Voyage, fields='__all__')
     list_display = ['voyage_id']
     list_display_links = ['voyage_id']
     ordering = ['-voyage_in_cd_rom', 'voyage_groupings', 'voyage_id']
     search_fields = ['voyage_id']
-    exclude = ('voyage_ship', 'voyage_itinerary', 'voyage_dates', 'voyage_crew', 'voyage_slaves_numbers')
+    exclude = ('voyage_ship', 'voyage_itinerary', 'voyage_dates',
+               'voyage_crew', 'voyage_slaves_numbers')
 
     class Meta:
         fields = '__all__'
@@ -335,7 +361,7 @@ admin.site.register(Place, PlaceAdmin)
 admin.site.register(VoyageGroupings, VoyageGroupingsAdmin)
 
 # Ship, Nation, Owners
-#admin.site.register(VoyageShipOwner, VoyageShipOwnerAdmin)
+# admin.site.register(VoyageShipOwner, VoyageShipOwnerAdmin)
 admin.site.register(Nationality, VoyageNationalityAdmin)
 admin.site.register(TonType, VoyageTonTypeAdmin)
 admin.site.register(RigOfVessel, VoyageRigOfVesselAdmin)
@@ -346,7 +372,6 @@ admin.site.register(ParticularOutcome, VoyageParticularOutcomeAdmin)
 admin.site.register(SlavesOutcome, VoyageSlavesOutcomeAdmin)
 admin.site.register(VesselCapturedOutcome, VoyageVesselOutcomeAdmin)
 # attached as inline in Voyage section
-
 
 # Voyage Slaves (characteristics)
 # attached as inline in Voyage section

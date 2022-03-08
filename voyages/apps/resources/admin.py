@@ -1,11 +1,14 @@
+from __future__ import unicode_literals
+
 from django.contrib import admin
-from .models import *
-from .forms import *
+
+from .forms import ImageAdminForm
+from .models import AfricanName, Country, Image, ImageCategory, SexAge
 
 
 class ImageAdmin(admin.ModelAdmin):
     list_filter = ['category']
-    list_display = ['ready_to_go', 'title', 'file' ]
+    list_display = ['ready_to_go', 'title', 'file']
     list_display_links = ['title']
     list_editable = ['ready_to_go']
     search_fields = ['title', 'description']
@@ -20,7 +23,7 @@ class ImageAdmin(admin.ModelAdmin):
 class ImageCategoryAdmin(admin.ModelAdmin):
     list_display = ['visible_on_website', 'label', 'value']
     list_display_links = ['label']
-    list_editable =  ['visible_on_website']
+    list_editable = ['visible_on_website']
     ordering = ['value']
     search_fields = ['value']
 
@@ -49,12 +52,20 @@ class SexAgeAdmin(admin.ModelAdmin):
 
 
 class AfricanNameAdmin(admin.ModelAdmin):
-    list_display = ['slave_id', 'name', 'age', 'height', 'source', 'ship_name', 'date_arrived', 'voyage_number',
-                    'sex_age', 'country', 'disembarkation_port', 'embarkation_port']
+    list_display = [
+        'slave_id', 'name', 'age', 'height', 'source', 'ship_name',
+        'date_arrived', 'voyage_number', 'sex_age', 'country',
+        'disembarkation_port', 'embarkation_port'
+    ]
     list_display_links = ['name', 'slave_id']
-    exclude = ['voyage', ]
+    exclude = [
+        'voyage',
+    ]
     ordering = ['slave_id']
-    search_fields = ['slave_id', 'name', 'age', 'height', 'source', 'ship_name', 'date_arrived', 'voyage_number']
+    search_fields = [
+        'slave_id', 'name', 'age', 'height', 'source', 'ship_name',
+        'date_arrived', 'voyage_number'
+    ]
 
     class Meta:
         model = AfricanName

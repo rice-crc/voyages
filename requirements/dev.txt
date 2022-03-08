@@ -8,3 +8,4 @@ unittest2
 django-cities-light
 xlrd
 scipy
+pygit2 # Used to simplify localsettings.py to auto-map db/solr depending on the active branch.

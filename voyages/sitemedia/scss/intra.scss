@@ -217,7 +217,7 @@ a {
 .btn-info {
 	  background-color: $intra-color;
 		border-color: $intra-color;
-		
+
 		&:hover, &:active, &:focus, &:not(:disabled):not(.disabled):active {
 			background-color: $intra-hover-color;
 			border-color: $intra-hover-color;
@@ -244,4 +244,7 @@ a {
 
 table.dataTable thead > tr > th {
   color: $intra-color;
+  span.column-header:after {
+    color: black;
+  }
 }
