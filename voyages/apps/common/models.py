@@ -79,7 +79,7 @@ class SavedQuery(models.Model):
         return post
 
     def save(self, *args, preserve_id=False, **kwargs):
-        hash_object = hashlib.sha1(self.query)
+        hash_object = hashlib.sha1(self.query.encode('utf8'))
         self.hash = hash_object.hexdigest()
         if not self.id or not preserve_id:
             pre_existing = list(
