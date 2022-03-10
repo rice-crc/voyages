@@ -682,7 +682,7 @@ function loadTreeselectOptions(vm, vTreeselect, filter, callback) {
         return false;
       }
 
-      var params = {var_name: modelVarName[varName]};
+      var params = {var_name: modelVarName[varName], dataset: 0};
 
       axios
         .post(apiUrl, params)

@@ -1,6 +1,6 @@
 var categoryNames = [
   gettext("Name"),
-  gettext("Voyages"),
+  gettext("Itinerary"),
   gettext("Personal Data"),
   gettext("Sources"),
 ];
