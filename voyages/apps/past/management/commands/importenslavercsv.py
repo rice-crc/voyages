@@ -1,3 +1,5 @@
+from distutils.log import fatal
+from unittest import skip
 from django.core.management.base import BaseCommand
 from django.db import connection
 from django.db import transaction
@@ -32,7 +34,7 @@ class Command(BaseCommand):
         # List the smallest unambiguous prefix of months in English so that we can parse
         MONTHS = ["JA", "F", "MAR", "AP", "MAY", "JUN", "JUL", "AUG", "S", "O", "N", "D"]
         MAX_NAME_CHARS = 255
-        MAX_WILL_FIELDS_CHARS = 100
+        MAX_WILL_FIELDS_CHARS = 12
         self.errors = 0
         target_db = options.get('db')
         skip_invalid = options.get('skip_invalid', False)
@@ -73,8 +75,9 @@ class Command(BaseCommand):
         def clean_name(name):
             if name is None or name == '':
                 return None
-            # Remove any annotations (between parenthesis).
-            name = re.sub("\(.*\)", "", name)
+            # Remove any annotations (between parenthesis). Using negative look
+            # aheads for allowed Jr/Sr values within parenthesis.
+            name = re.sub("\((?!Jr)(?!Sr).*\)", "", name)
             # Remove trailing characters.
             name = re.sub("[,.\s]+$", "", name)
             return name if name != '' else None
@@ -126,104 +129,151 @@ class Command(BaseCommand):
                     fatal_error("Bad voyage id in: " + val)
             return res
 
+        def load_aliases(rh, aliases):
+            for i in range(1, 9):
+                alias_value = clean_name(rh.get(f"alias {i}", max_chars=MAX_NAME_CHARS))
+                if alias_value is not None and alias_value != "":
+                    aliases.add(alias_value)
+            return set(aliases)
+
         # Iterate through csv files and import them.
         for file in enslaver_csv_files:
+            rows = []
             with open(file, 'rb') as f:
                 reader = helper.read_to_dict(f)
                 print("Importing " + file)
-                error_reporting.reset_row()
                 for r in reader:
-                    rh = RowHelper(r, error_reporting)
-                    # Start with the list of voyages associated with the enslaver.
-                    voyage_list = []
-                    for voyage_id in get_voyage_ids(rh.get('voyage list')):
-                        try:
-                            voyage = Voyage.all_dataset_objects.get(pk=int(voyage_id))
-                        except:
-                            voyage = None
-                        if voyage is None:
-                            fatal_error("Voyage id not found: " + str(voyage_id))
-                        else:
-                            voyage_list.append(voyage)
-                    if len(voyage_list) == 0:
-                        fatal_error("No voyages associated with enslaver")
-                    # TODO Q: how should we represent composite roles?
-                    # Our initial approach of using flags might make more sense.
+                    pid = r.get("person id")
+                    if pid is None or pid == '':
+                        continue
+                    row = {key: val for key, val in r.items()}
+                    # Standardize dual role labels.
+                    if row.get('role') == 'Captain_Owner':
+                        row['role'] = 'Owner_Captain'
+                    rows.append((len(rows), row))
+            # First pass: detect merges by matching voyage id sets and aliases.
+            voyage_ids_by_row = []
+            aliases_by_row = []
+            voyage_id_to_rows = {}
+            for (i, r) in rows:
+                rh = RowHelper(r, error_reporting)
+                voyage_ids = set(get_voyage_ids(rh.get('voyage list')))
+                voyage_ids_by_row.append(voyage_ids)
+                aliases_by_row.append(load_aliases(rh, set()))
+                for voyage_id in voyage_ids:
+                    voyage_id_to_rows.setdefault(voyage_id, set()).add(i)
+            # Second pass: detect which rows were merged into other rows. We
+            # build a dictionary merged_source_idx => merged_target_idx.
+            # 
+            # Any row not appearing as key should be imported as an
+            # EnslaverIdentity.
+            # 
+            # Any row that is a key cannot appear as a value.
+            merge_target_by_row = {}
+            error_reporting.reset_row()
+            for (i, r) in rows:
+                rh = RowHelper(r, error_reporting)
+                voyage_ids = voyage_ids_by_row[i]
+                if len(voyage_ids) == 0:
+                    error_reporting.report(f"Row {i + 1} does not have any voyages")
+                    continue
+                matches = set.intersection(*[voyage_id_to_rows[voyage_id] for voyage_id in voyage_ids])
+                if i not in matches:
+                    # Should never happen, it's just a sanity check.
+                    fatal_error("Corrupt data structure!")
+                matches = [row_idx for row_idx in matches if row_idx != i and abs(row_idx - i) <= 30 and len(aliases_by_row[row_idx]) > 0]
+                if len(matches) <= 0:
+                    continue
+                # This row should quite likely be merged into some other.
+                principal_alias = clean_name(rh.get('full name', max_chars=MAX_NAME_CHARS))
+                if principal_alias is None:
+                    fatal_error(f"No principal alias in {i + 1}th row data: {r}")
+                name_matches = [row_idx for row_idx in matches if principal_alias in aliases_by_row[row_idx]]
+                if len(name_matches) > 1:
+                    fatal_error(f"Multiple merge targets for source row {i + 1} '{principal_alias}' in {name_matches}")
+                elif len(name_matches) == 1:
+                    merge_target_by_row[i] = name_matches[0]
+                else:
+                    alts = {j + 1: list(aliases_by_row[j]) for j in matches}
+                    error_reporting.report(f"Expected row {i + 1} ([{voyage_ids}]) with principal alias '{principal_alias}' to be merged: [{alts}]")
+            problem_rows = set(merge_target_by_row.keys()).intersection(merge_target_by_row.values())
+            if len(problem_rows) > 0:
+                fatal_error(f"Cannot handle multi-level merges, see {problem_rows}")
+
+            # Create identities for every target merge row and remove any voyage
+            # ids from the merge target that belong to a merged source.
+            enslaver_identities = {target_row_idx: create(EnslaverIdentity) for target_row_idx in set(merge_target_by_row.values())}
+            for src_idx, target_idx in merge_target_by_row.items():
+                voyage_ids_by_row[target_idx] = set(voyage_ids_by_row[target_idx]) - set(voyage_ids_by_row[src_idx])
+
+            print("Here is the merge targert map:")
+            for k, v in merge_target_by_row.items():
+                print(f"{k + 1} => {v + 1}")
+                        
+            # Importation.
+            error_reporting.reset_row()
+            for (i, r) in rows:
+                rh = RowHelper(r, error_reporting)
+                # Start with the list of voyages associated with the enslaver.
+                voyage_list = []
+                for voyage_id in voyage_ids_by_row[i]:
+                    try:
+                        voyage = Voyage.all_dataset_objects.get(pk=int(voyage_id))
+                    except:
+                        voyage = None
+                    if voyage is None:
+                        fatal_error(f"Voyage id not found: {voyage_id}")
+                    else:
+                        voyage_list.append(voyage)
+                try:
                     role = rh.get_by_value(EnslaverRole, "role", "name", allow_null=False)
-                    principal_alias = clean_name(rh.get('fullname', max_chars=MAX_NAME_CHARS))
-                    if principal_alias in all_enslavers:
-                        fatal_error("Duplicate principal alias: " + principal_alias)
+                except:
+                    if not skip_invalid:
+                        raise
+                if role is None and skip_invalid:
+                    continue
+                principal_alias = clean_name(rh.get('full name', max_chars=MAX_NAME_CHARS))
+                merge_target_row_idx = merge_target_by_row.get(i)
+                if principal_alias in all_enslavers and merge_target_row_idx is not None:
+                    fatal_error(f"Duplicate principal alias: {principal_alias}")
+                # For a merged row entry, we use the merged target identity and
+                # ignore the aliases except for the principal_alias, which
+                # should be a match to the target row's aliases.
+                if i in enslaver_identities:
+                    # Row is a merge target.
+                    enslaver = enslaver_identities[i]
+                elif merge_target_row_idx is not None:
+                    # Row is a merge source, so we fetch the merge target
+                    # identity here.
+                    enslaver = enslaver_identities[merge_target_row_idx]
+                else:
+                    # Row is neither a merge source nor target, so we create a
+                    # new identity for this single row.
                     enslaver = create(EnslaverIdentity)
-                    aliases = {principal_alias}
-                    for i in range(1, 9):
-                        alias_value = clean_name(rh.get("alias" + "{:02d}".format(i), max_chars=MAX_NAME_CHARS))
-                        if alias_value is not None and alias_value != "":
-                            aliases.add(alias_value)
-                    e_principal = None
-                    for alias in aliases:
-                        e_alias = create(EnslaverAlias)
-                        e_alias.alias = alias
-                        e_alias.identity = enslaver
-                        all_aliases.append(e_alias)
-                        if alias == principal_alias:
-                            e_principal = e_alias
-                    all_enslavers[principal_alias] = (enslaver, e_principal)
-                    # Link voyages to the principal alias.
-                    for voyage in voyage_list:
-                        conn = create(EnslaverVoyageConnection)
-                        conn.voyage = voyage
-                        conn.role = role
-                        conn.enslaver_alias = e_principal
-                        # TODO Q: will order be used in this connection?
-                        enslaver_voyage_conn.append(conn)
-                    # Set enslaver personal info.
-                    enslaver.principal_alias = principal_alias
-                    enslaver.birth_year = parse_year(rh.get("birth year"))
-                    (birth_day, birth_month) = parse_day_and_month(rh.get('birth date'))
-                    enslaver.birth_day = birth_day
-                    enslaver.birth_month = birth_month
-                    enslaver.death_year = parse_year(rh.get("death year"))
-                    (death_day, death_month) = parse_day_and_month(rh.get('death date'))
-                    enslaver.death_day = death_day
-                    enslaver.death_month = death_month
-                    enslaver.father_name = clean_name(rh.get("father's name"))
-                    enslaver.father_occupation = clean_name(rh.get("father's occupation"))
-                    enslaver.mother_name = clean_name(rh.get("mother's name"))
-                    enslaver.probate_date = rh.get("probate date", max_chars=MAX_WILL_FIELDS_CHARS)
-                    enslaver.will_value_pounds = rh.get("will value lbs", max_chars=MAX_WILL_FIELDS_CHARS)
-                    enslaver.will_value_dollars = rh.get("will value dollars", max_chars=MAX_WILL_FIELDS_CHARS)
-                    enslaver.will_court = rh.get("will court/s", max_chars=MAX_WILL_FIELDS_CHARS)
-                    enslaver.text_id = rh.get("## person id")
-                    enslaver.birth_place = rh.get_by_value(Place, "birth place", "place")
-                    enslaver.death_place = rh.get_by_value(Place, "death place", "place")
-                    # TODO Q: sheet's NOTE field goes where??
-                    # Parse sources associated with this enslaver.
-                    order = 1
-                    for key in get_multi_valued_column_suffix(6):
-                        source_ref = rh.get('source ' + key, max_chars=MAX_NAME_CHARS)
-                        if len(source_ref) > 200:
-                            print('source [' + str(len(source_ref)) + ']: ')
-                        if source_ref is None or empty.match(source_ref):
-                            break
-                        (source, match) = source_finder.get(source_ref)
-                        if source is None:
-                            self.errors += 1
-                            error_reporting.report(
-                                'Source not found for '
-                                'ensaver: "' + principal_alias + '" '
-                                'source_ref: '
-                                '"' + smart_str(source_ref) + '"'
-                                ', longest partial '
-                                'match: ' + smart_str(match),
-                                source_ref)
-                            continue
-                        source_connection = create(EnslaverIdentitySourceConnection)
-                        source_connection.identity = enslaver
-                        source_connection.source = source
-                        source_connection.source_order = order
-                        source_connection.text_ref = source_ref
-                        source_connections.append(source_connection)
-                        order += 1
+                aliases = aliases_by_row[i]
+                aliases.add(principal_alias)
+                e_principal = None
+                for alias in aliases:
+                    e_alias = create(EnslaverAlias)
+                    e_alias.alias = alias
+                    e_alias.identity = enslaver
+                    e_alias.manual_id = rh.get("person id", max_chars=30)
+                    all_aliases.append(e_alias)
+                    if alias == principal_alias:
+                        e_principal = e_alias
+                # Link voyages to the principal alias. If this is a merged
+                # source row, then we are preserving the connections to voyages
+                # for the merged target using the specific alias that is used in
+                # the documents linking to the voyage.
+                for voyage in voyage_list:
+                    conn = create(EnslaverVoyageConnection)
+                    conn.voyage = voyage
+                    conn.role = role
+                    conn.enslaver_alias = e_principal
+                    # TODO Q: will order be used in this connection?
+                    enslaver_voyage_conn.append(conn)
+                # Set enslaver personal info.
+                if merge_target_row_idx is None:
                     # Include spouses in the enslaver table.               
                     def add_spouse(spouse, date):
                         if spouse:
@@ -256,6 +306,51 @@ class Command(BaseCommand):
                             in_relation_b.role = spouse_role
                             enslavement_relations.append((marriage, [], [in_relation_a, in_relation_b]))
 
+                    all_enslavers[principal_alias] = (enslaver, e_principal)
+                    enslaver.principal_alias = principal_alias
+                    enslaver.birth_year = parse_year(rh.get("birth year"))
+                    (birth_day, birth_month) = parse_day_and_month(rh.get('birth date'))
+                    enslaver.birth_day = birth_day
+                    enslaver.birth_month = birth_month
+                    enslaver.death_year = parse_year(rh.get("death year"))
+                    (death_day, death_month) = parse_day_and_month(rh.get('death date'))
+                    enslaver.death_day = death_day
+                    enslaver.death_month = death_month
+                    enslaver.father_name = clean_name(rh.get("father's name"))
+                    enslaver.father_occupation = clean_name(rh.get("father's occupation"))
+                    enslaver.mother_name = clean_name(rh.get("mother's name"))
+                    enslaver.probate_date = rh.get("probate date", max_chars=MAX_WILL_FIELDS_CHARS)
+                    enslaver.will_value_pounds = rh.get("will value lbs", max_chars=MAX_WILL_FIELDS_CHARS)
+                    enslaver.will_value_dollars = rh.get("will value dollars", max_chars=MAX_WILL_FIELDS_CHARS)
+                    enslaver.will_court = rh.get("will court/s", max_chars=MAX_WILL_FIELDS_CHARS)
+                    enslaver.birth_place = rh.get_by_value(Place, "birth place", "place")
+                    enslaver.death_place = rh.get_by_value(Place, "death place", "place")
+                    # TODO Q: sheet's NOTE field goes where??
+                    # Parse sources associated with this enslaver.
+                    order = 1
+                    for key in get_multi_valued_column_suffix(6):
+                        source_ref = rh.get('source ' + key, max_chars=MAX_NAME_CHARS)
+                        if len(source_ref) > 200:
+                            print('source [' + str(len(source_ref)) + ']: ')
+                        if source_ref is None or empty.match(source_ref):
+                            break
+                        (source, match) = source_finder.get(source_ref)
+                        if source is None:
+                            self.errors += 1
+                            error_reporting.report(
+                                'Source not found for '
+                                f'ensaver: "{principal_alias}" '
+                                f'source_ref: "{source_ref}", longest partial '
+                                f'match: {match}',
+                                source_ref)
+                            continue
+                        source_connection = create(EnslaverIdentitySourceConnection)
+                        source_connection.identity = enslaver
+                        source_connection.source = source
+                        source_connection.source_order = order
+                        source_connection.text_ref = source_ref
+                        source_connections.append(source_connection)
+                        order += 1
                     add_spouse(clean_name(rh.get('s1 name')), rh.get('s1 marriage date'))
                     add_spouse(clean_name(rh.get('s2 name')), rh.get('s2 marriage date'))
 

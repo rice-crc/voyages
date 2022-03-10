@@ -225,7 +225,6 @@ class EnslaverInfoAbstractBase(models.Model):
     will_value_pounds = models.CharField(max_length=12, null=True)
     will_value_dollars = models.CharField(max_length=12, null=True)
     will_court = models.CharField(max_length=12, null=True)
-    text_id = models.CharField(max_length=50)
     principal_location = models.ForeignKey(Place, null=True,
                                                 on_delete=models.CASCADE,
                                                 db_index=True)
@@ -263,6 +262,10 @@ class EnslaverAlias(models.Model):
     """
     identity = models.ForeignKey(EnslaverIdentity, on_delete=models.CASCADE, related_name='aliases')
     alias = models.CharField(max_length=255)
+    
+    # The manual id can be used to track the original entries in sheets produced
+    # by the researchers.
+    manual_id = models.CharField(max_length=30, null=True)
 
     def __str__(self):
         return self.__unicode__()
