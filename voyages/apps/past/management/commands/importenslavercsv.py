@@ -7,7 +7,7 @@ from django.utils.encoding import smart_str
 from voyages.apps.common.models import year_mod
 
 from voyages.apps.common.utils import *
-from voyages.apps.past.models import EnslavedInRelation, EnslavementRelation, EnslavementRelationType, EnslaverAlias, EnslaverIdentity, EnslaverIdentitySourceConnection, EnslaverInRelation, EnslaverRole, EnslaverVoyageConnection
+from voyages.apps.past.models import EnslavedInRelation, EnslavementRelation, EnslavementRelationType, EnslaverAlias, EnslaverIdentity, EnslaverIdentitySourceConnection, EnslaverInRelation, EnslaverRole, EnslaverVoyageConnection, EnslaverCachedProperties
 from voyages.apps.voyage.models import Place, Voyage
 import re
 
@@ -49,7 +49,8 @@ class Command(BaseCommand):
         helper = BulkImportationHelper(target_db)
         source_finder = SourceReferenceFinder()
         print("Please ensure that all csv files are UTF8-BOM encoded")
-        all_enslavers = {} # principal name : string => (enslaver: EnslaverIdentity, principal_alias: EnslaverAlias)
+        enslavers = {} # map id => EnslaverIdentity
+        mapped_enslavers = {} # principal name : string => (enslaver: EnslaverIdentity, principal_alias: EnslaverAlias)
         all_aliases = []
         enslaver_voyage_conn = []
         source_connections = []
@@ -234,7 +235,7 @@ class Command(BaseCommand):
                     continue
                 principal_alias = clean_name(rh.get('full name', max_chars=MAX_NAME_CHARS))
                 merge_target_row_idx = merge_target_by_row.get(i)
-                if principal_alias in all_enslavers and merge_target_row_idx is not None:
+                if principal_alias in mapped_enslavers and merge_target_row_idx is not None:
                     fatal_error(f"Duplicate principal alias: {principal_alias}")
                 # For a merged row entry, we use the merged target identity and
                 # ignore the aliases except for the principal_alias, which
@@ -250,6 +251,7 @@ class Command(BaseCommand):
                     # Row is neither a merge source nor target, so we create a
                     # new identity for this single row.
                     enslaver = create(EnslaverIdentity)
+                enslavers[enslaver.id] = enslaver
                 aliases = aliases_by_row[i]
                 aliases.add(principal_alias)
                 e_principal = None
@@ -261,6 +263,7 @@ class Command(BaseCommand):
                     all_aliases.append(e_alias)
                     if alias == principal_alias:
                         e_principal = e_alias
+                mapped_enslavers[principal_alias] = (enslaver, e_principal)
                 # Link voyages to the principal alias. If this is a merged
                 # source row, then we are preserving the connections to voyages
                 # for the merged target using the specific alias that is used in
@@ -278,7 +281,7 @@ class Command(BaseCommand):
                     def add_spouse(spouse, date):
                         if spouse:
                             # Check if there is already that person in the enslavers record.
-                            existing = all_enslavers.get(spouse)
+                            existing = mapped_enslavers.get(spouse)
                             if existing is None:
                                 spouse_ens = create(EnslaverIdentity)
                                 spouse_ens_alias = create(EnslaverAlias)
@@ -286,7 +289,7 @@ class Command(BaseCommand):
                                 spouse_ens_alias.alias = spouse
                                 spouse_ens.principal_alias = spouse
                                 all_aliases.append(spouse_ens_alias)
-                                all_enslavers[spouse] = (spouse_ens, spouse_ens_alias)
+                                mapped_enslavers[spouse] = (spouse_ens, spouse_ens_alias)
                             else:
                                 (spouse_ens, spouse_ens_alias) = existing
                             marriage = create(EnslavementRelation)
@@ -306,7 +309,6 @@ class Command(BaseCommand):
                             in_relation_b.role = spouse_role
                             enslavement_relations.append((marriage, [], [in_relation_a, in_relation_b]))
 
-                    all_enslavers[principal_alias] = (enslaver, e_principal)
                     enslaver.principal_alias = principal_alias
                     enslaver.birth_year = parse_year(rh.get("birth year"))
                     (birth_day, birth_month) = parse_day_and_month(rh.get('birth date'))
@@ -354,7 +356,7 @@ class Command(BaseCommand):
                     add_spouse(clean_name(rh.get('s1 name')), rh.get('s1 marriage date'))
                     add_spouse(clean_name(rh.get('s2 name')), rh.get('s2 marriage date'))
 
-        print('Constructed ' + str(len(all_enslavers)) + ' Enslavers from CSV.')
+        print('Constructed ' + str(len(enslavers)) + ' Enslavers from CSV.')
 
         if error_reporting.errors > 0:
             print(str(error_reporting.errors) + ' total errors reported!')
@@ -383,7 +385,7 @@ class Command(BaseCommand):
                 helper.delete_all(cursor, EnslaverIdentitySourceConnection)
                 helper.delete_all(cursor, EnslaverIdentity)
                 print('Inserting new enslaver records...')
-                helper.bulk_insert(EnslaverIdentity, [eid for (eid, _) in all_enslavers.values()])
+                helper.bulk_insert(EnslaverIdentity, enslavers.values())
                 helper.bulk_insert(EnslaverIdentitySourceConnection, source_connections)
                 helper.bulk_insert(EnslaverAlias, all_aliases)
                 helper.bulk_insert(EnslaverVoyageConnection, enslaver_voyage_conn)
@@ -391,5 +393,6 @@ class Command(BaseCommand):
                 helper.bulk_insert(EnslavedInRelation, [enslaved_in_rel for (_, enslaved, _) in enslavement_relations for enslaved_in_rel in enslaved])
                 helper.bulk_insert(EnslaverInRelation, [enslaver_in_rel for (_, _, enslaver) in enslavement_relations for enslaver_in_rel in enslaver])
                 helper.re_enable_fks(cursor)
-
+        # Compute cached properties.
+        EnslaverCachedProperties.update()
         print("Completed!")

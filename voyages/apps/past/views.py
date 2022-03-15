@@ -220,6 +220,7 @@ def search_enslaver(request):
             'principal_alias',
             'birth_year', 'birth_month', 'birth_day',
             'death_year', 'death_month', 'death_day',
+            'cached_properties__enslaved_count',
             EnslaverSearch.ALIASES_LIST,
             EnslaverSearch.VOYAGES_LIST,
             EnslaverSearch.SOURCES_LIST,

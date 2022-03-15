@@ -8,8 +8,8 @@ from functools import reduce
 from django.conf import settings
 
 from django.contrib.auth.models import User
-from django.db import models
-from django.db.models import (Case, CharField, F, Func, IntegerField, Q, Value, When)
+from django.db import (connection, models, transaction)
+from django.db.models import (Case, CharField, F, Func, IntegerField, Q, Sum, Value, When)
 from django.db.models.expressions import Subquery, OuterRef
 from django.db.models.fields import TextField
 from django.db.models.functions import Coalesce, Concat, Length, Substr
@@ -243,6 +243,35 @@ class EnslaverIdentity(EnslaverInfoAbstractBase):
 
     class Meta:
         verbose_name = 'Enslaver unique identity and personal info'
+
+
+class EnslaverCachedProperties(models.Model):
+    identity = models.ForeignKey(EnslaverIdentity, related_name='cached_properties',
+                                on_delete=models.CASCADE, unique=True, primary_key=True)
+    enslaved_count = models.IntegerField()
+
+    @staticmethod
+    def compute():
+        identity_field = 'enslaver_alias__identity'
+        enslaved_count_field = 'voyage__voyage_slaves_numbers__imp_total_num_slaves_embarked'
+        fields = [identity_field, enslaved_count_field]
+        q = EnslaverVoyageConnection.objects \
+            .select_related(*fields) \
+            .values(identity_field) \
+            .annotate(enslaved_count=Sum(enslaved_count_field)) \
+            .values_list(identity_field, 'enslaved_count')
+        for row in q:
+            props = EnslaverCachedProperties()
+            props.identity_id = int(row[0])
+            props.enslaved_count = int(row[1]) if row[1] is not None else 0
+            yield props
+
+    @staticmethod
+    def update():
+        with transaction.atomic():
+            # Delete all first to avoid duplicate primary key errors.
+            EnslaverCachedProperties.objects.all().delete()
+            EnslaverCachedProperties.objects.bulk_create(__class__.compute())
 
 
 class EnslaverIdentitySourceConnection(models.Model):
@@ -619,6 +648,19 @@ class MultiValueHelper:
             row[self.projected_name] = []
         return row
 
+    @staticmethod
+    def set_group_concat_limit(limit=100000):
+        """
+        MySQL has a parameter that controls how much data can be produced by a
+        GROUP_CONCAT statement. Since GROUP_CONCAT is the main mechanism we use
+        in this helper to produce complex nested data in the query output
+        without requiring multiple roundtrips to the database, a low limit for
+        this parameter could mean that the number of nested entries returned is
+        truncated.
+        """
+        with connection.cursor() as cursor:
+            cursor.execute(f'SET SESSION group_concat_max_len = {int(limit)};')
+
 
 class NullIf(Func):
     # TODO (Django update): this is implemented in latest version of Django...
@@ -932,6 +974,8 @@ class EnslavedSearch:
         if self.ENSLAVERS_LIST in fields:
             q = self.enslavers_helper.adapt_query(q)
 
+        MultiValueHelper.set_group_concat_limit()
+
         q = q.values(*fields)
 
         #if settings.DEBUG:
@@ -1013,7 +1057,8 @@ class EnslaverSearch:
         disembarkation_port='voyage__voyage_itinerary__imp_principal_port_slave_dis__place',
         # slaves_embarked='voyage__voyage_slaves_numbers__imp_total_num_slaves_embarked')
         slaves_embarked='voyage__voyage_slaves_numbers__imp_total_num_slaves_embarked',
-        voyage_year='voyage__voyage_dates__imp_arrival_at_port_of_dis')
+        voyage_year='voyage__voyage_dates__imp_arrival_at_port_of_dis',
+        alias='enslaver_alias__alias')
 
     sources_helper = MultiValueHelper(
         SOURCES_LIST,
@@ -1053,8 +1098,9 @@ class EnslaverSearch:
                  ship_name=None,
                  voyage_id=None,
                  source=None,
-                 order_by=None,
-                 voyage_dataset=None):
+                 enslaved_count=None,
+                 voyage_dataset=None,
+                 order_by=None):
         """
         Search the Enslaver database. If a parameter is set to None, it will
         not be included in the search.
@@ -1072,6 +1118,8 @@ class EnslaverSearch:
         @param: voyage_id A pair (a, b) where the a <= voyage_id <= b
         @param: source A text fragment that should match Source's text_ref or
                 full_ref
+        @param: enslaved_count A pair (a, b) such that the enslaver has an
+                associated enslaved count between a and b.
         @param: order_by An array of dicts {
                 'columnName': 'NAME', 'direction': 'ASC or DESC' }.
                 Note that if the search is fuzzy, then the fallback value of
@@ -1085,8 +1133,9 @@ class EnslaverSearch:
         self.ship_name = ship_name
         self.voyage_id = voyage_id
         self.source = source
-        self.order_by = order_by
+        self.enslaved_count = enslaved_count
         self.voyage_dataset = voyage_dataset
+        self.order_by = order_by
 
     def execute(self, fields):
         """
@@ -1139,9 +1188,13 @@ class EnslaverSearch:
             # Search on YEARAM field. Note that we have a 'MM,DD,YYYY' format
             # even though the only year should be present.
             q = add_voyage_field(q, 'voyage_dates__imp_arrival_at_port_of_dis', 'range', _year_range_conv(self.year_range))
+        if self.enslaved_count:
+            q = q.filter(cached_properties__enslaved_count__range=self.enslaved_count)
 
         for helper in self.all_helpers:
             q = helper.adapt_query(q)
+        
+        MultiValueHelper.set_group_concat_limit()
 
         order_by_ranking = 'asc'
         orm_orderby = None
