@@ -48,11 +48,14 @@ def get_pivot_table_advanced(results,
         facet['categories'] = terms
     search_kwargs['json.facet'] = json.dumps(facet)
     response = json.loads(q.backend.conn._select(search_kwargs))
-    buckets = response['facets']['categories']['buckets']
-    row_data = [(x['val'], {y['val']: y
-                            for y in x['subcat']['buckets']})
-                for x in buckets
-                if 'subcat' in x]
+    try:
+        buckets = response['facets']['categories']['buckets']
+        row_data = [(x['val'], {y['val']: y
+                                for y in x['subcat']['buckets']})
+                    for x in buckets
+                    if 'subcat' in x]
+    except:
+        row_data = []
     return row_data
 
 

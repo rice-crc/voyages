@@ -93,7 +93,7 @@ def perform_search(search, lang):
             term = term[0]
         skip = False
         if operator.front_end_op_str == _op_contains.front_end_op_str:
-            m = re.match(r'^\s*["\u201c](\*?)([^\*]*)(\*?)["\u201d]\s*$', term)
+            m = re.match(r'^\s*["\u201c](\*?)([^\*]*)(\*?)["\u201d]\s*$', str(term))
             if m:
                 # Change to exact match and remove quotes.
                 # Make sure we sanitize the input.
