@@ -12,7 +12,7 @@ var allColumns = [
 
   // voyages
   { data: "voyages_list", className: "dt-control text-center", category: 1, header: gettext("Voyages"), isImputed: false, orderable: false, defaultContent: '' },
-  { data: "total_slaves", className: "text-right", category: 1, header: gettext("Number of Captives"), isImputed: false, orderable: false, defaultContent: '' },
+  { data: "cached_properties__enslaved_count", className: "text-right", category: 1, header: gettext("Number of Captives"), isImputed: false, defaultContent: '' },
 
   // personal data
   { data: "birth_day", className: "text-right", category: 2, header: gettext("Birth Day"), isImputed: false },

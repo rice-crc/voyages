@@ -35,6 +35,10 @@
         @change="changed">
       </v-number>
 
+      <v-number @change="changed"
+        :filter="scope.filters.var_enslaved_count">
+      </v-number>
+
       <!-- <v-treeselect -->
         <!-- :filter="scope.filters.var_voyage_dataset" -->
         <!-- @change="changed"> -->
