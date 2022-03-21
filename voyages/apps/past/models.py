@@ -9,7 +9,7 @@ from django.conf import settings
 
 from django.contrib.auth.models import User
 from django.db import (connection, models, transaction)
-from django.db.models import (Case, CharField, F, Func, IntegerField, Q, Sum, Value, When)
+from django.db.models import (Case, CharField, Count, F, Func, IntegerField, Q, Sum, Value, When)
 from django.db.models.expressions import Subquery, OuterRef
 from django.db.models.fields import TextField
 from django.db.models.functions import Coalesce, Concat, Length, Substr
@@ -245,31 +245,89 @@ class EnslaverIdentity(EnslaverInfoAbstractBase):
         verbose_name = 'Enslaver unique identity and personal info'
 
 
+class PropHelper:
+    def __init__(self):
+        self.data = {}
+
+    def add_num(self, id, key, num):
+        if num is None:
+            return
+        item = self.data.setdefault(id, {})
+        item[key] = item.get(key, 0) + num
+
+    def add_to_set(self, id, key, val):
+        if val is None:
+            return
+        item = self.data.setdefault(id, {})
+        item[key] = {val}.union(item.get(key, set()))
+
 class EnslaverCachedProperties(models.Model):
     identity = models.ForeignKey(EnslaverIdentity, related_name='cached_properties',
                                 on_delete=models.CASCADE, unique=True, primary_key=True)
     enslaved_count = models.IntegerField()
+    transactions_amount = models.DecimalField(null=False, default=0, decimal_places=2, max_digits=6)
+    # Enumerate all the distinct roles for an enslaver, using the PKs of the
+    # Role enumeration separated by comma.
+    roles = models.CharField(max_length=255, null=False, blank=True)
 
     @staticmethod
     def compute():
-        identity_field = 'enslaver_alias__identity'
+        """
+        Compute cached properties for the Enslaver. This method seeds the
+        EnslaverCachedProperties table which can be used to search and sort
+        enslavers based on aggregated values.
+        """
+        identity_field = 'enslaver_alias__identity__id'
         enslaved_count_field = 'voyage__voyage_slaves_numbers__imp_total_num_slaves_embarked'
-        fields = [identity_field, enslaved_count_field]
-        q = EnslaverVoyageConnection.objects \
-            .select_related(*fields) \
+        voyage_conn_fields = [identity_field, enslaved_count_field]
+        # The number of captives associated with an Enslaver is obtained from
+        # two sources: (1) the number of enslaved embarked in all voyages
+        # associated with the enslaver; (2) enslaved people in a relationship
+        # with the enslaver through the EnslavementRelation table.
+        q_captive_count_voyageconn = EnslaverVoyageConnection.objects \
+            .select_related(*voyage_conn_fields) \
             .values(identity_field) \
             .annotate(enslaved_count=Sum(enslaved_count_field)) \
             .values_list(identity_field, 'enslaved_count')
-        for row in q:
+        related_enslaved_field = 'relation__enslaved__id'
+        relation_fields = [identity_field, related_enslaved_field]
+        q_captive_count_relations = EnslaverInRelation.objects \
+            .select_related(*relation_fields) \
+            .values(identity_field) \
+            .annotate(enslaved_count=Count(related_enslaved_field)) \
+            .values_list(identity_field, 'enslaved_count')
+        helper = PropHelper()
+        for row in q_captive_count_voyageconn:
+            helper.add_num(int(row[0]), 'enslaved_count', row[1])
+        for row in q_captive_count_relations:
+            helper.add_num(int(row[0]), 'enslaved_count', row[1])
+        amount_fields = [identity_field, 'relation__amount']
+        q_transaction_amount = EnslaverInRelation.objects \
+            .select_related(*amount_fields) \
+            .values(identity_field) \
+            .annotate(amount_sum=Sum(amount_fields[1])) \
+            .values_list(identity_field, 'amount_sum')
+        for row in q_transaction_amount:
+            helper.add_num(int(row[0]), 'tot_amount', row[1])
+        q_roles = EnslaverInRelation.objects.values_list(identity_field, 'role')
+        for row in q_roles:
+            helper.add_to_set(int(row[0]), 'roles', row[1])
+        q_roles = EnslaverVoyageConnection.objects.values_list(identity_field, 'role')
+        for row in q_roles:
+            helper.add_to_set(int(row[0]), 'roles', row[1])
+        for id, item in helper.data.items():
             props = EnslaverCachedProperties()
-            props.identity_id = int(row[0])
-            props.enslaved_count = int(row[1]) if row[1] is not None else 0
+            props.identity_id = id
+            props.enslaved_count = item.get('enslaved_count', 0)
+            props.roles = ','.join([str(role) for role in item.get('roles', [])])
+            props.transactions_amount = item.get('tot_amount', 0)
             yield props
 
     @staticmethod
     def update():
         with transaction.atomic():
-            # Delete all first to avoid duplicate primary key errors.
+            # Delete all cached entries first to avoid duplicate primary key
+            # errors (note that this model's PK is also a FK).
             EnslaverCachedProperties.objects.all().delete()
             EnslaverCachedProperties.objects.bulk_create(__class__.compute())
 
