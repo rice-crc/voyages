@@ -9,7 +9,7 @@ from django.conf import settings
 
 from django.contrib.auth.models import User
 from django.db import (connection, models, transaction)
-from django.db.models import (Case, CharField, Count, F, Func, IntegerField, Q, Sum, Value, When)
+from django.db.models import (Case, CharField, Count, F, Func, IntegerField, Max, Min, Q, Sum, Value, When)
 from django.db.models.expressions import Subquery, OuterRef
 from django.db.models.fields import TextField
 from django.db.models.functions import Coalesce, Concat, Length, Substr
@@ -246,29 +246,43 @@ class EnslaverIdentity(EnslaverInfoAbstractBase):
 
 
 class PropHelper:
+    """
+    A helper structure to index property values by id and key.
+    """
+
     def __init__(self):
         self.data = {}
 
     def add_num(self, id, key, num):
         if num is None:
             return
-        item = self.data.setdefault(id, {})
-        item[key] = item.get(key, 0) + num
+        self.set_or_replace(id, key, lambda prev: num + (prev or 0))
 
     def add_to_set(self, id, key, val):
         if val is None:
             return
+        self.set_or_replace(id, key, lambda prev: {val}.union(prev or set()))
+
+    def set(self, id, key, val):
+        if val is None:
+            return
+        self.set_or_replace(id, key, lambda _: val)
+
+    def set_or_replace(self, id, key, update_fn):
         item = self.data.setdefault(id, {})
-        item[key] = {val}.union(item.get(key, set()))
+        item[key] = update_fn(item.get(key, None))
+
 
 class EnslaverCachedProperties(models.Model):
     identity = models.ForeignKey(EnslaverIdentity, related_name='cached_properties',
                                 on_delete=models.CASCADE, unique=True, primary_key=True)
-    enslaved_count = models.IntegerField()
-    transactions_amount = models.DecimalField(null=False, default=0, decimal_places=2, max_digits=6)
+    enslaved_count = models.IntegerField(db_index=True)
+    transactions_amount = models.DecimalField(db_index=True, null=False, default=0, decimal_places=2, max_digits=6)
     # Enumerate all the distinct roles for an enslaver, using the PKs of the
     # Role enumeration separated by comma.
     roles = models.CharField(max_length=255, null=False, blank=True)
+    first_year = models.IntegerField(db_index=True, null=True)
+    last_year = models.IntegerField(db_index=True, null=True)
 
     @staticmethod
     def compute():
@@ -277,7 +291,27 @@ class EnslaverCachedProperties(models.Model):
         EnslaverCachedProperties table which can be used to search and sort
         enslavers based on aggregated values.
         """
+        helper = PropHelper()
         identity_field = 'enslaver_alias__identity__id'
+        voyage_year_field = 'voyage__voyage_dates__imp_arrival_at_port_of_dis'
+        q_years = EnslaverVoyageConnection.objects \
+            .select_related(voyage_year_field) \
+            .values(identity_field) \
+            .annotate(min_year=Min(voyage_year_field)) \
+            .annotate(max_year=Max(voyage_year_field)) \
+            .values_list(identity_field, 'min_year', 'max_year')
+
+        def get_year(s):
+            if s is None or len(s) < 4:
+                return None
+            try:
+                return int(s[-4:])
+            except:
+                return None
+
+        for row in q_years:
+            helper.set(int(row[0]), 'min_year', get_year(row[1]))
+            helper.set(int(row[0]), 'max_year', get_year(row[2]))
         enslaved_count_field = 'voyage__voyage_slaves_numbers__imp_total_num_slaves_embarked'
         voyage_conn_fields = [identity_field, enslaved_count_field]
         # The number of captives associated with an Enslaver is obtained from
@@ -296,7 +330,6 @@ class EnslaverCachedProperties(models.Model):
             .values(identity_field) \
             .annotate(enslaved_count=Count(related_enslaved_field)) \
             .values_list(identity_field, 'enslaved_count')
-        helper = PropHelper()
         for row in q_captive_count_voyageconn:
             helper.add_num(int(row[0]), 'enslaved_count', row[1])
         for row in q_captive_count_relations:
@@ -321,6 +354,8 @@ class EnslaverCachedProperties(models.Model):
             props.enslaved_count = item.get('enslaved_count', 0)
             props.roles = ','.join([str(role) for role in item.get('roles', [])])
             props.transactions_amount = item.get('tot_amount', 0)
+            props.first_year = item.get('min_year', None)
+            props.last_year = item.get('max_year', None)
             yield props
 
     @staticmethod
@@ -707,7 +742,7 @@ class MultiValueHelper:
         return row
 
     @staticmethod
-    def set_group_concat_limit(limit=100000):
+    def set_group_concat_limit(limit=1000000):
         """
         MySQL has a parameter that controls how much data can be produced by a
         GROUP_CONCAT statement. Since GROUP_CONCAT is the main mechanism we use
@@ -1113,7 +1148,6 @@ class EnslaverSearch:
         ship_name='voyage__voyage_ship__ship_name',
         embarkation_port='voyage__voyage_itinerary__imp_principal_place_of_slave_purchase__place',
         disembarkation_port='voyage__voyage_itinerary__imp_principal_port_slave_dis__place',
-        # slaves_embarked='voyage__voyage_slaves_numbers__imp_total_num_slaves_embarked')
         slaves_embarked='voyage__voyage_slaves_numbers__imp_total_num_slaves_embarked',
         voyage_year='voyage__voyage_dates__imp_arrival_at_port_of_dis',
         alias='enslaver_alias__alias')

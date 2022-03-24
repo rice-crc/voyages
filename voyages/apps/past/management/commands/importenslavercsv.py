@@ -207,7 +207,7 @@ class Command(BaseCommand):
             for src_idx, target_idx in merge_target_by_row.items():
                 voyage_ids_by_row[target_idx] = set(voyage_ids_by_row[target_idx]) - set(voyage_ids_by_row[src_idx])
 
-            print("Here is the merge targert map:")
+            print("Here is the merge target map:")
             for k, v in merge_target_by_row.items():
                 print(f"{k + 1} => {v + 1}")
                         
@@ -234,6 +234,8 @@ class Command(BaseCommand):
                 if role is None and skip_invalid:
                     continue
                 principal_alias = clean_name(rh.get('full name', max_chars=MAX_NAME_CHARS))
+                if principal_alias is None and skip_invalid:
+                    continue
                 merge_target_row_idx = merge_target_by_row.get(i)
                 if principal_alias in mapped_enslavers and merge_target_row_idx is not None:
                     fatal_error(f"Duplicate principal alias: {principal_alias}")
@@ -355,7 +357,7 @@ class Command(BaseCommand):
                         order += 1
                     add_spouse(clean_name(rh.get('s1 name')), rh.get('s1 marriage date'))
                     add_spouse(clean_name(rh.get('s2 name')), rh.get('s2 marriage date'))
-
+        all_aliases = [a for a in all_aliases if a.identity_id in enslavers]
         print('Constructed ' + str(len(enslavers)) + ' Enslavers from CSV.')
 
         if error_reporting.errors > 0:
@@ -384,6 +386,7 @@ class Command(BaseCommand):
                 helper.delete_all(cursor, EnslaverAlias)
                 helper.delete_all(cursor, EnslaverIdentitySourceConnection)
                 helper.delete_all(cursor, EnslaverIdentity)
+                helper.delete_all(cursor, EnslaverCachedProperties)
                 print('Inserting new enslaver records...')
                 helper.bulk_insert(EnslaverIdentity, enslavers.values())
                 helper.bulk_insert(EnslaverIdentitySourceConnection, source_connections)
