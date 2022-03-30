@@ -3,8 +3,6 @@ from unittest import skip
 from django.core.management.base import BaseCommand
 from django.db import connection
 from django.db import transaction
-from django.utils.encoding import smart_str
-from voyages.apps.common.models import year_mod
 
 from voyages.apps.common.utils import *
 from voyages.apps.past.models import EnslavedInRelation, EnslavementRelation, EnslavementRelationType, EnslaverAlias, EnslaverIdentity, EnslaverIdentitySourceConnection, EnslaverInRelation, EnslaverRole, EnslaverVoyageConnection, EnslaverCachedProperties
@@ -19,6 +17,8 @@ class Command(BaseCommand):
         parser.add_argument('enslaver_csv_files', nargs='+')
         parser.add_argument('--skip_invalid', dest='skip_invalid', default=False)
         parser.add_argument('--start_pk', dest='start_pk', default=None)
+        parser.add_argument('--short_ref_remap_csv', dest='short_ref_remap_csv', default=None)
+        parser.add_argument('--place_remap_csv', dest='place_remap_csv', default=None)
         parser.add_argument(
             '--db',
             dest='db',
@@ -39,7 +39,22 @@ class Command(BaseCommand):
         target_db = options.get('db')
         skip_invalid = options.get('skip_invalid', False)
         start_pk = options.get('start_pk')
+        short_ref_remap = options.get('short_ref_remap_csv')
+        place_remap = options.get('place_remap_csv')
 
+        def remap_load(filename):
+            trie = Trie()
+            with open(filename, 'rb') as f:
+                print("Parsing remap CSV file")
+                reader = unicodecsv.DictReader(f, delimiter=',', encoding='utf-8-sig')
+                for r in reader:
+                    trie.add(r['original'], r['modified'])
+            return trie
+
+        if place_remap:
+            place_remap = remap_load(place_remap)
+        if short_ref_remap:
+            short_ref_remap = remap_load(short_ref_remap)
         error_reporting = ErrorReporting()
         if target_db not in ('mysql', 'pgsql'):
             error_reporting.report(
@@ -327,8 +342,8 @@ class Command(BaseCommand):
                     enslaver.will_value_pounds = rh.get("will value lbs", max_chars=MAX_WILL_FIELDS_CHARS)
                     enslaver.will_value_dollars = rh.get("will value dollars", max_chars=MAX_WILL_FIELDS_CHARS)
                     enslaver.will_court = rh.get("will court/s", max_chars=MAX_WILL_FIELDS_CHARS)
-                    enslaver.birth_place = rh.get_by_value(Place, "birth place", "place")
-                    enslaver.death_place = rh.get_by_value(Place, "death place", "place")
+                    enslaver.birth_place = rh.get_by_value(Place, "birth place", "place", remap=place_remap)
+                    enslaver.death_place = rh.get_by_value(Place, "death place", "place", remap=place_remap)
                     # TODO Q: sheet's NOTE field goes where??
                     # Parse sources associated with this enslaver.
                     order = 1
@@ -339,6 +354,11 @@ class Command(BaseCommand):
                         if source_ref is None or empty.match(source_ref):
                             break
                         (source, match) = source_finder.get(source_ref)
+                        if source is None and short_ref_remap is not None:
+                            # Try remapping the short ref to address missing
+                            # sources in bulk.
+                            remap_ref = short_ref_remap.get(source_ref)
+                            (source, match) = source_finder.get(remap_ref)
                         if source is None:
                             self.errors += 1
                             error_reporting.report(
@@ -371,6 +391,7 @@ class Command(BaseCommand):
         if confirm != 'yes':
             for model_name, missing_keys in error_reporting.missing.items():
                 print("Missing entries for " + str(model_name) + ":")
+                missing_keys = set(missing_keys)
                 for key in missing_keys:
                     print(key)
             return
