@@ -639,6 +639,7 @@ function getTreeselectLabel(currentVariable, searchTerms, treeselectOptions) {
 function loadTreeselectOptions(vm, vTreeselect, filter, callback) {
   var varName = filter.varName;
   var loadType = filter.type;
+  var payload = {};
 
   // load only once remotely and then local copy
   if (!vm.filterData.treeselectOptions[varName]) {
@@ -688,13 +689,17 @@ function loadTreeselectOptions(vm, vTreeselect, filter, callback) {
         case 'language_groups':
           var apiUrl = '/past/api/language-groups';
           break;
+        case 'vessel_fate':
+          var apiUrl = '/voyage/var-options';
+          payload.var_name = 'var_outcome_ship_captured';
+          break;
         default:
           callback("Error: varName " + varName + " is not acceptable");
           return false;
       }
 
       axios
-        .post(apiUrl)
+        .post(apiUrl, payload)
         .then(function(response) {
           var options = [];
           switch (varName) {
@@ -707,6 +712,9 @@ function loadTreeselectOptions(vm, vTreeselect, filter, callback) {
               break;
             case 'language_groups':
               var options = parseLanguageGroups(response);
+              break;
+            case 'vessel_fate':
+              var options = parseVesselFate(response);
               break;
           }
 
@@ -817,6 +825,13 @@ var parseCountries = function(response) {
     options.push({'id': id, 'label' : country.name});
   });
   return options;
+}
+
+var parseVesselFate = function(response) {
+  response.data.data.map(function(data) {
+    data["id"] = data["value"];
+  });
+  return response.data.data;
 }
 
 // parseLanguageGroups function
