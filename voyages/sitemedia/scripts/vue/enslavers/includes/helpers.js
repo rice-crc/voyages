@@ -175,10 +175,8 @@ function processResponse(json, mainDatatable, fuzzySearch) {
       row.alias_list = aliasList;
     }
 
-    var totalSlaves = 0;
     if (row.voyages_list) {
       row.voyages_list.forEach((value) => {
-        totalSlaves += value.slaves_embarked;
         var arrivalDateArray = value.voyage_year ? value.voyage_year.split([',']) : '';
         var arrivalDate = '';
 
@@ -190,7 +188,10 @@ function processResponse(json, mainDatatable, fuzzySearch) {
         value.voyage_year = arrivalDate;
       });
     }
-    row.total_slaves = totalSlaves;
+
+    if (!row.cached_properties__enslaved_count) {
+      row.cached_properties__enslaved_count = 0;
+    }
 
     // source formatting
     row.sources_raw = row.sources_list;
@@ -682,7 +683,7 @@ function loadTreeselectOptions(vm, vTreeselect, filter, callback) {
         return false;
       }
 
-      var params = {var_name: modelVarName[varName]};
+      var params = {var_name: modelVarName[varName], dataset: 0};
 
       axios
         .post(apiUrl, params)
@@ -974,6 +975,7 @@ function formatVoyages ( d ) {
   var voyagesTable = '<div style="width: 100%; background-color: #FFFFFF;" class="d-flex flex-row-reverse"><table cellpadding="5" cellspacing="0" border="0">'+
     '<tr>'+
       '<th>'+gettext("Voyage ID")+'</th>'+
+      '<th>'+gettext("Enslaver Alias")+'</th>'+
       '<th>'+gettext("Voyage Year")+'</th>'+
       '<th>'+gettext("Disembarkation Port")+'</th>'+
       '<th>'+gettext("Embarkation Port")+'</th>'+
@@ -984,6 +986,7 @@ function formatVoyages ( d ) {
     d.voyages_list.forEach((item) => {
       voyagesTable += '<tr>'+
         '<td class="text-right">'+'<a href="javascript:void(0)" onclick="openVoyageModal(' + item.voyage_id + ');">' + item.voyage_id + '</a>'+'</td>'+
+        '<td>'+item.alias+'</td>'+
         '<td class="text-right">'+item.voyage_year+'</td>'+
         '<td>'+item.disembarkation_port+'</td>'+
         '<td>'+item.embarkation_port+'</td>'+

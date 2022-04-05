@@ -11,10 +11,10 @@ var searchBar = new Vue({
       enslaverName: enslaverName,
       // identity: identity,
       // personalData: personalData,
-      // itinerary: itinerary,
+      itinerary: itinerary,
       // culturalAssociation: culturalAssociation,
       // fate: fate,
-      // sources: sources,
+      sources: sources,
       settings: settings
     },
     filterData: {

@@ -27,30 +27,23 @@
 
       <v-treeselect
         :filter="scope.filters.var_disembarkation_ports"
-        v-if="localStorage.enslavedDataset==0"
         @change="changed">
       </v-treeselect>
-
-      <!-- <v-text @change="changed"
-        :filter="scope.filters.var_geocode"
-      ></v-text> -->
 
       <v-number
         :filter="scope.filters.var_year_range"
         @change="changed">
       </v-number>
 
-      <!-- <v-treeselect
-        :filter="scope.filters.var_intended_disembarkation_port"
-        v-if="localStorage.enslavedDataset==0"
-        @change="changed">
-      </v-treeselect> -->
+      <v-number @change="changed"
+        :filter="scope.filters.var_enslaved_count">
+      </v-number>
 
-      <v-treeselect
-        :filter="scope.filters.var_voyage_dataset"
-        v-if="localStorage.enslavedDataset==0"
-        @change="changed">
-      </v-treeselect>
+      <!-- <v-treeselect -->
+        <!-- :filter="scope.filters.var_voyage_dataset" -->
+        <!-- @change="changed"> -->
+      <!-- </v-treeselect> -->
+
     </div>
   </v-panel-singular>
 </li>

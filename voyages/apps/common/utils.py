@@ -83,7 +83,7 @@ class RowHelper:
             val = val[:max_chars]
         return val
 
-    def get_by_value(self, model_type, field_name, key_name = 'value', allow_null=True, manager=None):
+    def get_by_value(self, model_type, field_name, key_name = 'value', allow_null=True, manager=None, remap=None):
         """
         Gets a model object of the given type by
         using its (integer) key code.
@@ -105,6 +105,10 @@ class RowHelper:
                 self.error_reporting.report('Null value for ' + field_name)
             return None
         val = col.get(src_val)
+        if val is None and remap is not None:
+            remaped_val = remap.get(src_val)
+            if remaped_val is not None:
+                val = col.get(remaped_val)
         if val is None:
             msg = 'Failed to locate "' + model_type_name + '" with value: "' + \
                 str(src_val) + '" for field "' + field_name + '"'
@@ -134,7 +138,6 @@ class BulkImportationHelper:
                 [next(iterator).decode("utf-8-sig").lower().replace("_", "").encode('utf-8')],
                 iterator)
 
-        #return unicodecsv.DictReader(lower_headers(file), delimiter=',', encoding='utf-8')
         return unicodecsv.DictReader(lower_headers(file), delimiter=',', encoding='utf-8-sig')
 
     @staticmethod
@@ -248,36 +251,71 @@ class ErrorReporting:
             sys.stderr.write(msg + '\n')
 
 
+class Trie:
+    def __init__(self, excluded_chars=[' ', ',', '(', ')']):
+        self.trie = {}
+        self._end = '_end'
+        self.excluded_chars = excluded_chars
+
+    def add(self, key, value):
+        dictionary = self.trie
+        has_star = False
+        for letter in key:
+            if letter in self.excluded_chars:
+                continue
+            if has_star:
+                raise Exception("Our trie only accepts a single * element and it must be the last character")
+            has_star = letter == '*'
+            dictionary = dictionary.setdefault(letter, {})
+        dictionary[self._end] = value
+
+    def get(self, key):
+        """
+        Look for an exact match in the Trie. If not found, None is returned.
+        """
+        (best, _, is_exact) = self.get_longest_prefix_match(key)
+        return best if is_exact else None
+
+    def get_longest_prefix_match(self, key):
+        """
+        This method searches the trie and obtain the value whose key matches the
+        longest prefix of the given key.
+        """
+        best = None
+        match = ''
+        dictionary = self.trie
+        is_exact = True
+        star_match = None
+        for letter in key:
+            if letter in self.excluded_chars:
+                continue
+            is_exact = False
+            dictionary = dictionary.get(letter)
+            if dictionary is None:
+                break
+            match += letter
+            best = dictionary.get(self._end, best)
+            star_match = dictionary.get('*') or star_match
+            is_exact = True
+        if (not is_exact or (is_exact and best is None)) and star_match is not None and self._end in star_match:
+            best = star_match.get(self._end)
+            is_exact = True
+        return best, match, is_exact
+
+
 class SourceReferenceFinder:
     """
     This helper indexes source references.
     """
 
-    @staticmethod
-    def is_char_excluded(letter):
-        """
-        Determine if the character should be excluded when matching sources.
-        """
-        return letter in (' ', ',')
-
     def __init__(self, all_sources = None):
         if not all_sources:
             all_sources = VoyageSources.objects.all()
-        trie = {}
-        self._end = '_end'
-
-        def add_to_trie(_, value):
-            dictionary = trie
-            for letter in plain:
-                if self.__class__.is_char_excluded(letter):
-                    continue
-                dictionary = dictionary.setdefault(letter, {})
-            dictionary[self._end] = value
+        self.trie = Trie()
 
         for source in all_sources:
             plain = unidecode(source.short_ref).lower()
-            add_to_trie(plain, source)
-        self.trie = trie
+            self.trie.add(plain, source)
 
     def get(self, ref):
         """
@@ -285,16 +323,6 @@ class SourceReferenceFinder:
         Source whose short reference matches the longest
         prefix of the given reference.
         """
-        best = None
-        match = ''
-        dictionary = self.trie
         plain = unidecode(ref).lower()
-        for letter in plain:
-            if self.__class__.is_char_excluded(letter):
-                continue
-            dictionary = dictionary.get(letter)
-            if dictionary is None:
-                break
-            match += letter
-            best = dictionary.get(self._end, best)
+        (best, match, _) = self.trie.get_longest_prefix_match(plain)
         return best, match
