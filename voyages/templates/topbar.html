@@ -69,8 +69,18 @@
 					</div>
 				</li>
 
+				<li class="nav-item dropdown" id="link-blog">
+					<a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false" >{% trans 'Blog' %}</a>
+					<div class="dropdown-menu dropdown-menu-right">						
+						<a class="dropdown-item" href="{% url 'blog:blog' %}">{% trans "All Posts" %}</a>
+						<a class="dropdown-item" href="{% url 'blog:institutions' %}">{% trans "Institutions" %}</a>
+						<a class="dropdown-item" href="{% url 'blog:authors' %}">{% trans "Authors" %}</a>
+						
+					</div>
+				</li>
+
 				<li class="nav-item " id="link-blog">
-					<a class="nav-link" href="{% url 'blog:blog' %}">{% trans "Blog" %}</a>					
+					<a class="nav-link" href="{% url 'blog:blog' %}">{% trans "Blog" %}</a>
 				</li>
 
 				{% get_current_language as LANGUAGE_CODE %}

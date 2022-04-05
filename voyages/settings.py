@@ -44,7 +44,8 @@ STATICFILES_DIRS = (
     # Put strings here, like "/home/html/static" or "C:/www/django/static".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
-    os.path.join(BASE_DIR, 'sitemedia'),)
+    os.path.join(BASE_DIR, 'sitemedia'),
+    )
 
 # List of finder classes that know how to find static files in
 # various locations.
@@ -162,6 +163,9 @@ INSTALLED_APPS = (
     'voyages.apps.blog',
     
 )
+
+
+THUMBNAIL_PRESERVE_FORMAT = True
 
 I18N_HELPER_DEBUG = False
 I18N_HELPER_HTML = "<div class='i18n-helper' style='display: inline; "

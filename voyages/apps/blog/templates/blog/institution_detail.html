@@ -1,0 +1,71 @@
+{% extends "_base.html" %}
+{% load voyage_extras %}
+{% load sass_tags %}
+{% load i18n %}
+{% load thumbnail %}
+
+{% block content %}
+
+<!-- CSS for Trans-Atlantic -->
+<link href="{% sass_src 'scss/library/js-offcanvas@1.0.0.min.css' %}" rel="stylesheet" type="text/css" />
+<link href="{% sass_src 'scss/off-canvas.scss' %}" rel="stylesheet" type="text/css" />
+<link href="{% sass_src 'scss/intra.scss' %}" rel="stylesheet" type="text/css" />
+<link href="{% sass_src 'scss/library/bootstrap-vue-2.0.0-rc.11.css' %}" rel="stylesheet" type="text/css" />
+
+
+<div class="nav-header">
+	<div>{% trans 'Echoes: The SlaveVoyages Blog' %} - {{ object.name }}</div>
+	<div class="navbar-subtitle flex">
+		<div class="navbar-subitem">			
+			{% block userlinks %}				
+			<a class="navbar-subitem-link" href="{% url 'blog:blog' %}">{% trans 'All posts' %}</a> 				
+			{% endblock %}			
+		</div>
+	</div>
+</div>
+
+
+<div class="container-new">
+    <div class="row">
+      <div class="col-md-12  mb-4  mt-3 left  top">
+        <div class="card-body">
+          {% thumbnail institution.image "400x300" crop="center" as im %}
+            <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}">
+          {% endthumbnail %}
+          <p>
+          <h1>{% block title %} {{ object.name }} {% endblock title %}            
+          </h1>
+          </p>
+          <p>
+            <div class="card-text blog-content">{{ object.description|default_if_none:"" }}</div>
+          </p>
+          <h4>Institution Authors:</h4>          
+          
+          {% for author in object.author_set.all %}                 
+                <div class="media ">
+                  <div class="media-left media-top">
+                    {% thumbnail author.photo "64x64" crop="center" as im %}
+                      <a href="{% url 'blog:author_bio' author.slug  author.id   %}" >
+                        <img class="rounded-circle" src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}">
+                      </a>
+                    {% endthumbnail %}
+                  </div>
+                  <div class="media-body">
+                    <h4 class="media-heading">
+                      <a href="{% url 'blog:author_bio' author.slug  author.id   %}" >
+                        {{ author.name }}
+                      </a>
+                    </h4>
+                    {{ author.role }}
+                  </div>                
+              </div>              
+              <div class="row mt-3"></div>
+          {% endfor %}
+        
+        </div>
+      </div>
+      
+    </div>
+  </div>
+
+{% endblock %}

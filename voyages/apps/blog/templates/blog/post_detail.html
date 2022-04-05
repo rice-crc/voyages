@@ -14,7 +14,7 @@
 
 
 <div class="nav-header">
-	<div>{% trans 'Blog' %} - {{ object.title }}</div>
+	<div>{% trans 'Echoes: The SlaveVoyages Blog' %} - {{ object.title }}</div>
 	<div class="navbar-subtitle flex">
 		<div class="navbar-subitem">			
 			{% block userlinks %}				
@@ -33,7 +33,18 @@
             <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}">
           {% endthumbnail %}
           <h1>{% block title %} {{ object.title }} {% endblock title %}</h1>
-          <p class=" text-muted">{{ post.author }} | {{ post.created_on }}</p>
+          <p class="card-text text-muted h6">
+            {{ post.created_on }}
+            
+            <br>
+            {% for author in post.authors.all %}                      
+              <a href="{% url 'blog:author_bio' author.slug  author.id   %}">
+                <span>{{ author.name }}</span>             
+              </a>
+              {{ forloop.last|yesno:",|"|safe }}
+            {% endfor %}
+          </p>
+          
           <p>
             {% for tag in post.tags.all %}
               <a href="{% url 'blog:tag' tag.slug   %}">
