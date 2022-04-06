@@ -577,7 +577,8 @@ class EnslavedSearch:
                  source=None,
                  order_by=None,
                  voyage_dataset=None,
-                 skin_color=None):
+                 skin_color=None,
+                 vessel_fate=None):
         """
         Search the Enslaved database. If a parameter is set to None, it will
         not be included in the search.
@@ -610,6 +611,7 @@ class EnslavedSearch:
                 Note that if the search is fuzzy, then the fallback value of
                 order_by is the ranking of the fuzzy search.
         @param: skin_color a textual description for skin color (Racial Descriptor)
+        @param: vessel_fate a list of fates for the associated voyage vessel.
         """
         self.enslaved_dataset = enslaved_dataset
         self.searched_name = searched_name
@@ -626,9 +628,10 @@ class EnslavedSearch:
         self.voyage_id = voyage_id
         self.enslaved_id = enslaved_id
         self.source = source
-        self.order_by = order_by
+        self.order_by = order_by or [{'columnName': 'pk', 'direction': 'asc'}]
         self.voyage_dataset = voyage_dataset
         self.skin_color = skin_color
+        self.vessel_fate = vessel_fate
 
     def get_order_for_field(self, field):
         if isinstance(self.order_by, list):
@@ -723,6 +726,10 @@ class EnslavedSearch:
         if self.ship_name:
             q = q.filter(
                 voyage__voyage_ship__ship_name__icontains=self.ship_name)
+        if self.vessel_fate:
+            q = q.filter(
+                voyage__voyage_name_outcome__vessel_captured_outcome__value__in=self.vessel_fate)
+
         order_by_ranking = 'asc'
         if isinstance(self.order_by, list):
             order_by_ranking = None
