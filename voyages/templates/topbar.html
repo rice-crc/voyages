@@ -1,4 +1,6 @@
 {% load i18n %}
+{% load voyage_extras %}
+{% feature_flag "ENSLAVERS" %}
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
 	<div class="nav-container">
@@ -45,7 +47,9 @@
 					<div class="dropdown-menu">
 						<a class="dropdown-item" href="{% url 'resources:about' %}">Understanding the Database</a>
 						<a class="dropdown-item" href="{% url 'past:database' %}">{% trans "Database" %}</a>
+						{% if ENSLAVERS %}
 						<a class="dropdown-item" href="{% url 'past:enslavers' %}">{% trans "Enslavers Database" %}</a>
+						{% endif %}
 						<a class="dropdown-item" href="{% url 'resources:downloads' %}">{% trans "Downloads" %}</a>
 					</div>
 				</li>
