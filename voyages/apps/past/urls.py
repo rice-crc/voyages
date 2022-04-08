@@ -3,14 +3,15 @@ from __future__ import unicode_literals
 from django.conf.urls import url
 from django.views.generic import TemplateView
 
-import voyages.apps.past.views
 import voyages.apps.static_content.views
+from voyages.settings import is_feature_enabled
 
 urlpatterns = [
     url(r'^api/search_enslaved',
         voyages.apps.past.views.search_enslaved, name='search_enslaved'),
     url(r'^api/search_enslaver',
-        voyages.apps.past.views.search_enslaver, name='search_enslaver'),
+        voyages.apps.past.views.search_enslaver, name='search_enslaver') \
+            if is_feature_enabled('ENSLAVERS') else None,
     url(r'^api/modern-countries',
         voyages.apps.past.views.get_modern_countries,
         name='modern-countries'),
@@ -25,7 +26,8 @@ urlpatterns = [
         name='database'),
      url(r'^enslavers',
         TemplateView.as_view(template_name='past/enslavers.html'),
-        name='enslavers'),
+        name='enslavers') \
+            if is_feature_enabled('ENSLAVERS') else None,
     url(r'^contribute/(?P<id>.*)',
         TemplateView.as_view(template_name='past/contribute.html'),
         name='contribute'),
@@ -44,3 +46,6 @@ urlpatterns = [
         voyages.apps.past.views.get_enumeration,
         name='enslaver-roles-enum'),
 ]
+
+# Remove any null URLs produced by disabled feature flags.
+urlpatterns = [u for u in urlpatterns if u is not None]
