@@ -39,7 +39,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 # Example: "http://media.lawrence.com/static/"
 STATIC_URL = '/static/'
 
-FILEBROWSER_DIRECTORY = 'images/'
+FILEBROWSER_DIRECTORY = 'blog/images/'
 
 # SASS_PROCESSOR_ROOT = STATIC_URL
 
