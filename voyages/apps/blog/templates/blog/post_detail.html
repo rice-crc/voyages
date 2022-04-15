@@ -32,11 +32,10 @@
 <div class="container-new">
     <div class="row">
       <div class="col-md-12  mb-4  mt-3 left  top">
-        <div class="card-body">
-          {% thumbnail post.thumbnail "300x300" crop="center" as im %}
-            <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}">
-          {% endthumbnail %}
+        <div class="card-body">          
+          <img class="blog-detail-thumbnail" src="{{ post.thumbnail.url }}" >
           <h1>{% block title %} {{ object.title }} {% endblock title %}</h1>
+          <h3>{{ object.subtitle }}</h3>          
           <p class="card-text text-muted h6">
             {{ post.created_on }}
             

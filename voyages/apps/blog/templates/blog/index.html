@@ -1,4 +1,4 @@
-'{% extends "_base.html" %}
+{% extends "_base.html" %}
 {% load voyage_extras %}
 {% load sass_tags %}
 {% load i18n %}
@@ -40,19 +40,13 @@
                 <a href="{% url 'blog:post_detail' post.slug  post.id   %}">
                     <div class="content-overlay"></div> 
                     
+                   
                     
-                    <!--
-                    <img class="content-image" src="{{ post.thumbnail.url }}"  width="100%" height="auto">    
-                    -->
-
-                    
-                    {% thumbnail post.thumbnail "300x300" crop="center" as im %}                        
-                        <img class="content-image" src="{{ im.url }}"  width="100%" height="{{ im.height }}">    
-                    {% endthumbnail %}                
-                    
+                    <img class="content-image blog-thumbnail" src="{{ post.thumbnail.url }}" >    
                     
                     <div class="content-details fadeIn-bottom">
-                        <h3 class="content-title">{{ post.title }}</h3>
+                        <h3 class="content-title">{{ post.title }}</h3>                      
+                        <h4 class="content-title">{{ post.subtitle|default_if_none:"" }}</h4>
                         <p class="content-text">
                             {% for author in post.authors.all %}            
                                 {{ author.name }}

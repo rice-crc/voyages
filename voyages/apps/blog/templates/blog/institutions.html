@@ -35,10 +35,7 @@
                 <a href="{% url 'blog:institution_detail' institution.slug  institution.id   %}">
                     <div class="content-overlay"></div> 
                     
-                    
-                    {% thumbnail institution.image "300x300" crop="center" as im %}                        
-                        <img class="content-image" src="{{ im.url }}"  width="100%" height="{{ im.height }}">    
-                    {% endthumbnail %}                
+                    <img class="content-image blog-thumbnail" src="{{ institution.image.url }}" >    
                     
                     <div class="content-details fadeIn-bottom">
                         <h3 class="content-title">{{ institution.name }}</h3>                        
