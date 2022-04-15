@@ -9,7 +9,7 @@
 <!-- CSS for Trans-Atlantic -->
 <link href="{% sass_src 'scss/library/js-offcanvas@1.0.0.min.css' %}" rel="stylesheet" type="text/css" />
 <link href="{% sass_src 'scss/off-canvas.scss' %}" rel="stylesheet" type="text/css" />
-<link href="{% sass_src 'scss/intra.scss' %}" rel="stylesheet" type="text/css" />
+
 <link href="{% sass_src 'scss/library/bootstrap-vue-2.0.0-rc.11.css' %}" rel="stylesheet" type="text/css" />
 <link href="{% sass_src 'scss/blog.css' %}" rel="stylesheet" type="text/css" />
 
@@ -43,7 +43,8 @@
           <p>
             <div class="card-text blog-content">{{ object.description|default_if_none:"" }}</div>
           </p>
-          <h4>Author's posts:</h4>
+          <hr>
+          <h3>Author's posts:</h3>
 
           <div class="row">
             {% for post in object.post_set.all %}

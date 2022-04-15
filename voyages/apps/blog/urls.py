@@ -1,6 +1,6 @@
 from . import views
 #from django.urls import path
-from django.conf.urls import url
+from django.conf.urls import url, include
 
 from .feeds import LatestPostEntries
 
@@ -19,4 +19,5 @@ urlpatterns = [
     url('(?P<slug>[-\w]+)/(?P<pk>\d+)/$', views.PostDetail.as_view(), name='post_detail'), 
     url(r'^tag/(?P<tag>[-\w]+)$',views.PostList.as_view(),name='tag'),        
     url(r'^feed/$', LatestPostEntries()),
+    
 ]

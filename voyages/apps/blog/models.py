@@ -2,7 +2,7 @@ from django.db import models
 
 from django.contrib.auth.models import User
 
-
+from filebrowser.fields import FileBrowseField
 
 
 STATUS = (
@@ -56,7 +56,8 @@ class Post(models.Model):
     status = models.IntegerField(choices=STATUS, default=0)
     
     tags = models.ManyToManyField(Tag)
-    thumbnail = models.ImageField(upload_to='images',null=True, blank=True)
+    #thumbnail = models.ImageField(upload_to='images',null=True, blank=True)
+    thumbnail = FileBrowseField("Thumbnail", max_length=300, directory="blog/", extensions=[".jpg",".png",".wep", ".gif"], null=True,  blank=True)
 
     class Meta:
         ordering = ['-created_on']

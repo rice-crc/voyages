@@ -8,13 +8,19 @@
 
 {% block content %}
 
+{% load staticfiles %}
+
+<!-- Custom js-->
+<script type="text/javascript" src="{% static 'blog/scripts/test.js' %}"></script>
+
+
 <!-- CSS for Trans-Atlantic -->
 <link href="{% sass_src 'scss/library/js-offcanvas@1.0.0.min.css' %}" rel="stylesheet" type="text/css" />
 <link href="{% sass_src 'scss/off-canvas.scss' %}" rel="stylesheet" type="text/css" />
-<link href="{% sass_src 'scss/intra.scss' %}" rel="stylesheet" type="text/css" />
+
 <link href="{% sass_src 'scss/library/bootstrap-vue-2.0.0-rc.11.css' %}" rel="stylesheet" type="text/css" />
 
-<link href="{% sass_src 'scss/blog.css' %}" rel="stylesheet" type="text/css" />
+<link href="{% sass_src 'scss/blog.scss' %}" rel="stylesheet" type="text/css" />
 
 
 <div class="nav-header">
@@ -35,9 +41,15 @@
                     <div class="content-overlay"></div> 
                     
                     
+                    <!--
+                    <img class="content-image" src="{{ post.thumbnail.url }}"  width="100%" height="auto">    
+                    -->
+
+                    
                     {% thumbnail post.thumbnail "300x300" crop="center" as im %}                        
                         <img class="content-image" src="{{ im.url }}"  width="100%" height="{{ im.height }}">    
                     {% endthumbnail %}                
+                    
                     
                     <div class="content-details fadeIn-bottom">
                         <h3 class="content-title">{{ post.title }}</h3>

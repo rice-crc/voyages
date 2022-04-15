@@ -1,6 +1,26 @@
 @import "colors";
 
 
+.nav-header {
+    color: white;
+    background: $enslavers-secondary-color !important;
+    padding: 0.5rem 4rem 0;
+    font-size: 1rem;
+    font-weight: bold;
+  }
+
+  .navbar {
+    background: $enslavers-color !important;
+  }
+  
+a {
+    color: $enslavers-color;
+}
+
+a:hover {
+    color: $enslavers-secondary-color;
+}
+
 
 .title {
     color: #1a1a1a;
@@ -20,7 +40,7 @@
 .content .content-overlay {
     background: rgba(0, 0, 0, 0.7);
     position: absolute;
-    height: 100%;
+    height: auto;
     width: 100%;
     left: 0;
     top: 0;

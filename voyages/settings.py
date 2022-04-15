@@ -5,6 +5,8 @@ import sys
 
 from django.utils.translation import ugettext_lazy as _
 
+TEMPLATE_DEBUG  = True
+
 # Django settings for voyages project.
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -36,6 +38,8 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 # URL prefix for static files.
 # Example: "http://media.lawrence.com/static/"
 STATIC_URL = '/static/'
+
+FILEBROWSER_DIRECTORY = 'images/'
 
 # SASS_PROCESSOR_ROOT = STATIC_URL
 
@@ -120,6 +124,8 @@ SASS_PROCESSOR_INCLUDE_DIRS = [
 ]
 
 INSTALLED_APPS = (
+    'filebrowser',
+
     'autocomplete_light',
     'sass_processor',
     'django.contrib.auth',
@@ -160,7 +166,7 @@ INSTALLED_APPS = (
     # 'allauth.socialaccount.providers.facebook',
     'allauth.socialaccount.providers.google',
     # 'storages',
-    'voyages.apps.blog',
+    'voyages.apps.blog',    
     
 )
 
