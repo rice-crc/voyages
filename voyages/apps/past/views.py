@@ -218,6 +218,7 @@ def search_enslaver(request):
     fields = data.get('fields')
     if fields is None:
         fields = [
+            'id',
             'principal_alias',
             'birth_year', 'birth_month', 'birth_day',
             'death_year', 'death_month', 'death_day',

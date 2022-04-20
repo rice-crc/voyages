@@ -8,10 +8,11 @@ var categoryNames = [
 var allColumns = [
   // name
   { data: "principal_alias", category: 0, header: gettext("Full Name"), isImputed: false },
-  { data: "alias_list", category: 0, header: gettext("Alias List"), isImputed: false },
+  { data: "alias_list", category: 0, header: gettext("Alias List"), isImputed: false, orderable: false },
 
   // voyages
-  { data: "voyages_list", className: "dt-control text-center", category: 1, header: gettext("Voyages"), isImputed: false, orderable: false, defaultContent: '' },
+  { data: "voyages_list", className: "dt-control text-center voyages", category: 1, header: gettext("Voyages"), isImputed: false, orderable: false, defaultContent: '' },
+  { data: "relations_list", className: "dt-control text-center relations", category: 1, header: gettext("Relations"), isImputed: false, orderable: false, defaultContent: '' },
   { data: "cached_properties__enslaved_count", className: "text-right", category: 1, header: gettext("Number of Captives"), isImputed: false, defaultContent: '' },
 
   // personal data
@@ -70,7 +71,7 @@ allColumns.forEach(function(c, index) {
     if (data !== null) {
       if (c.data == 'sources_list') {
         formattedString = data;
-      } else if (c.data == 'voyages_list') {
+      } else if (c.data == 'voyages_list' || c.data == 'relations_list') {
         if (data.length > 0) {
           formattedString = '<i class="fa fa-plus-square" aria-hidden="true"></i>';
         }

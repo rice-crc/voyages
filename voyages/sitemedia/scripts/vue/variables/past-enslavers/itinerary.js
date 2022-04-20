@@ -65,7 +65,7 @@ var_enslaved_count = new NumberVariable({
     label: gettext("Number of Captives"),
     description: "",
   },{
-    op: "is equal to",
+    op: "is at least",
     searchTerm0: null,
     searchTerm1: null
   },{
