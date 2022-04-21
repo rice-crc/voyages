@@ -31,3 +31,5 @@ ijson==2.6.1
 requests==2.24.0
 mysql-connector-python==8.0.26
 django-filebrowser-no-grappelli2==3.8.1
+django-admin-relation-links
+google-cloud-translate

@@ -65,5 +65,27 @@ class Post(models.Model):
     def __str__(self):
         return self.title
 
+class PostTranslation(models.Model):
+    post = models.ForeignKey(Post, on_delete= models.CASCADE,related_name='translations')    
+    language = models.CharField(max_length=2, null = True, blank = True)
+    title = models.CharField(max_length=200, unique=True)
+    subtitle = models.CharField(max_length=200, null = True, blank = True)
+    slug = models.SlugField(max_length=200, unique=True)
+        
+    updated_on = models.DateTimeField(auto_now= True)
+    content = models.TextField()
+    created_on = models.DateTimeField(auto_now_add=True)
+    status = models.IntegerField(choices=STATUS, default=0)
+    
+    tags = models.ManyToManyField(Tag)
+    #thumbnail = models.ImageField(upload_to='images',null=True, blank=True)
+    thumbnail = FileBrowseField("Thumbnail", max_length=300, directory="blog/", extensions=[".jpg",".png",".wep", ".gif"], null=True,  blank=True)
+
+    class Meta:
+        ordering = ['-created_on']
+
+    def __str__(self):
+        return self.title
+
 
 
