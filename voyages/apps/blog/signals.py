@@ -2,7 +2,7 @@ from django.conf import settings
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
-from .models import Post, PostTranslation
+from .models import Post, PUBLISH_STATUS
 
 from django.utils.text import slugify
 
@@ -13,27 +13,29 @@ import logging
 
 logging.info("signals.py")
 
-@receiver(post_save,sender = Post)
-def post_created(sender, instance, created, **kwargs):
-    logging.info("POST_CREATED_HANDLER")
-    if created:
-        logging.info("POST CREATED:")
-        logging.info(instance.title)
+SOURCE_LANGUAGE = "en"
 
-        for lang_code, lang_name in settings.LANGUAGES:
-            logging.info(lang_code)
-            if lang_code != settings.LANGUAGES[settings.DEFAULT_LANGUAGE][0]:
+@receiver(post_save, sender=Post)
+def post_saved(sender, instance, **kwargs):
+    logging.info("POST_SAVED_HANDLER")
+    if instance.status == PUBLISH_STATUS and instance.language == SOURCE_LANGUAGE:
+        logging.info(f"POST SAVED: {instance.pk}")
+        logging.info(instance.title)
+        for lang_code, _ in settings.LANGUAGES:
+            if lang_code != SOURCE_LANGUAGE:
+                # First check if the target language already has a translation.
+                count = Post.objects.filter(slug=instance.slug, language=lang_code).count()
+                if count > 0:
+                    continue
                 logging.info("CREATING for language:")
                 logging.info(lang_code)
-
-                translatedTitle = translate_text(lang_code,instance.title)
-
-                translatedSubTitle = translate_text(lang_code, instance.title)
-
-                translatedContent = translate_text(lang_code, instance.content)
-
-                translationRecord = PostTranslation(post= instance,title = translatedTitle, subtitle = translatedSubTitle,   slug=slugify(translatedTitle), content = translatedContent,  created_on = instance.created_on, updated_on = instance.updated_on, thumbnail = instance.thumbnail, language = lang_code)
-                translationRecord.save()
+                clone = Post.objects.get(pk=instance.pk)
+                clone.pk = None
+                clone.title = translate_text(lang_code, instance.title)
+                clone.subtitle = translate_text(lang_code, instance.subtitle)
+                clone.content = translate_text(lang_code, instance.content)
+                clone.language = lang_code
+                clone.save()
     
 
 def translate_text(target, text):

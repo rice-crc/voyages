@@ -8,11 +8,6 @@ from .models import Post
 from .models import Tag
 from .models import Institution
 from .models import Author
-from .models import PostTranslation
-
-from voyages.extratools import AdvancedEditor
-
-from django_admin_relation_links import AdminChangeLinksMixin
 
 
 class AdvancedEditorManager(forms.Textarea):
@@ -35,8 +30,8 @@ class AdvancedEditorManager(forms.Textarea):
         return rendered
 
 
-class PostAdmin(AdminChangeLinksMixin, admin.ModelAdmin):
-    list_display = ('title', 'slug','translations_link', 'status','created_on')
+class PostAdmin(admin.ModelAdmin):
+    list_display = ('title', 'slug', 'language', 'status','created_on')
     list_filter = ("status",)
     search_fields = ['title', 'content']
     prepopulated_fields = {'slug': ('title',)}
@@ -45,26 +40,6 @@ class PostAdmin(AdminChangeLinksMixin, admin.ModelAdmin):
         models.TextField: {'widget': AdvancedEditorManager(
         attrs={'class': 'tinymcetextareamanager'})}
     }
-
-
-    changelist_links = ['translations']
-
-class PostTranslationAdmin(AdminChangeLinksMixin, admin.ModelAdmin):
-    list_display = ('title', 'slug', 'language', 'status','created_on','post_link')
-    list_filter = ("status",)
-    search_fields = ['title', 'content']
-    prepopulated_fields = {'slug': ('title',)}
-    
-    formfield_overrides = {
-        models.TextField: {'widget': AdvancedEditorManager(
-        attrs={'class': 'tinymcetextareamanager'})}
-    }
-
-
-    change_links  = ['post']
-
-
-
 
 class TagAdmin(admin.ModelAdmin):
     prepopulated_fields = {'slug':('name',)}
@@ -82,5 +57,3 @@ admin.site.register(Tag,TagAdmin)
 admin.site.register(Institution,InstitutionAdmin)
 
 admin.site.register(Author,AuthorAdmin)
-
-admin.site.register(PostTranslation, PostTranslationAdmin)
