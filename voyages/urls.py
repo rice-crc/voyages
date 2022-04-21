@@ -1,5 +1,7 @@
 from __future__ import absolute_import, unicode_literals
 
+from filebrowser.sites import site
+
 import django.contrib.sitemaps.views
 import django.views.i18n
 import django.views.static
@@ -27,6 +29,10 @@ js_info_dict = {
 }
 
 urlpatterns = [
+    url('admin/filebrowser/', site.urls),    
+    url('admin/', admin.site.urls),
+
+
     url(r'^',
         include('voyages.apps.static_content.urls',
                 namespace='static_content')),
@@ -59,6 +65,7 @@ urlpatterns = [
     url(r'^autocomplete/', include('autocomplete_light.urls')),
     url(r'^blog/',
        include('voyages.apps.blog.urls', namespace='blog')),
+    
 
     # Handle language changes
     url(r'^setlanguage/(?P<lang_code>\w+)',
