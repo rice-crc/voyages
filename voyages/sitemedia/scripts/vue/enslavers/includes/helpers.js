@@ -175,10 +175,8 @@ function processResponse(json, mainDatatable, fuzzySearch) {
       row.alias_list = aliasList;
     }
 
-    var totalSlaves = 0;
     if (row.voyages_list) {
       row.voyages_list.forEach((value) => {
-        totalSlaves += value.slaves_embarked;
         var arrivalDateArray = value.voyage_year ? value.voyage_year.split([',']) : '';
         var arrivalDate = '';
 
@@ -190,7 +188,24 @@ function processResponse(json, mainDatatable, fuzzySearch) {
         value.voyage_year = arrivalDate;
       });
     }
-    row.total_slaves = totalSlaves;
+
+    if (row.relations_list) {
+      row.relations_list.forEach((value) => {
+        var arrivalDateArray = value.date ? value.date.split([',']) : '';
+        var arrivalDate = '';
+
+        if (arrivalDateArray.length == 3) {
+          arrivalDate = arrivalDateArray[2];
+        } else if (arrivalDateArray.length == 1) {
+          arrivalDate = arrivalDateArray[0];
+        }
+        value.relation_year = arrivalDate;
+      });
+    }
+
+    if (!row.cached_properties__enslaved_count) {
+      row.cached_properties__enslaved_count = 0;
+    }
 
     // source formatting
     row.sources_raw = row.sources_list;
@@ -971,9 +986,10 @@ function displayColumnOrder(order) {
 }
 
 function formatVoyages ( d ) {
-  var voyagesTable = '<div style="width: 100%; background-color: #FFFFFF;" class="d-flex flex-row-reverse"><table cellpadding="5" cellspacing="0" border="0">'+
+  var voyagesTable = '<div style="width: 100%; background-color: #FFFFFF; max-height:200px; overflow:auto;" class="d-flex flex-row-reverse enslaver-voyages"><table cellpadding="5" cellspacing="0" border="0">'+
     '<tr>'+
       '<th>'+gettext("Voyage ID")+'</th>'+
+      '<th>'+gettext("Enslaver Alias")+'</th>'+
       '<th>'+gettext("Voyage Year")+'</th>'+
       '<th>'+gettext("Disembarkation Port")+'</th>'+
       '<th>'+gettext("Embarkation Port")+'</th>'+
@@ -984,6 +1000,7 @@ function formatVoyages ( d ) {
     d.voyages_list.forEach((item) => {
       voyagesTable += '<tr>'+
         '<td class="text-right">'+'<a href="javascript:void(0)" onclick="openVoyageModal(' + item.voyage_id + ');">' + item.voyage_id + '</a>'+'</td>'+
+        '<td>'+item.alias+'</td>'+
         '<td class="text-right">'+item.voyage_year+'</td>'+
         '<td>'+item.disembarkation_port+'</td>'+
         '<td>'+item.embarkation_port+'</td>'+
@@ -994,6 +1011,41 @@ function formatVoyages ( d ) {
     });
     voyagesTable += '</table></div></td></tr><tr>';
   return voyagesTable;
+}
+
+function formatRelations ( d ) {
+  var relationsTable = '<div style="width: 100%; background-color: #FFFFFF; max-height:200px; overflow:auto;" class="d-flex flex-row-reverse enslaver-relations"><table cellpadding="5" cellspacing="0" border="0">'+
+    '<tr>'+
+      '<th>'+gettext("Relation ID")+'</th>'+
+      '<th>'+gettext("Alias")+'</th>'+
+      '<th>'+gettext("Role")+'</th>'+
+      '<th>'+gettext("Year")+'</th>'+
+    '</tr>';
+
+    d.relations_list.forEach((relation) => {
+      relation.enslaved.forEach((person) => {
+        if (person.id !== d.id) {
+          relationsTable += '<tr>'+
+            '<td class="text-right">'+relation.relation_id+'</td>'+
+            '<td>'+person.alias+'</td>'+
+            '<td>'+relation.role+'</td>'+
+            '<td class="text-right">'+relation.relation_year+'</td>'+
+          '</tr>';
+        }
+      });
+      relation.enslavers.forEach((person) => {
+        if (person.id !== d.id) {
+          relationsTable += '<tr>'+
+            '<td class="text-right">'+relation.relation_id+'</td>'+
+            '<td>'+person.alias+'</td>'+
+            '<td>'+relation.role+'</td>'+
+            '<td class="text-right">'+relation.relation_year+'</td>'+
+          '</tr>';
+        }
+      });
+    });
+    relationsTable += '</table></div></td></tr><tr>';
+  return relationsTable;
 }
 
 function refreshUi(filter, filterData, currentTab, tabData, options) {
@@ -1116,14 +1168,14 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
     });
 
     // Add event listener for opening and closing details
-    $('#results_main_table tbody').off('click').on('click', 'td.dt-control', function () {
+    $('#results_main_table tbody').off('click', 'td.dt-control.voyages').on('click', 'td.dt-control.voyages', function () {
         var tr = $(this).closest('tr');
-        var tdi = tr.find("i.fa");
+        var tdi = $(this).find("i.fa");
         var row = $('#results_main_table').DataTable().row( tr );
         var data = row.data();
 
         if (data.voyages_list.length > 0) {
-          if ( row.child.isShown() ) {
+          if ( row.child.isShown() && row.child().find('div').hasClass('enslaver-voyages') ) {
             // This row is already open - close it
             row.child.hide();
             tr.removeClass('shown');
@@ -1132,10 +1184,45 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
           }
           else {
             if ( $('#results_main_table').DataTable().row( '.shown' ).length ) {
-              $('.dt-control', $('#results_main_table').DataTable().row( '.shown' ).node()).click();
+              if ($('#results_main_table').DataTable().row( '.shown' ).child().find('div').hasClass('enslaver-voyages')) {
+                $('.dt-control.voyages', $('#results_main_table').DataTable().row( '.shown' ).node()).click();
+              } else {
+                $('.dt-control.relations', $('#results_main_table').DataTable().row( '.shown' ).node()).click();
+              }
             }
             // Open this row
             row.child( formatVoyages(data) ).show();
+            tr.addClass('shown');
+            tdi.first().removeClass('fa-plus-square');
+            tdi.first().addClass('fa-minus-square');
+          }
+        }
+    } );
+    // Add event listener for opening and closing details
+    $('#results_main_table tbody').off('click', 'td.dt-control.relations').on('click', 'td.dt-control.relations', function () {
+        var tr = $(this).closest('tr');
+        var tdi = $(this).find("i.fa");
+        var row = $('#results_main_table').DataTable().row( tr );
+        var data = row.data();
+
+        if (data.relations_list.length > 0) {
+          if ( row.child.isShown() && row.child().find('div').hasClass('enslaver-relations') ) {
+            // This row is already open - close it
+            row.child.hide();
+            tr.removeClass('shown');
+            tdi.first().removeClass('fa-minus-square');
+            tdi.first().addClass('fa-plus-square');
+          }
+          else {
+            if ( $('#results_main_table').DataTable().row( '.shown' ).length ) {
+              if ($('#results_main_table').DataTable().row( '.shown' ).child().find('div').hasClass('enslaver-voyages')) {
+                $('.dt-control.voyages', $('#results_main_table').DataTable().row( '.shown' ).node()).click();
+              } else {
+                $('.dt-control.relations', $('#results_main_table').DataTable().row( '.shown' ).node()).click();
+              }
+            }
+            // Open this row
+            row.child( formatRelations(data) ).show();
             tr.addClass('shown');
             tdi.first().removeClass('fa-plus-square');
             tdi.first().addClass('fa-minus-square');

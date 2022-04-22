@@ -164,6 +164,7 @@ def search_enslaved(request):
             'voyage__voyage_itinerary__int_first_port_dis__place',
             'voyage__voyage_itinerary__imp_principal_place_of_slave_purchase__place',
             'voyage__voyage_itinerary__imp_principal_port_slave_dis__place',
+            'voyage__voyage_name_outcome__vessel_captured_outcome__label',
             'captive_fate__name', 'post_disembark_location__place',
             EnslavedSearch.SOURCES_LIST, EnslavedSearch.ENSLAVERS_LIST
         ] + _name_fields + _modern_name_fields
@@ -217,9 +218,11 @@ def search_enslaver(request):
     fields = data.get('fields')
     if fields is None:
         fields = [
+            'id',
             'principal_alias',
             'birth_year', 'birth_month', 'birth_day',
             'death_year', 'death_month', 'death_day',
+            'cached_properties__enslaved_count',
             EnslaverSearch.ALIASES_LIST,
             EnslaverSearch.VOYAGES_LIST,
             EnslaverSearch.SOURCES_LIST,

@@ -1,5 +1,7 @@
+from voyages.apps.common.utils import Trie
 from voyages.apps.voyage.models import Place, Region
 from django.db import transaction
+from unidecode import unidecode
 import math
 import unicodecsv
 
@@ -35,14 +37,25 @@ def add_regions_to_csv(csv_in, csv_out):
     rows = [r for r in input_file]
     our_cols = ['CodeValue', 'ShowOnMap', 'Region', 'RegionCode', 'MapView']
     columns = set()
+    places_trie = Trie()
+    for place in Place.objects.select_related('region').all():
+        places_trie.add(unidecode(place.place).lower() + '*', place)
     for row in rows:
         columns = columns.union(set(row.keys()))
         for k in our_cols:
             row[k] = ''
         try:
+            # First check if the Matching name is an entry or near an existing
+            # Place entry.
             lat = float(row['Latitude'])
             lng = float(row['Longitude'])
-            region = get_region(lat, lng)
+            match_place = places_trie.get(unidecode(row['Match']).lower())
+            if match_place is None:
+                region = get_region(lat, lng)
+            else:
+                row['Match'] = match_place.place
+                row['CodeValue'] = match_place.value
+                region = match_place.region
             row['Region'] = region.region
             row['RegionCode'] = region.value
             row['MapView'] = "https://www.google.com/maps/@?api=1&map_action=map&center=" + str(lat) + "," + str(lng) + "&zoom=10"

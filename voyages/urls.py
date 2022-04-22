@@ -1,4 +1,7 @@
 from __future__ import absolute_import, unicode_literals
+from voyages.settings import is_feature_enabled
+
+from filebrowser.sites import site
 
 import django.contrib.sitemaps.views
 import django.views.i18n
@@ -27,6 +30,10 @@ js_info_dict = {
 }
 
 urlpatterns = [
+    url('admin/filebrowser/', site.urls),    
+    url('admin/', admin.site.urls),
+
+
     url(r'^',
         include('voyages.apps.static_content.urls',
                 namespace='static_content')),
@@ -57,8 +64,6 @@ urlpatterns = [
         include('voyages.apps.contribute.urls', namespace='contribute')),
     url(r'^search/', include('haystack.urls', namespace='search')),
     url(r'^autocomplete/', include('autocomplete_light.urls')),
-    url(r'^blog/',
-       include('voyages.apps.blog.urls', namespace='blog')),
 
     # Handle language changes
     url(r'^setlanguage/(?P<lang_code>\w+)',
@@ -73,6 +78,10 @@ urlpatterns = [
     url(r'^accounts/', include('allauth.urls')),
     url(r'^captcha/', include('captcha.urls'))
 ]
+
+if is_feature_enabled("BLOG"):
+    urlpatterns.append(url(r'^blog/',
+       include('voyages.apps.blog.urls', namespace='blog')))
 
 # XML generated sitemap
 sitemaps = {

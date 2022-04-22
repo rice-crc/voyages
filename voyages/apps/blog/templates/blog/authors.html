@@ -1,0 +1,93 @@
+{% extends "_base.html" %}
+{% load voyage_extras %}
+{% load sass_tags %}
+{% load i18n %}
+
+{% load thumbnail %}
+
+
+{% block content %}
+
+<!-- CSS for Trans-Atlantic -->
+<link href="{% sass_src 'scss/library/js-offcanvas@1.0.0.min.css' %}" rel="stylesheet" type="text/css" />
+<link href="{% sass_src 'scss/off-canvas.scss' %}" rel="stylesheet" type="text/css" />
+
+<link href="{% sass_src 'scss/library/bootstrap-vue-2.0.0-rc.11.css' %}" rel="stylesheet" type="text/css" />
+<link href="{% sass_src 'scss/blog.css' %}" rel="stylesheet" type="text/css" />
+
+
+<div class="nav-header">
+	<div>{% block title %} {% trans 'Echoes: The SlaveVoyages Blog' %} - Authors{% endblock title %}</div>
+	<div class="navbar-subtitle flex">
+		
+	</div>
+</div>
+
+<div class="container-new">
+    <div class="row">
+        {% for author in author_list %}
+
+        <div class="col-md-4">
+            <div class="content"> 
+                <a href="{% url 'blog:author_bio' author.slug  author.id   %}">
+                    <div class="content-overlay"></div> 
+                    
+                    
+                    {% thumbnail author.photo "300x300" crop="center" as im %}                        
+                        <img class="content-image " src="{{ im.url }}"  width="100%" height="{{ im.height }}">    
+                    {% endthumbnail %}                
+                    
+                    <div class="content-details fadeIn-bottom">
+                        <h3 class="content-title">{{ author.name }}</h3>
+                        <p class="content-text">
+                            {{ author.role }} at {{ author.institution.name }}                            
+                        </p>
+                    </div>
+                </a> 
+            </div>
+        </div>
+        {% endfor %}        
+    </div>
+    {% if is_paginated %}  
+    <div class="row">
+        <div class="col-md-12">
+            <nav aria-label="Page navigation container"></nav>                                
+            <div class="dataTables_paginate paging_simple_numbers">
+                {% trans 'Page' %} {{ page_obj.number }} {% trans 'of' %} {{ page_obj.paginator.num_pages }}.                    
+            <ul class="pagination pagination-sm justify-content-center">                
+                {% if page_obj.has_previous %}
+                <li><a href="?page=1" class="page-link">&laquo; {% trans 'First' %}</a></li>
+                <li><a href="?page={{ page_obj.previous_page_number }}" class="page-link">{% trans 'Previous' %}</a></li>
+                {% endif %}        
+                {# Paginator num pages #}
+                {% for i in paginator_range %}
+                    {% if i == results.number %}
+                        <li class="paginate_button page-item active">
+                        <a href="#" class="page-link">{{ i }}</a>
+                        </li>
+                    {% else %}
+                        <input type="hidden" id="form_page_{{ i }}" value="{{ i }}" name="desired_page" disabled="true">
+                        <li class="paginate_button page-item">
+                        <a href="#" onclick="retrieve_page('form_page_{{ i }}');" class="page-link">{{ i }}</a>
+                        </li>
+                    {% endif %}
+                {% endfor %}            
+                {% if page_obj.has_next %}
+                <li><a href="?page={{ page_obj.next_page_number }}" class="page-link">{% trans 'Next' %}</a></li>
+                <li><a href="?page={{ page_obj.paginator.num_pages }}" class="page-link">{% trans 'Last' %} &raquo;</a></li>
+
+                {% endif %}
+            </ul>
+            </nav>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+   
+</div>
+
+
+
+
+
+{% endblock %}
