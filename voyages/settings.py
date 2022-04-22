@@ -5,7 +5,7 @@ import sys
 
 from django.utils.translation import ugettext_lazy as _
 
-TEMPLATE_DEBUG  = True
+DEBUG  = True
 
 # Django settings for voyages project.
 
@@ -112,7 +112,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
             ],
             'string_if_invalid': 'Nothing',
-            'debug': True,
+            'debug': DEBUG,
         },
     },
 ]
