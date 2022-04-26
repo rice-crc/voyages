@@ -673,7 +673,7 @@ def _map_voyage_to_spss(voyage):
     # Links
     links = [
         str(link.second.voyage_id)
-        for link in voyage.links_to_other_voyages.all()
+        for link in voyage.outgoing_to_other_voyages.all()
     ]
     data['VOYAGEID2'] = '/'.join(links)
 

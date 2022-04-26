@@ -18,7 +18,7 @@ class Migration(migrations.Migration):
             name='first',
             field=models.ForeignKey(
                 on_delete=django.db.models.deletion.CASCADE,
-                related_name='links_to_other_voyages',
+                related_name='outgoing_to_other_voyages',
                 to='voyage.Voyage'),
         ),
     ]

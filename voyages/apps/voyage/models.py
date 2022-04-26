@@ -1742,9 +1742,9 @@ class LinkedVoyages(models.Model):
     """
     Allow pairs of voyages to be linked.
     """
-    first = models.ForeignKey('Voyage', related_name="links_to_other_voyages",
+    first = models.ForeignKey('Voyage', related_name="outgoing_to_other_voyages",
                               on_delete=models.CASCADE)
-    second = models.ForeignKey('Voyage', related_name="+",
+    second = models.ForeignKey('Voyage', related_name="incoming_from_other_voyages",
                                on_delete=models.CASCADE)
     mode = models.IntegerField()
 
@@ -1925,9 +1925,13 @@ class VoyagesFullQueryHelper:
                          'particular_outcome', 'resistance', 'outcome_slaves',
                          'vessel_captured_outcome', 'outcome_owner').all()),
             Prefetch(
-                'links_to_other_voyages',
+                'outgoing_to_other_voyages',
                 queryset=LinkedVoyages.objects.select_related('second').only(
-                    'first_id', 'second_id', 'second__voyage_id'))
+                    'first_id', 'second_id', 'second__voyage_id')),
+            Prefetch(
+                'incoming_from_other_voyages',
+                queryset=LinkedVoyages.objects.select_related('first').only(
+                    'first_id', 'second_id', 'first__voyage_id'))
         ]
 
         for k, v in list(self.related_models.items()):
