@@ -3,6 +3,7 @@ from .models import PUBLISH_STATUS, Post
 from .models import Author
 from .models import Institution
 
+
 class PostList(generic.ListView):    
     template_name = 'blog/index.html'
     paginate_by = 5
@@ -36,8 +37,23 @@ class PostDetail(generic.DetailView):
         return None
 
 class AuthorBio(generic.DetailView):
+    #lang_code = self.request.LANGUAGE_CODE or "en"
     model = Author
     template_name = 'blog/author_bio.html'
+
+    def get_context_data(self, **kwargs):
+        
+        context = super(AuthorBio, self).get_context_data(**kwargs)
+
+        lang_code = self.request.LANGUAGE_CODE or "en"
+
+        if 'pk' in self.kwargs:        
+            author = Author.objects.get(pk=self.kwargs['pk'])
+            posts = author.post_set.filter(language=lang_code)            
+            context['posts'] = posts
+
+        return context
+
 
 class InstitutionDetail(generic.DetailView):
     model = Institution
