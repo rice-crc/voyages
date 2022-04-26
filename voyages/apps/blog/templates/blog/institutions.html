@@ -35,7 +35,11 @@
                 <a href="{% url 'blog:institution_detail' institution.slug  institution.id   %}">
                     <div class="content-overlay"></div> 
                     
-                    <img class="content-image blog-thumbnail" src="{{ institution.image.url }}" >    
+                    {%if institution.image %}
+                        <img class="content-image blog-thumbnail" src="institution.image.url" >    
+                    {%else%}
+                        <img class="content-image blog-thumbnail" src="{{STATIC_URL}}images/site/404.png" >    
+                    {%endif%}
                     
                     <div class="content-details fadeIn-bottom">
                         <h3 class="content-title">{{ institution.name }}</h3>                        
