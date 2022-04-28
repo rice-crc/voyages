@@ -1,6 +1,5 @@
 @import "colors";
 
-
 .nav-header {
     color: white;
     background: $enslavers-secondary-color !important;
@@ -28,20 +27,12 @@ a:hover {
     margin-bottom: 10px
 }
 
-.content {
-    position: relative;
-    width: 90%;
-    //max-width: 400px;
-    margin: auto;
-    overflow: hidden;
-    margin-top:20px;
-    
-}
-.content .content-overlay {
-    background: rgba(0, 0, 0, 0.7);
+
+.content-overlay {
+    background: rgba(0, 0, 0, 0.7);    
     position: absolute;
-    height: 600px;
-    width: 600px;
+    height: auto;
+    width: auto;
     left: 0;
     top: 0;
     bottom: 0;
@@ -52,10 +43,10 @@ a:hover {
     transition: all 0.4s ease-in-out 0s
 }
 
-.content:hover .content-overlay {
+
+.card:hover .content-overlay {
     opacity: 1
 }
-
 
 .content-image {
     width: 100%;
@@ -93,7 +84,7 @@ img.blog-detail-thumbnail{
     transition: all 0.3s ease-in-out 0s
 }
 
-.content:hover .content-details {
+ .card:hover .content-details {
     top: 50%;
     left: 50%;
     opacity: 1

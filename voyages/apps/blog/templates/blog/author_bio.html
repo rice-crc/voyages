@@ -11,7 +11,7 @@
 <link href="{% sass_src 'scss/off-canvas.scss' %}" rel="stylesheet" type="text/css" />
 
 <link href="{% sass_src 'scss/library/bootstrap-vue-2.0.0-rc.11.css' %}" rel="stylesheet" type="text/css" />
-<link href="{% sass_src 'scss/blog.css' %}" rel="stylesheet" type="text/css" />
+<link href="{% sass_src 'scss/blog.scss' %}" rel="stylesheet" type="text/css" />
 
 <div class="nav-header">
 	<div>{% trans 'Echoes: The SlaveVoyages Blog' %} - {{ object.name }}</div>
@@ -26,57 +26,63 @@
 
 
 <div class="container-new">
+  <div class="main-body">
     <div class="row">
-      <div class="col-md-12  mb-4  mt-3 left  top">
-        <div class="card-body">
-          {% thumbnail author.photo "300x300" crop="center" as im %}
-            <img class="rounded-circle" src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}">
-          {% endthumbnail %}
-          <p>
-          <h1>{% block title %} {{ object.name }} {% endblock title %}
-            <br>
-            <small>
-              {{ object.role }} at <a href="{% url 'blog:institution_detail' object.institution.slug  object.institution.id   %}" >{{ object.institution.name }}</a>
-            </small>
-          </h1>
-          </p>
-          <p>
-            <div class="card-text blog-content">{{ object.description|default_if_none:"" }}</div>
-          </p>
-          <hr>
-          <h3>Author's posts:</h3>
-
-          <div class="row">
-            {% for post in posts.all %}
-
-        <div class="col-md-4">
-            <div class="content"> 
-                <a href="{% url 'blog:post_detail' post.slug   %}">
-                    <div class="content-overlay"></div> 
-                    
-              
-                    <img class="content-image blog-thumbnail" src="{{ post.thumbnail.url }}" >    
-
-                    <div class="content-details fadeIn-bottom">
-                        <h3 class="content-title">{{ post.title }}</h3>
-                        <h4 class="content-title">{{ post.subtitle|default_if_none:"" }}</h4>
-                        <p class="content-text">
-                            {% for author in post.authors.all %}            
-                                {{ author.name }}
-                                {{ forloop.last|yesno:",|"|safe }}
-                            {% endfor %}
-                        </p>
-                    </div>
-                </a> 
-            </div>
-        </div>
-        {% endfor %}   
-      </div>
-
+      <div class="col-lg-4">
+        <div class="card">
+          <div class="card-body">
+            <div class="d-flex flex-column align-items-center text-center">
+              <img src="{{ author.photo.url }}" alt="{{ object.name }}" class="rounded-circle bg-primary" width="300">
+              <div class="mt-3">
+                <h4>{{ object.name }}</h4>
+                <p class="text-secondary mb-1">{{ object.role }}</p>
+                <p class="text-muted font-size-sm"><a href="{% url 'blog:institution_detail' object.institution.slug  object.institution.id   %}" >{{ object.institution.name }}</a></p>                
+              </div>
+            </div>            
+          </div>
         </div>
       </div>
-      
+      <div class="col-lg-8">
+        <div class="card">
+          <div class="card-body">            
+            {{ object.description|default_if_none:"" }}            
+            {{ profile|safe }}
+          </div>
+        </div>
+        
+      </div>
     </div>
   </div>
+</div>
+
+
+<hr>
+
+<div class="container-new">
+
+  <h3>{% trans "Author's posts:" %}</h3>
+  <div class="card-columns">
+
+    {% for post in posts.all %}
+      <div class="card">
+        <a href="{% url 'blog:post_detail' post.slug   %}">
+          <div class="content-overlay"></div> 
+          <img class="card-img img-fluid content-image " src="{{ post.thumbnail.url }}" alt="{{ post.title }}">
+          <div class="content-details fadeIn-bottom">
+            <h3 class="content-title">{{ post.title }}</h3>
+            <h4 class="content-title">{{ post.subtitle|default_if_none:"" }}</h4>
+            <p class="content-text">
+                {% for author in post.authors.all %}            
+                    {{ author.name }}
+                    {{ forloop.last|yesno:",|"|safe }}
+                {% endfor %}
+            </p>
+          </div>
+        </a>
+      </div>
+    {% endfor %}
+  </div>
+</div>
+
 
 {% endblock %}
