@@ -6,7 +6,7 @@ from .models import Institution
 
 class PostList(generic.ListView):    
     template_name = 'blog/index.html'
-    paginate_by = 5
+    paginate_by = 10
 
     def get_queryset(self):
         lang_code = self.request.LANGUAGE_CODE or "en"
@@ -37,7 +37,7 @@ class PostDetail(generic.DetailView):
         return None
 
 class AuthorBio(generic.DetailView):
-    #lang_code = self.request.LANGUAGE_CODE or "en"
+    
     model = Author
     template_name = 'blog/author_bio.html'
 
@@ -75,7 +75,7 @@ class InstitutionDetail(generic.DetailView):
 
         if 'pk' in self.kwargs:        
             institution = Institution.objects.get(pk=self.kwargs['pk'])
-            #posts = institution.post_set.exclude(slug=institution.slug).filter(language=lang_code) 
+            
             
             profile = Post.objects.filter(slug= institution.slug, language=lang_code)[:2]
             if len(profile) == 1:
@@ -83,14 +83,11 @@ class InstitutionDetail(generic.DetailView):
             else:
                 context['profile'] = ''
 
-            #context['posts'] = posts
-            
-
         return context
 
 class AuthorList(generic.ListView):    
     template_name = 'blog/authors.html'
-    paginate_by = 5
+    paginate_by = 10
 
     def get_queryset(self):
         return Author.objects.order_by('name')
@@ -98,7 +95,7 @@ class AuthorList(generic.ListView):
 
 class InstitutionList(generic.ListView):    
     template_name = 'blog/institutions.html'
-    paginate_by = 5
+    paginate_by = 10
 
     def get_queryset(self):
         return Institution.objects.order_by('name')

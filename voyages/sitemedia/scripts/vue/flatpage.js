@@ -162,7 +162,7 @@ var flatpage = new Vue({
   created: function() {
     var vm = this;
     var host = window.location.origin;
-    var prefix = "/common/flatpagehierarchy/";
+  var prefix = "/common/flatpagehierarchy/";
     var pathname = window.location.pathname;
     var url = host + prefix + this.pathname;
 
