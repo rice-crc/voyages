@@ -69,11 +69,17 @@
           {% for author in object.author_set.all %}                 
                 <div class="media ">
                   <div class="media-left media-top">
-                    {% thumbnail author.photo "64x64" crop="center" as im %}
-                      <a href="{% url 'blog:author_bio' author.slug  author.id   %}" >
-                        <img class="rounded-circle" src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}">
-                      </a>
-                    {% endthumbnail %}
+                    {%if author.photo %}
+                      {% thumbnail author.photo "64x64" crop="center" as im %}
+                        <a href="{% url 'blog:author_bio' author.slug  author.id   %}" >
+                          <img class="rounded-circle" src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}">
+                        </a>
+                      {% endthumbnail %}
+                    {% else %}
+                      <div class="avatar">
+                          <i class="fas fa-user fa-4x "></i>
+                      </div>
+                    {% endif %}            
                   </div>
                   <div class="media-body">
                     <h4 class="media-heading">

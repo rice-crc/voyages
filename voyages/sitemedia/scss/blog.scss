@@ -40,7 +40,7 @@ a:hover {
     opacity: 0;
     -webkit-transition: all 0.4s ease-in-out 0s;
     -moz-transition: all 0.4s ease-in-out 0s;
-    transition: all 0.4s ease-in-out 0s
+    transition: all 0.4s ease-in-out 0s;    
 }
 
 
@@ -105,4 +105,13 @@ img.blog-detail-thumbnail{
 
 .fadeIn-bottom {
     top: 80%
+}
+
+.avatar
+{
+    text-align: center !important;
+}
+.avatar i
+{
+    color: #212529;
 }

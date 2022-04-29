@@ -13,7 +13,7 @@
 <link href="{% sass_src 'scss/off-canvas.scss' %}" rel="stylesheet" type="text/css" />
 
 <link href="{% sass_src 'scss/library/bootstrap-vue-2.0.0-rc.11.css' %}" rel="stylesheet" type="text/css" />
-<link href="{% sass_src 'scss/blog.css' %}" rel="stylesheet" type="text/css" />
+<link href="{% sass_src 'scss/blog.scss' %}" rel="stylesheet" type="text/css" />
 
 
 <div class="nav-header">
@@ -31,8 +31,14 @@
         {% for author in author_list %}
           <div class="card">
             <a href="{% url 'blog:author_bio' author.slug  author.id   %}">
-                <div class="content-overlay"></div> 
-                <img class="card-img img-fluid content-image " src="{{ author.photo.url }}" >                  
+                <div class="content-overlay"></div>                 
+                {%if author.photo %}
+                    <img class="card-img img-fluid content-image " src="{{ author.photo.url }}" >      
+                {% else %}
+                    <div class="avatar">
+                        <i class="fas fa-user fa-10x"></i>
+                    </div>
+                {% endif %}            
                 
                 <div class="content-details fadeIn-bottom">
                     <h3 class="content-title">{{ author.name }}</h3>
