@@ -1,5 +1,5 @@
 from django.views import generic
-from .models import PUBLISH_STATUS, Post, Tag
+from .models import PUBLISH_STATUS,DRAFT_STATUS, Post, Tag
 from .models import Author
 from .models import Institution
 
@@ -25,13 +25,13 @@ class PostDetail(generic.DetailView):
         slug = self.kwargs.get('slug')
         if slug is not None:
             lang_code = self.request.LANGUAGE_CODE or "en"
-            matches = Post.objects.filter(slug=slug,language=lang_code)[:2]
+            matches = Post.objects.filter(status=PUBLISH_STATUS, slug=slug,language=lang_code)[:2]
             if len(matches) == 1:
                 return matches[0]
             if lang_code != "en":
                 # Fallback to the English language if the translation is not
                 # found for this slug.
-                matches = Post.objects.filter(slug=slug,language="en")[:2]
+                matches = Post.objects.filter(status=PUBLISH_STATUS, slug=slug,language="en")[:2]
             if len(matches) == 1:
                 return matches[0]
         return None
@@ -49,9 +49,9 @@ class AuthorBio(generic.DetailView):
 
         if 'pk' in self.kwargs:        
             author = Author.objects.get(pk=self.kwargs['pk'])
-            posts = author.post_set.exclude(slug=author.slug).filter(language=lang_code) 
+            posts = author.post_set.exclude(slug=author.slug).filter(status=PUBLISH_STATUS,language=lang_code)
             
-            profile = Post.objects.filter(slug= author.slug, language=lang_code)[:2]
+            profile = Post.objects.filter(status=PUBLISH_STATUS, slug= author.slug, language=lang_code)[:2]
             if len(profile) == 1:
                 context['profile'] = profile[0].content
             else:
@@ -77,7 +77,7 @@ class InstitutionDetail(generic.DetailView):
             institution = Institution.objects.get(pk=self.kwargs['pk'])
             
             
-            profile = Post.objects.filter(slug= institution.slug, language=lang_code)[:2]
+            profile = Post.objects.filter(status=PUBLISH_STATUS, slug= institution.slug, language=lang_code)[:2]
             if len(profile) == 1:
                 context['profile'] = profile[0].content
             else:
