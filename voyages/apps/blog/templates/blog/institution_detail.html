@@ -38,7 +38,7 @@
               <img src="{{ institution.image.url }}" alt="{{ object.name }}"  width="300">
               {% endif %}
               <div class="mt-3">
-                <h4>{{ object.name }}</h4>
+                <h4>{% block title %}{{ object.name }}{% endblock title %}</h4>
                 <p class="text-secondary mb-1">{{ object.description|default_if_none:"" }}</p>                
               </div>
             </div>            

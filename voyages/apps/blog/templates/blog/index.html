@@ -40,7 +40,12 @@
         <div class="card">
           <a href="{% url 'blog:post_detail' post.slug   %}">
             <div class="content-overlay"></div> 
-            <img class="card-img img-fluid content-image " src="{{ post.thumbnail.url }}" alt="{{ post.title }}">
+            {%if post.thumbnail %}
+              <img class="card-img img-fluid content-image " src="{{ post.thumbnail.url }}" alt="{{ post.title }}">
+            {%else%}
+              <img class="card-img img-fluid content-image " src="{{STATIC_URL}}images/site/404.png"  alt="{{ post.title }}">    
+            {%endif%}
+            
             <div class="content-details fadeIn-bottom">
               <h3 class="content-title">{{ post.title }}</h3>
               <h4 class="content-title">{{ post.subtitle|default_if_none:"" }}</h4>

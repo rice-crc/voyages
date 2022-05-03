@@ -15,6 +15,8 @@ from .models import Author
 
 from .models import PUBLISH_STATUS,DRAFT_STATUS
 
+from django.contrib.flatpages.models import FlatPage
+from django.utils.text import slugify
 
 class AdvancedEditorManager(forms.Textarea):
 
@@ -41,6 +43,7 @@ class PostAdmin(admin.ModelAdmin):
     list_filter = ("status",)
     search_fields = ['title', 'content']
     prepopulated_fields = {'slug': ('title',)}
+    change_list_template = 'blog/admin/post_change_list.html'
     
     formfield_overrides = {
         models.TextField: {'widget': AdvancedEditorManager(
@@ -81,11 +84,38 @@ class PostAdmin(admin.ModelAdmin):
         return security_urls + urls
 
     def news_migration (self, request):
+
+        oldnews = FlatPage.objects.filter(url__contains='/about/news/')
+
+        authorName = 'Voyages Team'
+        author = Author.objects.get(name=authorName)
+
+        tag = Tag.objects.get(name='News')
+        
+        for news in oldnews:
+
+            title = news.title
+            if (title.startswith('- ')):
+                title = title[2:]
+
+            exists = Post.objects.filter(title=title,language='en',slug=slugify(title),tags__slug__in = ['News'])
+
+            if exists.count() == 0:            
+                migrated = Post(title=title,slug=slugify(title),content=news.content)
+                migrated.save()
+
+                migrated.authors.set([author])
+                migrated.tags.set([tag])
+                migrated.status=PUBLISH_STATUS
+                migrated.save()
+            
+
         context = dict(
-            self.admin_site.each_context(request), # Include common variables for rendering the admin template.
-            something="test",
+            self.admin_site.each_context(request), # Include common variables for rendering the admin template.            
+            message = "News migrated!"
         )
-        return TemplateResponse(request, "blog/news-migration.html", context)
+
+        return TemplateResponse(request, "blog/admin/news-migration.html", context)
 
     
     actions = [make_published,make_draft]
@@ -110,4 +140,5 @@ admin.site.register(Tag,TagAdmin)
 admin.site.register(Institution,InstitutionAdmin)
 
 admin.site.register(Author,AuthorAdmin)
+
 

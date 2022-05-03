@@ -36,9 +36,9 @@
               <div class="content-overlay"></div> 
               
               {%if institution.image %}
-                <img class="card-img img-fluid content-image " src="{{institution.image.url}}" >    
+                <img class="card-img img-fluid content-image " src="{{institution.image.url}}"  alt="{{ institution.name }}">    
               {%else%}
-                <img class="card-img img-fluid content-image " src="{{STATIC_URL}}images/site/404.png" >    
+                <img class="card-img img-fluid content-image " src="{{STATIC_URL}}images/site/404.png" alt="{{ institution.name }}">    
               {%endif%}
 
               <div class="content-details fadeIn-bottom">

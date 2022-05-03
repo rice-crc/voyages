@@ -1,10 +1,12 @@
-{% extends "blog/_base.html" %}
+{% extends "_base.html" %}
 {% load voyage_extras %}
 {% load sass_tags %}
 {% load i18n %}
 {% load thumbnail %}
 
 {% block content %}
+
+
 
 <!-- CSS for Trans-Atlantic -->
 <link href="{% sass_src 'scss/library/js-offcanvas@1.0.0.min.css' %}" rel="stylesheet" type="text/css" />
@@ -38,7 +40,7 @@
               <i class="fas fa-user fa-10x"></i>
               {% endif %}
               <div class="mt-3">
-                <h4>{{ object.name }}</h4>
+                <h4>{% block title %}{{ object.name }}{% endblock title %}</h4>
                 <p class="text-secondary mb-1">{{ object.role }}</p>
                 <p class="text-muted font-size-sm"><a href="{% url 'blog:institution_detail' object.institution.slug  object.institution.id   %}" >{{ object.institution.name }}</a></p>                
               </div>
@@ -71,7 +73,12 @@
       <div class="card">
         <a href="{% url 'blog:post_detail' post.slug   %}">
           <div class="content-overlay"></div> 
-          <img class="card-img img-fluid content-image " src="{{ post.thumbnail.url }}" alt="{{ post.title }}">
+          {%if post.thumbnail %}
+            <img class="card-img img-fluid content-image " src="{{ post.thumbnail.url }}" alt="{{ post.title }}">
+          {%else%}
+            <img class="card-img img-fluid content-image " src="{{STATIC_URL}}images/site/404.png"  alt="{{ post.title }}">    
+          {%endif%}
+          
           <div class="content-details fadeIn-bottom">
             <h3 class="content-title">{{ post.title }}</h3>
             <h4 class="content-title">{{ post.subtitle|default_if_none:"" }}</h4>
