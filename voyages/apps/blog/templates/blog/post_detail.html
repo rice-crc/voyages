@@ -33,7 +33,9 @@
     <div class="row">
       <div class="col-md-12  mb-4  mt-3 left  top">
         <div class="card-body">          
-          <img class="blog-detail-thumbnail" src="{{ post.thumbnail.url }}" >
+          {%if post.thumbnail %}
+            <img class="blog-detail-thumbnail" src="{{ post.thumbnail.url }}" >
+          {% endif %}
           <h1>{% block title %} {{ object.title }} {% endblock title %}</h1>
           <h3>{{ object.subtitle }}</h3>          
           <p class="card-text text-muted h6">

@@ -80,7 +80,7 @@ class PostAdmin(admin.ModelAdmin):
             url(r'^newsmigration/$', self.admin_site.admin_view(self.news_migration))            
         ]
 
-        print(urls)
+        
         return security_urls + urls
 
     def news_migration (self, request):
