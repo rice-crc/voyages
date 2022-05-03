@@ -13,6 +13,8 @@ from .models import Tag
 from .models import Institution
 from .models import Author
 
+from .models import PUBLISH_STATUS,DRAFT_STATUS
+
 
 class AdvancedEditorManager(forms.Textarea):
 
@@ -45,6 +47,29 @@ class PostAdmin(admin.ModelAdmin):
         attrs={'class': 'tinymcetextareamanager'})}
     }
 
+    
+
+    def make_published(self,request,queryset):
+        rows_updated = queryset.update(status=PUBLISH_STATUS)
+        if rows_updated == 1:
+            message_count = "1 post was"
+        else:
+            message_count = "%s post were" % rows_updated
+
+        self.message_user(request,"%s successfully marked as published." % message_count)
+
+
+    def make_draft(self,request,queryset):
+        rows_updated = queryset.update(status=DRAFT_STATUS)
+        if rows_updated == 1:
+            message_count = "1 post was"
+        else:
+            message_count = "%s post were" % rows_updated
+
+        self.message_user(request,"%s successfully marked as draft." % message_count)
+        
+
+
     def get_urls(self):
         urls = super(PostAdmin, self).get_urls()
 
@@ -61,6 +86,9 @@ class PostAdmin(admin.ModelAdmin):
             something="test",
         )
         return TemplateResponse(request, "blog/news-migration.html", context)
+
+    
+    actions = [make_published,make_draft]
 
 
 class TagAdmin(admin.ModelAdmin):
