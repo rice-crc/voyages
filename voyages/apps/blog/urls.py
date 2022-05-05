@@ -18,6 +18,7 @@ urlpatterns = [
     url(r'^author/(?P<slug>[-\w]+)/(?P<pk>\d+)/$', views.AuthorBio.as_view(), name='author_bio'),    
     url(r'^feed$', LatestPostEntries()),
     url(r'^tag/(?P<tag>[-\w]+)$',views.PostList.as_view(),name='tag'),
+    url(r'^news/$',views.PostList.as_view(),name='news'),
     url('(?P<slug>[-\w]+)$', views.PostDetail.as_view(), name='post_detail'), 
     
 ]

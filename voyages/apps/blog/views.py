@@ -10,7 +10,10 @@ class PostList(generic.ListView):
 
     def get_queryset(self):
         lang_code = self.request.LANGUAGE_CODE or "en"
-        if self.kwargs.get('tag') is None:
+
+        if self.request.resolver_match.url_name == 'news':
+            return Post.objects.filter(status=PUBLISH_STATUS, language=lang_code, tags__slug__in=['news','front-page']).order_by('-created_on')
+        elif self.kwargs.get('tag') is None:
             return Post.objects.filter(status=PUBLISH_STATUS, language=lang_code).order_by('-created_on').exclude(tags__in = Tag.objects.filter(slug__in = ['author-profile','institution-profile']) )
         return Post.objects.filter(status=PUBLISH_STATUS, language=lang_code, tags__slug__in=[self.kwargs['tag']]).order_by('-created_on')
 

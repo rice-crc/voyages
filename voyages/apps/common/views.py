@@ -225,7 +225,11 @@ def get_flat_page_content(_, url):
     contentType = 'text/html; charset=utf-8'
 
 
-    if  '/about/news/' in page.url:
+    if '/about/news/10/en/' in page.url:
+        contentType = 'application/json'
+        content = reverse('blog:news')
+        
+    elif  '/about/news/' in page.url:
 
         title = page.title
         if (title.startswith('- ')):
