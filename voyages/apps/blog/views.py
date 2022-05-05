@@ -3,6 +3,8 @@ from .models import PUBLISH_STATUS,DRAFT_STATUS, Post, Tag
 from .models import Author
 from .models import Institution
 
+from django import template
+register = template.Library()
 
 class PostList(generic.ListView):    
     template_name = 'blog/index.html'
@@ -12,19 +14,38 @@ class PostList(generic.ListView):
         lang_code = self.request.LANGUAGE_CODE or "en"
 
         if self.request.resolver_match.url_name == 'news':
-            return Post.objects.filter(status=PUBLISH_STATUS, language=lang_code, tags__slug__in=['news','front-page']).order_by('-created_on')
+            return Post.objects.filter(status=PUBLISH_STATUS, language=lang_code, tags__slug__in=['news']).order_by('-created_on').filter(status=PUBLISH_STATUS, language=lang_code, tags__slug__in=['front-page']).order_by('-created_on')
         elif self.kwargs.get('tag') is None:
             return Post.objects.filter(status=PUBLISH_STATUS, language=lang_code).order_by('-created_on').exclude(tags__in = Tag.objects.filter(slug__in = ['author-profile','institution-profile']) )
+            
         return Post.objects.filter(status=PUBLISH_STATUS, language=lang_code, tags__slug__in=[self.kwargs['tag']]).order_by('-created_on')
+
 
 
 class PostDetail(generic.DetailView):
     model = Post
     template_name = 'blog/post_detail.html'
 
+
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        print('get context data')
+        if self.object:
+            isNews = self.object.tags.filter(slug__in =['news','front-page'] ).count() > 0
+            context['is_news'] = isNews
+
+        return context
+
     def get_object(self):
+
+        print(self)
+
         if 'pk' in self.kwargs:
-            return Post.objects.get(pk=self.kwargs['pk'])
+            post = Post.objects.get(pk=self.kwargs['pk'])
+            
+
+            return  post
+
         slug = self.kwargs.get('slug')
         if slug is not None:
             lang_code = self.request.LANGUAGE_CODE or "en"

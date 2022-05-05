@@ -6,7 +6,6 @@
 
 {% block content %}
 
-
 <script src="https://cdn.jsdelivr.net/sharer.js/latest/sharer.min.js"></script>
 
 <!-- CSS for Trans-Atlantic -->
@@ -22,7 +21,11 @@
 	<div class="navbar-subtitle flex">
 		<div class="navbar-subitem">			
 			{% block userlinks %}				
-			<a class="navbar-subitem-link" href="{% url 'blog:blog' %}">{% trans 'All posts' %}</a> 				
+        {% if is_news %}
+          <a class="navbar-subitem-link" href="{% url 'blog:news' %}">{% trans 'News frontpage' %}</a> 				
+        {% else %}
+          <a class="navbar-subitem-link" href="{% url 'blog:blog' %}">{% trans 'All posts' %}</a> 				
+        {% endif %}
 			{% endblock %}			
 		</div>
 	</div>
