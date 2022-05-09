@@ -21,6 +21,8 @@ from voyages.apps.voyage.models import Nationality, Place
 from voyages.apps.blog.models import Post
 from django.utils.text import slugify
 
+from voyages.settings import is_feature_enabled
+
 
 @cache_page(3600)
 def get_nations(_):
@@ -224,22 +226,22 @@ def get_flat_page_content(_, url):
 
     contentType = 'text/html; charset=utf-8'
 
-
-    if '/about/news/10/en/' in page.url:
-        contentType = 'application/json'
-        content = reverse('blog:news')
-        
-    elif  '/about/news/' in page.url:
-
-        title = page.title
-        if (title.startswith('- ')):
-            title = title[2:]
-
-        exists = Post.objects.filter(title=title,language='en',slug=slugify(title),tags__slug__in = ['News']).first()
-
-        if exists is not None:
+    if is_feature_enabled("BLOG"):
+        if '/about/news/10/en/' in page.url:
             contentType = 'application/json'
-            content = reverse('blog:post_detail', args=[exists.slug])
+            content = reverse('blog:news')
+            
+        elif  '/about/news/' in page.url:
+
+            title = page.title
+            if (title.startswith('- ')):
+                title = title[2:]
+
+            exists = Post.objects.filter(title=title,language='en',slug=slugify(title),tags__slug__in = ['News']).first()
+
+            if exists is not None:
+                contentType = 'application/json'
+                content = reverse('blog:post_detail', args=[exists.slug])
 
     
     return HttpResponse(content, contentType)
