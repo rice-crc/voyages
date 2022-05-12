@@ -27,7 +27,7 @@
                         {% if slidestart %}<div class="carousel-item{% if forloop.first %} active {% endif %}">
                             <div class="row">{% endif %}
                                 <div class="col-md-4 text-center" >
-                                    <a href="{% url 'blog:post_detail' post.slug   %}" class="expand-snippet" data-content="{{ post.get_snippet|striptags|truncatewords:120 }}" rel="popover" data-placement="top" data-original-title="{{ post.title }}" data-trigger="hover">
+                                    <a href="{% url 'blog:post_detail' post.slug   %}" class="expand-snippet" data-content="{{ post.get_snippet|striptags|truncatewords:120 }} <br><br><a  class='popover-more' href='{% url 'blog:post_detail' post.slug   %}'>{% trans 'click to read more' %}</a><br>"  data-html="true" rel="popover" data-placement="top" data-original-title="{{ post.title }}" data-trigger="manual">
                                         {%if post.thumbnail %}
                                             <img class="d-block w-100 h-50 "  src="{{ post.thumbnail.url}}" alt="{{post.title}}">
                                         {%else%}
@@ -68,7 +68,24 @@
         })
 
 
-        $('.expand-snippet').popover();
+        //$('.expand-snippet').popover();
+
+        $(".expand-snippet")
+            .popover({ html: true})
+                .on("mouseenter", function () {
+                    $(this).popover("show");
+                }).on("mouseleave", function () {
+                    var _this = this;
+                    if (!$(".popover:hover").length) {
+                        $(this).popover("hide");
+                    }
+                    else {
+                        $('.popover').mouseleave(function() {
+                            $(_this).popover("hide");
+                            $(this).off('mouseleave');
+                        });
+                    }
+                });
     })
 
     
