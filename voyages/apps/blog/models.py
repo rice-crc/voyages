@@ -62,7 +62,7 @@ class Post(models.Model):
     
     tags = models.ManyToManyField(Tag)
     
-    thumbnail = FileBrowseField("Thumbnail", format="Image", max_length=300,directory="images/", extensions=[".jpg",".png",".wep", ".gif"], blank=True,default='images/')
+    thumbnail = FileBrowseField("Thumbnail", format="Image", max_length=300,directory="images/", extensions=[".jpg",".png",".wep", ".gif"], blank=True)
 
     class Meta:
         ordering = ['-created_on']

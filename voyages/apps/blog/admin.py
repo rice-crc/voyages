@@ -52,7 +52,9 @@ class PostAdmin(admin.ModelAdmin):
         attrs={'class': 'tinymcetextareamanager'})}
     }
 
-    
+    add_form_template = 'blog/admin/change_form.html'
+    change_form_template = 'blog/admin/change_form.html'
+
 
     
     def make_published(self,request,queryset):

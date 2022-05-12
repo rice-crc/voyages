@@ -75,7 +75,7 @@ class Migration(migrations.Migration):
                 ('content', models.TextField()),
                 ('created_on', models.DateTimeField(auto_now_add=True)),
                 ('status', models.IntegerField(choices=[(0, 'Draft'), (1, 'Publish')], default=0)),
-                ('thumbnail', filebrowser.fields.FileBrowseField(blank=True, default='images/', max_length=300, verbose_name='Thumbnail')),                
+                ('thumbnail', filebrowser.fields.FileBrowseField(blank=True, max_length=300, verbose_name='Thumbnail')),                
                 ('authors', models.ManyToManyField(to='blog.Author')),
             ],
             options={
