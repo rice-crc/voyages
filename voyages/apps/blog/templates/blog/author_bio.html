@@ -31,7 +31,7 @@
   <div class="main-body">
     <div class="row">
       <div class="col-lg-4">
-        <div class="card">
+        <div class="card border-0">
           <div class="card-body">
             <div class="d-flex flex-column align-items-center text-center">
               {%if author.photo %}
@@ -49,7 +49,7 @@
         </div>
       </div>
       <div class="col-lg-8">
-        <div class="card">
+        <div class="card border-0">
           <div class="card-body">            
             {{ object.description|default_if_none:"" }}            
             {{ profile|safe }}

@@ -39,7 +39,8 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 # Example: "http://media.lawrence.com/static/"
 STATIC_URL = '/static/'
 
-FILEBROWSER_DIRECTORY = 'blog/images/'
+FILEBROWSER_DIRECTORY = 'blog/'
+
 
 # SASS_PROCESSOR_ROOT = STATIC_URL
 
@@ -241,6 +242,10 @@ def is_feature_enabled(feature_name):
         return False
     return FEATURE_FLAGS.get(feature_name, False)
 
+
+
+
+
 # Modify HAYSTACK config for fixture loading durring tests
 # It is not possible to use override_settings decorator
 # because HAYSTACK triggers an update on save() when fixtures are loaded
@@ -263,3 +268,4 @@ except Exception as e:
         file=sys.stderr)
 
 del sys
+

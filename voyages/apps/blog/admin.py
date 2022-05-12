@@ -18,6 +18,8 @@ from .models import PUBLISH_STATUS,DRAFT_STATUS
 from django.contrib.flatpages.models import FlatPage
 from django.utils.text import slugify
 
+from .signals import translate_text
+
 class AdvancedEditorManager(forms.Textarea):
 
     class Media:
@@ -52,6 +54,7 @@ class PostAdmin(admin.ModelAdmin):
 
     
 
+    
     def make_published(self,request,queryset):
         rows_updated = queryset.update(status=PUBLISH_STATUS)
         if rows_updated == 1:
@@ -70,6 +73,111 @@ class PostAdmin(admin.ModelAdmin):
             message_count = "%s post were" % rows_updated
 
         self.message_user(request,"%s successfully marked as draft." % message_count)
+
+    
+    def force_translation(self,request,queryset):
+        total = 0
+
+        for instance in queryset.all():
+            
+            for lang_code, _ in settings.LANGUAGES:            
+                # First check if the target language already has a translation. 
+                existing = Post.objects.filter(slug=instance.slug, language=lang_code)
+                
+                count = existing.count()
+
+                if count > 0: #update
+                    clone = existing[0]
+                    authors = clone.authors.all()                    
+                    tags = clone.tags.all()
+
+                else: #add new
+                    clone = Post.objects.get(pk=instance.pk)
+
+                    authors = clone.authors.all()
+                    tags = clone.tags.all()
+
+                    clone.pk = None
+
+                #don't auto-translate Author and Institution names
+                if not clone.title in [None, ''] and tags.filter(slug__in=['author-profile','institution-profile']).count() == 0 :
+                    clone.title = translate_text(lang_code, instance.title) 
+                else:
+                    clone.title = instance.title + ' ' + lang_code
+
+                if not clone.subtitle in [None, '']:
+                    clone.subtitle = translate_text(lang_code, instance.subtitle)
+
+                if not clone.content in [None, '']:
+                    clone.content = translate_text(lang_code, instance.content)
+
+                clone.language = lang_code
+
+                clone.save()                
+                
+                clone.authors.set(authors)
+                clone.tags.set(tags) 
+
+                total += 1
+
+        if total == 1:
+            message_count = "1 post was"
+        else:
+            message_count = "%s post were" % total
+
+
+        self.message_user(request,"%s translated." % message_count)
+
+    force_translation.short_description = 'FORCE TRANSLATION'
+    
+        
+    def translate_to_new_languages(self,request,queryset):
+
+        total = 0
+
+        for instance in queryset.all():
+            
+            for lang_code, _ in settings.LANGUAGES:            
+                # First check if the target language already has a translation.
+                count = Post.objects.filter(slug=instance.slug, language=lang_code).count()
+                if count > 0:
+                    continue
+
+                clone = Post.objects.get(pk=instance.pk)
+
+                authors = clone.authors.all()
+                tags = clone.tags.all()
+
+                clone.pk = None
+
+                #don't auto-translate Author and Institution names
+                if not clone.title in [None, ''] and tags.filter(slug__in=['author-profile','institution-profile']).count() == 0 :
+                    clone.title = translate_text(lang_code, instance.title) 
+                else:
+                    clone.title = instance.title + ' ' + lang_code
+
+                if not clone.subtitle in [None, '']:
+                    clone.subtitle = translate_text(lang_code, instance.subtitle)
+
+                if not clone.content in [None, '']:
+                    clone.content = translate_text(lang_code, instance.content)
+
+                clone.language = lang_code
+
+                clone.save()                
+                
+                clone.authors.set(authors)
+                clone.tags.set(tags) 
+
+                total += 1
+
+        if total == 1:
+            message_count = "1 post was"
+        else:
+            message_count = "%s post were" % total
+
+
+        self.message_user(request,"%s translated." % message_count)
         
 
 
@@ -118,7 +226,7 @@ class PostAdmin(admin.ModelAdmin):
         return TemplateResponse(request, "blog/admin/news-migration.html", context)
 
     
-    actions = [make_published,make_draft]
+    actions = [make_published,make_draft,translate_to_new_languages,force_translation]
 
 
 class TagAdmin(admin.ModelAdmin):

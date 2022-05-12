@@ -14,7 +14,7 @@ class PostList(generic.ListView):
         lang_code = self.request.LANGUAGE_CODE or "en"
 
         if self.request.resolver_match.url_name == 'news':
-            return Post.objects.filter(status=PUBLISH_STATUS, language=lang_code, tags__slug__in=['news']).order_by('-created_on').filter(status=PUBLISH_STATUS, language=lang_code, tags__slug__in=['front-page']).order_by('-created_on')
+            return Post.objects.filter(status=PUBLISH_STATUS, language=lang_code, tags__slug__in=['news']).order_by('-created_on').order_by('-created_on')
         elif self.kwargs.get('tag') is None:
             return Post.objects.filter(status=PUBLISH_STATUS, language=lang_code).order_by('-created_on').exclude(tags__in = Tag.objects.filter(slug__in = ['author-profile','institution-profile']) )
             
@@ -29,7 +29,7 @@ class PostDetail(generic.DetailView):
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
-        print('get context data')
+
         if self.object:
             isNews = self.object.tags.filter(slug__in =['news','front-page'] ).count() > 0
             context['is_news'] = isNews
@@ -37,19 +37,21 @@ class PostDetail(generic.DetailView):
         return context
 
     def get_object(self):
-
-        print(self)
-
+        
         if 'pk' in self.kwargs:
-            post = Post.objects.get(pk=self.kwargs['pk'])
-            
-
+            post = Post.objects.get(pk=self.kwargs['pk'])            
             return  post
 
         slug = self.kwargs.get('slug')
+        language_param = self.kwargs.get('language')
+        
         if slug is not None:
             lang_code = self.request.LANGUAGE_CODE or "en"
-            matches = Post.objects.filter(status=PUBLISH_STATUS, slug=slug,language=lang_code)[:2]
+
+            if language_param is not None:
+                lang_code = language_param
+            
+            matches = Post.objects.filter(status=PUBLISH_STATUS, slug=slug,language=lang_code)[:2]            
             if len(matches) == 1:
                 return matches[0]
             if lang_code != "en":

@@ -1,6 +1,7 @@
 {% extends "admin/change_list.html" %}
 {% load i18n admin_static %}
 
+
 {% block object-tools-items %}
 {{ block.super }}
 {% load voyage_extras %}
@@ -8,7 +9,7 @@
 
 {% if BLOG %}
 <li>
-    <a href="./newsmigration" >Migrate all news to Blog Format</a>
+    <a href="./newsmigration" >{% trans 'Migrate all news to Blog Format' %}</a>
 </li>
 {% endif %}
 {% endblock %}

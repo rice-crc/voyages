@@ -1,17 +1,22 @@
 {% load sass_tags %}
 {% load i18n %}
+
+{% load compress %}
+
 {% load voyage_extras %}
 {% feature_flag "BLOG" %}
 
 {% if BLOG %}
 {% block content %}
 
+{% load staticfiles %}
+
 <link href="{% sass_src 'scss/blog-carousel.scss' %}" rel="stylesheet" type="text/css" />
 
 <div class="aos-container news-container" data-aos="fade-in" data-aos-easing="ease" data-aos-duration="500">
     <div class="container">
         <div class="news-container-title">
-			{% trans 'Latest Blog Posts' %}
+			{% trans 'Latest News' %}
 		</div>
         <div class="news-grid-container row" >
             <div id="carouselBlogIndicators" class="carousel slide" data-ride="carousel" >          
@@ -22,11 +27,15 @@
                         {% if slidestart %}<div class="carousel-item{% if forloop.first %} active {% endif %}">
                             <div class="row">{% endif %}
                                 <div class="col-md-4 text-center" >
-                                    <a href="{% url 'blog:post_detail' post.slug   %}">
-                                        <img class="d-block w-100 h-50" class="h-50 d-inline-block"  src="{{ post.thumbnail.url}}" alt="{{post.title}}">
+                                    <a href="{% url 'blog:post_detail' post.slug   %}" class="expand-snippet" data-content="{{ post.get_snippet|striptags|truncatewords:120 }}" rel="popover" data-placement="top" data-original-title="{{ post.title }}" data-trigger="hover">
+                                        {%if post.thumbnail %}
+                                            <img class="d-block w-100 h-50 "  src="{{ post.thumbnail.url}}" alt="{{post.title}}">
+                                        {%else%}
+                                            <img class="d-block w-100 h-50 d-inline-block " src="{{ STATIC_URL }}images/site/404.png"  alt="{{ post.title }}">    
+                                        {%endif%}
                                         <div class="carousel-caption d-md-block">
                                             <h5>{{ post.title }}</h5>        
-                                            <p>{{ post.subtitle|default_if_none:"" }}</p>                
+                                            <p>{{ post.subtitle|default_if_none:"" }}</p>                                            
                                         </div>
                                     </a>
                                 </div>
@@ -54,10 +63,16 @@
 </div>
 <script>
     $(document).ready(function() {        
-        $('.carousel').carousel({
+        $(".carousel").carousel({
             interval: 2000
         })
+
+
+        $('.expand-snippet').popover();
     })
+
+    
+
 </script>
 
 {% endblock %}

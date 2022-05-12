@@ -10,6 +10,7 @@
     width:auto !important; 
     margin: auto;
     
+    
 }
 
 .carousel-caption
@@ -20,4 +21,20 @@
 .carousel-caption h5
 {
     /*text-shadow: 0 0 2px blue;*/
+}
+
+.carousel-control-prev-icon, .carousel-control-next-icon
+{
+    background-color: black;
+}
+
+.pagebreak
+{
+    background: white;      
+    overflow-y: scroll;
+}
+
+.pagebreak .card-body
+{
+    color: black !important;
 }

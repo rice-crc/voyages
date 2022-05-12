@@ -40,16 +40,36 @@
             <img class="blog-detail-thumbnail" src="{{ post.thumbnail.url }}" >
           {% endif %}
           <h1>{% block title %} {{ object.title }} {% endblock title %}</h1>
-          <h3>{{ object.subtitle }}</h3>          
+          <h3>{{ object.subtitle|default_if_none:"" }}</h3>          
           <p class="card-text text-muted h6">
             {{ post.created_on }}
             
             <br>
-            {% for author in post.authors.all %}                      
-              <a href="{% url 'blog:author_bio' author.slug  author.id   %}">
-                <span>{{ author.name }}</span>             
-              </a>
-              {{ forloop.last|yesno:",|"|safe }}
+            {% for author in post.authors.all %}         
+              <div class="media ">
+                <div class="media-left media-top">
+                  {%if author.photo %}
+                    {% thumbnail author.photo "40x40" crop="center" as im %}
+                      <a href="{% url 'blog:author_bio' author.slug  author.id   %}" >
+                        <img class="rounded-circle" src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}">
+                      </a>
+                    {% endthumbnail %}
+                  {% else %}
+                    <div class="avatar">
+                        <i class="fas fa-user fa-3x "></i>
+                    </div>
+                  {% endif %}            
+                </div>
+                <div class="media-body">
+                  <h4 class="media-heading">
+                    <a href="{% url 'blog:author_bio' author.slug  author.id   %}" >
+                      {{ author.name }}
+                    </a>
+                  </h4>
+                  {{ author.role }}
+                </div>                
+            </div>              
+            <div class="row mt-3"></div>                       
             {% endfor %}
           </p>
           

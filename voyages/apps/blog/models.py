@@ -61,8 +61,8 @@ class Post(models.Model):
     status = models.IntegerField(choices=STATUS, default=0)
     
     tags = models.ManyToManyField(Tag)
-    #thumbnail = models.ImageField(upload_to='images',null=True, blank=True)
-    thumbnail = FileBrowseField("Thumbnail", max_length=300, directory="blog/", extensions=[".jpg",".png",".wep", ".gif"], null=True,  blank=True)
+    
+    thumbnail = FileBrowseField("Thumbnail", format="Image", max_length=300,directory="images/", extensions=[".jpg",".png",".wep", ".gif"], blank=True,default='images/')
 
     class Meta:
         ordering = ['-created_on']
@@ -70,3 +70,11 @@ class Post(models.Model):
 
     def __str__(self):
         return self.title
+
+    def get_snippet(self):
+
+        page_break = self.content.find('<!-- pagebreak -->')
+        if page_break != -1:
+            return self.content[:page_break]
+
+        return self.content

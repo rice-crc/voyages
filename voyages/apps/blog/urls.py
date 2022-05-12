@@ -16,10 +16,12 @@ urlpatterns = [
     url(r'^institutions/$',views.InstitutionList.as_view(),name='institutions'),        
     url(r'^institution/(?P<slug>[-\w]+)/(?P<pk>\d+)/$', views.InstitutionDetail.as_view(), name='institution_detail'), 
     url(r'^author/(?P<slug>[-\w]+)/(?P<pk>\d+)/$', views.AuthorBio.as_view(), name='author_bio'),    
-    url(r'^feed$', LatestPostEntries()),
+    url(r'^feed/$', LatestPostEntries()),
+    url(r'^feed/(?P<language>[-\w]+)/$', LatestPostEntries()),    
     url(r'^tag/(?P<tag>[-\w]+)$',views.PostList.as_view(),name='tag'),
     url(r'^news/$',views.PostList.as_view(),name='news'),
     url('(?P<slug>[-\w]+)$', views.PostDetail.as_view(), name='post_detail'), 
+    url('(?P<slug>[-\w]+)/(?P<language>[-\w]+)/$', views.PostDetail.as_view(), name='post_detail'), 
     
 ]
 

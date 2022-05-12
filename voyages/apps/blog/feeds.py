@@ -7,10 +7,12 @@ class LatestPostEntries (Feed):
     link = "/blog/feed"
     description = "Last posts from the blog"
 
-    def items(self):
-        lang_code = "en"
+    def get_object(self, request, language = 'en'):
+        return language
+
+    def items(self,obj):        
         # TODO: detect the language needed from the feed.
-        return Post.objects.filter(language=lang_code).order_by('-created_on')[:20]
+        return Post.objects.filter(language=obj).order_by('-created_on')[:20]
 
     def item_title(self,item):
         return item.title
@@ -19,7 +21,7 @@ class LatestPostEntries (Feed):
         return item.title
 
     def item_link(self,item):
-        return reverse('blog:post_detail', args=[item.slug])
+        return reverse('blog:post_detail', args=[item.slug,item.language])
     
 
 

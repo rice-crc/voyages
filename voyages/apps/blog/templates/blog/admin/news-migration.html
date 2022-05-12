@@ -1,6 +1,8 @@
 {% extends "admin/base_site.html" %}
 
-{% block title %}News Migration{% endblock title %}
+{% load i18n %}
+
+{% block title %}{% trans 'News Migration' %} {% endblock title %}
 
 {% block content %}
 {{ message }}
