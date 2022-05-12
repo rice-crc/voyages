@@ -45,14 +45,9 @@ def post_saved(sender, instance, **kwargs):
 
                 clone.pk = None
 
-
-
-
-                #don't auto-translate Author and Institution names
-                if not clone.title in [None, ''] and tags.filter(slug__in=['author-profile','institution-profile']).count() == 0 :
-                    clone.title = translate_text(lang_code, instance.title) 
-                else:
-                    clone.title = instance.title 
+              
+                if not clone.title in [None, '']:
+                    clone.title = translate_text(lang_code, instance.title)
 
                 if not clone.subtitle in [None, '']:
                     clone.subtitle = translate_text(lang_code, instance.subtitle)
