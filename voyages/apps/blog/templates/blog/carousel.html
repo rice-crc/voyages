@@ -31,7 +31,7 @@
                                         {%if post.thumbnail %}
                                             <img class="d-block w-100 h-50 "  src="{{ post.thumbnail.url}}" alt="{{post.title}}">
                                         {%else%}
-                                            <img class="d-block w-100 h-50 d-inline-block " src="{{ STATIC_URL }}images/site/404.png"  alt="{{ post.title }}">    
+                                            <img class="d-block w-100 h-50 d-inline-block " src="{% static 'images/site/404.png' %}"  alt="{{ post.title }}">    
                                         {%endif%}
                                         <div class="carousel-caption d-md-block">
                                             <h5>{{ post.title }}</h5>        
