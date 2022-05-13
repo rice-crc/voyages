@@ -6,6 +6,7 @@ from django.contrib.auth.models import User
 
 from filebrowser.fields import FileBrowseField
 
+from django.utils import timezone
 
 DRAFT_STATUS = 0
 PUBLISH_STATUS = 1
@@ -50,19 +51,19 @@ class Tag(models.Model):
         return self.name
 
 class Post(models.Model):
-    title = models.CharField(max_length=200, unique=True)
+    title = models.CharField(max_length=200, unique=False)
     language = models.CharField(max_length=2, null = True, blank=False, default='en', choices=settings.LANGUAGES)
     subtitle = models.CharField(max_length=200, null = True, blank = True)
     slug = models.SlugField(max_length=200)
     authors = models.ManyToManyField(Author)
     updated_on = models.DateTimeField(auto_now= True)
     content = models.TextField()
-    created_on = models.DateTimeField(auto_now_add=True)
+    created_on = models.DateTimeField(default=timezone.now)
     status = models.IntegerField(choices=STATUS, default=0)
     
     tags = models.ManyToManyField(Tag)
-    #thumbnail = models.ImageField(upload_to='images',null=True, blank=True)
-    thumbnail = FileBrowseField("Thumbnail", max_length=300, directory="blog/", extensions=[".jpg",".png",".wep", ".gif"], null=True,  blank=True)
+    
+    thumbnail = FileBrowseField("Thumbnail", format="Image", max_length=300,directory="images/", extensions=[".jpg",".png",".wep", ".gif"], blank=True)
 
     class Meta:
         ordering = ['-created_on']
@@ -70,3 +71,11 @@ class Post(models.Model):
 
     def __str__(self):
         return self.title
+
+    def get_snippet(self):
+
+        page_break = self.content.find('<!-- pagebreak -->')
+        if page_break != -1:
+            return self.content[:page_break]
+
+        return self.content

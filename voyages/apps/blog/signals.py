@@ -6,36 +6,65 @@ from .models import Post, PUBLISH_STATUS
 
 from django.utils.text import slugify
 
-import logging
+
+
+from django.db import transaction
 
 #import os
 #os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "/voyages.apps.blog/google_auth.json"
 
-logging.info("signals.py")
+
 
 SOURCE_LANGUAGE = "en"
 
+def on_transaction_commit(func):
+    def inner(*args, **kwargs):
+        transaction.on_commit(lambda: func(*args, **kwargs))
+
+    return inner
+
+
 @receiver(post_save, sender=Post)
+@on_transaction_commit
 def post_saved(sender, instance, **kwargs):
-    logging.info("POST_SAVED_HANDLER")
+    
     if instance.status == PUBLISH_STATUS and instance.language == SOURCE_LANGUAGE:
-        logging.info(f"POST SAVED: {instance.pk}")
-        logging.info(instance.title)
+        
         for lang_code, _ in settings.LANGUAGES:
             if lang_code != SOURCE_LANGUAGE:
                 # First check if the target language already has a translation.
                 count = Post.objects.filter(slug=instance.slug, language=lang_code).count()
                 if count > 0:
                     continue
-                logging.info("CREATING for language:")
-                logging.info(lang_code)
+                
+
                 clone = Post.objects.get(pk=instance.pk)
+
+                authors = clone.authors.all()
+                tags = clone.tags.all()
+
                 clone.pk = None
-                clone.title = translate_text(lang_code, instance.title)
-                clone.subtitle = translate_text(lang_code, instance.subtitle)
-                clone.content = translate_text(lang_code, instance.content)
+
+              
+                if not clone.title in [None, '']:
+                    clone.title = translate_text(lang_code, instance.title)
+
+                if not clone.subtitle in [None, '']:
+                    clone.subtitle = translate_text(lang_code, instance.subtitle)
+
+                if not clone.content in [None, '']:
+                    clone.content = translate_text(lang_code, instance.content)
+
                 clone.language = lang_code
-                clone.save()
+
+                clone.save()                
+                
+                clone.authors.set(authors)
+                clone.tags.set(tags)
+
+
+
+                
     
 
 def translate_text(target, text):
@@ -64,8 +93,6 @@ def translate_text(target, text):
     #result = translate_client.translate(text, target_language=target)
     result = translate_client.translate(text, target_language=target)
 
-    #print(u"Text: {}".format(result["input"]))
-    #print(u"Translation: {}".format(result["translatedText"]))
-    #print(u"Detected source language: {}".format(result["detectedSourceLanguage"]))
+   
 
     return result["translatedText"]

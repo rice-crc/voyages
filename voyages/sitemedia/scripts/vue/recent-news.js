@@ -24,7 +24,7 @@ var recentNews = new Vue({
     var pathname = 'about/news';
     var url = host + prefix + pathname;
 
-    var articleMaxNum = 3;
+    var articleMaxNum = 10;
     var articles = [];
 
     axios.get(url)
