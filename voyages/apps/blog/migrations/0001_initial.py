@@ -73,7 +73,7 @@ class Migration(migrations.Migration):
                 ('slug', models.SlugField(max_length=200)),
                 ('updated_on', models.DateTimeField(auto_now=True)),
                 ('content', models.TextField()),
-                ('created_on', models.DateTimeField(auto_now_add=True)),
+                ('created_on', models.DateTimeField(default=django.utils.timezone.now)),
                 ('status', models.IntegerField(choices=[(0, 'Draft'), (1, 'Publish')], default=0)),
                 ('thumbnail', filebrowser.fields.FileBrowseField(blank=True, max_length=300, verbose_name='Thumbnail')),                
                 ('authors', models.ManyToManyField(to='blog.Author')),

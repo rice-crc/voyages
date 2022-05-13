@@ -6,6 +6,7 @@ from django.contrib.auth.models import User
 
 from filebrowser.fields import FileBrowseField
 
+from django.utils import timezone
 
 DRAFT_STATUS = 0
 PUBLISH_STATUS = 1
@@ -57,7 +58,7 @@ class Post(models.Model):
     authors = models.ManyToManyField(Author)
     updated_on = models.DateTimeField(auto_now= True)
     content = models.TextField()
-    created_on = models.DateTimeField(auto_now_add=True)
+    created_on = models.DateTimeField(default=timezone.now)
     status = models.IntegerField(choices=STATUS, default=0)
     
     tags = models.ManyToManyField(Tag)
