@@ -130,6 +130,19 @@ var_place_voyage_ended_id = new PlaceVariable({
     isAdvanced: false
   });
 
+var_voyage_links = new TreeselectVariable({
+    varName: "voyage_links",
+    label: gettext("Linked Voyages"),
+    description: "",
+  },{
+    op: "is null",
+    searchTerm: null,
+  },{
+    isImputed: false,
+    isAdvanced: false,
+    isMultiple: false,
+  });
+
 itinerary = {
   departure: {
     var_imp_port_voyage_begin_id: var_imp_port_voyage_begin_id,
@@ -173,6 +186,14 @@ itinerary = {
 
   destination: {
     var_place_voyage_ended_id: var_place_voyage_ended_id,
+    count: {
+      changed: 0,
+      activated: 0,
+    }
+  },
+
+  voyage_link: {
+    var_voyage_links: var_voyage_links,
     count: {
       changed: 0,
       activated: 0,

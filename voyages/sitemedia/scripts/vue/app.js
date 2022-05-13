@@ -19,7 +19,15 @@ var searchBar = new Vue({
       settings: settings
     },
     filterData: {
-      treeselectOptions: {}
+      treeselectOptions: {
+        var_voyage_links: [{
+          id: "True",
+          label: gettext("Doesn't have Linked Voyages")
+        },{
+          id: "False",
+          label: gettext("Has Linked Voyages")
+        }]
+      }
     },
     activated: false,
     saved: [],

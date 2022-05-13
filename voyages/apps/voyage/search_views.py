@@ -111,7 +111,7 @@ def perform_search(search, lang):
                     f'var_{item["varName"]}_plaintext{xt}:("{term}")')
                 skip = True
         if operator.front_end_op_str == _op_isnull.front_end_op_str:
-            neg = "-" if bool(term) else ''
+            neg = "-" if term == "True" else ''
             custom_terms.append(f'{neg}var_{item["varName"]}:*')
             skip = True
         if not skip:

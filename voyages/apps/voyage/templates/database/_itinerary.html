@@ -127,6 +127,23 @@
 				</div>
 			</v-panel>
 
+			<v-panel @reset="reset" group="itinerary" sub-group="voyage_link" @apply="apply" title="{% trans 'Linked Voyages' %}" :filters="filter.itinerary.voyage_link">
+				<div slot="v-panel-header">
+					<v-panel-header title="{% trans 'Linked Voyages' %}" description="{% trans '' %}">
+						<div slot="v-modal-content"></div>
+					</v-panel-header>
+				</div>
+
+				<div slot="v-panel-content" slot-scope="scope">
+					<code v-if="options.debug">{{scope.filters}}</code>
+					<v-treeselect
+						:filter="scope.filters.var_voyage_links"
+						@change="changed">
+					</v-treeselect>
+
+				</div>
+			</v-panel>
+
 			</ul>
 	</div>
 </li>

@@ -46,6 +46,7 @@ var allColumns = [
   { data: "var_second_landing_place_lang", category: 2, header: gettext("2nd place of slave landing"), visible: false, isImputed: false },
   { data: "var_third_landing_place_lang", category: 2, header: gettext("3rd place of slave landing"), visible: false, isImputed: false },
   { data: "var_place_voyage_ended_lang", category: 2, header: gettext("Place where voyage ended"), visible: false, isImputed: false },
+  { data: "var_voyage_links", category: 2, header: gettext("Linked voyages"), visible: true, isImputed: false },
 
   // slaves
   { data: "var_imp_total_num_slaves_purchased", category: 3, header: gettext("Total embarked"), visible: false, isImputed: true },
