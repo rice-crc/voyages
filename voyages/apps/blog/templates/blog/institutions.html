@@ -27,28 +27,32 @@
 
 
 <div class="container-new">
-    <div class="row">
-        {% for institution in institution_list %}
 
-        <div class="col-md-4">
-            <div class="content"> 
-                <a href="{% url 'blog:institution_detail' institution.slug  institution.id   %}">
-                    <div class="content-overlay"></div> 
-                    
-                    <img class="content-image blog-thumbnail" src="{{ institution.image.url }}" >    
-                    
-                    <div class="content-details fadeIn-bottom">
-                        <h3 class="content-title">{{ institution.name }}</h3>                        
-                    </div>
-                </a> 
-            </div>
-        </div>
-        {% endfor %}        
+    <div class="card-columns">
+  
+        {% for institution in institution_list %}
+          <div class="card ">
+            <a href="{% url 'blog:institution_detail' institution.slug  institution.id   %}">
+              <div class="content-overlay"></div> 
+              
+              {%if institution.image %}
+                <img class="card-img img-fluid content-image " src="{{institution.image.url}}"  alt="{{ institution.name }}">    
+              {%else%}
+                <img class="card-img img-fluid content-image " src="{{STATIC_URL}}images/site/404.png" alt="{{ institution.name }}">    
+              {%endif%}
+
+              <div class="content-details fadeIn-bottom">
+                <h3 class="content-title">{{ institution.name }}</h3>   
+              </div>
+            </a>
+          </div>
+        {% endfor %}
     </div>
+
     {% if is_paginated %}  
     <div class="row">
         <div class="col-md-12">
-            <nav aria-label="Page navigation container"></nav>                                
+            <nav aria-label="Page navigation container">
             <div class="dataTables_paginate paging_simple_numbers">
                 {% trans 'Page' %} {{ page_obj.number }} {% trans 'of' %} {{ page_obj.paginator.num_pages }}.                    
             <ul class="pagination pagination-sm justify-content-center">                
@@ -75,8 +79,8 @@
 
                 {% endif %}
             </ul>
-            </nav>
             </div>
+            </nav>
         </div>
     </div>
     {% endif %}

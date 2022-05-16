@@ -1,2 +1,0 @@
-
-alert('testing custom js');

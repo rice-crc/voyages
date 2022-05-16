@@ -241,6 +241,7 @@ class Command(BaseCommand):
                         fatal_error(f"Voyage id not found: {voyage_id}")
                     else:
                         voyage_list.append(voyage)
+                role = None
                 try:
                     role = rh.get_by_value(EnslaverRole, "role", "name", allow_null=False)
                 except:
@@ -305,6 +306,7 @@ class Command(BaseCommand):
                                 spouse_ens_alias.identity = spouse_ens
                                 spouse_ens_alias.alias = spouse
                                 spouse_ens.principal_alias = spouse
+                                enslavers[spouse_ens.id] = spouse_ens
                                 all_aliases.append(spouse_ens_alias)
                                 mapped_enslavers[spouse] = (spouse_ens, spouse_ens_alias)
                             else:

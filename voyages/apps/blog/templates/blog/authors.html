@@ -13,7 +13,7 @@
 <link href="{% sass_src 'scss/off-canvas.scss' %}" rel="stylesheet" type="text/css" />
 
 <link href="{% sass_src 'scss/library/bootstrap-vue-2.0.0-rc.11.css' %}" rel="stylesheet" type="text/css" />
-<link href="{% sass_src 'scss/blog.css' %}" rel="stylesheet" type="text/css" />
+<link href="{% sass_src 'scss/blog.scss' %}" rel="stylesheet" type="text/css" />
 
 
 <div class="nav-header">
@@ -23,35 +23,39 @@
 	</div>
 </div>
 
-<div class="container-new">
-    <div class="row">
-        {% for author in author_list %}
 
-        <div class="col-md-4">
-            <div class="content"> 
-                <a href="{% url 'blog:author_bio' author.slug  author.id   %}">
-                    <div class="content-overlay"></div> 
-                    
-                    
-                    {% thumbnail author.photo "300x300" crop="center" as im %}                        
-                        <img class="content-image " src="{{ im.url }}"  width="100%" height="{{ im.height }}">    
-                    {% endthumbnail %}                
-                    
-                    <div class="content-details fadeIn-bottom">
-                        <h3 class="content-title">{{ author.name }}</h3>
-                        <p class="content-text">
-                            {{ author.role }} at {{ author.institution.name }}                            
-                        </p>
+
+<div class="container-new">
+
+    <div class="card-columns">  
+        {% for author in author_list %}
+          <div class="card">
+            <a href="{% url 'blog:author_bio' author.slug  author.id   %}">
+                <div class="content-overlay"></div>                 
+                {%if author.photo %}
+                    <img class="card-img img-fluid content-image " src="{{ author.photo.url }}" >      
+                {% else %}
+                    <div class="avatar">
+                        <i class="fas fa-user fa-10x"></i>
                     </div>
-                </a> 
-            </div>
-        </div>
-        {% endfor %}        
+                {% endif %}            
+                
+                <div class="content-details fadeIn-bottom">
+                    <h3 class="content-title">{{ author.name }}</h3>
+                    <p class="content-text">
+                        {{ author.role }} at {{ author.institution.name }}                            
+                    </p>
+                </div>
+            </a>
+          </div>
+          
+        {% endfor %}
     </div>
+
     {% if is_paginated %}  
     <div class="row">
         <div class="col-md-12">
-            <nav aria-label="Page navigation container"></nav>                                
+            <nav aria-label="Page navigation container">
             <div class="dataTables_paginate paging_simple_numbers">
                 {% trans 'Page' %} {{ page_obj.number }} {% trans 'of' %} {{ page_obj.paginator.num_pages }}.                    
             <ul class="pagination pagination-sm justify-content-center">                
@@ -78,8 +82,8 @@
 
                 {% endif %}
             </ul>
-            </nav>
             </div>
+            </nav>
         </div>
     </div>
     {% endif %}

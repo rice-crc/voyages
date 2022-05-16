@@ -1,4 +1,3 @@
-alert('init 2');
 tinymce.init({
     selector: "textarea",
     plugins: [

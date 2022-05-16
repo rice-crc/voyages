@@ -28,31 +28,58 @@
 
 
 <div class="container-new">
+  <div class="main-body">
+    <div class="row">
+      <div class="col-lg-4">
+        <div class="card border-0">
+          <div class="card-body">
+            <div class="d-flex flex-column align-items-center text-center">
+              {%if institution.image %}
+              <img src="{{ institution.image.url }}" alt="{{ object.name }}"  width="300">
+              {% endif %}
+              <div class="mt-3">
+                <h4>{% block title %}{{ object.name }}{% endblock title %}</h4>
+                <p class="text-secondary mb-1">{{ object.description|default_if_none:"" }}</p>                
+              </div>
+            </div>            
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-8">
+        <div class="card border-0">
+          <div class="card-body">                        
+            {{ profile|safe }}
+          </div>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+<hr>
+
+<div class="container-new">
     <div class="row">
       <div class="col-md-12  mb-4  mt-3 left  top">
         <div class="card-body">
-          {% thumbnail institution.image "400x300" crop="center" as im %}
-            <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}">
-          {% endthumbnail %}
-          <p>
-          <h1>{% block title %} {{ object.name }} {% endblock title %}            
-          </h1>
-          </p>
-          <p>
-            <div class="card-text blog-content">{{ object.description|default_if_none:"" }}</div>
-          </p>
-
-          <hr>
+          
           <h3>Institution Authors:</h3>          
           
           {% for author in object.author_set.all %}                 
                 <div class="media ">
                   <div class="media-left media-top">
-                    {% thumbnail author.photo "64x64" crop="center" as im %}
-                      <a href="{% url 'blog:author_bio' author.slug  author.id   %}" >
-                        <img class="rounded-circle" src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}">
-                      </a>
-                    {% endthumbnail %}
+                    {%if author.photo %}
+                      {% thumbnail author.photo "64x64" crop="center" as im %}
+                        <a href="{% url 'blog:author_bio' author.slug  author.id   %}" >
+                          <img class="rounded-circle" src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}">
+                        </a>
+                      {% endthumbnail %}
+                    {% else %}
+                      <div class="avatar">
+                          <i class="fas fa-user fa-4x "></i>
+                      </div>
+                    {% endif %}            
                   </div>
                   <div class="media-body">
                     <h4 class="media-heading">
