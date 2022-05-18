@@ -136,10 +136,9 @@
 
 				<div slot="v-panel-content" slot-scope="scope">
 					<code v-if="options.debug">{{scope.filters}}</code>
-					<v-treeselect
-						:filter="scope.filters.var_voyage_links"
-						@change="changed">
-					</v-treeselect>
+					<v-toggle @change="changed"
+						:filter="scope.filters.var_voyage_links">
+					</v-toggle>
 
 				</div>
 			</v-panel>

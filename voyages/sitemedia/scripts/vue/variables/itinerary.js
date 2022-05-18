@@ -130,17 +130,16 @@ var_place_voyage_ended_id = new PlaceVariable({
     isAdvanced: false
   });
 
-var_voyage_links = new TreeselectVariable({
+var_voyage_links = new BooleanVariable({
     varName: "voyage_links",
-    label: gettext("Linked Voyages"),
+    label: gettext("Only with Linked Voyages"),
     description: "",
   },{
     op: "is null",
-    searchTerm: null,
+    searchTerm: false,
   },{
     isImputed: false,
-    isAdvanced: false,
-    isMultiple: false,
+    isAdvanced: false
   });
 
 itinerary = {

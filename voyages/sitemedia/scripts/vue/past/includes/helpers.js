@@ -48,7 +48,8 @@ var voyageColumns = [
       { data: "var_first_landing_place_lang", label: gettext("1st place of slave landing"), isImputed: false },
       { data: "var_second_landing_place_lang", label: gettext("2nd place of slave landing"), isImputed: false },
       { data: "var_third_landing_place_lang", label: gettext("3rd place of slave landing"), isImputed: false },
-      { data: "var_place_voyage_ended_lang", label: gettext("Place where voyage ended"), isImputed: false }
+      { data: "var_place_voyage_ended_lang", label: gettext("Place where voyage ended"), isImputed: false },
+      { data: "var_voyage_links", label: gettext("Linked voyages"), isImputed: false }
     ]
   },
   {
