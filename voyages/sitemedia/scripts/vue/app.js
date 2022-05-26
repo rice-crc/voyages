@@ -19,7 +19,15 @@ var searchBar = new Vue({
       settings: settings
     },
     filterData: {
-      treeselectOptions: {}
+      treeselectOptions: {
+        var_voyage_links: [{
+          id: "True",
+          label: gettext("Doesn't have Linked Voyages")
+        },{
+          id: "False",
+          label: gettext("Has Linked Voyages")
+        }]
+      }
     },
     activated: false,
     saved: [],
@@ -257,6 +265,11 @@ var searchBar = new Vue({
                     value = this.row.data[varName + "_lang"];
                   }
 
+                  // Patch linked voyages
+                  if (varName == "var_voyage_links" && value) {
+                    value = getFormattedLinkedVoyages(value);
+                  }
+
                   // Patch place variables
                   if (item.type == "place") {
                     value = this.row.data[varName.slice(0, -3) + "_lang"];
@@ -314,6 +327,7 @@ var searchBar = new Vue({
       if (!value) return "";
       if (value == "is one of") return "is";
       if (value == "is equal to") return "is";
+      if (value == "is null") return "is";
       return value;
     },
 
@@ -325,6 +339,13 @@ var searchBar = new Vue({
       if (/[0-9]{4}-[0-9]{2}-[0-9]{2}/.test(value))
         return value.match(/[0-9]{4}-[0-9]{2}-[0-9]{2}/)[0];
       if (Array.isArray(value)) return '"' + value.join('", "') + '"';
+      return value;
+    },
+
+    labelFormat: function(value) {
+      if (value == searchBar.filter.itinerary.voyage_link.var_voyage_links.label) {
+        return gettext("Linked Voyages");
+      }
       return value;
     }
   },

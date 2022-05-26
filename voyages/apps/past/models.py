@@ -8,8 +8,8 @@ from functools import reduce
 from django.conf import settings
 
 from django.contrib.auth.models import User
-from django.db import models
-from django.db.models import (Case, CharField, F, Func, IntegerField, Q, Value, When)
+from django.db import (connection, models, transaction)
+from django.db.models import (Case, CharField, Count, F, Func, IntegerField, Max, Min, Q, Sum, Value, When)
 from django.db.models.expressions import Subquery, OuterRef
 from django.db.models.fields import TextField
 from django.db.models.functions import Coalesce, Concat, Length, Substr
@@ -26,7 +26,7 @@ from voyages.apps.common.validators import date_csv_field_validator
 # function obtained from
 # https://stackoverflow.com/questions/517923/
 # what-is-the-best-way-to-remove-accents-in-a-python-unicode-string
-def strip_accents(text):
+def _strip_accents(text):
     """
     Strip accents from input String.
 
@@ -39,22 +39,31 @@ def strip_accents(text):
     text = unidecode.unidecode(text)
     return text.replace(',', '').lower()
 
+COMMON_NAME_EXCLUSION_LIST = ['van', 'der', 'de', 'del', 'da', 'do']
 
-class NameSearchCache:
+def _get_composite_names(name):
+    yield name
+    parts = re.split("\\s*,\\s*", name)
+    if len(parts) == 2:
+        # When the name is split by a comma, we assume that its format is
+        # LastName, FirstName and also yield a string to represent the name as
+        # FirstName LastName.
+        yield parts[1] + " " + parts[0]
+    parts = re.split("\\s*,\\s*|\\s+", name)
+    for part in parts:
+        # Heuristic: drop small segments that are common to names, such as "de",
+        # "del", "van" as they add nothing to the search.
+        if len(part) > 3 or (len(part) > 2 and not part in COMMON_NAME_EXCLUSION_LIST):
+            yield part
+
+
+class EnslavedNameSearchCache:
+    WORDSET_INDEX = None
+
     _loaded = False
     _lock = threading.Lock()
-    _index = None
     _name_key = {}
     _sound_recordings = {}
-    
-    @staticmethod
-    def get_composite_names(name):
-        yield name
-        parts = re.split("\\s*,\\s*|\\s+", name)
-        if len(parts) == 2:
-            yield parts[1] + " " + parts[0]
-        for part in parts:
-            yield part
 
     @classmethod
     def get_recordings(cls, names):
@@ -72,7 +81,7 @@ class NameSearchCache:
 
     @classmethod
     def search_full(cls, name, max_cost, max_results):
-        res = sorted(Levenshtein_search.lookup(0, strip_accents(name),
+        res = sorted(Levenshtein_search.lookup(cls.WORDSET_INDEX, _strip_accents(name),
                                                max_cost),
                      key=lambda x: x[1])
         return [(cls._name_key[x[0]], x[1], x[0]) for x in res[0:max_results]]
@@ -82,7 +91,8 @@ class NameSearchCache:
         with cls._lock:
             if not force_reload and cls._loaded:
                 return
-            Levenshtein_search.clear_wordset(0)
+            if cls.WORDSET_INDEX:
+                Levenshtein_search.clear_wordset(cls.WORDSET_INDEX)
             cls._name_key = {}
             all_names = set()
             q = Enslaved.objects.values_list('enslaved_id', 'documented_name',
@@ -91,16 +101,16 @@ class NameSearchCache:
 
             for item in q:
                 ns = {
-                    strip_accents(part)
+                    _strip_accents(part)
                     for i in range(1, len(item)) if item[i] is not None
-                    for part in NameSearchCache.get_composite_names(item[i])
+                    for part in _get_composite_names(item[i])
                 }
                 all_names.update(ns)
                 item_0 = item[0]
                 for name in ns:
                     ids = cls._name_key.setdefault(name, [])
                     ids.append(item_0)
-            Levenshtein_search.populate_wordset(0, list(all_names))
+            cls.WORDSET_INDEX = Levenshtein_search.populate_wordset(-1, list(all_names))
             q = EnslavedName.objects.values_list('id', 'name', 'language',
                                                  'recordings_count')
             for item in q:
@@ -117,6 +127,74 @@ class NameSearchCache:
             cls._loaded = True
 
 
+class EnslaverNameSearchCache:
+    WORDSET_INDEX = None
+
+    _loaded = False
+    _lock = threading.Lock()
+    _name_key = {}
+    
+    @classmethod
+    def search(cls, name, max_cost=3, max_results=100):
+        res = cls.search_full(name, max_cost, max_results)
+        return [id for x in res for id in x[0]]
+
+    @classmethod
+    def search_full(cls, name, max_cost, max_results):
+        res = sorted(Levenshtein_search.lookup(cls.WORDSET_INDEX, _strip_accents(name),
+                                               max_cost),
+                     key=lambda x: x[1])
+        return [(cls._name_key[x[0]], x[1], x[0]) for x in res[0:max_results]]
+
+    @classmethod
+    def load(cls, force_reload=False):
+        with cls._lock:
+            if not force_reload and cls._loaded:
+                return
+            if cls.WORDSET_INDEX:
+                Levenshtein_search.clear_wordset(cls.WORDSET_INDEX)
+            cls._name_key = {}
+            all_names = set()
+            q = EnslaverAlias.objects.values_list('identity_id', 'alias')
+            for item in q:
+                ns = {
+                    _strip_accents(part)
+                    for part in _get_composite_names(item[1])
+                }
+                all_names.update(ns)
+                item_0 = item[0]
+                for name in ns:
+                    ids = cls._name_key.setdefault(name, [])
+                    ids.append(item_0)
+            cls.WORDSET_INDEX = Levenshtein_search.populate_wordset(-1, list(all_names))
+            cls._loaded = True
+
+
+class NamedModelAbstractBase(models.Model):
+    id = models.IntegerField(primary_key=True)
+    name = models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.__unicode__()
+
+    def __unicode__(self):
+        return str(self.id) + ", " + self.name
+
+    class Meta:
+        abstract = True
+
+        
+class SourceConnectionAbstractBase(models.Model):
+    # Sources are shared with Voyages.
+    source = models.ForeignKey(VoyageSources, related_name="+",
+                               null=False, on_delete=models.CASCADE)
+    source_order = models.IntegerField()
+    text_ref = models.CharField(max_length=255, null=False, blank=True)
+
+    class Meta:
+        abstract = True
+
+
 class EnslaverInfoAbstractBase(models.Model):
     principal_alias = models.CharField(max_length=255)
 
@@ -124,33 +202,38 @@ class EnslaverInfoAbstractBase(models.Model):
     birth_year = models.IntegerField(null=True)
     birth_month = models.IntegerField(null=True)
     birth_day = models.IntegerField(null=True)
-    birth_place = models.CharField(max_length=255, null=True)
+    birth_place = models.ForeignKey(Place, null=True, on_delete=models.SET_NULL, related_name='+')
 
     death_year = models.IntegerField(null=True)
     death_month = models.IntegerField(null=True)
     death_day = models.IntegerField(null=True)
-    death_place = models.CharField(max_length=255, null=True)
+    death_place = models.ForeignKey(Place, null=True, on_delete=models.SET_NULL, related_name='+')
 
     father_name = models.CharField(max_length=255, null=True)
     father_occupation = models.CharField(max_length=255, null=True)
     mother_name = models.CharField(max_length=255, null=True)
 
-    first_spouse_name = models.CharField(max_length=255, null=True)
-    first_marriage_date = models.CharField(max_length=12, null=True)
-    second_spouse_name = models.CharField(max_length=255, null=True)
-    second_marriage_date = models.CharField(max_length=12, null=True)
-
+    # We will include the spouses in the Enslaver table and use
+    # EnslavementRelation to join the individuals by a marriage
+    # relationship.
+    # first_spouse_name = models.CharField(max_length=255, null=True)
+    # first_marriage_date = models.CharField(max_length=12, null=True)
+    # second_spouse_name = models.CharField(max_length=255, null=True)
+    # second_marriage_date = models.CharField(max_length=12, null=True)
+	
     probate_date = models.CharField(max_length=12, null=True)
     will_value_pounds = models.CharField(max_length=12, null=True)
     will_value_dollars = models.CharField(max_length=12, null=True)
     will_court = models.CharField(max_length=12, null=True)
-    text_id=models.CharField(max_length=50)
-    first_active_year=models.IntegerField(null=True)
-    last_active_year=models.IntegerField(null=True)
-    number_enslaved=models.IntegerField(null=True)
-    principal_location=models.ForeignKey(Place, null=True,
+    principal_location = models.ForeignKey(Place, null=True,
                                                 on_delete=models.CASCADE,
                                                 db_index=True)
+
+    def __str__(self):
+        return self.__unicode__()
+
+    def __unicode__(self):
+        return "Enslaver info: " + self.principal_alias
 	 
     class Meta:
         abstract = True
@@ -162,6 +245,128 @@ class EnslaverIdentity(EnslaverInfoAbstractBase):
         verbose_name = 'Enslaver unique identity and personal info'
 
 
+class PropHelper:
+    """
+    A helper structure to index property values by id and key.
+    """
+
+    def __init__(self):
+        self.data = {}
+
+    def add_num(self, id, key, num):
+        if num is None:
+            return
+        self.set_or_replace(id, key, lambda prev: num + (prev or 0))
+
+    def add_to_set(self, id, key, val):
+        if val is None:
+            return
+        self.set_or_replace(id, key, lambda prev: {val}.union(prev or set()))
+
+    def set(self, id, key, val):
+        if val is None:
+            return
+        self.set_or_replace(id, key, lambda _: val)
+
+    def set_or_replace(self, id, key, update_fn):
+        item = self.data.setdefault(id, {})
+        item[key] = update_fn(item.get(key, None))
+
+
+class EnslaverCachedProperties(models.Model):
+    identity = models.ForeignKey(EnslaverIdentity, related_name='cached_properties',
+                                on_delete=models.CASCADE, unique=True, primary_key=True)
+    enslaved_count = models.IntegerField(db_index=True)
+    transactions_amount = models.DecimalField(db_index=True, null=False, default=0, decimal_places=2, max_digits=6)
+    # Enumerate all the distinct roles for an enslaver, using the PKs of the
+    # Role enumeration separated by comma.
+    roles = models.CharField(max_length=255, null=False, blank=True)
+    first_year = models.IntegerField(db_index=True, null=True)
+    last_year = models.IntegerField(db_index=True, null=True)
+
+    @staticmethod
+    def compute():
+        """
+        Compute cached properties for the Enslaver. This method seeds the
+        EnslaverCachedProperties table which can be used to search and sort
+        enslavers based on aggregated values.
+        """
+        helper = PropHelper()
+        identity_field = 'enslaver_alias__identity__id'
+        voyage_year_field = 'voyage__voyage_dates__imp_arrival_at_port_of_dis'
+        q_years = EnslaverVoyageConnection.objects \
+            .select_related(voyage_year_field) \
+            .values(identity_field) \
+            .annotate(min_year=Min(voyage_year_field)) \
+            .annotate(max_year=Max(voyage_year_field)) \
+            .values_list(identity_field, 'min_year', 'max_year')
+
+        def get_year(s):
+            if s is None or len(s) < 4:
+                return None
+            try:
+                return int(s[-4:])
+            except:
+                return None
+
+        for row in q_years:
+            helper.set(int(row[0]), 'min_year', get_year(row[1]))
+            helper.set(int(row[0]), 'max_year', get_year(row[2]))
+        enslaved_count_field = 'voyage__voyage_slaves_numbers__imp_total_num_slaves_embarked'
+        voyage_conn_fields = [identity_field, enslaved_count_field]
+        # The number of captives associated with an Enslaver is obtained from
+        # two sources: (1) the number of enslaved embarked in all voyages
+        # associated with the enslaver; (2) enslaved people in a relationship
+        # with the enslaver through the EnslavementRelation table.
+        q_captive_count_voyageconn = EnslaverVoyageConnection.objects \
+            .select_related(*voyage_conn_fields) \
+            .values(identity_field) \
+            .annotate(enslaved_count=Sum(enslaved_count_field)) \
+            .values_list(identity_field, 'enslaved_count')
+        related_enslaved_field = 'relation__enslaved__id'
+        relation_fields = [identity_field, related_enslaved_field]
+        q_captive_count_relations = EnslaverInRelation.objects \
+            .select_related(*relation_fields) \
+            .values(identity_field) \
+            .annotate(enslaved_count=Count(related_enslaved_field)) \
+            .values_list(identity_field, 'enslaved_count')
+        for row in q_captive_count_voyageconn:
+            helper.add_num(int(row[0]), 'enslaved_count', row[1])
+        for row in q_captive_count_relations:
+            helper.add_num(int(row[0]), 'enslaved_count', row[1])
+        amount_fields = [identity_field, 'relation__amount']
+        q_transaction_amount = EnslaverInRelation.objects \
+            .select_related(*amount_fields) \
+            .values(identity_field) \
+            .annotate(amount_sum=Sum(amount_fields[1])) \
+            .values_list(identity_field, 'amount_sum')
+        for row in q_transaction_amount:
+            helper.add_num(int(row[0]), 'tot_amount', row[1])
+        q_roles = EnslaverInRelation.objects.values_list(identity_field, 'role')
+        for row in q_roles:
+            helper.add_to_set(int(row[0]), 'roles', row[1])
+        q_roles = EnslaverVoyageConnection.objects.values_list(identity_field, 'role')
+        for row in q_roles:
+            helper.add_to_set(int(row[0]), 'roles', row[1])
+        for id, item in helper.data.items():
+            props = EnslaverCachedProperties()
+            props.identity_id = id
+            props.enslaved_count = item.get('enslaved_count', 0)
+            props.roles = ','.join([str(role) for role in item.get('roles', [])])
+            props.transactions_amount = item.get('tot_amount', 0)
+            props.first_year = item.get('min_year', None)
+            props.last_year = item.get('max_year', None)
+            yield props
+
+    @staticmethod
+    def update():
+        with transaction.atomic():
+            # Delete all cached entries first to avoid duplicate primary key
+            # errors (note that this model's PK is also a FK).
+            EnslaverCachedProperties.objects.all().delete()
+            EnslaverCachedProperties.objects.bulk_create(__class__.compute())
+
+
 class EnslaverIdentitySourceConnection(models.Model):
     identity = models.ForeignKey(EnslaverIdentity, on_delete=models.CASCADE)
     # Sources are shared with Voyages.
@@ -170,14 +375,25 @@ class EnslaverIdentitySourceConnection(models.Model):
     source_order = models.IntegerField()
     text_ref = models.CharField(max_length=255, null=False, blank=True)
 
+
 class EnslaverAlias(models.Model):
     """
     An alias represents a name appearing in a record that is mapped to
     a consolidated identity. The same individual may appear in multiple
     records under different names (aliases).
     """
-    identity = models.ForeignKey(EnslaverIdentity, on_delete=models.CASCADE)
+    identity = models.ForeignKey(EnslaverIdentity, on_delete=models.CASCADE, related_name='aliases')
     alias = models.CharField(max_length=255)
+    
+    # The manual id can be used to track the original entries in sheets produced
+    # by the researchers.
+    manual_id = models.CharField(max_length=30, null=True)
+
+    def __str__(self):
+        return self.__unicode__()
+
+    def __unicode__(self):
+        return "EnslaverAlias: " + self.alias
 
     class Meta:
         verbose_name = 'Enslaver alias'
@@ -205,43 +421,27 @@ class EnslaverMergerItem(models.Model):
     enslaver_identity_id = models.IntegerField(null=False)
 
 
+class EnslaverRole(NamedModelAbstractBase):
+    pass
+
+
 class EnslaverVoyageConnection(models.Model):
     """
     Associates an enslaver with a voyage at some particular role.
     """
 
-    class Role:
-        CAPTAIN = 1
-        OWNER = 2
-        BUYER = 3
-        SELLER = 4
-
-    enslaver_alias = models.ForeignKey('EnslaverAlias',
+    enslaver_alias = models.ForeignKey(EnslaverAlias,
                                        null=False,
                                        on_delete=models.CASCADE)
     voyage = models.ForeignKey('voyage.Voyage',
                                null=False,
                                on_delete=models.CASCADE)
-    role = models.IntegerField(null=False)
+    role = models.ForeignKey(EnslaverRole, null=False, on_delete=models.CASCADE)
     # There might be multiple persons with the same role for the same voyage
     # and they can be ordered (ranked) using the following field.
     order = models.IntegerField(null=True)
     # NOTE: we will have to substitute VoyageShipOwner and VoyageCaptain
     # models/tables by this entity.
-
-
-class NamedModelAbstractBase(models.Model):
-    id = models.IntegerField(primary_key=True)
-    name = models.CharField(max_length=255)
-
-    def __str__(self):
-        return self.__unicode__()
-
-    def __unicode__(self):
-        return str(self.id) + ", " + self.name
-
-    class Meta:
-        abstract = True
 
 
 class LanguageGroup(NamedModelAbstractBase):
@@ -293,6 +493,7 @@ class EnslavedDataset:
 class CaptiveFate(NamedModelAbstractBase):
     pass
 
+
 class CaptiveStatus(NamedModelAbstractBase):
 
     class Meta:
@@ -333,7 +534,8 @@ class Enslaved(models.Model):
     # For Kinfolk, this is the Last known location field.
     post_disembark_location = models.ForeignKey(Place, null=True,
                                                 on_delete=models.CASCADE,
-                                                db_index=True)
+                                                db_index=True,
+                                                related_name='+')
     last_known_date = models.CharField(
         max_length=10,
         validators=[date_csv_field_validator],
@@ -350,17 +552,10 @@ class Enslaved(models.Model):
                                      related_name='+')
 
 
-class EnslavedSourceConnection(models.Model):
+class EnslavedSourceConnection(SourceConnectionAbstractBase):
     enslaved = models.ForeignKey(Enslaved,
                                  on_delete=models.CASCADE,
                                  related_name='sources_conn')
-    # Sources are shared with Voyages.
-    source = models.ForeignKey(VoyageSources,
-                               on_delete=models.CASCADE,
-                               related_name='+',
-                               null=False)
-    source_order = models.IntegerField()
-    text_ref = models.CharField(max_length=255, null=False, blank=True)
 
 
 class EnslavedContribution(models.Model):
@@ -400,14 +595,19 @@ class EnslavedName(models.Model):
         unique_together = ('name', 'language')
 
 
+class EnslavementRelationType(NamedModelAbstractBase):
+    pass
+
+
 class EnslavementRelation(models.Model):
     """
-    Represents a relation involving enslavers and enslaved individuals.
+    Represents a relation involving any number of enslavers and enslaved
+    individuals.
     """
     
     id = models.IntegerField(primary_key=True)
-    relation_type = models.IntegerField()
-    place = models.ForeignKey(Place, null=True, on_delete=models.SET_NULL)
+    relation_type = models.ForeignKey(EnslavementRelationType, null=False, on_delete=models.CASCADE)
+    place = models.ForeignKey(Place, null=True, on_delete=models.SET_NULL, related_name='+')
     date = models.CharField(max_length=12, null=True,
         help_text="Date in MM,DD,YYYY format with optional fields.")
     amount = models.DecimalField(null=True, decimal_places=2, max_digits=6)
@@ -424,13 +624,13 @@ class EnslavedInRelation(models.Model):
     """
 
     id = models.IntegerField(primary_key=True)
-    transaction = models.ForeignKey(
+    relation = models.ForeignKey(
         EnslavementRelation,
         related_name="enslaved",
         null=False,
         on_delete=models.CASCADE)
     enslaved = models.ForeignKey(Enslaved,
-        related_name="transactions",
+        related_name="relations",
         null=False,
         on_delete=models.CASCADE)
 
@@ -441,13 +641,13 @@ class EnslaverInRelation(models.Model):
     """
 
     id = models.IntegerField(primary_key=True)
-    transaction = models.ForeignKey(
+    relation = models.ForeignKey(
         EnslavementRelation,
         related_name="enslavers",
         null=False,
         on_delete=models.CASCADE)
     enslaver_alias = models.ForeignKey(EnslaverAlias, null=False, on_delete=models.CASCADE)
-    role = models.IntegerField(null=False, help_text="The role of the enslaver in this relation")
+    role = models.ForeignKey(EnslaverRole, null=False, on_delete=models.CASCADE, help_text="The role of the enslaver in this relation")
 
 
 _special_empty_string_fields = {
@@ -473,11 +673,13 @@ class MultiValueHelper:
     _GROUP_SEP = "@###@"
     _FIELD_SEP_VALUE = Value(_FIELD_SEP)
 
-    def __init__(self, projected_name, m2m_connection_model, fk_name, **field_mappings):
+    def __init__(self, projected_name, m2m_connection_model, fk_name, data_adapter = None, group_adapter = None, **field_mappings):
         self.field_mappings = field_mappings
         self.projected_name = projected_name
         self.model = m2m_connection_model
         self.fk_name = fk_name
+        self.data_adapter = data_adapter
+        self.group_adapter = group_adapter
 
     def adapt_query(self, q):
         """
@@ -498,6 +700,7 @@ class MultiValueHelper:
             # This value and the arg_joiner is needed so that the ORM produces the right syntax
             # for GROUP_CONCAT(CONCAT(<FieldsToConcatenate>) SEPARATOR <quoted _GROUP_SEP>).
             Value(self._GROUP_SEP),
+            template = "%(function)s(DISTINCT %(expressions)s)",
             arg_joiner=" SEPARATOR ",
             function='GROUP_CONCAT')
         sub_query = self.model.objects.filter(**{ self.fk_name: OuterRef('pk') }) \
@@ -511,12 +714,20 @@ class MultiValueHelper:
         """
         flen = len(self.field_mappings)
         if value is None or flen == 0:
-            return
+            return []
+        res = []
         for item in value.split(self._GROUP_SEP):
             values = item.split(self._FIELD_SEP)
             if len(values) == flen:
+                if self.data_adapter:
+                    values = self.data_adapter(values)
+                if values is None:
+                    continue
                 # Return a dict when multiple values are mapped otherwise return just the value.
-                yield { name: values[index] for (index, name) in enumerate(self.field_mappings.keys()) } if flen > 1 else values[0]
+                res.append({ name: values[index] for (index, name) in enumerate(self.field_mappings.keys()) } if flen > 1 else values[0])
+        if self.group_adapter:
+            res = self.group_adapter(res)
+        return res if res is not None else []
 
     def patch_row(self, row):
         """
@@ -525,16 +736,49 @@ class MultiValueHelper:
         corresponding to an associated entry.
         """
         if self.projected_name in row:
-            row[self.projected_name] = list(self.parse_grouped(row[self.projected_name]))
+            row[self.projected_name] = self.parse_grouped(row[self.projected_name])
         else:
             row[self.projected_name] = []
         return row
+
+    @staticmethod
+    def set_group_concat_limit(limit=1000000):
+        """
+        MySQL has a parameter that controls how much data can be produced by a
+        GROUP_CONCAT statement. Since GROUP_CONCAT is the main mechanism we use
+        in this helper to produce complex nested data in the query output
+        without requiring multiple roundtrips to the database, a low limit for
+        this parameter could mean that the number of nested entries returned is
+        truncated.
+        """
+        with connection.cursor() as cursor:
+            cursor.execute(f'SET SESSION group_concat_max_len = {int(limit)};')
 
 
 class NullIf(Func):
     # TODO (Django update): this is implemented in latest version of Django...
     function = 'NULLIF'
     arity = 2
+
+
+def _auto_select_related_fields(q, fields):
+    """
+    For performance reasons it is better if we detect all the fields that are
+    related to the main model and force the ORM to select them in the query
+    (otherwise, they would need to be fetched by separate queries). We use the
+    convention of double underscores in related field names to detect those
+    fields and extract only the part that needs to be passed to
+    select_related().
+    """
+    related = list({f[:i] for (f, i) in [(f, f.rfind('__')) for f in fields] if i > 0})
+    return q.select_related(*related)
+
+
+def _year_range_conv(range):
+    """
+    When searching by year on CSV date-value fields, apply this conversion.
+    """
+    return [',,' + str(y) for y in range]
 
 
 class EnslavedSearch:
@@ -555,9 +799,9 @@ class EnslavedSearch:
         ENSLAVERS_LIST,
         EnslavedInRelation,
         'enslaved_id',
-        enslaver_name="transaction__enslavers__enslaver_alias__alias",
-        relation_date="transaction__date",
-        enslaver_role="transaction__enslavers__role")
+        enslaver_name="relation__enslavers__enslaver_alias__alias",
+        relation_date="relation__date",
+        enslaver_role="relation__enslavers__role__name")
 
     def __init__(self,
                  enslaved_dataset=None,
@@ -577,7 +821,8 @@ class EnslavedSearch:
                  source=None,
                  order_by=None,
                  voyage_dataset=None,
-                 skin_color=None):
+                 skin_color=None,
+                 vessel_fate=None):
         """
         Search the Enslaved database. If a parameter is set to None, it will
         not be included in the search.
@@ -610,6 +855,7 @@ class EnslavedSearch:
                 Note that if the search is fuzzy, then the fallback value of
                 order_by is the ranking of the fuzzy search.
         @param: skin_color a textual description for skin color (Racial Descriptor)
+        @param: vessel_fate a list of fates for the associated voyage vessel.
         """
         self.enslaved_dataset = enslaved_dataset
         self.searched_name = searched_name
@@ -626,9 +872,10 @@ class EnslavedSearch:
         self.voyage_id = voyage_id
         self.enslaved_id = enslaved_id
         self.source = source
-        self.order_by = order_by
+        self.order_by = order_by or [{'columnName': 'pk', 'direction': 'asc'}]
         self.voyage_dataset = voyage_dataset
         self.skin_color = skin_color
+        self.vessel_fate = vessel_fate
 
     def get_order_for_field(self, field):
         if isinstance(self.order_by, list):
@@ -643,33 +890,28 @@ class EnslavedSearch:
         representing an Enslaved record.
         @param: fields A list of fields that are fetched.
         """
-        # For performance reasons we detect all the fields that are related to
-        # the Enslaved model and force the ORM to select them in the query
-        # (otherwise, they would need to be fetched by separate queries). We use
-        # the convention of double underscores in related field names to detect
-        # those fields and extract only the part that needs to be passed to
-        # select_related().
-        related = list({f[:i] for (f, i) in [(f, f.rfind('__')) for f in fields] if i > 0})
-        q = Enslaved.objects.select_related(*related)
+        q = _auto_select_related_fields(Enslaved.objects, fields)
 
         ranking = None
         is_fuzzy = False
         if self.searched_name and len(self.searched_name):
             if self.exact_name_search:
-                qmask = Q(documented_name=self.searched_name)
-                qmask |= Q(name_first=self.searched_name)
-                qmask |= Q(name_second=self.searched_name)
-                qmask |= Q(name_third=self.searched_name)
+                qmask = Q(documented_name__icontains=self.searched_name)
+                qmask |= Q(name_first__icontains=self.searched_name)
+                qmask |= Q(name_second__icontains=self.searched_name)
+                qmask |= Q(name_third__icontains=self.searched_name)
                 q = q.filter(qmask)
             else:
                 # Perform a fuzzy search on our cached names.
-                NameSearchCache.load()
-                fuzzy_ids = NameSearchCache.search(self.searched_name)
+                EnslavedNameSearchCache.load()
+                fuzzy_ids = EnslavedNameSearchCache.search(self.searched_name)
                 if len(fuzzy_ids) == 0:
                     return []
                 ranking = {x[1]: x[0] for x in enumerate(fuzzy_ids)}
                 q = q.filter(pk__in=fuzzy_ids)
                 is_fuzzy = True
+                if 'enslaved_id' not in fields:
+                    fields.append('enslaved_id')
         if self.gender:
             gender_val = 1 if self.gender == 'male' else 2
             q = q.filter(gender=gender_val)
@@ -707,9 +949,7 @@ class EnslavedSearch:
             # Search on YEARAM field. Note that we have a 'MM,DD,YYYY' format
             # even though the only year should be present.
             q = q.filter(
-                voyage__voyage_dates__imp_arrival_at_port_of_dis__range=[
-                    ',,' + str(y) for y in self.year_range
-                ])
+                voyage__voyage_dates__imp_arrival_at_port_of_dis__range=_year_range_conv(self.year_range))
         if self.embarkation_ports:
             # Search on MJBYPTIMP field.
             q = q.filter(
@@ -723,6 +963,10 @@ class EnslavedSearch:
         if self.ship_name:
             q = q.filter(
                 voyage__voyage_ship__ship_name__icontains=self.ship_name)
+        if self.vessel_fate:
+            q = q.filter(
+                voyage__voyage_name_outcome__vessel_captured_outcome__value__in=self.vessel_fate)
+
         order_by_ranking = 'asc'
         if isinstance(self.order_by, list):
             order_by_ranking = None
@@ -830,10 +1074,12 @@ class EnslavedSearch:
         if self.ENSLAVERS_LIST in fields:
             q = self.enslavers_helper.adapt_query(q)
 
+        MultiValueHelper.set_group_concat_limit()
+
         q = q.values(*fields)
 
-        if settings.DEBUG:
-            print(q.query)
+        #if settings.DEBUG:
+        #    print(q.query)
 
         if is_fuzzy:
             # Convert the QuerySet to a concrete list and include the ranking
@@ -851,3 +1097,246 @@ class EnslavedSearch:
     def patch_row(cls, row):
         cls.sources_helper.patch_row(row)
         cls.enslavers_helper.patch_row(row)
+        return row
+
+
+def _voyages_data_adapter(values):
+    values[0] = int(values[0])
+    try:
+        values[5] = int(values[5])
+    except:
+        values[5] = None
+    return values
+
+def _split_id_and_name(s, name_field):
+    match = re.match('([0-9]+)\|(.*)', s)
+    return {'id': int(match[1]), name_field: match[2]} if match else None
+
+def _relations_group_adapter(rel_group):
+    relations = {}
+    for r in rel_group:
+        rid = int(r['relation_id'])
+        current = relations.get(rid)
+        if current is None:
+            current = { 'relation_id': rid }
+            relations[rid] = current
+        current['role'] = r['role']
+        current['date'] = r['relation_date']
+        cur_enslavers = current.setdefault('enslavers', {})
+        enslaver = _split_id_and_name(r['relation_enslaver'], 'alias')
+        if enslaver:
+            cur_enslavers[enslaver['id']] = enslaver
+        cur_enslaved = current.setdefault('enslaved', {})
+        enslaved = _split_id_and_name(r['relation_enslaved'], 'alias')
+        if enslaved:
+            cur_enslaved[enslaved['id']] = enslaved
+    return [{k: list(v.values()) if type(v) is dict else v for k, v in r.items()} for r in relations.values()]
+
+
+class EnslaverSearch:
+    ALIASES_LIST = "alias_list"
+    VOYAGES_LIST = "voyages_list"
+    SOURCES_LIST = "sources_list"
+    RELATIONS_LIST = "relations_list"
+
+    aliases_helper = MultiValueHelper(
+        ALIASES_LIST,
+        EnslaverAlias,
+        'identity_id',
+        alias='alias')
+
+    voyages_helper = MultiValueHelper(
+        VOYAGES_LIST,
+        EnslaverVoyageConnection,
+        'enslaver_alias__identity_id',
+        _voyages_data_adapter,
+        voyage_id='voyage_id',
+        role='role__name',
+        ship_name='voyage__voyage_ship__ship_name',
+        embarkation_port='voyage__voyage_itinerary__imp_principal_place_of_slave_purchase__place',
+        disembarkation_port='voyage__voyage_itinerary__imp_principal_port_slave_dis__place',
+        slaves_embarked='voyage__voyage_slaves_numbers__imp_total_num_slaves_embarked',
+        voyage_year='voyage__voyage_dates__imp_arrival_at_port_of_dis',
+        alias='enslaver_alias__alias')
+
+    sources_helper = MultiValueHelper(
+        SOURCES_LIST,
+        EnslaverIdentitySourceConnection,
+        'identity_id',
+        text_ref="text_ref",
+        full_ref="source__full_ref")
+
+    relations_helper = MultiValueHelper(
+        RELATIONS_LIST,
+        EnslaverInRelation,
+        'enslaver_alias__identity_id',
+        None,
+        _relations_group_adapter,
+        relation_id='relation_id',
+        relation_date='relation__date',
+        role='role__name',
+        relation_enslaver=Concat(
+            'relation__enslavers__enslaver_alias__identity_id',
+            Value('|'),
+            'relation__enslavers__enslaver_alias__alias',
+            output_field='relation_enslaver_info'),
+        relation_enslaved=Concat(
+            'relation__enslaved__enslaved__enslaved_id',
+            Value('|'),
+            'relation__enslaved__enslaved__documented_name',
+            output_field='relation_enslaved_info'))
+
+    all_helpers = [aliases_helper, voyages_helper, sources_helper, relations_helper]
+
+    def __init__(self,
+                 searched_name=None,
+                 exact_name_search=False,
+                 year_range=None,
+                 embarkation_ports=None,
+                 disembarkation_ports=None,
+                 ship_name=None,
+                 voyage_id=None,
+                 source=None,
+                 enslaved_count=None,
+                 voyage_dataset=None,
+                 order_by=None):
+        """
+        Search the Enslaver database. If a parameter is set to None, it will
+        not be included in the search.
+        @param: searched_name A name string to be searched
+        @param: exact_name_search Boolean indicating whether the search is
+                exact or fuzzy
+        @param: voyage_dataset A list of voyage datasets that restrict the search.
+        @param: year_range A pair (a, b) where a is the min voyage year and b
+                the max
+        @param: embarkation_ports A list of port ids where the enslaved
+                embarked
+        @param: disembarkation_ports A list of port ids where the enslaved
+                disembarked
+        @param: ship_name The ship name that the enslaved embarked
+        @param: voyage_id A pair (a, b) where the a <= voyage_id <= b
+        @param: source A text fragment that should match Source's text_ref or
+                full_ref
+        @param: enslaved_count A pair (a, b) such that the enslaver has an
+                associated enslaved count between a and b.
+        @param: order_by An array of dicts {
+                'columnName': 'NAME', 'direction': 'ASC or DESC' }.
+                Note that if the search is fuzzy, then the fallback value of
+                order_by is the ranking of the fuzzy search.
+        """
+        self.searched_name = searched_name
+        self.exact_name_search = exact_name_search
+        self.year_range = year_range
+        self.embarkation_ports = embarkation_ports
+        self.disembarkation_ports = disembarkation_ports
+        self.ship_name = ship_name
+        self.voyage_id = voyage_id
+        self.source = source
+        self.enslaved_count = enslaved_count
+        self.voyage_dataset = voyage_dataset
+        self.order_by = order_by or [{'columnName': 'pk', 'direction': 'asc'}]
+
+    def execute(self, fields):
+        """
+        Execute the search and output an enumerable of dictionaries, each
+        representing an Enslaved record.
+        @param: fields A list of fields that are fetched.
+        """
+        q = _auto_select_related_fields(EnslaverIdentity.objects, fields)
+
+        ranking = None
+        is_fuzzy = False
+        if self.searched_name and len(self.searched_name):
+            if self.exact_name_search:
+                q = q.filter(aliases__alias__icontains=self.searched_name)
+            else:
+                # Perform a fuzzy search on our cached names.
+                EnslaverNameSearchCache.load()
+                fuzzy_ids = EnslaverNameSearchCache.search(self.searched_name)
+                if len(fuzzy_ids) == 0:
+                    return []
+                ranking = {x[1]: x[0] for x in enumerate(fuzzy_ids)}
+                q = q.filter(pk__in=fuzzy_ids)
+                is_fuzzy = True
+                if 'id' not in fields:
+                    fields.append('id')
+
+        if self.source:
+            qmask = Q(enslaveridentitysourceconnection__text_ref__icontains=self.source)
+            qmask |= Q(enslaveridentitysourceconnection__source__full_ref__icontains=self.source)
+            q = q.filter(qmask)
+        
+        # Voyage related search fields: since an enslaver can be associated with
+        # multiple voyages, it is enough to match any of them.
+        voyage_search_prefix = 'aliases__enslavervoyageconnection__voyage__'
+
+        def add_voyage_field(q, field, op, val):
+            return q.filter(**{voyage_search_prefix + field + '__' + op: val })
+
+        if self.voyage_id:
+            q = add_voyage_field(q, 'pk', 'range', self.voyage_id)
+        if self.ship_name:
+            q = add_voyage_field(q, 'voyage_ship__ship_name', 'icontains', self.ship_name)
+        if self.embarkation_ports:
+            # Search on MJBYPTIMP field.
+            q = add_voyage_field(q, 'voyage_itinerary__imp_principal_place_of_slave_purchase__pk', 'in', self.embarkation_ports)
+        if self.disembarkation_ports:
+            # Search on MJSLPTIMP field.
+            q = add_voyage_field(q, 'voyage_itinerary__imp_principal_port_slave_dis__pk', 'in', self.disembarkation_ports)
+        if self.year_range:
+            # Search on YEARAM field. Note that we have a 'MM,DD,YYYY' format
+            # even though the only year should be present.
+            q = add_voyage_field(q, 'voyage_dates__imp_arrival_at_port_of_dis', 'range', _year_range_conv(self.year_range))
+        if self.enslaved_count:
+            q = q.filter(cached_properties__enslaved_count__range=self.enslaved_count)
+
+        for helper in self.all_helpers:
+            q = helper.adapt_query(q)
+        
+        MultiValueHelper.set_group_concat_limit()
+
+        order_by_ranking = 'asc'
+        orm_orderby = None
+        if isinstance(self.order_by, list):
+            order_by_ranking = None
+            orm_orderby = []
+            for x in self.order_by:
+                col_name = x['columnName']
+                if col_name == 'ranking':
+                    order_by_ranking = x['direction']
+                is_desc = x['direction'].lower() == 'desc'
+                order_field = F(col_name)
+                if is_desc:
+                    order_field = order_field.desc(nulls_last=True)
+                else:
+                    order_field = order_field.asc(nulls_last=True)
+                orm_orderby.append(order_field)
+
+        if orm_orderby:
+            q = q.order_by(*orm_orderby)
+        else:
+            q = q.order_by('pk')
+
+        q = q.distinct()
+        q = q.values(*fields)
+
+        if settings.DEBUG:
+            print(q.query)
+
+        if is_fuzzy:
+            # Convert the QuerySet to a concrete list and include the ranking
+            # as a member of each object in that list.
+            q = list(q)
+            for x in q:
+                x['ranking'] = ranking[x['id']]
+            if order_by_ranking:
+                q = sorted(q,
+                           key=lambda x: x['ranking'],
+                           reverse=(order_by_ranking == 'desc'))
+        return q
+
+    @classmethod
+    def patch_row(cls, row):
+        for helper in cls.all_helpers:
+            row = helper.patch_row(row)
+        return row

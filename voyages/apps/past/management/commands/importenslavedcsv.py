@@ -1,4 +1,3 @@
-
 from django.core.management.base import BaseCommand
 from django.db import connection
 from django.db import transaction
@@ -8,9 +7,9 @@ from voyages.apps.common.utils import *
 from voyages.apps.past.models import CaptiveFate, CaptiveStatus, Enslaved, EnslavedSourceConnection, EnslaverAlias, LanguageGroup, RegisterCountry
 from voyages.apps.voyage.models import Place, Voyage
 
-class Command(BaseCommand):    
-    help = ('Imports CSV files with the full PAST data-set and converts the data '
-            'to the Django models. TODO: implement enslavers import!')
+class Command(BaseCommand):
+    help = ('Imports CSV files with the full Enslaved data-set and converts the data '
+            'to the Django models.')
 
     def add_arguments(self, parser):
         parser.add_argument('enslaved_csv_files', nargs='+')
@@ -132,13 +131,15 @@ class Command(BaseCommand):
         if confirm != 'yes':
             return
 
-        print('Deleting old data...')
-
         with transaction.atomic():
             with connection.cursor() as cursor:
+                print('Deleting old data...')
                 helper.disable_fks(cursor)
                 helper.delete_all(cursor, Enslaved)
                 helper.delete_all(cursor, EnslavedSourceConnection)
+                print('Inserting new enslaved records...')
                 helper.bulk_insert(Enslaved, all_enslaved.values())
                 helper.bulk_insert(EnslavedSourceConnection, source_connections)
                 helper.re_enable_fks(cursor)
+
+        print("Completed!")

@@ -401,7 +401,7 @@
     <field name="var_departure_last_place_of_landing_month" type="long" indexed="true" stored="true" multiValued="false" />
     <field name="var_port_of_call_before_atl_crossing_lang_en" type="text_en" indexed="true" stored="true" multiValued="false" />
     <field name="var_sources" type="text_en" indexed="true" stored="true" multiValued="true" />
-    <field name="var_voyage_links" type="string" indexed="true" stored="true" multiValued="true" />
+    <field name="var_voyage_links" type="int" indexed="true" stored="true" multiValued="true" />
     <field name="var_second_region_slave_emb_lang_pt" type="text_pt" indexed="true" stored="true" multiValued="false" />
     <field name="var_second_region_slave_emb_lang_es" type="text_es" indexed="true" stored="true" multiValued="false" />
     <field name="var_ship_name_plaintext_exact" type="string" indexed="true" stored="true" multiValued="false" />
@@ -628,4 +628,3 @@
   <!-- field to use to determine and enforce document uniqueness. -->
   <uniqueKey>id</uniqueKey>
 </schema>
-

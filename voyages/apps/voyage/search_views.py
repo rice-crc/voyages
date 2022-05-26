@@ -56,9 +56,10 @@ _op_at_least = SearchOperator('is at least', 'gte', False)
 _op_between = SearchOperator('is between', 'range', True)
 _op_contains = SearchOperator('contains', 'contains', False)
 _op_one_of = SearchOperator('is one of', 'in', True)
+_op_isnull = SearchOperator('is null', '', False)
 # A list of operators used with Solr/Haystack to perform searches.
 _operators_list = [
-    _op_eq, _op_at_most, _op_at_least, _op_between, _op_contains, _op_one_of
+    _op_eq, _op_at_most, _op_at_least, _op_between, _op_contains, _op_one_of, _op_isnull
 ]
 _operators_dict = {op.front_end_op_str: op for op in _operators_list}
 
@@ -93,7 +94,7 @@ def perform_search(search, lang):
             term = term[0]
         skip = False
         if operator.front_end_op_str == _op_contains.front_end_op_str:
-            m = re.match(r'^\s*["\u201c](\*?)([^\*]*)(\*?)["\u201d]\s*$', term)
+            m = re.match(r'^\s*["\u201c](\*?)([^\*]*)(\*?)["\u201d]\s*$', str(term))
             if m:
                 # Change to exact match and remove quotes.
                 # Make sure we sanitize the input.
@@ -109,6 +110,10 @@ def perform_search(search, lang):
                 custom_terms.append(
                     f'var_{item["varName"]}_plaintext{xt}:("{term}")')
                 skip = True
+        if operator.front_end_op_str == _op_isnull.front_end_op_str:
+            neg = "-" if term == "True" else ''
+            custom_terms.append(f'{neg}var_{item["varName"]}:*')
+            skip = True
         if not skip:
             search_terms[f'var_{item["varName"]}__'
                          f'{operator.back_end_op_str}'] = term
@@ -131,7 +136,7 @@ def perform_search(search, lang):
             pass
     else:
         try:
-            dataset = int(dataset)
+            dataset = int(dataset) if dataset != '*' else -1
         except Exception:
             dataset = VoyageDataset.Transatlantic
     if dataset >= 0:
