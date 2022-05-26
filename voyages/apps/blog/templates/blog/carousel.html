@@ -1,0 +1,93 @@
+{% load sass_tags %}
+{% load i18n %}
+
+{% load compress %}
+
+{% load voyage_extras %}
+{% feature_flag "BLOG" %}
+
+{% if BLOG %}
+{% block content %}
+
+{% load staticfiles %}
+
+<link href="{% sass_src 'scss/blog-carousel.scss' %}" rel="stylesheet" type="text/css" />
+
+<div class="aos-container news-container" data-aos="fade-in" data-aos-easing="ease" data-aos-duration="500">
+    <div class="container">
+        <div class="news-container-title">
+			{% trans 'Latest News' %}
+		</div>
+        <div class="news-grid-container row" >
+            <div id="carouselBlogIndicators" class="carousel slide" data-ride="carousel" >          
+                <div class="carousel-inner">
+                    {% for post in posts %}
+                        {% cycle 'start' '' '' as slidestart silent %}
+                        {% cycle '' '' 'end' as slidend silent %}
+                        {% if slidestart %}<div class="carousel-item{% if forloop.first %} active {% endif %}">
+                            <div class="row">{% endif %}
+                                <div class="col-md-4 text-center" >
+                                    <a href="{% url 'blog:post_detail' post.slug   %}" class="expand-snippet" data-content="{{ post.get_snippet|striptags|truncatewords:120 }} <br><br><a  class='popover-more' href='{% url 'blog:post_detail' post.slug   %}'>{% trans 'click to read more...' %}</a><br>"  data-html="true" rel="popover" data-placement="top" data-original-title="{{ post.title }}" data-trigger="manual">
+                                        {%if post.thumbnail %}
+                                            <img class="d-block w-100 h-50 "  src="{{ post.thumbnail.url}}" alt="{{post.title}}">
+                                        {%else%}
+                                            <img class="d-block w-100 h-50 d-inline-block " src="{% static 'images/site/404.png' %}"  alt="{{ post.title }}">    
+                                        {%endif%}
+                                        <div class="carousel-caption d-md-block">
+                                            <h5>{{ post.title }}</h5>        
+                                            <p>{{ post.subtitle|default_if_none:"" }}</p>                                            
+                                        </div>
+                                    </a>
+                                </div>
+                        {% if not slidend and forloop.last or slidend %}
+                            </div>
+                        </div>{% endif %}
+                    {% endfor %}
+                </div>
+
+                <a class="carousel-control-prev" href="#carouselBlogIndicators" role="button" data-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="sr-only">{% trans 'Previous' %}</span>
+                </a>
+                <a class="carousel-control-next" href="#carouselBlogIndicators" role="button" data-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="sr-only">{% trans 'Next' %}</span>
+                </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function() {        
+        $(".carousel").carousel({
+            interval: 2000
+        })
+
+
+        //$('.expand-snippet').popover();
+
+        $(".expand-snippet")
+            .popover({ html: true})
+                .on("mouseenter", function () {
+                    $(this).popover("show");
+                }).on("mouseleave", function () {
+                    var _this = this;
+                    if (!$(".popover:hover").length) {
+                        $(this).popover("hide");
+                    }
+                    else {
+                        $('.popover').mouseleave(function() {
+                            $(_this).popover("hide");
+                            $(this).off('mouseleave');
+                        });
+                    }
+                });
+    })
+
+    
+
+</script>
+
+{% endblock %}
+{% endif %}

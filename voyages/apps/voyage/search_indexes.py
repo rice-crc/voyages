@@ -106,7 +106,7 @@ class TranslatedTextField(indexes.SearchField):
     # declaration.
     re_translated_fieldname = re.compile('(.*)_lang_([a-z]{2})$')
 
-    def __init__(self, unidecode=True, **kwargs):
+    def __init__(self, unidecode=False, **kwargs):
         kwargs['faceted'] = True
         self.language_code = None
         self.unidecode = unidecode

@@ -1,7 +1,7 @@
 // reserved keyword for saved search query identifier
 const SAVED_SEARCH_LABEL = "#searchId=";
 const ENSLAVED_PATH = "enslaved/";
-const SEARCH_URL = "/past/api/search";
+const SEARCH_URL = "/past/api/search_enslaved";
 
 var voyageColumns = [
   {

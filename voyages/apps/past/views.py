@@ -21,8 +21,8 @@ from voyages.apps.common.models import SavedQuery
 from voyages.apps.common.views import get_filtered_results
 from .models import (AltLanguageGroupName, Enslaved,
                      EnslavedContribution, EnslavedContributionLanguageEntry,
-                     EnslavedContributionNameEntry, EnslavedSearch,
-                     LanguageGroup, MultiValueHelper, ModernCountry, NameSearchCache,
+                     EnslavedContributionNameEntry, EnslavedSearch, EnslaverRole, EnslaverSearch,
+                     LanguageGroup, MultiValueHelper, ModernCountry, EnslavedNameSearchCache,
                      _modern_name_fields, _name_fields)
 
 ENSLAVED_DATASETS = ['african-origins', 'oceans-of-kinfolk']
@@ -119,6 +119,14 @@ def get_language_groups(_):
         for item in items], safe=False)
 
 
+@csrf_exempt
+@cache_page(3600)
+def get_enumeration(_, model_name):
+    from django.apps import apps
+    model = apps.get_model(app_label="past", model_name=model_name.replace('-', ''))
+    return JsonResponse({x.pk: x.name for x in model.objects.all()})
+
+
 def restore_enslaved_permalink(_, link_id):
     """Redirect the page with a URL param"""
     q = SavedQuery.objects.get(pk=link_id)
@@ -132,8 +140,10 @@ def restore_enslaved_permalink(_, link_id):
         pass
     return redirect("/past/database" + ds_name + "#searchId=" + link_id)
 
+
 def is_valid_name(name):
     return name is not None and name.strip() != ""
+
 
 @require_POST
 @csrf_exempt
@@ -192,13 +202,45 @@ def search_enslaved(request):
 
         table = _generate_table(query, data.get('tableParams', {}), adapter)
         page = table.get('data', [])
-        NameSearchCache.load()
+        EnslavedNameSearchCache.load()
         for entry in page:
-            entry['recordings'] = NameSearchCache.get_recordings(
+            entry['recordings'] = EnslavedNameSearchCache.get_recordings(
                 [entry[f] for f in _name_fields if f in entry])
         return JsonResponse(table)
     return JsonResponse({'error': 'Unsupported'})
 
+
+@require_POST
+@csrf_exempt
+def search_enslaver(request):
+    data = json.loads(request.body)
+    search = EnslaverSearch(**data['search_query'])
+    fields = data.get('fields')
+    if fields is None:
+        fields = [
+            'id',
+            'principal_alias',
+            'birth_year', 'birth_month', 'birth_day',
+            'death_year', 'death_month', 'death_day',
+            'cached_properties__enslaved_count',
+            EnslaverSearch.ALIASES_LIST,
+            EnslaverSearch.VOYAGES_LIST,
+            EnslaverSearch.SOURCES_LIST,
+            EnslaverSearch.RELATIONS_LIST
+        ]
+    query = search.execute(fields)
+    output_type = data.get('output', 'resultsTable')
+    # For now we only support outputing the results to DataTables.
+    if output_type == 'resultsTable':
+
+        def adapter(page):
+            for row in page:
+                EnslaverSearch.patch_row(row)
+            return page
+
+        table = _generate_table(query, data.get('tableParams', {}), adapter)
+        return JsonResponse(table)
+    return JsonResponse({'error': 'Unsupported'})
 
 @require_POST
 @csrf_exempt
