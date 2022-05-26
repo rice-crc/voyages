@@ -904,8 +904,11 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
 
     def prepare_var_voyage_links(self, obj):
         return [
-            str(link.mode) + ': ' + str(link.second.voyage_id)
-            for link in obj.links_to_other_voyages.all()
+            int(link.second.voyage_id)
+            for link in obj.outgoing_to_other_voyages.all()
+        ] + [
+            int(link.first.voyage_id)
+            for link in obj.incoming_from_other_voyages.all()
         ]
 
 
