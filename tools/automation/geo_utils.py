@@ -58,7 +58,7 @@ def add_regions_to_csv(csv_in, csv_out):
                 region = match_place.region
             row['Region'] = region.region
             row['RegionCode'] = region.value
-            row['MapView'] = "https://www.google.com/maps/@?api=1&map_action=map&center=" + str(lat) + "," + str(lng) + "&zoom=10"
+            row['MapView'] = f"=HYPERLINK(\"https://www.google.com/maps/@?api=1&map_action=map&center=" + str(lat) + "," + str(lng) + "&zoom=10\")"
         except:
             pass
     columns = list(sorted(columns)) + our_cols
@@ -127,8 +127,13 @@ def import_places_from_csv(csv):
 # 	return $null
 # }
 # 
+# if (!$key) {
+#    Write-Error "Don't forget to set the API key!"
+# }
 # $out = @()
 # $places | ForEach-Object {
+#	$pct = (100.0 * $out.Length) / $places.Length
+#	Write-Progress -Activity "Fetching Places on Google API" -Status "Searching $($_)" -PercentComplete $pct
 # 	$geo = Invoke-RestMethod -ContentType "application/json; charset=utf-8" "https://maps.googleapis.com/maps/api/geocode/json?address=$($_)&key=$($key)"
 # 	$results = $geo.results
 # 	if ($exclusion -and $results) {

@@ -118,29 +118,30 @@ class Command(BaseCommand):
             month = None
             day = None
             if val is not None and val != "":
-                match = re.match("^(\d+)[-/]([\w]+)", val)
+                match = re.match("^(\d+)[-/\s]+([\w]+)", val)
                 if match:
                     day = int(match[1])
                     month = match_month(match[2].upper())
                     if month is None:
                         # If there is a day, then the month should be valid.
-                        error_reporting.report("Could not parse month: " + val)
+                        error_reporting.report("Could not parse day/month: " + val)
                 else:
                     # Maybe we can match just the month.
                     match = re.match("^([\w]{3,})", val)
                     if match:
                         month = match_month(match[1].upper())
                     if month is None:
-                        error_reporting.report("Could not parse date: " + val)
+                        error_reporting.report("Could not parse day/month: " + val)
             return (day, month)
 
         def get_voyage_ids(val):
             if val is None or val == '':
                 return []
             res = []
-            for x in val.replace('V_', '').split(':'):
+            for x in re.split("[:;/]", re.sub('(V_|\s)', '', val)):
                 try:
-                    res.append(int(x))
+                    if x != '':
+                        res.append(int(x))
                 except:
                     fatal_error("Bad voyage id in: " + val)
             return res
@@ -167,6 +168,7 @@ class Command(BaseCommand):
                     if row.get('role') == 'Captain_Owner':
                         row['role'] = 'Owner_Captain'
                     rows.append((len(rows), row))
+            print(f"Read {len(rows)} rows in {file}")
             # First pass: detect merges by matching voyage id sets and aliases.
             voyage_ids_by_row = []
             aliases_by_row = []
@@ -350,9 +352,10 @@ class Command(BaseCommand):
                     # Parse sources associated with this enslaver.
                     order = 1
                     for key in get_multi_valued_column_suffix(6):
-                        source_ref = rh.get('source ' + key, max_chars=MAX_NAME_CHARS)
-                        if len(source_ref) > 200:
-                            print('source [' + str(len(source_ref)) + ']: ')
+                        source_ref = rh.get('source ' + key)
+                        if len(source_ref) > MAX_NAME_CHARS:
+                            error_reporting.report(f"Source ref too long (> {MAX_NAME_CHARS}): {source_ref}")
+                            source_ref = source_ref[:MAX_NAME_CHARS]
                         if source_ref is None or empty.match(source_ref):
                             break
                         (source, match) = source_finder.get(source_ref)
@@ -365,7 +368,7 @@ class Command(BaseCommand):
                             self.errors += 1
                             error_reporting.report(
                                 'Source not found for '
-                                f'ensaver: "{principal_alias}" '
+                                f'enslaver: "{principal_alias}" '
                                 f'source_ref: "{source_ref}", longest partial '
                                 f'match: {match}',
                                 source_ref)
