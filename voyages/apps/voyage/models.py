@@ -1673,9 +1673,26 @@ class VoyageSourcesType(models.Model):
 
 
 class VoyageDataset:
+    """
+    An enumeration of Voyage Datasets. Note that in certain places we are using
+    a bitvector to represent the aggregation of multiple datasets. This means
+    that we use 2 ** DataSetIndex in the bit vector to represent its inclusion.
+    In particular, for a regular INT column in the database this limits the
+    range of indices we can use from [0, 30].
+    """
     Transatlantic = 0
     IntraAmerican = 1
     IntraAfrican = 2
+
+    @classmethod
+    def parse(cls, name):        
+        if name == 'trans':
+            return cls.Transatlantic
+        if name == 'intra':
+            return cls.IntraAmerican
+        if name == 'african':
+            return cls.IntraAfrican
+        raise Exception("Unknown Voyage dataset")
 
 
 # Voyage Sources
