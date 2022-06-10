@@ -1,3 +1,4 @@
+from concurrent.futures import process
 from distutils.log import fatal
 from unittest import skip
 from django.core.management.base import BaseCommand
@@ -42,17 +43,62 @@ class Command(BaseCommand):
         short_ref_remap = options.get('short_ref_remap_csv')
         place_remap = options.get('place_remap_csv')
 
-        def remap_load(filename):
+        class RemapHelper:
+            def __init__(self, trie, fuzzy):
+                self.trie = trie
+                self.fuzzy = fuzzy
+
+            def get(self, key):
+                val = self.trie.get(key)
+                if val is None:
+                    key = key.lower()
+                    alt_keys = [key]
+                    if self.fuzzy:
+                        alt_keys += self.__class__.fuzzify(key)
+                    for alt_key in alt_keys:
+                        val = self.trie.get(alt_key)
+                        if val is not None:
+                            break
+                return val
+
+            @staticmethod
+            def fuzzify(s):
+                """
+                Generate a list of fuzzified strings.
+                """
+                chars = [',', ' ', '(',  '[', ')', ']']
+                prefix = ''
+                results = []
+                for _, c in enumerate(s):
+                    if c in chars and len(prefix) > 3:
+                        results.append(prefix)
+                    if c not in chars:
+                        prefix += c
+                # Place the longest keys first so that we try more specific
+                # matches before less specific ones.
+                results.reverse()
+                return results
+
+
+        def remap_load(filename, original_col_name='original', modified_col_name='modified', fuzzy=False):
             trie = Trie()
             with open(filename, 'rb') as f:
                 print("Parsing remap CSV file")
-                reader = unicodecsv.DictReader(f, delimiter=',', encoding='utf-8-sig')
+                reader = BulkImportationHelper.read_to_dict(f)
                 for r in reader:
-                    trie.add(r['original'], r['modified'])
-            return trie
+                    key = r[original_col_name].lower()
+                    trie.add(key, r[modified_col_name])
+                    if fuzzy:
+                        # If the word has spaces or a comma, truncate the string
+                        # up to that point and if there are at least 4 chars on
+                        # that prefix, index using the prefix as well.
+                        alt_keys = RemapHelper.fuzzify(key)
+                        for alt_key in alt_keys:
+                            trie.add(alt_key, r[modified_col_name])
+            return RemapHelper(trie, fuzzy)
 
         if place_remap:
-            place_remap = remap_load(place_remap)
+            place_remap = remap_load(place_remap, modified_col_name='match', fuzzy=True)
         if short_ref_remap:
             short_ref_remap = remap_load(short_ref_remap)
         error_reporting = ErrorReporting()
