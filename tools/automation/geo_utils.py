@@ -84,6 +84,9 @@ def import_places_from_csv(csv, skip_errors=True):
     updates = {}
     for row in rows:
         idx_row += 1
+        if all([v == '' for v in row.values()]):
+            # Skip empty rows
+            continue
         place_name = row['match'].strip()
         if place_name == '':
             skipped.append((idx_row, "Empty place name"))
@@ -113,7 +116,7 @@ def import_places_from_csv(csv, skip_errors=True):
             skipped.append((idx_row, "Bad geo coordinates"))
             continue
         place.value = place_code
-        show = row['showonmap'].lower() == 'true'
+        show = row['showonmap'].lower() != 'false'
         place.show_on_main_map = show
         place.show_on_voyage_map = show
         updates[place_code] = place
