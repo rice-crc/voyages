@@ -18,7 +18,7 @@ Vue.component('v-flatpage', {
   },
 
   methods: {
-    click (event) {
+    click (event) {      
       this.$emit('clicked', event.target.id);
     }
   },

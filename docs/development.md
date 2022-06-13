@@ -403,3 +403,45 @@ docker exec -i bash -c 'echo hello'
 ```
 
 [Return to Top](#table-of-contents)
+
+## Feature Flags
+
+It is possible to toggle features ON/OFF by setting. This can be useful when
+developing new user-facing features that are not yet ready for production. The
+same code can be deployed to production and staging, the feature can be enabled
+in staging and disabled in production. In particular, this allows more frequent
+merges into the main production branch reducing the chances of merge conflicts.
+
+In localsettings.py declare a dictionary FEATURE_FLAGS with string keys
+representing the feature names and boolean values indicating whether they are
+enabled or not. NOTE: in case the feature name is not present in the dict, then
+it is assumed to be disabled by.
+
+To guard code you can use the helper method settings.is_feature_enabled which
+takes the feature name as argument.
+
+Here is an example for urls.py:
+
+```python
+from voyages.settings import is_feature_enabled
+urlpatterns = [ ...,
+  url(...) if is_feature_enabled("MY_FEATURE") else None,
+  ...
+]
+# Remove any null URLs produced by disabled feature flags.
+urlpatterns = [u for u in urlpatterns if u is not None]
+```
+
+In the html templates it is possible to guard elements as follows:
+
+```html
+{% load voyage_extras %}
+{% feature_flag "MY_FEATURE" %}
+
+...
+{% if MY_FEATURE %}
+<div>
+Here goes everything that should be in the HTML when MY_FEATURE is enabled.
+</div>
+{% endif %}
+```

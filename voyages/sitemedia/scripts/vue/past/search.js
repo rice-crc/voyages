@@ -45,6 +45,7 @@ var allColumns = [
     //fate
     { data: "captive_fate__name", category: 3, header: gettext("Captive Fate"), isImputed: false },
     { data: "post_disembark_location__place", category: 3, header: gettext("Post Disembarkation Location"), isImputed: false },
+    { data: "voyage__voyage_name_outcome__vessel_captured_outcome__label", category: 3, header: gettext("Vessel Fate"), isImputed: false },
 
     // sources
     { data: "sources_list", category: 4, header: gettext("Sources"), isImputed: false, visible: false, orderable: false },

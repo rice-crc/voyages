@@ -1,7 +1,7 @@
 // reserved keyword for saved search query identifier
 const SAVED_SEARCH_LABEL = "#searchId=";
 const ENSLAVED_PATH = "enslaved/";
-const SEARCH_URL = "/past/api/search";
+const SEARCH_URL = "/past/api/search_enslaved";
 
 var voyageColumns = [
   {
@@ -48,7 +48,8 @@ var voyageColumns = [
       { data: "var_first_landing_place_lang", label: gettext("1st place of slave landing"), isImputed: false },
       { data: "var_second_landing_place_lang", label: gettext("2nd place of slave landing"), isImputed: false },
       { data: "var_third_landing_place_lang", label: gettext("3rd place of slave landing"), isImputed: false },
-      { data: "var_place_voyage_ended_lang", label: gettext("Place where voyage ended"), isImputed: false }
+      { data: "var_place_voyage_ended_lang", label: gettext("Place where voyage ended"), isImputed: false },
+      { data: "var_voyage_links", label: gettext("Linked voyages"), isImputed: false }
     ]
   },
   {
@@ -639,6 +640,7 @@ function getTreeselectLabel(currentVariable, searchTerms, treeselectOptions) {
 function loadTreeselectOptions(vm, vTreeselect, filter, callback) {
   var varName = filter.varName;
   var loadType = filter.type;
+  var payload = {};
 
   // load only once remotely and then local copy
   if (!vm.filterData.treeselectOptions[varName]) {
@@ -688,13 +690,17 @@ function loadTreeselectOptions(vm, vTreeselect, filter, callback) {
         case 'language_groups':
           var apiUrl = '/past/api/language-groups';
           break;
+        case 'vessel_fate':
+          var apiUrl = '/voyage/var-options';
+          payload.var_name = 'var_outcome_ship_captured';
+          break;
         default:
           callback("Error: varName " + varName + " is not acceptable");
           return false;
       }
 
       axios
-        .post(apiUrl)
+        .post(apiUrl, payload)
         .then(function(response) {
           var options = [];
           switch (varName) {
@@ -707,6 +713,9 @@ function loadTreeselectOptions(vm, vTreeselect, filter, callback) {
               break;
             case 'language_groups':
               var options = parseLanguageGroups(response);
+              break;
+            case 'vessel_fate':
+              var options = parseVesselFate(response);
               break;
           }
 
@@ -817,6 +826,13 @@ var parseCountries = function(response) {
     options.push({'id': id, 'label' : country.name});
   });
   return options;
+}
+
+var parseVesselFate = function(response) {
+  response.data.data.map(function(data) {
+    data["id"] = data["value"];
+  });
+  return response.data.data;
 }
 
 // parseLanguageGroups function
