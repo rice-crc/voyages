@@ -15,6 +15,7 @@ from django.db.models.fields import TextField
 from django.db.models.functions import Coalesce, Concat, Length, Substr
 import Levenshtein_search
 import re
+from voyages.apps.common.models import NamedModelAbstractBase
 
 from voyages.apps.voyage.models import Place, Voyage, VoyageDataset, VoyageSources
 from voyages.apps.common.validators import date_csv_field_validator
@@ -168,20 +169,6 @@ class EnslaverNameSearchCache:
                     ids.append(item_0)
             cls.WORDSET_INDEX = Levenshtein_search.populate_wordset(-1, list(all_names))
             cls._loaded = True
-
-
-class NamedModelAbstractBase(models.Model):
-    id = models.IntegerField(primary_key=True)
-    name = models.CharField(max_length=255)
-
-    def __str__(self):
-        return self.__unicode__()
-
-    def __unicode__(self):
-        return str(self.id) + ", " + self.name
-
-    class Meta:
-        abstract = True
 
         
 class SourceConnectionAbstractBase(models.Model):
