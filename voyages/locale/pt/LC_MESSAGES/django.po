@@ -3,8 +3,27 @@
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
+#: voyages/apps/voyage/templates/database/_captain_and_crew.html:10
+#: voyages/apps/voyage/templates/database/_itinerary.html:64
+#: voyages/apps/voyage/templates/database/_itinerary.html:115
+#: voyages/apps/voyage/templates/database/_itinerary.html:132
+#: voyages/apps/voyage/templates/database/_settings.html:50
+#: voyages/apps/voyage/templates/database/_source.html:6
+#: voyages/apps/voyage/templates/database/_source.html:8
+#: voyages/apps/voyage/templates/database/tabs/tables.html:6
+#: voyages/apps/voyage/templates/database/tabs/tables.html:9
+#: voyages/apps/voyage/templates/database/tabs/tables.html:12
+#: voyages/apps/voyage/templates/database/tabs/timeline.html:5
+#: voyages/apps/voyage/templates/database/tabs/visualization.html:16
+#: voyages/apps/voyage/templates/database/tabs/visualization.html:19
+#: voyages/apps/voyage/templates/database/tabs/visualization.html:32
+#: voyages/apps/voyage/templates/database/tabs/visualization.html:35
+#: voyages/apps/voyage/templates/database/tabs/visualization.html:47
+#: voyages/apps/voyage/templates/database/tabs/visualization.html:50
+#, fuzzy
 msgid ""
 msgstr ""
+"#-#-#-#-#  pt-django.po  #-#-#-#-#\n"
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-03-11 01:29-0400\n"
@@ -15,6 +34,1395 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 2.4.1\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"#-#-#-#-#  old_django.po  #-#-#-#-#\n"
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-06-10 14:06+0000\n"
+"PO-Revision-Date: 2020-10-07 14:16-0400\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: pt\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"#-#-#-#-#  django.po  #-#-#-#-#\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 2.4.1\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.5\n"
+"#-#-#-#-#  django.po  #-#-#-#-#\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Generator: Poedit 2.4.1\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
@@ -715,12 +2123,17 @@ msgstr "Viagens em Escravo - Sobre"
 #: voyages/apps/static_content/templates/static_content/index.html:180
 #: voyages/apps/static_content/templates/static_content/index.html:203
 #: voyages/templates/topbar.html:61
+#: voyages/apps/static_content/templates/static_content/index.html:189
+#: voyages/apps/static_content/templates/static_content/index.html:233
+#: voyages/apps/static_content/templates/static_content/index.html:256
+#: voyages/templates/topbar.html:68 voyages/templates/topbar.html:70
 msgid "About"
 msgstr "Sobre"
 
 #: voyages/apps/about/templates/index.html:19
 #: voyages/apps/static_content/templates/static_content/index.html:5
 #: voyages/templates/topbar.html:6
+#: voyages/apps/static_content/templates/static_content/index.html:7
 msgid "Slave Voyages"
 msgstr "Viagens em Escravo"
 
@@ -762,7 +2175,8 @@ msgstr "Banco de Dados Nomes Africanos"
 #: voyages/apps/american/templates/american/about.html:19
 #: voyages/apps/resources/templates/resources/about.html:18
 #: voyages/apps/voyage/templates/about.html:14 voyages/templates/topbar.html:15
-#: voyages/templates/topbar.html:33
+#: voyages/templates/topbar.html:33 voyages/templates/topbar.html:18
+#: voyages/templates/topbar.html:36
 msgid "Understanding the Database"
 msgstr "Entendendo o Banco de Dados"
 
@@ -779,6 +2193,11 @@ msgstr "Banco de Dados Nomes Africanos"
 #: voyages/apps/voyage/templates/downloads.html:13
 #: voyages/templates/topbar.html:19 voyages/templates/topbar.html:36
 #: voyages/templates/topbar.html:47
+#: voyages/apps/static_content/templates/static_content/index.html:201
+#: voyages/apps/static_content/templates/static_content/index.html:235
+#: voyages/apps/static_content/templates/static_content/index.html:262
+#: voyages/templates/topbar.html:22 voyages/templates/topbar.html:39
+#: voyages/templates/topbar.html:54
 msgid "Downloads"
 msgstr "Downloads"
 
@@ -790,30 +2209,34 @@ msgstr "Banco de Dados Nomes Africanos"
 #: voyages/apps/static_content/templates/static_content/index.html:144
 #: voyages/apps/voyage/templates/essays.html:13
 #: voyages/templates/topbar.html:18 voyages/templates/topbar.html:35
+#: voyages/apps/static_content/templates/static_content/index.html:198
+#: voyages/templates/topbar.html:21 voyages/templates/topbar.html:38
 msgid "Essays"
 msgstr "Ensaios"
 
-#: voyages/apps/assessment/forms.py:11
+#: voyages/apps/assessment/forms.py:11 voyages/apps/assessment/forms.py:18
 msgid "Rows"
 msgstr "Linhas"
 
-#: voyages/apps/assessment/forms.py:15
+#: voyages/apps/assessment/forms.py:15 voyages/apps/assessment/forms.py:23
 msgid "Columns"
 msgstr "Colunas"
 
-#: voyages/apps/assessment/forms.py:19
+#: voyages/apps/assessment/forms.py:19 voyages/apps/assessment/forms.py:28
 msgid "Cells"
 msgstr "Células"
 
-#: voyages/apps/assessment/forms.py:21
+#: voyages/apps/assessment/forms.py:21 voyages/apps/assessment/forms.py:31
 msgid "Include empty"
 msgstr "Incluir vazio"
 
 #: voyages/apps/assessment/forms.py:25 voyages/apps/voyage/forms.py:198
+#: voyages/apps/assessment/forms.py:36
 msgid "From"
 msgstr "De"
 
 #: voyages/apps/assessment/forms.py:27 voyages/apps/voyage/forms.py:200
+#: voyages/apps/assessment/forms.py:39
 msgid "To"
 msgstr "Para"
 
@@ -822,57 +2245,74 @@ msgstr "Para"
 #: voyages/apps/assessment/templates/assessment/estimates-left-menu.html:37
 #: voyages/apps/voyage/templates/database/_ship_nation_owner.html:63
 #: voyages/apps/voyage/templates/database/_ship_nation_owner.html:65
+#: voyages/apps/assessment/globals.py:151
+#: voyages/apps/assessment/globals.py:165
 msgid "Flag"
 msgstr "Bandeira"
 
 #: voyages/apps/assessment/globals.py:164
 #: voyages/apps/assessment/globals.py:175
+#: voyages/apps/assessment/globals.py:152
+#: voyages/apps/assessment/globals.py:166
 msgid "Embarkation regions"
 msgstr "Regiões de embarque"
 
 #: voyages/apps/assessment/globals.py:165
 #: voyages/apps/assessment/globals.py:176
+#: voyages/apps/assessment/globals.py:154
+#: voyages/apps/assessment/globals.py:168
 msgid "Broad disembarkation regions"
 msgstr "Grande regiões de desembarque"
 
 #: voyages/apps/assessment/globals.py:166
 #: voyages/apps/assessment/globals.py:177
+#: voyages/apps/assessment/globals.py:156
+#: voyages/apps/assessment/globals.py:170
 msgid "Specific disembarkation regions"
 msgstr "Regiões específicas de desembarque"
 
 #: voyages/apps/assessment/globals.py:167
+#: voyages/apps/assessment/globals.py:158
 msgid "Individual years"
 msgstr "Anos específicos"
 
 #: voyages/apps/assessment/globals.py:168 voyages/apps/voyage/globals.py:568
+#: voyages/apps/assessment/globals.py:159 voyages/apps/voyage/globals.py:779
 msgid "5-year periods"
 msgstr "Períodos de 5 anos"
 
 #: voyages/apps/assessment/globals.py:169 voyages/apps/voyage/globals.py:569
+#: voyages/apps/assessment/globals.py:160 voyages/apps/voyage/globals.py:780
 msgid "10-year periods"
 msgstr "Períodos de 10 anos"
 
 #: voyages/apps/assessment/globals.py:170 voyages/apps/voyage/globals.py:570
+#: voyages/apps/assessment/globals.py:161 voyages/apps/voyage/globals.py:781
 msgid "25-year periods"
 msgstr "Períodos de 25 anos"
 
 #: voyages/apps/assessment/globals.py:171 voyages/apps/voyage/globals.py:571
+#: voyages/apps/assessment/globals.py:162 voyages/apps/voyage/globals.py:782
 msgid "50-year periods"
 msgstr "Períodos de 50 anos"
 
 #: voyages/apps/assessment/globals.py:172 voyages/apps/voyage/globals.py:572
+#: voyages/apps/assessment/globals.py:163 voyages/apps/voyage/globals.py:783
 msgid "100-year periods"
 msgstr "Períodos de 100 anos"
 
 #: voyages/apps/assessment/globals.py:180
+#: voyages/apps/assessment/globals.py:173
 msgid "Embarked/Disembarked"
 msgstr "Embarcados/Desembarcados"
 
 #: voyages/apps/assessment/globals.py:181
+#: voyages/apps/assessment/globals.py:174
 msgid "Only embarked"
 msgstr "Apenas embarcados"
 
 #: voyages/apps/assessment/globals.py:182
+#: voyages/apps/assessment/globals.py:175
 msgid "Only disembarked"
 msgstr "Apenas desembarcados"
 
@@ -895,6 +2335,7 @@ msgstr "A extensão total de tempo coberto pelas estimativas é 1501-1866."
 #: voyages/apps/assessment/templates/assessment/estimates-left-menu.html:29
 #: voyages/apps/assessment/templates/assessment/estimates-left-menu.html:58
 #: voyages/apps/assessment/templates/assessment/estimates-left-menu.html:216
+#: voyages/apps/past/templates/past/_enslaved_dataset_select_modal.html:68
 msgid "Apply"
 msgstr "Aplicar"
 
@@ -910,6 +2351,7 @@ msgstr "regiões"
 
 #: voyages/apps/assessment/templates/assessment/estimates-left-menu.html:77
 #: voyages/apps/voyage/globals.py:562 voyages/apps/voyage/globals.py:578
+#: voyages/apps/voyage/globals.py:761 voyages/apps/voyage/globals.py:800
 msgid "Embarkation Regions"
 msgstr "Regiões de embarque"
 
@@ -962,6 +2404,8 @@ msgstr "Link criado"
 #: voyages/apps/assessment/templates/assessment/estimates.html:27
 #: voyages/apps/static_content/templates/static_content/index.html:141
 #: voyages/templates/topbar.html:17
+#: voyages/apps/static_content/templates/static_content/index.html:195
+#: voyages/templates/topbar.html:20
 msgid "Estimates"
 msgstr "Estimativas"
 
@@ -1012,6 +2456,8 @@ msgstr "Regiões de desembarque selecionadas:"
 #: voyages/apps/resources/templates/resources/names-index.html:84
 #: voyages/apps/voyage/templates/database/_panel.html:21
 #: voyages/apps/voyage/templates/database/_panel.html:27
+#: voyages/apps/past/templates/past/_panel.html:21
+#: voyages/apps/past/templates/past/_panel.html:27
 msgid "Hide"
 msgstr "Esconder"
 
@@ -1022,11 +2468,13 @@ msgstr "Tabelas"
 
 #: voyages/apps/assessment/templates/assessment/estimates.html:144
 #: voyages/apps/voyage/templates/database/_tabs.html:18
+#: voyages/apps/static_content/templates/static_content/index.html:65
 msgid "Timeline"
 msgstr "Linha do tempo"
 
 #: voyages/apps/assessment/templates/assessment/estimates.html:148
 #: voyages/apps/voyage/templates/database/_tabs.html:23
+#: voyages/apps/voyage/templates/database/_tabs.html:22
 msgid "Maps"
 msgstr "Mapas"
 
@@ -1047,6 +2495,7 @@ msgid "Download Timeline Data"
 msgstr "Baixar linha do tempo"
 
 #: voyages/apps/assessment/templates/assessment/estimates_timeline.html:140
+#: voyages/apps/assessment/templates/assessment/estimates_timeline.html:135
 msgid "Historical event"
 msgstr "Eventos históricos"
 
@@ -1056,16 +2505,21 @@ msgstr "Eventos históricos"
 #: voyages/apps/contribute/templates/contribute/interim.html:1530
 #: voyages/apps/resources/templates/resources/image-category-detail.html:100
 #: voyages/apps/resources/templates/resources/images-search-detail.html:129
+#: voyages/apps/assessment/templates/assessment/estimates_timeline.html:139
 msgid "Year"
 msgstr "Ano"
 
 #: voyages/apps/assessment/templates/assessment/estimates_timeline.html:145
 #: voyages/apps/assessment/templates/assessment/estimates_timeline.html:213
+#: voyages/apps/assessment/templates/assessment/estimates_timeline.html:140
+#: voyages/apps/assessment/templates/assessment/estimates_timeline.html:208
 msgid "Embarked"
 msgstr "Embarcados"
 
 #: voyages/apps/assessment/templates/assessment/estimates_timeline.html:146
 #: voyages/apps/assessment/templates/assessment/estimates_timeline.html:213
+#: voyages/apps/assessment/templates/assessment/estimates_timeline.html:141
+#: voyages/apps/assessment/templates/assessment/estimates_timeline.html:208
 msgid "Disembarked"
 msgstr "Desembarcados"
 
@@ -1127,7 +2581,7 @@ msgstr "Brasil abole o tráfico de escravos"
 msgid "Last reported transatlantic slave voyage arrives in Americas"
 msgstr "Última viagem negreira transatlântica documentada chega às Américas"
 
-#: voyages/apps/contribute/forms.py:10
+#: voyages/apps/contribute/forms.py:10 voyages/apps/contribute/forms.py:14
 msgid "Terms and Conditions"
 msgstr "Termos e Condições"
 
@@ -1151,59 +2605,59 @@ msgstr ""
 "Trans-Atlantic Slave Trade Database será regido por quaisquer licenças "
 "aplicáveis."
 
-#: voyages/apps/contribute/forms.py:33
+#: voyages/apps/contribute/forms.py:33 voyages/apps/contribute/forms.py:47
 msgid "Username or Email"
 msgstr "Nome do usuário ou email"
 
-#: voyages/apps/contribute/forms.py:36
+#: voyages/apps/contribute/forms.py:36 voyages/apps/contribute/forms.py:51
 msgid "First name"
 msgstr "Nome"
 
-#: voyages/apps/contribute/forms.py:37
+#: voyages/apps/contribute/forms.py:37 voyages/apps/contribute/forms.py:52
 msgid "Last name"
 msgstr "Sobrenome"
 
-#: voyages/apps/contribute/forms.py:38
+#: voyages/apps/contribute/forms.py:38 voyages/apps/contribute/forms.py:54
 msgid "Institution"
 msgstr "Instituição"
 
-#: voyages/apps/contribute/forms.py:40
+#: voyages/apps/contribute/forms.py:40 voyages/apps/contribute/forms.py:57
 msgid "Brief description of new material and sources"
 msgstr "Breve descrição de novos materiais e fontes"
 
-#: voyages/apps/contribute/forms.py:44
+#: voyages/apps/contribute/forms.py:44 voyages/apps/contribute/forms.py:64
 msgid "Agree to the terms and conditions above"
 msgstr "Concordar com os termos e condições acima"
 
-#: voyages/apps/contribute/forms.py:102
+#: voyages/apps/contribute/forms.py:102 voyages/apps/contribute/forms.py:132
 msgid "Improperly formatted field"
 msgstr "Campo inadequadamente formatado"
 
-#: voyages/apps/contribute/forms.py:106
+#: voyages/apps/contribute/forms.py:106 voyages/apps/contribute/forms.py:137
 #, python-format
 msgid "At least %d voyage(s) should be provided"
 msgstr "Pelo menos %d de viagem(s) deve(m) ser fornecida(s)"
 
-#: voyages/apps/contribute/forms.py:108
+#: voyages/apps/contribute/forms.py:108 voyages/apps/contribute/forms.py:141
 #, python-format
 msgid "At most %d voyage(s) should be provided"
 msgstr "A(s) viagem(s) deve(m) ser efectuada(s), no máximo, em %d"
 
-#: voyages/apps/contribute/forms.py:111
+#: voyages/apps/contribute/forms.py:111 voyages/apps/contribute/forms.py:146
 msgid "Some of the provided voyage_ids are invalid"
 msgstr "Algumas das voyage_ids fornecidas são inválidas"
 
-#: voyages/apps/contribute/forms.py:114
+#: voyages/apps/contribute/forms.py:114 voyages/apps/contribute/forms.py:150
 msgid "Enter last name , first name."
 msgstr "Entrar sobrenome , nome próprio."
 
-#: voyages/apps/contribute/forms.py:129
+#: voyages/apps/contribute/forms.py:129 voyages/apps/contribute/forms.py:171
 msgid "If not country of registration, use the comments box to explain coding."
 msgstr ""
 "Se não for o país de registo, utilize a caixa de comentários para explicar a "
 "codificação."
 
-#: voyages/apps/contribute/forms.py:136
+#: voyages/apps/contribute/forms.py:136 voyages/apps/contribute/forms.py:180
 msgid ""
 "If more than one place of purchase, use the comments box to explain choice "
 "of principal place."
@@ -1211,7 +2665,7 @@ msgstr ""
 "Se houver mais de um local de compra, use a caixa de comentários para "
 "explicar a escolha do local principal."
 
-#: voyages/apps/contribute/forms.py:137
+#: voyages/apps/contribute/forms.py:137 voyages/apps/contribute/forms.py:183
 msgid ""
 "If more than one place of landing, use the comments box to explain choice of "
 "principal place."
@@ -1219,236 +2673,242 @@ msgstr ""
 "Se houver mais de um local de desembarque, use a caixa de comentários para "
 "explicar a escolha do local principal."
 
-#: voyages/apps/contribute/forms.py:141
+#: voyages/apps/contribute/forms.py:141 voyages/apps/contribute/forms.py:188
 msgid "Name of vessel"
 msgstr ""
 
-#: voyages/apps/contribute/forms.py:142
+#: voyages/apps/contribute/forms.py:142 voyages/apps/contribute/forms.py:189
 msgid "Year of ship construction"
 msgstr "Ano de construção"
 
-#: voyages/apps/contribute/forms.py:143
+#: voyages/apps/contribute/forms.py:143 voyages/apps/contribute/forms.py:190
 msgid "Year of ship registration"
 msgstr "Ano de registro"
 
-#: voyages/apps/contribute/forms.py:144
+#: voyages/apps/contribute/forms.py:144 voyages/apps/contribute/forms.py:191
 msgid "Place where ship constructed"
 msgstr "Porto de construção"
 
-#: voyages/apps/contribute/forms.py:145
+#: voyages/apps/contribute/forms.py:145 voyages/apps/contribute/forms.py:192
 msgid "Place where ship registered"
 msgstr "Porto de registro"
 
-#: voyages/apps/contribute/forms.py:146
+#: voyages/apps/contribute/forms.py:146 voyages/apps/contribute/forms.py:193
 msgid "National carrier"
 msgstr "Nação transportadora"
 
 #: voyages/apps/contribute/forms.py:147
 #: voyages/apps/contribute/templates/contribute/interim.html:136
+#: voyages/apps/contribute/forms.py:194
 msgid "Rig of vessel"
 msgstr "Equipamento do navio"
 
-#: voyages/apps/contribute/forms.py:148
+#: voyages/apps/contribute/forms.py:148 voyages/apps/contribute/forms.py:195
 msgid "Tonnage of vessel"
 msgstr "Tonelagem do navio"
 
-#: voyages/apps/contribute/forms.py:149
+#: voyages/apps/contribute/forms.py:149 voyages/apps/contribute/forms.py:196
 msgid "Definition of ton"
 msgstr "Portos de destino"
 
-#: voyages/apps/contribute/forms.py:150
+#: voyages/apps/contribute/forms.py:150 voyages/apps/contribute/forms.py:197
 msgid "Guns mounted"
 msgstr "Armas montadas"
 
-#: voyages/apps/contribute/forms.py:151
+#: voyages/apps/contribute/forms.py:151 voyages/apps/contribute/forms.py:198
 msgid "First or managing owner of venture"
 msgstr "Primeira região de aquisição de escravos"
 
-#: voyages/apps/contribute/forms.py:152
+#: voyages/apps/contribute/forms.py:152 voyages/apps/contribute/forms.py:199
 msgid "Second owner of venture"
 msgstr "Segunda região de aquisição de escravos"
 
-#: voyages/apps/contribute/forms.py:153
+#: voyages/apps/contribute/forms.py:153 voyages/apps/contribute/forms.py:200
 msgid "Other owners"
 msgstr "Resultado da viagem para proprietário*"
 
 #: voyages/apps/contribute/forms.py:155
 #: voyages/apps/voyage/templates/database/_outcome.html:8
+#: voyages/apps/contribute/forms.py:202
 msgid "Outcome of voyage"
 msgstr "Alguma informação sobre resultado da viagem disponível"
 
 #: voyages/apps/contribute/forms.py:156
 #: voyages/apps/contribute/templates/contribute/interim.html:288
+#: voyages/apps/contribute/forms.py:203
 msgid "African resistance"
 msgstr "Resistência africana"
 
-#: voyages/apps/contribute/forms.py:158
+#: voyages/apps/contribute/forms.py:158 voyages/apps/contribute/forms.py:206
 msgid "First port of intended embarkation"
 msgstr "Embarques estimados"
 
-#: voyages/apps/contribute/forms.py:159
+#: voyages/apps/contribute/forms.py:159 voyages/apps/contribute/forms.py:208
 msgid "Second port of intended embarkation"
 msgstr "Regiões específicas de desembarque"
 
-#: voyages/apps/contribute/forms.py:160
+#: voyages/apps/contribute/forms.py:160 voyages/apps/contribute/forms.py:210
 msgid "First port of intended disembarkation"
 msgstr "Embarque e desembarque"
 
-#: voyages/apps/contribute/forms.py:161
+#: voyages/apps/contribute/forms.py:161 voyages/apps/contribute/forms.py:212
 msgid "Second port of intended disembarkation"
 msgstr "Naufragado ou destruído, depois do desembarque"
 
-#: voyages/apps/contribute/forms.py:162
+#: voyages/apps/contribute/forms.py:162 voyages/apps/contribute/forms.py:213
 msgid "Port of departure"
 msgstr "Porto de Moçambique"
 
-#: voyages/apps/contribute/forms.py:163
+#: voyages/apps/contribute/forms.py:163 voyages/apps/contribute/forms.py:215
 msgid "Number of ports called prior to slave purchase"
 msgstr "Número de escravos pretendidos no primeiro porto de aquisição"
 
-#: voyages/apps/contribute/forms.py:164
+#: voyages/apps/contribute/forms.py:164 voyages/apps/contribute/forms.py:217
 msgid "First place of slave purchase"
 msgstr "Primeiro lugar de aquisição de escravos"
 
-#: voyages/apps/contribute/forms.py:165
+#: voyages/apps/contribute/forms.py:165 voyages/apps/contribute/forms.py:219
 msgid "Second place of slave purchase"
 msgstr "Segundo lugar de aquisição de escravos"
 
-#: voyages/apps/contribute/forms.py:166
+#: voyages/apps/contribute/forms.py:166 voyages/apps/contribute/forms.py:221
 msgid "Third place of slave purchase"
 msgstr "Terceiro lugar de aquisição de escravos"
 
-#: voyages/apps/contribute/forms.py:167
+#: voyages/apps/contribute/forms.py:167 voyages/apps/contribute/forms.py:223
 msgid "Principal place of slave purchase"
 msgstr "Principal lugar de aquisição de escravos*"
 
 #: voyages/apps/contribute/forms.py:168
 #: voyages/apps/voyage/templates/database/_itinerary.html:61
 #: voyages/apps/voyage/templates/database/_itinerary.html:64
+#: voyages/apps/contribute/forms.py:225
 msgid "Places of call before Atlantic crossing"
 msgstr "Portos de escala antes da travessia atlântica"
 
-#: voyages/apps/contribute/forms.py:169
+#: voyages/apps/contribute/forms.py:169 voyages/apps/contribute/forms.py:227
 msgid "Number of New World ports of call before disembarkation"
 msgstr "Número de portos de escala no Novo Mundo antes do desembarque"
 
-#: voyages/apps/contribute/forms.py:170
+#: voyages/apps/contribute/forms.py:170 voyages/apps/contribute/forms.py:228
 msgid "First place of landing"
 msgstr "Primeiro lugar de desembarque de escravos"
 
-#: voyages/apps/contribute/forms.py:171
+#: voyages/apps/contribute/forms.py:171 voyages/apps/contribute/forms.py:229
 msgid "Second place of landing"
 msgstr "Segundo lugar de desembarque de escravos"
 
-#: voyages/apps/contribute/forms.py:172
+#: voyages/apps/contribute/forms.py:172 voyages/apps/contribute/forms.py:230
 msgid "Third place of landing"
 msgstr "Terceiro lugar de desembarque de escravos"
 
-#: voyages/apps/contribute/forms.py:173
+#: voyages/apps/contribute/forms.py:173 voyages/apps/contribute/forms.py:232
 msgid "Principal place of slave disembarkation"
 msgstr "Principal lugar de desembarque de escravos*"
 
-#: voyages/apps/contribute/forms.py:174
+#: voyages/apps/contribute/forms.py:174 voyages/apps/contribute/forms.py:233
 msgid "Port at which voyage ended"
 msgstr "Porto onde a viagem terminou"
 
-#: voyages/apps/contribute/forms.py:176
+#: voyages/apps/contribute/forms.py:176 voyages/apps/contribute/forms.py:235
 msgid "Date of departure"
 msgstr "Data de partida do navio disponível"
 
-#: voyages/apps/contribute/forms.py:177
+#: voyages/apps/contribute/forms.py:177 voyages/apps/contribute/forms.py:236
 msgid "Date that slave purchase began"
 msgstr "Primeiro lugar de aquisição de escravos"
 
-#: voyages/apps/contribute/forms.py:178
+#: voyages/apps/contribute/forms.py:178 voyages/apps/contribute/forms.py:238
 msgid "Date that vessel left last slaving port"
 msgstr "Data em que o navio saiu do último porto de escravatura"
 
-#: voyages/apps/contribute/forms.py:179
+#: voyages/apps/contribute/forms.py:179 voyages/apps/contribute/forms.py:240
 msgid "Date of first disembarkation of slaves"
 msgstr "Condenado - depois do embarque de escravos"
 
-#: voyages/apps/contribute/forms.py:180
+#: voyages/apps/contribute/forms.py:180 voyages/apps/contribute/forms.py:242
 msgid "Date of second disembarkation of slaves"
 msgstr "Capturado por venezuelanos antes do desembarque de escravos"
 
-#: voyages/apps/contribute/forms.py:181
+#: voyages/apps/contribute/forms.py:181 voyages/apps/contribute/forms.py:244
 msgid "Date of third disembarkation of slaves"
 msgstr "Capturado por holandeses - depois do embarque de escravos"
 
-#: voyages/apps/contribute/forms.py:182
+#: voyages/apps/contribute/forms.py:182 voyages/apps/contribute/forms.py:245
 msgid "Date that ship left on return voyage"
 msgstr "Data em que a nave partiu na viagem de regresso"
 
-#: voyages/apps/contribute/forms.py:183
+#: voyages/apps/contribute/forms.py:183 voyages/apps/contribute/forms.py:246
 msgid "Date when voyage completed"
 msgstr "Data em que a viagem terminou"
 
-#: voyages/apps/contribute/forms.py:184
+#: voyages/apps/contribute/forms.py:184 voyages/apps/contribute/forms.py:247
 msgid "Length of Middle Passage in days"
 msgstr "Duração da travessia do Atlântico (em dias)*"
 
-#: voyages/apps/contribute/forms.py:186
+#: voyages/apps/contribute/forms.py:186 voyages/apps/contribute/forms.py:249
 msgid "First captain of voyage"
 msgstr "Lista de viagens"
 
-#: voyages/apps/contribute/forms.py:187
+#: voyages/apps/contribute/forms.py:187 voyages/apps/contribute/forms.py:250
 msgid "Second captain of voyage"
 msgstr "Segundo lugar de desembarque de escravos"
 
-#: voyages/apps/contribute/forms.py:188
+#: voyages/apps/contribute/forms.py:188 voyages/apps/contribute/forms.py:251
 msgid "Third captain of voyage"
 msgstr "Lista de viagens"
 
 #: voyages/apps/contribute/models.py:301
 #: voyages/apps/contribute/templates/contribute/downloads_partial.html:15
 #: voyages/apps/contribute/templates/contribute/index.html:55
+#: voyages/apps/contribute/models.py:614
 msgid "Under review"
 msgstr "Sob revisão"
 
-#: voyages/apps/contribute/models.py:302
+#: voyages/apps/contribute/models.py:302 voyages/apps/contribute/models.py:616
 msgid "Accepted (reviewer)"
 msgstr "Aceito (revisor)"
 
-#: voyages/apps/contribute/models.py:303
+#: voyages/apps/contribute/models.py:303 voyages/apps/contribute/models.py:618
 msgid "Rejected (reviewer)"
 msgstr "Recusado (revisor)"
 
-#: voyages/apps/contribute/models.py:304
+#: voyages/apps/contribute/models.py:304 voyages/apps/contribute/models.py:619
 msgid "Accepted"
 msgstr "Aceito"
 
 #: voyages/apps/contribute/models.py:305
 #: voyages/apps/contribute/templates/contribute/downloads_partial.html:21
 #: voyages/apps/contribute/templates/contribute/index.html:59
+#: voyages/apps/contribute/models.py:620
 msgid "Rejected"
 msgstr "Rejeitado"
 
-#: voyages/apps/contribute/models.py:306
+#: voyages/apps/contribute/models.py:306 voyages/apps/contribute/models.py:621
 msgid "Editor bypass"
 msgstr "By-pass do editor"
 
-#: voyages/apps/contribute/models.py:308
+#: voyages/apps/contribute/models.py:308 voyages/apps/contribute/models.py:623
 msgid "No reply"
 msgstr "Nenhum resultado"
 
-#: voyages/apps/contribute/models.py:309
+#: voyages/apps/contribute/models.py:309 voyages/apps/contribute/models.py:624
 msgid "Will review"
 msgstr ""
 
-#: voyages/apps/contribute/models.py:310
+#: voyages/apps/contribute/models.py:310 voyages/apps/contribute/models.py:625
 msgid "Cannot review"
 msgstr "Não é possível rever"
 
-#: voyages/apps/contribute/models.py:324
+#: voyages/apps/contribute/models.py:324 voyages/apps/contribute/models.py:651
 msgid "Review a contribution"
 msgstr "Construção"
 
-#: voyages/apps/contribute/models.py:339
+#: voyages/apps/contribute/models.py:339 voyages/apps/contribute/models.py:678
 msgid "Editorial review of contribution"
 msgstr "Construção"
 
-#: voyages/apps/contribute/models.py:403
+#: voyages/apps/contribute/models.py:403 voyages/apps/contribute/models.py:762
 msgid ""
 "Edit each variable as required, or leave as is if you think no change is "
 "necessary."
@@ -1456,11 +2916,11 @@ msgstr ""
 "Editar cada variável conforme necessário, ou deixar como está se achar que "
 "não é necessária nenhuma alteração."
 
-#: voyages/apps/contribute/models.py:408
+#: voyages/apps/contribute/models.py:408 voyages/apps/contribute/models.py:771
 msgid "Edit an existing voyage"
 msgstr "Editar uma viagem existente"
 
-#: voyages/apps/contribute/models.py:424
+#: voyages/apps/contribute/models.py:424 voyages/apps/contribute/models.py:791
 msgid ""
 "Enter your preferred data to the right. If required use the box for notes to "
 "explain your reasons for recommending the merge."
@@ -1468,16 +2928,16 @@ msgstr ""
 "Introduza os seus dados preferidos à direita. Se necessário, use a caixa de "
 "notas para explicar as razões para recomendar a fusão."
 
-#: voyages/apps/contribute/models.py:430
+#: voyages/apps/contribute/models.py:430 voyages/apps/contribute/models.py:801
 msgid "Merge two or more voyages into one"
 msgstr "Fundir duas ou mais viagens numa só"
 
-#: voyages/apps/contribute/models.py:441
+#: voyages/apps/contribute/models.py:441 voyages/apps/contribute/models.py:816
 msgid "Complete as many boxes in each category as your source(s) allow."
 msgstr ""
 "Preencha tantas caixas em cada categoria quantas suas fontes permitirem."
 
-#: voyages/apps/contribute/models.py:446
+#: voyages/apps/contribute/models.py:446 voyages/apps/contribute/models.py:824
 msgid "New voyage"
 msgstr ""
 
@@ -1501,6 +2961,7 @@ msgstr "Enviar para o revisor"
 #: voyages/apps/contribute/templates/contribute/assign_reviewer_dialog.html:24
 #: voyages/apps/contribute/templates/contribute/interim.html:1635
 #: voyages/apps/contribute/templates/contribute/interim.html:1652
+#: voyages/apps/past/templates/past/_enslaved_dataset_select_modal.html:65
 msgid "Cancel"
 msgstr "Cancelar"
 
@@ -1532,6 +2993,7 @@ msgstr "Mensagem para o editor"
 #: voyages/apps/contribute/templates/contribute/decision_part.html:51
 #: voyages/apps/contribute/templates/contribute/decision_part.html:105
 #: voyages/apps/contribute/templates/contribute/decision_part.html:194
+#: voyages/apps/contribute/templates/contribute/decision_part.html:199
 msgid "Decision"
 msgstr ""
 
@@ -1587,23 +3049,28 @@ msgstr "Dados imputados"
 
 #: voyages/apps/contribute/templates/contribute/decision_part.html:101
 #: voyages/apps/contribute/templates/contribute/decision_part.html:176
+#: voyages/apps/contribute/templates/contribute/decision_part.html:181
 msgid "Please choose your decision."
 msgstr "Por favor, escolha a sua decisão."
 
 #: voyages/apps/contribute/templates/contribute/decision_part.html:105
 #: voyages/apps/contribute/templates/contribute/decision_part.html:194
+#: voyages/apps/contribute/templates/contribute/decision_part.html:199
 msgid "Please confirm your message and decision."
 msgstr "Por favor, confirme a sua mensagem e decisão."
 
 #: voyages/apps/contribute/templates/contribute/decision_part.html:155
+#: voyages/apps/contribute/templates/contribute/decision_part.html:159
 msgid "Impute variables computed as follows"
 msgstr "Variáveis imputar calculadas da seguinte forma"
 
 #: voyages/apps/contribute/templates/contribute/decision_part.html:183
+#: voyages/apps/contribute/templates/contribute/decision_part.html:188
 msgid "Please indicate the voyage id to be used with this voyage"
 msgstr "Indicar o código de viagem a utilizar nesta viagem"
 
 #: voyages/apps/contribute/templates/contribute/decision_part.html:189
+#: voyages/apps/contribute/templates/contribute/decision_part.html:194
 msgid "The impute program must be executed before accepting a contribution."
 msgstr ""
 "O programa de imputação deve ser executado antes de aceitar uma contribuição."
@@ -1625,6 +3092,7 @@ msgid "Notes:"
 msgstr "Notas"
 
 #: voyages/apps/contribute/templates/contribute/delete.html:26
+#: voyages/apps/past/templates/past-contribute/_language_group.html:48
 msgid "Submit"
 msgstr "Pesquisar"
 
@@ -1697,6 +3165,7 @@ msgid "Download"
 msgstr "Download"
 
 #: voyages/apps/contribute/templates/contribute/downloads_partial.html:101
+#: voyages/apps/contribute/templates/contribute/downloads_partial.html:102
 msgid "You must select at least one status"
 msgstr "É necessário selecionar pelo menos um status"
 
@@ -1714,6 +3183,7 @@ msgid "Begin"
 msgstr ""
 
 #: voyages/apps/contribute/templates/contribute/editor_main.html:38
+#: voyages/apps/past/templates/past-contribute/_left-menu.html:84
 msgid "Voyages"
 msgstr "Viagens"
 
@@ -2275,6 +3745,8 @@ msgstr "Mortes de escravos durante a travessia do Atlântico*"
 
 #: voyages/apps/contribute/templates/contribute/interim.html:1222
 #: voyages/apps/voyage/templates/database/tabs/results-detail.html:35
+#: voyages/apps/past/templates/past-contribute/_full_details_modal.html:34
+#: voyages/apps/voyage/templates/database/_full_details_modal.html:34
 msgid "Imputed results are calculated by an algorithm."
 msgstr "Os resultados imputados são calculados por um algoritmo."
 
@@ -2336,6 +3808,12 @@ msgstr "Proporção de machos"
 
 #: voyages/apps/contribute/templates/contribute/interim.html:1310
 #: voyages/apps/contribute/templates/contribute/interim_summary.html:584
+#: voyages/apps/past/templates/past-enslavers/_sources.html:4
+#: voyages/apps/past/templates/past-enslavers/_sources.html:6
+#: voyages/apps/past/templates/past-enslavers/_sources.html:8
+#: voyages/apps/past/templates/past/_sources.html:4
+#: voyages/apps/past/templates/past/_sources.html:6
+#: voyages/apps/past/templates/past/_sources.html:8
 msgid "Sources"
 msgstr "Fontes"
 
@@ -2353,13 +3831,13 @@ msgstr ""
 
 #: voyages/apps/contribute/templates/contribute/interim.html:1322
 #: voyages/apps/contribute/templates/contribute/interim_summary.html:592
-#: voyages/apps/voyage/models.py:1231
+#: voyages/apps/voyage/models.py:1231 voyages/apps/voyage/models.py:1708
 msgid "Short reference"
 msgstr "Referência abreviada"
 
 #: voyages/apps/contribute/templates/contribute/interim.html:1323
 #: voyages/apps/contribute/templates/contribute/interim_summary.html:593
-#: voyages/apps/voyage/models.py:1234
+#: voyages/apps/voyage/models.py:1234 voyages/apps/voyage/models.py:1712
 msgid "Full reference"
 msgstr "Referência completa"
 
@@ -2537,6 +4015,12 @@ msgstr "Lugar de embarque"
 #: voyages/apps/contribute/templates/contribute/interim_summary.html:639
 #: voyages/apps/resources/templates/resources/names-index.html:135
 #: voyages/apps/voyage/templates/upload.html:16
+#: voyages/apps/past/templates/past-enslavers/_enslaver-name.html:4
+#: voyages/apps/past/templates/past-enslavers/_enslaver-name.html:6
+#: voyages/apps/past/templates/past-enslavers/_enslaver-name.html:8
+#: voyages/apps/past/templates/past/_african-name.html:6
+#: voyages/apps/past/templates/past/_african-name.html:8
+#: voyages/apps/past/templates/past/_identity.html:6
 msgid "Name"
 msgstr "Nome"
 
@@ -2554,6 +4038,7 @@ msgstr "País"
 
 #: voyages/apps/contribute/templates/contribute/interim.html:1580
 #: voyages/apps/contribute/templates/contribute/interim.html:1607
+#: voyages/templates/topbar.html:85
 msgid "Authors"
 msgstr ""
 
@@ -2564,11 +4049,15 @@ msgstr "Localização"
 
 #: voyages/apps/contribute/templates/contribute/interim.html:1592
 #: voyages/apps/contribute/templates/contribute/interim.html:1619
+#: voyages/apps/blog/templates/blog/authors.html:60
+#: voyages/apps/blog/templates/blog/index.html:66
+#: voyages/apps/blog/templates/blog/institutions.html:57
 msgid "Page"
 msgstr "Página para upload viagem"
 
 #: voyages/apps/contribute/templates/contribute/interim.html:1634
 #: voyages/apps/contribute/templates/contribute/interim.html:2351
+#: voyages/apps/contribute/templates/contribute/interim.html:2371
 msgid "Add"
 msgstr "Adicionar"
 
@@ -2582,83 +4071,103 @@ msgid "Confirm"
 msgstr "Confirmar"
 
 #: voyages/apps/contribute/templates/contribute/interim.html:1663
+#: voyages/apps/contribute/templates/contribute/interim.html:1669
 msgid "Modify reference"
 msgstr "Referência abreviada"
 
 #: voyages/apps/contribute/templates/contribute/interim.html:1702
+#: voyages/apps/contribute/templates/contribute/interim.html:1708
 msgid "Save changes"
 msgstr "Salvar alterações"
 
 #: voyages/apps/contribute/templates/contribute/interim.html:1760
+#: voyages/apps/contribute/templates/contribute/interim.html:1779
 msgid "Short reference must not be empty"
 msgstr "Referência abreviada"
 
 #: voyages/apps/contribute/templates/contribute/interim.html:1763
+#: voyages/apps/contribute/templates/contribute/interim.html:1782
 msgid "Full reference is too short"
 msgstr "Referência completa"
 
 #: voyages/apps/contribute/templates/contribute/interim.html:1766
+#: voyages/apps/contribute/templates/contribute/interim.html:1785
 msgid "Text reference must start with short reference"
 msgstr "A referência de texto deve começar com uma breve referência"
 
 #: voyages/apps/contribute/templates/contribute/interim.html:1771
+#: voyages/apps/contribute/templates/contribute/interim.html:1790
 msgid ""
 "Suffix should be alphanumeric and contain only restricted special symbols"
 msgstr ""
 "O sufixo deve ser alfanumérico e conter apenas símbolos especiais restritos"
 
 #: voyages/apps/contribute/templates/contribute/interim.html:1775
+#: voyages/apps/contribute/templates/contribute/interim.html:1794
 msgid "Validation errors"
 msgstr "Erros de validação"
 
 #: voyages/apps/contribute/templates/contribute/interim.html:1779
+#: voyages/apps/contribute/templates/contribute/interim.html:1798
 msgid "Validation warnings"
 msgstr "Avisos de validação"
 
 #: voyages/apps/contribute/templates/contribute/interim.html:1779
+#: voyages/apps/contribute/templates/contribute/interim.html:1798
 msgid "Confirm anyway?"
 msgstr "Confirmar na mesma?"
 
 #: voyages/apps/contribute/templates/contribute/interim.html:1820
+#: voyages/apps/contribute/templates/contribute/interim.html:1839
 msgid "Remove this source?"
 msgstr "Remover esta fonte?"
 
 #: voyages/apps/contribute/templates/contribute/interim.html:1943
 #: voyages/apps/contribute/templates/contribute/interim_summary.html:913
+#: voyages/apps/contribute/templates/contribute/interim.html:1963
+#: voyages/apps/contribute/templates/contribute/interim_summary.html:918
 msgid "The contribution will be deleted. Continue anyway?"
 msgstr "A contribuição será suprimida. Continua assim mesmo?"
 
 #: voyages/apps/contribute/templates/contribute/interim.html:1983
+#: voyages/apps/contribute/templates/contribute/interim.html:2003
 msgid "Most common outcomes"
 msgstr "Resultados mais comuns"
 
 #: voyages/apps/contribute/templates/contribute/interim.html:2025
+#: voyages/apps/contribute/templates/contribute/interim.html:2045
 msgid "Ports"
 msgstr "portos"
 
 #: voyages/apps/contribute/templates/contribute/interim.html:2109
+#: voyages/apps/contribute/templates/contribute/interim.html:2129
 msgid "Year in the range"
 msgstr "Ano de registro"
 
 #: voyages/apps/contribute/templates/contribute/interim.html:2110
+#: voyages/apps/contribute/templates/contribute/interim.html:2130
 msgid "Month"
 msgstr "mês:"
 
 #: voyages/apps/contribute/templates/contribute/interim.html:2111
+#: voyages/apps/contribute/templates/contribute/interim.html:2131
 msgid "Day"
 msgstr "Dia"
 
 #: voyages/apps/contribute/templates/contribute/interim.html:2341
+#: voyages/apps/contribute/templates/contribute/interim.html:2361
 msgid "Create reference"
 msgstr "Referência abreviada"
 
 #: voyages/apps/contribute/templates/contribute/interim.html:2343
+#: voyages/apps/contribute/templates/contribute/interim.html:2363
 msgid "Edit"
 msgstr "Editar"
 
 #: voyages/apps/contribute/templates/contribute/interim.html:2343
 #: voyages/templates/account/email.html:36
 #: voyages/templates/socialaccount/connections.html:35
+#: voyages/apps/contribute/templates/contribute/interim.html:2363
 msgid "Remove"
 msgstr "Remover"
 
@@ -2742,14 +4251,17 @@ msgid "Submit your contribution"
 msgstr "Construção"
 
 #: voyages/apps/contribute/templates/contribute/interim_summary.html:901
+#: voyages/apps/contribute/templates/contribute/interim_summary.html:906
 msgid "There are no contributed source references"
 msgstr "Ordenar por referência curta"
 
 #: voyages/apps/contribute/templates/contribute/interim_summary.html:918
+#: voyages/apps/contribute/templates/contribute/interim_summary.html:923
 msgid "Return to contribution for editing?"
 msgstr "Voltar à contribuição para edição?"
 
 #: voyages/apps/contribute/templates/contribute/interim_summary.html:923
+#: voyages/apps/contribute/templates/contribute/interim_summary.html:928
 msgid ""
 "Once you submit your contribution you will not be able to edit it further. "
 "To resume editing, just save the data entry form and it will appear on the "
@@ -2760,15 +4272,18 @@ msgstr ""
 "página inicial Contribuir. Submeter a sua contribuição?"
 
 #: voyages/apps/contribute/templates/contribute/interim_summary.html:935
+#: voyages/apps/contribute/templates/contribute/interim_summary.html:940
 msgid "Merged voyages"
 msgstr "Viagens relacionadas"
 
 #: voyages/apps/contribute/templates/contribute/interim_summary.html:935
 #: voyages/apps/voyage/templates/voyage_main_content.html:20
+#: voyages/apps/contribute/templates/contribute/interim_summary.html:940
 msgid "Voyage"
 msgstr "Viagem"
 
 #: voyages/apps/contribute/templates/contribute/interim_summary.html:951
+#: voyages/apps/contribute/templates/contribute/interim_summary.html:956
 msgid "(blank)"
 msgstr ""
 "<a href=\"http://www.gnu.org/licenses/gpl.html\" target=\"_blank\">GNU "
@@ -3012,6 +4527,10 @@ msgstr "Imagens de "
 #: voyages/apps/resources/templates/resources/images-search-detail.html:103
 #: voyages/apps/resources/templates/resources/names-index.html:407
 #: voyages/apps/resources/templates/resources/names-index.html:411
+#: voyages/apps/blog/templates/blog/authors.html:64
+#: voyages/apps/blog/templates/blog/carousel.html:50
+#: voyages/apps/blog/templates/blog/index.html:70
+#: voyages/apps/blog/templates/blog/institutions.html:61
 msgid "Previous"
 msgstr "Anterior"
 
@@ -3021,6 +4540,10 @@ msgstr "Anterior"
 #: voyages/apps/resources/templates/resources/images-search-detail.html:111
 #: voyages/apps/resources/templates/resources/names-index.html:432
 #: voyages/apps/resources/templates/resources/names-index.html:436
+#: voyages/apps/blog/templates/blog/authors.html:80
+#: voyages/apps/blog/templates/blog/carousel.html:54
+#: voyages/apps/blog/templates/blog/index.html:86
+#: voyages/apps/blog/templates/blog/institutions.html:77
 msgid "Next"
 msgstr "Próximo"
 
@@ -3126,12 +4649,12 @@ msgstr "Planos de Aula"
 
 #: voyages/apps/resources/templates/resources/lessons.html:18
 #: voyages/apps/resources/templates/resources/links.html:18
-#: voyages/templates/topbar.html:52
+#: voyages/templates/topbar.html:52 voyages/templates/topbar.html:59
 msgid "Resources"
 msgstr "Recursos"
 
 #: voyages/apps/resources/templates/resources/lessons.html:19
-#: voyages/templates/topbar.html:55
+#: voyages/templates/topbar.html:55 voyages/templates/topbar.html:62
 msgid "Lesson Plans"
 msgstr "Planos de Aula"
 
@@ -3140,7 +4663,7 @@ msgid "Resources - External Links"
 msgstr "Recursos - Links Externos"
 
 #: voyages/apps/resources/templates/resources/links.html:19
-#: voyages/templates/topbar.html:56
+#: voyages/templates/topbar.html:56 voyages/templates/topbar.html:63
 msgid "External Links"
 msgstr "Links Externos"
 
@@ -3182,6 +4705,7 @@ msgstr "ID"
 
 #: voyages/apps/resources/templates/resources/names-index.html:152
 #: voyages/apps/resources/templates/resources/names-left-menu.html:70
+#: voyages/apps/past/templates/past-contribute/_left-menu.html:65
 msgid "Age"
 msgstr "Idade"
 
@@ -3199,6 +4723,7 @@ msgid "Origin"
 msgstr "Origem"
 
 #: voyages/apps/resources/templates/resources/names-index.html:237
+#: voyages/apps/past/templates/past-contribute/_left-menu.html:95
 msgid "Ship Name"
 msgstr "Nome do navio"
 
@@ -3217,6 +4742,7 @@ msgid "Disembarkation"
 msgstr "Desembarque"
 
 #: voyages/apps/resources/templates/resources/names-index.html:303
+#: voyages/apps/past/templates/past/_enslaved_dataset_select_modal.html:20
 msgid "African Origins"
 msgstr "Projeto Origens Africanas"
 
@@ -3242,11 +4768,17 @@ msgstr "Ver"
 
 #: voyages/apps/resources/templates/resources/names-index.html:396
 #: voyages/apps/resources/templates/resources/names-index.html:400
+#: voyages/apps/blog/templates/blog/authors.html:63
+#: voyages/apps/blog/templates/blog/index.html:69
+#: voyages/apps/blog/templates/blog/institutions.html:60
 msgid "First"
 msgstr "Primeiro"
 
 #: voyages/apps/resources/templates/resources/names-index.html:442
 #: voyages/apps/resources/templates/resources/names-index.html:446
+#: voyages/apps/blog/templates/blog/authors.html:81
+#: voyages/apps/blog/templates/blog/index.html:87
+#: voyages/apps/blog/templates/blog/institutions.html:78
 msgid "Last"
 msgstr "Último"
 
@@ -3339,15 +4871,18 @@ msgstr ""
 "\t\t\t\t\t"
 
 #: voyages/apps/static_content/templates/static_content/index.html:38
+#: voyages/apps/static_content/templates/static_content/index.html:40
 msgid "Henry Louis Gates introduces Slave Voyages 2.0 and some of its people"
 msgstr ""
 "Henry Louis Gates apresenta Slave Voyages 2.0 e algumas de suas pessoas"
 
 #: voyages/apps/static_content/templates/static_content/index.html:44
+#: voyages/apps/static_content/templates/static_content/index.html:46
 msgid "Special features"
 msgstr "Artigos especiais"
 
 #: voyages/apps/static_content/templates/static_content/index.html:48
+#: voyages/apps/static_content/templates/static_content/index.html:50
 msgid "Introductory maps"
 msgstr "Mapas introdutórios"
 
@@ -3373,14 +4908,17 @@ msgstr "Linha do Tempo: Número de cativos embarcados e desembarcados por ano"
 
 #: voyages/apps/static_content/templates/static_content/index.html:70
 #: voyages/apps/voyage/templates/database/_tabs.html:26
+#: voyages/apps/static_content/templates/static_content/index.html:73
 msgid "Timelapse"
 msgstr "Linha do tempo"
 
 #: voyages/apps/static_content/templates/static_content/index.html:71
+#: voyages/apps/static_content/templates/static_content/index.html:74
 msgid "View the movement of slave ships across the Atlantic"
 msgstr "Veja o movimento de navios de escravos através do Atlântico"
 
 #: voyages/apps/static_content/templates/static_content/index.html:86
+#: voyages/apps/static_content/templates/static_content/index.html:89
 msgid ""
 "The Slave Voyages 1.0 is now available as a read-only archive until late "
 "2019."
@@ -3397,16 +4935,21 @@ msgid "donate to this project"
 msgstr "Sobre o projeto"
 
 #: voyages/apps/static_content/templates/static_content/index.html:97
+#: voyages/apps/static_content/templates/static_content/index.html:108
 msgid "scroll down to learn more"
 msgstr "rolar para baixo para saber mais"
 
 #: voyages/apps/static_content/templates/static_content/index.html:123
 #: voyages/templates/topbar.html:13
+#: voyages/apps/static_content/templates/static_content/index.html:177
+#: voyages/templates/topbar.html:16
 msgid "Trans-Atlantic"
 msgstr "Transatlântico"
 
 #: voyages/apps/static_content/templates/static_content/index.html:124
 #: voyages/apps/static_content/templates/static_content/index.html:168
+#: voyages/apps/static_content/templates/static_content/index.html:178
+#: voyages/apps/static_content/templates/static_content/index.html:222
 msgid "Slave Trade Database"
 msgstr "Base de dados do comércio de escravos"
 
@@ -3442,6 +4985,11 @@ msgstr ""
 #: voyages/apps/static_content/templates/static_content/index.html:206
 #: voyages/templates/topbar.html:16 voyages/templates/topbar.html:34
 #: voyages/templates/topbar.html:46
+#: voyages/apps/static_content/templates/static_content/index.html:234
+#: voyages/apps/static_content/templates/static_content/index.html:245
+#: voyages/apps/static_content/templates/static_content/index.html:259
+#: voyages/templates/topbar.html:19 voyages/templates/topbar.html:37
+#: voyages/templates/topbar.html:50
 msgid "Database"
 msgstr "Banco de dados"
 
@@ -3450,11 +4998,15 @@ msgstr "Banco de dados"
 #: voyages/templates/account/base.html:23
 #: voyages/templates/account/login.html:8 voyages/templates/topbar.html:26
 #: voyages/templates/topbar.html:38
+#: voyages/apps/static_content/templates/static_content/index.html:205
+#: voyages/apps/static_content/templates/static_content/index.html:236
 msgid "Contribute"
 msgstr "Colabore"
 
 #: voyages/apps/static_content/templates/static_content/index.html:167
 #: voyages/templates/topbar.html:31
+#: voyages/apps/static_content/templates/static_content/index.html:221
+#: voyages/templates/topbar.html:34
 msgid "Intra-American"
 msgstr "Américas"
 
@@ -3500,6 +5052,8 @@ msgstr ""
 
 #: voyages/apps/static_content/templates/static_content/index.html:221
 #: voyages/templates/base.html:31 voyages/templates/topbar.html:54
+#: voyages/apps/static_content/templates/static_content/index.html:274
+#: voyages/templates/base.html:35 voyages/templates/topbar.html:61
 msgid "Image Galleries"
 msgstr "Categorias de idade"
 
@@ -3526,6 +5080,7 @@ msgid "manuscripts"
 msgstr "manuscritos"
 
 #: voyages/apps/static_content/templates/static_content/index.html:246
+#: voyages/apps/static_content/templates/static_content/index.html:304
 msgid "places"
 msgstr "lugares"
 
@@ -3534,14 +5089,16 @@ msgid "slaves"
 msgstr "escravos"
 
 #: voyages/apps/static_content/templates/static_content/index.html:266
+#: voyages/apps/static_content/templates/static_content/index.html:324
 msgid "vessels"
 msgstr "embarcações"
 
-#: voyages/apps/voyage/admin.py:14
+#: voyages/apps/voyage/admin.py:14 voyages/apps/voyage/admin.py:27
 msgid "Advanced options"
 msgstr "Opções avançadas"
 
 #: voyages/apps/voyage/beta_views.py:251 voyages/apps/voyage/views.py:1244
+#: voyages/apps/voyage/search_views.py:447 voyages/apps/voyage/views.py:1444
 msgid "Africa, port unspecified"
 msgstr "Ásia e África, porto não especificado"
 
@@ -3590,257 +5147,268 @@ msgid "Timeline variable"
 msgstr "Variável da linha do tempo"
 
 #: voyages/apps/voyage/globals.py:558 voyages/apps/voyage/globals.py:574
+#: voyages/apps/voyage/globals.py:745 voyages/apps/voyage/globals.py:787
 msgid "Flag*"
 msgstr "Bandeira*"
 
 #: voyages/apps/voyage/globals.py:559 voyages/apps/voyage/globals.py:575
+#: voyages/apps/voyage/globals.py:750 voyages/apps/voyage/globals.py:791
 msgid "Broad region where voyage began"
 msgstr "Grande região onde viagem teve início"
 
 #: voyages/apps/voyage/globals.py:560 voyages/apps/voyage/globals.py:576
+#: voyages/apps/voyage/globals.py:755 voyages/apps/voyage/globals.py:796
 msgid "Region where voyage began"
 msgstr "Região onde viagem teve início"
 
 #: voyages/apps/voyage/globals.py:561 voyages/apps/voyage/globals.py:577
+#: voyages/apps/voyage/globals.py:758 voyages/apps/voyage/globals.py:798
 msgid "Port where voyage began"
 msgstr "Porto onde viagem teve início"
 
 #: voyages/apps/voyage/globals.py:563 voyages/apps/voyage/globals.py:579
+#: voyages/apps/voyage/globals.py:764 voyages/apps/voyage/globals.py:803
 msgid "Embarkation Ports"
 msgstr "Portos de embarque"
 
 #: voyages/apps/voyage/globals.py:564 voyages/apps/voyage/globals.py:580
+#: voyages/apps/voyage/globals.py:767 voyages/apps/voyage/globals.py:805
 msgid "Specific regions of disembarkation"
 msgstr "Regiões específicas de desembarque"
 
 #: voyages/apps/voyage/globals.py:565 voyages/apps/voyage/globals.py:581
+#: voyages/apps/voyage/globals.py:770 voyages/apps/voyage/globals.py:808
 msgid "Broad regions of disembarkation"
 msgstr "Grandes regiões de desembarque"
 
 #: voyages/apps/voyage/globals.py:566 voyages/apps/voyage/globals.py:582
+#: voyages/apps/voyage/globals.py:775 voyages/apps/voyage/globals.py:813
 msgid "Disembarkation Ports"
 msgstr "Portos de desembarque"
 
-#: voyages/apps/voyage/globals.py:567
+#: voyages/apps/voyage/globals.py:567 voyages/apps/voyage/globals.py:778
 msgid "Individual Years"
 msgstr "Anos específicos"
 
-#: voyages/apps/voyage/globals.py:717
+#: voyages/apps/voyage/globals.py:717 voyages/apps/voyage/globals.py:968
 msgid "Number of Voyages"
 msgstr "Número de Viagens"
 
-#: voyages/apps/voyage/globals.py:718
+#: voyages/apps/voyage/globals.py:718 voyages/apps/voyage/globals.py:969
 msgid "Sum of embarked slaves"
 msgstr "Soma de escravos embarcados"
 
-#: voyages/apps/voyage/globals.py:719
+#: voyages/apps/voyage/globals.py:719 voyages/apps/voyage/globals.py:971
 msgid "Average number of embarked slaves"
 msgstr "Número médio de escravos embarcados"
 
-#: voyages/apps/voyage/globals.py:720
+#: voyages/apps/voyage/globals.py:720 voyages/apps/voyage/globals.py:973
 msgid "Number of voyages - embarked slaves"
 msgstr "Número de viagens – escravos embarcados"
 
-#: voyages/apps/voyage/globals.py:721
+#: voyages/apps/voyage/globals.py:721 voyages/apps/voyage/globals.py:975
 msgid "Percent of embarked slaves (row total)"
 msgstr "Porcentagem de escravos embarcados (total de linha)"
 
-#: voyages/apps/voyage/globals.py:722
+#: voyages/apps/voyage/globals.py:722 voyages/apps/voyage/globals.py:977
 msgid "Percent of embarked slaves (column total)"
 msgstr "Porcentagem de escravos embarcados (total de coluna)"
 
-#: voyages/apps/voyage/globals.py:723
+#: voyages/apps/voyage/globals.py:723 voyages/apps/voyage/globals.py:979
 msgid "Sum of disembarked slaves"
 msgstr "Soma de escravos desembarcados"
 
-#: voyages/apps/voyage/globals.py:724
+#: voyages/apps/voyage/globals.py:724 voyages/apps/voyage/globals.py:981
 msgid "Average number of disembarked slaves"
 msgstr "Número médio de escravos desembarcados"
 
-#: voyages/apps/voyage/globals.py:725
+#: voyages/apps/voyage/globals.py:725 voyages/apps/voyage/globals.py:983
 msgid "Number of voyages - disembarked slaves"
 msgstr "Número de viagens – escravos desembarcados"
 
-#: voyages/apps/voyage/globals.py:726
+#: voyages/apps/voyage/globals.py:726 voyages/apps/voyage/globals.py:985
 msgid "Percent of disembarked slaves (row total)"
 msgstr "Porcentagem de escravos desembarcados (total de linha)"
 
-#: voyages/apps/voyage/globals.py:727
+#: voyages/apps/voyage/globals.py:727 voyages/apps/voyage/globals.py:987
 msgid "Percent of disembarked slaves (column total)"
 msgstr "Porcentagem de escravos desembarcados (total de coluna)"
 
 #: voyages/apps/voyage/globals.py:728 voyages/apps/voyage/globals.py:744
+#: voyages/apps/voyage/globals.py:989 voyages/apps/voyage/globals.py:1019
 msgid "Sum of embarked/disembarked slaves"
 msgstr "Soma de escravos embarcados/desembarcados"
 
 #: voyages/apps/voyage/globals.py:729 voyages/apps/voyage/globals.py:744
+#: voyages/apps/voyage/globals.py:990 voyages/apps/voyage/globals.py:1020
 msgid "Average number of embarked/disembarked slaves"
 msgstr "Número médio de escravos embarcados/desembarcados"
 
 #: voyages/apps/voyage/globals.py:730 voyages/apps/voyage/globals.py:744
+#: voyages/apps/voyage/globals.py:991 voyages/apps/voyage/globals.py:1021
 msgid "Number of voyages - embarked/disembarked slaves"
 msgstr "Número de viagens – escravos embarcados/desembarcados"
 
-#: voyages/apps/voyage/globals.py:731
+#: voyages/apps/voyage/globals.py:731 voyages/apps/voyage/globals.py:992
 msgid "Average percentage male"
 msgstr "Porcentagem média de machos"
 
-#: voyages/apps/voyage/globals.py:732
+#: voyages/apps/voyage/globals.py:732 voyages/apps/voyage/globals.py:994
 msgid "Number of voyages - percentage male"
 msgstr "Número de viagens – porcentagem de machos"
 
-#: voyages/apps/voyage/globals.py:733
+#: voyages/apps/voyage/globals.py:733 voyages/apps/voyage/globals.py:996
 msgid "Average percentage children"
 msgstr "Porcentagem média de crianças"
 
-#: voyages/apps/voyage/globals.py:734
+#: voyages/apps/voyage/globals.py:734 voyages/apps/voyage/globals.py:998
 msgid "Number of voyages - percentage children"
 msgstr "Número de viagens – porcentagem de crianças"
 
-#: voyages/apps/voyage/globals.py:735
+#: voyages/apps/voyage/globals.py:735 voyages/apps/voyage/globals.py:1000
 msgid "Average percentage of slaves embarked who died during voyage"
 msgstr "Porcentagem média de escravos embarcados que morreram durante a viagem"
 
-#: voyages/apps/voyage/globals.py:736
+#: voyages/apps/voyage/globals.py:736 voyages/apps/voyage/globals.py:1002
 msgid ""
 "Number of voyages - percentage of slaves embarked who died during voyage"
 msgstr ""
 "Número de viagens – porcentagem de escravos embarcados que morreram durante "
 "a viagem"
 
-#: voyages/apps/voyage/globals.py:737
+#: voyages/apps/voyage/globals.py:737 voyages/apps/voyage/globals.py:1005
 msgid "Average middle passage (days)"
 msgstr "Média de travessia do Atlântico (dias)"
 
-#: voyages/apps/voyage/globals.py:738
+#: voyages/apps/voyage/globals.py:738 voyages/apps/voyage/globals.py:1007
 msgid "Number of voyages - middle passage (days)"
 msgstr "Número de viagens – travessia do Atlântico (dias)"
 
-#: voyages/apps/voyage/globals.py:739
+#: voyages/apps/voyage/globals.py:739 voyages/apps/voyage/globals.py:1009
 msgid "Average standarized tonnage"
 msgstr "Tonelagem padronizada média"
 
-#: voyages/apps/voyage/globals.py:740
+#: voyages/apps/voyage/globals.py:740 voyages/apps/voyage/globals.py:1011
 msgid "Number of voyages - standarized tonnage"
 msgstr "Número de viagens – tonelagem padronizada"
 
-#: voyages/apps/voyage/globals.py:741
+#: voyages/apps/voyage/globals.py:741 voyages/apps/voyage/globals.py:1013
 msgid "Sterling cash price in Jamaica"
 msgstr "Preço à vista em libras esterlinas na Jamaica"
 
-#: voyages/apps/voyage/globals.py:742
+#: voyages/apps/voyage/globals.py:742 voyages/apps/voyage/globals.py:1015
 msgid "Number of voyages - sterling cash price in Jamaica"
 msgstr "Número de viagens – Preço à vista em libras esterlinas na Jamaica"
 
-#: voyages/apps/voyage/globals.py:1692
+#: voyages/apps/voyage/globals.py:1692 voyages/apps/voyage/globals.py:2355
 msgid "Number of voyages"
 msgstr "Número de viagens"
 
-#: voyages/apps/voyage/globals.py:1693
+#: voyages/apps/voyage/globals.py:1693 voyages/apps/voyage/globals.py:2357
 msgid "Average tonnage"
 msgstr "Tonelagem média"
 
-#: voyages/apps/voyage/globals.py:1694
+#: voyages/apps/voyage/globals.py:1694 voyages/apps/voyage/globals.py:2358
 msgid "Average tonnage (standardized)"
 msgstr "Tonelagem média (padronizada)"
 
-#: voyages/apps/voyage/globals.py:1695
+#: voyages/apps/voyage/globals.py:1695 voyages/apps/voyage/globals.py:2361
 msgid "Average number of guns"
 msgstr "Número médio de armas"
 
-#: voyages/apps/voyage/globals.py:1696
+#: voyages/apps/voyage/globals.py:1696 voyages/apps/voyage/globals.py:2364
 msgid "Rate of resistance"
 msgstr "Taxa de resistência"
 
-#: voyages/apps/voyage/globals.py:1698
+#: voyages/apps/voyage/globals.py:1698 voyages/apps/voyage/globals.py:2367
 msgid "Average duration of voyage from home port to disembarkation (days)"
 msgstr "Duração média da viagem do porto de partida ao desembarque (dias)"
 
-#: voyages/apps/voyage/globals.py:1700
+#: voyages/apps/voyage/globals.py:1700 voyages/apps/voyage/globals.py:2370
 msgid "Average duration of middle passage (days)"
 msgstr "Duração média da travessia do Atlântico (dias)"
 
-#: voyages/apps/voyage/globals.py:1701
+#: voyages/apps/voyage/globals.py:1701 voyages/apps/voyage/globals.py:2372
 msgid "Average crew at outset"
 msgstr "Tripulação média no início"
 
-#: voyages/apps/voyage/globals.py:1702
+#: voyages/apps/voyage/globals.py:1702 voyages/apps/voyage/globals.py:2374
 msgid "Average crew at first landing of slaves"
 msgstr "Tripulação média no primeiro desembarque de escravos"
 
-#: voyages/apps/voyage/globals.py:1703
+#: voyages/apps/voyage/globals.py:1703 voyages/apps/voyage/globals.py:2376
 msgid "Number of crew deaths"
 msgstr "Número de mortes da tripulação"
 
-#: voyages/apps/voyage/globals.py:1704
+#: voyages/apps/voyage/globals.py:1704 voyages/apps/voyage/globals.py:2378
 msgid "Average crew deaths"
 msgstr "Média de mortes da tripulação"
 
-#: voyages/apps/voyage/globals.py:1705
+#: voyages/apps/voyage/globals.py:1705 voyages/apps/voyage/globals.py:2380
 msgid "Intended number of purchases"
 msgstr "Número pretendido de aquisições"
 
-#: voyages/apps/voyage/globals.py:1706
+#: voyages/apps/voyage/globals.py:1706 voyages/apps/voyage/globals.py:2382
 msgid "Average intended purchases"
 msgstr "Média pretendida de aquisições"
 
-#: voyages/apps/voyage/globals.py:1707
+#: voyages/apps/voyage/globals.py:1707 voyages/apps/voyage/globals.py:2384
 msgid "Total number of captives embarked"
 msgstr "Número total de cativos embarcados"
 
-#: voyages/apps/voyage/globals.py:1708
+#: voyages/apps/voyage/globals.py:1708 voyages/apps/voyage/globals.py:2386
 msgid "Average number of captives embarked"
 msgstr "Número médio de cativos embarcados"
 
-#: voyages/apps/voyage/globals.py:1709
+#: voyages/apps/voyage/globals.py:1709 voyages/apps/voyage/globals.py:2388
 msgid "Total number of captives disembarked"
 msgstr "Número total de cativos desembarcados"
 
-#: voyages/apps/voyage/globals.py:1710
+#: voyages/apps/voyage/globals.py:1710 voyages/apps/voyage/globals.py:2390
 msgid "Average number of captives disembarked"
 msgstr "Número total de cativos desembarcados"
 
-#: voyages/apps/voyage/globals.py:1711
+#: voyages/apps/voyage/globals.py:1711 voyages/apps/voyage/globals.py:2392
 msgid "Percentage men (among captives)"
 msgstr "Porcentagem de homens (entre cativos)"
 
-#: voyages/apps/voyage/globals.py:1713
+#: voyages/apps/voyage/globals.py:1713 voyages/apps/voyage/globals.py:2395
 msgid "Percentage women (among captives)"
 msgstr "Porcentagem de mulheres (entre cativos)"
 
-#: voyages/apps/voyage/globals.py:1715
+#: voyages/apps/voyage/globals.py:1715 voyages/apps/voyage/globals.py:2398
 msgid "Percentage boys (among captives)"
 msgstr "Porcentagem de meninos (entre cativos)"
 
-#: voyages/apps/voyage/globals.py:1717
+#: voyages/apps/voyage/globals.py:1717 voyages/apps/voyage/globals.py:2401
 msgid "Percentage girls (among captives)"
 msgstr "Porcentagem de meninas (entre cativos)"
 
-#: voyages/apps/voyage/globals.py:1719
+#: voyages/apps/voyage/globals.py:1719 voyages/apps/voyage/globals.py:2404
 msgid "Percentage female (among captives)"
 msgstr "Porcentagem de fêmeas (entre cativos)"
 
-#: voyages/apps/voyage/globals.py:1721
+#: voyages/apps/voyage/globals.py:1721 voyages/apps/voyage/globals.py:2407
 msgid "Percentage male (among captives)"
 msgstr "Porcentagem de machos (entre cativos)"
 
-#: voyages/apps/voyage/globals.py:1723
+#: voyages/apps/voyage/globals.py:1723 voyages/apps/voyage/globals.py:2411
 msgid "Sterling cash price in Jamaica*"
 msgstr "Preço em esterlinas à vista na Jamaica*"
 
-#: voyages/apps/voyage/globals.py:1725
+#: voyages/apps/voyage/globals.py:1725 voyages/apps/voyage/globals.py:2414
 msgid "Number of slave deaths"
 msgstr "Número de mortes de escravos"
 
-#: voyages/apps/voyage/globals.py:1726
+#: voyages/apps/voyage/globals.py:1726 voyages/apps/voyage/globals.py:2416
 msgid "Average slave deaths"
 msgstr "Média de mortes de escravos"
 
-#: voyages/apps/voyage/globals.py:1727
+#: voyages/apps/voyage/globals.py:1727 voyages/apps/voyage/globals.py:2419
 msgid "Average percentage of slaves embarked who died during the voyage"
 msgstr "Porcentagem média de escravos embarcados que morreram durante a viagem"
 
-#: voyages/apps/voyage/models.py:1258
+#: voyages/apps/voyage/models.py:1258 voyages/apps/voyage/models.py:1744
 msgid "Text reference(citation)"
 msgstr "Referência do texto (citação)"
 
@@ -3859,34 +5427,52 @@ msgstr "Tráfico transatlântico de escravos"
 #: voyages/apps/voyage/templates/database.html:28
 #: voyages/apps/voyage/templates/database.html:35
 #: voyages/apps/voyage/templates/voyage_main_content.html:15
+#: voyages/apps/voyage/templates/database.html:30
+#: voyages/apps/voyage/templates/database.html:40
 msgid "Trans-Atlantic Slave Trade - Database"
 msgstr "Comércio Transatlântico de Escravos - Base de Dados"
 
 #: voyages/apps/voyage/templates/database.html:37
+#: voyages/apps/voyage/templates/database.html:32
+#: voyages/apps/voyage/templates/database.html:42
 msgid "Intra-American Slave Trade - Database"
 msgstr "Comércio Intra-Americano de Escravos - Base de Dados"
 
 #: voyages/apps/voyage/templates/database.html:72
+#: voyages/apps/past/templates/past/database.html:79
+#: voyages/apps/past/templates/past/enslavers.html:73
+#: voyages/apps/voyage/templates/database.html:77
 msgid "Ooops"
 msgstr "Ooops"
 
 #: voyages/apps/voyage/templates/database.html:73
+#: voyages/apps/past/templates/past/database.html:80
+#: voyages/apps/past/templates/past/enslavers.html:74
+#: voyages/apps/voyage/templates/database.html:78
 msgid "We may have sailed off course and an error has occurred."
 msgstr "Podemos ter saído da rota e ocorreu um erro."
 
 #: voyages/apps/voyage/templates/database.html:75
+#: voyages/apps/past/templates/past/database.html:82
+#: voyages/apps/past/templates/past/enslavers.html:76
+#: voyages/apps/voyage/templates/database.html:80
 msgid "Report"
 msgstr "Relatório"
 
 #: voyages/apps/voyage/templates/database.html:76
+#: voyages/apps/past/templates/past/database.html:83
+#: voyages/apps/past/templates/past/enslavers.html:77
+#: voyages/apps/voyage/templates/database.html:81
 msgid "Reload"
 msgstr "Recarregar"
 
 #: voyages/apps/voyage/templates/database/_actions.html:8
+#: voyages/apps/past/templates/past/_actions.html:8
 msgid "View all"
 msgstr "Ver tudo"
 
 #: voyages/apps/voyage/templates/database/_actions.html:17
+#: voyages/apps/past/templates/past/_actions.html:17
 msgid "Reset all"
 msgstr "Reiniciar tudo"
 
@@ -3913,6 +5499,12 @@ msgid "Please follow the format of YYYY/MM/DD. All dates are inclusive."
 msgstr "Por favor, siga o formato AAAAA/MM/DD. Todas as datas são inclusivas."
 
 #: voyages/apps/voyage/templates/database/_itinerary.html:4
+#: voyages/apps/past/templates/past-enslavers/_itinerary.html:4
+#: voyages/apps/past/templates/past-enslavers/_itinerary.html:6
+#: voyages/apps/past/templates/past-enslavers/_itinerary.html:9
+#: voyages/apps/past/templates/past/_itinerary.html:4
+#: voyages/apps/past/templates/past/_itinerary.html:6
+#: voyages/apps/past/templates/past/_itinerary.html:9
 msgid "Itinerary"
 msgstr "Itinerário"
 
@@ -3955,6 +5547,7 @@ msgid "Outcome"
 msgstr "Resultado desconhecido"
 
 #: voyages/apps/voyage/templates/database/_panel.html:25
+#: voyages/apps/past/templates/past/_panel.html:25
 msgid "No variables are selected"
 msgstr "Nenhuma variável é selecionada"
 
@@ -4015,15 +5608,19 @@ msgid "The year and location of slave ship construction and registration"
 msgstr "O ano e a localização da construção e registro do navio-escravo"
 
 #: voyages/apps/voyage/templates/database/_ship_nation_owner.html:65
+#: voyages/apps/voyage/templates/database/_ship_nation_owner.html:67
 msgid "The flag (nationality) of the slave ship"
 msgstr "Condenação (de navio negreiro)"
 
 #: voyages/apps/voyage/templates/database/_ship_nation_owner.html:84
 #: voyages/apps/voyage/templates/database/_ship_nation_owner.html:87
+#: voyages/apps/voyage/templates/database/_ship_nation_owner.html:86
+#: voyages/apps/voyage/templates/database/_ship_nation_owner.html:89
 msgid "Rig, tonnage, and guns mounted"
 msgstr "Sonda, tonelagem e armas montadas"
 
 #: voyages/apps/voyage/templates/database/_ship_nation_owner.html:87
+#: voyages/apps/voyage/templates/database/_ship_nation_owner.html:89
 msgid "Additional variables about slave ships"
 msgstr "Variáveis adicionais sobre naves escravas"
 
@@ -4077,6 +5674,7 @@ msgid "Additional characteristics about slaves"
 msgstr "Características adicionais dos escravos"
 
 #: voyages/apps/voyage/templates/database/_tabs.html:6
+#: voyages/apps/past/templates/past/_tabs.html:6
 msgid "Results"
 msgstr "Resultados"
 
@@ -4120,26 +5718,38 @@ msgstr ""
 "caminhos refletem o tamanho do tráfego."
 
 #: voyages/apps/voyage/templates/database/tabs/results-detail.html:9
+#: voyages/apps/past/templates/past-contribute/_full_details_modal.html:7
+#: voyages/apps/voyage/templates/database/_full_details_modal.html:7
 msgid "Full detail"
 msgstr "Exibir detalhe"
 
 #: voyages/apps/voyage/templates/database/tabs/results-detail.html:15
+#: voyages/apps/past/templates/past-contribute/_full_details_modal.html:13
+#: voyages/apps/voyage/templates/database/_full_details_modal.html:13
 msgid "Here are the currently available details for this voyage."
 msgstr "Aqui estão os detalhes atualmente disponíveis para esta viagem."
 
 #: voyages/apps/voyage/templates/database/tabs/results-detail.html:15
+#: voyages/apps/past/templates/past-contribute/_full_details_modal.html:14
+#: voyages/apps/voyage/templates/database/_full_details_modal.html:14
 msgid "Expand/Collapse"
 msgstr "Expandir/Comprimir"
 
 #: voyages/apps/voyage/templates/database/tabs/results-detail.html:15
+#: voyages/apps/past/templates/past-contribute/_full_details_modal.html:15
+#: voyages/apps/voyage/templates/database/_full_details_modal.html:15
 msgid "to see/hide all"
 msgstr "para ver/ocultar todos"
 
 #: voyages/apps/voyage/templates/database/tabs/results-detail.html:38
+#: voyages/apps/past/templates/past-contribute/_full_details_modal.html:36
+#: voyages/apps/voyage/templates/database/_full_details_modal.html:36
 msgid "IMP"
 msgstr "IMP"
 
 #: voyages/apps/voyage/templates/database/tabs/results-detail.html:54
+#: voyages/apps/past/templates/past-contribute/_full_details_modal.html:52
+#: voyages/apps/voyage/templates/database/_full_details_modal.html:52
 msgid "Close"
 msgstr "Fechar"
 
@@ -4148,14 +5758,17 @@ msgid "Total slaves"
 msgstr "Total de escravos"
 
 #: voyages/apps/voyage/templates/database/tabs/summary-statistics.html:12
+#: voyages/apps/voyage/templates/database/tabs/statistics.html:12
 msgid "Total voyages"
 msgstr "Total de viagens"
 
 #: voyages/apps/voyage/templates/database/tabs/summary-statistics.html:13
+#: voyages/apps/voyage/templates/database/tabs/statistics.html:13
 msgid "Average"
 msgstr "Média"
 
 #: voyages/apps/voyage/templates/database/tabs/summary-statistics.html:14
+#: voyages/apps/voyage/templates/database/tabs/statistics.html:14
 msgid "Standard deviation"
 msgstr "Desvio padrão"
 
@@ -4222,6 +5835,7 @@ msgid "Trans-Atlantic - Introductory Maps"
 msgstr "Mapas introdutórios"
 
 #: voyages/apps/voyage/templates/maps.html:14 voyages/templates/topbar.html:22
+#: voyages/templates/topbar.html:25
 msgid "Introductory Maps"
 msgstr "Mapas introdutórios"
 
@@ -4271,105 +5885,107 @@ msgstr "Mapa"
 msgid "No images are available."
 msgstr "Tonelagem do navio disponível"
 
-#: voyages/apps/voyage/views.py:488
+#: voyages/apps/voyage/views.py:488 voyages/apps/voyage/views.py:601
 msgid "Time frame:"
 msgstr "Intervalo de tempo:"
 
-#: voyages/apps/voyage/views.py:509
+#: voyages/apps/voyage/views.py:509 voyages/apps/voyage/views.py:623
 msgid " month:"
 msgstr "mês:"
 
 #: voyages/apps/voyage/views.py:522 voyages/apps/voyage/views.py:529
-#: voyages/apps/voyage/views.py:531
+#: voyages/apps/voyage/views.py:531 voyages/apps/voyage/views.py:650
 msgid "between "
 msgstr "entre "
 
 #: voyages/apps/voyage/views.py:522 voyages/apps/voyage/views.py:529
-#: voyages/apps/voyage/views.py:531
+#: voyages/apps/voyage/views.py:531 voyages/apps/voyage/views.py:650
 msgid " and "
 msgstr " e "
 
-#: voyages/apps/voyage/views.py:534
+#: voyages/apps/voyage/views.py:534 voyages/apps/voyage/views.py:653
 msgid "in "
 msgstr "em "
 
-#: voyages/apps/voyage/views.py:536
+#: voyages/apps/voyage/views.py:536 voyages/apps/voyage/views.py:655
 msgid "equal to "
 msgstr "é igual a"
 
 #: voyages/apps/voyage/views.py:541 voyages/apps/voyage/views.py:548
+#: voyages/apps/voyage/views.py:660 voyages/apps/voyage/views.py:667
 msgid "before "
 msgstr "antes"
 
-#: voyages/apps/voyage/views.py:550
+#: voyages/apps/voyage/views.py:550 voyages/apps/voyage/views.py:669
 msgid "at most "
 msgstr "ao máximo"
 
 #: voyages/apps/voyage/views.py:553 voyages/apps/voyage/views.py:555
+#: voyages/apps/voyage/views.py:672 voyages/apps/voyage/views.py:674
 msgid "after "
 msgstr "após"
 
-#: voyages/apps/voyage/views.py:557
+#: voyages/apps/voyage/views.py:557 voyages/apps/voyage/views.py:676
 msgid "at least "
 msgstr "ao menos"
 
-#: voyages/settings.py:192
+#: voyages/settings.py:192 voyages/settings.py:201
 msgid "English"
 msgstr "Inglês"
 
-#: voyages/settings.py:193
+#: voyages/settings.py:193 voyages/settings.py:202
 msgid "Spanish"
 msgstr "Espanhol"
 
-#: voyages/settings.py:194
+#: voyages/settings.py:194 voyages/settings.py:203
 msgid "Portuguese"
 msgstr "Português"
 
-#: voyages/sitemedia/maps/index.html:74
+#: voyages/sitemedia/maps/index.html:74 voyages/sitemedia/maps/index.html:87
 msgid "Load all flows from database (may take a while)"
 msgstr "Carregar todos os fluxos do banco de dados (pode levar algum tempo)"
 
-#: voyages/sitemedia/maps/index.html:123
+#: voyages/sitemedia/maps/index.html:123 voyages/sitemedia/maps/index.html:136
 msgid "Recompute flow paths"
 msgstr "Recompute os caminhos de fluxo"
 
-#: voyages/sitemedia/maps/index.html:126
+#: voyages/sitemedia/maps/index.html:126 voyages/sitemedia/maps/index.html:140
 msgid "Prevent editing when toggled"
 msgstr "Impedir a edição quando alternado"
 
-#: voyages/sitemedia/maps/index.html:130
+#: voyages/sitemedia/maps/index.html:130 voyages/sitemedia/maps/index.html:144
 msgid "Rollback last action"
 msgstr "Rollback última ação"
 
-#: voyages/sitemedia/maps/index.html:133
+#: voyages/sitemedia/maps/index.html:133 voyages/sitemedia/maps/index.html:147
 msgid "Drag nodes to change their position"
 msgstr "Arrastar os nós para alterar sua posição"
 
-#: voyages/sitemedia/maps/index.html:137
+#: voyages/sitemedia/maps/index.html:137 voyages/sitemedia/maps/index.html:151
 msgid "Add marker"
 msgstr "Recursos"
 
-#: voyages/sitemedia/maps/index.html:141
+#: voyages/sitemedia/maps/index.html:141 voyages/sitemedia/maps/index.html:155
 msgid "Split link"
 msgstr "Dividir link"
 
-#: voyages/sitemedia/maps/index.html:145
+#: voyages/sitemedia/maps/index.html:145 voyages/sitemedia/maps/index.html:159
 msgid "Delete marker"
 msgstr "Apagar"
 
-#: voyages/sitemedia/maps/index.html:149
+#: voyages/sitemedia/maps/index.html:149 voyages/sitemedia/maps/index.html:163
 msgid "Add link"
 msgstr "Adicionar Link"
 
-#: voyages/sitemedia/maps/index.html:153
+#: voyages/sitemedia/maps/index.html:153 voyages/sitemedia/maps/index.html:167
 msgid "Delete link"
 msgstr "Apagar"
 
-#: voyages/sitemedia/maps/index.html:157
+#: voyages/sitemedia/maps/index.html:157 voyages/sitemedia/maps/index.html:171
 msgid "Delete every marker and link"
 msgstr "Apagar todos os marcadores e links"
 
-#: voyages/sitemedia/maps/index.html:162
+#: voyages/sitemedia/maps/index.html:162 voyages/sitemedia/maps/index.html:177
 msgid "Help"
 msgstr "Ajuda"
 
@@ -5051,9 +6667,953 @@ msgstr ""
 msgid "Slave Ship in 3D Video"
 msgstr "Navio Escravo em Vídeo 3D"
 
-#: voyages/templates/topbar.html:24
+#: voyages/templates/topbar.html:24 voyages/templates/topbar.html:27
 msgid "Timeline and Chronology"
 msgstr "Linha do Tempo e Cronologia"
+
+#: voyages/apps/past/templates/past-enslavers/_enslaver-name.html:8
+#: voyages/apps/past/templates/past-enslavers/_itinerary.html:9
+#: voyages/apps/past/templates/past-enslavers/_sources.html:8
+#: voyages/apps/past/templates/past/_cultural-association.html:9
+#: voyages/apps/past/templates/past/_fate.html:8
+#: voyages/apps/past/templates/past/_itinerary.html:9
+#: voyages/apps/past/templates/past/_personal-data.html:9
+#: voyages/apps/past/templates/past/_sources.html:8
+msgid "Description"
+msgstr "Descrição"
+
+#: voyages/apps/past/templates/past/_fate.html:4
+#: voyages/apps/past/templates/past/_fate.html:6
+msgid "Fate"
+msgstr "Destino"
+
+#: voyages/apps/blog/templates/blog/admin/news-migration.html:5
+#, fuzzy
+#| msgid "Destination"
+msgid "News Migration"
+msgstr "Destino"
+
+#: voyages/apps/blog/templates/blog/admin/post_change_list.html:12
+msgid "Migrate all news to Blog Format"
+msgstr ""
+
+#: voyages/apps/blog/templates/blog/author_bio.html:19
+#: voyages/apps/blog/templates/blog/authors.html:20
+#: voyages/apps/blog/templates/blog/index.html:26
+#: voyages/apps/blog/templates/blog/institution_detail.html:19
+#: voyages/apps/blog/templates/blog/institutions.html:22
+#: voyages/apps/blog/templates/blog/post_detail.html:20
+msgid "Echoes: The SlaveVoyages Blog"
+msgstr ""
+
+#: voyages/apps/blog/templates/blog/author_bio.html:23
+#: voyages/apps/blog/templates/blog/institution_detail.html:23
+#: voyages/apps/blog/templates/blog/post_detail.html:27
+msgid "All posts"
+msgstr ""
+
+#: voyages/apps/blog/templates/blog/author_bio.html:69
+msgid "Author's posts:"
+msgstr ""
+
+#: voyages/apps/blog/templates/blog/authors.html:60
+#: voyages/apps/blog/templates/blog/index.html:66
+#: voyages/apps/blog/templates/blog/institutions.html:57
+msgid "of"
+msgstr ""
+
+#: voyages/apps/blog/templates/blog/carousel.html:19
+msgid "Latest News"
+msgstr ""
+
+#: voyages/apps/blog/templates/blog/carousel.html:30
+msgid "click to read more..."
+msgstr ""
+
+#: voyages/apps/blog/templates/blog/post_detail.html:25
+#, fuzzy
+#| msgid "Newspaper"
+msgid "News frontpage"
+msgstr "Jornal"
+
+#: voyages/apps/contribute/forms.py:15
+#, fuzzy
+#| msgid ""
+#| "I warrant that I have the right to contribute the following data to the "
+#| "Voyages Database and its inclusion in the Voyages Database will not "
+#| "infringe anyone's intellectual property rights. I also agree that this "
+#| "data will become part of the Voyages: The Trans-Atlantic Slave Trade "
+#| "Database website and will be governed by any applicable licenses."
+msgid ""
+"I warrant that I have the right to contribute the\n"
+"                          following data to the Voyages  Database and its\n"
+"                          inclusion in the Voyages Database will not "
+"infringe\n"
+"                          anyone's  intellectual property rights. I also "
+"agree\n"
+"                          that this data will become part of  the Voyages: "
+"The\n"
+"                          Trans-Atlantic Slave Trade Database website and "
+"will\n"
+"                          be  governed by any applicable licenses."
+msgstr ""
+"A versão em português desta página (Contribuir) está em desenvolvimento. "
+"Caso encontre traduções incorretas ou confusas, habilite a versão em Inglês "
+"ou Espanhol no menu acima. \n"
+"\n"
+"\n"
+"Garanto que tenho o direito de contribuir com os seguintes dados para o "
+"Banco de Dados de Viagens e sua inclusão no Banco de Dados de Viagens não "
+"infringirá os direitos de propriedade intelectual de ninguém. Também "
+"concordo que estes dados passarão a fazer parte das viagens: O website da "
+"Trans-Atlantic Slave Trade Database será regido por quaisquer licenças "
+"aplicáveis."
+
+#: voyages/apps/contribute/templates/contribute/decision_part.html:58
+msgid "Delete the CONTRIBUTION from the platform"
+msgstr ""
+
+#: voyages/apps/past/templates/past-contribute/_language_group.html:8
+msgid "Country - Language Group"
+msgstr ""
+
+#: voyages/apps/past/templates/past-contribute/_language_group.html:9
+msgid ""
+"You may select a country to narrow down Language Group options. If your "
+"suggested Language Group is not listed, you may leave your contribution in "
+"the comments."
+msgstr ""
+
+#: voyages/apps/past/templates/past-contribute/_language_group.html:12
+msgid "Multilingual (Language Group)"
+msgstr ""
+
+#: voyages/apps/past/templates/past-contribute/_language_group.html:18
+msgid ""
+"Check Multilingual if there are more than one Language Group associated with "
+"this name. Then identify <b>one Primary Language Group</b> from the list "
+"below."
+msgstr ""
+
+#: voyages/apps/past/templates/past-contribute/_language_group.html:32
+msgid "Comments"
+msgstr ""
+
+#: voyages/apps/past/templates/past-contribute/_language_group.html:33
+#, fuzzy
+#| msgid "Thank you for your contribution!"
+msgid "Add any comments to your contribution."
+msgstr "Obrigado pela sua contribuição!"
+
+#: voyages/apps/past/templates/past-contribute/_language_group.html:47
+#, fuzzy
+#| msgid "Previous query"
+msgid "Previous Section"
+msgstr "Consulta anterior"
+
+#: voyages/apps/past/templates/past-contribute/_left-menu.html:23
+#, fuzzy
+#| msgid "Year registered"
+msgid "In Register"
+msgstr "Ano de registro"
+
+#: voyages/apps/past/templates/past-contribute/_left-menu.html:29
+msgid "Modern Counterpart"
+msgstr ""
+
+#: voyages/apps/past/templates/past-contribute/_left-menu.html:39
+msgid "Language Associated with Name"
+msgstr ""
+
+#: voyages/apps/past/templates/past-contribute/_left-menu.html:47
+#, fuzzy
+#| msgid "Language"
+msgid "Language Group"
+msgstr "Idioma"
+
+#: voyages/apps/past/templates/past-contribute/_left-menu.html:57
+#, fuzzy
+#| msgid "Other characteristics"
+msgid "Physical Characteristics"
+msgstr "Escravos (características)"
+
+#: voyages/apps/past/templates/past-contribute/_left-menu.html:68
+#, fuzzy
+#| msgid "Males"
+msgid "Male"
+msgstr "machos"
+
+#: voyages/apps/past/templates/past-contribute/_left-menu.html:69
+#, fuzzy
+#| msgid "Females"
+msgid "Female"
+msgstr "Fêmeas"
+
+#: voyages/apps/past/templates/past-contribute/_left-menu.html:70
+#, fuzzy
+#| msgid "See"
+msgid "Sex"
+msgstr "Ver bandeira/bandeira nacional."
+
+#: voyages/apps/past/templates/past-contribute/_left-menu.html:74
+#, fuzzy
+#| msgid "Height (in)"
+msgid "Height"
+msgstr "Altura [pol.]"
+
+#: voyages/apps/past/templates/past-contribute/_left-menu.html:99
+#, fuzzy
+#| msgid "Ports"
+msgid "Port"
+msgstr "portos"
+
+#: voyages/apps/past/templates/past-contribute/_left-menu.html:103
+#, fuzzy
+#| msgid "Voyage Itinerary"
+msgid "Voyage Year"
+msgstr "Itinerário da viagem"
+
+#: voyages/apps/past/templates/past-contribute/_name_pronunciation.html:15
+msgid "Add Another Suggestion"
+msgstr ""
+
+#: voyages/apps/past/templates/past-contribute/_name_pronunciation.html:16
+#, fuzzy
+#| msgid "Crew action"
+msgid "Next Section"
+msgstr "Ação da tripulação"
+
+#: voyages/apps/past/templates/past/_african-name.html:4
+#, fuzzy
+#| msgid "African Names"
+msgid "African Name"
+msgstr "Nomes africanos"
+
+#: voyages/apps/past/templates/past/_african-name.html:8
+msgid "Possible modern counterpart"
+msgstr ""
+
+#: voyages/apps/past/templates/past/_cultural-association.html:4
+#: voyages/apps/past/templates/past/_cultural-association.html:9
+#, fuzzy
+#| msgid "Eventual Abolition"
+msgid "Cultural Association"
+msgstr "Abolição"
+
+#: voyages/apps/past/templates/past/_cultural-association.html:6
+#: voyages/apps/past/templates/past/_personal-data.html:4
+#: voyages/apps/past/templates/past/_personal-data.html:6
+#: voyages/apps/past/templates/past/_personal-data.html:9
+msgid "Personal Data"
+msgstr ""
+
+#: voyages/apps/past/templates/past/_enslaved_dataset_select_modal.html:7
+msgid "Select a database of enslaved people to search"
+msgstr ""
+
+#: voyages/apps/past/templates/past/_enslaved_dataset_select_modal.html:8
+msgid "You may choose to search within one of the following databases."
+msgstr ""
+
+#: voyages/apps/past/templates/past/_enslaved_dataset_select_modal.html:24
+#, fuzzy
+#| msgid ""
+#| "\n"
+#| "\t\t\t\t\t\tThe African Names Database provides personal details of "
+#| "91,491 Africans taken from captured slave ships or from African trading "
+#| "sites. It displays the African name, age, gender, origin, country, and "
+#| "places of embarkation and disembarkation\n"
+#| "\t\t\t\t\t\tof each individual.\n"
+#| "\t\t\t\t\t\t"
+msgid ""
+"The African Origins Database provides personal details of 93,605 Africans "
+"taken from captured slave ships or from African trading sites. It displays "
+"the African name, age, gender, and places of embarkation and disembarkation "
+"of each individual. The database invites users to make contributions to the "
+"site to identify the likely ethnolinguistic origins of the names from the "
+"historical records."
+msgstr ""
+"\n"
+"\t\t\t\t\t\tEsta base de dados identifica 91.491 africanos, retirados de "
+"navios negreiros capturados ou de locais de tráfico na África. Ela exibe o "
+"nome africano, a idade, o sexo, a origem, o país e os locais de embarque e "
+"desembarque de cada indivíduo."
+
+#: voyages/apps/past/templates/past/_enslaved_dataset_select_modal.html:45
+msgid "Oceans of Kinfolk (United States)"
+msgstr ""
+
+#: voyages/apps/past/templates/past/_enslaved_dataset_select_modal.html:49
+#, fuzzy
+#| msgid ""
+#| "\n"
+#| "\t\t\t\t\t\tThe African Names Database provides personal details of "
+#| "91,491 Africans taken from captured slave ships or from African trading "
+#| "sites. It displays the African name, age, gender, origin, country, and "
+#| "places of embarkation and disembarkation\n"
+#| "\t\t\t\t\t\tof each individual.\n"
+#| "\t\t\t\t\t\t"
+msgid ""
+"The Oceans of Kinfolk Database provides personal details of more than 63,000 "
+"enslaved African Americans forcibly transported to New Orleans from various "
+"ports in the United States during the 19th century. The database includes "
+"the name, age, gender, and places of embarkation and disembarkation of each "
+"individual."
+msgstr ""
+"\n"
+"\t\t\t\t\t\tEsta base de dados identifica 91.491 africanos, retirados de "
+"navios negreiros capturados ou de locais de tráfico na África. Ela exibe o "
+"nome africano, a idade, o sexo, a origem, o país e os locais de embarque e "
+"desembarque de cada indivíduo."
+
+#: voyages/apps/past/templates/past/_fate.html:8
+#, fuzzy
+#| msgid "Disembarkation Regions"
+msgid "Post Disembarkation Location"
+msgstr "Regiões de desembarque"
+
+#: voyages/apps/past/templates/past/_identity.html:4
+#: voyages/apps/past/templates/past/_identity.html:8
+msgid "Identity"
+msgstr ""
+
+#: voyages/apps/past/templates/past/contribute.html:24
+#, fuzzy
+#| msgid "Trans-Atlantic Slave Trade - Database"
+msgid "People of Atlantic Slave Trade - Database of the Enslavers"
+msgstr "Comércio Transatlântico de Escravos - Base de Dados"
+
+#: voyages/apps/past/templates/past/contribute.html:30
+#, fuzzy
+#| msgid "Trans-Atlantic Slave Trade - Database"
+msgid "People of Atlantic Slave Trade - Database of the Enslaved"
+msgstr "Comércio Transatlântico de Escravos - Base de Dados"
+
+#: voyages/apps/past/templates/past/contribute.html:36
+#, fuzzy
+#| msgid "Back to start"
+msgid "Back to Search"
+msgstr "Voltar ao início"
+
+#: voyages/apps/past/templates/past/contribute.html:41
+msgid "Contribute to origins of the name of this person"
+msgstr ""
+
+#: voyages/apps/past/templates/past/contribute.html:59
+#, fuzzy
+#| msgid "Return to Contribute home"
+msgid "Select to contribute"
+msgstr "Página de colaboração"
+
+#: voyages/apps/past/templates/past/contribute.html:62
+msgid "Names & Pronunciation"
+msgstr ""
+
+#: voyages/apps/past/templates/past/contribute.html:65
+#, fuzzy
+#| msgid "Language"
+msgid "Language Groups"
+msgstr "Idioma"
+
+#: voyages/apps/past/templates/past/database.html:25
+#: voyages/apps/past/templates/past/enslavers.html:25
+#, fuzzy
+#| msgid "A Guide to the Trans-Atlantic Slave Trade Database"
+msgid "People of the Atlantic Slave Trade - Database"
+msgstr "Um breve resumo do tráfico transatlântico de escravos"
+
+#: voyages/apps/past/templates/past/database.html:34
+#, fuzzy
+#| msgid "African Names - Database"
+msgid "African Origins - Database"
+msgstr "Explore o Banco de Dados de Nomes Africanos"
+
+#: voyages/apps/past/templates/past/database.html:35
+msgid "Oceans of Kinfolk - Database"
+msgstr ""
+
+#: voyages/apps/past/templates/past/database.html:39
+#, fuzzy
+#| msgid "Voyages Database"
+msgid "Change Database"
+msgstr "Banco de Dados Viagens"
+
+#: voyages/apps/past/templates/past/enslavers.html:34
+#, fuzzy
+#| msgid "Slave Trade Database"
+msgid "Enslavers - Database"
+msgstr "Base de dados do comércio de escravos"
+
+#: voyages/apps/static_content/templates/static_content/index.html:30
+msgid ""
+"Explore the Origins and Forced Relocations of Enslaved Africans Across the "
+"Atlantic World"
+msgstr ""
+
+#: voyages/apps/static_content/templates/static_content/index.html:32
+msgid ""
+" \n"
+"\t\t\t\t\tThe SlaveVoyages website is a collaborative digital initiative "
+"that compiles and makes publicly accessible records of the largest slave "
+"trades in history. Search these records to learn about the broad origins and "
+"forced relocations of more than 12 million African people who were sent "
+"across the Atlantic in slave ships, and hundreds of thousands more who were "
+"trafficked within the Americas. Explore where they were taken, the numerous "
+"rebellions that occurred, the horrific loss of life during the voyages, the "
+"identities and nationalities of the perpetrators, and much more.\n"
+"\t\t\t\t\t"
+msgstr ""
+
+#: voyages/apps/static_content/templates/static_content/index.html:51
+#, fuzzy
+#| msgid "The Countries of the Slave Trade"
+msgid "View places and routes of the slave trade"
+msgstr "Os Países do Tráfico de Escravos"
+
+#: voyages/apps/static_content/templates/static_content/index.html:58
+#, fuzzy
+#| msgid "Review a contribution"
+msgid "3D video reconstructions"
+msgstr "Construção"
+
+#: voyages/apps/static_content/templates/static_content/index.html:59
+#, fuzzy
+#| msgid "View a 3D rendition of a slave ship"
+msgid "View 3D renditions of slaving vessels"
+msgstr "Condenação (de navio negreiro)"
+
+#: voyages/apps/static_content/templates/static_content/index.html:66
+#, fuzzy
+#| msgid "View the movement of slave ships across the Atlantic"
+msgid "Examine estimated numbers of people trafficked across the Atlantic"
+msgstr "Veja o movimento de navios de escravos através do Atlântico"
+
+#: voyages/apps/static_content/templates/static_content/index.html:98
+msgid "Provide your thoughts and suggestions about the Slave Voyages site."
+msgstr ""
+
+#: voyages/apps/static_content/templates/static_content/index.html:101
+msgid "user feedback"
+msgstr ""
+
+#: voyages/apps/static_content/templates/static_content/index.html:103
+msgid "Report a specific issue/bug found on the site."
+msgstr ""
+
+#: voyages/apps/static_content/templates/static_content/index.html:106
+msgid "report issues"
+msgstr ""
+
+#: voyages/apps/static_content/templates/static_content/index.html:182
+msgid ""
+"\n"
+"This database compiles information about more than 36,000 voyages that "
+"forcibly transported enslaved Africans across the Atlantic between 1514 and "
+"1866. Search and analyze the database for information on the broad origins "
+"of enslaved people, the tortuous Middle Passage, and the destinations of "
+"Africans in the Americas.\n"
+"\t\t\t\t\t\t"
+msgstr ""
+
+#: voyages/apps/static_content/templates/static_content/index.html:226
+#, fuzzy
+#| msgid ""
+#| "\n"
+#| "\t\t\t\t\t\tThe Intra-American Slave Trade Database contains information "
+#| "on approximately 10,000 slave voyages within the Americas. These voyages "
+#| "operated within colonial empires, across imperial boundaries, and inside "
+#| "the borders of nations such as the United\n"
+#| "\t\t\t\t\t\tStates and Brazil. The database enables users to explore the "
+#| "contours of this enormous New World slave trade, which not only dispersed "
+#| "African survivors of the Atlantic crossing but also displaced enslaved "
+#| "people born in the Americas.\n"
+#| "\t\t\t\t\t\t"
+msgid ""
+"\n"
+"\t\t\t\t\t\tThis database contains information on more than 11,000 maritime "
+"voyages trafficking enslaved people within the Americas. These slave trades "
+"operated within colonial empires, across imperial boundaries, and inside the "
+"borders of nations such as the United States and Brazil. Explore the forced "
+"removals, which not only dispersed African survivors of the Atlantic "
+"crossing but also displaced enslaved people born in the Americas.\n"
+"\t\t\t\t\t\t"
+msgstr ""
+"\n"
+"\t\t\t\t\t\tO Banco de Dados de Comércio de Escravos Intra-Americanos contém "
+"informações sobre aproximadamente 10.000 viagens de escravos nas Américas. "
+"Estas viagens operaram dentro dos impérios coloniais, através das fronteiras "
+"imperiais, e dentro das fronteiras de nações como a dos Estados Unidos.\n"
+"\t\t\t\t\t\tEstados e Brasil. A base de dados permite aos utilizadores "
+"explorar os contornos deste enorme tráfico de escravos do Novo Mundo, que "
+"não só dispersou os sobreviventes africanos da travessia do Atlântico, mas "
+"também deslocou pessoas escravizadas nascidas nas Américas.\n"
+"\t\t\t\t\t\t"
+
+#: voyages/apps/static_content/templates/static_content/index.html:244
+#, fuzzy
+#| msgid "Coverage of the Slave Trade"
+msgid "People of the African Slave Trade"
+msgstr "Cobertura do tráfico de escravos"
+
+#: voyages/apps/static_content/templates/static_content/index.html:249
+msgid ""
+"\n"
+"\t\t\t\t\t\tThe People of the African Slave Trade databases provide personal "
+"details on 91,491 enslaved people. In the African Origins dataset are the "
+"personal details of 91,491 Africans taken from nineteenth-century slave "
+"ships captured by anti-slave trade patrols or from African trading sites "
+"between 1808-1862. In the Oceans of Kinfolk dataset are the personal details "
+"of 63,562 people transported to New Orleans, and in many cases records on "
+"the people who transported, bought, and sold them there. Analyze the name, "
+"age, gender, origin, places of embarkation and disembarkation of these "
+"individuals, and some of their linkages to enslavers.\n"
+"\t\t\t\t\t\t"
+msgstr ""
+
+#: voyages/apps/static_content/templates/static_content/index.html:278
+#, fuzzy
+#| msgid ""
+#| "\n"
+#| "\t\t\t\t\t\tExplore several hundred images of the people, places, vessels "
+#| "and manuscripts of the Trans-Atlantic and Intra-American slave trades. "
+#| "Where available, each image contains a link to a corresponding slave "
+#| "voyage in the databases and a reference to the\n"
+#| "\t\t\t\t\t\toriginal source.\n"
+#| "\t\t\t\t\t\t"
+msgid ""
+"\n"
+"\t\t\t\t\t\tExplore images of the people, places, vessels, and documents "
+"linked to the Trans-Atlantic and Intra-American slave trades. Where "
+"available, each image contains a link to a corresponding slave voyage in the "
+"databases and a reference to the original source.\n"
+"\t\t\t\t\t\t"
+msgstr ""
+"\n"
+"\t\t\t\t\t\tExplore várias centenas de imagens de pessoas, lugares, "
+"embarcações e manuscritos do tráfico transatlântico e intra-americano de "
+"escravos. Quando disponível, cada imagem contém um link para uma viagem "
+"escrava correspondente nas bases de dados e uma referência à\n"
+"\t\t\t\t\t\tfonte original.\n"
+"\t\t\t\t\t\t"
+
+#: voyages/apps/static_content/templates/static_content/index.html:292
+msgid "people"
+msgstr ""
+
+#: voyages/apps/static_content/templates/static_content/index.html:314
+#, fuzzy
+#| msgid "Documentation"
+msgid "documents"
+msgstr "Documentação"
+
+#: voyages/apps/voyage/globals.py:2088
+msgctxt "summary statistics label"
+msgid "SLAXIMP"
+msgstr ""
+
+#: voyages/apps/voyage/globals.py:2094
+msgctxt "summary statistics label"
+msgid "SLAMIMP"
+msgstr ""
+
+#: voyages/apps/voyage/globals.py:2100
+#, fuzzy
+#| msgid "Percentage of slaves embarked who died during voyage*"
+msgctxt "summary statistics label"
+msgid "Percentage of slaves embarked who died during voyage"
+msgstr "Porcentagem de escravos embarcados que morreram durante a viagem*"
+
+#: voyages/apps/voyage/globals.py:2106
+msgctxt "summary statistics label"
+msgid "VOYAGE"
+msgstr ""
+
+#: voyages/apps/voyage/globals.py:2124
+msgctxt "summary statistics label"
+msgid "TONNAGE"
+msgstr ""
+
+#: voyages/apps/voyage/search_views.py:519
+msgctxt "datatable column header"
+msgid "CREW3"
+msgstr ""
+
+#: voyages/apps/voyage/search_views.py:523
+msgctxt "datatable column header"
+msgid "DLSLATRA"
+msgstr ""
+
+#: voyages/apps/voyage/search_views.py:529
+#, fuzzy
+#| msgid "DATA"
+msgctxt "datatable column header"
+msgid "DATARR32"
+msgstr "DADOS"
+
+#: voyages/apps/voyage/search_views.py:531
+msgctxt "datatable column header"
+msgid "SLA1PORT"
+msgstr ""
+
+#: voyages/apps/voyage/search_views.py:533
+msgctxt "datatable column header"
+msgid "PLAC1TRA"
+msgstr ""
+
+#: voyages/apps/voyage/search_views.py:539
+msgctxt "datatable column header"
+msgid "VOY1IMP"
+msgstr ""
+
+#: voyages/apps/voyage/search_views.py:541
+msgctxt "datatable column header"
+msgid "PTDEPIMP"
+msgstr ""
+
+#: voyages/apps/voyage/search_views.py:543
+msgctxt "datatable column header"
+msgid "MJBYPTIMP"
+msgstr ""
+
+#: voyages/apps/voyage/search_views.py:545
+msgctxt "datatable column header"
+msgid "MJSLPTIMP"
+msgstr ""
+
+#: voyages/apps/voyage/search_views.py:551
+msgctxt "datatable column header"
+msgid "VYMRTIMP"
+msgstr ""
+
+#: voyages/apps/voyage/search_views.py:553
+msgctxt "datatable column header"
+msgid "VYMRTRAT"
+msgstr ""
+
+#: voyages/apps/voyage/search_views.py:555
+msgctxt "datatable column header"
+msgid "NATINIMP"
+msgstr ""
+
+#: voyages/apps/voyage/search_views.py:571
+msgctxt "datatable column header"
+msgid "VOYAGE"
+msgstr ""
+
+#: voyages/apps/voyage/search_views.py:573
+msgctxt "datatable column header"
+msgid "NATIONAL"
+msgstr ""
+
+#: voyages/apps/voyage/search_views.py:575
+msgctxt "datatable column header"
+msgid "NCAR13"
+msgstr ""
+
+#: voyages/apps/voyage/search_views.py:577
+msgctxt "datatable column header"
+msgid "NCAR15"
+msgstr ""
+
+#: voyages/apps/voyage/search_views.py:579
+msgctxt "datatable column header"
+msgid "NCAR17"
+msgstr ""
+
+#: voyages/apps/voyage/search_views.py:581
+msgctxt "datatable column header"
+msgid "SLAS32"
+msgstr ""
+
+#: voyages/apps/voyage/search_views.py:583
+msgctxt "datatable column header"
+msgid "SLAS36"
+msgstr ""
+
+#: voyages/apps/voyage/search_views.py:585
+msgctxt "datatable column header"
+msgid "SLAS39"
+msgstr ""
+
+#: voyages/apps/voyage/search_views.py:587
+msgctxt "datatable column header"
+msgid "SLINTEND"
+msgstr ""
+
+#: voyages/apps/voyage/search_views.py:593
+msgctxt "datatable column header"
+msgid "FATE2"
+msgstr ""
+
+#: voyages/apps/voyage/search_views.py:599
+msgctxt "datatable column header"
+msgid "PORTRET"
+msgstr ""
+
+#: voyages/apps/voyage/search_views.py:607
+msgctxt "datatable column header"
+msgid "RESISTANCE"
+msgstr ""
+
+#: voyages/apps/voyage/search_views.py:609
+msgctxt "datatable column header"
+msgid "RIG"
+msgstr ""
+
+#: voyages/apps/voyage/search_views.py:613
+msgctxt "datatable column header"
+msgid "ADPSALE1"
+msgstr ""
+
+#: voyages/apps/voyage/search_views.py:615
+msgctxt "datatable column header"
+msgid "PLAC2TRA"
+msgstr ""
+
+#: voyages/apps/voyage/search_views.py:619
+msgctxt "datatable column header"
+msgid "D1SLATRA"
+msgstr ""
+
+#: voyages/apps/voyage/search_views.py:623
+msgctxt "datatable column header"
+msgid "ADPSALE2"
+msgstr ""
+
+#: voyages/apps/voyage/search_views.py:625
+msgctxt "datatable column header"
+msgid "PLAC3TRA"
+msgstr ""
+
+#: voyages/apps/voyage/search_views.py:631
+msgctxt "datatable column header"
+msgid "SLAARRIV"
+msgstr ""
+
+#: voyages/apps/voyage/search_views.py:637
+msgctxt "datatable column header"
+msgid "DATEDEPA"
+msgstr ""
+
+#: voyages/apps/voyage/search_views.py:639
+#, fuzzy
+#| msgid "DATA"
+msgctxt "datatable column header"
+msgid "DATARR43"
+msgstr "DADOS"
+
+#: voyages/apps/voyage/templates/database/_itinerary.html:8
+msgctxt "search panel left menu"
+msgid "PORTDEP"
+msgstr ""
+
+#: voyages/apps/voyage/templates/database/_itinerary.html:11
+msgctxt "subpanel title"
+msgid "PORTDEP"
+msgstr ""
+
+#: voyages/apps/voyage/templates/database/_itinerary.html:27
+msgctxt "search panel left menu"
+msgid "MAJBUYPT"
+msgstr ""
+
+#: voyages/apps/voyage/templates/database/_itinerary.html:29
+msgctxt "subpanel title"
+msgid "MAJBUYPT"
+msgstr ""
+
+#: voyages/apps/voyage/templates/database/_itinerary.html:79
+msgctxt "search panel left menu"
+msgid "MAJSELPT"
+msgstr ""
+
+#: voyages/apps/voyage/templates/database/_itinerary.html:81
+msgctxt "subpanel title"
+msgid "MAJSELPT"
+msgstr ""
+
+#: voyages/apps/voyage/templates/database/_itinerary.html:113
+msgctxt "search panel left menu"
+msgid "PORTRET"
+msgstr ""
+
+#: voyages/apps/voyage/templates/database/_itinerary.html:115
+msgctxt "subpanel title"
+msgid "PORTRET"
+msgstr ""
+
+#: voyages/apps/voyage/templates/database/_itinerary.html:130
+#: voyages/apps/voyage/templates/database/_itinerary.html:132
+#, fuzzy
+#| msgid "Related Voyages"
+msgid "Linked Voyages"
+msgstr "Viagens relacionadas"
+
+#: voyages/apps/voyage/templates/database/_settings.html:38
+#: voyages/apps/voyage/templates/database/_settings.html:41
+#, fuzzy
+#| msgid "Current series"
+msgid "Current searches"
+msgstr "Séries atuais"
+
+#: voyages/apps/voyage/templates/database/_settings.html:49
+#, fuzzy
+#| msgid "Current series"
+msgid "Current Searches"
+msgstr "Séries atuais"
+
+#: voyages/apps/voyage/templates/database/_ship_nation_owner.html:63
+msgctxt "search panel left menu"
+msgid "NATIONAL"
+msgstr ""
+
+#: voyages/apps/voyage/templates/database/_ship_nation_owner.html:66
+msgctxt "subpanel title"
+msgid "NATIONAL"
+msgstr ""
+
+#: voyages/apps/voyage/templates/database/tabs/maps.html:21
+#, fuzzy
+#| msgid "About this Database"
+msgid "About this Timelapse"
+msgstr "Banco de Dados Viagens"
+
+#: voyages/apps/voyage/templates/database/tabs/maps.html:29
+msgid ""
+"This timelapse offers an overall preview as well as demonstration of how the "
+"slave movement happened. The results of any user query will display in this "
+"timelapse feature. Also, please note the following:"
+msgstr ""
+
+#: voyages/apps/voyage/templates/database/tabs/maps.html:33
+#, fuzzy
+#| msgid "Voyage id"
+msgid "Voyage Size"
+msgstr "Identificação da viagem"
+
+#: voyages/apps/voyage/templates/database/tabs/maps.html:35
+msgid ""
+"Each circle on this timelapse represents a single voyage and is both sized, "
+"according to the number of captives on board, and colored, according to the "
+"three icons at the bottom left of the graph."
+msgstr ""
+
+#: voyages/apps/voyage/templates/database/tabs/maps.html:39
+#, fuzzy
+#| msgid "Voyage duration"
+msgid "Voyage Nationality"
+msgstr "Informação da Viagem"
+
+#: voyages/apps/voyage/templates/database/tabs/maps.html:41
+msgid ""
+"Each circle is color coded and the color code represents the nationality of "
+"the slave vessel, but users can instead choose Region of Embarkation, or "
+"Region of Disembarkation by clicking on the icons to the left of the graph."
+msgstr ""
+
+#: voyages/apps/voyage/templates/database/tabs/maps.html:45
+#, fuzzy
+#| msgid "Image Detail"
+msgid "Voyage Details"
+msgstr "Detalhes da imagem"
+
+#: voyages/apps/voyage/templates/database/tabs/maps.html:47
+msgid ""
+"To inspect details of an individual voyage, pause and click on a circle."
+msgstr ""
+
+#: voyages/apps/voyage/templates/database/tabs/maps.html:66
+msgid ""
+"View the Movement of <span id=\"tab-map-voyage-value\"></span> Slave Ships"
+msgstr ""
+
+#: voyages/apps/voyage/templates/database/tabs/maps.html:74
+msgid "Learn more about the Timelapse"
+msgstr ""
+
+#: voyages/apps/voyage/templates/database/tabs/maps.html:99
+msgid "Play at different speeds"
+msgstr ""
+
+#: voyages/apps/voyage/templates/database/tabs/maps.html:102
+msgid "Play in full screen"
+msgstr ""
+
+#: voyages/apps/voyage/templates/database/tabs/statistics.html:11
+#, fuzzy
+#| msgid "Total slaves"
+msgid "Total captives"
+msgstr "Total de escravos"
+
+#: voyages/apps/voyage/templates/ship.html:6
+msgid "3D Videos of Slaving Vessels"
+msgstr ""
+
+#: voyages/apps/voyage/templates/ship.html:13
+msgid "3D videos of Slaving Vessels"
+msgstr ""
+
+#: voyages/templates/footer.html:9
+#, fuzzy
+#| msgid "Copyright 2019 Emory University. Software licensed under"
+msgid "Copyright 2021 The Slave Voyages Consortium. Software licensed under"
+msgstr "Copyright 2019 Emory University. Software licenciado sob"
+
+#: voyages/templates/topbar.html:26
+msgid "3D Videos of Slaving Ships"
+msgstr ""
+
+#: voyages/templates/topbar.html:29 voyages/templates/topbar.html:41
+#, fuzzy
+#| msgid "Contribute"
+msgid "Contribute Data"
+msgstr "Colabore"
+
+#: voyages/templates/topbar.html:46
+#, fuzzy
+#| msgid "Seasonality in the Trans-Atlantic Slave Trade"
+msgid "People of the Atlantic Slave Trade"
+msgstr "Sazonalidade no tráfico de escravos transatlântico"
+
+#: voyages/templates/topbar.html:47
+msgid "PAST"
+msgstr ""
+
+#: voyages/templates/topbar.html:52
+#, fuzzy
+#| msgid "Slave Trade Database"
+msgid "Enslavers Database"
+msgstr "Base de dados do comércio de escravos"
+
+#: voyages/templates/topbar.html:72
+#, fuzzy
+#| msgid "Newspaper"
+msgid "News"
+msgstr "Jornal"
+
+#: voyages/templates/topbar.html:74
+msgid "Provide User Feedback"
+msgstr ""
+
+#: voyages/templates/topbar.html:75
+#, fuzzy
+#| msgid "Report"
+msgid "Report Issues"
+msgstr "Relatório"
+
+#: voyages/templates/topbar.html:81
+msgid "Blog"
+msgstr ""
+
+#: voyages/templates/topbar.html:83
+msgid "All Posts"
+msgstr ""
+
+#: voyages/templates/topbar.html:84
+#, fuzzy
+#| msgid "Institution"
+msgid "Institutions"
+msgstr "Instituição"
 
 #~ msgid "Acknowledgements"
 #~ msgstr "Agradecimentos"
@@ -9926,9 +12486,6 @@ msgstr "Linha do Tempo e Cronologia"
 
 #~ msgid "Term"
 #~ msgstr "Termo"
-
-#~ msgid "Description"
-#~ msgstr "Descrição"
 
 #~ msgid "Question"
 #~ msgstr "Questão"
@@ -23144,9 +25701,6 @@ msgstr "Linha do Tempo e Cronologia"
 #~ msgid "Faluxo"
 #~ msgstr "Faluxo"
 
-#~ msgid "Fate"
-#~ msgstr "Destino"
-
 #~ msgid "Fernando Po"
 #~ msgstr "Fernando Po"
 
@@ -31049,8 +33603,7 @@ msgstr "Linha do Tempo e Cronologia"
 #~ msgstr "Nenhuma consulta salva durante esta sessão.</div>"
 
 #~ msgid "Load"
-#~ msgstr ""
-#~ "Carregar"
+#~ msgstr "Carregar"
 
 #~ msgid "is between"
 #~ msgstr "entre "

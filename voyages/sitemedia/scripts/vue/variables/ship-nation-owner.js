@@ -87,7 +87,7 @@ var_registered_place_idnum = new PlaceVariable({
 
 var_nationality = new TreeselectVariable({
     varName: "nationality",
-    label: gettext("Flag"),
+    label: pgettext("filter select label", "NATIONAL"),
     description: "",
   },{
     op: "is one of",
@@ -99,7 +99,7 @@ var_nationality = new TreeselectVariable({
 
 var_imputed_nationality = new TreeselectVariable({
     varName: "imputed_nationality",
-    label: gettext("Flag (imputed)"),
+    label: pgettext("filter select label", "NATINIMP"),
     description: "",
   },{
     op: "is one of",
@@ -111,7 +111,7 @@ var_imputed_nationality = new TreeselectVariable({
 
 var_rig_of_vessel = new TreeselectVariable({
     varName: "rig_of_vessel",
-    label: gettext("Rig of vessel"),
+    label: pgettext("filter select label", "RIG"),
     description: "",
   },{
     op: "is one of",

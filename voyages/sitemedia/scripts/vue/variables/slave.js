@@ -40,7 +40,7 @@ var_imp_total_slaves_disembarked = new NumberVariable({
 
 var_num_slaves_intended_first_port = new NumberVariable({
     varName: "num_slaves_intended_first_port",
-    label: gettext("Slaves intended at 1st place"),
+    label: pgettext("filter select label", "SLINTEND"),
     description: "",
   },{
     op: "is equal to",
@@ -53,7 +53,7 @@ var_num_slaves_intended_first_port = new NumberVariable({
 
 var_num_slaves_carried_first_port = new NumberVariable({
     varName: "num_slaves_carried_first_port",
-    label: gettext("Slaves carried from 1st port"),
+    label: pgettext("filter select label", "NCAR13"),
     description: "",
   },{
     op: "is equal to",
@@ -66,7 +66,7 @@ var_num_slaves_carried_first_port = new NumberVariable({
 
 var_num_slaves_carried_second_port = new NumberVariable({
     varName: "num_slaves_carried_second_port",
-    label: gettext("Slaves carried from 2nd port"),
+    label: pgettext("filter select label", "NCAR15"),
     description: "",
   },{
     op: "is equal to",
@@ -78,7 +78,7 @@ var_num_slaves_carried_second_port = new NumberVariable({
   });
 var_num_slaves_carried_third_port = new NumberVariable({
     varName: "num_slaves_carried_third_port",
-    label: gettext("Slaves carried from 3rd port"),
+    label: pgettext("filter select label", "NCAR17"),
     description: "",
   },{
     op: "is equal to",
@@ -91,8 +91,8 @@ var_num_slaves_carried_third_port = new NumberVariable({
 
 var_total_num_slaves_arr_first_port_embark = new NumberVariable({
     varName: "total_num_slaves_arr_first_port_embark",
-    label: gettext("Slaves arrived at 1st port"),
-    description: "",
+    label: pgettext("filter select label", "SLAARRIV"),
+    description: pgettext("filter select description", "SLAARRIV"),
   },{
     op: "is equal to",
     searchTerm0: null,
@@ -104,7 +104,7 @@ var_total_num_slaves_arr_first_port_embark = new NumberVariable({
 
 var_num_slaves_disembark_first_place = new NumberVariable({
     varName: "num_slaves_disembark_first_place",
-    label: gettext("Slaves landed at 1st port"),
+    label: pgettext("filter select label", "SLAS32"),
     description: "",
   },{
     op: "is equal to",
@@ -116,7 +116,7 @@ var_num_slaves_disembark_first_place = new NumberVariable({
   });
 var_num_slaves_disembark_second_place = new NumberVariable({
     varName: "num_slaves_disembark_second_place",
-    label: gettext("Slaves landed at 2nd port"),
+    label: pgettext("filter select label", "SLAS36"),
     description: "",
   },{
     op: "is equal to",
@@ -129,7 +129,7 @@ var_num_slaves_disembark_second_place = new NumberVariable({
 
 var_num_slaves_disembark_third_place = new NumberVariable({
     varName: "num_slaves_disembark_third_place",
-    label: gettext("Slaves landed at 3rd port"),
+    label: pgettext("filter select label", "SLAS39"),
     description: "",
   },{
     op: "is equal to",
@@ -234,7 +234,7 @@ var_imputed_sterling_cash = new NumberVariable({
 
 var_imputed_death_middle_passage = new NumberVariable({
     varName: "imputed_death_middle_passage",
-    label: gettext("Slaves died during middle passage"),
+    label: pgettext("filter select label", "VYMRTIMP"),
     description: "",
   },{
     op: "is equal to",
@@ -247,8 +247,8 @@ var_imputed_death_middle_passage = new NumberVariable({
 
 var_imputed_mortality = new PercentageVariable({
     varName: "imputed_mortality",
-    label: gettext("Mortality rate"),
-    description: gettext("Percent died at sea. Please enter as an integer. e.g. 75"),
+    label: pgettext("filter select label", "VYMRTRAT"),
+    description: pgettext("filter select description", "VYMRTRAT"),
   },{
     op: "is equal to",
     searchTerm0: null,
