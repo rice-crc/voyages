@@ -1970,6 +1970,9 @@ class VoyagesFullQueryHelper:
             Prefetch('voyage_ship_owner',
                      queryset=VoyageShipOwner.objects.order_by(
                          'owner_name__owner_order')),
+            Prefetch('african_info'),
+            Prefetch('cargo',
+                     queryset=VoyageCargoConnection.objects.prefetch_related('cargo').prefetch_related('unit')),
             Prefetch('group',
                      queryset=VoyageSourcesConnection.objects.prefetch_related(
                          'source').order_by('source_order')),

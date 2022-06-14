@@ -13,6 +13,7 @@ from django.db import transaction
 import unicodecsv as csv
 
 from voyages.apps.common.models import year_mod
+from voyages.apps.common.utils import get_multi_valued_column_suffix
 from voyages.apps.contribute.models import (ContributionStatus,
                                             DeleteVoyageContribution,
                                             EditVoyageContribution,
@@ -74,8 +75,12 @@ _exported_spss_fields = [
     'YEAR5', 'YEARAF', 'YEARAM', 'YEARDEP', 'YRCONS', 'YRREG', 'VOYAGEID2',
     'DATASET', "BOYRAT1", "CHILRAT1", "GIRLRAT1", "MALRAT1", "MENRAT1",
     "WOMRAT1", "BOYRAT3", "CHILRAT3", "GIRLRAT3", "MALRAT3", "MENRAT3",
-    "WOMRAT3"
-]
+    "WOMRAT3", "COMMENTS"
+] + \
+["CARGOTYPE" + suffix.upper() for suffix in get_multi_valued_column_suffix(10)] + \
+["CARGOUNIT" + suffix.upper() for suffix in get_multi_valued_column_suffix(10)] + \
+["CARGOMEASURE" + suffix.upper() for suffix in get_multi_valued_column_suffix(10)] + \
+["AFRINFO" + suffix.upper() for suffix in get_multi_valued_column_suffix(6)]
 
 # TODO: Some variables are not an exact match to any field in or models,
 # so they either have some correspondence with a computed value from those
@@ -428,6 +433,9 @@ def _map_voyage_to_spss(voyage):
     data['YEAR25'] = year_mod(yearam, 25, 1500)
     data['YEAR100'] = (year_mod(yearam, 100, 0) - 1) * 100 if yearam else None
 
+    # Comments
+    data['COMMENTS'] = voyage.comments
+
     # Outcomes
     outcomes = list(voyage.voyage_name_outcome.all())
     if len(outcomes) == 1:
@@ -453,7 +461,7 @@ def _map_voyage_to_spss(voyage):
     data['PLACREG'] = _get_label_value(ship.registered_place)
     data['REGISREG'] = _get_label_value(ship.registered_region)
 
-    aux = 'ABCDEFGHIJKLMNOP'
+    aux = list(get_multi_valued_column_suffix(16))
     for i, owner in enumerate(voyage.voyage_ship_owner.all()):
         if i >= len(aux):
             break
@@ -461,11 +469,27 @@ def _map_voyage_to_spss(voyage):
     data['NATINIMP'] = _get_label_value(ship.imputed_nationality)
     data['TONMOD'] = ship.tonnage_mod
 
-    aux = 'ABC'
+    aux = list(get_multi_valued_column_suffix(3))
     for i, captain in enumerate(voyage.voyage_captain.all()):
         if i >= len(aux):
             break
         data['CAPTAIN' + aux[i]] = captain.name
+
+    # Cargo
+    aux = list(get_multi_valued_column_suffix(10))
+    for i, cargo_conn in enumerate(voyage.cargo.all()):
+        if i >= len(aux):
+            break
+        data['CARGOTYPE' + aux[i]] = cargo_conn.cargo.value
+        data['CARGOUNIT' + aux[i]] = cargo_conn.unit.value if cargo_conn.unit else None
+        data['CARGOMEASURE' + aux[i]] = cargo_conn.amount
+
+    # African info
+    aux = list(get_multi_valued_column_suffix(6))
+    for i, afrinfo in enumerate(voyage.african_info.all()):
+        if i >= len(aux):
+            break
+        data['AFRINFO' + aux[i]] = afrinfo.value
 
     # Itinerary
     itinerary = voyage.voyage_itinerary
@@ -662,7 +686,7 @@ def _map_voyage_to_spss(voyage):
     data["WOMRAT3"] = numbers.percentage_women_among_landed_slaves
     # INSERT HERE any new number variables [export CSV]
 
-    aux = 'ABCDEFGHIJKLMNOPQR'
+    aux = list(get_multi_valued_column_suffix(18))
     for i, source_conn in enumerate(voyage.group.all()):
         if i >= len(aux):
             break
@@ -831,7 +855,7 @@ def _map_interim_to_spss(interim):
         interim.primary_sources.all()))
     source_refs = [x.source_ref_text for x in created_sources] + \
         [x.full_ref for x in interim.pre_existing_sources.all()]
-    aux = 'ABCDEFGHIJKLMNOPQR'
+    aux = list(get_multi_valued_column_suffix(18))
     for i, ref in enumerate(source_refs):
         if i >= len(aux):
             break
@@ -1301,6 +1325,11 @@ def _save_editorial_version(review_request,
         create_source_reference(src.original_short_ref, src.original_ref,
                                 source_order)
         source_order += 1
+
+    # TODO new_voyage_fields
+    # voyage.comments = interim.comments
+    # voyage.afrinfo (maybe a JSON array)
+    # voyage.cargo (tabular data for connection, maybe a JSON array of objects)
 
     # Set voyage foreign keys (this is redundant, but we are keeping the
     # original model design)

@@ -934,6 +934,12 @@ def voyage_to_dict(voyage):
         for k, v in list(slave_number_var_map.items()):
             dikt[number_prefix + k] = getattr(numbers, v)
 
+    # TODO new_voyage_fields: we need to generate dict entries for
+    # the new fields.
+    
+    # Comments
+    dikt['comments'] = voyage.comments
+
     # Captains
     captains = voyage.voyage_captain.all()
     captain_keys = ['first', 'second', 'third']

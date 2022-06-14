@@ -53,6 +53,9 @@ class InterimVoyage(models.Model):
     entries.
     """
 
+    # TODO new_voyage_fields: to allow contributions to these new fields we must
+    # include additional data in this model.
+
     # Ship, nation, owners
     name_of_vessel = models.CharField(max_length=255, null=True, blank=True)
     year_ship_constructed = models.IntegerField(null=True, blank=True)
