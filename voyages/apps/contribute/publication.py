@@ -77,10 +77,10 @@ _exported_spss_fields = [
     "WOMRAT1", "BOYRAT3", "CHILRAT3", "GIRLRAT3", "MALRAT3", "MENRAT3",
     "WOMRAT3", "COMMENTS"
 ] + \
-["CARGOTYPE" + suffix.upper() for suffix in get_multi_valued_column_suffix(10)] + \
-["CARGOUNIT" + suffix.upper() for suffix in get_multi_valued_column_suffix(10)] + \
-["CARGOMEASURE" + suffix.upper() for suffix in get_multi_valued_column_suffix(10)] + \
-["AFRINFO" + suffix.upper() for suffix in get_multi_valued_column_suffix(6)]
+["CARGOTYPE" + suffix.upper() for suffix in get_multi_valued_column_suffix(5)] + \
+["CARGOUNIT" + suffix.upper() for suffix in get_multi_valued_column_suffix(5)] + \
+["CARGOAMOUNT" + suffix.upper() for suffix in get_multi_valued_column_suffix(5)] + \
+["AFRINFO" + suffix.upper() for suffix in get_multi_valued_column_suffix(3)]
 
 # TODO: Some variables are not an exact match to any field in or models,
 # so they either have some correspondence with a computed value from those
@@ -476,16 +476,16 @@ def _map_voyage_to_spss(voyage):
         data['CAPTAIN' + aux[i]] = captain.name
 
     # Cargo
-    aux = list(get_multi_valued_column_suffix(10))
+    aux = list(get_multi_valued_column_suffix(5))
     for i, cargo_conn in enumerate(voyage.cargo.all()):
         if i >= len(aux):
             break
         data['CARGOTYPE' + aux[i]] = cargo_conn.cargo.value
         data['CARGOUNIT' + aux[i]] = cargo_conn.unit.value if cargo_conn.unit else None
-        data['CARGOMEASURE' + aux[i]] = cargo_conn.amount
+        data['CARGOAMOUNT' + aux[i]] = cargo_conn.amount
 
     # African info
-    aux = list(get_multi_valued_column_suffix(6))
+    aux = list(get_multi_valued_column_suffix(3))
     for i, afrinfo in enumerate(voyage.african_info.all()):
         if i >= len(aux):
             break

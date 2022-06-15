@@ -561,13 +561,13 @@ class Command(BaseCommand):
                         source_connections.append(source_connection)
                         order += 1
                     # African info
-                    for key in get_multi_valued_column_suffix(6):
+                    for key in get_multi_valued_column_suffix(3):
                         afrinfoval = rh.get_by_value(AfricanInfo, 'afrinfo' + key, key_name='id')
                         if afrinfoval is None:
                             continue
                         afrinfo_conn.append(Voyage.african_info.through(voyage_id=voyage_id, africaninfo_id=afrinfoval.id))
                     # Cargo
-                    for key in get_multi_valued_column_suffix(10):
+                    for key in get_multi_valued_column_suffix(5):
                         cargo_type = rh.get_by_value(CargoType, 'cargotype' + key, key_name='id')
                         if cargo_type is None:
                             continue
@@ -575,7 +575,7 @@ class Command(BaseCommand):
                         vcc.voyage = voyage
                         vcc.cargo = cargo_type
                         vcc.unit = rh.get_by_value(CargoUnit, 'cargounit' + key, key_name='id')
-                        vcc.amount = rh.cfloat('cargomeasure' + key)
+                        vcc.amount = rh.cfloat('cargoamount' + key)
                         cargo_conn.append(vcc)
                     # Outcome
                     outcome = VoyageOutcome()

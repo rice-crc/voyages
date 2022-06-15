@@ -341,7 +341,7 @@ class VoyageCargoConnection(models.Model):
     """
     cargo = models.ForeignKey(CargoType, related_name="+",
                               on_delete=models.CASCADE)
-    voyage = models.ForeignKey('Voyage', related_name="+",
+    voyage = models.ForeignKey('Voyage', related_name="cargo",
                                on_delete=models.CASCADE)
     unit = models.ForeignKey(CargoUnit, related_name="+", null=True)
     amount = models.FloatField("The amount of cargo according to the unit", null=True)
