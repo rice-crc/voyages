@@ -6,6 +6,7 @@ from django.core.management.base import BaseCommand
 from django.db import connection
 from django.db import transaction
 from django.utils.encoding import smart_str
+from voyages.apps.contribute.publication import CARGO_COLUMN_COUNT
 
 from voyages.apps.resources.models import AfricanName, Image
 from voyages.apps.voyage.models import (AfricanInfo, BroadRegion, CargoType, CargoUnit, LinkedVoyages,
@@ -567,7 +568,7 @@ class Command(BaseCommand):
                             continue
                         afrinfo_conn.append(Voyage.african_info.through(voyage_id=voyage_id, africaninfo_id=afrinfoval.id))
                     # Cargo
-                    for key in get_multi_valued_column_suffix(5):
+                    for key in get_multi_valued_column_suffix(CARGO_COLUMN_COUNT):
                         cargo_type = rh.get_by_value(CargoType, 'cargotype' + key, key_name='id')
                         if cargo_type is None:
                             continue

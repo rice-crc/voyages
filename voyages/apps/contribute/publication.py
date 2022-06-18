@@ -32,6 +32,8 @@ from voyages.apps.voyage.models import (Voyage, VoyageCaptain,
                                         VoyageSlavesNumbers, VoyageSources,
                                         VoyageSourcesConnection)
 
+CARGO_COLUMN_COUNT = 8
+
 _exported_spss_fields = [
     'VOYAGEID', 'STATUS', 'ADLT1IMP', 'ADLT2IMP', 'ADLT3IMP', 'ADPSALE1',
     'ADPSALE2', 'ADULT1', 'ADULT2', 'ADULT3', 'ADULT4', 'ADULT5', 'ADULT6',
@@ -77,9 +79,9 @@ _exported_spss_fields = [
     "WOMRAT1", "BOYRAT3", "CHILRAT3", "GIRLRAT3", "MALRAT3", "MENRAT3",
     "WOMRAT3", "COMMENTS"
 ] + \
-["CARGOTYPE" + suffix.upper() for suffix in get_multi_valued_column_suffix(5)] + \
-["CARGOUNIT" + suffix.upper() for suffix in get_multi_valued_column_suffix(5)] + \
-["CARGOAMOUNT" + suffix.upper() for suffix in get_multi_valued_column_suffix(5)] + \
+["CARGOTYPE" + suffix.upper() for suffix in get_multi_valued_column_suffix(CARGO_COLUMN_COUNT)] + \
+["CARGOUNIT" + suffix.upper() for suffix in get_multi_valued_column_suffix(CARGO_COLUMN_COUNT)] + \
+["CARGOAMOUNT" + suffix.upper() for suffix in get_multi_valued_column_suffix(CARGO_COLUMN_COUNT)] + \
 ["AFRINFO" + suffix.upper() for suffix in get_multi_valued_column_suffix(3)]
 
 # TODO: Some variables are not an exact match to any field in or models,
@@ -476,7 +478,7 @@ def _map_voyage_to_spss(voyage):
         data['CAPTAIN' + aux[i]] = captain.name
 
     # Cargo
-    aux = list(get_multi_valued_column_suffix(5))
+    aux = list(get_multi_valued_column_suffix(CARGO_COLUMN_COUNT))
     for i, cargo_conn in enumerate(voyage.cargo.all()):
         if i >= len(aux):
             break

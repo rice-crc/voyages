@@ -907,7 +907,7 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
             if conn.amount:
                 s += f": {conn.amount}"
                 if conn.unit:
-                    s += conn.unit.name
+                    s += " " + conn.unit.name
             return s
 
         return [parse_cargo_conn(conn) for conn in obj.cargo.all()]
