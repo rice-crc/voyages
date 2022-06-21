@@ -53,6 +53,15 @@
 
 <form action="{{ request.path }}" method="post" class="form-horizontal" id="main_form">
     {% csrf_token %}
+    <div class="form-group">
+        {% with form.voyage_comments as f %}
+            {{ f.errors }}
+            {{ f.label_tag }}
+            <div class="input-group col-sm-12">
+                {{ f }}
+            </div>
+        {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
+    </div>
     <!-- Ship, nation, owners -->
     <div class="expander_container">
         <div>
@@ -205,6 +214,22 @@
                 <div class="input-group col-sm-12{% if mode == 'contribute' %} last_group_input{% endif %}">
                     {{ f }}
                 </div>
+            {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
+        </div>
+        <div class="form-group">
+            {% with form.cargo as f %}
+                {{ f.errors }}
+                {{ f.label_tag }}
+                <table id="cargo_table" class="display">
+                    <thead>
+                        <tr>
+                            <th>Cargo Type</th>
+                            <th>Unit</th>
+                            <th>Amount</th>
+                        </tr>
+                    </thead>
+                </table>
+                todo: Initialize Datatables.js here and allow editing.
             {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
         </div>
 
@@ -1161,6 +1186,16 @@
             </div>
         </div>
         <div id="demographics" class="collapse col-md-12 var_group">
+        <div class="form-group">
+            {% with form.african_info as f %}
+                {{ f.errors }}
+                {{ f.label_tag }}
+                <div class="input-group col-sm-12 last_group_input">
+                    <input name="{{ f.html_name }}" id="id_{{ f.html_name }}" name="{{ f.html_name }}" data-value="{{ f.value }}">
+                    </input>
+                </div>
+            {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
+        </div>
         <div id="hidden_div" style="display:none">
             <input type="number" id="cell_editor" style="width: 65px;" step="any">
         </div>
@@ -2012,6 +2047,49 @@
                 selectize.options[i] = { priority: commonIndex, source: 'most_common', value: found.value, text: found.text };
             }
         }
+        
+        // This is more recent code (2022) and thus uses fetch instead of $.ajax.
+        let african_info = []; 
+        let cargo_type = [];
+        let cargo_unit = [];
+        fetch('/voyage/var-options', {
+                method: 'POST', 
+                body: JSON.stringify({ "var_name": "var_african_info" })
+            })
+            .then(response => response.json())
+            .then(res => { 
+                african_info = res.data;
+                $("#id_african_info").each(function() {
+                    var self = $(this);
+                    self.selectize({
+                        maxItems: null,
+                        options: african_info,
+                        labelField: 'label',
+                        sortField: 'label',
+                        valueField: 'pk',
+                        selectOnTab: false,
+                        {% if form.african_info.value %}
+                        items: {{ form.african_info.value }},
+                        {% endif %}
+                    });
+                });
+                const cell = $("#cell_african_info");
+                const textval = cell.data('value').map(aid => african_info.find(a => a.pk == aid).label).join(', ')
+                cell.html(textval);
+             });
+        fetch('/voyage/var-options', {
+                method: 'POST', 
+                body: JSON.stringify({ "var_name": "var_cargo_type" })
+            })
+            .then(response => response.json())
+            .then(res => { cargo_type = res.data; });
+        fetch('/voyage/var-options', {
+                method: 'POST', 
+                body: JSON.stringify({ "var_name": "var_cargo_unit" })
+            })
+            .then(response => response.json())
+            .then(res => { cargo_unit = res.data; });
+        // TODO (new fields): initialize DataTable with cargo data.
 
         $.ajax('/contribute/places_ajax', {
             success: function(originalPorts) {
@@ -2293,7 +2371,7 @@
                             value.trim();
                         }
                     }
-                    values += '<td width="' + width + '" class="pre-value-cell" data-field="' + originalField + '" data-value="' + (fv.dict[id] || '') + '">' + value + '</td>';
+                    values += '<td id="cell_' + field + '" width="' + width + '" class="pre-value-cell" data-field="' + originalField + '" data-value="' + (fv.dict[id] || '') + '">' + value + '</td>';
                 }
                 return '<table class="col-sm-12 label-table"><tr><td width="50%">' + $(this).removeClass('col-sm-4')[0].outerHTML + '</td>' + values + '</tr></table>';
             });
@@ -2465,6 +2543,10 @@
         {% endif %}
 
         var formSubmission = function(allowEmptySources, showErrors) {
+            const afrinfo = $("input[name='african_info']");
+            // Ensure that the serialized format is proper JSON.
+            afrinfo.val(JSON.stringify($("#id_african_info")[0].selectize.items.map(x => parseInt(x))));
+            // TODO (new fields): handle cargo variable
             allowEmptySources = allowEmptySources || false;
             $("input[name^='date']").each(function() {
                 var self = $(this);

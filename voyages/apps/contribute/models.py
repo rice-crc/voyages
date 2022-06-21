@@ -10,7 +10,7 @@ from django.utils.translation import ugettext as _
 
 from voyages.apps import voyage
 from voyages.apps.common.validators import date_csv_field_validator
-from voyages.apps.voyage.models import VoyageDataset
+from voyages.apps.voyage.models import VoyageDataset, VoyagesFullQueryHelper
 
 
 class AdminFaq(models.Model):
@@ -52,9 +52,6 @@ class InterimVoyage(models.Model):
     a modification of an existing entry or the merger of several existing
     entries.
     """
-
-    # TODO new_voyage_fields: to allow contributions to these new fields we must
-    # include additional data in this model.
 
     # Ship, nation, owners
     name_of_vessel = models.CharField(max_length=255, null=True, blank=True)
@@ -380,6 +377,15 @@ class InterimVoyage(models.Model):
     imputed_mortality_rate = models.FloatField(null=True, blank=True)
     imputed_standardized_price_of_slaves = models.FloatField(null=True,
                                                              blank=True)
+
+    # Plain text field to store comments for the voyage (do not confuse with the
+    # notes the contributor can include for the reviewers/editors).
+    voyage_comments = models.TextField(null=True, blank=True)
+    # A JSON array with the ids of AfricanInfo models.
+    african_info = models.TextField(null=True, blank=True)
+    # A JSON array where each entry is a JSON object corresponding to a
+    # VoyageCargoConnection object.
+    cargo = models.TextField(null=True, blank=True)
 
     persisted_form_data = models.TextField(
         max_length=10000,
@@ -719,8 +725,9 @@ class BaseVoyageContribution(models.Model):
         return []
 
     def get_related_voyages(self):
+        helper = VoyagesFullQueryHelper()
         return list(
-            voyage.models.Voyage.all_dataset_objects.filter(
+            helper.get_query().filter(
                 voyage_id__in=self.get_related_voyage_ids()))
 
     class Meta:

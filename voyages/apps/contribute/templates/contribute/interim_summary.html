@@ -537,6 +537,15 @@
 
     <h3>{% trans "Slaves (characteristics)" %}</h3>
 
+    {% with form.african_info as f %}
+        <!-- TODO (new fields) load the labels for these values -->
+        <div class="row{% if f.value == None or f.value == '' %} blank{% endif%}">
+            {{ f.label_tag }}
+            <div class="old_values" id="old_{{ f.html_name }}"></div>
+            <span id="{{ f.html_name }}">{{ f.value|default_if_none:blank_text }}</span>
+        </div>
+    {% endwith %}
+
     <table id="demographics_table" class="table table-striped" style="width: auto">
         <thead>
             <tr>

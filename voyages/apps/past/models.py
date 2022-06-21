@@ -282,8 +282,8 @@ class PowerFunc(Func):
 
 
 class EnslaverCachedProperties(models.Model):
-    identity = models.ForeignKey(EnslaverIdentity, related_name='cached_properties',
-                                on_delete=models.CASCADE, unique=True, primary_key=True)
+    identity = models.OneToOneField(EnslaverIdentity, related_name='cached_properties',
+                                on_delete=models.CASCADE, primary_key=True)
     enslaved_count = models.IntegerField(db_index=True)
     transactions_amount = models.DecimalField(db_index=True, null=False, default=0, decimal_places=2, max_digits=6)
     # Enumerate all the distinct roles for an enslaver, using the PKs of the

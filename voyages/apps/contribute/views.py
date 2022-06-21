@@ -936,6 +936,8 @@ def voyage_to_dict(voyage):
 
     # TODO new_voyage_fields: we need to generate dict entries for
     # the new fields.
+    dikt['african_info'] = json.dumps([a.pk for a in voyage.african_info.all()])
+    dikt['cargo'] = json.dumps([{"cargo_type": conn.cargo_id, "unit": conn.unit_id, "amount": conn.amount} for conn in voyage.cargo.all()])
     
     # Comments
     dikt['comments'] = voyage.comments
