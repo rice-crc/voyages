@@ -16,7 +16,31 @@ var searchBar = new Vue({
       captainAndCrew: captainAndCrew,
       slave: slave,
       source: source,
-      settings: settings
+      settings: settings,
+      comments: {
+        comments: {
+          var_comments: new TextVariable({
+            varName: "comments",
+            label: pgettext("voyages popup label", "COMMENTS"),
+            description: "",
+          },{
+            op: "contains",
+            searchTerm: null,
+          },{
+            isImputed: false,
+            isAdvanced: false
+          }),
+          count: {
+            changed: 0,
+            activated: 0,
+          }
+        },
+        count: {
+          changed: 0,
+          activated: 0,
+        },
+      }
+
     },
     filterData: {
       treeselectOptions: {
@@ -268,6 +292,16 @@ var searchBar = new Vue({
                   // Patch linked voyages
                   if (varName == "var_voyage_links" && value) {
                     value = getFormattedLinkedVoyages(value);
+                  }
+
+                  // Patch cargo
+                  if (varName == "var_cargo" && value) {
+                    value = getFormattedCargo(value);
+                  }
+
+                  // Patch afrinfo
+                  if (varName == "var_afrinfo" && value) {
+                    value = getFormattedAfricanInfo(value);
                   }
 
                   // Patch place variables

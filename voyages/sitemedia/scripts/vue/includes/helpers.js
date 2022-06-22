@@ -186,7 +186,7 @@ function getFormattedSourceInTable(sources) {
   return value;
 }
 
-// get formated source by parsing through the backend response
+// get formated linked voyages by parsing through the backend response
 function getFormattedLinkedVoyages(linkedVoyages) {
   var value = ""; // empty value string
   if (linkedVoyages) {
@@ -241,6 +241,7 @@ var variableMapping = {
   tonnage: "var_tonnage",
   tonnage_mod: "var_tonnage_mod",
   guns_mounted: "var_guns_mounted",
+  cargo: "var_cargo",
 
   imp_port_voyage_begin_idnum: "var_imp_port_voyage_begin_id",
   imp_principal_place_of_slave_purchase_idnum:
@@ -277,6 +278,7 @@ var variableMapping = {
   imputed_sterling_cash: "var_imputed_sterling_cash",
   imputed_death_middle_passage: "var_imputed_death_middle_passage",
   imputed_mortality: "var_imputed_mortality",
+  afrinfo: "var_afrinfo",
 
   imp_length_home_to_disembark: "var_imp_length_home_to_disembark",
   length_middle_passage_days: "var_length_middle_passage_days",
@@ -2565,7 +2567,8 @@ function openVoyageModal(voyageId, dataset) {
         { data: "var_rig_of_vessel"},
         { data: "var_tonnage"},
         { data: "var_tonnage_mod"},
-        { data: "var_guns_mounted"}
+        { data: "var_guns_mounted"},
+        { data: "var_cargo"}
       ]
     },
     {
@@ -2645,7 +2648,8 @@ function openVoyageModal(voyageId, dataset) {
         { data: "var_imputed_percentage_child"},
         { data: "var_imputed_sterling_cash"},
         { data: "var_imputed_death_middle_passage"},
-        { data: "var_imputed_mortality"}
+        { data: "var_imputed_mortality"},
+        { data: "var_afrinfo"}
       ]
     },
     {

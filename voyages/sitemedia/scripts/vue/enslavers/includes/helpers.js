@@ -21,7 +21,8 @@ var voyageColumns = [
       { data: "var_rig_of_vessel", label: pgettext("enslavers popup label", "RIG"), isImputed: false },
       { data: "var_tonnage", label: gettext("Tonnage"), isImputed: false },
       { data: "var_tonnage_mod", label: gettext("Standardized tonnage"), isImputed: true },
-      { data: "var_guns_mounted", label: gettext("Guns mounted"), isImputed: false }
+      { data: "var_guns_mounted", label: gettext("Guns mounted"), isImputed: false },
+      { data: "var_cargo", label: pgettext("enslavers popup label", "CARGO"), isImputed: false },
     ]
   },
   {
@@ -100,7 +101,8 @@ var voyageColumns = [
       { data: "var_imputed_percentage_child", label: gettext("Percent children"), isImputed: false },
       { data: "var_imputed_sterling_cash", label: gettext("Sterling cash price in Jamaica"), isImputed: false },
       { data: "var_imputed_death_middle_passage", label: pgettext("enslavers popup label", "VYMRTIMP"), isImputed: false },
-      { data: "var_imputed_mortality", label: pgettext("enslavers popup label", "VYMRTRAT"), isImputed: false }
+      { data: "var_imputed_mortality", label: pgettext("enslavers popup label", "VYMRTRAT"), isImputed: false },
+      { data: "var_afrinfo", label: pgettext("enslavers popup label", "AFRINFO"), isImputed: false }
     ]
   },
   {

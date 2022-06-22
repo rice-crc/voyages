@@ -160,6 +160,18 @@ var_guns_mounted = new NumberVariable({
     isadvanced: false
   });
 
+var_cargo = new TextVariable({
+    varName: "cargo",
+    label: pgettext("filter select label", "CARGO"),
+    description: "",
+  },{
+    op: "contains",
+    searchTerm: null,
+  },{
+    isImputed: false,
+    isAdvanced: false
+  });
+
 // all
 shipNationOwner = {
   voyagesAndVessels: {
@@ -200,6 +212,15 @@ shipNationOwner = {
     var_tonnage: var_tonnage,
     var_tonnage_mod: var_tonnage_mod,
     var_guns_mounted: var_guns_mounted,
+
+    count: {
+      changed: 0,
+      activated: 0,
+    }
+  },
+
+  cargo: {
+    var_cargo: var_cargo,
 
     count: {
       changed: 0,

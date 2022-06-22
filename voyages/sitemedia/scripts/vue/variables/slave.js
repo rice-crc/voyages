@@ -258,6 +258,18 @@ var_imputed_mortality = new PercentageVariable({
     isAdvanced: false
   });
 
+var_afrinfo = new TextVariable({
+    varName: "afrinfo",
+    label: pgettext("filter select label", "AFRINFO"),
+    description: "",
+  },{
+    op: "contains",
+    searchTerm: null,
+  },{
+    isImputed: false,
+    isAdvanced: false
+  });
+
 slave = {
   overallNumbers: {
     var_imp_total_num_slaves_purchased: var_imp_total_num_slaves_purchased,
@@ -308,6 +320,14 @@ slave = {
     var_imputed_sterling_cash: var_imputed_sterling_cash,
     var_imputed_death_middle_passage: var_imputed_death_middle_passage,
     var_imputed_mortality: var_imputed_mortality,
+    count: {
+      changed: 0,
+      activated: 0,
+    }
+  },
+
+  afrinfo: {
+    var_afrinfo: var_afrinfo,
     count: {
       changed: 0,
       activated: 0,
