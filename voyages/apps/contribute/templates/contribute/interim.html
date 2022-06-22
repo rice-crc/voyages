@@ -25,6 +25,13 @@
     .pre-value-cell:hover {
         background-color: lightblue;
     }
+    
+    table.dataTable tbody tr.selected {
+        box-shadow: inset 0 0 0 9999px rgb(13 110 253 / 90%);
+        color: white;
+    }
+
+    .selectize-dropdown { z-index: 9999; }
 </style>
 <div class="page-title-1" class='contribute_header'>{{ contribution | title }}</div>
 
@@ -58,9 +65,13 @@
             {{ f.errors }}
             {{ f.label_tag }}
             <div class="input-group col-sm-12">
-                {{ f }}
+                <textarea class="form-control not_selectized" id="id_{{ f.html_name }}" name="{{ f.html_name }}">{{ f.value }}</textarea>
             </div>
         {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
+        <small>{% blocktrans %}The comments above are meant for information related to the
+        voyage which does not fit any of the existing fields. For comments meant
+        to the reviewer/editor, please use the contributor's comments at the end
+        of this form or any of the specific field comment boxes.{% endblocktrans %}</small>
     </div>
     <!-- Ship, nation, owners -->
     <div class="expander_container">
@@ -220,7 +231,7 @@
             {% with form.cargo as f %}
                 {{ f.errors }}
                 {{ f.label_tag }}
-                <table id="cargo_table" class="display">
+                <table id="cargo_table" class="table table-striped" style="width: 100%">
                     <thead>
                         <tr>
                             <th>Cargo Type</th>
@@ -228,8 +239,11 @@
                             <th>Amount</th>
                         </tr>
                     </thead>
+                    <tbody>
+                    </tbody>
                 </table>
-                todo: Initialize Datatables.js here and allow editing.
+                <input type="hidden" name="{{ f.html_name }}" id="id_{{ f.html_name }}" name="{{ f.html_name }}" data-value="{{ f.value }}">
+                </input>
             {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
         </div>
 
@@ -1190,7 +1204,7 @@
             {% with form.african_info as f %}
                 {{ f.errors }}
                 {{ f.label_tag }}
-                <div class="input-group col-sm-12 last_group_input">
+                <div class="input-group col-sm-12">
                     <input name="{{ f.html_name }}" id="id_{{ f.html_name }}" name="{{ f.html_name }}" data-value="{{ f.value }}">
                     </input>
                 </div>
@@ -1417,7 +1431,7 @@
         {% endif %}
         {% if mode == 'contribute' %}
         <button class="btn btn-outline" type="submit" onclick="submit_val='';">{% trans "Review" %}</button>
-        <button class="btn btn-outline" type="submit" name="submit_val" value="delete" id="delete_contrib">{% trans "Cancel contribution" %}</button>
+        <button class="btn btn-danger" type="submit" name="submit_val" value="delete" id="delete_contrib">{% trans "Cancel contribution" %}</button>
         {% endif %}
         &nbsp;<span id="success_info" class="alert alert-success" style="opacity: 0.0">{% trans "Form saved!" %}</span>
     </div>
@@ -1684,6 +1698,35 @@
             </div>
             <div class="modal-footer">
                 <button id="create_ref_confirm_btn" type="button" class="btn btn-primary">{% trans "Confirm" %}</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal">{% trans "Cancel" %}</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="cargoModal" tabindex="-1" role="dialog" aria-labelledby="referencesModalLabel" data-backdrop="static">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="create_ref_dialog_label">{% trans "Add cargo to voyage" %}</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+            </div>
+            <div id="add_cargo_section" class="modal-body" style="height: 300px; overflow-y: auto;">
+                <div class="form-group">
+                    <label for="add_cargo_type">{% trans "Cargo Type" %}</label>
+                    <input class="custom_selectized" id="add_cargo_type"></input>
+                </div>
+                <div class="form-group">
+                    <label for="add_cargo_unit">{% trans "Unit" %}</label>
+                    <input class="custom_selectized" id="add_cargo_unit"></input>
+                </div>
+                <div class="form-group">
+                    <label for="add_cargo_amount">{% trans "Amount" %}</label>
+                    <input class="form-control not_selectized" type="number" id="add_cargo_amount"></input>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="add_cargo_confirm_btn" type="button" class="btn btn-primary">{% trans "Confirm" %}</button>
                 <button type="button" class="btn btn-danger" data-dismiss="modal">{% trans "Cancel" %}</button>
             </div>
         </div>
@@ -1964,6 +2007,7 @@
                 },
             });
         } else {
+
             addNotesPopup(input.attr('name'), input.parent());
         }
         input.addClass('form-control');
@@ -1972,6 +2016,10 @@
     var regions = {};
     var broad_regions = {};
     var numbers = {};
+    var cargoTable = null;
+    var africanInfo = []; 
+    var cargoType = [];
+    var cargoUnit = [];
 
     $(document).ready(function() {
         $('.form-horizontal .form-group>label').addClass('control-label col-sm-12 col-md-12 col-lg-12');
@@ -2024,6 +2072,7 @@
             .not('.select_region')
             .not('.date_input')
             .not('.not_selectized')
+            .not('.custom_selectized')
             .each(function () {
                 var f = $(this);
                 if (!f.parent().hasClass('selectize-input')) {
@@ -2049,46 +2098,136 @@
         }
         
         // This is more recent code (2022) and thus uses fetch instead of $.ajax.
-        let african_info = []; 
-        let cargo_type = [];
-        let cargo_unit = [];
-        fetch('/voyage/var-options', {
+        let promiseAfricanInfo = fetch('/voyage/var-options', {
                 method: 'POST', 
                 body: JSON.stringify({ "var_name": "var_african_info" })
             })
-            .then(response => response.json())
-            .then(res => { 
-                african_info = res.data;
+            .then(response => response.json());
+        let promiseCargoType = fetch('/voyage/var-options', {
+                method: 'POST', 
+                body: JSON.stringify({ "var_name": "var_cargo_type" })
+            })
+            .then(response => response.json());
+        let promiseCargoUnit = fetch('/voyage/var-options', {
+                method: 'POST', 
+                body: JSON.stringify({ "var_name": "var_cargo_unit" })
+            })
+            .then(response => response.json());
+
+        const makeEnumIndex = data => {
+            const index = {};
+            const reverse = {}
+            index[null] = null;
+            reverse[null] = null;
+            for (const item of data) {
+                index[item.pk] = item.label;
+                reverse[item.label] = item.pk;
+            }
+            return { items: data, index, reverse };
+        };
+        Promise.all([promiseAfricanInfo, promiseCargoType, promiseCargoUnit])
+            .then(arr => {
+                africanInfo = makeEnumIndex(arr[0].data);
+                cargoType = makeEnumIndex(arr[1].data);
+                cargoUnit = makeEnumIndex(arr[2].data);
+                // Selectize the input for african info (allowing multiple
+                // selections). We also make the previous value more user
+                // readable by mapping the ids into names.
                 $("#id_african_info").each(function() {
-                    var self = $(this);
-                    self.selectize({
-                        maxItems: null,
-                        options: african_info,
+                    $(this).selectize({
+                        maxItems: 3,
+                        options: africanInfo.items,
                         labelField: 'label',
                         sortField: 'label',
                         valueField: 'pk',
+                        searchField: 'label',
                         selectOnTab: false,
                         {% if form.african_info.value %}
                         items: {{ form.african_info.value }},
                         {% endif %}
                     });
                 });
-                const cell = $("#cell_african_info");
-                const textval = cell.data('value').map(aid => african_info.find(a => a.pk == aid).label).join(', ')
-                cell.html(textval);
+                $("#add_cargo_type").each(function() {
+                    $(this).selectize({ 
+                        maxItems: 1,
+                        options: cargoType.items,
+                        labelField: 'label',
+                        sortField: 'label',
+                        valueField: 'pk',
+                        searchField: 'label',
+                        selectOnTab: true,
+                        notesButton: false
+                    });
+                });
+                $("#add_cargo_unit").each(function() {
+                    $(this).selectize({ 
+                        maxItems: 1,
+                        options: cargoUnit.items,
+                        labelField: 'label',
+                        sortField: 'label',
+                        valueField: 'pk',
+                        searchField: 'label',
+                        selectOnTab: true,
+                        notesButton: false
+                    });
+                });
+                let cell = $("#cell_african_info");
+                let htmlval = cell.data('value').map(aid => africanInfo.index[aid]).join(', ')
+                cell.html(htmlval);
+                // Create a datatable with the current cargo data.
+                {% if form.cargo.value %}
+                const cargoData = {{ form.cargo.value|safe }}
+                    .map(row => ({ cargo_type: cargoType.index[row.cargo_type], unit: cargoUnit.index[row.unit], amount: row.amount }));
+                {% else %}
+                const cargoData = [];
+                {% endif %}
+                cargoTable = $("#cargo_table").DataTable({
+                    dom: '<"toolbar">',
+                    data: cargoData,
+                    columns: [
+                        { data: 'cargo_type' },
+                        { data: 'unit' },
+                        { data: 'amount' },
+                    ],
+                    paging: false,
+                    info: false,
+                    bFilter: false
+                });
+                $('div.toolbar').prop("className", "btn-group").html(`<button id="add_cargo_row" class="btn btn-primary" type="button" data-toggle="modal" data-target="#cargoModal">Add</button><button id="delete_cargo_row" class="btn btn-danger" type="button">Delete</button>`);
+                $('#cargo_table tbody').on('click', 'tr', function () {
+                    if ($(this).hasClass('selected')) {
+                        $(this).removeClass('selected');
+                    } else {
+                        cargoTable.$('tr.selected').removeClass('selected');
+                        $(this).addClass('selected');
+                    }
+                });
+                $("#add_cargo_confirm_btn").click(function() {
+                    const cargoTypeVal = parseInt($("#add_cargo_type").val());
+                    if (isNaN(cargoTypeVal) || !cargoType.index[cargoTypeVal]) {
+                        alert("{% trans "Cargo type is mandatory" %}");
+                        return;
+                    }
+                    let amount = parseFloat($("#add_cargo_amount").val());
+                    if (isNaN(amount)) {
+                        amount = null;
+                    }
+                    cargoTable.row.add({
+                        cargo_type: cargoType.index[cargoTypeVal],
+                        unit: cargoUnit.index[parseInt($("#add_cargo_unit").val())] || null,
+                        amount
+                    }).draw(false);
+                    $('#cargoModal').modal('hide');
+                });
+                $('#delete_cargo_row').click(function () {
+                    cargoTable.row('.selected').remove().draw(false);
+                });
+                cell = $("#cell_cargo");
+                // TODO (new fields): reuse badge generation code to produce a.
+                // consistent UI.
+                
+                // htmlval = cell.data('value');
              });
-        fetch('/voyage/var-options', {
-                method: 'POST', 
-                body: JSON.stringify({ "var_name": "var_cargo_type" })
-            })
-            .then(response => response.json())
-            .then(res => { cargo_type = res.data; });
-        fetch('/voyage/var-options', {
-                method: 'POST', 
-                body: JSON.stringify({ "var_name": "var_cargo_unit" })
-            })
-            .then(response => response.json())
-            .then(res => { cargo_unit = res.data; });
         // TODO (new fields): initialize DataTable with cargo data.
 
         $.ajax('/contribute/places_ajax', {
@@ -2371,7 +2510,7 @@
                             value.trim();
                         }
                     }
-                    values += '<td id="cell_' + field + '" width="' + width + '" class="pre-value-cell" data-field="' + originalField + '" data-value="' + (fv.dict[id] || '') + '">' + value + '</td>';
+                    values += '<td id="cell_' + field + '" width="' + width + '" class="pre-value-cell" data-field="' + originalField + '" data-value=\'' + (fv.dict[id] || '') + '\'>' + value + '</td>';
                 }
                 return '<table class="col-sm-12 label-table"><tr><td width="50%">' + $(this).removeClass('col-sm-4')[0].outerHTML + '</td>' + values + '</tr></table>';
             });
@@ -2547,6 +2686,12 @@
             // Ensure that the serialized format is proper JSON.
             afrinfo.val(JSON.stringify($("#id_african_info")[0].selectize.items.map(x => parseInt(x))));
             // TODO (new fields): handle cargo variable
+            const cargoData = Array.from(cargoTable.rows().data())
+                .map(row => ({ ...row,
+                    cargo_type: cargoType.reverse[row.cargo_type] || null,
+                    unit: cargoUnit.reverse[row.unit] || null
+                }));
+            $("input[name='cargo']").val(JSON.stringify(cargoData));
             allowEmptySources = allowEmptySources || false;
             $("input[name^='date']").each(function() {
                 var self = $(this);

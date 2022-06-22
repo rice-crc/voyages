@@ -1,4 +1,5 @@
 from __future__ import absolute_import, unicode_literals
+import json
 
 import os
 import re
@@ -23,7 +24,7 @@ from voyages.apps.contribute.models import (ContributionStatus,
                                             ReviewRequest,
                                             ReviewRequestDecision)
 from voyages.apps.voyage.models import (Voyage, VoyageCaptain,
-                                        VoyageCaptainConnection, VoyageCrew,
+                                        VoyageCaptainConnection, VoyageCargoConnection, VoyageCrew,
                                         VoyageDataset, VoyageDates,
                                         VoyageItinerary, VoyageOutcome,
                                         VoyagesFullQueryHelper, VoyageShip,
@@ -914,6 +915,7 @@ def _save_editorial_version(review_request,
         voyage.voyage_sources.clear()
 
     voyage.dataset = review_request.dataset
+    voyage.comments = interim.voyage_comments
     # Save voyage so that the database generates a primary key for it.
     voyage.voyage_groupings = (
         interim.imputed_voyage_groupings_for_estimating_imputed_slaves)
@@ -1328,10 +1330,20 @@ def _save_editorial_version(review_request,
                                 source_order)
         source_order += 1
 
-    # TODO new_voyage_fields
-    # voyage.comments = interim.comments
-    # voyage.afrinfo (maybe a JSON array)
-    # voyage.cargo (tabular data for connection, maybe a JSON array of objects)
+    if interim.african_info:
+        afrinfo = json.loads(interim.african_info)
+        for a in afrinfo:
+            afrinfo_conn = Voyage.african_info.through(voyage_id=voyage.voyage_id, africaninfo_id=a)
+            afrinfo_conn.save()
+    if interim.cargo:
+        cargo = json.loads(interim.cargo)
+        for c in cargo:
+            cargo_conn = VoyageCargoConnection()
+            cargo_conn.voyage = voyage
+            cargo_conn.cargo_id = c['cargo_type']
+            cargo_conn.unit_id = c['unit']
+            cargo_conn.amount = c['amount']
+            cargo_conn.save()
 
     # Set voyage foreign keys (this is redundant, but we are keeping the
     # original model design)

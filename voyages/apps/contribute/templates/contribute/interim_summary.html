@@ -18,6 +18,13 @@
         <span class="col-sm-4 old_values_header"></span>
         <span class="col-sm-4">{% trans "Contributed value" %}</span>
     </div>
+    {% with form.voyage_comments as f %}
+        <div class="row{% if f.value == None or f.value == '' %} blank{% endif%}">
+            {{ f.label_tag }}
+            <div class="old_values" id="old_{{ f.html_name }}"></div>
+            <span id="{{ f.html_name }}">{{ f.value|default_if_none:blank_text }}</span>
+        </div>
+    {% endwith %}
     <h3>{% trans "Ship, nation, owners" %}</h3>
     {% with form.name_of_vessel as f %}
         <div class="row{% if f.value == None or f.value == '' %} blank{% endif%}">
@@ -105,6 +112,13 @@
     {% endwith %}
     {% with form.additional_ship_owners as f %}
         <div class="multiline_value row{% if f.value == None or f.value == '' %} blank{% endif%}">
+            {{ f.label_tag }}
+            <div class="old_values" id="old_{{ f.html_name }}"></div>
+            <span id="{{ f.html_name }}">{{ f.value|default_if_none:blank_text }}</span>
+        </div>
+    {% endwith %}
+    {% with form.cargo as f %}
+        <div class="row{% if f.value == None or f.value == '' %} blank{% endif%}">
             {{ f.label_tag }}
             <div class="old_values" id="old_{{ f.html_name }}"></div>
             <span id="{{ f.html_name }}">{{ f.value|default_if_none:blank_text }}</span>
