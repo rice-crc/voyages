@@ -1743,6 +1743,7 @@
 <!-- Use a global JS constant to specify the root of static urls -->
 <script language="javascript">var STATIC_URL = "{{ STATIC_URL|escapejs }}";</script>
 <script language="javascript">var LANGUAGE_CODE = "{{ LANGUAGE_CODE|escapejs }}";</script>
+<script src="{{ STATIC_URL }}scripts/vue/includes/format-badges.js" type="text/javascript"></script>
 <script type="text/javascript">
     var MODIFY_REFERENCE_TEXT = '{% trans "Modify reference" %}';
     var submit_val = '';
@@ -2098,38 +2099,11 @@
         }
         
         // This is more recent code (2022) and thus uses fetch instead of $.ajax.
-        let promiseAfricanInfo = fetch('/voyage/var-options', {
-                method: 'POST', 
-                body: JSON.stringify({ "var_name": "var_african_info" })
-            })
-            .then(response => response.json());
-        let promiseCargoType = fetch('/voyage/var-options', {
-                method: 'POST', 
-                body: JSON.stringify({ "var_name": "var_cargo_type" })
-            })
-            .then(response => response.json());
-        let promiseCargoUnit = fetch('/voyage/var-options', {
-                method: 'POST', 
-                body: JSON.stringify({ "var_name": "var_cargo_unit" })
-            })
-            .then(response => response.json());
-
-        const makeEnumIndex = data => {
-            const index = {};
-            const reverse = {}
-            index[null] = null;
-            reverse[null] = null;
-            for (const item of data) {
-                index[item.pk] = item.label;
-                reverse[item.label] = item.pk;
-            }
-            return { items: data, index, reverse };
-        };
-        Promise.all([promiseAfricanInfo, promiseCargoType, promiseCargoUnit])
-            .then(arr => {
-                africanInfo = makeEnumIndex(arr[0].data);
-                cargoType = makeEnumIndex(arr[1].data);
-                cargoUnit = makeEnumIndex(arr[2].data);
+        fetchAfricanInfoAndCargo()
+            .then(data => {
+                africanInfo = data.africanInfo;
+                cargoType = data.cargoType;
+                cargoUnit = data.cargoUnit;
                 // Selectize the input for african info (allowing multiple
                 // selections). We also make the previous value more user
                 // readable by mapping the ids into names.
@@ -2172,12 +2146,16 @@
                     });
                 });
                 let cell = $("#cell_african_info");
-                let htmlval = cell.data('value').map(aid => africanInfo.index[aid]).join(', ')
+                let htmlval = cell.data('value').map(aid => getBadgeFormattedValue(africanInfo.index[aid])).join(' ')
+                cell.html(htmlval);
+                // Now handle the CARGO cell.
+                cell = $("#cell_cargo");
+                const cargoRowMap = createCargoRowMap(cargoType, cargoUnit);
+                htmlval = cargoToBadges(cell.data('value').map(cargoRowMap));
                 cell.html(htmlval);
                 // Create a datatable with the current cargo data.
                 {% if form.cargo.value %}
-                const cargoData = {{ form.cargo.value|safe }}
-                    .map(row => ({ cargo_type: cargoType.index[row.cargo_type], unit: cargoUnit.index[row.unit], amount: row.amount }));
+                const cargoData = {{ form.cargo.value|safe }}.map(cargoRowMap);
                 {% else %}
                 const cargoData = [];
                 {% endif %}

@@ -33,7 +33,7 @@ from voyages.apps.voyage.models import (Voyage, VoyageCaptain,
                                         VoyageSlavesNumbers, VoyageSources,
                                         VoyageSourcesConnection)
 
-CARGO_COLUMN_COUNT = 8
+CARGO_COLUMN_COUNT = 10
 
 _exported_spss_fields = [
     'VOYAGEID', 'STATUS', 'ADLT1IMP', 'ADLT2IMP', 'ADLT3IMP', 'ADPSALE1',

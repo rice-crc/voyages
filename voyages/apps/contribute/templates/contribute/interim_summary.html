@@ -706,6 +706,7 @@
 <script type="text/javascript" src="{{ STATIC_URL }}scripts/contribute/interim.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}scripts/library/js.cookie@2.1.0.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}scripts/contribute/common.js"></script>
+<script src="{{ STATIC_URL }}scripts/vue/includes/format-badges.js" type="text/javascript"></script>
 <!-- I18n of javascript text -->
 <script type="text/javascript" src="{% url 'javascript-catalog' %}"></script>
 <!-- Use a global JS constant to specify the root of static urls -->
@@ -840,6 +841,22 @@
             }
         }
     });
+    
+    fetchAfricanInfoAndCargo()
+        .then(({ africanInfo, cargoType, cargoUnit }) => {
+            // Replace raw JSON data with badges.
+            const cargoMap = createCargoRowMap(cargoType, cargoUnit);
+            const cargoCellUpdater = sel => {
+                sel.html(cargoToBadges(JSON.parse(sel.html()).map(cargoMap)));
+            };
+            cargoCellUpdater($("#cargo"));
+            cargoCellUpdater($("#old_cargo>span"));
+            const afrinfoCellUpdater = sel => {
+                sel.html(JSON.parse(sel.html()).map(aid => getBadgeFormattedValue(africanInfo.index[aid])));
+            };
+            afrinfoCellUpdater($("#african_info"));
+            afrinfoCellUpdater($("#old_african_info>span"));
+        });
 
     $('.old_values').each(function() {
         var $div = $(this);
