@@ -846,13 +846,20 @@
         .then(({ africanInfo, cargoType, cargoUnit }) => {
             // Replace raw JSON data with badges.
             const cargoMap = createCargoRowMap(cargoType, cargoUnit);
+            const safeParse = s => {
+                let data = [];
+                try {
+                    data = JSON.parse(s);
+                } catch { }
+                return data;
+            }
             const cargoCellUpdater = sel => {
-                sel.html(cargoToBadges(JSON.parse(sel.html()).map(cargoMap)));
+                sel.html(cargoToBadges(safeParse(sel.html()).map(cargoMap)));
             };
             cargoCellUpdater($("#cargo"));
             cargoCellUpdater($("#old_cargo>span"));
             const afrinfoCellUpdater = sel => {
-                sel.html(JSON.parse(sel.html()).map(aid => getBadgeFormattedValue(africanInfo.index[aid])));
+                sel.html(safeParse(sel.html()).map(aid => getBadgeFormattedValue(africanInfo.index[aid])));
             };
             afrinfoCellUpdater($("#african_info"));
             afrinfoCellUpdater($("#old_african_info>span"));

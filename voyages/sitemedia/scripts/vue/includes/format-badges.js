@@ -1,7 +1,8 @@
-function getBadgeFormattedValue(value) {
-  return '<span class="h6 pr-2"><span class="badge badge-pill badge-secondary tooltip-pointer" data-toggle="tooltip" data-placement="top"> ' +
-        value +
-        " </span></span>";
+const offensiveTextDisclaimer = gettext("Note: this term was used in historical records and appears here in this form to accurately represent the historical sources.");
+
+function getBadgeFormattedValue(value, maybeOffensive) {
+  maybeOffensive = !!maybeOffensive;
+  return `<span class="h6 pr-2"><span title="${maybeOffensive ? offensiveTextDisclaimer : ''}" class="badge badge-pill badge-secondary tooltip-pointer ${maybeOffensive ? 'badge-maybe-offensive' : ''}" data-toggle="tooltip" data-placement="top">${value}</span></span>`;
 }
 
 // get formated cargo by parsing through the backend response
@@ -37,7 +38,7 @@ function getFormattedAfricanInfo(africanInfoArray) {
   var value = ""; // empty value string
   if (africanInfoArray) {
     africanInfoArray.forEach(function(item) {
-      value += getBadgeFormattedValue(item);
+      value += getBadgeFormattedValue(item, true);
     });
   }
   return value;

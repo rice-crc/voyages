@@ -65,7 +65,7 @@
             {{ f.errors }}
             {{ f.label_tag }}
             <div class="input-group col-sm-12">
-                <textarea class="form-control not_selectized" id="id_{{ f.html_name }}" name="{{ f.html_name }}">{{ f.value }}</textarea>
+                <textarea class="form-control not_selectized" id="id_{{ f.html_name }}" name="{{ f.html_name }}">{{ f.value|default_if_none:'' }}</textarea>
             </div>
         {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
         <small>{% blocktrans %}The comments above are meant for information related to the
@@ -2154,10 +2154,9 @@
                 htmlval = cargoToBadges(cell.data('value').map(cargoRowMap));
                 cell.html(htmlval);
                 // Create a datatable with the current cargo data.
+                let cargoData = [];
                 {% if form.cargo.value %}
-                const cargoData = {{ form.cargo.value|safe }}.map(cargoRowMap);
-                {% else %}
-                const cargoData = [];
+                cargoData = ({{ form.cargo.value|safe }} || []).map(cargoRowMap);
                 {% endif %}
                 cargoTable = $("#cargo_table").DataTable({
                     dom: '<"toolbar">',
