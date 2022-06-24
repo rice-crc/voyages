@@ -60,9 +60,11 @@
         </div>
       </v-panel>
 
-      <v-panel @apply="apply" @reset="reset" group="shipNationOwner" sub-group="flag" title="{% trans 'Flag' %}" :filters="filter.shipNationOwner.flag">
+      <v-panel @apply="apply" @reset="reset" group="shipNationOwner" sub-group="flag" title="{% trans 'NATIONAL' context 'search panel left menu' %}" :filters="filter.shipNationOwner.flag">
         <div slot="v-panel-header">
-          <v-panel-header title="{% trans 'Flag' %}" description="{% trans 'The flag (nationality) of the slave ship' %}">
+          <v-panel-header 
+           title="{% trans 'NATIONAL' context 'subpanel title' %}"
+           description="{% trans 'The flag (nationality) of the slave ship' %}">
             <div slot="v-modal-content"></div>
           </v-panel-header>
         </div>

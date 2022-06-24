@@ -6,14 +6,15 @@ from django.core.management.base import BaseCommand
 from django.db import connection
 from django.db import transaction
 from django.utils.encoding import smart_str
+from voyages.apps.contribute.publication import CARGO_COLUMN_COUNT
 
 from voyages.apps.resources.models import AfricanName, Image
-from voyages.apps.voyage.models import (BroadRegion, LinkedVoyages,
+from voyages.apps.voyage.models import (AfricanInfo, BroadRegion, CargoType, CargoUnit, LinkedVoyages,
                                         Nationality, OwnerOutcome,
                                         ParticularOutcome, Place, Region,
                                         Resistance, RigOfVessel, SlavesOutcome,
                                         TonType, VesselCapturedOutcome, Voyage,
-                                        VoyageCaptain, VoyageCaptainConnection,
+                                        VoyageCaptain, VoyageCaptainConnection, VoyageCargoConnection,
                                         VoyageCrew, VoyageDates,
                                         VoyageGroupings, VoyageItinerary,
                                         VoyageOutcome, VoyageShip,
@@ -58,6 +59,8 @@ class Command(BaseCommand):
         captain_connections = []
         ship_owner_connections = []
         source_connections = []
+        afrinfo_conn = []
+        cargo_conn = []
         crews = []
         itineraries = []
         outcomes = []
@@ -492,6 +495,7 @@ class Command(BaseCommand):
                     voyage.voyage_in_cd_rom = in_cd_room == '1'
                     voyage.voyage_groupings = rh.get_by_value(VoyageGroupings, 'xmimpflag')
                     voyage.dataset = rh.cint('dataset', allow_null=False)
+                    voyage.comments = rh.get('COMMENTS')
                     intra_american = voyage.dataset == 1
                     counts[voyage.dataset] = counts.get(voyage.dataset, 0) + 1
                     ships.append(row_to_ship(rh, voyage))
@@ -557,6 +561,23 @@ class Command(BaseCommand):
                         source_connection.text_ref = source_ref
                         source_connections.append(source_connection)
                         order += 1
+                    # African info
+                    for key in get_multi_valued_column_suffix(3):
+                        afrinfoval = rh.get_by_value(AfricanInfo, 'afrinfo' + key, key_name='id')
+                        if afrinfoval is None:
+                            continue
+                        afrinfo_conn.append(Voyage.african_info.through(voyage_id=voyage_id, africaninfo_id=afrinfoval.id))
+                    # Cargo
+                    for key in get_multi_valued_column_suffix(CARGO_COLUMN_COUNT):
+                        cargo_type = rh.get_by_value(CargoType, 'cargotype' + key, key_name='id')
+                        if cargo_type is None:
+                            continue
+                        vcc = VoyageCargoConnection()
+                        vcc.voyage = voyage
+                        vcc.cargo = cargo_type
+                        vcc.unit = rh.get_by_value(CargoUnit, 'cargounit' + key, key_name='id')
+                        vcc.amount = rh.cfloat('cargoamount' + key)
+                        cargo_conn.append(vcc)
                     # Outcome
                     outcome = VoyageOutcome()
                     outcome.particular_outcome = rh.get_by_value(
@@ -625,6 +646,8 @@ class Command(BaseCommand):
                 helper.delete_all(cursor, VoyageShip)
                 helper.delete_all(cursor, VoyageShipOwner)
                 helper.delete_all(cursor, VoyageSlavesNumbers)
+                helper.delete_all(cursor, Voyage.african_info.through)
+                helper.delete_all(cursor, VoyageCargoConnection)
                 helper.delete_all(cursor, AfricanName)
                 helper.delete_all(cursor, Image)
                 helper.delete_all(cursor, Voyage)
@@ -696,6 +719,8 @@ class Command(BaseCommand):
                 bulk_insert(VoyageCaptainConnection, captain_connections)
                 bulk_insert(VoyageShipOwnerConnection, ship_owner_connections)
                 bulk_insert(VoyageSourcesConnection, source_connections)
+                bulk_insert(Voyage.african_info.through, afrinfo_conn)
+                bulk_insert(VoyageCargoConnection, cargo_conn)
 
                 # Update the one-to-one references for Voyages' models
                 # This is a redundant foreign key, however, this design

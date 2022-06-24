@@ -246,7 +246,7 @@ class ErrorReporting:
         self.reported[key] = msg_count + 1
         saturated = msg_count > 1
         if self.line > 0 and not saturated:
-            msg = '[' + str(self.line) +'] ' + msg
+            msg = f"{msg} [{self.line}]"
         if not saturated:
             sys.stderr.write(msg + '\n')
 

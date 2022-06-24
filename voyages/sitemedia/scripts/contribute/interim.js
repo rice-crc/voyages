@@ -8,13 +8,13 @@ function ValidationResult(warnings, errors) {
     this.warnings = warnings || [];
     this.errors = errors || [];
     var self = this;
-    this.hasErrors = function() {
+    this.hasErrors = function () {
         return self.errors.length > 0;
     };
-    this.hasWarnings = function() {
+    this.hasWarnings = function () {
         return self.warnings.length > 0;
     };
-    this.toString = function() {
+    this.toString = function () {
         var result = '';
         if (self.warnings.length != 0) {
             result = gettext('Warnings: ') + "\n" + self.warnings.join("\n");
@@ -27,8 +27,8 @@ function ValidationResult(warnings, errors) {
     };
 }
 
-var _bindFrom = function(self) {
-    return function() {
+var _bindFrom = function (self) {
+    return function () {
         self.index = $("#source_index_field").val();
         self.pk = $("#source_pk_field").val() || self.pk;
         for (var key in self._fields) {
@@ -45,8 +45,8 @@ var _bindFrom = function(self) {
     };
 };
 
-var _bindTo = function(self) {
-    return function() {
+var _bindTo = function (self) {
+    return function () {
         $('#referencesModal input').val('');
         $("#source_index_field").val(self.index);
         $("#source_pk_field").val(self.pk);
@@ -64,8 +64,8 @@ var _bindTo = function(self) {
     };
 }
 
-var _fromModel = function(self) {
-    return function(model) {
+var _fromModel = function (self) {
+    return function (model) {
         for (var key in self._fields) {
             var fieldName = self._fields[key][1];
             self[key] = model[fieldName];
@@ -77,8 +77,8 @@ var _fromModel = function(self) {
     };
 };
 
-var _toModel = function(self) {
-    return function() {
+var _toModel = function (self) {
+    return function () {
         var model = {};
         for (var key in self._fields) {
             var fieldName = self._fields[key][1];
@@ -93,10 +93,10 @@ var _toModel = function(self) {
     };
 }
 
-var _checkboxGetValue = function($el) {
+var _checkboxGetValue = function ($el) {
     return $el.prop('checked');
 }
-var _checkboxSetValue = function($el, val) {
+var _checkboxSetValue = function ($el, val) {
     $el.prop('checked', val);
     $el.trigger('change');
 }
@@ -131,8 +131,8 @@ function ConcatTerm(term, concatenator) {
     var self = this;
     self.term = term || '';
     self.concatenator = concatenator || '';
-    self.isNullOrEmpty = function() { return term == null || term == ''; };
-    self.add = function(concatTerm) {
+    self.isNullOrEmpty = function () { return term == null || term == ''; };
+    self.add = function (concatTerm) {
         if (self.isNullOrEmpty()) {
             return concatTerm.isNullOrEmpty() ? new ConcatTerm() : concatTerm;
         } else {
@@ -156,7 +156,7 @@ function concat(pieces) {
 }
 
 function sourceDetails(detailsArr) {
-    var nonEmpty = $.map(detailsArr, function(d) {
+    var nonEmpty = $.map(detailsArr, function (d) {
         if (d) {
             var x = d.trim();
             if (x.length) return '<p>' + x + '</p>';
@@ -179,12 +179,12 @@ function PrimarySource(library, location, series, volume, detail, info, url) {
     this.info = info;
     this.url = url;
     var self = this;
-    this.validate = function() {
+    this.validate = function () {
         var errors = [];
         validateMinLength(self.library, 2, errors, gettext('Library or archive name'));
         return new ValidationResult([], errors);
     };
-    this.toString = function() {
+    this.toString = function () {
         var result = '<span class="source_reference_main_part">' +
             self.library + ', ' + self.location;
         if (self.series) {
@@ -223,7 +223,7 @@ function ArticleSource(author, title, journal, volume, year, pageStart, pageEnd,
     this.info = info;
     this.url = url;
     var self = this;
-    this.validate = function() {
+    this.validate = function () {
         var errors = [];
         var warnings = [];
         validateMinLength(self.author, 4, errors, gettext('Author name'));
@@ -235,7 +235,7 @@ function ArticleSource(author, title, journal, volume, year, pageStart, pageEnd,
         }
         return new ValidationResult(warnings, errors);
     };
-    this.toString = function() {
+    this.toString = function () {
         var result = '<span class="source_reference_main_part">' +
             self.author + ', ' + self.title;
         if (self.journal) {
@@ -284,7 +284,7 @@ function BookSource(author, title, publisher, place, year, pageStart, pageEnd, i
     this.essay_title = essay_title || false;
     this.editors = editors;
     var self = this;
-    this.validate = function() {
+    this.validate = function () {
         var errors = [];
         var warnings = [];
         validateMinLength(self.author, 4, errors, gettext('Author name'));
@@ -300,7 +300,7 @@ function BookSource(author, title, publisher, place, year, pageStart, pageEnd, i
         }
         return new ValidationResult(warnings, errors);
     };
-    this.toString = function() {
+    this.toString = function () {
         var result = '<span class="source_reference_main_part">' +
             self.author + ', ';
         if (self.is_essay) {
@@ -309,8 +309,8 @@ function BookSource(author, title, publisher, place, year, pageStart, pageEnd, i
             result += self.title;
         }
         var extra = (new ConcatTerm(self.place, ', ')).
-        add(new ConcatTerm(self.publisher, ': ')).
-        add(new ConcatTerm(self.year));
+            add(new ConcatTerm(self.publisher, ': ')).
+            add(new ConcatTerm(self.year));
         result += concat([' (', extra.term, ')']);
         // Pages or single page?
         if (self.pageStart && self.pageStart == self.pageEnd) {
@@ -350,7 +350,7 @@ function NewspaperSource(name, alternative_name, city, country, info, url) {
     this.info = info;
     this.url = url;
     var self = this;
-    this.validate = function() {
+    this.validate = function () {
         var errors = [];
         var warnings = [];
         validateMinLength(self.name, 4, errors, gettext('Name'));
@@ -360,7 +360,7 @@ function NewspaperSource(name, alternative_name, city, country, info, url) {
         validateMinLength(self.url, 4, warnings, gettext('URL is a recommended field'));
         return new ValidationResult(warnings, errors);
     };
-    this.toString = function() {
+    this.toString = function () {
         var result = '<span class="source_reference_main_part">' + self.name;
         if (self.alternative_name) {
             result += ' (later, ' + self.alternative_name + ')';
@@ -395,7 +395,7 @@ function PrivateNoteOrCollectionSource(authors, title, location, page, info, url
     this.info = info;
     this.url = url;
     var self = this;
-    this.validate = function() {
+    this.validate = function () {
         var errors = [];
         var warnings = [];
         validateMinLength(self.authors, 4, errors, gettext('Authors'));
@@ -404,7 +404,7 @@ function PrivateNoteOrCollectionSource(authors, title, location, page, info, url
         validateMinLength(self.url, 4, warnings, gettext('URL is a recommended field'));
         return new ValidationResult(warnings, errors);
     };
-    this.toString = function() {
+    this.toString = function () {
         var result = '<span class="source_reference_main_part">' + self.title;
         if (self.location) {
             result += ' - ' + self.location;
@@ -439,7 +439,7 @@ function UnpublishedSecondarySource(authors, title, location, page, info, url) {
     this.info = info;
     this.url = url;
     var self = this;
-    this.validate = function() {
+    this.validate = function () {
         var errors = [];
         var warnings = [];
         validateMinLength(self.authors, 4, errors, gettext('Authors'));
@@ -448,7 +448,7 @@ function UnpublishedSecondarySource(authors, title, location, page, info, url) {
         validateMinLength(self.url, 4, warnings, gettext('URL is a recommended field'));
         return new ValidationResult(warnings, errors);
     };
-    this.toString = function() {
+    this.toString = function () {
         var result = '<span class="source_reference_main_part">' + self.title;
         if (self.location) {
             result += ' - ' + self.location;
@@ -553,12 +553,12 @@ function parseDateValue(val) {
         day = null;
     }
     var result = { year: year, month: month, day: day };
-    result.isValid = function() {
+    result.isValid = function () {
         // Date is considered valid if it has at least a year.
         // If it has a day, it must have a month as well.
         return result.year != null && (result.day == null || result.month != null);
     };
-    result.toMMDDYYYY = function() {
+    result.toMMDDYYYY = function () {
         return (result.month || '') + ',' + (result.day || '') + ',' + (result.year || '');
     };
     return result;
@@ -598,7 +598,7 @@ function validatePreSubmit(sources, preSources) {
         'date_return_departure',
         'date_voyage_completed',
     ];
-    var dates = $.map(allDateFields, function(field, i) {
+    var dates = $.map(allDateFields, function (field, i) {
         // Work with selectized fields.
         var date = parseDateValue($("#id_" + field).val());
         if (date.isValid()) return {
@@ -705,10 +705,10 @@ function SlaveNumbersTable(table_id, numbers, editable, column_count, row_count,
     // Fetch rows/cells from the DOM.
     self.rows = $.map(
         $("#" + self.table_id).find("tbody").find("tr"),
-        function(row, i) {
+        function (row, i) {
             var cells = $(row).find("td");
             cells.data('row', i);
-            cells.each(function(col) {
+            cells.each(function (col) {
                 $(this).data('col', col);
             });
             return cells;
@@ -740,7 +740,7 @@ function SlaveNumbersTable(table_id, numbers, editable, column_count, row_count,
             }
         }
         if (self.editable && !found) {
-            $("input[name='" + key + "']").each(function() {
+            $("input[name='" + key + "']").each(function () {
                 $(this).val(self.numbers[key]);
             });
         }
@@ -753,7 +753,7 @@ function SlaveNumbersTable(table_id, numbers, editable, column_count, row_count,
         self.col_count = self.column_count;
         self.row_count = self.row_count;
         // Clicking on a cell will open up an edit box for the entry.
-        $('#' + self.table_id + ' td').click(function() {
+        $('#' + self.table_id + ' td').click(function () {
             if (current_cell) return;
             current_cell = $(this);
             var value = parseFloat(current_cell.html());
@@ -761,7 +761,7 @@ function SlaveNumbersTable(table_id, numbers, editable, column_count, row_count,
             editor.unbind();
             editor.appendTo(current_cell);
             editor.focus();
-            editor.blur(function() {
+            editor.blur(function () {
                 if (current_cell) {
                     var value = editor.val();
                     current_cell.html(value);
@@ -769,7 +769,7 @@ function SlaveNumbersTable(table_id, numbers, editable, column_count, row_count,
                     editor.appendTo($('#hidden_div'));
                 }
             });
-            editor.keydown(function(e) {
+            editor.keydown(function (e) {
                 var old_cell = current_cell;
                 if (!old_cell) return;
                 var cell_shift = 0;
@@ -815,22 +815,22 @@ function SlaveNumbersTable(table_id, numbers, editable, column_count, row_count,
 
     // Enable hover effect for table cells.
     $('#' + self.table_id + ' td').hover(
-        function() {
+        function () {
             $(this).addClass('cell_hover');
         },
-        function() {
+        function () {
             $(this).removeClass('cell_hover');
         }
     );
 
     // The focus method will trigger a click on the first cell of the table.
-    self.focus = function() {
+    self.focus = function () {
         $(self.rows[0][0]).trigger('click');
     };
 
     // Append the table data to a form by creating hidden inputs with
     // the appropriate names and values.
-    self.appendToForm = function(form) {
+    self.appendToForm = function (form) {
         for (var i = 0; i < self.rows.length; ++i) {
             for (var j = 0; j < self.rows[i].length; ++j) {
                 var value = parseFloat($(self.rows[i][j]).html());
@@ -859,7 +859,7 @@ function ageAndSexTable(numbers, editable, pre_existing_data) {
         3,
         9,
         pre_existing_data,
-        function(key) {
+        function (key) {
             var match = regex.exec(key);
             if (match) {
                 var row = rows.indexOf(match[1]);
@@ -868,7 +868,7 @@ function ageAndSexTable(numbers, editable, pre_existing_data) {
             }
             return null;
         },
-        function(i, j) {
+        function (i, j) {
             return NUMBERS_KEY_PREFIX + rows[i] + cols[j];
         }
     );
@@ -886,7 +886,7 @@ function demographicsTable(numbers, editable, pre_existing_data) {
         DEMOGRAPHICS_COLUMN_HEADERS.length,
         DEMOGRAPHICS_ROW_HEADERS.length,
         pre_existing_data,
-        function(key) {
+        function (key) {
             var match = regex.exec(key);
             if (match) {
                 var col = DEMOGRAPHICS_COLUMN_HEADERS.indexOf(match[1]);
@@ -895,7 +895,7 @@ function demographicsTable(numbers, editable, pre_existing_data) {
             }
             return null;
         },
-        function(i, j) {
+        function (i, j) {
             return NUMBERS_KEY_PREFIX + DEMOGRAPHICS_COLUMN_HEADERS[j] + DEMOGRAPHICS_ROW_HEADERS[i];
         }
     );
@@ -903,3 +903,57 @@ function demographicsTable(numbers, editable, pre_existing_data) {
 
 // Helps when Django outputs none in some places.
 var None = {};
+
+// A simple helper that takes an aray of objects with pk, label properties and
+// creates an index pk => label and a reverse index label => pk as well as
+// maintaining a reference to the original array.
+const makeEnumIndex = items => {
+    const index = {};
+    const reverse = {}
+    index[null] = null;
+    reverse[null] = null;
+    for (const item of items) {
+        index[item.pk] = item.label;
+        reverse[item.label] = item.pk;
+    }
+    return { items, index, reverse };
+};
+
+const fetchAfricanInfoAndCargo = () => {
+    // This is more recent code (2022) and thus uses fetch instead of $.ajax.
+    const promiseAfricanInfo = fetch('/voyage/var-options', {
+        method: 'POST',
+        body: JSON.stringify({ "var_name": "var_african_info" })
+    })
+        .then(response => response.json());
+    const promiseCargoType = fetch('/voyage/var-options', {
+        method: 'POST',
+        body: JSON.stringify({ "var_name": "var_cargo_type" })
+    })
+        .then(response => response.json());
+    const promiseCargoUnit = fetch('/voyage/var-options', {
+        method: 'POST',
+        body: JSON.stringify({ "var_name": "var_cargo_unit" })
+    })
+        .then(response => response.json());
+    return Promise.all([promiseAfricanInfo, promiseCargoType, promiseCargoUnit])
+        .then(arr => ({ 
+            africanInfo: makeEnumIndex(arr[0].data),
+            cargoType: makeEnumIndex(arr[1].data),
+            cargoUnit: makeEnumIndex(arr[2].data)
+        }));
+}
+
+const createCargoRowMap = (cargoType, cargoUnit) => {
+    const cargoRowMap = row => ({
+        cargo_type: cargoType.index[row.cargo_type],
+        unit: cargoUnit.index[row.unit],
+        amount: row.amount
+    });
+    return cargoRowMap;
+}
+
+const cargoToBadges = rows => rows
+    .map(row => `${row.amount ? (`${row.amount} ${row.unit || ''}${row.unit ? ' ' : ''}of `) : ''}${row.cargo_type}`)
+    .map(s => getBadgeFormattedValue(s))
+    .join(' ');
