@@ -1127,7 +1127,7 @@ def _relations_group_adapter(rel_group):
         if enslaver:
             cur_enslavers[enslaver['id']] = enslaver
         cur_enslaved = current.setdefault('enslaved', {})
-        enslaved = _split_id_and_name(r['relation_enslaved'], 'name')
+        enslaved = _split_id_and_name(r['relation_enslaved'], 'alias')
         if enslaved:
             cur_enslaved[enslaved['id']] = enslaved
     return [{k: list(v.values()) if type(v) is dict else v for k, v in r.items()} for r in relations.values()]
