@@ -27,7 +27,7 @@ from voyages.apps.common.models import (SavedQuery,
                                         get_pks_from_haystack_results, get_values_from_haystack_results)
 from voyages.apps.common.views import \
     get_datatable_json_result as get_results_table
-from voyages.apps.voyage.models import (Nationality, OwnerOutcome,
+from voyages.apps.voyage.models import (AfricanInfo, CargoType, CargoUnit, Nationality, OwnerOutcome,
                                         ParticularOutcome, Place, Resistance,
                                         RigOfVessel, SlavesOutcome, TonType,
                                         VesselCapturedOutcome, Voyage,
@@ -533,6 +533,8 @@ download_header_map = {
         pgettext_lazy("datatable column header", "PLAC1TRA"),
     "var_guns_mounted":
         "Guns mounted",
+    "var_cargo":
+        pgettext_lazy("datatable column header", "CARGO"),
     "var_imp_arrival_at_port_of_dis":
         "Year of arrival at port of disembarkation",
     "var_imp_length_home_to_disembark":
@@ -551,6 +553,8 @@ download_header_map = {
         pgettext_lazy("datatable column header", "VYMRTIMP"),
     "var_imputed_mortality":
         pgettext_lazy("datatable column header", "VYMRTRAT"),
+    "var_afrinfo":
+        pgettext_lazy("datatable column header", "AFRINFO"),
     "var_imputed_nationality":
         pgettext_lazy("datatable column header", "NATINIMP"),
     "var_imputed_percentage_boys":
@@ -756,6 +760,12 @@ _options_model = {
     # Imputed nationality is currently restricted to a subset of code-values.
     'var_imputed_nationality':
         Nationality.objects.filter(value__in=[3, 6, 7, 8, 9, 10, 15, 30]),
+    'var_african_info':
+        AfricanInfo.objects,
+    'var_cargo_type':
+        CargoType.objects,
+    'var_cargo_unit':
+        CargoUnit.objects
 }
 
 
@@ -780,8 +790,8 @@ def get_var_options(request):
     is_cached = response_data is not None
     if not is_cached:
         response_data = [{
-            'label': x.label,
-            'value': x.value,
+            'label': x.label if hasattr(x, "label") else x.name,
+            'value': x.value if hasattr(x, "value") else x.pk,
             'pk': x.pk
         } for x in options_model.all()]
         # Cache the data for 24h.

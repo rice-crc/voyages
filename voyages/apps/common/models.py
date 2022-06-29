@@ -21,6 +21,20 @@ def year_mod(the_year, mod, start):
     return 1 + ((the_year - start - 1) // mod)
 
 
+class NamedModelAbstractBase(models.Model):
+    id = models.IntegerField(primary_key=True)
+    name = models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.__unicode__()
+
+    def __unicode__(self):
+        return str(self.id) + ", " + self.name
+
+    class Meta:
+        abstract = True
+
+
 # Create your models here.
 class SavedQuery(models.Model):
     """

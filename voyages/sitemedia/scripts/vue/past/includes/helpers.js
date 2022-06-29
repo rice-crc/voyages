@@ -21,6 +21,7 @@ var voyageColumns = [
       { data: "var_tonnage", label: gettext("Tonnage"), isImputed: false },
       { data: "var_tonnage_mod", label: gettext("Standardized tonnage"), isImputed: true },
       { data: "var_guns_mounted", label: gettext("Guns mounted"), isImputed: false }
+      { data: "var_cargo", label: pgettext("past popup label", "CARGO"), isImputed: false },
     ]
   },
   {
@@ -100,6 +101,7 @@ var voyageColumns = [
       { data: "var_imputed_sterling_cash", label: gettext("Sterling cash price in Jamaica"), isImputed: false },
       { data: "var_imputed_death_middle_passage", label: pgettext("past popup label", "VYMRTIMP"), isImputed: false },
       { data: "var_imputed_mortality", label: pgettext("past popup label", "VYMRTRAT"), isImputed: false }
+      { data: "var_afrinfo", label: pgettext("past popup label", "AFRINFO"), isImputed: false }
     ]
   },
   {

@@ -15,6 +15,7 @@ from django.db.models.fields import TextField
 from django.db.models.functions import Coalesce, Concat, Length, Substr
 import Levenshtein_search
 import re
+from voyages.apps.common.models import NamedModelAbstractBase
 
 from voyages.apps.voyage.models import Place, Voyage, VoyageDataset, VoyageSources
 from voyages.apps.common.validators import date_csv_field_validator
@@ -169,20 +170,6 @@ class EnslaverNameSearchCache:
             cls.WORDSET_INDEX = Levenshtein_search.populate_wordset(-1, list(all_names))
             cls._loaded = True
 
-
-class NamedModelAbstractBase(models.Model):
-    id = models.IntegerField(primary_key=True)
-    name = models.CharField(max_length=255)
-
-    def __str__(self):
-        return self.__unicode__()
-
-    def __unicode__(self):
-        return str(self.id) + ", " + self.name
-
-    class Meta:
-        abstract = True
-
         
 class SourceConnectionAbstractBase(models.Model):
     # Sources are shared with Voyages.
@@ -295,8 +282,8 @@ class PowerFunc(Func):
 
 
 class EnslaverCachedProperties(models.Model):
-    identity = models.ForeignKey(EnslaverIdentity, related_name='cached_properties',
-                                on_delete=models.CASCADE, unique=True, primary_key=True)
+    identity = models.OneToOneField(EnslaverIdentity, related_name='cached_properties',
+                                on_delete=models.CASCADE, primary_key=True)
     enslaved_count = models.IntegerField(db_index=True)
     transactions_amount = models.DecimalField(db_index=True, null=False, default=0, decimal_places=2, max_digits=6)
     # Enumerate all the distinct roles for an enslaver, using the PKs of the
