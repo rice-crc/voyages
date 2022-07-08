@@ -33,7 +33,7 @@ var allColumns = [
   { data: "var_tonnage", category: 1, header: gettext("Tonnage"), visible: false, isImputed: false },
   { data: "var_tonnage_mod", category: 1, header: gettext("Standardized tonnage"), visible: false, isImputed: true },
   { data: "var_guns_mounted", category: 1, header: gettext("Guns mounted"), visible: false, isImputed: false },
-  { data: "var_cargo", category: 1, header: pgettext("datatable column header", "CARGO"), visible: false, isImputed: false },
+  { data: "var_cargo", category: 1, header: pgettext("datatable column header", "CARGO"), visible: false, isImputed: false, orderable: false },
   { data: "var_comments", category: 0, header: pgettext("datatable column header", "COMMENTS"), visible: false, isImputed: false },
 
   // itinerary
@@ -71,7 +71,7 @@ var allColumns = [
   { data: "var_imputed_sterling_cash", category: 3, header: gettext("Sterling cash price in Jamaica"), visible: false, isImputed: false },
   { data: "var_imputed_death_middle_passage", category: 3, header: pgettext("datatable column header", "VYMRTIMP"), visible: false, isImputed: false },
   { data: "var_imputed_mortality", category: 3, header: pgettext("datatable column header", "VYMRTRAT"), visible: false, isImputed: false },
-  { data: "var_afrinfo", category: 3, header: pgettext("datatable column header", "AFRINFO"), visible: false, isImputed: false },
+  { data: "var_afrinfo", category: 3, header: pgettext("datatable column header", "AFRINFO"), visible: false, isImputed: false, orderable: false },
 
   // dates
   { data: "var_length_middle_passage_days", category: 4, header: pgettext("datatable column header", "VOYAGE"), visible: false, isImputed: false },
@@ -131,6 +131,10 @@ var categories = $.map(categoryNames, function(name) {
 allColumns.forEach(function(c, index) {
 
   if (c.data == 'var_comments') {
+    return false;
+  }
+
+  if (SV_MODE != "intra" && (c.data == 'var_cargo' || c.data == 'var_afrinfo')) {
     return false;
   }
 
