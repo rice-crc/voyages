@@ -162,8 +162,7 @@ function processResponse(json, mainDatatable, fuzzySearch) {
         if (enslaversList[value.enslaver_name] === undefined) {
           enslaversList[value.enslaver_name] = [];
         }
-
-        enslaversList[value.enslaver_name].push(gettext(searchBar.enslaverRoles[value.enslaver_role]));
+        enslaversList[value.enslaver_name].push(gettext(value.enslaver_role));
       });
       row.enslavers_list = enslaversList;
     }
