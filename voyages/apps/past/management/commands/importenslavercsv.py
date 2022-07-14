@@ -81,7 +81,7 @@ class Command(BaseCommand):
 
 
         def remap_load(filename, original_col_name='original', modified_col_name='modified', fuzzy=False):
-            trie = Trie()
+            trie = Trie(multivalued=True)
             with open(filename, 'rb') as f:
                 print("Parsing remap CSV file")
                 reader = BulkImportationHelper.read_to_dict(f)

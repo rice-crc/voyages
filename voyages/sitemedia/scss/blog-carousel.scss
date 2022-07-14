@@ -1,15 +1,18 @@
 .carousel
 {
     width:1200px;
-    margin:auto;
+    //margin:auto;
+    margin-left: 50px;
+    margin-right: 50px;
 }
 
 .carousel-inner  img
 {
     height:300px !important;
     width:auto !important; 
-    margin: auto;
-    
+    margin: auto;    
+    max-width: 95%;
+    object-fit: cover;
     
 }
 
@@ -25,7 +28,7 @@
 
 .carousel-control-prev-icon, .carousel-control-next-icon
 {
-    background-color: black;
+    //background-color: black;
 }
 
 .pagebreak
@@ -42,4 +45,19 @@
 a.popover-more
 {
     float:right;
+}
+
+.carousel-control-next
+{
+    margin-right: -150px;
+}
+
+.carousel-control-prev
+{
+    margin-left: -150px;
+}
+
+.carousel-control-next, .carousel-control-prev
+{
+    opacity: 1;
 }

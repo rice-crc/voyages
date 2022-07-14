@@ -1117,7 +1117,7 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 
       colReorder: true,
 
-      order: [[0, "asc"]],
+      order: [[4, "desc"]],
       destroy: true,
 
       // page length Default
