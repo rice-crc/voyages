@@ -686,7 +686,7 @@ function loadTreeselectOptions(vm, vTreeselect, filter, callback) {
   // load only once remotely and then local copy
   if (!vm.filterData.treeselectOptions[varName]) {
     if (loadType == "place") {
-      var apiUrl = '/past/api/enslaved-filtered-places';
+      var apiUrl = '/past/api/enslaver-filtered-places';
       var modelVarName = {
         embarkation_ports: "imp_principal_place_of_slave_purchase_id",
         disembarkation_ports: "imp_principal_port_slave_dis_id",

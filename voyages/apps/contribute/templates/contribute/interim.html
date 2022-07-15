@@ -2146,13 +2146,18 @@
                     });
                 });
                 let cell = $("#cell_african_info");
-                let htmlval = cell.data('value').map(aid => getBadgeFormattedValue(africanInfo.index[aid])).join(' ')
-                cell.html(htmlval);
+                if (cell.length) {
+                    let htmlval = cell.data('value')
+                        .map(aid => getBadgeFormattedValue(africanInfo.index[aid])).join(' ')
+                    cell.html(htmlval);
+                }
                 // Now handle the CARGO cell.
                 cell = $("#cell_cargo");
                 const cargoRowMap = createCargoRowMap(cargoType, cargoUnit);
-                htmlval = cargoToBadges(cell.data('value').map(cargoRowMap));
-                cell.html(htmlval);
+                if (cell.length) {
+                    htmlval = cargoToBadges(cell.data('value').map(cargoRowMap));
+                    cell.html(htmlval);
+                }
                 // Create a datatable with the current cargo data.
                 let cargoData = [];
                 {% if form.cargo.value %}

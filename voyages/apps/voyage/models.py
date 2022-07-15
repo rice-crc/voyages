@@ -1802,6 +1802,12 @@ class LinkedVoyages(models.Model):
                                on_delete=models.CASCADE)
     mode = models.IntegerField()
 
+    def __str__(self):
+        return self.__unicode__()
+
+    def __unicode__(self):
+        return str(self.first) + " => " + str(self.second)
+
     # In this mode the first voyage is the IntraAmerican voyage
     # and the second is a transatlantic voyage.
     INTRA_AMERICAN_LINK_MODE = 1
