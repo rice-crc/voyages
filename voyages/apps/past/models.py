@@ -51,11 +51,15 @@ def _get_composite_names(name):
         # FirstName LastName.
         yield parts[1] + " " + parts[0]
     parts = re.split("\\s*,\\s*|\\s+", name)
+    # Heuristic: drop small segments that are common to names, such as "de",
+    # "del", "van" as they add nothing to the search.
+    parts = [part for part in parts if len(part) > 3 or (len(part) > 2 and not part in COMMON_NAME_EXCLUSION_LIST)]
     for part in parts:
-        # Heuristic: drop small segments that are common to names, such as "de",
-        # "del", "van" as they add nothing to the search.
-        if len(part) > 3 or (len(part) > 2 and not part in COMMON_NAME_EXCLUSION_LIST):
-            yield part
+        yield part
+    if len(parts) > 2:
+        # Concatenate any two consecutive.
+        for i in range(0, len(parts) - 1):
+            yield parts[i] + parts[i + 1]
 
 
 class EnslavedNameSearchCache:
@@ -1312,7 +1316,7 @@ class EnslaverSearch:
         
         MultiValueHelper.set_group_concat_limit()
 
-        order_by_ranking = 'asc'
+        order_by_ranking = None
         orm_orderby = None
         if isinstance(self.order_by, list):
             order_by_ranking = None
@@ -1321,6 +1325,8 @@ class EnslaverSearch:
                 col_name = x['columnName']
                 if col_name == 'ranking':
                     order_by_ranking = x['direction']
+                    orm_orderby = []
+                    break
                 is_desc = x['direction'].lower() == 'desc'
                 order_field = F(col_name)
                 if is_desc:
@@ -1329,10 +1335,11 @@ class EnslaverSearch:
                     order_field = order_field.asc(nulls_last=True)
                 orm_orderby.append(order_field)
 
-        if orm_orderby:
-            q = q.order_by(*orm_orderby)
-        else:
-            q = q.order_by('pk')
+        if not order_by_ranking:
+            if orm_orderby:
+                q = q.order_by(*orm_orderby)
+            else:
+                q = q.order_by('pk')
 
         q = q.distinct()
         q = q.values(*fields)
