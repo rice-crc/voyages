@@ -40,6 +40,11 @@ function getFormattedCargo(cargoArray) {
 
 // get formated african info by parsing through the backend response
 function getFormattedAfricanInfo(africanInfoArray) {
+  try {
+    africanInfoArray = africanInfoArray.map(s => JSON.parse(s));
+  } catch {
+    africanInfoArray = [];
+  }
   var value = ""; // empty value string
   if (africanInfoArray) {
     africanInfoArray.forEach(function(item) {

@@ -163,11 +163,6 @@ allColumns.forEach(function(c, index) {
       } else if (c.data == 'var_cargo') {
         formattedString = getFormattedCargo(data);
       } else if (c.data == 'var_afrinfo') {
-        try {
-          data = data.map(s => JSON.parse(s));
-        } catch {
-          data = [];
-        }
         formattedString = getFormattedAfricanInfo(data);
       } else {
         formattedString = "<span>" + data + "</span>";
