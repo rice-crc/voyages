@@ -14,7 +14,9 @@ class AfricanInfo(NamedModelAbstractBase):
     Used to capture information about the ethnicity or background of the
     captives on a ship if found in merchants records or newspaper ads
     """
-    pass
+    possibly_offensive = models.BooleanField(
+        default=False,
+        help_text="Indicates that the wording used in this label might be offensive to readers")
 
 
 class CargoType(NamedModelAbstractBase):

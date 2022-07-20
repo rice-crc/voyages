@@ -1,5 +1,6 @@
 from __future__ import (absolute_import, division, print_function,
                         unicode_literals)
+import json
 
 import re
 from builtins import str
@@ -901,7 +902,7 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
         ]
 
     def prepare_var_afrinfo(self, obj):
-        return [a.name for a in obj.african_info.all()]
+        return [json.dumps({ "name": a.name, "possibly_offensive": a.possibly_offensive }) for a in obj.african_info.all()]
 
     def prepare_var_afrinfo_ids(self, obj):
         return [a.id for a in obj.african_info.all()]

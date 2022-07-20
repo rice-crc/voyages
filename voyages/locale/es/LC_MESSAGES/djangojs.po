@@ -43383,3 +43383,38 @@ msgstr ""
 #~ "\t\t\t\t\t\t\ty los lugares de embarque y desembarque de cada uno de los "
 #~ "individuos listados.\n"
 #~ "\t\t\t\t\t\t\t"
+
+#: voyages/sitemedia/scripts/vue/includes/format-badges.js:2
+msgctxt "possibly-offensive-label"
+msgid "New negroes"
+msgstr ""
+
+#: voyages/sitemedia/scripts/vue/includes/format-badges.js:2
+msgctxt "possibly-offensive-label"
+msgid "Negroes"
+msgstr ""
+
+#: voyages/sitemedia/scripts/vue/includes/format-badges.js:2
+msgctxt "possibly-offensive-label"
+msgid "Bozales"
+msgstr ""
+
+#: voyages/sitemedia/scripts/vue/includes/format-badges.js:2
+msgctxt "possibly-offensive-label"
+msgid "Seasoned"
+msgstr ""
+
+#: voyages/sitemedia/scripts/vue/includes/format-badges.js:2
+msgctxt "possibly-offensive-label"
+msgid "Creoles"
+msgstr ""
+
+#: voyages/sitemedia/scripts/vue/includes/format-badges.js:2
+msgctxt "possibly-offensive-label"
+msgid "Indians"
+msgstr ""
+
+#: voyages/sitemedia/scripts/vue/includes/format-badges.js:2
+msgctxt "possibly-offensive-label"
+msgid "Mulatto"
+msgstr ""
