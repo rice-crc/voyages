@@ -258,13 +258,13 @@ var_imputed_mortality = new PercentageVariable({
     isAdvanced: false
   });
 
-var_afrinfo = new TextVariable({
+var_afrinfo = new TreeselectVariable({
     varName: "afrinfo",
     label: pgettext("filter select label", "AFRINFO"),
     description: "",
   },{
-    op: "contains",
-    searchTerm: null,
+    op: "is one of",
+    searchTerm: [],
   },{
     isImputed: false,
     isAdvanced: false
@@ -326,7 +326,7 @@ slave = {
     }
   },
 
-  afrinfo: {
+  africanInfo: {
     var_afrinfo: var_afrinfo,
     count: {
       changed: 0,

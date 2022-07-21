@@ -160,13 +160,13 @@ var_guns_mounted = new NumberVariable({
     isadvanced: false
   });
 
-var_cargo = new TextVariable({
+var_cargo = new TreeselectVariable({
     varName: "cargo",
     label: pgettext("filter select label", "CARGO"),
     description: "",
   },{
-    op: "contains",
-    searchTerm: null,
+    op: "is one of",
+    searchTerm: [],
   },{
     isImputed: false,
     isAdvanced: false
