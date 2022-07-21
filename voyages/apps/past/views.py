@@ -256,8 +256,6 @@ def search_enslaver(request):
             return page
 
         table = _generate_table(query, data.get('tableParams', {}), adapter)
-        from django.db import connection
-        print(connection.queries[len(connection.queries) - 1])
         return JsonResponse(table)
     return JsonResponse({'error': 'Unsupported'})
 

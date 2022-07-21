@@ -941,7 +941,7 @@ class EnslavedSearch:
             gender_val = 1 if self.gender == 'male' else 2
             q = q.filter(gender=gender_val)
         if self.voyage_dataset:
-            conditions = [Q(voyage_dataset=VoyageDataset.parse(x)) for x in self.voyage_dataset]
+            conditions = [Q(voyage__dataset=VoyageDataset.parse(x)) for x in self.voyage_dataset]
             q = q.filter(reduce(operator.or_, conditions))
         if self.enslaved_dataset is not None:
             q = q.filter(dataset=self.enslaved_dataset)
