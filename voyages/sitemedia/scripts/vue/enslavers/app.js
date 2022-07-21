@@ -26,12 +26,15 @@ var searchBar = new Vue({
           id: "female",
           label: gettext("Female")
         }],
-        voyage_dataset: [{
+        voyage_datasets: [{
           id: "trans",
-          label: gettext("Transatlantic")
+          label: gettext("Trans-Atlantic")
         },{
-          id: "african",
-          label: gettext("Intra-African")
+          id: "intra",
+          label: gettext("Intra-American")
+        },{
+          id: "neither",
+          label: gettext("Neither")
         }]
       }
     },

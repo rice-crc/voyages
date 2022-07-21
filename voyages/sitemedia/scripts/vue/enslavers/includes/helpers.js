@@ -450,11 +450,17 @@ function searchAll(filter, filterData) {
                         // select all
                         filterData.treeselectOptions[varName][0].children.forEach(
                           function(options) {
-                            searchTerm.push(options.id);
+                            if (varName != "voyage_datasets" || options.id != "neither") {
+                              searchTerm.push(options.id);
+                            }
                           }
                         );
                       } else {
-                        searchTerm = filter[key1][key2][key3].value["searchTerm"];
+                        if (filter[key1][key2][key3]["varName"] == "voyage_datasets" && filter[key1][key2][key3].value["searchTerm"] == "neither") {
+                          searchTerm = [];
+                        } else {
+                          searchTerm = filter[key1][key2][key3].value["searchTerm"];
+                        }
                       }
                     } else {
                       searchTerm = filter[key1][key2][key3].value["searchTerm"];
