@@ -296,7 +296,7 @@ class EnslaverCachedProperties(models.Model):
     first_year = models.IntegerField(db_index=True, null=True)
     last_year = models.IntegerField(db_index=True, null=True)
     # The voyage datasets that contain voyages associated with the enslavers. We
-    # encode the aggregation as a bitwise OR of 
+    # encode the aggregation as a bitwise OR of the powers of two of dataset values.
     voyage_datasets = models.IntegerField(db_index=True, null=True)
 
     @staticmethod
@@ -380,7 +380,7 @@ class EnslaverCachedProperties(models.Model):
             props.transactions_amount = item.get('tot_amount', 0)
             props.first_year = item.get('min_year', None)
             props.last_year = item.get('max_year', None)
-            props.voyage_datasets = item.get('datasets', None)
+            props.voyage_datasets = item.get('datasets', 0)
             yield props
 
     @staticmethod
@@ -1304,12 +1304,15 @@ class EnslaverSearch:
             q = add_voyage_field(q, 'voyage_dates__imp_arrival_at_port_of_dis', 'range', _year_range_conv(self.year_range))
         if self.enslaved_count:
             q = q.filter(cached_properties__enslaved_count__range=self.enslaved_count)
-        if self.voyage_datasets:
+        if self.voyage_datasets is not None:
             bitvec = 0
             for x in self.voyage_datasets:
                 bitvec |= 2 ** VoyageDataset.parse(x)
-            q = q.annotate(voyage_datasets=BitsAndFunc('cached_properties__voyage_datasets', Value(bitvec)))
-            q = q.filter(voyage_datasets__gt=0)
+            if bitvec > 0:
+                q = q.annotate(voyage_datasets=BitsAndFunc('cached_properties__voyage_datasets', Value(bitvec)))
+                q = q.filter(voyage_datasets__gt=0)
+            else:
+                q = q.filter(cached_properties__voyage_datasets=0)
 
         for helper in self.all_helpers:
             q = helper.adapt_query(q)
