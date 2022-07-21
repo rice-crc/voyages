@@ -1076,6 +1076,7 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 
               if (fuzzySearch && !rankingVisible) {
                   d.order[0]['column'] = rankingIndex;
+                  d.order[0]['dir'] = "asc";
               }
             }
 
@@ -1117,7 +1118,7 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 
       colReorder: true,
 
-      order: [[3, "desc"]],
+      order: [[4, "desc"]],
       destroy: true,
 
       // page length Default

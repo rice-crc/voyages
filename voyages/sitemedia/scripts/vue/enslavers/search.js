@@ -8,6 +8,7 @@ var categoryNames = [
 var allColumns = [
   // name
   { data: "alias_list", category: 0, header: gettext("Full Name"), isImputed: false, orderable: false },
+  { data: "ranking", category: 0, header: gettext("Search Ranking"), isImputed: false, isUserSearchBased: true, visible: false },
 
   // voyages
   { data: "voyages_list", className: "dt-control text-center voyages", category: 1, header: gettext("Voyages"), isImputed: false, orderable: false, defaultContent: '' },
