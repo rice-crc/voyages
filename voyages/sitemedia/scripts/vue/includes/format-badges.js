@@ -1,8 +1,13 @@
-const offensiveTextDisclaimer = gettext("Note: this term was used in historical records and appears here in this form to accurately represent the historical sources.");
+const offensiveTextDisclaimer = (value) => {
+  const customWarning = pgettext("possibly-offensive-label", value);
+  return customWarning === value
+    ? gettext("Note: this term was used in historical records and appears here in this form to accurately represent the historical sources.")
+    : customWarning;
+}
 
 function getBadgeFormattedValue(value, maybeOffensive) {
   maybeOffensive = !!maybeOffensive;
-  return `<span class="h6 pr-2"><span title="${maybeOffensive ? offensiveTextDisclaimer : ''}" class="badge badge-pill badge-secondary tooltip-pointer ${maybeOffensive ? 'badge-maybe-offensive' : ''}" data-toggle="tooltip" data-placement="top">${value}</span></span>`;
+  return `<span class="h6 pr-2"><span title="${maybeOffensive ? offensiveTextDisclaimer(value) : ''}" class="badge badge-pill badge-secondary tooltip-pointer ${maybeOffensive ? 'badge-maybe-offensive' : ''}" data-toggle="tooltip" data-placement="top">${value}</span></span>`;
 }
 
 // get formated cargo by parsing through the backend response
@@ -35,10 +40,19 @@ function getFormattedCargo(cargoArray) {
 
 // get formated african info by parsing through the backend response
 function getFormattedAfricanInfo(africanInfoArray) {
+  try {
+    africanInfoArray = africanInfoArray.map(s => JSON.parse(s));
+  } catch {
+    africanInfoArray = [];
+  }
   var value = ""; // empty value string
   if (africanInfoArray) {
     africanInfoArray.forEach(function(item) {
-      value += getBadgeFormattedValue(item, true);
+      if (item['name']) {
+        value += getBadgeFormattedValue(item.name, item['possibly_offensive']);
+      } else {
+        value += getBadgeFormattedValue(item, false);
+      }
     });
   }
   return value;

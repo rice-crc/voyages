@@ -1,5 +1,6 @@
 from __future__ import (absolute_import, division, print_function,
                         unicode_literals)
+import json
 
 import re
 from builtins import str
@@ -727,6 +728,8 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
                                        
     var_afrinfo = indexes.MultiValueField(indexed=True, stored=True, null=True)
     var_cargo = indexes.MultiValueField(indexed=True, stored=True, null=True)
+    var_afrinfo_ids = indexes.MultiValueField(indexed=True, stored=True, null=True)
+    var_cargo_ids = indexes.MultiValueField(indexed=True, stored=True, null=True)
 
     def get_model(self):
         return Voyage
@@ -899,7 +902,10 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
         ]
 
     def prepare_var_afrinfo(self, obj):
-        return [a.name for a in obj.african_info.all()]
+        return [json.dumps({ "name": a.name, "possibly_offensive": a.possibly_offensive }) for a in obj.african_info.all()]
+
+    def prepare_var_afrinfo_ids(self, obj):
+        return [a.id for a in obj.african_info.all()]
 
     def prepare_var_cargo(self, obj):
         def parse_cargo_conn(conn):
@@ -911,6 +917,9 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
             return s
 
         return [parse_cargo_conn(conn) for conn in obj.cargo.all()]
+
+    def prepare_var_cargo_ids(self, obj):
+        return [c.cargo_id for c in obj.cargo.all()]
 
     def prepare_var_sources_plaintext(self, obj):
         return ", ".join(self.prepare_var_sources(obj))

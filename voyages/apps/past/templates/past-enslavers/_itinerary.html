@@ -39,10 +39,10 @@
         :filter="scope.filters.var_enslaved_count">
       </v-number>
 
-      <!-- <v-treeselect -->
-        <!-- :filter="scope.filters.var_voyage_dataset" -->
-        <!-- @change="changed"> -->
-      <!-- </v-treeselect> -->
+      <v-treeselect
+        :filter="scope.filters.var_voyage_datasets"
+        @change="changed">
+      </v-treeselect>
 
     </div>
   </v-panel-singular>

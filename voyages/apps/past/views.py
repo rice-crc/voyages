@@ -21,7 +21,7 @@ from voyages.apps.common.models import SavedQuery
 from voyages.apps.common.views import get_filtered_results
 from .models import (AltLanguageGroupName, Enslaved,
                      EnslavedContribution, EnslavedContributionLanguageEntry,
-                     EnslavedContributionNameEntry, EnslavedSearch, EnslaverRole, EnslaverSearch,
+                     EnslavedContributionNameEntry, EnslavedSearch, EnslaverRole, EnslaverSearch, EnslaverVoyageConnection,
                      LanguageGroup, MultiValueHelper, ModernCountry, EnslavedNameSearchCache,
                      _modern_name_fields, _name_fields)
 
@@ -64,6 +64,23 @@ def enslaved_database(request, dataset=None):
 
 @csrf_exempt
 @require_POST
+def get_enslaver_filtered_places(request):
+    data = json.loads(request.body)
+    var_name = data.get('var_name')
+    if var_name is None:
+        return JsonResponse({ "error": "var_name must be set" })
+    cache_key = f"_filtered_places_ENSLAVER_{var_name}"
+    var_name = f"voyage__voyage_itinerary__{var_name}"
+    qs = EnslaverVoyageConnection.objects \
+        .select_related(var_name) \
+        .values_list(var_name, flat=True) \
+        .distinct()
+    filtered = get_filtered_results(cache_key, qs)
+    filtered['filtered_var_name'] = var_name
+    return JsonResponse(filtered)
+
+@csrf_exempt
+@require_POST
 def get_enslaved_filtered_places(request):
     """
     Obtains a list of places and corresponding regions/broad regions that are
@@ -75,16 +92,16 @@ def get_enslaved_filtered_places(request):
     dataset = data.get('dataset')
     if var_name is None or dataset is None:
         return JsonResponse({ "error": "Both dataset and var_name must be set" })
-    cache_key = '_filtered_places_ENSLAVED_' + str(dataset) + "_" + var_name
+    cache_key = f"_filtered_places_ENSLAVED_{str(dataset)}_{var_name}"
     # Most location variables come from VoyageItinerary, but
     # post_disembarkation_location is only present in the Enslaved model
     # directly.
     if var_name != 'post_disembark_location_id':
-        var_name = 'voyage__voyage_itinerary__' + var_name
-    qs = Enslaved.objects.filter(dataset=dataset). \
-        select_related(var_name). \
-        values_list(var_name, flat=True). \
-        distinct()
+        var_name = f"voyage__voyage_itinerary__{var_name}"
+    qs = Enslaved.objects.filter(dataset=dataset) \
+        .select_related(var_name) \
+        .values_list(var_name, flat=True) \
+        .distinct()
     filtered = get_filtered_results(cache_key, qs)
     filtered['filtered_var_name'] = var_name
     filtered['dataset'] = dataset

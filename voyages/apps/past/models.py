@@ -51,11 +51,15 @@ def _get_composite_names(name):
         # FirstName LastName.
         yield parts[1] + " " + parts[0]
     parts = re.split("\\s*,\\s*|\\s+", name)
+    # Heuristic: drop small segments that are common to names, such as "de",
+    # "del", "van" as they add nothing to the search.
+    parts = [part for part in parts if len(part) > 3 or (len(part) > 2 and not part in COMMON_NAME_EXCLUSION_LIST)]
     for part in parts:
-        # Heuristic: drop small segments that are common to names, such as "de",
-        # "del", "van" as they add nothing to the search.
-        if len(part) > 3 or (len(part) > 2 and not part in COMMON_NAME_EXCLUSION_LIST):
-            yield part
+        yield part
+    if len(parts) > 2:
+        # Concatenate any two consecutive.
+        for i in range(0, len(parts) - 1):
+            yield parts[i] + parts[i + 1]
 
 
 class EnslavedNameSearchCache:
@@ -292,7 +296,7 @@ class EnslaverCachedProperties(models.Model):
     first_year = models.IntegerField(db_index=True, null=True)
     last_year = models.IntegerField(db_index=True, null=True)
     # The voyage datasets that contain voyages associated with the enslavers. We
-    # encode the aggregation as a bitwise OR of 
+    # encode the aggregation as a bitwise OR of the powers of two of dataset values.
     voyage_datasets = models.IntegerField(db_index=True, null=True)
 
     @staticmethod
@@ -376,7 +380,7 @@ class EnslaverCachedProperties(models.Model):
             props.transactions_amount = item.get('tot_amount', 0)
             props.first_year = item.get('min_year', None)
             props.last_year = item.get('max_year', None)
-            props.voyage_datasets = item.get('datasets', None)
+            props.voyage_datasets = item.get('datasets', 0)
             yield props
 
     @staticmethod
@@ -937,7 +941,7 @@ class EnslavedSearch:
             gender_val = 1 if self.gender == 'male' else 2
             q = q.filter(gender=gender_val)
         if self.voyage_dataset:
-            conditions = [Q(voyage_dataset=VoyageDataset.parse(x)) for x in self.voyage_dataset]
+            conditions = [Q(voyage__dataset=VoyageDataset.parse(x)) for x in self.voyage_dataset]
             q = q.filter(reduce(operator.or_, conditions))
         if self.enslaved_dataset is not None:
             q = q.filter(dataset=self.enslaved_dataset)
@@ -1300,19 +1304,22 @@ class EnslaverSearch:
             q = add_voyage_field(q, 'voyage_dates__imp_arrival_at_port_of_dis', 'range', _year_range_conv(self.year_range))
         if self.enslaved_count:
             q = q.filter(cached_properties__enslaved_count__range=self.enslaved_count)
-        if self.voyage_datasets:
+        if self.voyage_datasets is not None:
             bitvec = 0
             for x in self.voyage_datasets:
                 bitvec |= 2 ** VoyageDataset.parse(x)
-            q = q.annotate(voyage_datasets=BitsAndFunc('cached_properties__voyage_datasets', Value(bitvec)))
-            q = q.filter(voyage_datasets__gt=0)
+            if bitvec > 0:
+                q = q.annotate(voyage_datasets=BitsAndFunc('cached_properties__voyage_datasets', Value(bitvec)))
+                q = q.filter(voyage_datasets__gt=0)
+            else:
+                q = q.filter(cached_properties__voyage_datasets=0)
 
         for helper in self.all_helpers:
             q = helper.adapt_query(q)
         
         MultiValueHelper.set_group_concat_limit()
 
-        order_by_ranking = 'asc'
+        order_by_ranking = None
         orm_orderby = None
         if isinstance(self.order_by, list):
             order_by_ranking = None
@@ -1321,6 +1328,8 @@ class EnslaverSearch:
                 col_name = x['columnName']
                 if col_name == 'ranking':
                     order_by_ranking = x['direction']
+                    orm_orderby = []
+                    break
                 is_desc = x['direction'].lower() == 'desc'
                 order_field = F(col_name)
                 if is_desc:
@@ -1329,10 +1338,11 @@ class EnslaverSearch:
                     order_field = order_field.asc(nulls_last=True)
                 orm_orderby.append(order_field)
 
-        if orm_orderby:
-            q = q.order_by(*orm_orderby)
-        else:
-            q = q.order_by('pk')
+        if not order_by_ranking:
+            if orm_orderby:
+                q = q.order_by(*orm_orderby)
+            else:
+                q = q.order_by('pk')
 
         q = q.distinct()
         q = q.values(*fields)

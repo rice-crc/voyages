@@ -450,11 +450,17 @@ function searchAll(filter, filterData) {
                         // select all
                         filterData.treeselectOptions[varName][0].children.forEach(
                           function(options) {
-                            searchTerm.push(options.id);
+                            if (varName != "voyage_datasets" || options.id != "neither") {
+                              searchTerm.push(options.id);
+                            }
                           }
                         );
                       } else {
-                        searchTerm = filter[key1][key2][key3].value["searchTerm"];
+                        if (filter[key1][key2][key3]["varName"] == "voyage_datasets" && filter[key1][key2][key3].value["searchTerm"] == "neither") {
+                          searchTerm = [];
+                        } else {
+                          searchTerm = filter[key1][key2][key3].value["searchTerm"];
+                        }
                       }
                     } else {
                       searchTerm = filter[key1][key2][key3].value["searchTerm"];
@@ -686,7 +692,7 @@ function loadTreeselectOptions(vm, vTreeselect, filter, callback) {
   // load only once remotely and then local copy
   if (!vm.filterData.treeselectOptions[varName]) {
     if (loadType == "place") {
-      var apiUrl = '/past/api/enslaved-filtered-places';
+      var apiUrl = '/past/api/enslaver-filtered-places';
       var modelVarName = {
         embarkation_ports: "imp_principal_place_of_slave_purchase_id",
         disembarkation_ports: "imp_principal_port_slave_dis_id",
@@ -1076,6 +1082,7 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 
               if (fuzzySearch && !rankingVisible) {
                   d.order[0]['column'] = rankingIndex;
+                  d.order[0]['dir'] = "asc";
               }
             }
 

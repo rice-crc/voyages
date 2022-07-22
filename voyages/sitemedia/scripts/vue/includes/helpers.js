@@ -554,6 +554,14 @@ function searchAll(filter, filterData) {
                   item["varName"] = filter[key1][key2][key3].varName + "_idnum";
                 }
 
+                if (filter[key1][key2][key3].varName == "afrinfo") {
+                  item["varName"] = "afrinfo_ids";
+                }
+
+                if (filter[key1][key2][key3].varName == "cargo") {
+                  item["varName"] = "cargo_ids";
+                }
+
                 items.push(item);
               }
             }
@@ -767,7 +775,13 @@ function loadTreeselectOptions(vm, vTreeselect, filter, callback) {
         callback(); // notify vue-treeselect about data population completion
         return;
       } else {
-        varName = "var_" + varName;
+        if (varName == "afrinfo") {
+          varName = "var_african_info";
+        } else if (varName == "cargo") {
+          varName = "var_cargo_type";
+        } else {
+          varName = "var_" + varName;
+        }
         axios
           .post("/voyage/var-options", {
             var_name: varName
@@ -783,7 +797,6 @@ function loadTreeselectOptions(vm, vTreeselect, filter, callback) {
             return;
           })
           .catch(function(error) {
-            options.errorMessage = error;
             $("#sv-loader").addClass("display-none");
             $("#sv-loader-error").removeClass("display-none");
             return error;

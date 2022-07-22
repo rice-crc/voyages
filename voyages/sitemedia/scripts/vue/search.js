@@ -37,7 +37,7 @@ var allColumns = [
   { data: "var_comments", category: 0, header: pgettext("datatable column header", "COMMENTS"), visible: false, isImputed: false },
 
   // itinerary
-  { data: "var_imp_port_voyage_begin_lang", category: 2, header: pgettext("datatable column header", "PTDEPIMP"), isImputed: true },
+  { data: "var_imp_port_voyage_begin_lang", category: 2, header: pgettext("datatable column header", "PTDEPIMP"), isImputed: true, visible: SV_MODE == "intra" ? false : true, },
   { data: "var_imp_principal_place_of_slave_purchase_lang", category: 2, header: pgettext("datatable column header", "MJBYPTIMP"), isImputed: true },
   { data: "var_first_place_slave_purchase_lang", category: 2, header: pgettext("datatable column header", "PLAC1TRA"), visible: false, isImputed: false },
   { data: "var_second_place_slave_purchase_lang", category: 2, header: pgettext("datatable column header", "PLAC2TRA"), visible: false, isImputed: false },

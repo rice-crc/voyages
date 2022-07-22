@@ -14,7 +14,9 @@ class AfricanInfo(NamedModelAbstractBase):
     Used to capture information about the ethnicity or background of the
     captives on a ship if found in merchants records or newspaper ads
     """
-    pass
+    possibly_offensive = models.BooleanField(
+        default=False,
+        help_text="Indicates that the wording used in this label might be offensive to readers")
 
 
 class CargoType(NamedModelAbstractBase):
@@ -1801,6 +1803,12 @@ class LinkedVoyages(models.Model):
     second = models.ForeignKey('Voyage', related_name="incoming_from_other_voyages",
                                on_delete=models.CASCADE)
     mode = models.IntegerField()
+
+    def __str__(self):
+        return self.__unicode__()
+
+    def __unicode__(self):
+        return str(self.first) + " => " + str(self.second)
 
     # In this mode the first voyage is the IntraAmerican voyage
     # and the second is a transatlantic voyage.
