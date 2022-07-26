@@ -1,6 +1,6 @@
 var_imp_port_voyage_begin_id = new PlaceVariable({
     varName: "imp_port_voyage_begin_id",
-    label: gettext("Place where voyage began"),
+    label: pgettext("filter select label", "PTDEPIMP"),
     description: "",
   },{
     op: "is one of",
@@ -12,7 +12,7 @@ var_imp_port_voyage_begin_id = new PlaceVariable({
 
 var_imp_principal_place_of_slave_purchase_id = new PlaceVariable({
     varName: "imp_principal_place_of_slave_purchase_id",
-    label: gettext("Principal place of slave purchase"),
+    label: pgettext("filter select label", "MJBYPTIMP"),
     description: "",
   },{
     op: "is one of",
@@ -24,7 +24,7 @@ var_imp_principal_place_of_slave_purchase_id = new PlaceVariable({
 
 var_first_place_slave_purchase_id = new PlaceVariable({
     varName: "first_place_slave_purchase_id",
-    label: gettext("1st place of slave purchase"),
+    label: pgettext("filter select label", "PLAC1TRA"),
     description: "",
   },{
     op: "is one of",
@@ -36,7 +36,7 @@ var_first_place_slave_purchase_id = new PlaceVariable({
 
 var_second_place_slave_purchase_id = new PlaceVariable({
     varName: "second_place_slave_purchase_id",
-    label: gettext("2nd place of slave purchase"),
+    label: pgettext("filter select label", "PLAC2TRA"),
     description: "",
   },{
     op: "is one of",
@@ -48,7 +48,7 @@ var_second_place_slave_purchase_id = new PlaceVariable({
 
 var_third_place_slave_purchase_id = new PlaceVariable({
     varName: "third_place_slave_purchase_id",
-    label: gettext("3rd place of slave purchase"),
+    label: pgettext("filter select label", "PLAC3TRA"),
     description: "",
   },{
     op: "is one of",
@@ -72,7 +72,7 @@ var_port_of_call_before_atl_crossing_id = new PlaceVariable({
 
 var_imp_principal_port_slave_dis_id = new PlaceVariable({
     varName: "imp_principal_port_slave_dis_id",
-    label: gettext("Principal place of slave landing"),
+    label: pgettext("filter select label", "MJSLPTIMP"),
     description: "",
   },{
     op: "is one of",
@@ -84,7 +84,7 @@ var_imp_principal_port_slave_dis_id = new PlaceVariable({
 
 var_first_landing_place_id = new PlaceVariable({
     varName: "first_landing_place_id",
-    label: gettext("1st place of slave landing"),
+    label: pgettext("filter select label", "SLA1PORT"),
     description: "",
   },{
     op: "is one of",
@@ -96,7 +96,7 @@ var_first_landing_place_id = new PlaceVariable({
 
 var_second_landing_place_id = new PlaceVariable({
     varName: "second_landing_place_id",
-    label: gettext("2nd place of slave landing"),
+    label: pgettext("filter select label", "ADPSALE1"),
     description: "",
   },{
     op: "is one of",
@@ -108,7 +108,7 @@ var_second_landing_place_id = new PlaceVariable({
 
 var_third_landing_place_id = new PlaceVariable({
     varName: "third_landing_place_id",
-    label: gettext("3rd place of slave landing"),
+    label: pgettext("filter select label", "ADPSALE2"),
     description: "",
   },{
     op: "is one of",
@@ -120,7 +120,7 @@ var_third_landing_place_id = new PlaceVariable({
 
 var_place_voyage_ended_id = new PlaceVariable({
     varName: "place_voyage_ended_id",
-    label: gettext("Place where voyage ended"),
+    label: pgettext("filter select label", "PORTRET"),
     description: "",
   },{
     op: "is one of",

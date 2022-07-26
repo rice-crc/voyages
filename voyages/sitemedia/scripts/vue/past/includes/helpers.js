@@ -11,16 +11,17 @@ var voyageColumns = [
       { data: "var_voyage_id", label: gettext("Voyage ID"), isImputed: false },
       { data: "var_ship_name", label: gettext("Vessel name"), isImputed: false },
       { data: "var_owner", label: gettext("Vessel owner"), isImputed: false },
-      { data: "var_nationality", label: gettext("Flag"), isImputed: false },
-      { data: "var_imputed_nationality", label: gettext("Flag (imputed)"), isImputed: true },
+      { data: "var_nationality", label: pgettext("past popup label", "NATIONAL"), isImputed: false },
+      { data: "var_imputed_nationality", label: pgettext("past popup label", "NATINIMP"), isImputed: true },
       { data: "var_vessel_construction_place_lang", label: gettext("Place constructed"), isImputed: false },
       { data: "var_year_of_construction", label: gettext("Year constructed"), isImputed: false },
       { data: "var_registered_place_lang", label: gettext("Place registered"), isImputed: false },
       { data: "var_registered_year", label: gettext("Year registered"), isImputed: false },
-      { data: "var_rig_of_vessel", label: gettext("Rig of vessel"), isImputed: false },
+      { data: "var_rig_of_vessel", label: pgettext("past popup label", "RIG"), isImputed: false },
       { data: "var_tonnage", label: gettext("Tonnage"), isImputed: false },
       { data: "var_tonnage_mod", label: gettext("Standardized tonnage"), isImputed: true },
-      { data: "var_guns_mounted", label: gettext("Guns mounted"), isImputed: false }
+      { data: "var_guns_mounted", label: gettext("Guns mounted"), isImputed: false },
+      { data: "var_cargo", label: pgettext("past popup label", "CARGO"), isImputed: false },
     ]
   },
   {
@@ -28,43 +29,42 @@ var voyageColumns = [
     groupName : gettext('Outcome'),
     fields : [
       { data: "var_outcome_voyage_lang", label: gettext("Particular outcome of voyage"), isImputed: false },
-      { data: "var_outcome_slaves_lang", label: gettext("Outcome of voyage for slaves"), isImputed: false },
+      { data: "var_outcome_slaves_lang", label: pgettext("past popup label", "FATE2"), isImputed: false },
       { data: "var_outcome_ship_captured_lang", label: gettext("Outcome of voyage if ship captured"), isImputed: false },
       { data: "var_outcome_owner_lang", label: gettext("Outcome of voyage for owner"), isImputed: false },
-      { data: "var_resistance_lang", label: gettext("African resistance"), isImputed: false }
+      { data: "var_resistance_lang", label: pgettext("past popup label", "RESISTANCE"), isImputed: false }
     ]
   },
   {
     group : 'itinerary',
     groupName : gettext('Itinerary'),
     fields : [
-      { data: "var_imp_port_voyage_begin_lang", label: gettext("Place where voyage began"), isImputed: true },
-      { data: "var_imp_principal_place_of_slave_purchase_lang", label: gettext("Principal place of slave purchase"), isImputed: true },
-      { data: "var_first_place_slave_purchase_lang", label: gettext("1st place of slave purchase"), isImputed: false },
-      { data: "var_second_place_slave_purchase_lang", label: gettext("2nd place of slave purchase"), isImputed: false },
-      { data: "var_third_place_slave_purchase_lang", label: gettext("3rd place of slave purchase"), isImputed: false },
+      { data: "var_imp_port_voyage_begin_lang", label: pgettext("past popup label", "PTDEPIMP"), isImputed: true },
+      { data: "var_imp_principal_place_of_slave_purchase_lang", label: pgettext("past popup label", "MJBYPTIMP"), isImputed: true },
+      { data: "var_first_place_slave_purchase_lang", label: pgettext("past popup label", "PLAC1TRA"), isImputed: false },
+      { data: "var_second_place_slave_purchase_lang", label: pgettext("past popup label", "PLAC2TRA"), isImputed: false },
+      { data: "var_third_place_slave_purchase_lang", label: pgettext("past popup label", "PLAC3TRA"), isImputed: false },
       { data: "var_port_of_call_before_atl_crossing_lang", label: gettext("Places of call before Atlantic crossing"), isImputed: false },
-      { data: "var_imp_principal_port_slave_dis_lang", label: gettext("Principal place of slave landing"), isImputed: true },
-      { data: "var_first_landing_place_lang", label: gettext("1st place of slave landing"), isImputed: false },
-      { data: "var_second_landing_place_lang", label: gettext("2nd place of slave landing"), isImputed: false },
-      { data: "var_third_landing_place_lang", label: gettext("3rd place of slave landing"), isImputed: false },
-      { data: "var_place_voyage_ended_lang", label: gettext("Place where voyage ended"), isImputed: false },
-      { data: "var_voyage_links", label: gettext("Linked voyages"), isImputed: false }
+      { data: "var_imp_principal_port_slave_dis_lang", label: pgettext("past popup label", "MJSLPTIMP"), isImputed: true },
+      { data: "var_first_landing_place_lang", label: pgettext("past popup label", "SLA1PORT"), isImputed: false },
+      { data: "var_second_landing_place_lang", label: pgettext("past popup label", "ADPSALE1"), isImputed: false },
+      { data: "var_third_landing_place_lang", label: pgettext("past popup label", "ADPSALE2"), isImputed: false },
+      { data: "var_place_voyage_ended_lang", label: pgettext("past popup label", "PORTRET"), isImputed: false }
     ]
   },
   {
     group : 'dates',
     groupName : gettext('Dates'),
     fields : [
-      { data: "var_imp_length_home_to_disembark", label: gettext("Voyage length, homeport to disembarkation"), isImputed: false },
-      { data: "var_length_middle_passage_days", label: gettext("Middle passage (days)"), isImputed: false },
+      { data: "var_imp_length_home_to_disembark", label: pgettext("past popup label", "VOY1IMP"), isImputed: false },
+      { data: "var_length_middle_passage_days", label: pgettext("past popup label", "VOYAGE"), isImputed: false },
       { data: "var_imp_arrival_at_port_of_dis", label: gettext("Year of arrival at port of disembarkation "), isImputed: true },
-      { data: "var_voyage_began_partial", label: gettext("Date that voyage began"), isImputed: false },
-      { data: "var_slave_purchase_began_partial", label: gettext("Date trade began in Africa"), isImputed: false },
-      { data: "var_date_departed_africa_partial", label: gettext("Date vessel departed Africa"), isImputed: false },
-      { data: "var_first_dis_of_slaves_partial", label: gettext("Date vessel arrived with slaves"), isImputed: false },
+      { data: "var_voyage_began_partial", label: pgettext("past popup label", "DATEDEPA"), isImputed: false },
+      { data: "var_slave_purchase_began_partial", label: pgettext("past popup label", "D1SLATRA"), isImputed: false },
+      { data: "var_date_departed_africa_partial", label: pgettext("past popup label", "DLSLATRA"), isImputed: false },
+      { data: "var_first_dis_of_slaves_partial", label: pgettext("past popup label", "DATARR32"), isImputed: false },
       { data: "var_departure_last_place_of_landing_partial", label: gettext("Date vessel departed for homeport"), isImputed: false },
-      { data: "var_voyage_completed_partial", label: gettext("Date voyage completed"), isImputed: false }
+      { data: "var_voyage_completed_partial", label: pgettext("past popup label", "DATARR43"), isImputed: false }
     ]
   },
   {
@@ -73,7 +73,7 @@ var voyageColumns = [
     fields : [
       { data: "var_captain", label: gettext("Captain's name"), isImputed: false },
       { data: "var_crew_voyage_outset", label: gettext("Crew at voyage outset"), isImputed: false },
-      { data: "var_crew_first_landing", label: gettext("Crew at first landing of slaves"), isImputed: false },
+      { data: "var_crew_first_landing", label: pgettext("past popup label", "CREW3"), isImputed: false },
       { data: "var_crew_died_complete_voyage", label: gettext("Crew deaths during voyage"), isImputed: false }
     ]
   },
@@ -84,14 +84,14 @@ var voyageColumns = [
       { data: "var_imp_total_num_slaves_purchased", label: gettext("Total embarked"), isImputed: true },
       { data: "var_total_num_slaves_purchased", label: gettext("Total embarked"), isImputed: false },
       { data: "var_imp_total_slaves_disembarked", label: gettext("Total disembarked"), isImputed: true },
-      { data: "var_num_slaves_intended_first_port", label: gettext("Slaves intended at 1st place"), isImputed: false },
-      { data: "var_num_slaves_carried_first_port", label: gettext("Slaves carried from 1st port"), isImputed: false },
-      { data: "var_num_slaves_carried_second_port", label: gettext("Slaves carried from 2nd port"), isImputed: false },
-      { data: "var_num_slaves_carried_third_port", label: gettext("Slaves carried from 3rd port"), isImputed: false },
-      { data: "var_total_num_slaves_arr_first_port_embark", label: gettext("Slaves arrived at 1st port"), isImputed: false },
-      { data: "var_num_slaves_disembark_first_place", label: gettext("Slaves landed at 1st port"), isImputed: false },
-      { data: "var_num_slaves_disembark_second_place", label: gettext("Slaves landed at 2nd port"), isImputed: false },
-      { data: "var_num_slaves_disembark_third_place", label: gettext("Slaves landed at 3rd port"), isImputed: false },
+      { data: "var_num_slaves_intended_first_port", label: pgettext("past popup label", "SLINTEND"), isImputed: false },
+      { data: "var_num_slaves_carried_first_port", label: pgettext("past popup label", "NCAR13"), isImputed: false },
+      { data: "var_num_slaves_carried_second_port", label: pgettext("past popup label", "NCAR15"), isImputed: false },
+      { data: "var_num_slaves_carried_third_port", label: pgettext("past popup label", "NCAR17"), isImputed: false },
+      { data: "var_total_num_slaves_arr_first_port_embark", label: pgettext("past popup label", "SLAARRIV"), isImputed: false },
+      { data: "var_num_slaves_disembark_first_place", label: pgettext("past popup label", "SLAS32"), isImputed: false },
+      { data: "var_num_slaves_disembark_second_place", label: pgettext("past popup label", "SLAS36"), isImputed: false },
+      { data: "var_num_slaves_disembark_third_place", label: pgettext("past popup label", "SLAS39"), isImputed: false },
       { data: "var_imputed_percentage_men", label: gettext("Percent men"), isImputed: false },
       { data: "var_imputed_percentage_women", label: gettext("Percent women"), isImputed: false },
       { data: "var_imputed_percentage_boys", label: gettext("Percent boys"), isImputed: false },
@@ -99,8 +99,9 @@ var voyageColumns = [
       { data: "var_imputed_percentage_male", label: gettext("Percent males"), isImputed: false },
       { data: "var_imputed_percentage_child", label: gettext("Percent children"), isImputed: false },
       { data: "var_imputed_sterling_cash", label: gettext("Sterling cash price in Jamaica"), isImputed: false },
-      { data: "var_imputed_death_middle_passage", label: gettext("Slaves died during middle passage"), isImputed: false },
-      { data: "var_imputed_mortality", label: gettext("Mortality rate"), isImputed: false }
+      { data: "var_imputed_death_middle_passage", label: pgettext("past popup label", "VYMRTIMP"), isImputed: false },
+      { data: "var_imputed_mortality", label: pgettext("past popup label", "VYMRTRAT"), isImputed: false },
+      { data: "var_afrinfo", label: pgettext("past popup label", "AFRINFO"), isImputed: false },
     ]
   },
   {
@@ -161,8 +162,7 @@ function processResponse(json, mainDatatable, fuzzySearch) {
         if (enslaversList[value.enslaver_name] === undefined) {
           enslaversList[value.enslaver_name] = [];
         }
-
-        enslaversList[value.enslaver_name].push(gettext(searchBar.enslaverRoles[value.enslaver_role]));
+        enslaversList[value.enslaver_name].push(gettext(value.enslaver_role));
       });
       row.enslavers_list = enslaversList;
     }

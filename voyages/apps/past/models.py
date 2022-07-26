@@ -9,14 +9,15 @@ from django.conf import settings
 
 from django.contrib.auth.models import User
 from django.db import (connection, models, transaction)
-from django.db.models import (Case, CharField, Count, F, Func, IntegerField, Max, Min, Q, Sum, Value, When)
+from django.db.models import (Aggregate, Case, CharField, Count, F, Func, IntegerField, Max, Min, Q, Sum, Value, When)
 from django.db.models.expressions import Subquery, OuterRef
 from django.db.models.fields import TextField
 from django.db.models.functions import Coalesce, Concat, Length, Substr
 import Levenshtein_search
 import re
+from voyages.apps.common.models import NamedModelAbstractBase
 
-from voyages.apps.voyage.models import Place, Voyage, VoyageSources
+from voyages.apps.voyage.models import Place, Voyage, VoyageDataset, VoyageSources
 from voyages.apps.common.validators import date_csv_field_validator
 
 # Levenshtein-distance based search with ranked results.
@@ -50,11 +51,15 @@ def _get_composite_names(name):
         # FirstName LastName.
         yield parts[1] + " " + parts[0]
     parts = re.split("\\s*,\\s*|\\s+", name)
+    # Heuristic: drop small segments that are common to names, such as "de",
+    # "del", "van" as they add nothing to the search.
+    parts = [part for part in parts if len(part) > 3 or (len(part) > 2 and not part in COMMON_NAME_EXCLUSION_LIST)]
     for part in parts:
-        # Heuristic: drop small segments that are common to names, such as "de",
-        # "del", "van" as they add nothing to the search.
-        if len(part) > 3 or (len(part) > 2 and not part in COMMON_NAME_EXCLUSION_LIST):
-            yield part
+        yield part
+    if len(parts) > 2:
+        # Concatenate any two consecutive.
+        for i in range(0, len(parts) - 1):
+            yield parts[i] + parts[i + 1]
 
 
 class EnslavedNameSearchCache:
@@ -169,20 +174,6 @@ class EnslaverNameSearchCache:
             cls.WORDSET_INDEX = Levenshtein_search.populate_wordset(-1, list(all_names))
             cls._loaded = True
 
-
-class NamedModelAbstractBase(models.Model):
-    id = models.IntegerField(primary_key=True)
-    name = models.CharField(max_length=255)
-
-    def __str__(self):
-        return self.__unicode__()
-
-    def __unicode__(self):
-        return str(self.id) + ", " + self.name
-
-    class Meta:
-        abstract = True
-
         
 class SourceConnectionAbstractBase(models.Model):
     # Sources are shared with Voyages.
@@ -272,10 +263,31 @@ class PropHelper:
         item = self.data.setdefault(id, {})
         item[key] = update_fn(item.get(key, None))
 
+class BitOrAgg(Aggregate):
+    function = 'BIT_OR'
+    name = 'BitOr'
+
+
+class BitsAndFunc(Func):
+    """
+    This custom func applies the binary AND to the two expressions and checks
+    for a positive value (indicating bit intersection).
+    """
+    arity = 2
+    arg_joiner = ' & '
+    template = '(%(expressions)s)'
+
+
+class PowerFunc(Func):
+    arity = 2
+    function = 'POWER'
+    arg_joiner = ','
+    template = 'POWER(%(expressions)s)'
+
 
 class EnslaverCachedProperties(models.Model):
-    identity = models.ForeignKey(EnslaverIdentity, related_name='cached_properties',
-                                on_delete=models.CASCADE, unique=True, primary_key=True)
+    identity = models.OneToOneField(EnslaverIdentity, related_name='cached_properties',
+                                on_delete=models.CASCADE, primary_key=True)
     enslaved_count = models.IntegerField(db_index=True)
     transactions_amount = models.DecimalField(db_index=True, null=False, default=0, decimal_places=2, max_digits=6)
     # Enumerate all the distinct roles for an enslaver, using the PKs of the
@@ -283,6 +295,9 @@ class EnslaverCachedProperties(models.Model):
     roles = models.CharField(max_length=255, null=False, blank=True)
     first_year = models.IntegerField(db_index=True, null=True)
     last_year = models.IntegerField(db_index=True, null=True)
+    # The voyage datasets that contain voyages associated with the enslavers. We
+    # encode the aggregation as a bitwise OR of the powers of two of dataset values.
+    voyage_datasets = models.IntegerField(db_index=True, null=True)
 
     @staticmethod
     def compute():
@@ -312,6 +327,15 @@ class EnslaverCachedProperties(models.Model):
         for row in q_years:
             helper.set(int(row[0]), 'min_year', get_year(row[1]))
             helper.set(int(row[0]), 'max_year', get_year(row[2]))
+
+        q_datasets = EnslaverVoyageConnection.objects \
+            .select_related('voyage__dataset') \
+            .values(identity_field) \
+            .annotate(datasets=BitOrAgg(PowerFunc(Value(2), F('voyage__dataset')))) \
+            .values_list(identity_field, 'datasets')
+        for row in q_datasets:
+            helper.set(int(row[0]), 'datasets', int(row[1]))
+
         enslaved_count_field = 'voyage__voyage_slaves_numbers__imp_total_num_slaves_embarked'
         voyage_conn_fields = [identity_field, enslaved_count_field]
         # The number of captives associated with an Enslaver is obtained from
@@ -356,6 +380,7 @@ class EnslaverCachedProperties(models.Model):
             props.transactions_amount = item.get('tot_amount', 0)
             props.first_year = item.get('min_year', None)
             props.last_year = item.get('max_year', None)
+            props.voyage_datasets = item.get('datasets', 0)
             yield props
 
     @staticmethod
@@ -916,17 +941,7 @@ class EnslavedSearch:
             gender_val = 1 if self.gender == 'male' else 2
             q = q.filter(gender=gender_val)
         if self.voyage_dataset:
-
-            def get_dataset_query(x):
-                if x == 'trans':
-                    return Q(voyage__dataset=0)
-                if x == 'intra':
-                    return Q(voyage__dataset=1)
-                if x == 'african':
-                    return Q(voyage__dataset=2)
-                raise Exception('Invalid Voyage Dataset value')
-
-            conditions = [get_dataset_query(x) for x in self.voyage_dataset]
+            conditions = [Q(voyage__dataset=VoyageDataset.parse(x)) for x in self.voyage_dataset]
             q = q.filter(reduce(operator.or_, conditions))
         if self.enslaved_dataset is not None:
             q = q.filter(dataset=self.enslaved_dataset)
@@ -1198,7 +1213,7 @@ class EnslaverSearch:
                  voyage_id=None,
                  source=None,
                  enslaved_count=None,
-                 voyage_dataset=None,
+                 voyage_datasets=None,
                  order_by=None):
         """
         Search the Enslaver database. If a parameter is set to None, it will
@@ -1233,7 +1248,7 @@ class EnslaverSearch:
         self.voyage_id = voyage_id
         self.source = source
         self.enslaved_count = enslaved_count
-        self.voyage_dataset = voyage_dataset
+        self.voyage_datasets = voyage_datasets
         self.order_by = order_by or [{'columnName': 'pk', 'direction': 'asc'}]
 
     def execute(self, fields):
@@ -1289,13 +1304,22 @@ class EnslaverSearch:
             q = add_voyage_field(q, 'voyage_dates__imp_arrival_at_port_of_dis', 'range', _year_range_conv(self.year_range))
         if self.enslaved_count:
             q = q.filter(cached_properties__enslaved_count__range=self.enslaved_count)
+        if self.voyage_datasets is not None:
+            bitvec = 0
+            for x in self.voyage_datasets:
+                bitvec |= 2 ** VoyageDataset.parse(x)
+            if bitvec > 0:
+                q = q.annotate(voyage_datasets=BitsAndFunc('cached_properties__voyage_datasets', Value(bitvec)))
+                q = q.filter(voyage_datasets__gt=0)
+            else:
+                q = q.filter(cached_properties__voyage_datasets=0)
 
         for helper in self.all_helpers:
             q = helper.adapt_query(q)
         
         MultiValueHelper.set_group_concat_limit()
 
-        order_by_ranking = 'asc'
+        order_by_ranking = None
         orm_orderby = None
         if isinstance(self.order_by, list):
             order_by_ranking = None
@@ -1304,6 +1328,8 @@ class EnslaverSearch:
                 col_name = x['columnName']
                 if col_name == 'ranking':
                     order_by_ranking = x['direction']
+                    orm_orderby = []
+                    break
                 is_desc = x['direction'].lower() == 'desc'
                 order_field = F(col_name)
                 if is_desc:
@@ -1312,10 +1338,11 @@ class EnslaverSearch:
                     order_field = order_field.asc(nulls_last=True)
                 orm_orderby.append(order_field)
 
-        if orm_orderby:
-            q = q.order_by(*orm_orderby)
-        else:
-            q = q.order_by('pk')
+        if not order_by_ranking:
+            if orm_orderby:
+                q = q.order_by(*orm_orderby)
+            else:
+                q = q.order_by('pk')
 
         q = q.distinct()
         q = q.values(*fields)

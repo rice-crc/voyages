@@ -1,5 +1,6 @@
 from __future__ import (absolute_import, division, print_function,
                         unicode_literals)
+import json
 
 import re
 from builtins import str
@@ -153,6 +154,7 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
     # stopwords in the matching language).
 
     text = indexes.CharField(document=True, use_template=True)
+    var_comments = indexes.CharField(null=True, model_attr='comments')
 
     var_imp_voyage_began = indexes.IntegerField(null=True)
 
@@ -723,6 +725,11 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
     var_dataset = indexes.IntegerField(null=False,
                                        indexed=True,
                                        model_attr='dataset')
+                                       
+    var_afrinfo = indexes.MultiValueField(indexed=True, stored=True, null=True)
+    var_cargo = indexes.MultiValueField(indexed=True, stored=True, null=True)
+    var_afrinfo_ids = indexes.MultiValueField(indexed=True, stored=True, null=True)
+    var_cargo_ids = indexes.MultiValueField(indexed=True, stored=True, null=True)
 
     def get_model(self):
         return Voyage
@@ -730,7 +737,7 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
     def get_updated_field(self):
         return 'last_update'
 
-    def index_queryset(self,using=None):
+    def index_queryset(self, using=None):
         """Used when the entire index for model is updated."""
         helper = VoyagesFullQueryHelper()
         return helper.get_query()
@@ -893,6 +900,26 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
             ">" + ("" if conn.source is None else conn.source.full_ref)
             for conn in obj.group.all()
         ]
+
+    def prepare_var_afrinfo(self, obj):
+        return [json.dumps({ "name": a.name, "possibly_offensive": a.possibly_offensive }) for a in obj.african_info.all()]
+
+    def prepare_var_afrinfo_ids(self, obj):
+        return [a.id for a in obj.african_info.all()]
+
+    def prepare_var_cargo(self, obj):
+        def parse_cargo_conn(conn):
+            s = conn.cargo.name
+            if conn.amount:
+                s += f": {conn.amount}"
+                if conn.unit:
+                    s += " " + conn.unit.name
+            return s
+
+        return [parse_cargo_conn(conn) for conn in obj.cargo.all()]
+
+    def prepare_var_cargo_ids(self, obj):
+        return [c.cargo_id for c in obj.cargo.all()]
 
     def prepare_var_sources_plaintext(self, obj):
         return ", ".join(self.prepare_var_sources(obj))

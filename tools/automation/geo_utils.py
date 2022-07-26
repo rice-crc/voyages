@@ -1,4 +1,4 @@
-from voyages.apps.common.utils import Trie
+from voyages.apps.common.utils import BulkImportationHelper, Trie
 from voyages.apps.voyage.models import Place, Region
 from django.db import transaction
 from unidecode import unidecode
@@ -58,7 +58,7 @@ def add_regions_to_csv(csv_in, csv_out):
                 region = match_place.region
             row['Region'] = region.region
             row['RegionCode'] = region.value
-            row['MapView'] = "https://www.google.com/maps/@?api=1&map_action=map&center=" + str(lat) + "," + str(lng) + "&zoom=10"
+            row['MapView'] = f"=HYPERLINK(\"https://www.google.com/maps/@?api=1&map_action=map&center=" + str(lat) + "," + str(lng) + "&zoom=10\")"
         except:
             pass
     columns = list(sorted(columns)) + our_cols
@@ -68,7 +68,7 @@ def add_regions_to_csv(csv_in, csv_out):
         out_file.writerow(row)
     return rows
 
-def import_places_from_csv(csv):
+def import_places_from_csv(csv, skip_errors=True):
     """
     Given a CSV produced by add_regions_to_csv (and manually edited), import the
     places into the database in bulk.
@@ -76,28 +76,58 @@ def import_places_from_csv(csv):
     Note: the CodeValue column must be filled with values that are unique among
     all places.
     """
-    input_file = unicodecsv.DictReader(open(csv, 'rb'))
+    rows = BulkImportationHelper.read_to_dict(open(csv, 'rb'))
+    places = {p.value: p for p in Place.objects.all()}
     regions = {r.value: r.pk for r in Region.objects.all()}
-    count = 0
-    with transaction.atomic():
-        for row in input_file:
-            place_name = row['match'].strip()
-            if place_name == '':
-                continue
+    skipped = []
+    idx_row = 1
+    updates = {}
+    for row in rows:
+        idx_row += 1
+        if all([v == '' for v in row.values()]):
+            # Skip empty rows
+            continue
+        place_name = row['match'].strip()
+        if place_name == '':
+            skipped.append((idx_row, "Empty place name"))
+            continue
+        try:
             place_code = int(row['codevalue'])
-            # TODO: validate place code?
-            place = Place()
-            place.place = place_name
+        except:
+            skipped.append((idx_row, "Bad place code value"))
+            continue
+        if place_code in updates:
+            # Only log an error if the place name is different.
+            if place_name != updates[place_code].place:
+                skipped.append((idx_row, "Duplicate place code value"))
+            continue
+        # TODO: validate place code?
+        place = places.get(place_code, Place())
+        place.place = place_name
+        try:
             place.region_id = regions[int(row['regioncode'])]
+        except:
+            skipped.append((idx_row, "Region id not found"))
+            continue
+        try:
             place.longitude = float(row['longitude'])
             place.latitude = float(row['latitude'])
-            place.value = place_code
-            show = row['showonmap'].lower() == 'true'
-            place.show_on_main_map = show
-            place.show_on_voyage_map = show
-            place.save()
-            count += 1
-    return count
+        except:
+            skipped.append((idx_row, "Bad geo coordinates"))
+            continue
+        place.value = place_code
+        show = row['showonmap'].lower() != 'false'
+        place.show_on_main_map = show
+        place.show_on_voyage_map = show
+        updates[place_code] = place
+    if len(skipped) == 0 or skip_errors:
+        with transaction.atomic():
+            for place in updates.values():
+                place.save()
+    if len(skipped) > 0:
+        for row_num, error in skipped:
+            print(f"[{row_num}]: {error}")
+    return updates
 
 # Run the functions above on a shell, invoked by, say:
 # docker exec -i voyages-django bash -c 'python3 manage.py shell'
@@ -127,8 +157,13 @@ def import_places_from_csv(csv):
 # 	return $null
 # }
 # 
+# if (!$key) {
+#    Write-Error "Don't forget to set the API key!"
+# }
 # $out = @()
 # $places | ForEach-Object {
+#	$pct = (100.0 * $out.Length) / $places.Length
+#	Write-Progress -Activity "Fetching Places on Google API" -Status "Searching $($_)" -PercentComplete $pct
 # 	$geo = Invoke-RestMethod -ContentType "application/json; charset=utf-8" "https://maps.googleapis.com/maps/api/geocode/json?address=$($_)&key=$($key)"
 # 	$results = $geo.results
 # 	if ($exclusion -and $results) {

@@ -108,7 +108,13 @@ class RowHelper:
         if val is None and remap is not None:
             remaped_val = remap.get(src_val)
             if remaped_val is not None:
-                val = col.get(remaped_val)
+                if isinstance(remaped_val, list):
+                    for rval in remaped_val:
+                        val = col.get(rval)
+                        if val is not None:
+                            break
+                else:
+                    val = col.get(remaped_val)
         if val is None:
             msg = 'Failed to locate "' + model_type_name + '" with value: "' + \
                 str(src_val) + '" for field "' + field_name + '"'
@@ -246,18 +252,25 @@ class ErrorReporting:
         self.reported[key] = msg_count + 1
         saturated = msg_count > 1
         if self.line > 0 and not saturated:
-            msg = '[' + str(self.line) +'] ' + msg
+            msg = f"{msg} [{self.line}]"
         if not saturated:
             sys.stderr.write(msg + '\n')
 
 
 class Trie:
-    def __init__(self, excluded_chars=[' ', ',', '(', ')']):
+    def __init__(self, excluded_chars=[' ', ',', '(', ')'], multivalued=False):
         self.trie = {}
         self._end = '_end'
         self.excluded_chars = excluded_chars
+        self.multivalued = multivalued
 
     def add(self, key, value):
+        """
+        Add an entry to the tree. If multivalued, all the values will be placed
+        in a list and the key will map to that list. For single-valued tries,
+        only the last added entry with the same key is kept and no Exception is
+        raised in case a key is re-added.
+        """
         dictionary = self.trie
         has_star = False
         for letter in key:
@@ -267,11 +280,18 @@ class Trie:
                 raise Exception("Our trie only accepts a single * element and it must be the last character")
             has_star = letter == '*'
             dictionary = dictionary.setdefault(letter, {})
-        dictionary[self._end] = value
+        if self.multivalued:
+            leaf = dictionary.setdefault(self._end, [])
+            leaf.append(value)
+        else:
+            # Overwrite any existing value.
+            dictionary[self._end] = value
 
     def get(self, key):
         """
-        Look for an exact match in the Trie. If not found, None is returned.
+        Look for an exact match in the Trie. If not found, None is returned. For
+        multivalued tries, the return is either a list with one or more matches
+        or None.
         """
         (best, _, is_exact) = self.get_longest_prefix_match(key)
         return best if is_exact else None

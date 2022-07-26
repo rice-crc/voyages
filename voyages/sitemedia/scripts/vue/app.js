@@ -1,3 +1,7 @@
+function resetPagination(datatable) {
+  datatable.page('first').draw(false);
+}
+
 // main app
 var searchBar = new Vue({
   el: "#search-bar",
@@ -16,7 +20,31 @@ var searchBar = new Vue({
       captainAndCrew: captainAndCrew,
       slave: slave,
       source: source,
-      settings: settings
+      settings: settings,
+      comments: {
+        comments: {
+          var_comments: new TextVariable({
+            varName: "comments",
+            label: pgettext("voyages popup label", "COMMENTS"),
+            description: "",
+          },{
+            op: "contains",
+            searchTerm: null,
+          },{
+            isImputed: false,
+            isAdvanced: false
+          }),
+          count: {
+            changed: 0,
+            activated: 0,
+          }
+        },
+        count: {
+          changed: 0,
+          activated: 0,
+        },
+      }
+
     },
     filterData: {
       treeselectOptions: {
@@ -270,6 +298,16 @@ var searchBar = new Vue({
                     value = getFormattedLinkedVoyages(value);
                   }
 
+                  // Patch cargo
+                  if (varName == "var_cargo" && value) {
+                    value = getFormattedCargo(value);
+                  }
+
+                  // Patch afrinfo
+                  if (varName == "var_afrinfo" && value) {
+                    value = getFormattedAfricanInfo(value);
+                  }
+
                   // Patch place variables
                   if (item.type == "place") {
                     value = this.row.data[varName.slice(0, -3) + "_lang"];
@@ -437,15 +475,15 @@ var searchBar = new Vue({
       // var searchTerms = searchAll(this.filter, this.filterData);
       // alert(JSON.stringify(searchTerms));
       // search(this.searchFilter, searchTerms);
-      $("#results_main_table").DataTable().state.clear();
       this.refresh();
+      resetPagination($("#results_main_table").DataTable());
     },
 
     // reset inputs, filters, and counts back to default state
     reset(group, subGroup) {
-      $("#results_main_table").DataTable().state.clear();
       resetFilter(this.filter, group, subGroup);
       this.refresh();
+      resetPagination($("#results_main_table").DataTable());
     },
 
     clearFilter(filter) {
@@ -461,9 +499,9 @@ var searchBar = new Vue({
     },
 
     resetAll() {
-      $("#results_main_table").DataTable().state.clear();
       this.refreshPage();
       this.resetURL();
+      resetPagination($("#results_main_table").DataTable());
     },
 
     refresh() {

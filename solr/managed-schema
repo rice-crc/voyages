@@ -212,6 +212,7 @@
     <dynamicField name="*_p" type="location" indexed="true" stored="true"/>
     <dynamicField name="*_coordinate"  type="tdoubles" indexed="true"  stored="false"/>
 
+    <field name="var_comments" type="text_en" indexed="true" stored="true" multiValued="false" />
     <field name="var_first_place_slave_purchase_lang_pt_exact" type="text_pt" indexed="true" stored="true" multiValued="false" />
     <field name="var_first_place_slave_purchase_lang_es_exact" type="text_es" indexed="true" stored="true" multiValued="false" />
     <field name="var_imp_port_voyage_begin_idnum" type="long" indexed="true" stored="true" multiValued="false" />
@@ -400,6 +401,10 @@
     <field name="var_sources_plaintext" type="text_en" indexed="true" stored="true" multiValued="false" />
     <field name="var_departure_last_place_of_landing_month" type="long" indexed="true" stored="true" multiValued="false" />
     <field name="var_port_of_call_before_atl_crossing_lang_en" type="text_en" indexed="true" stored="true" multiValued="false" />
+    <field name="var_afrinfo" type="text_en" indexed="true" stored="true" multiValued="true" />
+    <field name="var_cargo" type="text_en" indexed="true" stored="true" multiValued="true" />
+    <field name="var_afrinfo_ids" type="long" indexed="true" stored="true" multiValued="true" />
+    <field name="var_cargo_ids" type="long" indexed="true" stored="true" multiValued="true" />
     <field name="var_sources" type="text_en" indexed="true" stored="true" multiValued="true" />
     <field name="var_voyage_links" type="int" indexed="true" stored="true" multiValued="true" />
     <field name="var_second_region_slave_emb_lang_pt" type="text_pt" indexed="true" stored="true" multiValued="false" />
