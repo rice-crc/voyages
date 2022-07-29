@@ -442,6 +442,7 @@ var searchBar = new Vue({
     resetAll() {
       this.refreshPage();
       this.resetURL();
+      $("#results_main_table").DataTable().page( 0 ).draw( false );
       resetPagination($("#results_main_table").DataTable());
     },
 

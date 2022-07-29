@@ -261,7 +261,7 @@ var_imputed_mortality = new PercentageVariable({
 var_afrinfo = new TreeselectVariable({
     varName: "afrinfo",
     label: pgettext("filter select label", "AFRINFO"),
-    description: "",
+    description: pgettext("filter select description", "AFRINFO"),
   },{
     op: "is one of",
     searchTerm: [],
