@@ -202,7 +202,7 @@ def get_flat_page_tree(prefix, language=None):
         leaf_set = d.get(leaf_key, [])
         node = FlatPageTree(
             {t[2]: t[0] for t in leaf_set},
-            min([t[1] for t in leaf_set]) if len(leaf_set) > 0 else 0, parent)
+            min([t[1] or 100 for t in leaf_set]) if len(leaf_set) > 0 else 0, parent)
         for k, v in list(d.items()):
             if k != leaf_key:
                 recursive_create(v, node)
