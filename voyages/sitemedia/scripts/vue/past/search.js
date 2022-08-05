@@ -140,7 +140,7 @@ allColumns[enslavedDataset].forEach(function(c, index) {
       if (c.data == 'sources_list') {
         formattedString = data;
       } else if (c.isContribute) {
-          formattedString = '<a href="contribute/' + data + '"><i class="fas fa-microphone-alt btn btn-transparent"></i></a>';
+          formattedString = '<a href="/past/contribute/' + data + '"><i class="fas fa-microphone-alt btn btn-transparent"></i></a>';
       } else if (c.isAudible) {
         if (!jQuery.isEmptyObject(data)) {
           var audiosList = $('<div></div>');
