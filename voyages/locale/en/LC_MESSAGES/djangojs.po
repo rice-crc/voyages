@@ -6,28 +6,28 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-19 20:22+0000\n"
-"PO-Revision-Date: 2022-07-19 17:29-0300\n"
-"Last-Translator: \n"
-"Language-Team: \n"
-"Language: en\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.2.3\n"
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-07-19 20:22+0000\n"
 "POT-Creation-Date: 2022-06-10 14:06+0000\n"
+"PO-Revision-Date: 2022-07-22 17:00-0300\n"
 "PO-Revision-Date: 2022-06-10 11:31-0300\n"
 "Last-Translator: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
 "Language-Team: \n"
 "Language: en\n"
+"Language: en\n"
+"MIME-Version: 1.0\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 3.1\n"
+"Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 3.1.1\n"
+"X-Generator: Poedit 3.1\n"
 
 #: voyages/sitemedia/maps/js/voyagesMap.js:144
 #: voyages/static/maps/js/voyagesMap.js:144
@@ -114,6 +114,8 @@ msgstr ""
 #: voyages/static/scripts/vue/includes/helpers.js:1544
 #: voyages/sitemedia/scripts/vue/includes/helpers.js:1359
 #: voyages/sitemedia/scripts/vue/includes/helpers.js:1542
+#: voyages/sitemedia/scripts/vue/includes/helpers.js:1374
+#: voyages/sitemedia/scripts/vue/includes/helpers.js:1557
 msgid "Totals"
 msgstr ""
 
@@ -452,7 +454,7 @@ msgstr ""
 #: voyages/sitemedia/scripts/vue/app.js:24 voyages/static/scripts/vue/app.js:24
 msgctxt "voyages popup label"
 msgid "COMMENTS"
-msgstr ""
+msgstr "Comments"
 
 #: voyages/sitemedia/scripts/vue/app.js:49 voyages/static/scripts/vue/app.js:49
 #: voyages/sitemedia/scripts/vue/app.js:25
@@ -480,6 +482,7 @@ msgstr ""
 #: voyages/static/scripts/vue/enslavers/app.js:554
 #: voyages/static/scripts/vue/past/app.js:516
 #: voyages/sitemedia/scripts/vue/app.js:568
+#: voyages/sitemedia/scripts/vue/enslavers/app.js:557
 msgid "This search is either no longer valid or causing an error."
 msgstr ""
 
@@ -650,6 +653,9 @@ msgstr ""
 #: voyages/sitemedia/scripts/vue/enslavers/search.js:59
 #: voyages/sitemedia/scripts/vue/search.js:132
 #: voyages/sitemedia/scripts/vue/search.js:144
+#: voyages/sitemedia/scripts/vue/enslavers/includes/helpers.js:1006
+#: voyages/sitemedia/scripts/vue/enslavers/search.js:40
+#: voyages/sitemedia/scripts/vue/enslavers/search.js:52
 msgid "Imputed results are calculated by an algorithm."
 msgstr ""
 
@@ -726,6 +732,7 @@ msgstr ""
 #: voyages/static/scripts/vue/includes/helpers.js:2556
 #: voyages/static/scripts/vue/past/includes/helpers.js:9
 #: voyages/sitemedia/scripts/vue/includes/helpers.js:2554
+#: voyages/sitemedia/scripts/vue/includes/helpers.js:2569
 msgid "Ship, Nation, Owners"
 msgstr ""
 
@@ -754,6 +761,7 @@ msgstr ""
 #: voyages/static/scripts/vue/variables/past/itinerary.js:3
 #: voyages/static/scripts/vue/variables/ship-nation-owner.js:3
 #: voyages/sitemedia/scripts/vue/enslavers/includes/helpers.js:991
+#: voyages/sitemedia/scripts/vue/enslavers/includes/helpers.js:999
 msgid "Voyage ID"
 msgstr ""
 
@@ -914,7 +922,7 @@ msgstr ""
 #: voyages/static/scripts/vue/enslavers/includes/helpers.js:25
 msgctxt "enslavers popup label"
 msgid "CARGO"
-msgstr ""
+msgstr "Cargo"
 
 #: voyages/sitemedia/scripts/vue/enslavers/includes/helpers.js:30
 #: voyages/sitemedia/scripts/vue/includes/helpers.js:2576
@@ -930,6 +938,7 @@ msgstr ""
 #: voyages/sitemedia/scripts/vue/enslavers/includes/helpers.js:29
 #: voyages/sitemedia/scripts/vue/includes/helpers.js:2573
 #: voyages/sitemedia/scripts/vue/past/includes/helpers.js:28
+#: voyages/sitemedia/scripts/vue/includes/helpers.js:2589
 msgid "Outcome"
 msgstr ""
 
@@ -1024,6 +1033,7 @@ msgstr "Resistance"
 #: voyages/sitemedia/scripts/vue/enslavers/includes/helpers.js:40
 #: voyages/sitemedia/scripts/vue/includes/helpers.js:2584
 #: voyages/sitemedia/scripts/vue/past/includes/helpers.js:39
+#: voyages/sitemedia/scripts/vue/includes/helpers.js:2600
 msgid "Itinerary"
 msgstr ""
 
@@ -1129,6 +1139,7 @@ msgstr "Place where vessel's voyage ended"
 #: voyages/sitemedia/scripts/vue/enslavers/includes/helpers.js:57
 #: voyages/sitemedia/scripts/vue/includes/helpers.js:2602
 #: voyages/sitemedia/scripts/vue/past/includes/helpers.js:56
+#: voyages/sitemedia/scripts/vue/includes/helpers.js:2618
 msgid "Dates"
 msgstr ""
 
@@ -1221,6 +1232,7 @@ msgstr "Date vessel arrived at homeport"
 #: voyages/sitemedia/scripts/vue/enslavers/includes/helpers.js:72
 #: voyages/sitemedia/scripts/vue/includes/helpers.js:2617
 #: voyages/sitemedia/scripts/vue/past/includes/helpers.js:71
+#: voyages/sitemedia/scripts/vue/includes/helpers.js:2633
 msgid "Captain and Crew"
 msgstr ""
 
@@ -1299,6 +1311,7 @@ msgstr ""
 #: voyages/sitemedia/scripts/vue/enslavers/includes/helpers.js:82
 #: voyages/sitemedia/scripts/vue/includes/helpers.js:2627
 #: voyages/sitemedia/scripts/vue/past/includes/helpers.js:81
+#: voyages/sitemedia/scripts/vue/includes/helpers.js:2643
 msgid "Slaves"
 msgstr ""
 
@@ -1565,7 +1578,7 @@ msgstr "Percentage of captives who died during crossing"
 #: voyages/static/scripts/vue/enslavers/includes/helpers.js:105
 msgctxt "enslavers popup label"
 msgid "AFRINFO"
-msgstr ""
+msgstr "African Info"
 
 #: voyages/sitemedia/scripts/vue/enslavers/includes/helpers.js:110
 #: voyages/sitemedia/scripts/vue/includes/helpers.js:2657
@@ -1587,6 +1600,7 @@ msgstr ""
 #: voyages/sitemedia/scripts/vue/enslavers/includes/helpers.js:108
 #: voyages/sitemedia/scripts/vue/includes/helpers.js:2653
 #: voyages/sitemedia/scripts/vue/past/includes/helpers.js:107
+#: voyages/sitemedia/scripts/vue/includes/helpers.js:2670
 msgid "Source"
 msgstr ""
 
@@ -1626,6 +1640,10 @@ msgstr ""
 #: voyages/sitemedia/scripts/vue/includes/helpers.js:818
 #: voyages/sitemedia/scripts/vue/past/includes/helpers.js:753
 #: voyages/sitemedia/scripts/vue/past/includes/helpers.js:844
+#: voyages/sitemedia/scripts/vue/enslavers/includes/helpers.js:794
+#: voyages/sitemedia/scripts/vue/enslavers/includes/helpers.js:878
+#: voyages/sitemedia/scripts/vue/includes/helpers.js:823
+#: voyages/sitemedia/scripts/vue/includes/helpers.js:833
 msgid "Select All"
 msgstr ""
 
@@ -1633,6 +1651,7 @@ msgstr ""
 #: voyages/static/scripts/scripts/vue/enslavers/includes/helpers.js:978
 #: voyages/static/scripts/vue/enslavers/includes/helpers.js:994
 #: voyages/sitemedia/scripts/vue/enslavers/includes/helpers.js:992
+#: voyages/sitemedia/scripts/vue/enslavers/includes/helpers.js:1000
 msgid "Enslaver Alias"
 msgstr ""
 
@@ -1640,6 +1659,7 @@ msgstr ""
 #: voyages/static/scripts/scripts/vue/enslavers/includes/helpers.js:979
 #: voyages/static/scripts/vue/enslavers/includes/helpers.js:995
 #: voyages/sitemedia/scripts/vue/enslavers/includes/helpers.js:993
+#: voyages/sitemedia/scripts/vue/enslavers/includes/helpers.js:1001
 msgid "Voyage Year"
 msgstr ""
 
@@ -1659,6 +1679,7 @@ msgstr ""
 #: voyages/static/scripts/vue/variables/past-enslavers/itinerary.js:40
 #: voyages/static/scripts/vue/variables/past/itinerary.js:40
 #: voyages/sitemedia/scripts/vue/enslavers/includes/helpers.js:994
+#: voyages/sitemedia/scripts/vue/enslavers/includes/helpers.js:1002
 msgid "Disembarkation Port"
 msgstr ""
 
@@ -1678,6 +1699,7 @@ msgstr ""
 #: voyages/static/scripts/vue/variables/past-enslavers/itinerary.js:28
 #: voyages/static/scripts/vue/variables/past/itinerary.js:28
 #: voyages/sitemedia/scripts/vue/enslavers/includes/helpers.js:995
+#: voyages/sitemedia/scripts/vue/enslavers/includes/helpers.js:1003
 msgid "Embarkation Port"
 msgstr ""
 
@@ -1688,6 +1710,8 @@ msgstr ""
 #: voyages/static/scripts/vue/enslavers/includes/helpers.js:1023
 #: voyages/sitemedia/scripts/vue/enslavers/includes/helpers.js:996
 #: voyages/sitemedia/scripts/vue/enslavers/includes/helpers.js:1021
+#: voyages/sitemedia/scripts/vue/enslavers/includes/helpers.js:1004
+#: voyages/sitemedia/scripts/vue/enslavers/includes/helpers.js:1029
 msgid "Role"
 msgstr ""
 
@@ -1707,6 +1731,7 @@ msgstr ""
 #: voyages/static/scripts/vue/variables/past-enslavers/itinerary.js:16
 #: voyages/static/scripts/vue/variables/past/itinerary.js:16
 #: voyages/sitemedia/scripts/vue/enslavers/includes/helpers.js:997
+#: voyages/sitemedia/scripts/vue/enslavers/includes/helpers.js:1005
 msgid "Ship Name"
 msgstr ""
 
@@ -1714,24 +1739,28 @@ msgstr ""
 #: voyages/static/scripts/scripts/vue/enslavers/includes/helpers.js:984
 #: voyages/static/scripts/vue/enslavers/includes/helpers.js:1000
 #: voyages/sitemedia/scripts/vue/enslavers/includes/helpers.js:998
+#: voyages/sitemedia/scripts/vue/enslavers/includes/helpers.js:1006
 msgid "Captives Embarked"
 msgstr ""
 
 #: voyages/sitemedia/scripts/vue/enslavers/includes/helpers.js:1021
 #: voyages/static/scripts/vue/enslavers/includes/helpers.js:1021
 #: voyages/sitemedia/scripts/vue/enslavers/includes/helpers.js:1019
+#: voyages/sitemedia/scripts/vue/enslavers/includes/helpers.js:1027
 msgid "Relation ID"
 msgstr ""
 
 #: voyages/sitemedia/scripts/vue/enslavers/includes/helpers.js:1022
 #: voyages/static/scripts/vue/enslavers/includes/helpers.js:1022
 #: voyages/sitemedia/scripts/vue/enslavers/includes/helpers.js:1020
+#: voyages/sitemedia/scripts/vue/enslavers/includes/helpers.js:1028
 msgid "Alias"
 msgstr ""
 
 #: voyages/sitemedia/scripts/vue/enslavers/includes/helpers.js:1024
 #: voyages/static/scripts/vue/enslavers/includes/helpers.js:1024
 #: voyages/sitemedia/scripts/vue/enslavers/includes/helpers.js:1022
+#: voyages/sitemedia/scripts/vue/enslavers/includes/helpers.js:1030
 msgid "Year"
 msgstr ""
 
@@ -1746,6 +1775,8 @@ msgstr ""
 #: voyages/static/scripts/vue/past/includes/helpers.js:1101
 #: voyages/sitemedia/scripts/vue/enslavers/includes/helpers.js:1252
 #: voyages/sitemedia/scripts/vue/past/includes/helpers.js:1100
+#: voyages/sitemedia/scripts/vue/enslavers/includes/helpers.js:1262
+#: voyages/sitemedia/scripts/vue/past/includes/helpers.js:1103
 msgid "Your browser doesn't support <code>audio</code> tags."
 msgstr ""
 
@@ -1855,6 +1886,7 @@ msgstr ""
 #: voyages/static/scripts/vue/enslavers/search.js:54
 #: voyages/static/scripts/vue/past/search.js:130
 #: voyages/sitemedia/scripts/vue/enslavers/search.js:62
+#: voyages/sitemedia/scripts/vue/enslavers/search.js:55
 msgid "Some individuals had multiple names listed in the historical record."
 msgstr ""
 
@@ -1865,6 +1897,7 @@ msgstr ""
 #: voyages/static/scripts/vue/enslavers/search.js:58
 #: voyages/static/scripts/vue/past/search.js:134
 #: voyages/sitemedia/scripts/vue/enslavers/search.js:66
+#: voyages/sitemedia/scripts/vue/enslavers/search.js:59
 msgid "Data based on the user's search and that is not part of the database."
 msgstr ""
 
@@ -1890,6 +1923,9 @@ msgstr ""
 #: voyages/sitemedia/scripts/vue/enslavers/search.js:147
 #: voyages/sitemedia/scripts/vue/search.js:177
 #: voyages/sitemedia/scripts/vue/search.js:178
+#: voyages/sitemedia/scripts/vue/enslavers/search.js:104
+#: voyages/sitemedia/scripts/vue/search.js:190
+#: voyages/sitemedia/scripts/vue/search.js:191
 msgid "Restore default"
 msgstr ""
 
@@ -1904,6 +1940,8 @@ msgstr ""
 #: voyages/static/scripts/vue/search.js:199
 #: voyages/sitemedia/scripts/vue/enslavers/search.js:154
 #: voyages/sitemedia/scripts/vue/search.js:185
+#: voyages/sitemedia/scripts/vue/enslavers/search.js:111
+#: voyages/sitemedia/scripts/vue/search.js:198
 msgid "Configure columns"
 msgstr ""
 
@@ -1918,6 +1956,8 @@ msgstr ""
 #: voyages/static/scripts/vue/search.js:200
 #: voyages/sitemedia/scripts/vue/enslavers/search.js:155
 #: voyages/sitemedia/scripts/vue/search.js:186
+#: voyages/sitemedia/scripts/vue/enslavers/search.js:112
+#: voyages/sitemedia/scripts/vue/search.js:199
 msgid "Configure visible columns"
 msgstr ""
 
@@ -3943,6 +3983,7 @@ msgstr ""
 
 #: voyages/sitemedia/scripts/vue/includes/format-badges.js:8
 #: voyages/static/scripts/vue/includes/format-badges.js:4
+#: voyages/sitemedia/scripts/vue/includes/format-badges.js:4
 msgid ""
 "Note: this term was used in historical records and appears here in this form "
 "to accurately represent the historical sources."
@@ -3966,6 +4007,9 @@ msgstr ""
 #: voyages/sitemedia/scripts/vue/includes/helpers.js:1121
 #: voyages/sitemedia/scripts/vue/includes/helpers.js:1299
 #: voyages/sitemedia/scripts/vue/includes/helpers.js:1567
+#: voyages/sitemedia/scripts/vue/includes/helpers.js:1136
+#: voyages/sitemedia/scripts/vue/includes/helpers.js:1314
+#: voyages/sitemedia/scripts/vue/includes/helpers.js:1582
 msgid "Download"
 msgstr ""
 
@@ -3973,6 +4017,7 @@ msgstr ""
 #: voyages/static/scripts/scripts/vue/includes/helpers.js:1089
 #: voyages/static/scripts/vue/includes/helpers.js:1124
 #: voyages/sitemedia/scripts/vue/includes/helpers.js:1122
+#: voyages/sitemedia/scripts/vue/includes/helpers.js:1137
 msgid "Download results"
 msgstr ""
 
@@ -3984,6 +4029,8 @@ msgstr ""
 #: voyages/static/scripts/vue/includes/helpers.js:1155
 #: voyages/sitemedia/scripts/vue/includes/helpers.js:1130
 #: voyages/sitemedia/scripts/vue/includes/helpers.js:1153
+#: voyages/sitemedia/scripts/vue/includes/helpers.js:1145
+#: voyages/sitemedia/scripts/vue/includes/helpers.js:1168
 msgid "All results with all columns"
 msgstr ""
 
@@ -3995,6 +4042,8 @@ msgstr ""
 #: voyages/static/scripts/vue/includes/helpers.js:1159
 #: voyages/sitemedia/scripts/vue/includes/helpers.js:1134
 #: voyages/sitemedia/scripts/vue/includes/helpers.js:1157
+#: voyages/sitemedia/scripts/vue/includes/helpers.js:1149
+#: voyages/sitemedia/scripts/vue/includes/helpers.js:1172
 msgid "All results with visible columns"
 msgstr ""
 
@@ -4006,6 +4055,8 @@ msgstr ""
 #: voyages/static/scripts/vue/includes/helpers.js:1163
 #: voyages/sitemedia/scripts/vue/includes/helpers.js:1138
 #: voyages/sitemedia/scripts/vue/includes/helpers.js:1161
+#: voyages/sitemedia/scripts/vue/includes/helpers.js:1153
+#: voyages/sitemedia/scripts/vue/includes/helpers.js:1176
 msgid "Filtered results with all columns"
 msgstr ""
 
@@ -4017,6 +4068,8 @@ msgstr ""
 #: voyages/static/scripts/vue/includes/helpers.js:1167
 #: voyages/sitemedia/scripts/vue/includes/helpers.js:1142
 #: voyages/sitemedia/scripts/vue/includes/helpers.js:1165
+#: voyages/sitemedia/scripts/vue/includes/helpers.js:1157
+#: voyages/sitemedia/scripts/vue/includes/helpers.js:1180
 msgid "Filtered results with visible columns"
 msgstr ""
 
@@ -4024,6 +4077,7 @@ msgstr ""
 #: voyages/static/scripts/scripts/vue/includes/helpers.js:1332
 #: voyages/static/scripts/vue/includes/helpers.js:1367
 #: voyages/sitemedia/scripts/vue/includes/helpers.js:1365
+#: voyages/sitemedia/scripts/vue/includes/helpers.js:1380
 msgid "Year Range"
 msgstr ""
 
@@ -4031,6 +4085,7 @@ msgstr ""
 #: voyages/static/scripts/scripts/vue/includes/helpers.js:1604
 #: voyages/static/scripts/vue/includes/helpers.js:1639
 #: voyages/sitemedia/scripts/vue/includes/helpers.js:1637
+#: voyages/sitemedia/scripts/vue/includes/helpers.js:1652
 msgid "Click and drag in the plot area to zoom in"
 msgstr ""
 
@@ -4038,6 +4093,7 @@ msgstr ""
 #: voyages/static/scripts/scripts/vue/includes/helpers.js:1605
 #: voyages/static/scripts/vue/includes/helpers.js:1640
 #: voyages/sitemedia/scripts/vue/includes/helpers.js:1638
+#: voyages/sitemedia/scripts/vue/includes/helpers.js:1653
 msgid "Pinch the chart to zoom in"
 msgstr ""
 
@@ -4049,6 +4105,8 @@ msgstr ""
 #: voyages/static/scripts/vue/includes/helpers.js:1875
 #: voyages/sitemedia/scripts/vue/includes/helpers.js:1645
 #: voyages/sitemedia/scripts/vue/includes/helpers.js:1873
+#: voyages/sitemedia/scripts/vue/includes/helpers.js:1660
+#: voyages/sitemedia/scripts/vue/includes/helpers.js:1888
 msgid "Value"
 msgstr ""
 
@@ -4056,6 +4114,7 @@ msgstr ""
 #: voyages/static/scripts/scripts/vue/includes/helpers.js:1637
 #: voyages/static/scripts/vue/includes/helpers.js:1672
 #: voyages/sitemedia/scripts/vue/includes/helpers.js:1670
+#: voyages/sitemedia/scripts/vue/includes/helpers.js:1685
 msgid "Year "
 msgstr ""
 
@@ -4063,6 +4122,7 @@ msgstr ""
 #: voyages/static/scripts/scripts/vue/includes/helpers.js:1649
 #: voyages/static/scripts/vue/includes/helpers.js:1684
 #: voyages/sitemedia/scripts/vue/includes/helpers.js:1682
+#: voyages/sitemedia/scripts/vue/includes/helpers.js:1697
 msgid "We are sorry but there is no data to display or an error has occurred."
 msgstr ""
 
@@ -4106,7 +4166,7 @@ msgstr "Rig or type of vessel"
 #: voyages/static/scripts/vue/past/includes/helpers.js:24
 msgctxt "past popup label"
 msgid "CARGO"
-msgstr ""
+msgstr "Cargo"
 
 #: voyages/sitemedia/scripts/vue/past/includes/helpers.js:32
 #: voyages/static/scripts/vue/past/includes/helpers.js:32
@@ -4322,7 +4382,7 @@ msgstr "Percentage of captives who died during crossing"
 #: voyages/static/scripts/vue/past/includes/helpers.js:104
 msgctxt "past popup label"
 msgid "AFRINFO"
-msgstr ""
+msgstr "African Info"
 
 #: voyages/sitemedia/scripts/vue/past/search.js:3
 #: voyages/static/scripts/scripts/vue/past/search.js:3
@@ -4378,6 +4438,7 @@ msgstr ""
 #: voyages/static/scripts/scripts/vue/past/search.js:59
 #: voyages/static/scripts/vue/past/search.js:25
 #: voyages/static/scripts/vue/past/search.js:60
+#: voyages/sitemedia/scripts/vue/enslavers/search.js:11
 msgid "Search Ranking"
 msgstr ""
 
@@ -4562,13 +4623,13 @@ msgstr "Rig or type of vessel"
 #: voyages/static/scripts/vue/search.js:36
 msgctxt "datatable column header"
 msgid "CARGO"
-msgstr ""
+msgstr "Cargo"
 
 #: voyages/sitemedia/scripts/vue/search.js:37
 #: voyages/static/scripts/vue/search.js:37
 msgctxt "datatable column header"
 msgid "COMMENTS"
-msgstr ""
+msgstr "Comments"
 
 #: voyages/sitemedia/scripts/vue/search.js:40
 #: voyages/static/scripts/vue/search.js:40
@@ -4709,7 +4770,7 @@ msgstr "Percentage of captives who died during crossing"
 #: voyages/static/scripts/vue/search.js:74
 msgctxt "datatable column header"
 msgid "AFRINFO"
-msgstr ""
+msgstr "African Info"
 
 #: voyages/sitemedia/scripts/vue/search.js:77
 #: voyages/static/scripts/vue/search.js:77
@@ -5044,7 +5105,7 @@ msgstr "Rig or type of vessel"
 #: voyages/static/scripts/vue/variables/ship-nation-owner.js:165
 msgctxt "filter select label"
 msgid "CARGO"
-msgstr ""
+msgstr "Cargo"
 
 #: voyages/sitemedia/scripts/vue/variables/slave.js:43
 #: voyages/static/scripts/vue/variables/slave.js:43
@@ -5129,7 +5190,7 @@ msgstr "Please use whole numbers, e.g. 75"
 #: voyages/static/scripts/vue/variables/slave.js:263
 msgctxt "filter select label"
 msgid "AFRINFO"
-msgstr ""
+msgstr "African Info"
 
 #: voyages/sitemedia/scripts/vue/variables/source.js:3
 #: voyages/static/scripts/vue/variables/source.js:3
@@ -6037,8 +6098,6 @@ msgstr ""
 #: voyages/static/scripts/scripts/vue/search.js:31
 #: voyages/static/scripts/scripts/vue/variables/ship-nation-owner.js:90
 #, fuzzy
-#| msgctxt "filter select label TAST"
-#| msgid "Flag"
 msgid "Flag"
 msgstr "Flag TAST"
 
@@ -6334,6 +6393,26 @@ msgstr ""
 msgctxt "possibly-offensive-label"
 msgid "Mulatto"
 msgstr ""
+
+#: voyages/sitemedia/scripts/vue/enslavers/app.js:31
+msgid "Trans-Atlantic"
+msgstr ""
+
+#: voyages/sitemedia/scripts/vue/enslavers/app.js:34
+msgid "Intra-American"
+msgstr ""
+
+#: voyages/sitemedia/scripts/vue/enslavers/app.js:37
+msgid "Neither"
+msgstr ""
+
+#: voyages/sitemedia/scripts/vue/variables/slave.js:264
+msgctxt "filter select description"
+msgid "AFRINFO"
+msgstr ""
+"The list of values below contains labels that may be considered offensive. "
+"These terms are present in historical sources and are used here to "
+"accurately represent them."
 
 #~ msgctxt "filter select label IAM"
 #~ msgid "Flag"

@@ -1081,8 +1081,9 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
               var rankingVisible = $('#results_main_table').DataTable().column(rankingIndex).visible();
 
               if (fuzzySearch && !rankingVisible) {
-                  d.order[0]['column'] = rankingIndex;
-                  d.order[0]['dir'] = "asc";
+                $('#results_main_table').DataTable().order([ 1, "asc" ]);
+                d.order[0]['column'] = rankingIndex;
+                d.order[0]['dir'] = "asc";
               }
             }
 

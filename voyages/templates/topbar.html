@@ -47,7 +47,8 @@
 					<a class="nav-link dropdown-toggle d-none d-lg-block d-xl-none" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false" >{% trans 'PAST' %}</a>
 					<div class="dropdown-menu">
 						<a class="dropdown-item" href="{% url 'resources:about' %}">Understanding the Database</a>
-						<a class="dropdown-item" href="{% url 'past:database' %}">{% trans "Database" %}</a>
+						<a class="dropdown-item" href="{% url 'past:database' %}/african-origins">{% trans "African Origins (enslaved database)" %}</a>
+						<a class="dropdown-item" href="{% url 'past:database' %}/oceans-of-kinfolk">{% trans "Oceans of Kinfolk (enslaved database)" %}</a>
 						{% if ENSLAVERS %}
 						<a class="dropdown-item" href="{% url 'past:enslavers' %}">{% trans "Enslavers Database" %}</a>
 						{% endif %}
