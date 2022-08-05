@@ -11,7 +11,7 @@ from .forms import (VoyageCaptainConnectionForm, VoyageCrewForm,
                     VoyageShipForm, VoyageShipOwnerConnectionForm,
                     VoyageSlavesNumbersForm, VoyageSourcesConnectionForm,
                     VoyagesSourcesAdminForm)
-from .models import (BroadRegion, Nationality, OwnerOutcome, ParticularOutcome,
+from .models import (AfricanInfo, BroadRegion, CargoType, CargoUnit, LinkedVoyages, Nationality, OwnerOutcome, ParticularOutcome,
                      Place, Region, RigOfVessel, SlavesOutcome, TonType,
                      VesselCapturedOutcome, Voyage, VoyageCaptainConnection,
                      VoyageCrew, VoyageDates, VoyageGroupings, VoyageItinerary,
@@ -35,7 +35,8 @@ class FlatPageAdmin(FlatPageAdmin):
 
     class Media:
         js = (
-            'scripts/tiny_mce/tinymce.min.js',
+            '//cdn.tiny.cloud/1/evau54786a4pxb62mp84sjc26h72hrpdu9b5'
+            'ht3zzn8oisd5/tinymce/5/tinymce.min.js',
             'scripts/tiny_mce/textareas.js',
         )
 
@@ -346,6 +347,11 @@ class VoyageAdmin(admin.ModelAdmin):
     class Meta:
         fields = '__all__'
 
+
+admin.site.register(AfricanInfo)
+admin.site.register(CargoType)
+admin.site.register(CargoUnit)
+admin.site.register(LinkedVoyages)
 
 # Re-register FlatPageAdmin
 admin.site.unregister(FlatPage)

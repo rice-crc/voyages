@@ -1,6 +1,8 @@
 {% extends "base.html" %} {% load i18n %} {% load sass_tags %} {% load voyage_extras %} {% load compress %}
 
 
+
+
 <!-- Page title here -->
 {% block title %}{% trans "Slave Voyages" %}{% endblock %}
 {% block csslist %}
@@ -162,31 +164,8 @@
 	</div>
 </div>
 
-
-<div class="aos-container news-container" data-aos="fade-in" data-aos-easing="ease" data-aos-duration="500">
-	<div class="container">
-		<div class="news-container-title">
-			Recent News
-		</div>
-
-
-		<div class="news-grid-container row" id="recent-news">
-			<div class="news-grid col-xs-12 col-sm-12 col-md-6 col-lg-4" v-for="article in news" >
-				<a :href="article.url" target="_blank" rel="noopener"
-					alt="Emory University Center for Digital Scholarship (US)">
-					<div class="news-grid-item row fade-in ">
-							<div class="news-grid-title col-sm-12 no-padding"> [[article.title]]</div>
-							<div class="news-grid-title-date col-sm-12 no-padding" ><span class="news-grid-title-date-bg">[[article.timestamp]]</span></div>
-						<p class="news-grid-body">
-							[[article.text]]
-						</p>
-					</div>
-				</a>
-			</div>
-		</div>
-	</div>
-
-</div>
+{% load blog_carousel %}
+{% show_last_posts %}
 
 <div class="container">
 	<div class="row">
@@ -481,6 +460,9 @@ This database compiles information about more than 36,000 voyages that forcibly 
 		$('[data-toggle="tooltip"]').tooltip()
 	})
 </script>
+
+
+
 
 {% endcompress %}
 

@@ -564,3 +564,11 @@ td.number {
     padding: 0.5rem 2rem 0 !important;
   }
 }
+
+.badge-maybe-offensive {
+  filter: blur(1.8px);
+}
+
+.badge-maybe-offensive:hover {
+  filter: none;
+}

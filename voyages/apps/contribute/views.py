@@ -934,6 +934,14 @@ def voyage_to_dict(voyage):
         for k, v in list(slave_number_var_map.items()):
             dikt[number_prefix + k] = getattr(numbers, v)
 
+    # TODO new_voyage_fields: we need to generate dict entries for
+    # the new fields.
+    dikt['african_info'] = json.dumps([a.pk for a in voyage.african_info.all()])
+    dikt['cargo'] = json.dumps([{"cargo_type": conn.cargo_id, "unit": conn.unit_id, "amount": conn.amount} for conn in voyage.cargo.all()])
+    
+    # Comments
+    dikt['comments'] = voyage.comments
+
     # Captains
     captains = voyage.voyage_captain.all()
     captain_keys = ['first', 'second', 'third']

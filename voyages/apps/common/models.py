@@ -21,6 +21,20 @@ def year_mod(the_year, mod, start):
     return 1 + ((the_year - start - 1) // mod)
 
 
+class NamedModelAbstractBase(models.Model):
+    id = models.IntegerField(primary_key=True)
+    name = models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.__unicode__()
+
+    def __unicode__(self):
+        return str(self.id) + ", " + self.name
+
+    class Meta:
+        abstract = True
+
+
 # Create your models here.
 class SavedQuery(models.Model):
     """
@@ -79,10 +93,7 @@ class SavedQuery(models.Model):
         return post
 
     def save(self, *args, preserve_id=False, **kwargs):
-        try:
-        	hash_object = hashlib.sha1(self.query.encode('utf8'))
-        except:
-        	hash_object = hashlib.sha1(self.query)
+        hash_object = hashlib.sha1(self.query.encode('utf8'))
         self.hash = hash_object.hexdigest()
         if not self.id or not preserve_id:
             pre_existing = list(

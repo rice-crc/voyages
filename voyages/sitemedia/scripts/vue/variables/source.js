@@ -1,6 +1,6 @@
 var_sources_plaintext = new TextVariable({
     varName: "sources_plaintext",
-    label: gettext("Source of data"),
+    label: pgettext("filter select label", "SOURCE"),
     description: "",
   },{
     op: "contains",

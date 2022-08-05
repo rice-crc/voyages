@@ -1,0 +1,99 @@
+{% extends "_base.html" %}
+{% load voyage_extras %}
+{% load sass_tags %}
+{% load i18n %}
+{% load thumbnail %}
+
+{% block content %}
+
+
+
+<!-- CSS for Trans-Atlantic -->
+<link href="{% sass_src 'scss/library/js-offcanvas@1.0.0.min.css' %}" rel="stylesheet" type="text/css" />
+<link href="{% sass_src 'scss/off-canvas.scss' %}" rel="stylesheet" type="text/css" />
+
+<link href="{% sass_src 'scss/library/bootstrap-vue-2.0.0-rc.11.css' %}" rel="stylesheet" type="text/css" />
+<link href="{% sass_src 'scss/blog.scss' %}" rel="stylesheet" type="text/css" />
+
+<div class="nav-header">
+	<div>{% trans 'Echoes: The SlaveVoyages Blog' %} - {{ object.name }}</div>
+	<div class="navbar-subtitle flex">
+		<div class="navbar-subitem">			
+			{% block userlinks %}				
+			<a class="navbar-subitem-link" href="{% url 'blog:blog' %}">{% trans 'All posts' %}</a> 				
+			{% endblock %}			
+		</div>
+	</div>
+</div>
+
+
+<div class="container-new">
+  <div class="main-body">
+    <div class="row">
+      <div class="col-lg-4">
+        <div class="card border-0">
+          <div class="card-body">
+            <div class="d-flex flex-column align-items-center text-center">
+              {%if author.photo %}
+              <img src="{{ author.photo.url }}" alt="{{ object.name }}" class="rounded-circle " width="300">
+              {% else %}
+              <i class="fas fa-user fa-10x"></i>
+              {% endif %}
+              <div class="mt-3">
+                <h4>{% block title %}{{ object.name }}{% endblock title %}</h4>
+                <p class="text-secondary mb-1">{{ object.role }}</p>
+                <p class="text-muted font-size-sm"><a href="{% url 'blog:institution_detail' object.institution.slug  object.institution.id   %}" >{{ object.institution.name }}</a></p>                
+              </div>
+            </div>            
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-8">
+        <div class="card border-0">
+          <div class="card-body">            
+            {{ object.description|default_if_none:"" }}            
+            {{ profile|safe }}
+          </div>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<hr>
+
+<div class="container-new">
+
+  <h3>{% trans "Author's posts:" %}</h3>
+  <div class="card-columns">
+
+    {% for post in posts.all %}
+      <div class="card">
+        <a href="{% url 'blog:post_detail' post.slug   %}">
+          <div class="content-overlay"></div> 
+          {%if post.thumbnail %}
+            <img class="card-img img-fluid content-image " src="{{ post.thumbnail.url }}" alt="{{ post.title }}">
+          {%else%}
+            <img class="card-img img-fluid content-image " src="{{STATIC_URL}}images/site/404.png"  alt="{{ post.title }}">    
+          {%endif%}
+          
+          <div class="content-details fadeIn-bottom">
+            <h3 class="content-title">{{ post.title }}</h3>
+            <h4 class="content-title">{{ post.subtitle|default_if_none:"" }}</h4>
+            <p class="content-text">
+                {% for author in post.authors.all %}            
+                    {{ author.name }}
+                    {{ forloop.last|yesno:",|"|safe }}
+                {% endfor %}
+            </p>
+          </div>
+        </a>
+      </div>
+    {% endfor %}
+  </div>
+</div>
+
+
+{% endblock %}

@@ -19,7 +19,7 @@ from voyages.apps.voyage.views import prepare_paginator_variables
 
 from .forms import ResultsPerPageOptionForm
 from .globals import names_search_strict_text, names_sort_fields
-from .search_indexes import AfricanNamesIndex
+# from .search_indexes import AfricanNamesIndex
 from .models import (AfricanName, Country, Image,
                      ImageCategory, Place)
 
@@ -351,7 +351,7 @@ def get_image_search_detail(request, page):
     })
 
 
-AFRICAN_NAME_SOLR_FIELDS = list(AfricanNamesIndex.fields)
+AFRICAN_NAME_SOLR_FIELDS = [] # list(AfricanNamesIndex.fields)
 
 
 def download_slaves_helper(data):

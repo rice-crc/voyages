@@ -69,6 +69,8 @@ ARG GUNICORN_OPTS="--reload --workers 3 --threads 2 --worker-class gthread"
 
 ENV GUNICORN_PORT=${GUNICORN_PORT}
 ENV GUNICORN_OPTS=${GUNICORN_OPTS}
+# Calling Python's print() on an UTF-8 string might fail if this env var is not set.
+ENV PYTHONIOENCODING=utf-8
 
 EXPOSE $GUNICORN_PORT
 

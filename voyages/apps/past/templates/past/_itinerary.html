@@ -3,7 +3,7 @@
 <li class="nav-item dropdown">
   <v-menu-title :count="filter.itinerary.count" title="{% trans 'Itinerary' %}"></v-menu-title>
 
-  <v-panel-singular @apply="apply" @reset="reset" group="itinerary" title="{% trans 'Personal Data' %}" sub-group="itinerary"
+  <v-panel-singular @apply="apply" @reset="reset" group="itinerary" title="{% trans 'Itinerary' %}" sub-group="itinerary"
     :filters="filter.itinerary.itinerary" align="left">
     <div slot="v-panel-header">
       <v-panel-header title="{% trans 'Itinerary' %}" description="{% trans 'Description' %}">
@@ -18,7 +18,6 @@
 
       <v-text @change="changed"
         :filter="scope.filters.var_ship_name"
-        v-if="localStorage.enslavedDataset==0"
       ></v-text>
 
       <v-treeselect

@@ -87,7 +87,7 @@ var_registered_place_idnum = new PlaceVariable({
 
 var_nationality = new TreeselectVariable({
     varName: "nationality",
-    label: gettext("Flag"),
+    label: pgettext("filter select label", "NATIONAL"),
     description: "",
   },{
     op: "is one of",
@@ -99,7 +99,7 @@ var_nationality = new TreeselectVariable({
 
 var_imputed_nationality = new TreeselectVariable({
     varName: "imputed_nationality",
-    label: gettext("Flag (imputed)"),
+    label: pgettext("filter select label", "NATINIMP"),
     description: "",
   },{
     op: "is one of",
@@ -111,7 +111,7 @@ var_imputed_nationality = new TreeselectVariable({
 
 var_rig_of_vessel = new TreeselectVariable({
     varName: "rig_of_vessel",
-    label: gettext("Rig of vessel"),
+    label: pgettext("filter select label", "RIG"),
     description: "",
   },{
     op: "is one of",
@@ -160,6 +160,18 @@ var_guns_mounted = new NumberVariable({
     isadvanced: false
   });
 
+var_cargo = new TreeselectVariable({
+    varName: "cargo",
+    label: pgettext("filter select label", "CARGO"),
+    description: "",
+  },{
+    op: "is one of",
+    searchTerm: [],
+  },{
+    isImputed: false,
+    isAdvanced: false
+  });
+
 // all
 shipNationOwner = {
   voyagesAndVessels: {
@@ -200,6 +212,15 @@ shipNationOwner = {
     var_tonnage: var_tonnage,
     var_tonnage_mod: var_tonnage_mod,
     var_guns_mounted: var_guns_mounted,
+
+    count: {
+      changed: 0,
+      activated: 0,
+    }
+  },
+
+  cargo: {
+    var_cargo: var_cargo,
 
     count: {
       changed: 0,

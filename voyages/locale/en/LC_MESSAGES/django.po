@@ -1,0 +1,5050 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-06-10 14:06+0000\n"
+"PO-Revision-Date: 2022-07-22 16:58-0300\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: en\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 3.1.1\n"
+
+#: voyages/apps/about/templates/_base.html:4
+#: voyages/apps/about/templates/index.html:6
+msgid "Slave Voyages - About"
+msgstr ""
+
+#: voyages/apps/about/templates/index.html:18
+#: voyages/apps/resources/templates/resources/left-menu.html:11
+#: voyages/apps/static_content/templates/static_content/index.html:189
+#: voyages/apps/static_content/templates/static_content/index.html:233
+#: voyages/apps/static_content/templates/static_content/index.html:256
+#: voyages/templates/topbar.html:68 voyages/templates/topbar.html:70
+msgid "About"
+msgstr ""
+
+#: voyages/apps/about/templates/index.html:19
+#: voyages/apps/static_content/templates/static_content/index.html:7
+msgid "Slave Voyages"
+msgstr ""
+
+#: voyages/apps/about/templates/index.html:35
+#: voyages/apps/american/templates/american/about.html:35
+#: voyages/apps/american/templates/american/downloads.html:34
+#: voyages/apps/american/templates/american/essays.html:35
+#: voyages/apps/assessment/templates/assessment/estimates.html:127
+#: voyages/apps/resources/templates/resources/about.html:33
+#: voyages/apps/resources/templates/resources/base.html:31
+#: voyages/apps/resources/templates/resources/downloads.html:34
+#: voyages/apps/resources/templates/resources/image-category-detail.html:48
+#: voyages/apps/resources/templates/resources/image-detail.html:48
+#: voyages/apps/resources/templates/resources/image-search-detail-window.html:48
+#: voyages/apps/resources/templates/resources/images-category.html:58
+#: voyages/apps/resources/templates/resources/images-index.html:42
+#: voyages/apps/resources/templates/resources/images-search-detail.html:78
+#: voyages/apps/resources/templates/resources/images-search-results.html:60
+#: voyages/apps/resources/templates/resources/lessons.html:36
+#: voyages/apps/resources/templates/resources/links.html:35
+#: voyages/apps/resources/templates/resources/names-index.html:99
+#: voyages/apps/voyage/templates/about.html:30
+#: voyages/apps/voyage/templates/downloads.html:29
+#: voyages/apps/voyage/templates/essays.html:29
+#: voyages/templates/account/base.html:96
+msgid "Toggle Sidebar"
+msgstr ""
+
+#: voyages/apps/american/templates/american/about.html:6
+msgid "Intra-American Slave Trade - Understanding the Database"
+msgstr ""
+
+#: voyages/apps/american/templates/american/about.html:18
+#: voyages/apps/american/templates/american/downloads.html:18
+#: voyages/apps/american/templates/american/essays.html:18
+msgid "Intra-American Slave Trade"
+msgstr ""
+
+#: voyages/apps/american/templates/american/about.html:19
+#: voyages/apps/resources/templates/resources/about.html:18
+#: voyages/apps/voyage/templates/about.html:14 voyages/templates/topbar.html:18
+#: voyages/templates/topbar.html:36
+msgid "Understanding the Database"
+msgstr ""
+
+#: voyages/apps/american/templates/american/downloads.html:6
+msgid "Intra-American Slave Trade - Downloads"
+msgstr ""
+
+#: voyages/apps/american/templates/american/downloads.html:19
+#: voyages/apps/contribute/templates/contribute/downloads_partial.html:3
+#: voyages/apps/resources/templates/resources/downloads.html:18
+#: voyages/apps/static_content/templates/static_content/index.html:201
+#: voyages/apps/static_content/templates/static_content/index.html:235
+#: voyages/apps/static_content/templates/static_content/index.html:262
+#: voyages/apps/voyage/templates/downloads.html:13
+#: voyages/templates/topbar.html:22 voyages/templates/topbar.html:39
+#: voyages/templates/topbar.html:54
+msgid "Downloads"
+msgstr ""
+
+#: voyages/apps/american/templates/american/essays.html:6
+msgid "Intra-American - Essays"
+msgstr ""
+
+#: voyages/apps/american/templates/american/essays.html:19
+#: voyages/apps/static_content/templates/static_content/index.html:198
+#: voyages/apps/voyage/templates/essays.html:13
+#: voyages/templates/topbar.html:21 voyages/templates/topbar.html:38
+msgid "Essays"
+msgstr ""
+
+#: voyages/apps/assessment/forms.py:18
+msgid "Rows"
+msgstr ""
+
+#: voyages/apps/assessment/forms.py:23
+msgid "Columns"
+msgstr ""
+
+#: voyages/apps/assessment/forms.py:28
+msgid "Cells"
+msgstr ""
+
+#: voyages/apps/assessment/forms.py:31
+msgid "Include empty"
+msgstr ""
+
+#: voyages/apps/assessment/forms.py:36
+msgid "From"
+msgstr ""
+
+#: voyages/apps/assessment/forms.py:39
+msgid "To"
+msgstr ""
+
+#: voyages/apps/assessment/globals.py:151
+#: voyages/apps/assessment/globals.py:165
+#: voyages/apps/assessment/templates/assessment/estimates-left-menu.html:37
+msgid "Flag"
+msgstr ""
+
+#: voyages/apps/assessment/globals.py:152
+#: voyages/apps/assessment/globals.py:166
+msgid "Embarkation regions"
+msgstr ""
+
+#: voyages/apps/assessment/globals.py:154
+#: voyages/apps/assessment/globals.py:168
+msgid "Broad disembarkation regions"
+msgstr ""
+
+#: voyages/apps/assessment/globals.py:156
+#: voyages/apps/assessment/globals.py:170
+msgid "Specific disembarkation regions"
+msgstr ""
+
+#: voyages/apps/assessment/globals.py:158
+msgid "Individual years"
+msgstr ""
+
+#: voyages/apps/assessment/globals.py:159 voyages/apps/voyage/globals.py:779
+msgid "5-year periods"
+msgstr ""
+
+#: voyages/apps/assessment/globals.py:160 voyages/apps/voyage/globals.py:780
+msgid "10-year periods"
+msgstr ""
+
+#: voyages/apps/assessment/globals.py:161 voyages/apps/voyage/globals.py:781
+msgid "25-year periods"
+msgstr ""
+
+#: voyages/apps/assessment/globals.py:162 voyages/apps/voyage/globals.py:782
+msgid "50-year periods"
+msgstr ""
+
+#: voyages/apps/assessment/globals.py:163 voyages/apps/voyage/globals.py:783
+msgid "100-year periods"
+msgstr ""
+
+#: voyages/apps/assessment/globals.py:173
+msgid "Embarked/Disembarked"
+msgstr ""
+
+#: voyages/apps/assessment/globals.py:174
+msgid "Only embarked"
+msgstr ""
+
+#: voyages/apps/assessment/globals.py:175
+msgid "Only disembarked"
+msgstr ""
+
+#: voyages/apps/assessment/templates/assessment/estimates-left-menu.html:14
+msgid "Time Frame"
+msgstr ""
+
+#: voyages/apps/assessment/templates/assessment/estimates-left-menu.html:22
+msgid "Show data from"
+msgstr ""
+
+#: voyages/apps/assessment/templates/assessment/estimates-left-menu.html:24
+msgid "to"
+msgstr ""
+
+#: voyages/apps/assessment/templates/assessment/estimates-left-menu.html:27
+msgid "Full extent of coverage by estimates is 1501 - 1866."
+msgstr ""
+
+#: voyages/apps/assessment/templates/assessment/estimates-left-menu.html:29
+#: voyages/apps/assessment/templates/assessment/estimates-left-menu.html:58
+#: voyages/apps/assessment/templates/assessment/estimates-left-menu.html:216
+#: voyages/apps/past/templates/past/_enslaved_dataset_select_modal.html:68
+msgid "Apply"
+msgstr ""
+
+#: voyages/apps/assessment/templates/assessment/estimates-left-menu.html:30
+#: voyages/apps/assessment/templates/assessment/estimates-left-menu.html:60
+#: voyages/apps/assessment/templates/assessment/estimates-left-menu.html:217
+msgid "Reset"
+msgstr ""
+
+#: voyages/apps/assessment/templates/assessment/estimates-left-menu.html:67
+msgid "Regions"
+msgstr ""
+
+#: voyages/apps/assessment/templates/assessment/estimates-left-menu.html:77
+#: voyages/apps/voyage/globals.py:761 voyages/apps/voyage/globals.py:800
+msgid "Embarkation Regions"
+msgstr ""
+
+#: voyages/apps/assessment/templates/assessment/estimates-left-menu.html:143
+#: voyages/apps/assessment/templates/assessment/estimates-left-menu.html:211
+#: voyages/apps/resources/templates/resources/names-left-menu.html:214
+#: voyages/apps/resources/templates/resources/names-left-menu.html:323
+msgid "Select All"
+msgstr ""
+
+#: voyages/apps/assessment/templates/assessment/estimates-left-menu.html:144
+#: voyages/apps/assessment/templates/assessment/estimates-left-menu.html:212
+#: voyages/apps/resources/templates/resources/names-left-menu.html:215
+#: voyages/apps/resources/templates/resources/names-left-menu.html:324
+msgid "Deselect All"
+msgstr ""
+
+#: voyages/apps/assessment/templates/assessment/estimates-left-menu.html:149
+msgid "Disembarkation Regions"
+msgstr ""
+
+#: voyages/apps/assessment/templates/assessment/estimates-left-menu.html:226
+msgid "Create a Query Link"
+msgstr ""
+
+#: voyages/apps/assessment/templates/assessment/estimates-left-menu.html:232
+msgid ""
+"To reactivate the current query in the future, copy the following URL and "
+"then paste it into the address bar:"
+msgstr ""
+
+#: voyages/apps/assessment/templates/assessment/estimates-left-menu.html:234
+msgid "Create Link"
+msgstr ""
+
+#: voyages/apps/assessment/templates/assessment/estimates-left-menu.html:235
+#: voyages/apps/assessment/templates/assessment/estimates.html:50
+#: voyages/apps/resources/templates/resources/images-left-menu.html:73
+#: voyages/apps/resources/templates/resources/names-index.html:43
+#: voyages/apps/resources/templates/resources/names-left-menu.html:370
+msgid "Reset All"
+msgstr ""
+
+#: voyages/apps/assessment/templates/assessment/estimates-left-menu.html:247
+msgid "Link created"
+msgstr ""
+
+#: voyages/apps/assessment/templates/assessment/estimates.html:27
+#: voyages/apps/static_content/templates/static_content/index.html:195
+#: voyages/templates/topbar.html:20
+msgid "Estimates"
+msgstr ""
+
+#: voyages/apps/assessment/templates/assessment/estimates.html:32
+msgid "Trans-Atlantic Slave Trade - Estimates"
+msgstr ""
+
+#: voyages/apps/assessment/templates/assessment/estimates.html:35
+#: voyages/apps/resources/templates/resources/names-index.html:29
+msgid "Current Query"
+msgstr ""
+
+#: voyages/apps/assessment/templates/assessment/estimates.html:35
+msgid ""
+"For purposes of calculation, estimates of embarked and disembarked slaves in "
+"tables, the timeline, and maps have been rounded to integers. When users "
+"cite any number, they are advised to round it to the nearest hundred."
+msgstr ""
+
+#: voyages/apps/assessment/templates/assessment/estimates.html:41
+#: voyages/apps/resources/templates/resources/names-index.html:35
+msgid "View All"
+msgstr ""
+
+#: voyages/apps/assessment/templates/assessment/estimates.html:61
+msgid "Selected National Carriers"
+msgstr ""
+
+#: voyages/apps/assessment/templates/assessment/estimates.html:63
+#: voyages/apps/assessment/templates/assessment/estimates.html:76
+#: voyages/apps/assessment/templates/assessment/estimates.html:91
+msgid "all"
+msgstr ""
+
+#: voyages/apps/assessment/templates/assessment/estimates.html:74
+msgid "Selected Embarkation Regions"
+msgstr ""
+
+#: voyages/apps/assessment/templates/assessment/estimates.html:89
+msgid "Selected Disembarkation Regions"
+msgstr ""
+
+#: voyages/apps/assessment/templates/assessment/estimates.html:105
+#: voyages/apps/past/templates/past/_panel.html:21
+#: voyages/apps/past/templates/past/_panel.html:27
+#: voyages/apps/resources/templates/resources/names-index.html:84
+#: voyages/apps/voyage/templates/database/_panel.html:21
+#: voyages/apps/voyage/templates/database/_panel.html:27
+msgid "Hide"
+msgstr ""
+
+#: voyages/apps/assessment/templates/assessment/estimates.html:140
+#: voyages/apps/voyage/templates/database/_tabs.html:12
+msgid "Tables"
+msgstr ""
+
+#: voyages/apps/assessment/templates/assessment/estimates.html:144
+#: voyages/apps/static_content/templates/static_content/index.html:65
+#: voyages/apps/voyage/templates/database/_tabs.html:18
+msgid "Timeline"
+msgstr ""
+
+#: voyages/apps/assessment/templates/assessment/estimates.html:148
+#: voyages/apps/voyage/templates/database/_tabs.html:22
+msgid "Maps"
+msgstr ""
+
+#: voyages/apps/assessment/templates/assessment/estimates_table.html:12
+msgid "Update"
+msgstr ""
+
+#: voyages/apps/assessment/templates/assessment/estimates_table.html:13
+msgid "Download Table"
+msgstr ""
+
+#: voyages/apps/assessment/templates/assessment/estimates_timeline.html:36
+msgid "Timeline: Number of Captives Embarked and Disembarked per Year"
+msgstr ""
+
+#: voyages/apps/assessment/templates/assessment/estimates_timeline.html:40
+msgid "Download Timeline Data"
+msgstr ""
+
+#: voyages/apps/assessment/templates/assessment/estimates_timeline.html:135
+msgid "Historical event"
+msgstr ""
+
+#: voyages/apps/assessment/templates/assessment/estimates_timeline.html:139
+#: voyages/apps/contribute/templates/contribute/editor_main.html:59
+#: voyages/apps/contribute/templates/contribute/interim.html:1479
+#: voyages/apps/contribute/templates/contribute/interim.html:1530
+#: voyages/apps/resources/templates/resources/image-category-detail.html:100
+#: voyages/apps/resources/templates/resources/images-search-detail.html:129
+#: voyages/apps/contribute/templates/contribute/interim.html:1528
+#: voyages/apps/contribute/templates/contribute/interim.html:1579
+msgid "Year"
+msgstr ""
+
+#: voyages/apps/assessment/templates/assessment/estimates_timeline.html:140
+#: voyages/apps/assessment/templates/assessment/estimates_timeline.html:208
+msgid "Embarked"
+msgstr ""
+
+#: voyages/apps/assessment/templates/assessment/estimates_timeline.html:141
+#: voyages/apps/assessment/templates/assessment/estimates_timeline.html:208
+msgid "Disembarked"
+msgstr ""
+
+#: voyages/apps/assessment/templates/assessment/estimates_timeline.html:249
+msgid "First slave voyage direct from Africa to the Americas"
+msgstr ""
+
+#: voyages/apps/assessment/templates/assessment/estimates_timeline.html:250
+msgid "Continuous slave trade from Brazil begins"
+msgstr ""
+
+#: voyages/apps/assessment/templates/assessment/estimates_timeline.html:251
+msgid "Sugar exports from Eastern Caribbean begin"
+msgstr ""
+
+#: voyages/apps/assessment/templates/assessment/estimates_timeline.html:252
+msgid "English capture Jamaica"
+msgstr ""
+
+#: voyages/apps/assessment/templates/assessment/estimates_timeline.html:253
+msgid "Gold discovered in Minas Gerais (Brazil)"
+msgstr ""
+
+#: voyages/apps/assessment/templates/assessment/estimates_timeline.html:254
+msgid "French obtain St Domingue in Treaty of Rywsick"
+msgstr ""
+
+#: voyages/apps/assessment/templates/assessment/estimates_timeline.html:255
+msgid "Seven years war begins"
+msgstr ""
+
+#: voyages/apps/assessment/templates/assessment/estimates_timeline.html:256
+msgid "American Revolutionary War begins"
+msgstr ""
+
+#: voyages/apps/assessment/templates/assessment/estimates_timeline.html:257
+msgid "Bourbon reforms open Spanish colonial ports to slaves"
+msgstr ""
+
+#: voyages/apps/assessment/templates/assessment/estimates_timeline.html:258
+msgid "St Domingue revolution begins"
+msgstr ""
+
+#: voyages/apps/assessment/templates/assessment/estimates_timeline.html:259
+msgid "Abolition of British and US slave trades takes effect"
+msgstr ""
+
+#: voyages/apps/assessment/templates/assessment/estimates_timeline.html:260
+msgid "Anglo-Brazilian anti-slave trade treaty"
+msgstr ""
+
+#: voyages/apps/assessment/templates/assessment/estimates_timeline.html:261
+msgid "Brazil suppresses slave trade"
+msgstr ""
+
+#: voyages/apps/assessment/templates/assessment/estimates_timeline.html:262
+msgid "Last reported transatlantic slave voyage arrives in Americas"
+msgstr ""
+
+#: voyages/apps/blog/templates/blog/admin/news-migration.html:5
+msgid "News Migration"
+msgstr ""
+
+#: voyages/apps/blog/templates/blog/admin/post_change_list.html:12
+msgid "Migrate all news to Blog Format"
+msgstr ""
+
+#: voyages/apps/blog/templates/blog/author_bio.html:19
+#: voyages/apps/blog/templates/blog/authors.html:20
+#: voyages/apps/blog/templates/blog/index.html:26
+#: voyages/apps/blog/templates/blog/institution_detail.html:19
+#: voyages/apps/blog/templates/blog/institutions.html:22
+#: voyages/apps/blog/templates/blog/post_detail.html:20
+msgid "Echoes: The SlaveVoyages Blog"
+msgstr ""
+
+#: voyages/apps/blog/templates/blog/author_bio.html:23
+#: voyages/apps/blog/templates/blog/institution_detail.html:23
+#: voyages/apps/blog/templates/blog/post_detail.html:27
+msgid "All posts"
+msgstr ""
+
+#: voyages/apps/blog/templates/blog/author_bio.html:69
+msgid "Author's posts:"
+msgstr ""
+
+#: voyages/apps/blog/templates/blog/authors.html:60
+#: voyages/apps/blog/templates/blog/index.html:66
+#: voyages/apps/blog/templates/blog/institutions.html:57
+#: voyages/apps/contribute/templates/contribute/interim.html:1592
+#: voyages/apps/contribute/templates/contribute/interim.html:1619
+#: voyages/apps/contribute/templates/contribute/interim.html:1641
+#: voyages/apps/contribute/templates/contribute/interim.html:1668
+msgid "Page"
+msgstr ""
+
+#: voyages/apps/blog/templates/blog/authors.html:60
+#: voyages/apps/blog/templates/blog/index.html:66
+#: voyages/apps/blog/templates/blog/institutions.html:57
+msgid "of"
+msgstr ""
+
+#: voyages/apps/blog/templates/blog/authors.html:63
+#: voyages/apps/blog/templates/blog/index.html:69
+#: voyages/apps/blog/templates/blog/institutions.html:60
+#: voyages/apps/resources/templates/resources/names-index.html:396
+#: voyages/apps/resources/templates/resources/names-index.html:400
+msgid "First"
+msgstr ""
+
+#: voyages/apps/blog/templates/blog/authors.html:64
+#: voyages/apps/blog/templates/blog/carousel.html:50
+#: voyages/apps/blog/templates/blog/index.html:70
+#: voyages/apps/blog/templates/blog/institutions.html:61
+#: voyages/apps/resources/templates/resources/image-category-detail.html:71
+#: voyages/apps/resources/templates/resources/image-category-detail.html:73
+#: voyages/apps/resources/templates/resources/images-search-detail.html:101
+#: voyages/apps/resources/templates/resources/images-search-detail.html:103
+#: voyages/apps/resources/templates/resources/names-index.html:407
+#: voyages/apps/resources/templates/resources/names-index.html:411
+msgid "Previous"
+msgstr ""
+
+#: voyages/apps/blog/templates/blog/authors.html:80
+#: voyages/apps/blog/templates/blog/carousel.html:54
+#: voyages/apps/blog/templates/blog/index.html:86
+#: voyages/apps/blog/templates/blog/institutions.html:77
+#: voyages/apps/resources/templates/resources/image-category-detail.html:77
+#: voyages/apps/resources/templates/resources/image-category-detail.html:79
+#: voyages/apps/resources/templates/resources/images-search-detail.html:109
+#: voyages/apps/resources/templates/resources/images-search-detail.html:111
+#: voyages/apps/resources/templates/resources/names-index.html:432
+#: voyages/apps/resources/templates/resources/names-index.html:436
+msgid "Next"
+msgstr ""
+
+#: voyages/apps/blog/templates/blog/authors.html:81
+#: voyages/apps/blog/templates/blog/index.html:87
+#: voyages/apps/blog/templates/blog/institutions.html:78
+#: voyages/apps/resources/templates/resources/names-index.html:442
+#: voyages/apps/resources/templates/resources/names-index.html:446
+msgid "Last"
+msgstr ""
+
+#: voyages/apps/blog/templates/blog/carousel.html:19
+msgid "Latest News"
+msgstr ""
+
+#: voyages/apps/blog/templates/blog/carousel.html:30
+msgid "click to read more..."
+msgstr ""
+
+#: voyages/apps/blog/templates/blog/post_detail.html:25
+msgid "News frontpage"
+msgstr ""
+
+#: voyages/apps/contribute/forms.py:14
+msgid "Terms and Conditions"
+msgstr ""
+
+#: voyages/apps/contribute/forms.py:15
+msgid ""
+"I warrant that I have the right to contribute the\n"
+"                          following data to the Voyages  Database and its\n"
+"                          inclusion in the Voyages Database will not "
+"infringe\n"
+"                          anyone's  intellectual property rights. I also "
+"agree\n"
+"                          that this data will become part of  the Voyages: "
+"The\n"
+"                          Trans-Atlantic Slave Trade Database website and "
+"will\n"
+"                          be  governed by any applicable licenses."
+msgstr ""
+
+#: voyages/apps/contribute/forms.py:47
+msgid "Username or Email"
+msgstr ""
+
+#: voyages/apps/contribute/forms.py:51
+msgid "First name"
+msgstr ""
+
+#: voyages/apps/contribute/forms.py:52
+msgid "Last name"
+msgstr ""
+
+#: voyages/apps/contribute/forms.py:54
+msgid "Institution"
+msgstr ""
+
+#: voyages/apps/contribute/forms.py:57
+msgid "Brief description of new material and sources"
+msgstr ""
+
+#: voyages/apps/contribute/forms.py:64
+msgid "Agree to the terms and conditions above"
+msgstr ""
+
+#: voyages/apps/contribute/forms.py:132
+msgid "Improperly formatted field"
+msgstr ""
+
+#: voyages/apps/contribute/forms.py:137
+#, python-format
+msgid "At least %d voyage(s) should be provided"
+msgstr ""
+
+#: voyages/apps/contribute/forms.py:141
+#, python-format
+msgid "At most %d voyage(s) should be provided"
+msgstr ""
+
+#: voyages/apps/contribute/forms.py:146
+msgid "Some of the provided voyage_ids are invalid"
+msgstr ""
+
+#: voyages/apps/contribute/forms.py:150
+msgid "Enter last name , first name."
+msgstr ""
+
+#: voyages/apps/contribute/forms.py:171
+msgid "If not country of registration, use the comments box to explain coding."
+msgstr ""
+
+#: voyages/apps/contribute/forms.py:180
+msgid ""
+"If more than one place of purchase, use the comments box to explain choice "
+"of principal place."
+msgstr ""
+
+#: voyages/apps/contribute/forms.py:183
+msgid ""
+"If more than one place of landing, use the comments box to explain choice of "
+"principal place."
+msgstr ""
+
+#: voyages/apps/contribute/forms.py:188
+msgid "Name of vessel"
+msgstr ""
+
+#: voyages/apps/contribute/forms.py:189
+msgid "Year of ship construction"
+msgstr ""
+
+#: voyages/apps/contribute/forms.py:190
+msgid "Year of ship registration"
+msgstr ""
+
+#: voyages/apps/contribute/forms.py:191
+msgid "Place where ship constructed"
+msgstr ""
+
+#: voyages/apps/contribute/forms.py:192
+msgid "Place where ship registered"
+msgstr ""
+
+#: voyages/apps/contribute/forms.py:193
+msgid "National carrier"
+msgstr ""
+
+#: voyages/apps/contribute/forms.py:194
+#: voyages/apps/contribute/templates/contribute/interim.html:136
+#: voyages/apps/contribute/templates/contribute/interim.html:156
+msgid "Rig of vessel"
+msgstr ""
+
+#: voyages/apps/contribute/forms.py:195
+msgid "Tonnage of vessel"
+msgstr ""
+
+#: voyages/apps/contribute/forms.py:196
+msgid "Definition of ton"
+msgstr ""
+
+#: voyages/apps/contribute/forms.py:197
+msgid "Guns mounted"
+msgstr ""
+
+#: voyages/apps/contribute/forms.py:198
+msgid "First or managing owner of venture"
+msgstr ""
+
+#: voyages/apps/contribute/forms.py:199
+msgid "Second owner of venture"
+msgstr ""
+
+#: voyages/apps/contribute/forms.py:200
+msgid "Other owners"
+msgstr ""
+
+#: voyages/apps/contribute/forms.py:202
+#: voyages/apps/voyage/templates/database/_outcome.html:8
+msgid "Outcome of voyage"
+msgstr ""
+
+#: voyages/apps/contribute/forms.py:203
+#: voyages/apps/contribute/templates/contribute/interim.html:288
+#: voyages/apps/contribute/templates/contribute/interim.html:327
+msgid "African resistance"
+msgstr ""
+
+#: voyages/apps/contribute/forms.py:206
+msgid "First port of intended embarkation"
+msgstr ""
+
+#: voyages/apps/contribute/forms.py:208
+msgid "Second port of intended embarkation"
+msgstr ""
+
+#: voyages/apps/contribute/forms.py:210
+msgid "First port of intended disembarkation"
+msgstr ""
+
+#: voyages/apps/contribute/forms.py:212
+msgid "Second port of intended disembarkation"
+msgstr ""
+
+#: voyages/apps/contribute/forms.py:213
+msgid "Port of departure"
+msgstr ""
+
+#: voyages/apps/contribute/forms.py:215
+msgid "Number of ports called prior to slave purchase"
+msgstr ""
+
+#: voyages/apps/contribute/forms.py:217
+msgid "First place of slave purchase"
+msgstr ""
+
+#: voyages/apps/contribute/forms.py:219
+msgid "Second place of slave purchase"
+msgstr ""
+
+#: voyages/apps/contribute/forms.py:221
+msgid "Third place of slave purchase"
+msgstr ""
+
+#: voyages/apps/contribute/forms.py:223
+msgid "Principal place of slave purchase"
+msgstr ""
+
+#: voyages/apps/contribute/forms.py:225
+#: voyages/apps/voyage/templates/database/_itinerary.html:61
+#: voyages/apps/voyage/templates/database/_itinerary.html:64
+msgid "Places of call before Atlantic crossing"
+msgstr ""
+
+#: voyages/apps/contribute/forms.py:227
+msgid "Number of New World ports of call before disembarkation"
+msgstr ""
+
+#: voyages/apps/contribute/forms.py:228
+msgid "First place of landing"
+msgstr ""
+
+#: voyages/apps/contribute/forms.py:229
+msgid "Second place of landing"
+msgstr ""
+
+#: voyages/apps/contribute/forms.py:230
+msgid "Third place of landing"
+msgstr ""
+
+#: voyages/apps/contribute/forms.py:232
+msgid "Principal place of slave disembarkation"
+msgstr ""
+
+#: voyages/apps/contribute/forms.py:233
+msgid "Port at which voyage ended"
+msgstr ""
+
+#: voyages/apps/contribute/forms.py:235
+msgid "Date of departure"
+msgstr ""
+
+#: voyages/apps/contribute/forms.py:236
+msgid "Date that slave purchase began"
+msgstr ""
+
+#: voyages/apps/contribute/forms.py:238
+msgid "Date that vessel left last slaving port"
+msgstr ""
+
+#: voyages/apps/contribute/forms.py:240
+msgid "Date of first disembarkation of slaves"
+msgstr ""
+
+#: voyages/apps/contribute/forms.py:242
+msgid "Date of second disembarkation of slaves"
+msgstr ""
+
+#: voyages/apps/contribute/forms.py:244
+msgid "Date of third disembarkation of slaves"
+msgstr ""
+
+#: voyages/apps/contribute/forms.py:245
+msgid "Date that ship left on return voyage"
+msgstr ""
+
+#: voyages/apps/contribute/forms.py:246
+msgid "Date when voyage completed"
+msgstr ""
+
+#: voyages/apps/contribute/forms.py:247
+msgid "Length of Middle Passage in days"
+msgstr ""
+
+#: voyages/apps/contribute/forms.py:249
+msgid "First captain of voyage"
+msgstr ""
+
+#: voyages/apps/contribute/forms.py:250
+msgid "Second captain of voyage"
+msgstr ""
+
+#: voyages/apps/contribute/forms.py:251
+msgid "Third captain of voyage"
+msgstr ""
+
+#: voyages/apps/contribute/models.py:614
+#: voyages/apps/contribute/templates/contribute/downloads_partial.html:15
+#: voyages/apps/contribute/templates/contribute/index.html:55
+#: voyages/apps/contribute/models.py:623
+msgid "Under review"
+msgstr ""
+
+#: voyages/apps/contribute/models.py:616 voyages/apps/contribute/models.py:625
+msgid "Accepted (reviewer)"
+msgstr ""
+
+#: voyages/apps/contribute/models.py:618 voyages/apps/contribute/models.py:627
+msgid "Rejected (reviewer)"
+msgstr ""
+
+#: voyages/apps/contribute/models.py:619 voyages/apps/contribute/models.py:628
+msgid "Accepted"
+msgstr ""
+
+#: voyages/apps/contribute/models.py:620
+#: voyages/apps/contribute/templates/contribute/downloads_partial.html:21
+#: voyages/apps/contribute/templates/contribute/index.html:59
+#: voyages/apps/contribute/models.py:629
+msgid "Rejected"
+msgstr ""
+
+#: voyages/apps/contribute/models.py:621 voyages/apps/contribute/models.py:630
+msgid "Editor bypass"
+msgstr ""
+
+#: voyages/apps/contribute/models.py:623 voyages/apps/contribute/models.py:632
+msgid "No reply"
+msgstr ""
+
+#: voyages/apps/contribute/models.py:624 voyages/apps/contribute/models.py:633
+msgid "Will review"
+msgstr ""
+
+#: voyages/apps/contribute/models.py:625 voyages/apps/contribute/models.py:634
+msgid "Cannot review"
+msgstr ""
+
+#: voyages/apps/contribute/models.py:651 voyages/apps/contribute/models.py:660
+msgid "Review a contribution"
+msgstr ""
+
+#: voyages/apps/contribute/models.py:678 voyages/apps/contribute/models.py:687
+msgid "Editorial review of contribution"
+msgstr ""
+
+#: voyages/apps/contribute/models.py:762 voyages/apps/contribute/models.py:772
+msgid ""
+"Edit each variable as required, or leave as is if you think no change is "
+"necessary."
+msgstr ""
+
+#: voyages/apps/contribute/models.py:771 voyages/apps/contribute/models.py:781
+msgid "Edit an existing voyage"
+msgstr ""
+
+#: voyages/apps/contribute/models.py:791 voyages/apps/contribute/models.py:801
+msgid ""
+"Enter your preferred data to the right. If required use the box for notes to "
+"explain your reasons for recommending the merge."
+msgstr ""
+
+#: voyages/apps/contribute/models.py:801 voyages/apps/contribute/models.py:811
+msgid "Merge two or more voyages into one"
+msgstr ""
+
+#: voyages/apps/contribute/models.py:816 voyages/apps/contribute/models.py:826
+msgid "Complete as many boxes in each category as your source(s) allow."
+msgstr ""
+
+#: voyages/apps/contribute/models.py:824 voyages/apps/contribute/models.py:834
+msgid "New voyage"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/assign_reviewer_dialog.html:9
+#: voyages/apps/contribute/templates/contribute/preview_editor_commands.html:5
+msgid "Assign a reviewer"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/assign_reviewer_dialog.html:14
+msgid "Choose a reviewer"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/assign_reviewer_dialog.html:18
+msgid "Editor's message"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/assign_reviewer_dialog.html:23
+msgid "Send to reviewer"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/assign_reviewer_dialog.html:24
+#: voyages/apps/contribute/templates/contribute/interim.html:1635
+#: voyages/apps/contribute/templates/contribute/interim.html:1652
+#: voyages/apps/past/templates/past/_enslaved_dataset_select_modal.html:65
+#: voyages/apps/contribute/templates/contribute/interim.html:1684
+#: voyages/apps/contribute/templates/contribute/interim.html:1701
+#: voyages/apps/contribute/templates/contribute/interim.html:1730
+msgid "Cancel"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/assign_reviewer_dialog.html:39
+msgid "Abort review request?"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/assign_reviewer_dialog.html:59
+msgid "A reviewer must be selected."
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/assign_reviewer_dialog.html:75
+#: voyages/apps/contribute/templates/contribute/editor_main.html:230
+#: voyages/apps/contribute/templates/contribute/editor_main.html:261
+#: voyages/apps/contribute/templates/contribute/preview_editor_commands.html:27
+msgid "A server error occurred, please contact the webmaster"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/decision_part.html:6
+#: voyages/apps/contribute/templates/contribute/decision_part.html:35
+msgid "Reviewer's decision:"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/decision_part.html:9
+msgid "Message to editor"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/decision_part.html:17
+#: voyages/apps/contribute/templates/contribute/decision_part.html:51
+#: voyages/apps/contribute/templates/contribute/decision_part.html:105
+#: voyages/apps/contribute/templates/contribute/decision_part.html:199
+msgid "Decision"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/decision_part.html:21
+#: voyages/apps/contribute/templates/contribute/decision_part.html:55
+msgid "Please select..."
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/decision_part.html:22
+#: voyages/apps/contribute/templates/contribute/decision_part.html:35
+#: voyages/apps/contribute/templates/contribute/decision_part.html:56
+#: voyages/apps/contribute/templates/contribute/legal.html:7
+msgid "Accept"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/decision_part.html:23
+#: voyages/apps/contribute/templates/contribute/decision_part.html:35
+#: voyages/apps/contribute/templates/contribute/decision_part.html:57
+msgid "Reject"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/decision_part.html:28
+msgid "Submit to editor"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/decision_part.html:32
+msgid "Editorial tools:"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/decision_part.html:43
+msgid "Decision message"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/decision_part.html:58
+msgid "Delete the CONTRIBUTION from the platform"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/decision_part.html:65
+msgid "This is an Intra-American voyage"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/decision_part.html:73
+msgid "Published voyage id"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/decision_part.html:81
+msgid "Submit final decision"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/decision_part.html:83
+msgid "Impute"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/decision_part.html:101
+#: voyages/apps/contribute/templates/contribute/decision_part.html:181
+msgid "Please choose your decision."
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/decision_part.html:105
+#: voyages/apps/contribute/templates/contribute/decision_part.html:199
+msgid "Please confirm your message and decision."
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/decision_part.html:159
+msgid "Impute variables computed as follows"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/decision_part.html:188
+msgid "Please indicate the voyage id to be used with this voyage"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/decision_part.html:194
+msgid "The impute program must be executed before accepting a contribution."
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/delete.html:6
+msgid "Recommend the Deletion of an Existing Voyage"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/delete.html:9
+msgid ""
+"Please use the box for notes to tell us why the selected voyage(s) should be "
+"removed from the database."
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/delete.html:20
+msgid "Notes:"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/delete.html:26
+#: voyages/apps/past/templates/past-contribute/_language_group.html:48
+msgid "Submit"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/delete_review.html:19
+msgid "Review Deleted Voyages"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/delete_review.html:20
+msgid "Are you sure you wish to recommend the voyage(s) below for deletion?"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/delete_review.html:22
+msgid "Delete Voyage Contribution - Voyage Data"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/delete_review.html:35
+msgid "Confirm Deletion"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/delete_review.html:36
+msgid "Cancel Contribution"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/delete_review.html:41
+msgid ""
+"This delete contribution will be cancelled. This action cannot be undone, "
+"continue?"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/delete_review.html:60
+#: voyages/apps/contribute/templates/contribute/interim.html:1394
+#: voyages/apps/contribute/templates/contribute/interim_summary.html:676
+#: voyages/apps/contribute/templates/contribute/interim.html:1443
+#: voyages/apps/contribute/templates/contribute/interim_summary.html:699
+msgid "Return to requests list"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/downloads_partial.html:9
+msgid "Submitted by contributor"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/downloads_partial.html:27
+msgid "Accepted (pending publication)"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/downloads_partial.html:33
+#: voyages/apps/contribute/templates/contribute/index.html:61
+msgid "Published"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/downloads_partial.html:49
+msgid "Select all"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/downloads_partial.html:50
+msgid "Clear"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/downloads_partial.html:54
+msgid "Compatibility options"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/downloads_partial.html:57
+msgid "Remove line breaks from CSV cells"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/downloads_partial.html:62
+msgid "Download"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/downloads_partial.html:102
+msgid "You must select at least one status"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/edit.html:6
+msgid "Edit an Existing Record of a Voyage"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/edit.html:9
+msgid "Please select the voyage you wish to edit."
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/edit.html:21
+#: voyages/apps/contribute/templates/contribute/merge.html:21
+msgid "Begin"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/editor_main.html:38
+#: voyages/apps/past/templates/past-contribute/_left-menu.html:84
+msgid "Voyages"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/editor_main.html:39
+msgid "Requests"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/editor_main.html:40
+msgid "Users"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/editor_main.html:41
+msgid "Source Codes"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/editor_main.html:42
+msgid "Publish New DB Version"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/editor_main.html:43
+msgid "Download Voyages"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/editor_main.html:56
+#: voyages/apps/contribute/templates/contribute/editor_main.html:85
+#: voyages/apps/contribute/templates/contribute/voyage_selection_table.html:7
+#: voyages/apps/contribute/templates/contribute/voyage_selection_table.html:24
+#: voyages/apps/resources/templates/resources/image-category-detail.html:141
+#: voyages/apps/resources/templates/resources/images-search-detail.html:168
+#: voyages/apps/resources/templates/resources/names-index.html:220
+#: voyages/apps/resources/templates/resources/names-left-menu.html:44
+msgid "Voyage ID"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/editor_main.html:57
+#: voyages/apps/contribute/templates/contribute/editor_main.html:82
+msgid "Type"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/editor_main.html:58
+#: voyages/apps/contribute/templates/contribute/editor_main.html:86
+#: voyages/apps/contribute/templates/contribute/voyage_selection_table.html:25
+msgid "Ship"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/editor_main.html:60
+msgid "Nation"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/editor_main.html:61
+msgid "Exported"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/editor_main.html:62
+msgid "Imported"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/editor_main.html:63
+msgid "Major place of purchase"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/editor_main.html:64
+msgid "Major place of landing"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/editor_main.html:65
+#: voyages/apps/contribute/templates/contribute/editor_main.html:83
+#: voyages/apps/contribute/templates/contribute/interim_summary.html:635
+#: voyages/apps/contribute/templates/contribute/interim_summary.html:658
+msgid "Contributor"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/editor_main.html:66
+#: voyages/apps/contribute/templates/contribute/editor_main.html:84
+msgid "Date"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/editor_main.html:87
+msgid "Reviewer"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/editor_main.html:88
+#: voyages/apps/contribute/templates/contribute/interim.html:1324
+#: voyages/apps/contribute/templates/contribute/interim_summary.html:594
+#: voyages/apps/contribute/templates/contribute/interim.html:1373
+#: voyages/apps/contribute/templates/contribute/interim_summary.html:617
+msgid "Action"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/editor_main.html:89
+msgid "Response"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/editor_main.html:90
+#: voyages/apps/contribute/templates/contribute/index.html:40
+#: voyages/apps/contribute/templates/contribute/index.html:78
+msgid "Status"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/editor_main.html:103
+msgid "Users on Live Admin"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/editor_main.html:113
+msgid "Sources on Live Admin"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/editor_main.html:167
+msgid "Assign"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/editor_main.html:168
+msgid "Archive request"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/editor_main.html:170
+msgid "Editorial Review"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/editor_main.html:212
+msgid ""
+"Confirm archival of this request? Any response the reviewer may have sent "
+"will be ignored."
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/guidelines.html:8
+#: voyages/templates/account/base.html:59
+msgid "Guidelines for Contributors"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/guidelines.html:11
+msgid ""
+"The guide is provided as a PDF file to allow users to reference it in a "
+"separate window or to download and print it."
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/index.html:7
+msgid "User Home"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/index.html:15
+msgid "Welcome to the Contribute Section"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/index.html:19
+msgid "Live Admin"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/index.html:21
+#: voyages/templates/account/base.html:66
+msgid "New Voyage"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/index.html:22
+#: voyages/templates/account/base.html:69
+msgid "Edit Existing Voyage"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/index.html:23
+#: voyages/templates/account/base.html:72
+msgid "Merge Voyages"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/index.html:24
+#: voyages/templates/account/base.html:75
+msgid "Recommend Voyage Deletion"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/index.html:27
+msgid "Editorial Platform"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/index.html:34
+msgid "Contributions"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/index.html:38
+#: voyages/apps/contribute/templates/contribute/interim.html:1321
+#: voyages/apps/contribute/templates/contribute/interim_summary.html:591
+#: voyages/apps/contribute/templates/contribute/interim.html:1370
+#: voyages/apps/contribute/templates/contribute/interim_summary.html:614
+msgid "Voyage ID(s)"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/index.html:39
+msgid "Type of contribution"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/index.html:51
+msgid "Pending"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/index.html:53
+msgid "Submitted"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/index.html:57
+msgid "Approved"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/index.html:72
+msgid "Review requests"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/index.html:76
+msgid "Review Id"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/index.html:77
+#: voyages/apps/contribute/templates/contribute/review_request.html:9
+msgid "Editor"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/index.html:89
+msgid "Not replied"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/index.html:91
+msgid "Accepted for review"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim.html:33
+#: voyages/apps/contribute/templates/contribute/interim.html:40
+msgid "Variables are organized into eight categories."
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim.html:35
+#: voyages/apps/contribute/templates/contribute/interim.html:42
+msgid ""
+"Comments or notes on any entry may be added by clicking on the comment icon "
+"to the right of each input box."
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim.html:36
+#: voyages/apps/contribute/templates/contribute/interim.html:43
+msgid ""
+"Should you wish to add a port or region that does not appear in the drop "
+"down menu, please let the editors know via the note box at the foot of the "
+"entry form."
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim.html:37
+#: voyages/apps/contribute/templates/contribute/interim.html:44
+msgid "If required, use this box for any additional information."
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim.html:38
+#: voyages/apps/contribute/templates/contribute/interim.html:45
+msgid ""
+"You can review your complete entry at any time by clicking on the 'Review' "
+"button. To submit your entry you must move to the Review page first."
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim.html:44
+#: voyages/apps/contribute/templates/contribute/interim.html:51
+msgid "Voyage ID(s): "
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim.html:61
+#: voyages/apps/contribute/templates/contribute/interim.html:81
+msgid "Ship, Nation, Owners"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim.html:118
+#: voyages/apps/contribute/templates/contribute/interim.html:219
+#: voyages/apps/contribute/templates/contribute/interim.html:138
+#: voyages/apps/contribute/templates/contribute/interim.html:258
+msgid "Nationalities"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim.html:163
+#: voyages/apps/contribute/templates/contribute/interim.html:183
+msgid "Tonnage type"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim.html:258
+#: voyages/apps/contribute/templates/contribute/interim.html:297
+msgid "Voyage Outcome"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim.html:270
+#: voyages/apps/contribute/templates/contribute/interim.html:309
+msgid "Other voyage outcomes"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim.html:308
+#: voyages/apps/contribute/templates/contribute/interim.html:347
+msgid "Voyage outcomes for slaves"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim.html:326
+#: voyages/apps/contribute/templates/contribute/interim.html:365
+msgid "Voyage outcomes if ship captured"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim.html:344
+#: voyages/apps/contribute/templates/contribute/interim.html:383
+msgid "Voyage outcomes for owner"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim.html:364
+#: voyages/apps/contribute/templates/contribute/interim.html:403
+msgid "Voyage Itinerary"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim.html:613
+#: voyages/apps/contribute/templates/contribute/interim.html:652
+msgid "Voyage Dates"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim.html:618
+#: voyages/apps/contribute/templates/contribute/interim.html:657
+msgid ""
+"Enter partial information (year only or month and year only) when full date "
+"unknown."
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim.html:800
+#: voyages/apps/voyage/templates/database/_captain_and_crew.html:7
+#: voyages/apps/contribute/templates/contribute/interim.html:839
+msgid "Captain and Crew"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim.html:834
+#: voyages/apps/contribute/templates/contribute/interim_summary.html:345
+#: voyages/apps/contribute/templates/contribute/interim.html:873
+#: voyages/apps/contribute/templates/contribute/interim_summary.html:359
+msgid "Crew at voyage outset"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim.html:842
+#: voyages/apps/contribute/templates/contribute/interim_summary.html:352
+#: voyages/apps/contribute/templates/contribute/interim.html:881
+#: voyages/apps/contribute/templates/contribute/interim_summary.html:366
+msgid "Crew at departure from last port of slave purchase"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim.html:850
+#: voyages/apps/contribute/templates/contribute/interim_summary.html:359
+#: voyages/apps/contribute/templates/contribute/interim.html:889
+#: voyages/apps/contribute/templates/contribute/interim_summary.html:373
+msgid "Crew at first landing of slaves"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim.html:858
+#: voyages/apps/contribute/templates/contribute/interim_summary.html:366
+#: voyages/apps/contribute/templates/contribute/interim.html:897
+#: voyages/apps/contribute/templates/contribute/interim_summary.html:380
+msgid "Crew when return voyage began"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim.html:866
+#: voyages/apps/contribute/templates/contribute/interim_summary.html:373
+#: voyages/apps/contribute/templates/contribute/interim.html:905
+#: voyages/apps/contribute/templates/contribute/interim_summary.html:387
+msgid "Crew at end of voyage"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim.html:874
+#: voyages/apps/contribute/templates/contribute/interim_summary.html:380
+#: voyages/apps/contribute/templates/contribute/interim.html:913
+#: voyages/apps/contribute/templates/contribute/interim_summary.html:394
+msgid "Number of crew if voyage stage unknow"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim.html:882
+#: voyages/apps/contribute/templates/contribute/interim_summary.html:387
+#: voyages/apps/contribute/templates/contribute/interim.html:921
+#: voyages/apps/contribute/templates/contribute/interim_summary.html:401
+msgid "Crew died before first place of trade in Africa"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim.html:890
+#: voyages/apps/contribute/templates/contribute/interim_summary.html:394
+#: voyages/apps/contribute/templates/contribute/interim.html:929
+#: voyages/apps/contribute/templates/contribute/interim_summary.html:408
+msgid "Crew died while ship was on African coast"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim.html:898
+#: voyages/apps/contribute/templates/contribute/interim_summary.html:401
+#: voyages/apps/contribute/templates/contribute/interim.html:937
+#: voyages/apps/contribute/templates/contribute/interim_summary.html:415
+msgid "Crew died during middle passage"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim.html:906
+#: voyages/apps/contribute/templates/contribute/interim_summary.html:408
+#: voyages/apps/contribute/templates/contribute/interim.html:945
+#: voyages/apps/contribute/templates/contribute/interim_summary.html:422
+msgid "Crew died in the Americas"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim.html:914
+#: voyages/apps/contribute/templates/contribute/interim_summary.html:415
+#: voyages/apps/contribute/templates/contribute/interim.html:953
+#: voyages/apps/contribute/templates/contribute/interim_summary.html:429
+msgid "Crew died on return voyage"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim.html:922
+#: voyages/apps/contribute/templates/contribute/interim_summary.html:422
+#: voyages/apps/contribute/templates/contribute/interim.html:961
+#: voyages/apps/contribute/templates/contribute/interim_summary.html:436
+msgid "Crew died during complete voyage"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim.html:930
+#: voyages/apps/contribute/templates/contribute/interim_summary.html:429
+#: voyages/apps/contribute/templates/contribute/interim.html:969
+#: voyages/apps/contribute/templates/contribute/interim_summary.html:443
+msgid "Total number of crew deserted"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim.html:944
+#: voyages/apps/contribute/templates/contribute/interim_summary.html:435
+#: voyages/apps/contribute/templates/contribute/interim.html:983
+#: voyages/apps/contribute/templates/contribute/interim_summary.html:449
+msgid "Slaves (numbers)"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim.html:951
+#: voyages/apps/contribute/templates/contribute/interim_summary.html:441
+#: voyages/apps/contribute/templates/contribute/interim.html:990
+#: voyages/apps/contribute/templates/contribute/interim_summary.html:455
+msgid "Slaves intended from first port of purchase"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim.html:959
+#: voyages/apps/contribute/templates/contribute/interim_summary.html:448
+#: voyages/apps/contribute/templates/contribute/interim.html:998
+#: voyages/apps/contribute/templates/contribute/interim_summary.html:462
+msgid "Slaves intended from second port of purchase"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim.html:967
+#: voyages/apps/contribute/templates/contribute/interim_summary.html:455
+#: voyages/apps/contribute/templates/contribute/interim.html:1006
+#: voyages/apps/contribute/templates/contribute/interim_summary.html:469
+msgid "Slaves carried from first port of purchase"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim.html:975
+#: voyages/apps/contribute/templates/contribute/interim_summary.html:462
+#: voyages/apps/contribute/templates/contribute/interim.html:1014
+#: voyages/apps/contribute/templates/contribute/interim_summary.html:476
+msgid "Slaves carried from second port of purchase"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim.html:983
+#: voyages/apps/contribute/templates/contribute/interim_summary.html:469
+#: voyages/apps/contribute/templates/contribute/interim.html:1022
+#: voyages/apps/contribute/templates/contribute/interim_summary.html:483
+msgid "Slaves carried from third port of purchase"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim.html:991
+#: voyages/apps/contribute/templates/contribute/interim_summary.html:476
+#: voyages/apps/contribute/templates/contribute/interim.html:1030
+#: voyages/apps/contribute/templates/contribute/interim_summary.html:490
+msgid "Total slaves purchased in Africa"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim.html:999
+#: voyages/apps/contribute/templates/contribute/interim_summary.html:483
+#: voyages/apps/contribute/templates/contribute/interim.html:1038
+#: voyages/apps/contribute/templates/contribute/interim_summary.html:497
+msgid "Total slaves on board at departure from last slaving port"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim.html:1007
+#: voyages/apps/contribute/templates/contribute/interim_summary.html:490
+#: voyages/apps/contribute/templates/contribute/interim.html:1046
+#: voyages/apps/contribute/templates/contribute/interim_summary.html:504
+msgid "Total slaves arrived at first port of disembarkation"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim.html:1015
+#: voyages/apps/contribute/templates/contribute/interim_summary.html:497
+#: voyages/apps/contribute/templates/contribute/interim.html:1054
+#: voyages/apps/contribute/templates/contribute/interim_summary.html:511
+msgid "Slaves disembarked at first place"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim.html:1023
+#: voyages/apps/contribute/templates/contribute/interim_summary.html:504
+#: voyages/apps/contribute/templates/contribute/interim.html:1062
+#: voyages/apps/contribute/templates/contribute/interim_summary.html:518
+msgid "Slaves disembarked at second place"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim.html:1031
+#: voyages/apps/contribute/templates/contribute/interim_summary.html:511
+#: voyages/apps/contribute/templates/contribute/interim.html:1070
+#: voyages/apps/contribute/templates/contribute/interim_summary.html:525
+msgid "Slaves disembarked at third place"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim.html:1039
+#: voyages/apps/contribute/templates/contribute/interim_summary.html:518
+#: voyages/apps/contribute/templates/contribute/interim.html:1078
+#: voyages/apps/contribute/templates/contribute/interim_summary.html:532
+msgid "Slaves deaths before leaving Africa"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim.html:1047
+#: voyages/apps/contribute/templates/contribute/interim_summary.html:525
+#: voyages/apps/contribute/templates/contribute/interim.html:1086
+#: voyages/apps/contribute/templates/contribute/interim_summary.html:539
+msgid "Slaves deaths between Africa and the Americas"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim.html:1055
+#: voyages/apps/contribute/templates/contribute/interim_summary.html:532
+#: voyages/apps/contribute/templates/contribute/interim.html:1094
+#: voyages/apps/contribute/templates/contribute/interim_summary.html:546
+msgid "Slaves deaths between arrival and sale"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim.html:1070
+#: voyages/apps/contribute/templates/contribute/interim.html:1109
+msgid "Voyage groupings"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim.html:1109
+#: voyages/apps/contribute/templates/contribute/interim.html:1148
+msgid "Slaves (mortality and price)"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim.html:1159
+#: voyages/apps/contribute/templates/contribute/interim_summary.html:538
+#: voyages/apps/contribute/templates/contribute/interim.html:1198
+#: voyages/apps/contribute/templates/contribute/interim_summary.html:552
+msgid "Slaves (characteristics)"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim.html:1171
+#: voyages/apps/contribute/templates/contribute/interim_summary.html:544
+#: voyages/apps/contribute/templates/contribute/interim.html:1220
+#: voyages/apps/contribute/templates/contribute/interim_summary.html:567
+msgid "Men"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim.html:1172
+#: voyages/apps/contribute/templates/contribute/interim_summary.html:545
+#: voyages/apps/contribute/templates/contribute/interim.html:1221
+#: voyages/apps/contribute/templates/contribute/interim_summary.html:568
+msgid "Women"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim.html:1173
+#: voyages/apps/contribute/templates/contribute/interim_summary.html:546
+#: voyages/apps/contribute/templates/contribute/interim.html:1222
+#: voyages/apps/contribute/templates/contribute/interim_summary.html:569
+msgid "Boys"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim.html:1174
+#: voyages/apps/contribute/templates/contribute/interim_summary.html:547
+#: voyages/apps/contribute/templates/contribute/interim.html:1223
+#: voyages/apps/contribute/templates/contribute/interim_summary.html:570
+msgid "Girls"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim.html:1175
+#: voyages/apps/contribute/templates/contribute/interim_summary.html:548
+#: voyages/apps/contribute/templates/contribute/interim.html:1224
+#: voyages/apps/contribute/templates/contribute/interim_summary.html:571
+msgid "Males"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim.html:1176
+#: voyages/apps/contribute/templates/contribute/interim_summary.html:549
+#: voyages/apps/contribute/templates/contribute/interim.html:1225
+#: voyages/apps/contribute/templates/contribute/interim_summary.html:572
+msgid "Females"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim.html:1177
+#: voyages/apps/contribute/templates/contribute/interim_summary.html:550
+#: voyages/apps/contribute/templates/contribute/interim.html:1226
+#: voyages/apps/contribute/templates/contribute/interim_summary.html:573
+msgid "Adults"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim.html:1178
+#: voyages/apps/contribute/templates/contribute/interim_summary.html:551
+#: voyages/apps/contribute/templates/contribute/interim.html:1227
+#: voyages/apps/contribute/templates/contribute/interim_summary.html:574
+msgid "Children"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim.html:1179
+#: voyages/apps/contribute/templates/contribute/interim_summary.html:552
+#: voyages/apps/contribute/templates/contribute/interim.html:1228
+#: voyages/apps/contribute/templates/contribute/interim_summary.html:575
+msgid "Infants"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim.html:1184
+#: voyages/apps/contribute/templates/contribute/interim_summary.html:557
+#: voyages/apps/contribute/templates/contribute/interim.html:1233
+#: voyages/apps/contribute/templates/contribute/interim_summary.html:580
+msgid "Embarked slaves (first port)"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim.html:1188
+#: voyages/apps/contribute/templates/contribute/interim_summary.html:561
+#: voyages/apps/contribute/templates/contribute/interim.html:1237
+#: voyages/apps/contribute/templates/contribute/interim_summary.html:584
+msgid "Embarked slaves (second port)"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim.html:1192
+#: voyages/apps/contribute/templates/contribute/interim_summary.html:565
+#: voyages/apps/contribute/templates/contribute/interim.html:1241
+#: voyages/apps/contribute/templates/contribute/interim_summary.html:588
+msgid "Embarked slaves (third port)"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim.html:1196
+#: voyages/apps/contribute/templates/contribute/interim_summary.html:569
+#: voyages/apps/contribute/templates/contribute/interim.html:1245
+#: voyages/apps/contribute/templates/contribute/interim_summary.html:592
+msgid "Died on voyage"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim.html:1200
+#: voyages/apps/contribute/templates/contribute/interim_summary.html:573
+#: voyages/apps/contribute/templates/contribute/interim.html:1249
+#: voyages/apps/contribute/templates/contribute/interim_summary.html:596
+msgid "Disembarked slaves (first port)"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim.html:1204
+#: voyages/apps/contribute/templates/contribute/interim_summary.html:577
+#: voyages/apps/contribute/templates/contribute/interim.html:1253
+#: voyages/apps/contribute/templates/contribute/interim_summary.html:600
+msgid "Disembarked slaves (second port)"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim.html:1209
+#: voyages/apps/contribute/templates/contribute/interim.html:1258
+msgid "Imputed number at ports of purchase"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim.html:1213
+#: voyages/apps/contribute/templates/contribute/interim.html:1262
+msgid "Imputed number at ports of landing"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim.html:1217
+#: voyages/apps/contribute/templates/contribute/interim.html:1266
+msgid "Imputed number at departure or arrival"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim.html:1221
+#: voyages/apps/contribute/templates/contribute/interim.html:1270
+msgid "Imputed deaths on middle passage"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim.html:1222
+#: voyages/apps/past/templates/past-contribute/_full_details_modal.html:34
+#: voyages/apps/voyage/templates/database/_full_details_modal.html:34
+#: voyages/apps/contribute/templates/contribute/interim.html:1271
+msgid "Imputed results are calculated by an algorithm."
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim.html:1233
+#: voyages/apps/contribute/templates/contribute/interim.html:1282
+msgid "Notes for slaves characteristics"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim.html:1248
+#: voyages/apps/contribute/templates/contribute/interim.html:1297
+msgid "Slaves (age and sex)"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim.html:1257
+#: voyages/apps/contribute/templates/contribute/interim.html:1306
+msgid "At ports of purchase"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim.html:1258
+#: voyages/apps/contribute/templates/contribute/interim.html:1307
+msgid "At ports of landing"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim.html:1259
+#: voyages/apps/contribute/templates/contribute/interim.html:1308
+msgid "At departure or on arrival"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim.html:1264
+#: voyages/apps/contribute/templates/contribute/interim.html:1313
+msgid "Total identified by age (imputed)"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim.html:1268
+#: voyages/apps/contribute/templates/contribute/interim.html:1317
+msgid "Total identified by gender (imputed)"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim.html:1272
+#: voyages/apps/contribute/templates/contribute/interim.html:1321
+msgid "Total identified by age and gender (imputed)"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim.html:1276
+#: voyages/apps/contribute/templates/contribute/interim.html:1325
+msgid "Percentage of men (imputed)"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim.html:1280
+#: voyages/apps/contribute/templates/contribute/interim.html:1329
+msgid "Percentage of women (imputed)"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim.html:1284
+#: voyages/apps/contribute/templates/contribute/interim.html:1333
+msgid "Percentage of boys (imputed)"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim.html:1288
+#: voyages/apps/contribute/templates/contribute/interim.html:1337
+msgid "Percentage of girls (imputed)"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim.html:1292
+#: voyages/apps/contribute/templates/contribute/interim.html:1341
+msgid "Child ratio (imputed)"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim.html:1296
+#: voyages/apps/contribute/templates/contribute/interim.html:1345
+msgid "Male ratio (imputed)"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim.html:1310
+#: voyages/apps/contribute/templates/contribute/interim_summary.html:584
+#: voyages/apps/past/templates/past-enslavers/_sources.html:4
+#: voyages/apps/past/templates/past-enslavers/_sources.html:6
+#: voyages/apps/past/templates/past-enslavers/_sources.html:8
+#: voyages/apps/past/templates/past/_sources.html:4
+#: voyages/apps/past/templates/past/_sources.html:6
+#: voyages/apps/past/templates/past/_sources.html:8
+#: voyages/apps/contribute/templates/contribute/interim.html:1359
+#: voyages/apps/contribute/templates/contribute/interim_summary.html:607
+msgid "Sources"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim.html:1316
+#: voyages/apps/contribute/templates/contribute/interim_summary.html:587
+#: voyages/apps/contribute/templates/contribute/interim.html:1365
+#: voyages/apps/contribute/templates/contribute/interim_summary.html:610
+msgid "Current source references"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim.html:1317
+#: voyages/apps/contribute/templates/contribute/interim.html:1366
+msgid ""
+"Please specify whether the sources below should be included, excluded, or "
+"edited."
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim.html:1322
+#: voyages/apps/contribute/templates/contribute/interim_summary.html:592
+#: voyages/apps/voyage/models.py:1708
+#: voyages/apps/contribute/templates/contribute/interim.html:1371
+#: voyages/apps/contribute/templates/contribute/interim_summary.html:615
+#: voyages/apps/voyage/models.py:1747
+msgid "Short reference"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim.html:1323
+#: voyages/apps/contribute/templates/contribute/interim_summary.html:593
+#: voyages/apps/voyage/models.py:1712
+#: voyages/apps/contribute/templates/contribute/interim.html:1372
+#: voyages/apps/contribute/templates/contribute/interim_summary.html:616
+#: voyages/apps/voyage/models.py:1751
+msgid "Full reference"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim.html:1340
+#: voyages/apps/contribute/templates/contribute/interim.html:1389
+msgid "Accept as it is"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim.html:1341
+#: voyages/apps/contribute/templates/contribute/interim.html:1390
+msgid "Exclude reference (please explain)"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim.html:1342
+#: voyages/apps/contribute/templates/contribute/interim.html:1391
+msgid "Edit reference (please explain)"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim.html:1354
+#: voyages/apps/contribute/templates/contribute/interim.html:1403
+msgid "Add source"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim.html:1359
+#: voyages/apps/contribute/templates/contribute/interim_summary.html:621
+#: voyages/apps/contribute/templates/contribute/interim.html:1408
+#: voyages/apps/contribute/templates/contribute/interim_summary.html:644
+msgid "Type of source"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim.html:1360
+#: voyages/apps/contribute/templates/contribute/interim_summary.html:622
+#: voyages/apps/contribute/templates/contribute/interim.html:1409
+#: voyages/apps/contribute/templates/contribute/interim_summary.html:645
+msgid "Details"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim.html:1372
+#: voyages/apps/contribute/templates/contribute/interim.html:1421
+msgid "Contributor’s Comments on This Entry:"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim.html:1381
+#: voyages/apps/contribute/templates/contribute/interim.html:1430
+msgid "Save"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim.html:1384
+#: voyages/apps/contribute/templates/contribute/interim.html:1433
+msgid "Review"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim.html:1385
+#: voyages/apps/contribute/templates/contribute/interim_summary.html:669
+#: voyages/apps/contribute/templates/contribute/interim.html:1434
+#: voyages/apps/contribute/templates/contribute/interim_summary.html:692
+msgid "Cancel contribution"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim.html:1387
+#: voyages/apps/contribute/templates/contribute/interim.html:1436
+msgid "Form saved!"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim.html:1397
+#: voyages/apps/contribute/templates/contribute/interim.html:1446
+msgid "Return to Contribute home"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim.html:1403
+#: voyages/apps/contribute/templates/contribute/interim.html:1452
+msgid "Add a source reference"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim.html:1415
+#: voyages/apps/contribute/templates/contribute/interim.html:1464
+msgid "Primary source"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim.html:1417
+#: voyages/apps/contribute/templates/contribute/interim.html:1466
+msgid "Article"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim.html:1419
+#: voyages/apps/contribute/templates/contribute/interim.html:1468
+msgid "Book"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim.html:1421
+#: voyages/apps/contribute/templates/contribute/interim.html:1470
+msgid "Newspaper"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim.html:1423
+#: voyages/apps/contribute/templates/contribute/interim.html:1472
+msgid "Private note or collection"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim.html:1425
+#: voyages/apps/contribute/templates/contribute/interim.html:1474
+msgid "Unpublished secondary source"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim.html:1432
+#: voyages/apps/contribute/templates/contribute/interim.html:1481
+msgid "Name of library or archive"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim.html:1436
+#: voyages/apps/contribute/templates/contribute/interim.html:1485
+msgid "Location of library/archive"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim.html:1440
+#: voyages/apps/contribute/templates/contribute/interim.html:1489
+msgid "Series or collection"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim.html:1444
+#: voyages/apps/contribute/templates/contribute/interim.html:1493
+msgid "Volume or box or bundle"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim.html:1448
+#: voyages/apps/contribute/templates/contribute/interim.html:1497
+msgid "Document detail (page or folio number, and/or date of document)"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim.html:1452
+#: voyages/apps/contribute/templates/contribute/interim.html:1569
+#: voyages/apps/contribute/templates/contribute/interim.html:1596
+#: voyages/apps/contribute/templates/contribute/interim.html:1623
+#: voyages/apps/contribute/templates/contribute/interim.html:1501
+#: voyages/apps/contribute/templates/contribute/interim.html:1618
+#: voyages/apps/contribute/templates/contribute/interim.html:1645
+#: voyages/apps/contribute/templates/contribute/interim.html:1672
+msgid "Information about source"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim.html:1456
+#: voyages/apps/contribute/templates/contribute/interim.html:1495
+#: voyages/apps/contribute/templates/contribute/interim.html:1546
+#: voyages/apps/contribute/templates/contribute/interim.html:1573
+#: voyages/apps/contribute/templates/contribute/interim.html:1600
+#: voyages/apps/contribute/templates/contribute/interim.html:1627
+#: voyages/apps/contribute/templates/contribute/interim.html:1505
+#: voyages/apps/contribute/templates/contribute/interim.html:1544
+#: voyages/apps/contribute/templates/contribute/interim.html:1595
+#: voyages/apps/contribute/templates/contribute/interim.html:1622
+#: voyages/apps/contribute/templates/contribute/interim.html:1649
+#: voyages/apps/contribute/templates/contribute/interim.html:1676
+msgid ""
+"URLs or digitized image of the source to be submitted wherever possible "
+"about source"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim.html:1463
+#: voyages/apps/contribute/templates/contribute/interim.html:1514
+#: voyages/apps/contribute/templates/contribute/interim.html:1512
+#: voyages/apps/contribute/templates/contribute/interim.html:1563
+msgid "Author"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim.html:1467
+#: voyages/apps/contribute/templates/contribute/interim.html:1518
+#: voyages/apps/contribute/templates/contribute/interim.html:1584
+#: voyages/apps/contribute/templates/contribute/interim.html:1611
+#: voyages/apps/contribute/templates/contribute/interim.html:1516
+#: voyages/apps/contribute/templates/contribute/interim.html:1567
+#: voyages/apps/contribute/templates/contribute/interim.html:1633
+#: voyages/apps/contribute/templates/contribute/interim.html:1660
+msgid "Title"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim.html:1471
+#: voyages/apps/contribute/templates/contribute/interim.html:1520
+msgid "Journal"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim.html:1475
+#: voyages/apps/contribute/templates/contribute/interim.html:1524
+msgid "Volume number"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim.html:1483
+#: voyages/apps/contribute/templates/contribute/interim.html:1534
+#: voyages/apps/contribute/templates/contribute/interim.html:1532
+#: voyages/apps/contribute/templates/contribute/interim.html:1583
+msgid "Page numbers"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim.html:1491
+#: voyages/apps/contribute/templates/contribute/interim.html:1542
+#: voyages/apps/contribute/templates/contribute/interim.html:1540
+#: voyages/apps/contribute/templates/contribute/interim.html:1591
+msgid "Other information"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim.html:1502
+#: voyages/apps/contribute/templates/contribute/interim.html:1551
+msgid "Source is an essay/chapter in a book"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim.html:1506
+#: voyages/apps/contribute/templates/contribute/interim.html:1555
+msgid "Essay/Chapter title"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim.html:1510
+#: voyages/apps/contribute/templates/contribute/interim.html:1559
+msgid "Editors"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim.html:1522
+#: voyages/apps/contribute/templates/contribute/interim.html:1571
+msgid "Publisher"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim.html:1526
+#: voyages/apps/contribute/templates/contribute/interim.html:1575
+msgid "Place of publication"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim.html:1553
+#: voyages/apps/contribute/templates/contribute/interim_summary.html:639
+#: voyages/apps/past/templates/past-enslavers/_enslaver-name.html:4
+#: voyages/apps/past/templates/past-enslavers/_enslaver-name.html:6
+#: voyages/apps/past/templates/past-enslavers/_enslaver-name.html:8
+#: voyages/apps/past/templates/past/_african-name.html:6
+#: voyages/apps/past/templates/past/_african-name.html:8
+#: voyages/apps/past/templates/past/_identity.html:6
+#: voyages/apps/resources/templates/resources/names-index.html:135
+#: voyages/apps/voyage/templates/upload.html:16
+#: voyages/apps/contribute/templates/contribute/interim.html:1602
+#: voyages/apps/contribute/templates/contribute/interim_summary.html:662
+msgid "Name"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim.html:1557
+#: voyages/apps/contribute/templates/contribute/interim.html:1606
+msgid "Alternative name"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim.html:1561
+#: voyages/apps/contribute/templates/contribute/interim.html:1610
+msgid "City"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim.html:1565
+#: voyages/apps/contribute/templates/contribute/interim.html:1614
+msgid "Country"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim.html:1580
+#: voyages/apps/contribute/templates/contribute/interim.html:1607
+#: voyages/templates/topbar.html:85
+#: voyages/apps/contribute/templates/contribute/interim.html:1629
+#: voyages/apps/contribute/templates/contribute/interim.html:1656
+msgid "Authors"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim.html:1588
+#: voyages/apps/contribute/templates/contribute/interim.html:1615
+#: voyages/apps/contribute/templates/contribute/interim.html:1637
+#: voyages/apps/contribute/templates/contribute/interim.html:1664
+msgid "Location"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim.html:1634
+#: voyages/apps/contribute/templates/contribute/interim.html:2371
+#: voyages/apps/contribute/templates/contribute/interim.html:1683
+#: voyages/apps/contribute/templates/contribute/interim.html:2570
+msgid "Add"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim.html:1646
+#: voyages/apps/contribute/templates/contribute/interim.html:1695
+msgid "Edit or create sources reference"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim.html:1651
+#: voyages/templates/account/email_confirm.html:20
+#: voyages/apps/contribute/templates/contribute/interim.html:1700
+#: voyages/apps/contribute/templates/contribute/interim.html:1729
+msgid "Confirm"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim.html:1669
+#: voyages/apps/contribute/templates/contribute/interim.html:1748
+msgid "Modify reference"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim.html:1708
+#: voyages/apps/contribute/templates/contribute/interim.html:1787
+msgid "Save changes"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim.html:1779
+#: voyages/apps/contribute/templates/contribute/interim.html:1858
+msgid "Short reference must not be empty"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim.html:1782
+#: voyages/apps/contribute/templates/contribute/interim.html:1861
+msgid "Full reference is too short"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim.html:1785
+#: voyages/apps/contribute/templates/contribute/interim.html:1864
+msgid "Text reference must start with short reference"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim.html:1790
+#: voyages/apps/contribute/templates/contribute/interim.html:1869
+msgid ""
+"Suffix should be alphanumeric and contain only restricted special symbols"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim.html:1794
+#: voyages/apps/contribute/templates/contribute/interim.html:1873
+msgid "Validation errors"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim.html:1798
+#: voyages/apps/contribute/templates/contribute/interim.html:1877
+msgid "Validation warnings"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim.html:1798
+#: voyages/apps/contribute/templates/contribute/interim.html:1877
+msgid "Confirm anyway?"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim.html:1839
+#: voyages/apps/contribute/templates/contribute/interim.html:1918
+msgid "Remove this source?"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim.html:1963
+#: voyages/apps/contribute/templates/contribute/interim_summary.html:918
+#: voyages/apps/contribute/templates/contribute/interim.html:2047
+#: voyages/apps/contribute/templates/contribute/interim_summary.html:965
+msgid "The contribution will be deleted. Continue anyway?"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim.html:2003
+#: voyages/apps/contribute/templates/contribute/interim.html:2088
+msgid "Most common outcomes"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim.html:2045
+#: voyages/apps/contribute/templates/contribute/interim.html:2244
+msgid "Ports"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim.html:2129
+#: voyages/apps/contribute/templates/contribute/interim.html:2328
+msgid "Year in the range"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim.html:2130
+#: voyages/apps/contribute/templates/contribute/interim.html:2329
+msgid "Month"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim.html:2131
+#: voyages/apps/contribute/templates/contribute/interim.html:2330
+msgid "Day"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim.html:2361
+#: voyages/apps/contribute/templates/contribute/interim.html:2560
+msgid "Create reference"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim.html:2363
+#: voyages/apps/contribute/templates/contribute/interim.html:2562
+msgid "Edit"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim.html:2363
+#: voyages/templates/account/email.html:36
+#: voyages/templates/socialaccount/connections.html:35
+#: voyages/apps/contribute/templates/contribute/interim.html:2562
+msgid "Remove"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim_summary.html:6
+msgid "Verify submitted information"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim_summary.html:11
+msgid "Blank inputs"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim_summary.html:12
+msgid "Previous values"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim_summary.html:13
+#: voyages/apps/contribute/templates/contribute/interim_summary.html:595
+#: voyages/apps/contribute/templates/contribute/interim_summary.html:618
+msgid "Notes"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim_summary.html:17
+msgid "Variable"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim_summary.html:19
+msgid "Contributed value"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim_summary.html:21
+#: voyages/apps/contribute/templates/contribute/interim_summary.html:28
+msgid "Ship, nation, owners"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim_summary.html:114
+#: voyages/apps/contribute/templates/contribute/interim_summary.html:128
+msgid "Voyage outcome"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim_summary.html:133
+#: voyages/apps/contribute/templates/contribute/interim_summary.html:147
+msgid "Voyage itinerary"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim_summary.html:250
+#: voyages/apps/contribute/templates/contribute/interim_summary.html:264
+msgid "Voyage dates"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim_summary.html:318
+#: voyages/apps/voyage/templates/database/_captain_and_crew.html:4
+#: voyages/apps/voyage/templates/database/_captain_and_crew.html:10
+#: voyages/apps/contribute/templates/contribute/interim_summary.html:332
+msgid "Captain and crew"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim_summary.html:616
+#: voyages/apps/contribute/templates/contribute/interim_summary.html:639
+msgid "Contributed source references"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim_summary.html:630
+#: voyages/apps/contribute/templates/contribute/interim_summary.html:653
+msgid "General comments"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim_summary.html:643
+#: voyages/apps/contribute/templates/contribute/interim_summary.html:666
+msgid "E-mail"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim_summary.html:649
+#: voyages/apps/contribute/templates/contribute/interim_summary.html:672
+msgid "Summary date"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim_summary.html:652
+#: voyages/apps/contribute/templates/contribute/interim_summary.html:675
+msgid "Review status: "
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim_summary.html:659
+#: voyages/apps/contribute/templates/contribute/interim_summary.html:682
+msgid "Print"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim_summary.html:663
+#: voyages/apps/contribute/templates/contribute/interim_summary.html:686
+msgid "Edit contribution"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim_summary.html:666
+#: voyages/apps/contribute/templates/contribute/interim_summary.html:689
+msgid "Submit your contribution"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim_summary.html:906
+#: voyages/apps/contribute/templates/contribute/interim_summary.html:953
+msgid "There are no contributed source references"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim_summary.html:923
+#: voyages/apps/contribute/templates/contribute/interim_summary.html:970
+msgid "Return to contribution for editing?"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim_summary.html:928
+#: voyages/apps/contribute/templates/contribute/interim_summary.html:975
+msgid ""
+"Once you submit your contribution you will not be able to edit it further. "
+"To resume editing, just save the data entry form and it will appear on the "
+"Contribute Home page. Submit your contribution?"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim_summary.html:940
+#: voyages/apps/contribute/templates/contribute/interim_summary.html:987
+msgid "Merged voyages"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim_summary.html:940
+#: voyages/apps/voyage/templates/voyage_main_content.html:20
+#: voyages/apps/contribute/templates/contribute/interim_summary.html:987
+msgid "Voyage"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim_summary.html:956
+#: voyages/apps/contribute/templates/contribute/interim_summary.html:1003
+msgid "(blank)"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/merge.html:6
+msgid "Merge Existing Records of Voyages"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/merge.html:9
+msgid "Please select two or more existing voyage records for merging."
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/preview_editor_commands.html:8
+msgid "Begin editorial review"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/preview_editor_commands.html:19
+msgid "Begin editorial review bypassing a reviewer?"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/publication_partial.html:3
+msgid "Publication"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/publication_partial.html:8
+msgid "Skip full database backup"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/publication_partial.html:12
+msgid "Publish all"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/publication_partial.html:32
+msgid "Publication log:"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/publication_partial.html:41
+msgid "Last updated at"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/review_request.html:7
+msgid "Review request"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/review_request.html:9
+msgid "asked you to review the contribution below."
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/review_request.html:16
+msgid "View contribution summary"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/review_request.html:18
+msgid "Respond to review invitation"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/review_request.html:22
+msgid "Message to editor:"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/review_request.html:29
+msgid "Accept request"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/review_request.html:30
+msgid "Reject request"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/review_request.html:35
+msgid "Confirm response?"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/sources_form.html:33
+msgid "Text reference"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/thanks.html:6
+msgid "Thank You for Your Contribution!"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/thanks.html:9
+msgid ""
+"The editors appreciate the time you have taken to keep the Voyages database "
+"current."
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/thanks.html:13
+msgid "Return to "
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/thanks.html:13
+#: voyages/templates/account/base.html:38
+#: voyages/templates/account/base.html:63 voyages/templates/admin/base.html:38
+msgid "Contribute Home"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/upload.html:4
+msgid "Voyage Upload Page"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/upload.html:7
+msgid "Voyage File Upload"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/upload.html:9
+msgid "Current files:"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/upload.html:18
+msgid "No files available."
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/upload.html:21
+msgid "Upload new file"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/upload.html:28
+msgid "File path:"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/upload.html:33
+msgid "File title:"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/voyage_selection_table.html:12
+#: voyages/apps/resources/templates/resources/images-left-menu.html:72
+#: voyages/apps/resources/templates/resources/names-left-menu.html:369
+msgid "Search"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/voyage_selection_table.html:26
+msgid "Year arrived in the Americas"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/voyage_selection_table.html:27
+msgid "Captain"
+msgstr ""
+
+#: voyages/apps/past/templates/past-contribute/_full_details_modal.html:7
+#: voyages/apps/voyage/templates/database/_full_details_modal.html:7
+msgid "Full detail"
+msgstr ""
+
+#: voyages/apps/past/templates/past-contribute/_full_details_modal.html:13
+#: voyages/apps/voyage/templates/database/_full_details_modal.html:13
+msgid "Here are the currently available details for this voyage."
+msgstr ""
+
+#: voyages/apps/past/templates/past-contribute/_full_details_modal.html:14
+#: voyages/apps/voyage/templates/database/_full_details_modal.html:14
+msgid "Expand/Collapse"
+msgstr ""
+
+#: voyages/apps/past/templates/past-contribute/_full_details_modal.html:15
+#: voyages/apps/voyage/templates/database/_full_details_modal.html:15
+msgid "to see/hide all"
+msgstr ""
+
+#: voyages/apps/past/templates/past-contribute/_full_details_modal.html:36
+#: voyages/apps/voyage/templates/database/_full_details_modal.html:36
+msgid "IMP"
+msgstr ""
+
+#: voyages/apps/past/templates/past-contribute/_full_details_modal.html:52
+#: voyages/apps/voyage/templates/database/_full_details_modal.html:52
+msgid "Close"
+msgstr ""
+
+#: voyages/apps/past/templates/past-contribute/_language_group.html:8
+msgid "Country - Language Group"
+msgstr ""
+
+#: voyages/apps/past/templates/past-contribute/_language_group.html:9
+msgid ""
+"You may select a country to narrow down Language Group options. If your "
+"suggested Language Group is not listed, you may leave your contribution in "
+"the comments."
+msgstr ""
+
+#: voyages/apps/past/templates/past-contribute/_language_group.html:12
+msgid "Multilingual (Language Group)"
+msgstr ""
+
+#: voyages/apps/past/templates/past-contribute/_language_group.html:18
+msgid ""
+"Check Multilingual if there are more than one Language Group associated with "
+"this name. Then identify <b>one Primary Language Group</b> from the list "
+"below."
+msgstr ""
+
+#: voyages/apps/past/templates/past-contribute/_language_group.html:32
+msgid "Comments"
+msgstr ""
+
+#: voyages/apps/past/templates/past-contribute/_language_group.html:33
+msgid "Add any comments to your contribution."
+msgstr ""
+
+#: voyages/apps/past/templates/past-contribute/_language_group.html:47
+msgid "Previous Section"
+msgstr ""
+
+#: voyages/apps/past/templates/past-contribute/_left-menu.html:23
+msgid "In Register"
+msgstr ""
+
+#: voyages/apps/past/templates/past-contribute/_left-menu.html:29
+msgid "Modern Counterpart"
+msgstr ""
+
+#: voyages/apps/past/templates/past-contribute/_left-menu.html:39
+msgid "Language Associated with Name"
+msgstr ""
+
+#: voyages/apps/past/templates/past-contribute/_left-menu.html:47
+msgid "Language Group"
+msgstr ""
+
+#: voyages/apps/past/templates/past-contribute/_left-menu.html:57
+msgid "Physical Characteristics"
+msgstr ""
+
+#: voyages/apps/past/templates/past-contribute/_left-menu.html:65
+#: voyages/apps/resources/templates/resources/names-index.html:152
+#: voyages/apps/resources/templates/resources/names-left-menu.html:70
+msgid "Age"
+msgstr ""
+
+#: voyages/apps/past/templates/past-contribute/_left-menu.html:68
+msgid "Male"
+msgstr ""
+
+#: voyages/apps/past/templates/past-contribute/_left-menu.html:69
+msgid "Female"
+msgstr ""
+
+#: voyages/apps/past/templates/past-contribute/_left-menu.html:70
+msgid "Sex"
+msgstr ""
+
+#: voyages/apps/past/templates/past-contribute/_left-menu.html:74
+msgid "Height"
+msgstr ""
+
+#: voyages/apps/past/templates/past-contribute/_left-menu.html:95
+#: voyages/apps/resources/templates/resources/names-index.html:237
+msgid "Ship Name"
+msgstr ""
+
+#: voyages/apps/past/templates/past-contribute/_left-menu.html:99
+msgid "Port"
+msgstr ""
+
+#: voyages/apps/past/templates/past-contribute/_left-menu.html:103
+msgid "Voyage Year"
+msgstr ""
+
+#: voyages/apps/past/templates/past-contribute/_name_pronunciation.html:15
+msgid "Add Another Suggestion"
+msgstr ""
+
+#: voyages/apps/past/templates/past-contribute/_name_pronunciation.html:16
+msgid "Next Section"
+msgstr ""
+
+#: voyages/apps/past/templates/past-enslavers/_enslaver-name.html:8
+#: voyages/apps/past/templates/past-enslavers/_itinerary.html:9
+#: voyages/apps/past/templates/past-enslavers/_sources.html:8
+#: voyages/apps/past/templates/past/_cultural-association.html:9
+#: voyages/apps/past/templates/past/_fate.html:8
+#: voyages/apps/past/templates/past/_itinerary.html:9
+#: voyages/apps/past/templates/past/_personal-data.html:9
+#: voyages/apps/past/templates/past/_sources.html:8
+msgid "Description"
+msgstr ""
+
+#: voyages/apps/past/templates/past-enslavers/_itinerary.html:4
+#: voyages/apps/past/templates/past-enslavers/_itinerary.html:6
+#: voyages/apps/past/templates/past-enslavers/_itinerary.html:9
+#: voyages/apps/past/templates/past/_itinerary.html:4
+#: voyages/apps/past/templates/past/_itinerary.html:6
+#: voyages/apps/past/templates/past/_itinerary.html:9
+#: voyages/apps/voyage/templates/database/_itinerary.html:4
+msgid "Itinerary"
+msgstr ""
+
+#: voyages/apps/past/templates/past/_actions.html:8
+#: voyages/apps/voyage/templates/database/_actions.html:8
+msgid "View all"
+msgstr ""
+
+#: voyages/apps/past/templates/past/_actions.html:17
+#: voyages/apps/voyage/templates/database/_actions.html:17
+msgid "Reset all"
+msgstr ""
+
+#: voyages/apps/past/templates/past/_african-name.html:4
+msgid "African Name"
+msgstr ""
+
+#: voyages/apps/past/templates/past/_african-name.html:8
+msgid "Possible modern counterpart"
+msgstr ""
+
+#: voyages/apps/past/templates/past/_cultural-association.html:4
+#: voyages/apps/past/templates/past/_cultural-association.html:9
+msgid "Cultural Association"
+msgstr ""
+
+#: voyages/apps/past/templates/past/_cultural-association.html:6
+#: voyages/apps/past/templates/past/_personal-data.html:4
+#: voyages/apps/past/templates/past/_personal-data.html:6
+#: voyages/apps/past/templates/past/_personal-data.html:9
+msgid "Personal Data"
+msgstr ""
+
+#: voyages/apps/past/templates/past/_enslaved_dataset_select_modal.html:7
+msgid "Select a database of enslaved people to search"
+msgstr ""
+
+#: voyages/apps/past/templates/past/_enslaved_dataset_select_modal.html:8
+msgid "You may choose to search within one of the following databases."
+msgstr ""
+
+#: voyages/apps/past/templates/past/_enslaved_dataset_select_modal.html:20
+#: voyages/apps/resources/templates/resources/names-index.html:303
+msgid "African Origins"
+msgstr ""
+
+#: voyages/apps/past/templates/past/_enslaved_dataset_select_modal.html:24
+msgid ""
+"The African Origins Database provides personal details of 93,605 Africans "
+"taken from captured slave ships or from African trading sites. It displays "
+"the African name, age, gender, and places of embarkation and disembarkation "
+"of each individual. The database invites users to make contributions to the "
+"site to identify the likely ethnolinguistic origins of the names from the "
+"historical records."
+msgstr ""
+
+#: voyages/apps/past/templates/past/_enslaved_dataset_select_modal.html:45
+msgid "Oceans of Kinfolk (United States)"
+msgstr ""
+
+#: voyages/apps/past/templates/past/_enslaved_dataset_select_modal.html:49
+msgid ""
+"The Oceans of Kinfolk Database provides personal details of more than 63,000 "
+"enslaved African Americans forcibly transported to New Orleans from various "
+"ports in the United States during the 19th century. The database includes "
+"the name, age, gender, and places of embarkation and disembarkation of each "
+"individual."
+msgstr ""
+
+#: voyages/apps/past/templates/past/_fate.html:4
+#: voyages/apps/past/templates/past/_fate.html:6
+msgid "Fate"
+msgstr ""
+
+#: voyages/apps/past/templates/past/_fate.html:8
+msgid "Post Disembarkation Location"
+msgstr ""
+
+#: voyages/apps/past/templates/past/_identity.html:4
+#: voyages/apps/past/templates/past/_identity.html:8
+msgid "Identity"
+msgstr ""
+
+#: voyages/apps/past/templates/past/_panel.html:25
+#: voyages/apps/voyage/templates/database/_panel.html:25
+msgid "No variables are selected"
+msgstr ""
+
+#: voyages/apps/past/templates/past/_tabs.html:6
+#: voyages/apps/voyage/templates/database/_tabs.html:6
+msgid "Results"
+msgstr ""
+
+#: voyages/apps/past/templates/past/contribute.html:24
+msgid "People of Atlantic Slave Trade - Database of the Enslavers"
+msgstr ""
+
+#: voyages/apps/past/templates/past/contribute.html:30
+msgid "People of Atlantic Slave Trade - Database of the Enslaved"
+msgstr ""
+
+#: voyages/apps/past/templates/past/contribute.html:36
+msgid "Back to Search"
+msgstr ""
+
+#: voyages/apps/past/templates/past/contribute.html:41
+msgid "Contribute to origins of the name of this person"
+msgstr ""
+
+#: voyages/apps/past/templates/past/contribute.html:59
+msgid "Select to contribute"
+msgstr ""
+
+#: voyages/apps/past/templates/past/contribute.html:62
+msgid "Names & Pronunciation"
+msgstr ""
+
+#: voyages/apps/past/templates/past/contribute.html:65
+msgid "Language Groups"
+msgstr ""
+
+#: voyages/apps/past/templates/past/database.html:25
+#: voyages/apps/past/templates/past/enslavers.html:25
+msgid "People of the Atlantic Slave Trade - Database"
+msgstr ""
+
+#: voyages/apps/past/templates/past/database.html:34
+msgid "African Origins - Database"
+msgstr ""
+
+#: voyages/apps/past/templates/past/database.html:35
+msgid "Oceans of Kinfolk - Database"
+msgstr ""
+
+#: voyages/apps/past/templates/past/database.html:39
+msgid "Change Database"
+msgstr ""
+
+#: voyages/apps/past/templates/past/database.html:79
+#: voyages/apps/past/templates/past/enslavers.html:73
+#: voyages/apps/voyage/templates/database.html:77
+msgid "Ooops"
+msgstr ""
+
+#: voyages/apps/past/templates/past/database.html:80
+#: voyages/apps/past/templates/past/enslavers.html:74
+#: voyages/apps/voyage/templates/database.html:78
+msgid "We may have sailed off course and an error has occurred."
+msgstr ""
+
+#: voyages/apps/past/templates/past/database.html:82
+#: voyages/apps/past/templates/past/enslavers.html:76
+#: voyages/apps/voyage/templates/database.html:80
+msgid "Report"
+msgstr ""
+
+#: voyages/apps/past/templates/past/database.html:83
+#: voyages/apps/past/templates/past/enslavers.html:77
+#: voyages/apps/voyage/templates/database.html:81
+msgid "Reload"
+msgstr ""
+
+#: voyages/apps/past/templates/past/enslavers.html:34
+msgid "Enslavers - Database"
+msgstr ""
+
+#: voyages/apps/resources/templates/resources/about.html:6
+msgid "African Names Database - About"
+msgstr ""
+
+#: voyages/apps/resources/templates/resources/about.html:17
+#: voyages/apps/resources/templates/resources/downloads.html:17
+#: voyages/apps/resources/templates/resources/names-index.html:22
+msgid "African Names"
+msgstr ""
+
+#: voyages/apps/resources/templates/resources/base.html:6
+msgid "About the Project"
+msgstr ""
+
+#: voyages/apps/resources/templates/resources/downloads.html:6
+msgid "African Names Database - Downloads"
+msgstr ""
+
+#: voyages/apps/resources/templates/resources/image-category-detail.html:16
+#: voyages/apps/resources/templates/resources/image-category-detail.html:56
+#: voyages/apps/resources/templates/resources/image-detail.html:28
+#: voyages/apps/resources/templates/resources/images-search-detail.html:16
+#: voyages/apps/resources/templates/resources/images-search-detail.html:85
+msgid "Image Detail"
+msgstr ""
+
+#: voyages/apps/resources/templates/resources/image-category-detail.html:20
+#: voyages/apps/resources/templates/resources/image-detail.html:19
+#: voyages/apps/resources/templates/resources/image-search-detail-window.html:19
+#: voyages/apps/resources/templates/resources/images-category.html:21
+#: voyages/apps/resources/templates/resources/images-index.html:21
+#: voyages/apps/resources/templates/resources/images-search-detail.html:20
+#: voyages/apps/resources/templates/resources/images-search-results.html:20
+msgid "Resources - Image Galleries"
+msgstr ""
+
+#: voyages/apps/resources/templates/resources/image-category-detail.html:29
+#: voyages/apps/resources/templates/resources/images-category.html:24
+#: voyages/apps/resources/templates/resources/images-category.html:65
+#: voyages/apps/resources/templates/resources/images-search-detail.html:34
+#: voyages/apps/resources/templates/resources/images-search-results.html:26
+msgid "Images of "
+msgstr ""
+
+#: voyages/apps/resources/templates/resources/image-category-detail.html:111
+#: voyages/apps/resources/templates/resources/images-search-detail.html:140
+#: voyages/apps/voyage/templates/database/_source.html:4
+#: voyages/apps/voyage/templates/database/_source.html:8
+msgid "Source"
+msgstr ""
+
+#: voyages/apps/resources/templates/resources/image-category-detail.html:122
+#: voyages/apps/resources/templates/resources/images-search-detail.html:151
+msgid "Language"
+msgstr ""
+
+#: voyages/apps/resources/templates/resources/image-category-detail.html:139
+#: voyages/apps/resources/templates/resources/images-search-detail.html:166
+msgid "Related Voyages"
+msgstr ""
+
+#: voyages/apps/resources/templates/resources/image-detail.html:15
+#: voyages/apps/resources/templates/resources/image-search-detail-window.html:15
+#: voyages/apps/resources/templates/resources/images-search-results.html:29
+#: voyages/apps/resources/templates/resources/images-search-results.html:31
+#: voyages/apps/resources/templates/resources/images-search-results.html:34
+#: voyages/apps/voyage/templates/voyage_main_content.html:47
+#: voyages/apps/voyage/templates/voyage_main_content.html:49
+msgid "Images"
+msgstr ""
+
+#: voyages/apps/resources/templates/resources/image-search-detail-window.html:28
+#: voyages/apps/resources/templates/resources/images-category.html:40
+#: voyages/apps/resources/templates/resources/images-index.html:49
+#: voyages/apps/resources/templates/resources/images-search-results.html:41
+msgid "All Categories"
+msgstr ""
+
+#: voyages/apps/resources/templates/resources/images-category.html:16
+msgid "Category Images"
+msgstr ""
+
+#: voyages/apps/resources/templates/resources/images-category.html:30
+#: voyages/apps/resources/templates/resources/images-category.html:71
+#: voyages/apps/resources/templates/resources/images-left-menu.html:60
+msgid "images"
+msgstr ""
+
+#: voyages/apps/resources/templates/resources/images-index.html:24
+msgid "All Categories "
+msgstr ""
+
+#: voyages/apps/resources/templates/resources/images-index.html:55
+msgid "View all images"
+msgstr ""
+
+#: voyages/apps/resources/templates/resources/images-left-menu.html:12
+msgid "Keyword"
+msgstr ""
+
+#: voyages/apps/resources/templates/resources/images-left-menu.html:23
+#: voyages/apps/resources/templates/resources/names-left-menu.html:54
+msgid "Time frame"
+msgstr ""
+
+#: voyages/apps/resources/templates/resources/images-left-menu.html:41
+msgid "Category"
+msgstr ""
+
+#: voyages/apps/resources/templates/resources/images-left-menu.html:58
+msgid "image"
+msgstr ""
+
+#: voyages/apps/resources/templates/resources/images-search-detail.html:42
+msgid "All images"
+msgstr ""
+
+#: voyages/apps/resources/templates/resources/images-search-detail.html:49
+#: voyages/apps/resources/templates/resources/images-search-detail.html:57
+#: voyages/apps/resources/templates/resources/images-search-results.html:66
+msgid "Search Results"
+msgstr ""
+
+#: voyages/apps/resources/templates/resources/images-search-results.html:16
+msgid "Images Search"
+msgstr ""
+
+#: voyages/apps/resources/templates/resources/images-search-results.html:29
+msgid "All Images"
+msgstr ""
+
+#: voyages/apps/resources/templates/resources/images-search-results.html:31
+#: voyages/apps/resources/templates/resources/images-search-results.html:34
+msgid "Search results"
+msgstr ""
+
+#: voyages/apps/resources/templates/resources/left-menu.html:6
+msgid "About this Database"
+msgstr ""
+
+#: voyages/apps/resources/templates/resources/lessons.html:6
+msgid "Resources - Lesson Plans"
+msgstr ""
+
+#: voyages/apps/resources/templates/resources/lessons.html:18
+#: voyages/apps/resources/templates/resources/links.html:18
+#: voyages/templates/topbar.html:59
+msgid "Resources"
+msgstr ""
+
+#: voyages/apps/resources/templates/resources/lessons.html:19
+#: voyages/templates/topbar.html:62
+msgid "Lesson Plans"
+msgstr ""
+
+#: voyages/apps/resources/templates/resources/links.html:6
+msgid "Resources - External Links"
+msgstr ""
+
+#: voyages/apps/resources/templates/resources/links.html:19
+#: voyages/templates/topbar.html:63
+msgid "External Links"
+msgstr ""
+
+#: voyages/apps/resources/templates/resources/names-index.html:26
+msgid "African Names - Database"
+msgstr ""
+
+#: voyages/apps/resources/templates/resources/names-index.html:29
+msgid "Shows variables used in the current query."
+msgstr ""
+
+#: voyages/apps/resources/templates/resources/names-index.html:79
+msgid ""
+"There are currently no conditions in your query. The listing on the right "
+"shows all Africans in the database."
+msgstr ""
+
+#: voyages/apps/resources/templates/resources/names-index.html:105
+msgid "Showing"
+msgstr ""
+
+#: voyages/apps/resources/templates/resources/names-index.html:105
+msgid "out of"
+msgstr ""
+
+#: voyages/apps/resources/templates/resources/names-index.html:106
+msgid "Show "
+msgstr ""
+
+#: voyages/apps/resources/templates/resources/names-index.html:106
+msgid " rows"
+msgstr ""
+
+#: voyages/apps/resources/templates/resources/names-index.html:118
+msgid "ID"
+msgstr ""
+
+#: voyages/apps/resources/templates/resources/names-index.html:169
+msgid "Height (in)"
+msgstr ""
+
+#: voyages/apps/resources/templates/resources/names-index.html:186
+#: voyages/apps/resources/templates/resources/names-left-menu.html:102
+msgid "Sex/Age"
+msgstr ""
+
+#: voyages/apps/resources/templates/resources/names-index.html:203
+msgid "Origin"
+msgstr ""
+
+#: voyages/apps/resources/templates/resources/names-index.html:254
+msgid "Arrival"
+msgstr ""
+
+#: voyages/apps/resources/templates/resources/names-index.html:271
+msgid "Embarkation"
+msgstr ""
+
+#: voyages/apps/resources/templates/resources/names-index.html:288
+#: voyages/apps/resources/templates/resources/names-left-menu.html:334
+#: voyages/apps/resources/templates/resources/names-left-menu.html:345
+msgid "Disembarkation"
+msgstr ""
+
+#: voyages/apps/resources/templates/resources/names-index.html:343
+msgid ""
+"A transatlantic Voyage ID for this record does not yet exist, although "
+"further research might uncover one. The link in the rightmost column of the "
+"African Names Database table will take you to the matching entry in the "
+"African Origins database."
+msgstr ""
+
+#: voyages/apps/resources/templates/resources/names-index.html:359
+msgid "Redirecting to African Origins"
+msgstr ""
+
+#: voyages/apps/resources/templates/resources/names-index.html:359
+msgid "View"
+msgstr ""
+
+#: voyages/apps/resources/templates/resources/names-index.html:473
+msgid "Download current view"
+msgstr ""
+
+#: voyages/apps/resources/templates/resources/names-index.html:474
+msgid "Download all results"
+msgstr ""
+
+#: voyages/apps/resources/templates/resources/names-left-menu.html:18
+msgid "General Variables"
+msgstr ""
+
+#: voyages/apps/resources/templates/resources/names-left-menu.html:24
+msgid "African name"
+msgstr ""
+
+#: voyages/apps/resources/templates/resources/names-left-menu.html:34
+msgid "Ship name"
+msgstr ""
+
+#: voyages/apps/resources/templates/resources/names-left-menu.html:86
+msgid "Height (inches)"
+msgstr ""
+
+#: voyages/apps/resources/templates/resources/names-left-menu.html:112
+msgid "boys"
+msgstr ""
+
+#: voyages/apps/resources/templates/resources/names-left-menu.html:122
+msgid "girls"
+msgstr ""
+
+#: voyages/apps/resources/templates/resources/names-left-menu.html:134
+msgid "men"
+msgstr ""
+
+#: voyages/apps/resources/templates/resources/names-left-menu.html:144
+msgid "women"
+msgstr ""
+
+#: voyages/apps/resources/templates/resources/names-left-menu.html:156
+msgid "male"
+msgstr ""
+
+#: voyages/apps/resources/templates/resources/names-left-menu.html:166
+msgid "female"
+msgstr ""
+
+#: voyages/apps/resources/templates/resources/names-left-menu.html:179
+msgid "Place of Origin"
+msgstr ""
+
+#: voyages/apps/resources/templates/resources/names-left-menu.html:185
+#: voyages/apps/resources/templates/resources/names-left-menu.html:229
+msgid "Filter by"
+msgstr ""
+
+#: voyages/apps/resources/templates/resources/names-left-menu.html:224
+msgid "Place of Embarkation"
+msgstr ""
+
+#: voyages/apps/static_content/templates/static_content/index.html:30
+msgid ""
+"Explore the Origins and Forced Relocations of Enslaved Africans Across the "
+"Atlantic World"
+msgstr ""
+
+#: voyages/apps/static_content/templates/static_content/index.html:32
+msgid ""
+" \n"
+"\t\t\t\t\tThe SlaveVoyages website is a collaborative digital initiative "
+"that compiles and makes publicly accessible records of the largest slave "
+"trades in history. Search these records to learn about the broad origins and "
+"forced relocations of more than 12 million African people who were sent "
+"across the Atlantic in slave ships, and hundreds of thousands more who were "
+"trafficked within the Americas. Explore where they were taken, the numerous "
+"rebellions that occurred, the horrific loss of life during the voyages, the "
+"identities and nationalities of the perpetrators, and much more.\n"
+"\t\t\t\t\t"
+msgstr ""
+
+#: voyages/apps/static_content/templates/static_content/index.html:40
+msgid "Henry Louis Gates introduces Slave Voyages 2.0 and some of its people"
+msgstr ""
+
+#: voyages/apps/static_content/templates/static_content/index.html:46
+msgid "Special features"
+msgstr ""
+
+#: voyages/apps/static_content/templates/static_content/index.html:50
+msgid "Introductory maps"
+msgstr ""
+
+#: voyages/apps/static_content/templates/static_content/index.html:51
+msgid "View places and routes of the slave trade"
+msgstr ""
+
+#: voyages/apps/static_content/templates/static_content/index.html:58
+msgid "3D video reconstructions"
+msgstr ""
+
+#: voyages/apps/static_content/templates/static_content/index.html:59
+msgid "View 3D renditions of slaving vessels"
+msgstr ""
+
+#: voyages/apps/static_content/templates/static_content/index.html:66
+msgid "Examine estimated numbers of people trafficked across the Atlantic"
+msgstr ""
+
+#: voyages/apps/static_content/templates/static_content/index.html:73
+#: voyages/apps/voyage/templates/database/_tabs.html:26
+msgid "Timelapse"
+msgstr ""
+
+#: voyages/apps/static_content/templates/static_content/index.html:74
+msgid "View the movement of slave ships across the Atlantic"
+msgstr ""
+
+#: voyages/apps/static_content/templates/static_content/index.html:89
+msgid ""
+"The Slave Voyages 1.0 is now available as a read-only archive until late "
+"2019."
+msgstr ""
+
+#: voyages/apps/static_content/templates/static_content/index.html:94
+msgid "donate to this project"
+msgstr ""
+
+#: voyages/apps/static_content/templates/static_content/index.html:98
+msgid "Provide your thoughts and suggestions about the Slave Voyages site."
+msgstr ""
+
+#: voyages/apps/static_content/templates/static_content/index.html:101
+msgid "user feedback"
+msgstr ""
+
+#: voyages/apps/static_content/templates/static_content/index.html:103
+msgid "Report a specific issue/bug found on the site."
+msgstr ""
+
+#: voyages/apps/static_content/templates/static_content/index.html:106
+msgid "report issues"
+msgstr ""
+
+#: voyages/apps/static_content/templates/static_content/index.html:108
+msgid "scroll down to learn more"
+msgstr ""
+
+#: voyages/apps/static_content/templates/static_content/index.html:177
+#: voyages/templates/topbar.html:16
+msgid "Trans-Atlantic"
+msgstr ""
+
+#: voyages/apps/static_content/templates/static_content/index.html:178
+#: voyages/apps/static_content/templates/static_content/index.html:222
+msgid "Slave Trade Database"
+msgstr ""
+
+#: voyages/apps/static_content/templates/static_content/index.html:182
+msgid ""
+"\n"
+"This database compiles information about more than 36,000 voyages that "
+"forcibly transported enslaved Africans across the Atlantic between 1514 and "
+"1866. Search and analyze the database for information on the broad origins "
+"of enslaved people, the tortuous Middle Passage, and the destinations of "
+"Africans in the Americas.\n"
+"\t\t\t\t\t\t"
+msgstr ""
+
+#: voyages/apps/static_content/templates/static_content/index.html:192
+#: voyages/apps/static_content/templates/static_content/index.html:234
+#: voyages/apps/static_content/templates/static_content/index.html:245
+#: voyages/apps/static_content/templates/static_content/index.html:259
+#: voyages/templates/topbar.html:19 voyages/templates/topbar.html:37
+#: voyages/templates/topbar.html:50
+msgid "Database"
+msgstr ""
+
+#: voyages/apps/static_content/templates/static_content/index.html:205
+#: voyages/apps/static_content/templates/static_content/index.html:236
+#: voyages/templates/account/base.html:23
+#: voyages/templates/account/login.html:8
+msgid "Contribute"
+msgstr ""
+
+#: voyages/apps/static_content/templates/static_content/index.html:221
+#: voyages/templates/topbar.html:34
+msgid "Intra-American"
+msgstr ""
+
+#: voyages/apps/static_content/templates/static_content/index.html:226
+msgid ""
+"\n"
+"\t\t\t\t\t\tThis database contains information on more than 11,000 maritime "
+"voyages trafficking enslaved people within the Americas. These slave trades "
+"operated within colonial empires, across imperial boundaries, and inside the "
+"borders of nations such as the United States and Brazil. Explore the forced "
+"removals, which not only dispersed African survivors of the Atlantic "
+"crossing but also displaced enslaved people born in the Americas.\n"
+"\t\t\t\t\t\t"
+msgstr ""
+
+#: voyages/apps/static_content/templates/static_content/index.html:244
+msgid "People of the African Slave Trade"
+msgstr ""
+
+#: voyages/apps/static_content/templates/static_content/index.html:249
+msgid ""
+"\n"
+"\t\t\t\t\t\tThe People of the African Slave Trade databases provide personal "
+"details on 91,491 enslaved people. In the African Origins dataset are the "
+"personal details of 91,491 Africans taken from nineteenth-century slave "
+"ships captured by anti-slave trade patrols or from African trading sites "
+"between 1808-1862. In the Oceans of Kinfolk dataset are the personal details "
+"of 63,562 people transported to New Orleans, and in many cases records on "
+"the people who transported, bought, and sold them there. Analyze the name, "
+"age, gender, origin, places of embarkation and disembarkation of these "
+"individuals, and some of their linkages to enslavers.\n"
+"\t\t\t\t\t\t"
+msgstr ""
+
+#: voyages/apps/static_content/templates/static_content/index.html:274
+#: voyages/templates/base.html:35 voyages/templates/topbar.html:61
+msgid "Image Galleries"
+msgstr ""
+
+#: voyages/apps/static_content/templates/static_content/index.html:278
+msgid ""
+"\n"
+"\t\t\t\t\t\tExplore images of the people, places, vessels, and documents "
+"linked to the Trans-Atlantic and Intra-American slave trades. Where "
+"available, each image contains a link to a corresponding slave voyage in the "
+"databases and a reference to the original source.\n"
+"\t\t\t\t\t\t"
+msgstr ""
+
+#: voyages/apps/static_content/templates/static_content/index.html:292
+msgid "people"
+msgstr ""
+
+#: voyages/apps/static_content/templates/static_content/index.html:304
+msgid "places"
+msgstr ""
+
+#: voyages/apps/static_content/templates/static_content/index.html:314
+msgid "documents"
+msgstr ""
+
+#: voyages/apps/static_content/templates/static_content/index.html:324
+msgid "vessels"
+msgstr ""
+
+#: voyages/apps/voyage/admin.py:27
+msgid "Advanced options"
+msgstr ""
+
+#: voyages/apps/voyage/globals.py:745 voyages/apps/voyage/globals.py:787
+msgid "Flag*"
+msgstr ""
+
+#: voyages/apps/voyage/globals.py:750 voyages/apps/voyage/globals.py:791
+msgid "Broad region where voyage began"
+msgstr ""
+
+#: voyages/apps/voyage/globals.py:755 voyages/apps/voyage/globals.py:796
+msgid "Region where voyage began"
+msgstr ""
+
+#: voyages/apps/voyage/globals.py:758 voyages/apps/voyage/globals.py:798
+msgid "Port where voyage began"
+msgstr ""
+
+#: voyages/apps/voyage/globals.py:764 voyages/apps/voyage/globals.py:803
+msgid "Embarkation Ports"
+msgstr ""
+
+#: voyages/apps/voyage/globals.py:767 voyages/apps/voyage/globals.py:805
+msgid "Specific regions of disembarkation"
+msgstr ""
+
+#: voyages/apps/voyage/globals.py:770 voyages/apps/voyage/globals.py:808
+msgid "Broad regions of disembarkation"
+msgstr ""
+
+#: voyages/apps/voyage/globals.py:775 voyages/apps/voyage/globals.py:813
+msgid "Disembarkation Ports"
+msgstr ""
+
+#: voyages/apps/voyage/globals.py:778
+msgid "Individual Years"
+msgstr ""
+
+#: voyages/apps/voyage/globals.py:968
+msgid "Number of Voyages"
+msgstr ""
+
+#: voyages/apps/voyage/globals.py:969
+msgid "Sum of embarked slaves"
+msgstr ""
+
+#: voyages/apps/voyage/globals.py:971
+msgid "Average number of embarked slaves"
+msgstr ""
+
+#: voyages/apps/voyage/globals.py:973
+msgid "Number of voyages - embarked slaves"
+msgstr ""
+
+#: voyages/apps/voyage/globals.py:975
+msgid "Percent of embarked slaves (row total)"
+msgstr ""
+
+#: voyages/apps/voyage/globals.py:977
+msgid "Percent of embarked slaves (column total)"
+msgstr ""
+
+#: voyages/apps/voyage/globals.py:979
+msgid "Sum of disembarked slaves"
+msgstr ""
+
+#: voyages/apps/voyage/globals.py:981
+msgid "Average number of disembarked slaves"
+msgstr ""
+
+#: voyages/apps/voyage/globals.py:983
+msgid "Number of voyages - disembarked slaves"
+msgstr ""
+
+#: voyages/apps/voyage/globals.py:985
+msgid "Percent of disembarked slaves (row total)"
+msgstr ""
+
+#: voyages/apps/voyage/globals.py:987
+msgid "Percent of disembarked slaves (column total)"
+msgstr ""
+
+#: voyages/apps/voyage/globals.py:989 voyages/apps/voyage/globals.py:1019
+msgid "Sum of embarked/disembarked slaves"
+msgstr ""
+
+#: voyages/apps/voyage/globals.py:990 voyages/apps/voyage/globals.py:1020
+msgid "Average number of embarked/disembarked slaves"
+msgstr ""
+
+#: voyages/apps/voyage/globals.py:991 voyages/apps/voyage/globals.py:1021
+msgid "Number of voyages - embarked/disembarked slaves"
+msgstr ""
+
+#: voyages/apps/voyage/globals.py:992
+msgid "Average percentage male"
+msgstr ""
+
+#: voyages/apps/voyage/globals.py:994
+msgid "Number of voyages - percentage male"
+msgstr ""
+
+#: voyages/apps/voyage/globals.py:996
+msgid "Average percentage children"
+msgstr ""
+
+#: voyages/apps/voyage/globals.py:998
+msgid "Number of voyages - percentage children"
+msgstr ""
+
+#: voyages/apps/voyage/globals.py:1000
+msgid "Average percentage of slaves embarked who died during voyage"
+msgstr ""
+
+#: voyages/apps/voyage/globals.py:1002
+msgid ""
+"Number of voyages - percentage of slaves embarked who died during voyage"
+msgstr ""
+
+#: voyages/apps/voyage/globals.py:1005
+msgid "Average middle passage (days)"
+msgstr ""
+
+#: voyages/apps/voyage/globals.py:1007
+msgid "Number of voyages - middle passage (days)"
+msgstr ""
+
+#: voyages/apps/voyage/globals.py:1009
+msgid "Average standarized tonnage"
+msgstr ""
+
+#: voyages/apps/voyage/globals.py:1011
+msgid "Number of voyages - standarized tonnage"
+msgstr ""
+
+#: voyages/apps/voyage/globals.py:1013
+msgid "Sterling cash price in Jamaica"
+msgstr ""
+
+#: voyages/apps/voyage/globals.py:1015
+msgid "Number of voyages - sterling cash price in Jamaica"
+msgstr ""
+
+#: voyages/apps/voyage/globals.py:2088
+msgctxt "summary statistics label"
+msgid "SLAXIMP"
+msgstr "Captives embarked *"
+
+#: voyages/apps/voyage/globals.py:2094
+msgctxt "summary statistics label"
+msgid "SLAMIMP"
+msgstr "Captives disembarked *"
+
+#: voyages/apps/voyage/globals.py:2100
+msgctxt "summary statistics label"
+msgid "Percentage of slaves embarked who died during voyage"
+msgstr "Percentage of captives embarked who died during crossing"
+
+#: voyages/apps/voyage/globals.py:2106
+msgctxt "summary statistics label"
+msgid "VOYAGE"
+msgstr "Duration of captives' crossing (in days)"
+
+#: voyages/apps/voyage/globals.py:2124
+msgctxt "summary statistics label"
+msgid "TONNAGE"
+msgstr "Tonnage of vessel"
+
+#: voyages/apps/voyage/globals.py:2355
+msgid "Number of voyages"
+msgstr ""
+
+#: voyages/apps/voyage/globals.py:2357
+msgid "Average tonnage"
+msgstr ""
+
+#: voyages/apps/voyage/globals.py:2358
+msgid "Average tonnage (standardized)"
+msgstr ""
+
+#: voyages/apps/voyage/globals.py:2361
+msgid "Average number of guns"
+msgstr ""
+
+#: voyages/apps/voyage/globals.py:2364
+msgid "Rate of resistance"
+msgstr ""
+
+#: voyages/apps/voyage/globals.py:2367
+msgid "Average duration of voyage from home port to disembarkation (days)"
+msgstr ""
+
+#: voyages/apps/voyage/globals.py:2370
+msgid "Average duration of middle passage (days)"
+msgstr ""
+
+#: voyages/apps/voyage/globals.py:2372
+msgid "Average crew at outset"
+msgstr ""
+
+#: voyages/apps/voyage/globals.py:2374
+msgid "Average crew at first landing of slaves"
+msgstr ""
+
+#: voyages/apps/voyage/globals.py:2376
+msgid "Number of crew deaths"
+msgstr ""
+
+#: voyages/apps/voyage/globals.py:2378
+msgid "Average crew deaths"
+msgstr ""
+
+#: voyages/apps/voyage/globals.py:2380
+msgid "Intended number of purchases"
+msgstr ""
+
+#: voyages/apps/voyage/globals.py:2382
+msgid "Average intended purchases"
+msgstr ""
+
+#: voyages/apps/voyage/globals.py:2384
+msgid "Total number of captives embarked"
+msgstr ""
+
+#: voyages/apps/voyage/globals.py:2386
+msgid "Average number of captives embarked"
+msgstr ""
+
+#: voyages/apps/voyage/globals.py:2388
+msgid "Total number of captives disembarked"
+msgstr ""
+
+#: voyages/apps/voyage/globals.py:2390
+msgid "Average number of captives disembarked"
+msgstr ""
+
+#: voyages/apps/voyage/globals.py:2392
+msgid "Percentage men (among captives)"
+msgstr ""
+
+#: voyages/apps/voyage/globals.py:2395
+msgid "Percentage women (among captives)"
+msgstr ""
+
+#: voyages/apps/voyage/globals.py:2398
+msgid "Percentage boys (among captives)"
+msgstr ""
+
+#: voyages/apps/voyage/globals.py:2401
+msgid "Percentage girls (among captives)"
+msgstr ""
+
+#: voyages/apps/voyage/globals.py:2404
+msgid "Percentage female (among captives)"
+msgstr ""
+
+#: voyages/apps/voyage/globals.py:2407
+msgid "Percentage male (among captives)"
+msgstr ""
+
+#: voyages/apps/voyage/globals.py:2411
+msgid "Sterling cash price in Jamaica*"
+msgstr ""
+
+#: voyages/apps/voyage/globals.py:2414
+msgid "Number of slave deaths"
+msgstr ""
+
+#: voyages/apps/voyage/globals.py:2416
+msgid "Average slave deaths"
+msgstr ""
+
+#: voyages/apps/voyage/globals.py:2419
+msgid "Average percentage of slaves embarked who died during the voyage"
+msgstr ""
+
+#: voyages/apps/voyage/models.py:1744 voyages/apps/voyage/models.py:1783
+msgid "Text reference(citation)"
+msgstr ""
+
+#: voyages/apps/voyage/search_views.py:447 voyages/apps/voyage/views.py:1444
+msgid "Africa, port unspecified"
+msgstr ""
+
+#: voyages/apps/voyage/search_views.py:519
+msgctxt "datatable column header"
+msgid "CREW3"
+msgstr "Crew at first landing of captives"
+
+#: voyages/apps/voyage/search_views.py:523
+msgctxt "datatable column header"
+msgid "DLSLATRA"
+msgstr "Date vessel departed with captives"
+
+#: voyages/apps/voyage/search_views.py:529
+msgctxt "datatable column header"
+msgid "DATARR32"
+msgstr "Date vessel arrived with captives"
+
+#: voyages/apps/voyage/search_views.py:531
+msgctxt "datatable column header"
+msgid "SLA1PORT"
+msgstr "First place where captives were landed"
+
+#: voyages/apps/voyage/search_views.py:533
+msgctxt "datatable column header"
+msgid "PLAC1TRA"
+msgstr "First place where captives were purchased"
+
+#: voyages/apps/voyage/search_views.py:539
+#: voyages/apps/voyage/search_views.py:541
+msgctxt "datatable column header"
+msgid "VOY1IMP"
+msgstr "Voyage duration, homeport to disembarkation (in days)"
+
+#: voyages/apps/voyage/search_views.py:541
+#: voyages/apps/voyage/search_views.py:543
+msgctxt "datatable column header"
+msgid "PTDEPIMP"
+msgstr "Place where vessel's voyage began"
+
+#: voyages/apps/voyage/search_views.py:543
+#: voyages/apps/voyage/search_views.py:545
+msgctxt "datatable column header"
+msgid "MJBYPTIMP"
+msgstr "Principal place where captives were purchased"
+
+#: voyages/apps/voyage/search_views.py:545
+#: voyages/apps/voyage/search_views.py:547
+msgctxt "datatable column header"
+msgid "MJSLPTIMP"
+msgstr "Principal place where captives were landed"
+
+#: voyages/apps/voyage/search_views.py:551
+#: voyages/apps/voyage/search_views.py:553
+msgctxt "datatable column header"
+msgid "VYMRTIMP"
+msgstr "Captive deaths during crossing"
+
+#: voyages/apps/voyage/search_views.py:553
+#: voyages/apps/voyage/search_views.py:555
+msgctxt "datatable column header"
+msgid "VYMRTRAT"
+msgstr "Percentage of captives who died during crossing"
+
+#: voyages/apps/voyage/search_views.py:555
+#: voyages/apps/voyage/search_views.py:559
+msgctxt "datatable column header"
+msgid "NATINIMP"
+msgstr "Flag of vessel"
+
+#: voyages/apps/voyage/search_views.py:571
+#: voyages/apps/voyage/search_views.py:575
+msgctxt "datatable column header"
+msgid "VOYAGE"
+msgstr "Duration of captives' crossing (in days)"
+
+#: voyages/apps/voyage/search_views.py:573
+#: voyages/apps/voyage/search_views.py:577
+msgctxt "datatable column header"
+msgid "NATIONAL"
+msgstr "Flag of vessel"
+
+#: voyages/apps/voyage/search_views.py:575
+#: voyages/apps/voyage/search_views.py:579
+msgctxt "datatable column header"
+msgid "NCAR13"
+msgstr "Captives carried from 1st port"
+
+#: voyages/apps/voyage/search_views.py:577
+#: voyages/apps/voyage/search_views.py:581
+msgctxt "datatable column header"
+msgid "NCAR15"
+msgstr "Captives carried from 2nd port"
+
+#: voyages/apps/voyage/search_views.py:579
+#: voyages/apps/voyage/search_views.py:583
+msgctxt "datatable column header"
+msgid "NCAR17"
+msgstr "Captives carried from 3rd port"
+
+#: voyages/apps/voyage/search_views.py:581
+#: voyages/apps/voyage/search_views.py:585
+msgctxt "datatable column header"
+msgid "SLAS32"
+msgstr "Captives landed at 1st port"
+
+#: voyages/apps/voyage/search_views.py:583
+#: voyages/apps/voyage/search_views.py:587
+msgctxt "datatable column header"
+msgid "SLAS36"
+msgstr "Captives landed at 2nd port"
+
+#: voyages/apps/voyage/search_views.py:585
+#: voyages/apps/voyage/search_views.py:589
+msgctxt "datatable column header"
+msgid "SLAS39"
+msgstr "Captives landed at 3rd port"
+
+#: voyages/apps/voyage/search_views.py:587
+#: voyages/apps/voyage/search_views.py:591
+msgctxt "datatable column header"
+msgid "SLINTEND"
+msgstr "Captives intended to be purchased at 1st place"
+
+#: voyages/apps/voyage/search_views.py:593
+#: voyages/apps/voyage/search_views.py:597
+msgctxt "datatable column header"
+msgid "FATE2"
+msgstr "Outcome of voyage for captives"
+
+#: voyages/apps/voyage/search_views.py:599
+#: voyages/apps/voyage/search_views.py:603
+msgctxt "datatable column header"
+msgid "PORTRET"
+msgstr "Place where vessel's voyage ended"
+
+#: voyages/apps/voyage/search_views.py:607
+#: voyages/apps/voyage/search_views.py:611
+msgctxt "datatable column header"
+msgid "RESISTANCE"
+msgstr "Resistance"
+
+#: voyages/apps/voyage/search_views.py:609
+#: voyages/apps/voyage/search_views.py:613
+msgctxt "datatable column header"
+msgid "RIG"
+msgstr "Rig or type of vessel"
+
+#: voyages/apps/voyage/search_views.py:613
+#: voyages/apps/voyage/search_views.py:617
+msgctxt "datatable column header"
+msgid "ADPSALE1"
+msgstr "Second place where captives were landed"
+
+#: voyages/apps/voyage/search_views.py:615
+#: voyages/apps/voyage/search_views.py:619
+msgctxt "datatable column header"
+msgid "PLAC2TRA"
+msgstr "Second place where captives were purchased"
+
+#: voyages/apps/voyage/search_views.py:619
+#: voyages/apps/voyage/search_views.py:623
+msgctxt "datatable column header"
+msgid "D1SLATRA"
+msgstr "Date captive embarkation began"
+
+#: voyages/apps/voyage/search_views.py:623
+#: voyages/apps/voyage/search_views.py:627
+msgctxt "datatable column header"
+msgid "ADPSALE2"
+msgstr "Third place where captives were landed"
+
+#: voyages/apps/voyage/search_views.py:625
+#: voyages/apps/voyage/search_views.py:629
+msgctxt "datatable column header"
+msgid "PLAC3TRA"
+msgstr "Third place where captives were purchased"
+
+#: voyages/apps/voyage/search_views.py:631
+#: voyages/apps/voyage/search_views.py:635
+msgctxt "datatable column header"
+msgid "SLAARRIV"
+msgstr "Captives arrived at 1st port"
+
+#: voyages/apps/voyage/search_views.py:637
+#: voyages/apps/voyage/search_views.py:641
+msgctxt "datatable column header"
+msgid "DATEDEPA"
+msgstr "Date vessel's voyage began"
+
+#: voyages/apps/voyage/search_views.py:639
+#: voyages/apps/voyage/search_views.py:643
+msgctxt "datatable column header"
+msgid "DATARR43"
+msgstr "Date vessel arrived at homeport"
+
+#: voyages/apps/voyage/templates/about.html:6
+msgid "Trans-Atlantic Slave Trade - Understanding the Database"
+msgstr ""
+
+#: voyages/apps/voyage/templates/about.html:13
+#: voyages/apps/voyage/templates/downloads.html:12
+#: voyages/apps/voyage/templates/essays.html:12
+#: voyages/apps/voyage/templates/maps.html:13
+#: voyages/apps/voyage/templates/ship.html:12
+msgid "Trans-Atlantic Slave Trade"
+msgstr ""
+
+#: voyages/apps/voyage/templates/database.html:30
+#: voyages/apps/voyage/templates/database.html:40
+#: voyages/apps/voyage/templates/voyage_main_content.html:15
+msgid "Trans-Atlantic Slave Trade - Database"
+msgstr ""
+
+#: voyages/apps/voyage/templates/database.html:32
+#: voyages/apps/voyage/templates/database.html:42
+msgid "Intra-American Slave Trade - Database"
+msgstr ""
+
+#: voyages/apps/voyage/templates/database/_dates.html:4
+msgid "Dates"
+msgstr ""
+
+#: voyages/apps/voyage/templates/database/_dates.html:9
+#: voyages/apps/voyage/templates/database/_dates.html:11
+msgid "Voyage duration"
+msgstr ""
+
+#: voyages/apps/voyage/templates/database/_dates.html:11
+msgid "Please enter an integer as the search term (days)"
+msgstr ""
+
+#: voyages/apps/voyage/templates/database/_dates.html:30
+#: voyages/apps/voyage/templates/database/_dates.html:32
+msgid "Dates during voyage"
+msgstr ""
+
+#: voyages/apps/voyage/templates/database/_dates.html:32
+msgid "Please follow the format of YYYY/MM/DD. All dates are inclusive."
+msgstr ""
+
+#: voyages/apps/voyage/templates/database/_itinerary.html:8
+msgctxt "search panel left menu"
+msgid "PORTDEP"
+msgstr "Place of vessel's departure"
+
+#: voyages/apps/voyage/templates/database/_itinerary.html:11
+msgctxt "subpanel title"
+msgid "PORTDEP"
+msgstr "Place of vessel's departure"
+
+#: voyages/apps/voyage/templates/database/_itinerary.html:11
+msgid "Locations where the voyage began"
+msgstr ""
+
+#: voyages/apps/voyage/templates/database/_itinerary.html:27
+msgctxt "search panel left menu"
+msgid "MAJBUYPT"
+msgstr "Place where captives were purchased"
+
+#: voyages/apps/voyage/templates/database/_itinerary.html:29
+msgctxt "subpanel title"
+msgid "MAJBUYPT"
+msgstr "Place where captives were purchased"
+
+#: voyages/apps/voyage/templates/database/_itinerary.html:29
+msgid "Locations where captives embarked"
+msgstr ""
+
+#: voyages/apps/voyage/templates/database/_itinerary.html:79
+msgctxt "search panel left menu"
+msgid "MAJSELPT"
+msgstr "Place where captives were landed"
+
+#: voyages/apps/voyage/templates/database/_itinerary.html:81
+msgctxt "subpanel title"
+msgid "MAJSELPT"
+msgstr "Place where captives were landed"
+
+#: voyages/apps/voyage/templates/database/_itinerary.html:81
+msgid "Locations where captives disembarked"
+msgstr ""
+
+#: voyages/apps/voyage/templates/database/_itinerary.html:113
+msgctxt "search panel left menu"
+msgid "PORTRET"
+msgstr "Place where vessel's voyage ended"
+
+#: voyages/apps/voyage/templates/database/_itinerary.html:115
+msgctxt "subpanel title"
+msgid "PORTRET"
+msgstr "Place where vessel's voyage ended"
+
+#: voyages/apps/voyage/templates/database/_itinerary.html:130
+#: voyages/apps/voyage/templates/database/_itinerary.html:132
+msgid "Linked Voyages"
+msgstr ""
+
+#: voyages/apps/voyage/templates/database/_outcome.html:4
+#: voyages/apps/voyage/templates/database/_outcome.html:6
+#: voyages/apps/voyage/templates/database/_outcome.html:8
+msgid "Outcome"
+msgstr ""
+
+#: voyages/apps/voyage/templates/database/_settings.html:7
+msgid "Adjust search settings"
+msgstr ""
+
+#: voyages/apps/voyage/templates/database/_settings.html:10
+#: voyages/apps/voyage/templates/database/_settings.html:13
+msgid "Search settings"
+msgstr ""
+
+#: voyages/apps/voyage/templates/database/_settings.html:14
+msgid "Settings about your search in the database"
+msgstr ""
+
+#: voyages/apps/voyage/templates/database/_settings.html:35
+msgid "Save a search"
+msgstr ""
+
+#: voyages/apps/voyage/templates/database/_settings.html:38
+#: voyages/apps/voyage/templates/database/_settings.html:41
+msgid "Current searches"
+msgstr ""
+
+#: voyages/apps/voyage/templates/database/_settings.html:42
+msgid ""
+"You can save a search by creating a link that can be later used to retreive "
+"your particular set of search variables. You may also share your search by "
+"sharing the link to this search with other people."
+msgstr ""
+
+#: voyages/apps/voyage/templates/database/_settings.html:49
+msgid "Current Searches"
+msgstr ""
+
+#: voyages/apps/voyage/templates/database/_ship_nation_owner.html:4
+msgid "Ship, nation, owner"
+msgstr ""
+
+#: voyages/apps/voyage/templates/database/_ship_nation_owner.html:9
+#: voyages/apps/voyage/templates/database/_ship_nation_owner.html:11
+msgid "Voyages and vessels"
+msgstr ""
+
+#: voyages/apps/voyage/templates/database/_ship_nation_owner.html:11
+msgid "Voyage ID number and information about the vessel"
+msgstr ""
+
+#: voyages/apps/voyage/templates/database/_ship_nation_owner.html:35
+#: voyages/apps/voyage/templates/database/_ship_nation_owner.html:38
+msgid "Construction and registration"
+msgstr ""
+
+#: voyages/apps/voyage/templates/database/_ship_nation_owner.html:38
+msgid "The year and location of slave ship construction and registration"
+msgstr ""
+
+#: voyages/apps/voyage/templates/database/_ship_nation_owner.html:63
+msgctxt "search panel left menu"
+msgid "NATIONAL"
+msgstr "Flag of vessel"
+
+#: voyages/apps/voyage/templates/database/_ship_nation_owner.html:66
+msgctxt "subpanel title"
+msgid "NATIONAL"
+msgstr "Flag of vessel"
+
+#: voyages/apps/voyage/templates/database/_ship_nation_owner.html:67
+msgid "The flag (nationality) of the slave ship"
+msgstr ""
+
+#: voyages/apps/voyage/templates/database/_ship_nation_owner.html:86
+#: voyages/apps/voyage/templates/database/_ship_nation_owner.html:89
+msgid "Rig, tonnage, and guns mounted"
+msgstr ""
+
+#: voyages/apps/voyage/templates/database/_ship_nation_owner.html:89
+msgid "Additional variables about slave ships"
+msgstr ""
+
+#: voyages/apps/voyage/templates/database/_slave.html:4
+msgid "Enslaved people"
+msgstr ""
+
+#: voyages/apps/voyage/templates/database/_slave.html:8
+#: voyages/apps/voyage/templates/database/_slave.html:10
+msgid "Overall numbers"
+msgstr ""
+
+#: voyages/apps/voyage/templates/database/_slave.html:10
+msgid "Embarkations and disembarkations"
+msgstr ""
+
+#: voyages/apps/voyage/templates/database/_slave.html:33
+#: voyages/apps/voyage/templates/database/_slave.html:35
+msgid "Purchase numbers"
+msgstr ""
+
+#: voyages/apps/voyage/templates/database/_slave.html:35
+msgid "Number of slaves purchased"
+msgstr ""
+
+#: voyages/apps/voyage/templates/database/_slave.html:61
+#: voyages/apps/voyage/templates/database/_slave.html:63
+msgid "Landing numbers"
+msgstr ""
+
+#: voyages/apps/voyage/templates/database/_slave.html:63
+msgid "Number of slaves landed"
+msgstr ""
+
+#: voyages/apps/voyage/templates/database/_slave.html:89
+#: voyages/apps/voyage/templates/database/_slave.html:91
+msgid "Percentage by sex and age"
+msgstr ""
+
+#: voyages/apps/voyage/templates/database/_slave.html:91
+msgid "Please enter as an integer. e.g. 75"
+msgstr ""
+
+#: voyages/apps/voyage/templates/database/_slave.html:125
+#: voyages/apps/voyage/templates/database/_slave.html:127
+msgid "Other characteristics"
+msgstr ""
+
+#: voyages/apps/voyage/templates/database/_slave.html:127
+msgid "Additional characteristics about slaves"
+msgstr ""
+
+#: voyages/apps/voyage/templates/database/_tabs.html:9
+msgid "Summary statistics"
+msgstr ""
+
+#: voyages/apps/voyage/templates/database/_tabs.html:15
+msgid "Data visualization"
+msgstr ""
+
+#: voyages/apps/voyage/templates/database/_year.html:4
+#: voyages/apps/voyage/templates/database/_year.html:7
+msgid "Year range"
+msgstr ""
+
+#: voyages/apps/voyage/templates/database/_year.html:5
+msgid "Year Range"
+msgstr ""
+
+#: voyages/apps/voyage/templates/database/_year.html:7
+msgid "Year range of your search. Please enter a range between 1514 and 1866."
+msgstr ""
+
+#: voyages/apps/voyage/templates/database/tabs/maps.html:21
+msgid "About this Timelapse"
+msgstr ""
+
+#: voyages/apps/voyage/templates/database/tabs/maps.html:29
+msgid ""
+"This timelapse offers an overall preview as well as demonstration of how the "
+"slave movement happened. The results of any user query will display in this "
+"timelapse feature. Also, please note the following:"
+msgstr ""
+
+#: voyages/apps/voyage/templates/database/tabs/maps.html:33
+msgid "Voyage Size"
+msgstr ""
+
+#: voyages/apps/voyage/templates/database/tabs/maps.html:35
+msgid ""
+"Each circle on this timelapse represents a single voyage and is both sized, "
+"according to the number of captives on board, and colored, according to the "
+"three icons at the bottom left of the graph."
+msgstr ""
+
+#: voyages/apps/voyage/templates/database/tabs/maps.html:39
+msgid "Voyage Nationality"
+msgstr ""
+
+#: voyages/apps/voyage/templates/database/tabs/maps.html:41
+msgid ""
+"Each circle is color coded and the color code represents the nationality of "
+"the slave vessel, but users can instead choose Region of Embarkation, or "
+"Region of Disembarkation by clicking on the icons to the left of the graph."
+msgstr ""
+
+#: voyages/apps/voyage/templates/database/tabs/maps.html:45
+msgid "Voyage Details"
+msgstr ""
+
+#: voyages/apps/voyage/templates/database/tabs/maps.html:47
+msgid ""
+"To inspect details of an individual voyage, pause and click on a circle."
+msgstr ""
+
+#: voyages/apps/voyage/templates/database/tabs/maps.html:66
+msgid ""
+"View the Movement of <span id=\"tab-map-voyage-value\"></span> Slave Ships"
+msgstr ""
+
+#: voyages/apps/voyage/templates/database/tabs/maps.html:74
+msgid "Learn more about the Timelapse"
+msgstr ""
+
+#: voyages/apps/voyage/templates/database/tabs/maps.html:99
+msgid "Play at different speeds"
+msgstr ""
+
+#: voyages/apps/voyage/templates/database/tabs/maps.html:102
+msgid "Play in full screen"
+msgstr ""
+
+#: voyages/apps/voyage/templates/database/tabs/statistics.html:11
+msgid "Total captives"
+msgstr ""
+
+#: voyages/apps/voyage/templates/database/tabs/statistics.html:12
+msgid "Total voyages"
+msgstr ""
+
+#: voyages/apps/voyage/templates/database/tabs/statistics.html:13
+msgid "Average"
+msgstr ""
+
+#: voyages/apps/voyage/templates/database/tabs/statistics.html:14
+msgid "Standard deviation"
+msgstr ""
+
+#: voyages/apps/voyage/templates/database/tabs/tables.html:6
+msgid "Row"
+msgstr ""
+
+#: voyages/apps/voyage/templates/database/tabs/tables.html:9
+msgid "Column"
+msgstr ""
+
+#: voyages/apps/voyage/templates/database/tabs/tables.html:12
+msgid "Cell"
+msgstr ""
+
+#: voyages/apps/voyage/templates/database/tabs/tables.html:15
+msgid "Omit Empty?"
+msgstr ""
+
+#: voyages/apps/voyage/templates/database/tabs/tables.html:21
+msgid "This will eliminate empty results in the table."
+msgstr ""
+
+#: voyages/apps/voyage/templates/database/tabs/timeline.html:5
+msgid "Choose a variable to plot"
+msgstr ""
+
+#: voyages/apps/voyage/templates/database/tabs/visualization.html:6
+msgid "X-Y Scatter Plot"
+msgstr ""
+
+#: voyages/apps/voyage/templates/database/tabs/visualization.html:7
+msgid "Bar Chart"
+msgstr ""
+
+#: voyages/apps/voyage/templates/database/tabs/visualization.html:8
+msgid "Donut Chart"
+msgstr ""
+
+#: voyages/apps/voyage/templates/database/tabs/visualization.html:16
+#: voyages/apps/voyage/templates/database/tabs/visualization.html:32
+msgid "X Axis"
+msgstr ""
+
+#: voyages/apps/voyage/templates/database/tabs/visualization.html:19
+#: voyages/apps/voyage/templates/database/tabs/visualization.html:35
+msgid "Y Axes"
+msgstr ""
+
+#: voyages/apps/voyage/templates/database/tabs/visualization.html:47
+msgid "Sectors"
+msgstr ""
+
+#: voyages/apps/voyage/templates/database/tabs/visualization.html:50
+msgid "Values"
+msgstr ""
+
+#: voyages/apps/voyage/templates/essays.html:6
+msgid "Trans-Atlantic - About the Database"
+msgstr ""
+
+#: voyages/apps/voyage/templates/maps.html:6
+msgid "Trans-Atlantic - Introductory Maps"
+msgstr ""
+
+#: voyages/apps/voyage/templates/maps.html:14 voyages/templates/topbar.html:25
+msgid "Introductory Maps"
+msgstr ""
+
+#: voyages/apps/voyage/templates/search_maps.html:9
+msgid "Loading map voyages..."
+msgstr ""
+
+#: voyages/apps/voyage/templates/ship.html:6
+msgid "3D Videos of Slaving Vessels"
+msgstr ""
+
+#: voyages/apps/voyage/templates/ship.html:13
+msgid "3D videos of Slaving Vessels"
+msgstr ""
+
+#: voyages/apps/voyage/templates/upload.html:12
+msgid "Uploaded files:"
+msgstr ""
+
+#: voyages/apps/voyage/templates/upload.html:17
+msgid "Size"
+msgstr ""
+
+#: voyages/apps/voyage/templates/upload.html:18
+msgid "Last Modified"
+msgstr ""
+
+#: voyages/apps/voyage/templates/voyage_info.html:20
+msgid "Voyage Information"
+msgstr ""
+
+#: voyages/apps/voyage/templates/voyage_main_content.html:18
+msgid "Voyage not found"
+msgstr ""
+
+#: voyages/apps/voyage/templates/voyage_main_content.html:33
+#: voyages/apps/voyage/templates/voyage_main_content.html:35
+msgid "Variables"
+msgstr ""
+
+#: voyages/apps/voyage/templates/voyage_main_content.html:40
+#: voyages/apps/voyage/templates/voyage_main_content.html:42
+msgid "Map"
+msgstr ""
+
+#: voyages/apps/voyage/templates/voyage_main_content.html:140
+msgid "No images are available."
+msgstr ""
+
+#: voyages/apps/voyage/views.py:601
+msgid "Time frame:"
+msgstr ""
+
+#: voyages/apps/voyage/views.py:623
+msgid " month:"
+msgstr ""
+
+#: voyages/apps/voyage/views.py:650
+msgid "between "
+msgstr ""
+
+#: voyages/apps/voyage/views.py:650
+msgid " and "
+msgstr ""
+
+#: voyages/apps/voyage/views.py:653
+msgid "in "
+msgstr ""
+
+#: voyages/apps/voyage/views.py:655
+msgid "equal to "
+msgstr ""
+
+#: voyages/apps/voyage/views.py:660 voyages/apps/voyage/views.py:667
+msgid "before "
+msgstr ""
+
+#: voyages/apps/voyage/views.py:669
+msgid "at most "
+msgstr ""
+
+#: voyages/apps/voyage/views.py:672 voyages/apps/voyage/views.py:674
+msgid "after "
+msgstr ""
+
+#: voyages/apps/voyage/views.py:676
+msgid "at least "
+msgstr ""
+
+#: voyages/settings.py:201
+msgid "English"
+msgstr ""
+
+#: voyages/settings.py:202
+msgid "Spanish"
+msgstr ""
+
+#: voyages/settings.py:203
+msgid "Portuguese"
+msgstr ""
+
+#: voyages/sitemedia/maps/index.html:87
+msgid "Load all flows from database (may take a while)"
+msgstr ""
+
+#: voyages/sitemedia/maps/index.html:136
+msgid "Recompute flow paths"
+msgstr ""
+
+#: voyages/sitemedia/maps/index.html:140
+msgid "Prevent editing when toggled"
+msgstr ""
+
+#: voyages/sitemedia/maps/index.html:144
+msgid "Rollback last action"
+msgstr ""
+
+#: voyages/sitemedia/maps/index.html:147
+msgid "Drag nodes to change their position"
+msgstr ""
+
+#: voyages/sitemedia/maps/index.html:151
+msgid "Add marker"
+msgstr ""
+
+#: voyages/sitemedia/maps/index.html:155
+msgid "Split link"
+msgstr ""
+
+#: voyages/sitemedia/maps/index.html:159
+msgid "Delete marker"
+msgstr ""
+
+#: voyages/sitemedia/maps/index.html:163
+msgid "Add link"
+msgstr ""
+
+#: voyages/sitemedia/maps/index.html:167
+msgid "Delete link"
+msgstr ""
+
+#: voyages/sitemedia/maps/index.html:171
+msgid "Delete every marker and link"
+msgstr ""
+
+#: voyages/sitemedia/maps/index.html:177
+msgid "Help"
+msgstr ""
+
+#: voyages/templates/404.html:6
+msgid "Page currently under construction"
+msgstr ""
+
+#: voyages/templates/404.html:18
+msgid "404. Seas Less Sailed."
+msgstr ""
+
+#: voyages/templates/404.html:21
+msgid ""
+"\n"
+"          \"When you make men slaves you deprive them of half their virtue, "
+"you set them in your own conduct an example\n"
+"          of fraud, rapine, and cruelty, and compel them to live with you in "
+"a state of war.\"\n"
+"          "
+msgstr ""
+
+#: voyages/templates/404.html:27
+msgid ""
+"\n"
+"          - Equus Anna, an Enslaved African\n"
+"          "
+msgstr ""
+
+#: voyages/templates/404.html:36
+msgid "Return to where you came"
+msgstr ""
+
+#: voyages/templates/404.html:37
+msgid "You have stepped on pathways less travelled. Let\\"
+msgstr ""
+
+#: voyages/templates/account/account_inactive.html:5
+#: voyages/templates/account/account_inactive.html:8
+msgid "Account Inactive"
+msgstr ""
+
+#: voyages/templates/account/account_inactive.html:10
+msgid "This account is inactive."
+msgstr ""
+
+#: voyages/templates/account/base.html:32 voyages/templates/admin/base.html:35
+msgid "Welcome,"
+msgstr ""
+
+#: voyages/templates/account/base.html:36 voyages/templates/admin/base.html:37
+msgid "Documentation"
+msgstr ""
+
+#: voyages/templates/account/base.html:39
+#: voyages/templates/account/password_change.html:5
+#: voyages/templates/account/password_change.html:8
+#: voyages/templates/account/password_change.html:13
+#: voyages/templates/account/password_reset_from_key.html:4
+#: voyages/templates/account/password_reset_from_key.html:7
+#: voyages/templates/account/password_reset_from_key_done.html:4
+#: voyages/templates/account/password_reset_from_key_done.html:7
+msgid "Change Password"
+msgstr ""
+
+#: voyages/templates/account/base.html:40
+#: voyages/templates/account/base.html:83 voyages/templates/admin/base.html:41
+msgid "Log Out"
+msgstr ""
+
+#: voyages/templates/account/base.html:43
+msgid "Login to Contribute"
+msgstr ""
+
+#: voyages/templates/account/base.html:85
+msgid "Sign In"
+msgstr ""
+
+#: voyages/templates/account/email.html:5
+msgid "Account"
+msgstr ""
+
+#: voyages/templates/account/email.html:8
+msgid "E-mail Addresses"
+msgstr ""
+
+#: voyages/templates/account/email.html:10
+msgid "The following e-mail addresses are associated with your account:"
+msgstr ""
+
+#: voyages/templates/account/email.html:24
+msgid "Verified"
+msgstr ""
+
+#: voyages/templates/account/email.html:26
+msgid "Unverified"
+msgstr ""
+
+#: voyages/templates/account/email.html:28
+msgid "Primary"
+msgstr ""
+
+#: voyages/templates/account/email.html:34
+msgid "Make Primary"
+msgstr ""
+
+#: voyages/templates/account/email.html:35
+msgid "Re-send Verification"
+msgstr ""
+
+#: voyages/templates/account/email.html:43
+msgid "Warning:"
+msgstr ""
+
+#: voyages/templates/account/email.html:43
+msgid ""
+"You currently do not have any e-mail address set up. You should really add "
+"an e-mail address so you can receive notifications, reset your password, etc."
+msgstr ""
+
+#: voyages/templates/account/email.html:48
+msgid "Add E-mail Address"
+msgstr ""
+
+#: voyages/templates/account/email.html:53
+msgid "Add E-mail"
+msgstr ""
+
+#: voyages/templates/account/email.html:62
+msgid "Do you really want to remove the selected e-mail address?"
+msgstr ""
+
+#: voyages/templates/account/email/email_confirmation_message.txt:1
+#, python-format
+msgid ""
+"Hello from %(site_name)s!\n"
+"\n"
+"You're receiving this e-mail because user %(user_display)s at "
+"%(site_domain)s has given yours as an e-mail address to connect their "
+"account.\n"
+"\n"
+"To confirm this is correct, go to %(activate_url)s\n"
+msgstr ""
+
+#: voyages/templates/account/email/email_confirmation_message.txt:7
+#, python-format
+msgid ""
+"Thank you from %(site_name)s!\n"
+"%(site_domain)s"
+msgstr ""
+
+#: voyages/templates/account/email/email_confirmation_subject.txt:3
+msgid "Please Confirm Your E-mail Address"
+msgstr ""
+
+#: voyages/templates/account/email/password_reset_key_message.txt:1
+#, python-format
+msgid ""
+"Hello from %(site_name)s!\n"
+"\n"
+"You're receiving this e-mail because you or someone else has requested a "
+"password for your user account at %(site_domain)s.\n"
+"It can be safely ignored if you did not request a password reset. Click the "
+"link below to reset your password."
+msgstr ""
+
+#: voyages/templates/account/email/password_reset_key_message.txt:8
+#, python-format
+msgid "In case you forgot, your username is %(username)s."
+msgstr ""
+
+#: voyages/templates/account/email/password_reset_key_message.txt:10
+#, python-format
+msgid ""
+"Thank you for using %(site_name)s!\n"
+"%(site_domain)s"
+msgstr ""
+
+#: voyages/templates/account/email/password_reset_key_subject.txt:3
+msgid "Password Reset E-mail"
+msgstr ""
+
+#: voyages/templates/account/email_confirm.html:6
+#: voyages/templates/account/email_confirm.html:10
+#: voyages/templates/account/email_confirmed.html:6
+#: voyages/templates/account/email_confirmed.html:11
+msgid "Confirm E-mail Address"
+msgstr ""
+
+#: voyages/templates/account/email_confirm.html:16
+#, python-format
+msgid ""
+"Please confirm that <a href=\"mailto:%(email)s\">%(email)s</a> is an e-mail "
+"address for user %(user_display)s."
+msgstr ""
+
+#: voyages/templates/account/email_confirm.html:27
+#, python-format
+msgid ""
+"This e-mail confirmation link expired or is invalid. Please <a href="
+"\"%(email_url)s\">issue a new e-mail confirmation request</a>."
+msgstr ""
+
+#: voyages/templates/account/email_confirmed.html:15
+#, python-format
+msgid ""
+"You have confirmed that <a href=\"mailto:%(email)s\">%(email)s</a> is an e-"
+"mail address for user %(user_display)s."
+msgstr ""
+
+#: voyages/templates/account/login.html:16
+msgid ""
+"The Contribute section allows users of the Voyages website to supply and/or "
+"revise existing information\n"
+"    in the Voyages Database. A team of slave trade scholars will review each "
+"contribution as part of the peer-review process.\n"
+"    New and/or revised information will be incorporated in the subsequent "
+"updates to the Voyages Database."
+msgstr ""
+
+#: voyages/templates/account/login.html:22
+msgid ""
+"The Contribute feature facilitates collaborative research and information "
+"sharing among the global\n"
+"    network of scholars working to continuously improve the store of "
+"knowledge about the slave trade.  These scholars are\n"
+"    increasingly working across diverse forms of media, from written "
+"documents to collections of machine-readable data.\n"
+"    The Voyages Database is itself the product of extensive revisions since "
+"the publication of the CD-ROM version of the\n"
+"    dataset in 1999. The Contribute section allows the database to continue "
+"evolving in a way that respects the high\n"
+"    standards of scholarship governing the construction of the original "
+"database."
+msgstr ""
+
+#: voyages/templates/account/login.html:31
+#, python-format
+msgid ""
+"Step-by-step instructions on how to use the Contribute forms are provided in "
+"the Voyages Guide,\n"
+"    a PDF file accessible in <a href=\"%(voyage_guide_url)s\">“Understanding "
+"the Database”</a>.\n"
+"    For further advice on contributing new data, we ask you to read our\n"
+"    <a href=\"%(contribute_guidelines_url)s\">“Guidelines for "
+"Contributors.”</a>"
+msgstr ""
+
+#: voyages/templates/account/login.html:38
+msgid ""
+"For purposes of managing contributions to the website, contributors are "
+"asked to register\n"
+"\tfor an account and provide an email address for communication."
+msgstr ""
+
+#: voyages/templates/account/login.html:43
+msgid "You are already signed in."
+msgstr ""
+
+#: voyages/templates/account/login.html:46
+#: voyages/templates/account/login.html:69
+msgid "Sign in"
+msgstr ""
+
+#: voyages/templates/account/login.html:49
+msgid "In order to access the Contribute section, please sign in."
+msgstr ""
+
+#: voyages/templates/account/login.html:55
+msgid "Your username/email and password didn't match. Please try again."
+msgstr ""
+
+#: voyages/templates/account/login.html:75
+msgid "Sign in with Google"
+msgstr ""
+
+#: voyages/templates/account/login.html:79
+#, python-format
+msgid ""
+"\n"
+"\tIf you don't have an account, <a href=\"%(contribute_newuser_url)s"
+"\">Create an Account</a>.\n"
+"\tIf you have forgotten your password, <a href=\"%(password_reset_url)s"
+"\">Retrieve Password</a>.\n"
+"\t"
+msgstr ""
+
+#: voyages/templates/account/logout.html:5
+#: voyages/templates/account/logout.html:8
+#: voyages/templates/account/logout.html:17
+msgid "Sign Out"
+msgstr ""
+
+#: voyages/templates/account/logout.html:10
+msgid "Are you sure you want to sign out?"
+msgstr ""
+
+#: voyages/templates/account/messages/cannot_delete_primary_email.txt:2
+#, python-format
+msgid "You cannot remove your primary e-mail address (%(email)s)."
+msgstr ""
+
+#: voyages/templates/account/messages/email_confirmation_sent.txt:2
+#, python-format
+msgid "Confirmation e-mail sent to %(email)s."
+msgstr ""
+
+#: voyages/templates/account/messages/email_confirmed.txt:2
+#, python-format
+msgid "You have confirmed %(email)s."
+msgstr ""
+
+#: voyages/templates/account/messages/email_deleted.txt:2
+#, python-format
+msgid "Removed e-mail address %(email)s."
+msgstr ""
+
+#: voyages/templates/account/messages/logged_in.txt:4
+#, python-format
+msgid "Successfully signed in as %(name)s."
+msgstr ""
+
+#: voyages/templates/account/messages/logged_out.txt:2
+msgid "You have signed out."
+msgstr ""
+
+#: voyages/templates/account/messages/password_changed.txt:2
+msgid "Password successfully changed."
+msgstr ""
+
+#: voyages/templates/account/messages/password_set.txt:2
+msgid "Password successfully set."
+msgstr ""
+
+#: voyages/templates/account/messages/primary_email_set.txt:2
+msgid "Primary e-mail address set."
+msgstr ""
+
+#: voyages/templates/account/messages/unverified_primary_email.txt:2
+msgid "Your primary e-mail address must be verified."
+msgstr ""
+
+#: voyages/templates/account/password_reset.html:6
+#: voyages/templates/account/password_reset.html:10
+#: voyages/templates/account/password_reset_done.html:6
+#: voyages/templates/account/password_reset_done.html:9
+msgid "Password Reset"
+msgstr ""
+
+#: voyages/templates/account/password_reset.html:15
+msgid ""
+"Forgotten your password? Enter your e-mail address below, and we'll send you "
+"an e-mail allowing you to reset it."
+msgstr ""
+
+#: voyages/templates/account/password_reset.html:20
+msgid "Reset My Password"
+msgstr ""
+
+#: voyages/templates/account/password_reset.html:23
+msgid "Please contact us if you have any trouble resetting your password."
+msgstr ""
+
+#: voyages/templates/account/password_reset_done.html:15
+msgid ""
+"We have sent you an e-mail. Please contact us if you do not receive it "
+"within a few minutes."
+msgstr ""
+
+#: voyages/templates/account/password_reset_from_key.html:7
+msgid "Bad Token"
+msgstr ""
+
+#: voyages/templates/account/password_reset_from_key.html:11
+#, python-format
+msgid ""
+"The password reset link was invalid, possibly because it has already been "
+"used.  Please request a <a href=\"%(passwd_reset_url)s\">new password reset</"
+"a>."
+msgstr ""
+
+#: voyages/templates/account/password_reset_from_key.html:17
+msgid "change password"
+msgstr ""
+
+#: voyages/templates/account/password_reset_from_key.html:20
+#: voyages/templates/account/password_reset_from_key_done.html:8
+msgid "Your password is now changed."
+msgstr ""
+
+#: voyages/templates/account/password_set.html:5
+#: voyages/templates/account/password_set.html:8
+#: voyages/templates/account/password_set.html:13
+msgid "Set Password"
+msgstr ""
+
+#: voyages/templates/account/signup.html:5
+#: voyages/templates/account/signup.html:9
+#: voyages/templates/account/signup.html:21
+msgid "Sign-up"
+msgstr ""
+
+#: voyages/templates/account/signup.html:11
+#, python-format
+msgid ""
+"Already have an account? Then please <a href=\"%(login_url)s\">sign in</a>."
+msgstr ""
+
+#: voyages/templates/account/signup_closed.html:5
+#: voyages/templates/account/signup_closed.html:8
+msgid "Sign Up Closed"
+msgstr ""
+
+#: voyages/templates/account/signup_closed.html:10
+msgid "We are sorry, but the sign up is currently closed."
+msgstr ""
+
+#: voyages/templates/account/snippets/already_logged_in.html:5
+msgid "Note"
+msgstr ""
+
+#: voyages/templates/account/snippets/already_logged_in.html:5
+#, python-format
+msgid "you are already logged in as %(user_display)s."
+msgstr ""
+
+#: voyages/templates/account/verification_sent.html:5
+#: voyages/templates/account/verification_sent.html:8
+#: voyages/templates/account/verified_email_required.html:5
+#: voyages/templates/account/verified_email_required.html:8
+msgid "Verify Your E-mail Address"
+msgstr ""
+
+#: voyages/templates/account/verification_sent.html:10
+msgid ""
+"We have sent an e-mail to you for verification. Follow the link provided to "
+"finalize the signup process. Please contact us if you do not receive it "
+"within a few minutes."
+msgstr ""
+
+#: voyages/templates/account/verified_email_required.html:12
+msgid ""
+"This part of the site requires us to verify that\n"
+"you are who you claim to be. For this purpose, we require that you\n"
+"verify ownership of your e-mail address. "
+msgstr ""
+
+#: voyages/templates/account/verified_email_required.html:16
+msgid ""
+"We have sent an e-mail to you for\n"
+"verification. Please click on the link inside this e-mail. Please\n"
+"contact us if you do not receive it within a few minutes."
+msgstr ""
+
+#: voyages/templates/account/verified_email_required.html:20
+#, python-format
+msgid ""
+"<strong>Note:</strong> you can still <a href=\"%(email_url)s\">change your e-"
+"mail address</a>."
+msgstr ""
+
+#: voyages/templates/admin/base.html:39
+msgid "Admin Home"
+msgstr ""
+
+#: voyages/templates/admin/base.html:40
+msgid "Change password"
+msgstr ""
+
+#: voyages/templates/admin/base_site.html:7
+#: voyages/templates/admin/base_site.html:34
+msgid "Voyage Admin"
+msgstr ""
+
+#: voyages/templates/admin/base_site.html:34
+msgid "Live"
+msgstr ""
+
+#: voyages/templates/admin/base_site.html:37
+msgid "Any changes will take effect immediately"
+msgstr ""
+
+#: voyages/templates/footer.html:9
+msgid "Copyright 2021 The Slave Voyages Consortium. Software licensed under"
+msgstr ""
+
+#: voyages/templates/footer.html:9
+msgid "GNU General Public License 3.0"
+msgstr ""
+
+#: voyages/templates/footer.html:9
+msgid "or later version."
+msgstr ""
+
+#: voyages/templates/footer.html:10
+msgid "Some content licensed under"
+msgstr ""
+
+#: voyages/templates/footer.html:10
+msgid "Creative Commons Attribution-Non-Commercial 3.0"
+msgstr ""
+
+#: voyages/templates/openid/login.html:9
+msgid "OpenID Sign In"
+msgstr ""
+
+#: voyages/templates/socialaccount/authentication_error.html:5
+#: voyages/templates/socialaccount/authentication_error.html:8
+msgid "Social Network Login Failure"
+msgstr ""
+
+#: voyages/templates/socialaccount/authentication_error.html:10
+msgid ""
+"An error occurred while attempting to login via your social network account."
+msgstr ""
+
+#: voyages/templates/socialaccount/connections.html:5
+#: voyages/templates/socialaccount/connections.html:8
+msgid "Account Connections"
+msgstr ""
+
+#: voyages/templates/socialaccount/connections.html:11
+msgid ""
+"You can sign in to your account using any of the following third party "
+"accounts:"
+msgstr ""
+
+#: voyages/templates/socialaccount/connections.html:43
+msgid ""
+"You currently have no social network accounts connected to this account."
+msgstr ""
+
+#: voyages/templates/socialaccount/connections.html:46
+msgid "Add a 3rd Party Account"
+msgstr ""
+
+#: voyages/templates/socialaccount/login_cancelled.html:5
+#: voyages/templates/socialaccount/login_cancelled.html:9
+msgid "Login Cancelled"
+msgstr ""
+
+#: voyages/templates/socialaccount/login_cancelled.html:13
+#, python-format
+msgid ""
+"You decided to cancel logging in to our site using one of your existing "
+"accounts. If this was a mistake, please proceed to <a href=\"%(login_url)s"
+"\">sign in</a>."
+msgstr ""
+
+#: voyages/templates/socialaccount/messages/account_connected.txt:2
+msgid "The social account has been connected."
+msgstr ""
+
+#: voyages/templates/socialaccount/messages/account_connected_other.txt:2
+msgid "The social account is already connected to a different account."
+msgstr ""
+
+#: voyages/templates/socialaccount/messages/account_disconnected.txt:2
+msgid "The social account has been disconnected."
+msgstr ""
+
+#: voyages/templates/socialaccount/signup.html:5
+msgid "Signup"
+msgstr ""
+
+#: voyages/templates/socialaccount/signup.html:8
+#: voyages/templates/socialaccount/signup.html:21
+msgid "Sign Up"
+msgstr ""
+
+#: voyages/templates/socialaccount/signup.html:10
+#, python-format
+msgid ""
+"You are about to use your %(provider_name)s account to login to\n"
+"%(site_name)s. As a final step, please complete the following form:"
+msgstr ""
+
+#: voyages/templates/topbar.html:26
+msgid "3D Videos of Slaving Ships"
+msgstr ""
+
+#: voyages/templates/topbar.html:27
+msgid "Timeline and Chronology"
+msgstr ""
+
+#: voyages/templates/topbar.html:29 voyages/templates/topbar.html:41
+msgid "Contribute Data"
+msgstr ""
+
+#: voyages/templates/topbar.html:46
+msgid "People of the Atlantic Slave Trade"
+msgstr ""
+
+#: voyages/templates/topbar.html:47
+msgid "PAST"
+msgstr ""
+
+#: voyages/templates/topbar.html:52
+msgid "Enslavers Database"
+msgstr ""
+
+#: voyages/templates/topbar.html:72
+msgid "News"
+msgstr ""
+
+#: voyages/templates/topbar.html:74
+msgid "Provide User Feedback"
+msgstr ""
+
+#: voyages/templates/topbar.html:75
+msgid "Report Issues"
+msgstr ""
+
+#: voyages/templates/topbar.html:81
+msgid "Blog"
+msgstr ""
+
+#: voyages/templates/topbar.html:83
+msgid "All Posts"
+msgstr ""
+
+#: voyages/templates/topbar.html:84
+msgid "Institutions"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim.html:71
+msgid ""
+"The comments above are meant for information related to the\n"
+"        voyage which does not fit any of the existing fields. For comments "
+"meant\n"
+"        to the reviewer/editor, please use the contributor's comments at the "
+"end\n"
+"        of this form or any of the specific field comment boxes."
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim.html:1710
+msgid "Add cargo to voyage"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim.html:1716
+msgid "Cargo Type"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim.html:1720
+msgid "Unit"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim.html:1724
+msgid "Amount"
+msgstr ""
+
+#: voyages/apps/contribute/templates/contribute/interim.html:2190
+msgid "Cargo type is mandatory"
+msgstr ""
+
+#: voyages/apps/voyage/search_views.py:537
+msgctxt "datatable column header"
+msgid "CARGO"
+msgstr "Cargo"
+
+#: voyages/apps/voyage/search_views.py:557
+msgctxt "datatable column header"
+msgid "AFRINFO"
+msgstr "African Info"
+
+#: voyages/apps/voyage/templates/database/_ship_nation_owner.html:115
+msgctxt "search panel left menu"
+msgid "CARGO"
+msgstr "Cargo"
+
+#: voyages/apps/voyage/templates/database/_ship_nation_owner.html:118
+msgctxt "subpanel title"
+msgid "CARGO"
+msgstr "Cargo"
+
+#: voyages/apps/voyage/templates/database/_slave.html:151
+msgctxt "search panel left menu"
+msgid "AFRINFO"
+msgstr "African Info"
+
+#: voyages/apps/voyage/templates/database/_slave.html:154
+msgctxt "subpanel title"
+msgid "AFRINFO"
+msgstr "African Info"
+
+#~ msgctxt "search panel left menu"
+#~ msgid "Flag"
+#~ msgstr "Flag"

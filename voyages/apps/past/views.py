@@ -21,8 +21,8 @@ from voyages.apps.common.models import SavedQuery
 from voyages.apps.common.views import get_filtered_results
 from .models import (AltLanguageGroupName, Enslaved,
                      EnslavedContribution, EnslavedContributionLanguageEntry,
-                     EnslavedContributionNameEntry, EnslavedSearch,
-                     LanguageGroup, MultiValueHelper, ModernCountry, NameSearchCache,
+                     EnslavedContributionNameEntry, EnslavedSearch, EnslaverRole, EnslaverSearch, EnslaverVoyageConnection,
+                     LanguageGroup, MultiValueHelper, ModernCountry, EnslavedNameSearchCache,
                      _modern_name_fields, _name_fields)
 
 ENSLAVED_DATASETS = ['african-origins', 'oceans-of-kinfolk']
@@ -64,6 +64,23 @@ def enslaved_database(request, dataset=None):
 
 @csrf_exempt
 @require_POST
+def get_enslaver_filtered_places(request):
+    data = json.loads(request.body)
+    var_name = data.get('var_name')
+    if var_name is None:
+        return JsonResponse({ "error": "var_name must be set" })
+    cache_key = f"_filtered_places_ENSLAVER_{var_name}"
+    var_name = f"voyage__voyage_itinerary__{var_name}"
+    qs = EnslaverVoyageConnection.objects \
+        .select_related(var_name) \
+        .values_list(var_name, flat=True) \
+        .distinct()
+    filtered = get_filtered_results(cache_key, qs)
+    filtered['filtered_var_name'] = var_name
+    return JsonResponse(filtered)
+
+@csrf_exempt
+@require_POST
 def get_enslaved_filtered_places(request):
     """
     Obtains a list of places and corresponding regions/broad regions that are
@@ -75,16 +92,16 @@ def get_enslaved_filtered_places(request):
     dataset = data.get('dataset')
     if var_name is None or dataset is None:
         return JsonResponse({ "error": "Both dataset and var_name must be set" })
-    cache_key = '_filtered_places_ENSLAVED_' + str(dataset) + "_" + var_name
+    cache_key = f"_filtered_places_ENSLAVED_{str(dataset)}_{var_name}"
     # Most location variables come from VoyageItinerary, but
     # post_disembarkation_location is only present in the Enslaved model
     # directly.
     if var_name != 'post_disembark_location_id':
-        var_name = 'voyage__voyage_itinerary__' + var_name
-    qs = Enslaved.objects.filter(dataset=dataset). \
-        select_related(var_name). \
-        values_list(var_name, flat=True). \
-        distinct()
+        var_name = f"voyage__voyage_itinerary__{var_name}"
+    qs = Enslaved.objects.filter(dataset=dataset) \
+        .select_related(var_name) \
+        .values_list(var_name, flat=True) \
+        .distinct()
     filtered = get_filtered_results(cache_key, qs)
     filtered['filtered_var_name'] = var_name
     filtered['dataset'] = dataset
@@ -119,6 +136,14 @@ def get_language_groups(_):
         for item in items], safe=False)
 
 
+@csrf_exempt
+@cache_page(3600)
+def get_enumeration(_, model_name):
+    from django.apps import apps
+    model = apps.get_model(app_label="past", model_name=model_name.replace('-', ''))
+    return JsonResponse({x.pk: x.name for x in model.objects.all()})
+
+
 def restore_enslaved_permalink(_, link_id):
     """Redirect the page with a URL param"""
     q = SavedQuery.objects.get(pk=link_id)
@@ -132,8 +157,10 @@ def restore_enslaved_permalink(_, link_id):
         pass
     return redirect("/past/database" + ds_name + "#searchId=" + link_id)
 
+
 def is_valid_name(name):
     return name is not None and name.strip() != ""
+
 
 @require_POST
 @csrf_exempt
@@ -154,6 +181,7 @@ def search_enslaved(request):
             'voyage__voyage_itinerary__int_first_port_dis__place',
             'voyage__voyage_itinerary__imp_principal_place_of_slave_purchase__place',
             'voyage__voyage_itinerary__imp_principal_port_slave_dis__place',
+            'voyage__voyage_name_outcome__vessel_captured_outcome__label',
             'captive_fate__name', 'post_disembark_location__place',
             EnslavedSearch.SOURCES_LIST, EnslavedSearch.ENSLAVERS_LIST
         ] + _name_fields + _modern_name_fields
@@ -191,13 +219,45 @@ def search_enslaved(request):
 
         table = _generate_table(query, data.get('tableParams', {}), adapter)
         page = table.get('data', [])
-        NameSearchCache.load()
+        EnslavedNameSearchCache.load()
         for entry in page:
-            entry['recordings'] = NameSearchCache.get_recordings(
+            entry['recordings'] = EnslavedNameSearchCache.get_recordings(
                 [entry[f] for f in _name_fields if f in entry])
         return JsonResponse(table)
     return JsonResponse({'error': 'Unsupported'})
 
+
+@require_POST
+@csrf_exempt
+def search_enslaver(request):
+    data = json.loads(request.body)
+    search = EnslaverSearch(**data['search_query'])
+    fields = data.get('fields')
+    if fields is None:
+        fields = [
+            'id',
+            'principal_alias',
+            'birth_year', 'birth_month', 'birth_day',
+            'death_year', 'death_month', 'death_day',
+            'cached_properties__enslaved_count',
+            EnslaverSearch.ALIASES_LIST,
+            EnslaverSearch.VOYAGES_LIST,
+            EnslaverSearch.SOURCES_LIST,
+            EnslaverSearch.RELATIONS_LIST
+        ]
+    query = search.execute(fields)
+    output_type = data.get('output', 'resultsTable')
+    # For now we only support outputing the results to DataTables.
+    if output_type == 'resultsTable':
+
+        def adapter(page):
+            for row in page:
+                EnslaverSearch.patch_row(row)
+            return page
+
+        table = _generate_table(query, data.get('tableParams', {}), adapter)
+        return JsonResponse(table)
+    return JsonResponse({'error': 'Unsupported'})
 
 @require_POST
 @csrf_exempt
