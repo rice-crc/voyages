@@ -14,6 +14,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
 from django.core.urlresolvers import reverse
 from django.db import connection, transaction
+from django.db.models import Q
 from django.db.models.fields import Field
 from django.http import (Http404, HttpResponse, HttpResponseBadRequest,
                          HttpResponseForbidden, HttpResponseRedirect,
@@ -52,6 +53,8 @@ from voyages.apps.contribute.publication import (
     export_contributions, export_from_voyages, full_contribution_id,
     get_csv_writer, get_filtered_contributions, get_header_csv_text,
     publish_accepted_contributions, safe_writerow)
+from voyages.apps.past.models import Enslaved, EnslavedContribution, EnslavedContributionLanguageEntry, EnslavedContributionNameEntry, EnslavedContributionStatus
+from voyages.apps.past.views import _get_audio_filename
 from voyages.apps.voyage.cache import VoyageCache
 from voyages.apps.voyage.forms import VoyagesSourcesAdminForm
 from voyages.apps.voyage.models import (Voyage, VoyageDataset, VoyageDates,
@@ -2199,3 +2202,90 @@ def retrieve_publication_status(request):
             text += lines[i] + '<br />'
             i += 1
         return JsonResponse({'lines': text, 'count': i - skip_count})
+
+# PAST / Origins contributions
+
+def _expand_contrib(c):
+    return {
+        "pk": c.pk,
+        "contributor": c.contributor.username if c.contributor else "(anonymous)",
+        "date": c.date,
+        "enslaved": {
+            "id": c.enslaved_id,
+            "gender": c.enslaved.gender,
+            "modern_name": c.enslaved.modern_name,
+            "historical_name": c.enslaved.documented_name,
+            "region_of_embarkation": c.enslaved.voyage.voyage_itinerary.imp_principal_region_of_slave_purchase.region
+        },
+        "contributed_names": [{
+                "pk": cn.pk,
+                "name": cn.name,
+                "notes": cn.notes,
+                "audio": _get_audio_filename(c.pk, cn.pk, full_path=False, check_exists=True)
+            } for cn in c.contributed_names.all()
+        ],
+        "contributed_language_groups": [{
+                "entry_pk": cl.pk,
+                "language_group_pk": cl.language_group.id,
+                "language_group_name": cl.language_group.name,
+                "notes": cl.notes
+            } for cl in c.contributed_language_groups.all()
+        ],
+        "is_multilingual": c.is_multilingual
+    }
+
+def _enslaved_contrib_base_query():
+    return EnslavedContribution.objects \
+        .select_related('enslaved') \
+        .select_related('enslaved__voyage__voyage_itinerary__imp_principal_region_of_slave_purchase') \
+        .prefetch_related('contributed_names') \
+        .prefetch_related('contributed_language_groups')
+
+@login_required()
+@require_POST
+def get_enslaved_contributions(request):
+    status = request.POST.get('status', EnslavedContributionStatus.PENDING)
+    q = _enslaved_contrib_base_query() \
+        .filter(status=status)
+    contribs = [_expand_contrib(c) for c in q]
+    return JsonResponse({'status': status, 'contributions': contribs })
+
+@login_required()
+@require_POST
+def get_enslaved_contrib_details(request):
+    contrib_pk = int(request.POST.get('contrib_pk'))
+    q = _enslaved_contrib_base_query() \
+        .filter(pk=contrib_pk)
+    matches = list(q)
+    if len(matches) != 1:
+        raise Http404("Not found")
+    c = matches[0]
+    # Previously contributed modern names.
+    prev_name_contrib = set(EnslavedContributionNameEntry.objects \
+        .filter(contribution__enslaved_id=c.enslaved_id) \
+        .exclude(contribution_id=c.pk) \
+        .filter(contribution__status__in=[EnslavedContributionStatus.PENDING, EnslavedContributionStatus.ACCEPTED]) \
+        .values_list('name', flat=True))
+    # Previously contributed language groups.
+    prev_lang_contrib = set(EnslavedContributionLanguageEntry.objects \
+        .filter(contribution__enslaved_id=c.enslaved_id) \
+        .exclude(contribution_id=c.pk) \
+        .filter(contribution__status__in=[EnslavedContributionStatus.PENDING, EnslavedContributionStatus.ACCEPTED]) \
+        .values_list('language_group__name', flat=True))
+    # Matching enslaved with same name and region.
+    propagation_candidates = Enslaved.objects \
+        .filter(voyage__voyage_itinerary__imp_principal_region_of_slave_purchase_id= \
+            c.enslaved.voyage.voyage_itinerary.imp_principal_region_of_slave_purchase_id) \
+        .filter(Q(documented_name=c.enslaved.documented_name) | \
+            Q(name_first=c.enslaved.documented_name) | \
+            Q(name_second=c.enslaved.documented_name) | \
+            Q(name_third=c.enslaved.documented_name)) \
+        .values( \
+                'pk', 'gender', 'modern_name', 'documented_name', \
+                'name_first', 'name_second', 'name_third', 'language_group__name', \
+                'voyage__voyage_itinerary__imp_principal_place_of_slave_purchase__place')
+    expanded = _expand_contrib(c)
+    expanded['prev_name_contributions'] = list(prev_name_contrib)
+    expanded['prev_language_group_contributions'] = list(prev_lang_contrib)
+    expanded['propagation_candidates'] = list(propagation_candidates)
+    return JsonResponse(expanded)

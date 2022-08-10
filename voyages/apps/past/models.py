@@ -583,6 +583,12 @@ class EnslavedSourceConnection(SourceConnectionAbstractBase):
                                  related_name='sources_conn')
 
 
+class EnslavedContributionStatus:
+    PENDING = 0
+    ACCEPTED = 1
+    REJECTED = 2
+
+
 class EnslavedContribution(models.Model):
     enslaved = models.ForeignKey(Enslaved, on_delete=models.CASCADE)
     contributor = models.ForeignKey(User, null=True, related_name='+',
@@ -596,7 +602,8 @@ class EnslavedContribution(models.Model):
 
 class EnslavedContributionNameEntry(models.Model):
     contribution = models.ForeignKey(EnslavedContribution,
-                                     on_delete=models.CASCADE)
+                                     on_delete=models.CASCADE,
+                                     related_name='contributed_names')
     name = models.CharField(max_length=255, null=False, blank=False)
     order = models.IntegerField()
     notes = models.CharField(max_length=255, null=True, blank=True)
@@ -604,7 +611,8 @@ class EnslavedContributionNameEntry(models.Model):
 
 class EnslavedContributionLanguageEntry(models.Model):
     contribution = models.ForeignKey(EnslavedContribution,
-                                     on_delete=models.CASCADE)
+                                     on_delete=models.CASCADE,
+                                     related_name='contributed_language_groups')
     language_group = models.ForeignKey(LanguageGroup, null=True,
                                        on_delete=models.CASCADE)
     order = models.IntegerField()

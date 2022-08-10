@@ -18,3 +18,4 @@ voyages/static
 data/
 tmp/
 google_auth.json
+documents/audio/**
