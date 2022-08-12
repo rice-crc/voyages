@@ -616,7 +616,6 @@ class EnslavedContributionLanguageEntry(models.Model):
     language_group = models.ForeignKey(LanguageGroup, null=True,
                                        on_delete=models.CASCADE)
     order = models.IntegerField()
-    notes = models.CharField(max_length=255, null=True, blank=True)
 
 
 class EnslavedName(models.Model):

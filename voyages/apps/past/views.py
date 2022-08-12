@@ -280,7 +280,6 @@ def enslaved_contribution(request):
     contrib.date = date.today()
     contrib.enslaved = enslaved
     contrib.notes = str(data.get('notes', ''))  # Optional notes
-    # TODO: Do we require the user to be authenticated in order to contribute?
     contrib.contributor = request.user if request.user.is_authenticated(
     ) else None
     contrib.is_multilingual = bool(data.get('is_multilingual', False))
@@ -316,9 +315,6 @@ def enslaved_contribution(request):
                     'Invalid language entry in contribution')
             lang_entry.language_group = LanguageGroup.objects.get(
                 pk=lang_group_id) if lang_group_id else None
-            # Currently we get repeated notes for the language group entries if
-            # there are more than one.
-            lang_entry.notes = data.get('notes', '')
             lang_entry.save()
             language_ids.append(lang_entry.pk)
         result['language_ids'] = language_ids
