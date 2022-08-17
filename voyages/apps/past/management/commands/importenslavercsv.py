@@ -111,7 +111,7 @@ class Command(BaseCommand):
         source_finder = SourceReferenceFinder()
         print("Please ensure that all csv files are UTF8-BOM encoded")
         enslavers = {} # map id => EnslaverIdentity
-        mapped_enslavers = {} # principal name : string => (enslaver: EnslaverIdentity, principal_alias: EnslaverAlias)
+        mapped_enslavers = {} # principal name : string => (enslaver: EnslaverIdentity, principal_alias: EnslaverAlias, source_row_index)
         all_aliases = []
         enslaver_voyage_conn = []
         source_connections = []
@@ -200,6 +200,7 @@ class Command(BaseCommand):
             return set(aliases)
 
         # Iterate through csv files and import them.
+        enslavers_by_pid = {}
         for file in enslaver_csv_files:
             rows = []
             with open(file, 'rb') as f:
@@ -209,6 +210,7 @@ class Command(BaseCommand):
                     pid = r.get("person id")
                     if pid is None or pid == '':
                         continue
+                    enslavers_by_pid.setdefault(pid, []).append(len(rows))
                     row = {key: val for key, val in r.items()}
                     # Standardize dual role labels.
                     if row.get('role') == 'Captain_Owner':
@@ -241,11 +243,17 @@ class Command(BaseCommand):
                 if len(voyage_ids) == 0:
                     error_reporting.report(f"Row {i + 1} does not have any voyages")
                     continue
+                shared_pid = enslavers_by_pid[r["person id"]]
+                if len(shared_pid) > 1:
+                    shared_target = min(shared_pid)
+                    if i != shared_target:
+                        merge_target_by_row[i] = shared_target
+                        continue
                 matches = set.intersection(*[voyage_id_to_rows[voyage_id] for voyage_id in voyage_ids])
                 if i not in matches:
                     # Should never happen, it's just a sanity check.
                     fatal_error("Corrupt data structure!")
-                matches = [row_idx for row_idx in matches if row_idx != i and abs(row_idx - i) <= 30 and len(aliases_by_row[row_idx]) > 0]
+                matches = [row_idx for row_idx in matches if row_idx != i and len(aliases_by_row[row_idx]) > 0]
                 if len(matches) <= 0:
                     continue
                 # This row should quite likely be merged into some other.
@@ -257,12 +265,34 @@ class Command(BaseCommand):
                     fatal_error(f"Multiple merge targets for source row {i + 1} '{principal_alias}' in {name_matches}")
                 elif len(name_matches) == 1:
                     merge_target_by_row[i] = name_matches[0]
-                else:
-                    alts = {j + 1: list(aliases_by_row[j]) for j in matches}
-                    error_reporting.report(f"Expected row {i + 1} ([{voyage_ids}]) with principal alias '{principal_alias}' to be merged: [{alts}]")
+                #else:
+                #    alts = {j + 1: list(aliases_by_row[j]) for j in matches}
+                #    error_reporting.report(f"Expected row {i + 1} ([{voyage_ids}]) with principal alias '{principal_alias}' to be merged: [{alts}]")
+            _keys = list(merge_target_by_row.keys())
+            for key in _keys:
+                if key not in merge_target_by_row:
+                    # Key was removed
+                    continue
+                val = merge_target_by_row[key]
+                visited = {key}
+                while val in merge_target_by_row:
+                    visited.add(val)
+                    next_val = merge_target_by_row[val]
+                    if next_val in visited:
+                        # Cycle detected, assign to minimum index.
+                        consolidated = min(visited)
+                        print(f"Cycle detected - consolidating target {consolidated}")
+                        print(visited)
+                        for k in visited:
+                            if k != consolidated:
+                                merge_target_by_row[k] = consolidated
+                        merge_target_by_row.pop(consolidated)
+                        break
+                    val = merge_target_by_row[key] = next_val
             problem_rows = set(merge_target_by_row.keys()).intersection(merge_target_by_row.values())
             if len(problem_rows) > 0:
-                fatal_error(f"Cannot handle multi-level merges, see {problem_rows}")
+                print(problem_rows)
+                raise Exception("Failed to consolidate merges")
 
             # Create identities for every target merge row and remove any voyage
             # ids from the merge target that belong to a merged source.
@@ -276,13 +306,15 @@ class Command(BaseCommand):
                         
             # Importation.
             error_reporting.reset_row()
+            all_voyages = {int(v.voyage_id): v for v in Voyage.all_dataset_objects.all()}
+            enslaver_identity_voyage_pairs = set()
             for (i, r) in rows:
                 rh = RowHelper(r, error_reporting)
                 # Start with the list of voyages associated with the enslaver.
                 voyage_list = []
                 for voyage_id in voyage_ids_by_row[i]:
                     try:
-                        voyage = Voyage.all_dataset_objects.get(pk=int(voyage_id))
+                        voyage = all_voyages.get(int(voyage_id))
                     except:
                         voyage = None
                     if voyage is None:
@@ -301,8 +333,6 @@ class Command(BaseCommand):
                 if principal_alias is None and skip_invalid:
                     continue
                 merge_target_row_idx = merge_target_by_row.get(i)
-                if principal_alias in mapped_enslavers and merge_target_row_idx is not None:
-                    fatal_error(f"Duplicate principal alias: {principal_alias}")
                 # For a merged row entry, we use the merged target identity and
                 # ignore the aliases except for the principal_alias, which
                 # should be a match to the target row's aliases.
@@ -314,6 +344,8 @@ class Command(BaseCommand):
                     # identity here.
                     enslaver = enslaver_identities[merge_target_row_idx]
                 else:
+                    if principal_alias in mapped_enslavers:
+                        fatal_error(f"Duplicate principal alias: {principal_alias} - matches {mapped_enslavers[principal_alias][2]}")
                     # Row is neither a merge source nor target, so we create a
                     # new identity for this single row.
                     enslaver = create(EnslaverIdentity)
@@ -329,12 +361,17 @@ class Command(BaseCommand):
                     all_aliases.append(e_alias)
                     if alias == principal_alias:
                         e_principal = e_alias
-                mapped_enslavers[principal_alias] = (enslaver, e_principal)
+                mapped_enslavers[principal_alias] = (enslaver, e_principal, i)
                 # Link voyages to the principal alias. If this is a merged
                 # source row, then we are preserving the connections to voyages
                 # for the merged target using the specific alias that is used in
                 # the documents linking to the voyage.
                 for voyage in voyage_list:
+                    if (enslaver, voyage) in enslaver_identity_voyage_pairs:
+                        # Avoid repeating the same voyage-identity link through
+                        # multiple aliases.
+                        continue
+                    enslaver_identity_voyage_pairs.add((enslaver, voyage))
                     conn = create(EnslaverVoyageConnection)
                     conn.voyage = voyage
                     conn.role = role
@@ -356,9 +393,9 @@ class Command(BaseCommand):
                                 spouse_ens.principal_alias = spouse
                                 enslavers[spouse_ens.id] = spouse_ens
                                 all_aliases.append(spouse_ens_alias)
-                                mapped_enslavers[spouse] = (spouse_ens, spouse_ens_alias)
+                                mapped_enslavers[spouse] = (spouse_ens, spouse_ens_alias, None)
                             else:
-                                (spouse_ens, spouse_ens_alias) = existing
+                                (spouse_ens, spouse_ens_alias, _) = existing
                             marriage = create(EnslavementRelation)
                             marriage.relation_type = marriage_relation_type
                             try:
