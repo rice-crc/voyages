@@ -8,8 +8,7 @@ from datetime import date
 from django.conf import settings
 from django.core.paginator import Paginator
 from django.db import transaction
-from django.db.models import Prefetch
-from django.http import JsonResponse
+from django.http import JsonResponse, FileResponse
 from django.http.response import HttpResponseBadRequest
 from django.shortcuts import redirect, render
 from django.views.decorators.cache import cache_page
@@ -21,7 +20,7 @@ from voyages.apps.common.models import SavedQuery
 from voyages.apps.common.views import get_filtered_results
 from .models import (AltLanguageGroupName, Enslaved,
                      EnslavedContribution, EnslavedContributionLanguageEntry,
-                     EnslavedContributionNameEntry, EnslavedSearch, EnslaverRole, EnslaverSearch, EnslaverVoyageConnection,
+                     EnslavedContributionNameEntry, EnslavedSearch, EnslaverSearch, EnslaverVoyageConnection,
                      LanguageGroup, MultiValueHelper, ModernCountry, EnslavedNameSearchCache,
                      _modern_name_fields, _name_fields)
 
@@ -281,7 +280,6 @@ def enslaved_contribution(request):
     contrib.date = date.today()
     contrib.enslaved = enslaved
     contrib.notes = str(data.get('notes', ''))  # Optional notes
-    # TODO: Do we require the user to be authenticated in order to contribute?
     contrib.contributor = request.user if request.user.is_authenticated(
     ) else None
     contrib.is_multilingual = bool(data.get('is_multilingual', False))
@@ -317,7 +315,6 @@ def enslaved_contribution(request):
                     'Invalid language entry in contribution')
             lang_entry.language_group = LanguageGroup.objects.get(
                 pk=lang_group_id) if lang_group_id else None
-            lang_entry.notes = lang.get('notes', '')
             lang_entry.save()
             language_ids.append(lang_entry.pk)
         result['language_ids'] = language_ids
@@ -327,6 +324,16 @@ def enslaved_contribution(request):
     result['audio_token'] = token
     return JsonResponse(result)
 
+def _get_audio_filename(contrib_pk, name_pk, full_path=True, check_exists=False):
+    filename = f"audio/{contrib_pk}_{name_pk}.webm"
+    fullname = f"{settings.MEDIA_ROOT}{filename}"
+    if full_path:
+        filename = fullname
+    if check_exists:
+        from os.path import exists
+        if not exists(fullname):
+            return None
+    return filename
 
 @require_POST
 @csrf_exempt
@@ -338,8 +345,7 @@ def store_audio(request, contrib_pk, name_pk, token):
     if contrib is None or contrib.token != token:
         return HttpResponseBadRequest('Contribution not found')
     name_pk = int(name_pk)
-    file_name = str(contrib_pk) + "_" + str(name_pk) + ".webm"
-    with open('%s/%s/%s' % (settings.MEDIA_ROOT, 'audio', file_name),
-              'wb+') as destination:
+    file_name = _get_audio_filename(contrib_pk, name_pk)
+    with open(file_name, 'wb+') as destination:
         destination.write(request.body)
     return JsonResponse({'len': len(request.body)})

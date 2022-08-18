@@ -14,6 +14,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
 from django.core.urlresolvers import reverse
 from django.db import connection, transaction
+from django.db.models import Q
 from django.db.models.fields import Field
 from django.http import (Http404, HttpResponse, HttpResponseBadRequest,
                          HttpResponseForbidden, HttpResponseRedirect,
@@ -52,6 +53,8 @@ from voyages.apps.contribute.publication import (
     export_contributions, export_from_voyages, full_contribution_id,
     get_csv_writer, get_filtered_contributions, get_header_csv_text,
     publish_accepted_contributions, safe_writerow)
+from voyages.apps.past.models import Enslaved, EnslavedContribution, EnslavedContributionLanguageEntry, EnslavedContributionNameEntry, EnslavedContributionStatus, LanguageGroup
+from voyages.apps.past.views import _get_audio_filename
 from voyages.apps.voyage.cache import VoyageCache
 from voyages.apps.voyage.forms import VoyagesSourcesAdminForm
 from voyages.apps.voyage.models import (Voyage, VoyageDataset, VoyageDates,
@@ -2199,3 +2202,169 @@ def retrieve_publication_status(request):
             text += lines[i] + '<br />'
             i += 1
         return JsonResponse({'lines': text, 'count': i - skip_count})
+
+# PAST / Origins contributions
+
+def _expand_contrib(c):
+    return {
+        "pk": c.pk,
+        "contributor": c.contributor.username if c.contributor else "(anonymous)",
+        "date": c.date,
+        "enslaved": {
+            "id": c.enslaved_id,
+            "gender": c.enslaved.gender,
+            "modern_name": c.enslaved.modern_name,
+            "historical_name": c.enslaved.documented_name,
+            "other_names": [name for name in [c.enslaved.name_first, c.enslaved.name_second, c.enslaved.name_third] if name],
+            "region_of_embarkation": c.enslaved.voyage.voyage_itinerary.imp_principal_region_of_slave_purchase.region
+        },
+        "contributed_names": [{
+                "pk": cn.pk,
+                "name": cn.name,
+                "notes": cn.notes,
+                "audio": _get_audio_filename(c.pk, cn.pk, full_path=False, check_exists=True)
+            } for cn in c.contributed_names.all()
+        ],
+        "contributed_language_groups": [{
+                "entry_pk": cl.pk,
+                "language_group_pk": cl.language_group.id,
+                "language_group_name": cl.language_group.name,
+            } for cl in c.contributed_language_groups.all()
+        ],
+        "notes": c.notes,
+        "is_multilingual": c.is_multilingual
+    }
+
+def _enslaved_contrib_base_query():
+    return EnslavedContribution.objects \
+        .select_related('enslaved') \
+        .select_related('enslaved__voyage__voyage_itinerary__imp_principal_region_of_slave_purchase') \
+        .prefetch_related('contributed_names') \
+        .prefetch_related('contributed_language_groups')
+
+@login_required()
+@require_POST
+def get_origins_contributions(request):
+    status = request.POST.get('status', [EnslavedContributionStatus.PENDING])
+    q = _enslaved_contrib_base_query()
+    if status:
+        # The caller can explicitly set status to 
+        # None so that we do not filter by status.
+        q = q.filter(status__in=status)
+    contribs = [_expand_contrib(c) for c in q]
+    return JsonResponse({'status': status, 'contributions': contribs })
+
+@login_required()
+@require_POST
+def get_origins_contrib_details(request):
+    contrib_pk = int(request.POST.get('contrib_pk'))
+    q = _enslaved_contrib_base_query().filter(pk=contrib_pk)
+    matches = list(q)
+    if len(matches) != 1:
+        raise Http404("Not found")
+    c = matches[0]
+    # Previously contributed modern names.
+    prev_name_contrib = set(EnslavedContributionNameEntry.objects \
+        .filter(contribution__enslaved_id=c.enslaved_id) \
+        .exclude(contribution_id=c.pk) \
+        # 2022-08-10 (Phil) - we should display to the editor even rejected name contributions.
+        #.filter(contribution__status__in=[EnslavedContributionStatus.PENDING, EnslavedContributionStatus.ACCEPTED]) \
+        .values_list('name', flat=True))
+    # Previously contributed language groups.
+    prev_lang_contrib = set(EnslavedContributionLanguageEntry.objects \
+        .filter(contribution__enslaved_id=c.enslaved_id) \
+        .exclude(contribution_id=c.pk) \
+        # same as above.
+        #.filter(contribution__status__in=[EnslavedContributionStatus.PENDING, EnslavedContributionStatus.ACCEPTED]) \
+        .values_list('language_group__name', flat=True))
+
+    # Matching enslaved with same name and region.
+    # Since there can be multiple historical names for each enslavers we
+    # try to match any combination (4 x 4 field matches are possible).
+    def create_name_match_clauses(names):
+        clause = None
+        for name in names:
+            if not name:
+                continue
+            part = Q(documented_name=name) | Q(name_first=name) | Q(name_second=name) | Q(name_third=name)
+            clause = (clause | part) if clause else part
+        return clause
+
+    name_clauses = create_name_match_clauses([
+        c.enslaved.documented_name,
+        c.enslaved.name_first,
+        c.enslaved.name_second,
+        c.enslaved.name_third
+    ])
+    propagation_candidates = Enslaved.objects \
+        .filter(voyage__voyage_itinerary__imp_principal_region_of_slave_purchase_id= \
+            c.enslaved.voyage.voyage_itinerary.imp_principal_region_of_slave_purchase_id) \
+        .filter(name_clauses) \
+        .values( \
+            'pk', 'gender', 'modern_name', 'documented_name', \
+            'name_first', 'name_second', 'name_third', 'language_group__name', \
+            'voyage__voyage_itinerary__imp_principal_place_of_slave_purchase__place')
+    expanded = _expand_contrib(c)
+    expanded['prev_name_contributions'] = list(prev_name_contrib)
+    expanded['prev_language_group_contributions'] = list(prev_lang_contrib)
+    expanded['propagation_candidates'] = list(propagation_candidates)
+    return JsonResponse(expanded)
+
+@login_required()
+@require_POST
+def reject_origins_contribution(request):
+    """
+    Mark the contribution as rejected.
+    """
+    contrib = get_object_or_404(EnslavedContribution, request.POST.get('contrib_pk'))
+    contrib.status = EnslavedContributionStatus.REJECTED
+    contrib.save()
+    return JsonResponse({'result': 'ok'})
+
+@login_required()
+@require_POST
+def publish_origins_editorial_review(request):
+    """
+    Publish the editor changes to the propagated Enslaved records.
+    """
+    data = json.loads(request.body)
+    contrib = get_object_or_404(EnslavedContribution, data['contrib_pk'])
+    modern_name = data.get('modern_name')
+    language_group = data.get('language_group')
+    if modern_name is None and language_group is None:
+        return JsonResponse({ 'error': 'At least one of modern_name or language_group should be non-null' })
+    # Note: we accept a value of -1 for language group to indicate that 
+    # the language group should be cleared.
+    clear_lang_group = False
+    if language_group is not None:
+        language_group = int(language_group)
+        clear_lang_group = language_group == -1
+        if not clear_lang_group:
+            lgpk = language_group
+            language_group = LanguageGroup.get(pk=lgpk)
+            if language_group is None:
+                return JsonResponse({ 'error': f'Language group with key={lgpk} was not found' })
+    # propagation should be a dict with keys: "pk", "notes" (optional)
+    propagation = data['propagation']
+    if len(propagation) == 0:
+        return JsonResponse({ 'error': 'At least one record should be selected for propagation' })
+    items = { e.pk: e for e in Enslaved.objects.filter(pk__in=[p["pk"] for p in propagation]) }
+    for p in propagation:
+        if p.pk not in items:
+            return JsonResponse({ 'error': f"The Enslaved entry with key {p['pk']} was not found" })
+    with transaction.atomic():
+        for p in propagation:
+            e = items[p["pk"]]
+            if modern_name is not None:
+                e.modern_name = modern_name
+            if clear_lang_group:
+                e.language_group = None
+            elif language_group is not None:
+                e.language_group = language_group
+            notes = p.get('notes')
+            if notes is not None:
+                e.notes = notes
+            e.save()
+        contrib.status = EnslavedContributionStatus.ACCEPTED
+        contrib.save()
+    return JsonResponse({ 'result': f"Contribution propagated to {len(propagation)} records." })
