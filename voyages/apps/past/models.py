@@ -1058,8 +1058,8 @@ class EnslavedSearch:
                     q = q.annotate(**{
                         col_name:
                             Func(*expressions,
-                                 function='GREATEST' if is_desc else 'LEAST'
-                                 )
+                                function='GREATEST' if is_desc else 'LEAST'
+                                ) if len(expressions) > 1 else expressions[0]
                     })
                     order_field = F(col_name)
                     order_field = order_field.desc(
