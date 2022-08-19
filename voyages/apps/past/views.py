@@ -157,6 +157,10 @@ def restore_enslaved_permalink(_, link_id):
     return redirect("/past/database" + ds_name + "#searchId=" + link_id)
 
 
+def restore_enslaver_permalink(_, link_id):
+    return redirect(f"/past/enslavers#searchId={link_id}")
+
+
 def is_valid_name(name):
     return name is not None and name.strip() != ""
 
