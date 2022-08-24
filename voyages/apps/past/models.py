@@ -219,6 +219,7 @@ class EnslaverInfoAbstractBase(models.Model):
     principal_location = models.ForeignKey(Place, null=True,
                                                 on_delete=models.CASCADE,
                                                 db_index=True)
+    notes = models.CharField(null=True, max_length=8192)
 
     def __str__(self):
         return self.__unicode__()

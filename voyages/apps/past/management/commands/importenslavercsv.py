@@ -115,6 +115,7 @@ class Command(BaseCommand):
         all_aliases = []
         enslaver_voyage_conn = []
         source_connections = []
+        enslaver_sources = {}
         enslavement_relations = [] # (rel: EnslavementRelation, enslaved: EnslavedInRelation[], enslavers: EnslaverInRelation[])
         marriage_relation_type = EnslavementRelationType.objects.get(name='Marriage')
         spouse_role = EnslaverRole.objects.get(name='Spouse')
@@ -379,92 +380,114 @@ class Command(BaseCommand):
                     # TODO Q: will order be used in this connection?
                     enslaver_voyage_conn.append(conn)
                 # Set enslaver personal info.
-                if merge_target_row_idx is None:
-                    # Include spouses in the enslaver table.               
-                    def add_spouse(spouse, date):
-                        if spouse:
-                            # Check if there is already that person in the enslavers record.
-                            existing = mapped_enslavers.get(spouse)
-                            if existing is None:
-                                spouse_ens = create(EnslaverIdentity)
-                                spouse_ens_alias = create(EnslaverAlias)
-                                spouse_ens_alias.identity = spouse_ens
-                                spouse_ens_alias.alias = spouse
-                                spouse_ens.principal_alias = spouse
-                                enslavers[spouse_ens.id] = spouse_ens
-                                all_aliases.append(spouse_ens_alias)
-                                mapped_enslavers[spouse] = (spouse_ens, spouse_ens_alias, None)
-                            else:
-                                (spouse_ens, spouse_ens_alias, _) = existing
-                            marriage = create(EnslavementRelation)
-                            marriage.relation_type = marriage_relation_type
-                            try:
-                                year_match = re.match("[0-9]{4}", date)
-                                marriage.date = ',,' + year_match[0]
-                            except:
-                                pass
-                            in_relation_a = create(EnslaverInRelation)
-                            in_relation_a.relation = marriage
-                            in_relation_a.enslaver_alias = e_principal
-                            in_relation_a.role = spouse_role
-                            in_relation_b = create(EnslaverInRelation)
-                            in_relation_b.relation = marriage
-                            in_relation_b.enslaver_alias = spouse_ens_alias
-                            in_relation_b.role = spouse_role
-                            enslavement_relations.append((marriage, [], [in_relation_a, in_relation_b]))
+                # Include spouses in the enslaver table.          
+                def add_spouse(spouse, date):
+                    if spouse:
+                        # Check if there is already that person in the enslavers record.
+                        existing = mapped_enslavers.get(spouse)
+                        if existing is None:
+                            spouse_ens = create(EnslaverIdentity)
+                            spouse_ens_alias = create(EnslaverAlias)
+                            spouse_ens_alias.identity = spouse_ens
+                            spouse_ens_alias.alias = spouse
+                            spouse_ens.principal_alias = spouse
+                            enslavers[spouse_ens.id] = spouse_ens
+                            all_aliases.append(spouse_ens_alias)
+                            mapped_enslavers[spouse] = (spouse_ens, spouse_ens_alias, None)
+                        else:
+                            # A bit crude but let us assume that if the
+                            # spouse was already created, then the
+                            # relationship is already encoded for a merged
+                            # row.
+                            return
+                        marriage = create(EnslavementRelation)
+                        marriage.relation_type = marriage_relation_type
+                        try:
+                            year_match = re.match("[0-9]{4}", date)
+                            marriage.date = ',,' + year_match[0]
+                        except:
+                            pass
+                        in_relation_a = create(EnslaverInRelation)
+                        in_relation_a.relation = marriage
+                        in_relation_a.enslaver_alias = e_principal
+                        in_relation_a.role = spouse_role
+                        in_relation_b = create(EnslaverInRelation)
+                        in_relation_b.relation = marriage
+                        in_relation_b.enslaver_alias = spouse_ens_alias
+                        in_relation_b.role = spouse_role
+                        enslavement_relations.append((marriage, [], [in_relation_a, in_relation_b]))
 
-                    enslaver.principal_alias = principal_alias
-                    enslaver.birth_year = parse_year(rh.get("birth year"))
-                    (birth_day, birth_month) = parse_day_and_month(rh.get('birth date'))
-                    enslaver.birth_day = birth_day
-                    enslaver.birth_month = birth_month
-                    enslaver.death_year = parse_year(rh.get("death year"))
-                    (death_day, death_month) = parse_day_and_month(rh.get('death date'))
-                    enslaver.death_day = death_day
-                    enslaver.death_month = death_month
-                    enslaver.father_name = clean_name(rh.get("father's name"))
-                    enslaver.father_occupation = clean_name(rh.get("father's occupation"))
-                    enslaver.mother_name = clean_name(rh.get("mother's name"))
-                    enslaver.probate_date = rh.get("probate date", max_chars=MAX_WILL_FIELDS_CHARS)
-                    enslaver.will_value_pounds = rh.get("will value lbs", max_chars=MAX_WILL_FIELDS_CHARS)
-                    enslaver.will_value_dollars = rh.get("will value dollars", max_chars=MAX_WILL_FIELDS_CHARS)
-                    enslaver.will_court = rh.get("will court/s", max_chars=MAX_WILL_FIELDS_CHARS)
-                    enslaver.birth_place = rh.get_by_value(Place, "birth place", "place", remap=place_remap)
-                    enslaver.death_place = rh.get_by_value(Place, "death place", "place", remap=place_remap)
-                    # TODO Q: sheet's NOTE field goes where??
-                    # Parse sources associated with this enslaver.
-                    order = 1
-                    for key in get_multi_valued_column_suffix(6):
-                        source_ref = rh.get('source ' + key)
-                        if len(source_ref) > MAX_NAME_CHARS:
-                            error_reporting.report(f"Source ref too long (> {MAX_NAME_CHARS}): {source_ref}")
-                            source_ref = source_ref[:MAX_NAME_CHARS]
-                        if source_ref is None or empty.match(source_ref):
-                            break
-                        (source, match) = source_finder.get(source_ref)
-                        if source is None and short_ref_remap is not None:
-                            # Try remapping the short ref to address missing
-                            # sources in bulk.
-                            remap_ref = short_ref_remap.get(source_ref)
-                            (source, match) = source_finder.get(remap_ref)
-                        if source is None:
-                            self.errors += 1
-                            error_reporting.report(
-                                'Source not found for '
-                                f'enslaver: "{principal_alias}" '
-                                f'source_ref: "{source_ref}", longest partial '
-                                f'match: {match}',
-                                source_ref)
-                            continue
-                        source_connection = create(EnslaverIdentitySourceConnection)
-                        source_connection.identity = enslaver
-                        source_connection.source = source
-                        source_connection.source_order = order
-                        source_connection.text_ref = source_ref
-                        source_connections.append(source_connection)
-                        order += 1
-                    add_spouse(clean_name(rh.get('s1 name')), rh.get('s1 marriage date'))
-                    add_spouse(clean_name(rh.get('s2 name')), rh.get('s2 marriage date'))
+                def merge_prop(enslaver, prop_name, val):
+                    if val is None or val == '':
+                        return
+                    current = getattr(enslaver, prop_name)
+                    if current is not None and current != '' and current != val:
+                        error_reporting.report(f"Different prop values for {prop_name}: '{current}' vs '{val}'")
+                    setattr(enslaver, prop_name, val)
+
+                merge_prop(enslaver, "principal_alias", principal_alias)
+                merge_prop(enslaver, "birth_year", parse_year(rh.get("birth year")))
+                (birth_day, birth_month) = parse_day_and_month(rh.get('birth date'))
+                merge_prop(enslaver, "birth_day", birth_day)
+                merge_prop(enslaver, "birth_month", birth_month)
+                merge_prop(enslaver, "death_year", parse_year(rh.get("death year")))
+                (death_day, death_month) = parse_day_and_month(rh.get('death date'))
+                merge_prop(enslaver, "death_day", death_day)
+                merge_prop(enslaver, "death_month", death_month)
+                merge_prop(enslaver, "father_name", clean_name(rh.get("father's name")))
+                merge_prop(enslaver, "father_occupation", clean_name(rh.get("father's occupation")))
+                merge_prop(enslaver, "mother_name", clean_name(rh.get("mother's name")))
+                merge_prop(enslaver, "probate_date", rh.get("probate date", max_chars=MAX_WILL_FIELDS_CHARS))
+                merge_prop(enslaver, "will_value_pounds", rh.get("value lbs", max_chars=MAX_WILL_FIELDS_CHARS))
+                merge_prop(enslaver, "will_value_dollars", rh.get("value usd", max_chars=MAX_WILL_FIELDS_CHARS))
+                merge_prop(enslaver, "will_court", rh.get("will court", max_chars=MAX_WILL_FIELDS_CHARS))
+                merge_prop(enslaver, "birth_place", rh.get_by_value(Place, "birth place", "place", remap=place_remap))
+                merge_prop(enslaver, "death_place", rh.get_by_value(Place, "death place", "place", remap=place_remap))
+                
+                # Concatenate notes.
+                def concat_notes(a, b):
+                    if not a:
+                        return b
+                    if not b:
+                        return a
+                    return f"{a}\n{b}"
+                
+                enslaver.notes = concat_notes(enslaver.notes, rh.get('notes', '').strip())
+                # Parse sources associated with this enslaver.
+                for key in get_multi_valued_column_suffix(6):
+                    source_ref = rh.get('source ' + key)
+                    if len(source_ref) > MAX_NAME_CHARS:
+                        error_reporting.report(f"Source ref too long (> {MAX_NAME_CHARS}): {source_ref}")
+                        source_ref = source_ref[:MAX_NAME_CHARS]
+                    if source_ref is None or empty.match(source_ref):
+                        break
+                    (source, match) = source_finder.get(source_ref)
+                    if source is None and short_ref_remap is not None:
+                        # Try remapping the short ref to address missing
+                        # sources in bulk.
+                        remap_ref = short_ref_remap.get(source_ref)
+                        (source, match) = source_finder.get(remap_ref)
+                    if source is None:
+                        self.errors += 1
+                        error_reporting.report(
+                            'Source not found for '
+                            f'enslaver: "{principal_alias}" '
+                            f'source_ref: "{source_ref}", longest partial '
+                            f'match: {match}',
+                            source_ref)
+                        continue
+                    esources = enslaver_sources.setdefault(enslaver.pk, set())
+                    if source.pk in esources:
+                        continue
+                    esources.add(source.pk)
+                    source_connection = create(EnslaverIdentitySourceConnection)
+                    source_connection.identity = enslaver
+                    source_connection.source = source
+                    source_connection.source_order = len(esources)
+                    source_connection.text_ref = source_ref
+                    source_connections.append(source_connection)
+                add_spouse(clean_name(rh.get('s1 name')), rh.get('s1 marriage date'))
+                add_spouse(clean_name(rh.get('s2 name')), rh.get('s2 marriage date'))
         all_aliases = [a for a in all_aliases if a.identity_id in enslavers]
         print('Constructed ' + str(len(enslavers)) + ' Enslavers from CSV.')
 
