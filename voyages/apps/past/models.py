@@ -425,28 +425,6 @@ class EnslaverAlias(models.Model):
         verbose_name = 'Enslaver alias'
 
 
-class EnslaverMerger(EnslaverInfoAbstractBase):
-    """
-    Represents a merger of two or more identities.
-    We inherit from EnslaverInfoAbstractBase so that all personal fields
-    are also contained in the merger.
-    """
-    comments = models.CharField(max_length=1024)
-
-
-class EnslaverMergerItem(models.Model):
-    """
-    Represents a single identity that is part of a merger.
-    """
-    merger = models.ForeignKey('EnslaverMerger',
-                               null=False,
-                               on_delete=models.CASCADE)
-    # We do not use a foreign key to the identity since if the merger
-    # is accepted, some/all of the records may be deleted and the keys
-    # would either be invalid or set to null.
-    enslaver_identity_id = models.IntegerField(null=False)
-
-
 class EnslaverRole(NamedModelAbstractBase):
     pass
 
@@ -553,7 +531,10 @@ class Enslaved(models.Model):
     skin_color = models.CharField(max_length=100, null=True, db_index=True)
     language_group = models.ForeignKey(LanguageGroup, null=True,
                                        on_delete=models.CASCADE,
-                                       db_index=True)
+                                       db_index=True)                             
+    modern_country = models.ForeignKey(ModernCountry, null=True, default=None,
+                                        on_delete=models.CASCADE,
+                                        db_index=True)
     register_country = models.ForeignKey(RegisterCountry, null=True,
                                          on_delete=models.CASCADE,
                                         db_index=True)
@@ -616,6 +597,7 @@ class EnslavedContributionLanguageEntry(models.Model):
                                      related_name='contributed_language_groups')
     language_group = models.ForeignKey(LanguageGroup, null=True,
                                        on_delete=models.CASCADE)
+    modern_country = models.ForeignKey(ModernCountry, null=True, default=None, on_delete=models.CASCADE)
     order = models.IntegerField()
 
 
