@@ -600,7 +600,7 @@ function getTreeselectLabel(currentVariable, searchTerms, treeselectOptions) {
     if (Array.isArray(searchTerms)) {
       searchTerms.forEach(function(searchTerm) {
         treeselectOptions.forEach(function(treeselectOption) {
-          if (treeselectOption.value == searchTerm) {
+          if (treeselectOption.value == searchTerm || treeselectOption.id == searchTerms) {
             labels.push(treeselectOption.label);
           }
         });
