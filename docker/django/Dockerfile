@@ -31,7 +31,7 @@ RUN apt-get update \
   && apt-get install --yes --no-upgrade --no-install-recommends \
     gcc=4:7.4.0-1ubuntu2.3 \
     libxml2-dev=2.9.4+dfsg1-6.1ubuntu1.7 \
-    libxslt1-dev=1.1.29-5ubuntu0.2 \
+    libxslt1-dev=1.1.29-5ubuntu0.3 \
     python3-dev=3.6.7-1~18.04 \
   && apt-get clean \
   && rm -rf \
