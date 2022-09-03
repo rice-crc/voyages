@@ -3,19 +3,50 @@
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
+#: voyages/apps/voyage/templates/database/_captain_and_crew.html:10
+#: voyages/apps/voyage/templates/database/_itinerary.html:64
+#: voyages/apps/voyage/templates/database/_itinerary.html:115
+#: voyages/apps/voyage/templates/database/_itinerary.html:132
+#: voyages/apps/voyage/templates/database/_settings.html:50
+#: voyages/apps/voyage/templates/database/_source.html:6
+#: voyages/apps/voyage/templates/database/_source.html:8
+#: voyages/apps/voyage/templates/database/tabs/tables.html:6
+#: voyages/apps/voyage/templates/database/tabs/tables.html:9
+#: voyages/apps/voyage/templates/database/tabs/tables.html:12
+#: voyages/apps/voyage/templates/database/tabs/timeline.html:5
+#: voyages/apps/voyage/templates/database/tabs/visualization.html:16
+#: voyages/apps/voyage/templates/database/tabs/visualization.html:19
+#: voyages/apps/voyage/templates/database/tabs/visualization.html:32
+#: voyages/apps/voyage/templates/database/tabs/visualization.html:35
+#: voyages/apps/voyage/templates/database/tabs/visualization.html:47
+#: voyages/apps/voyage/templates/database/tabs/visualization.html:50
+#, fuzzy
 msgid ""
 msgstr ""
+"#-#-#-#-#  django.po  #-#-#-#-#\n"
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-06-10 14:06+0000\n"
-"PO-Revision-Date: 2022-07-22 16:58-0300\n"
+"PO-Revision-Date: 2022-09-02 13:45-0300\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: en\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 3.1.1\n"
+"X-Generator: Poedit 2.2.3\n"
+"#-#-#-#-#  django.po  #-#-#-#-#\n"
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-09-03 19:00+0000\n"
+"PO-Revision-Date: 2022-09-02 13:45-0300\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: en\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 2.2.3\n"
 
 #: voyages/apps/about/templates/_base.html:4
 #: voyages/apps/about/templates/index.html:6
@@ -28,6 +59,7 @@ msgstr ""
 #: voyages/apps/static_content/templates/static_content/index.html:233
 #: voyages/apps/static_content/templates/static_content/index.html:256
 #: voyages/templates/topbar.html:68 voyages/templates/topbar.html:70
+#: voyages/templates/topbar.html:71 voyages/templates/topbar.html:73
 msgid "About"
 msgstr ""
 
@@ -58,6 +90,7 @@ msgstr ""
 #: voyages/apps/voyage/templates/downloads.html:29
 #: voyages/apps/voyage/templates/essays.html:29
 #: voyages/templates/account/base.html:96
+#: voyages/apps/resources/templates/resources/enslavers-about.html:33
 msgid "Toggle Sidebar"
 msgstr ""
 
@@ -75,6 +108,7 @@ msgstr ""
 #: voyages/apps/resources/templates/resources/about.html:18
 #: voyages/apps/voyage/templates/about.html:14 voyages/templates/topbar.html:18
 #: voyages/templates/topbar.html:36
+#: voyages/apps/resources/templates/resources/enslavers-about.html:18
 msgid "Understanding the Database"
 msgstr ""
 
@@ -90,7 +124,7 @@ msgstr ""
 #: voyages/apps/static_content/templates/static_content/index.html:262
 #: voyages/apps/voyage/templates/downloads.html:13
 #: voyages/templates/topbar.html:22 voyages/templates/topbar.html:39
-#: voyages/templates/topbar.html:54
+#: voyages/templates/topbar.html:54 voyages/templates/topbar.html:57
 msgid "Downloads"
 msgstr ""
 
@@ -2148,6 +2182,7 @@ msgstr ""
 #: voyages/templates/topbar.html:85
 #: voyages/apps/contribute/templates/contribute/interim.html:1629
 #: voyages/apps/contribute/templates/contribute/interim.html:1656
+#: voyages/templates/topbar.html:88
 msgid "Authors"
 msgstr ""
 
@@ -2726,6 +2761,7 @@ msgstr ""
 
 #: voyages/apps/past/templates/past/_enslaved_dataset_select_modal.html:20
 #: voyages/apps/resources/templates/resources/names-index.html:303
+#: voyages/templates/topbar.html:51
 msgid "African Origins"
 msgstr ""
 
@@ -2995,12 +3031,12 @@ msgstr ""
 
 #: voyages/apps/resources/templates/resources/lessons.html:18
 #: voyages/apps/resources/templates/resources/links.html:18
-#: voyages/templates/topbar.html:59
+#: voyages/templates/topbar.html:59 voyages/templates/topbar.html:62
 msgid "Resources"
 msgstr ""
 
 #: voyages/apps/resources/templates/resources/lessons.html:19
-#: voyages/templates/topbar.html:62
+#: voyages/templates/topbar.html:62 voyages/templates/topbar.html:65
 msgid "Lesson Plans"
 msgstr ""
 
@@ -3009,7 +3045,7 @@ msgid "Resources - External Links"
 msgstr ""
 
 #: voyages/apps/resources/templates/resources/links.html:19
-#: voyages/templates/topbar.html:63
+#: voyages/templates/topbar.html:63 voyages/templates/topbar.html:66
 msgid "External Links"
 msgstr ""
 
@@ -3313,6 +3349,7 @@ msgstr ""
 
 #: voyages/apps/static_content/templates/static_content/index.html:274
 #: voyages/templates/base.html:35 voyages/templates/topbar.html:61
+#: voyages/templates/topbar.html:64
 msgid "Image Galleries"
 msgstr ""
 
@@ -4316,51 +4353,51 @@ msgstr ""
 msgid "Portuguese"
 msgstr ""
 
-#: voyages/sitemedia/maps/index.html:87
+#: voyages/sitemedia/maps/index.html:87 voyages/static/maps/index.html:87
 msgid "Load all flows from database (may take a while)"
 msgstr ""
 
-#: voyages/sitemedia/maps/index.html:136
+#: voyages/sitemedia/maps/index.html:136 voyages/static/maps/index.html:136
 msgid "Recompute flow paths"
 msgstr ""
 
-#: voyages/sitemedia/maps/index.html:140
+#: voyages/sitemedia/maps/index.html:140 voyages/static/maps/index.html:140
 msgid "Prevent editing when toggled"
 msgstr ""
 
-#: voyages/sitemedia/maps/index.html:144
+#: voyages/sitemedia/maps/index.html:144 voyages/static/maps/index.html:144
 msgid "Rollback last action"
 msgstr ""
 
-#: voyages/sitemedia/maps/index.html:147
+#: voyages/sitemedia/maps/index.html:147 voyages/static/maps/index.html:147
 msgid "Drag nodes to change their position"
 msgstr ""
 
-#: voyages/sitemedia/maps/index.html:151
+#: voyages/sitemedia/maps/index.html:151 voyages/static/maps/index.html:151
 msgid "Add marker"
 msgstr ""
 
-#: voyages/sitemedia/maps/index.html:155
+#: voyages/sitemedia/maps/index.html:155 voyages/static/maps/index.html:155
 msgid "Split link"
 msgstr ""
 
-#: voyages/sitemedia/maps/index.html:159
+#: voyages/sitemedia/maps/index.html:159 voyages/static/maps/index.html:159
 msgid "Delete marker"
 msgstr ""
 
-#: voyages/sitemedia/maps/index.html:163
+#: voyages/sitemedia/maps/index.html:163 voyages/static/maps/index.html:163
 msgid "Add link"
 msgstr ""
 
-#: voyages/sitemedia/maps/index.html:167
+#: voyages/sitemedia/maps/index.html:167 voyages/static/maps/index.html:167
 msgid "Delete link"
 msgstr ""
 
-#: voyages/sitemedia/maps/index.html:171
+#: voyages/sitemedia/maps/index.html:171 voyages/static/maps/index.html:171
 msgid "Delete every marker and link"
 msgstr ""
 
-#: voyages/sitemedia/maps/index.html:177
+#: voyages/sitemedia/maps/index.html:177 voyages/static/maps/index.html:177
 msgid "Help"
 msgstr ""
 
@@ -4950,6 +4987,7 @@ msgid "Contribute Data"
 msgstr ""
 
 #: voyages/templates/topbar.html:46
+#: voyages/apps/static_content/templates/static_content/index.html:244
 msgid "People of the Atlantic Slave Trade"
 msgstr ""
 
@@ -4957,31 +4995,31 @@ msgstr ""
 msgid "PAST"
 msgstr ""
 
-#: voyages/templates/topbar.html:52
+#: voyages/templates/topbar.html:52 voyages/templates/topbar.html:55
 msgid "Enslavers Database"
 msgstr ""
 
-#: voyages/templates/topbar.html:72
+#: voyages/templates/topbar.html:72 voyages/templates/topbar.html:75
 msgid "News"
 msgstr ""
 
-#: voyages/templates/topbar.html:74
+#: voyages/templates/topbar.html:74 voyages/templates/topbar.html:77
 msgid "Provide User Feedback"
 msgstr ""
 
-#: voyages/templates/topbar.html:75
+#: voyages/templates/topbar.html:75 voyages/templates/topbar.html:78
 msgid "Report Issues"
 msgstr ""
 
-#: voyages/templates/topbar.html:81
+#: voyages/templates/topbar.html:81 voyages/templates/topbar.html:84
 msgid "Blog"
 msgstr ""
 
-#: voyages/templates/topbar.html:83
+#: voyages/templates/topbar.html:83 voyages/templates/topbar.html:86
 msgid "All Posts"
 msgstr ""
 
-#: voyages/templates/topbar.html:84
+#: voyages/templates/topbar.html:84 voyages/templates/topbar.html:87
 msgid "Institutions"
 msgstr ""
 
@@ -5023,7 +5061,7 @@ msgstr "Cargo"
 #: voyages/apps/voyage/search_views.py:557
 msgctxt "datatable column header"
 msgid "AFRINFO"
-msgstr "African Info"
+msgstr "Captive Background"
 
 #: voyages/apps/voyage/templates/database/_ship_nation_owner.html:115
 msgctxt "search panel left menu"
@@ -5038,12 +5076,249 @@ msgstr "Cargo"
 #: voyages/apps/voyage/templates/database/_slave.html:151
 msgctxt "search panel left menu"
 msgid "AFRINFO"
-msgstr "African Info"
+msgstr "Captive Background"
 
 #: voyages/apps/voyage/templates/database/_slave.html:154
 msgctxt "subpanel title"
 msgid "AFRINFO"
-msgstr "African Info"
+msgstr "Captive Background"
+
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#: voyages/apps/past/templates/past-enslavers/_enslaver-name.html:8
+#, fuzzy
+#| msgid ""
+msgctxt "Enslaver name search panel description"
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-06-10 14:06+0000\n"
+"PO-Revision-Date: 2022-09-02 13:45-0300\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: en\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 2.2.3\n"
+
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#: voyages/apps/past/templates/past-enslavers/_itinerary.html:9
+#, fuzzy
+#| msgid ""
+msgctxt "Enslaver Itinerary search panel description"
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-06-10 14:06+0000\n"
+"PO-Revision-Date: 2022-09-02 13:45-0300\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: en\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 2.2.3\n"
+
+#: voyages/apps/past/templates/past-enslavers/_sources.html:4
+#: voyages/apps/past/templates/past-enslavers/_sources.html:6
+#: voyages/apps/past/templates/past-enslavers/_sources.html:8
+msgid "Biographical Sources"
+msgstr ""
+
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#: voyages/apps/past/templates/past-enslavers/_sources.html:8
+#, fuzzy
+#| msgid ""
+msgctxt "Enslavers bio sources search panel description"
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-06-10 14:06+0000\n"
+"PO-Revision-Date: 2022-09-02 13:45-0300\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: en\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 2.2.3\n"
+
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#: voyages/apps/past/templates/past/_cultural-association.html:9
+#, fuzzy
+#| msgid ""
+msgctxt "Enslaved Cultural Association search panel description"
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-06-10 14:06+0000\n"
+"PO-Revision-Date: 2022-09-02 13:45-0300\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: en\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 2.2.3\n"
+
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#: voyages/apps/past/templates/past/_fate.html:8
+#, fuzzy
+#| msgid ""
+msgctxt "Enslaved Fate search panel description"
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-06-10 14:06+0000\n"
+"PO-Revision-Date: 2022-09-02 13:45-0300\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: en\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 2.2.3\n"
+
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#: voyages/apps/past/templates/past/_itinerary.html:9
+#, fuzzy
+#| msgid ""
+msgctxt "Enslaved Itinerary search panel description"
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-06-10 14:06+0000\n"
+"PO-Revision-Date: 2022-09-02 13:45-0300\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: en\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 2.2.3\n"
+
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#: voyages/apps/past/templates/past/_personal-data.html:9
+#, fuzzy
+#| msgid ""
+msgctxt "Enslaved Personal data search panel description"
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-06-10 14:06+0000\n"
+"PO-Revision-Date: 2022-09-02 13:45-0300\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: en\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 2.2.3\n"
+
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#: voyages/apps/past/templates/past/_sources.html:8
+#, fuzzy
+#| msgid ""
+msgctxt "Enslaved Source search panel description"
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-06-10 14:06+0000\n"
+"PO-Revision-Date: 2022-09-02 13:45-0300\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: en\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 2.2.3\n"
+
+#: voyages/apps/resources/templates/resources/about.html:6
+msgid "Enslaved Databases - About"
+msgstr ""
+
+#: voyages/apps/resources/templates/resources/about.html:17
+#: voyages/templates/topbar.html:50
+msgid "Enslaved Databases"
+msgstr ""
+
+#: voyages/apps/resources/templates/resources/about.html:18
+msgid "Understanding the Databases"
+msgstr ""
+
+#: voyages/apps/resources/templates/resources/enslavers-about.html:6
+msgid "Enslaver Database - About"
+msgstr ""
+
+#: voyages/apps/resources/templates/resources/enslavers-about.html:17
+msgid "Enslaver Database"
+msgstr ""
+
+#: voyages/apps/static_content/templates/static_content/index.html:249
+msgid ""
+"\n"
+"\t\t\t\t\t\tPeople of the Atlantic Slave Trade allows users to search three "
+"distinct databases. Two document enslaved people; one concerns enslavers. "
+"The African Origins dataset includes personal details of 95,153 Africans "
+"taken from slave ships mostly captured by anti-slave trade patrols or from "
+"African trading sites between 1808-1862. Users can view the personal details "
+"of Africans liberated from slave vessels, hear their names pronounced, and "
+"contribute to the project by suggesting the likely language origins of the "
+"names in the records. The Oceans of Kinfolk dataset includes the personal "
+"details of 63,562 people transported to New Orleans, and in many cases "
+"records on the people who transported, bought, and sold them there. Users "
+"can analyze the name, age, gender, origin, places of embarkation and "
+"disembarkation of these individuals, and some of their linkages to "
+"enslavers. The Enslavers database lists nearly 60,000 individuals or "
+"commercial companies involved in the enslavement of Africans or people of "
+"African descent, lists the number of captives they enslaved, and provides "
+"links to the slave voyages in which they participated.\n"
+"\t\t\t\t\t\t"
+msgstr ""
+
+#: voyages/templates/topbar.html:52
+msgid "Oceans of Kinfolk"
+msgstr ""
 
 #~ msgctxt "search panel left menu"
 #~ msgid "Flag"

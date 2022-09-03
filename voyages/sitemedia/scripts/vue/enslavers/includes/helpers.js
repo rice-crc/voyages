@@ -107,9 +107,9 @@ var voyageColumns = [
   },
   {
     group : 'sources',
-    groupName : gettext('Source'),
+    groupName : gettext('Biographical Source'),
     fields : [
-      { data: "var_sources", label: gettext("Source of data"), isImputed: false }
+      { data: "var_sources", label: gettext("Biographical Source of data"), isImputed: false }
     ]
   }
 ];
@@ -994,8 +994,8 @@ function displayColumnOrder(order) {
 }
 
 function formatVoyages ( d ) {
-  var voyagesTable = '<div style="width: 100%; background-color: #FFFFFF; max-height:200px; overflow:auto;" class="d-flex flex-row-reverse enslaver-voyages"><table cellpadding="5" cellspacing="0" border="0">'+
-    '<tr>'+
+  var voyagesTable = '<div style="width: 100%; background-color: #FFFFFF;" class="d-flex flex-row-reverse enslaver-voyages"><table id="nested_enslaver_voyage_table" cellpadding="5" cellspacing="0" border="0">'+
+    '<thead><tr>'+
       '<th>'+gettext("Voyage ID")+'</th>'+
       '<th>'+gettext("Enslaver Alias")+'</th>'+
       '<th>'+gettext("Voyage Year")+'</th>'+
@@ -1004,7 +1004,7 @@ function formatVoyages ( d ) {
       '<th>'+gettext("Role")+'</th>'+
       '<th>'+gettext("Ship Name")+'</th>'+
       '<th><span>' + gettext("Captives Embarked") + '</span> <span class="badge badge-pill badge-secondary" data-toggle="tooltip" data-placement="top" title="' + gettext("Imputed results are calculated by an algorithm.") + '"> IMP </span></th>'+
-    '</tr>';
+    '</tr></thead><tbody>';
     d.voyages_list.forEach((item) => {
       voyagesTable += '<tr>'+
         '<td class="text-right">'+'<a href="javascript:void(0)" onclick="openVoyageModal(' + item.voyage_id + ');">' + item.voyage_id + '</a>'+'</td>'+
@@ -1017,7 +1017,7 @@ function formatVoyages ( d ) {
         '<td class="text-right">'+item.slaves_embarked+'</td>'+
       '</tr>';
     });
-    voyagesTable += '</table></div></td></tr><tr>';
+    voyagesTable += '</tbody></table></div></td></tr><tr>';
   return voyagesTable;
 }
 
@@ -1202,6 +1202,13 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
             }
             // Open this row
             row.child( formatVoyages(data) ).show();
+            $("#nested_enslaver_voyage_table").DataTable({
+              fixedHeader: true,
+              paging: false,
+              searching: false,
+              info: false,
+              scrollY: "200px"
+            });
             tr.addClass('shown');
             tdi.first().removeClass('fa-plus-square');
             tdi.first().addClass('fa-minus-square');

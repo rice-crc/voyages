@@ -3,7 +3,7 @@
 {% load sass_tags %}
 {% load i18n %}
 
-{% block title %} {% trans 'Enslaved Databases - About' %} {% endblock %}
+{% block title %} {% trans 'Enslaver Database - About' %} {% endblock %}
 
 {% block content %}
 
@@ -14,8 +14,8 @@
 
 <div id="flatpage" v-cloak>
   <v-breadcrumb 
-    module="{% trans 'Enslaved Databases' %}"
-    title="{% trans 'Understanding the Databases' %}"
+    module="{% trans 'Enslaver Database' %}"
+    title="{% trans 'Understanding the Database' %}"
     @clicked="navigate"></v-breadcrumb>
 
   <div class="container-new">
@@ -50,7 +50,25 @@
 <script src="{{ STATIC_URL }}scripts/library/axios@0.18.0.min.js" type="text/javascript"></script>
 <script src="{{ STATIC_URL }}scripts/vue/components/v-breadcrumb.js"></script>
 <script src="{{ STATIC_URL }}scripts/vue/components/v-flatpage.js"></script>
-<script src="{{ STATIC_URL }}scripts/vue/components/v-flatpage-data-african-about.js"></script>
+<script type="text/javascript">
+  // intialization of data object for voyage/about flatpage structure
+  data = {
+    title: {},
+    response: {},
+    articles: [],
+    content: "",
+    pathname: "enslavers-about",
+    previous: {
+      title: "",
+      index: 0,
+    },
+    next: {
+      title: "",
+      index: 0,
+    },
+    currentIndex: 0,
+  }
+</script>
 <script src="{{ STATIC_URL }}scripts/vue/flatpage.js"></script>
 
 <script type="text/javascript" src="https://npmcdn.com/js-offcanvas@1.0/dist/_js/js-offcanvas.pkgd.min.js" charset="utf-8"></script>

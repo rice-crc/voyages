@@ -976,7 +976,7 @@ class EnslavedSearch:
         if isinstance(self.order_by, list):
             order_by_ranking = None
             for x in self.order_by:
-                if x['columnName'] == 'ranking':
+                if is_fuzzy and x['columnName'] == 'ranking':
                     order_by_ranking = x['direction']
                     break
             orm_orderby = []
@@ -1317,6 +1317,9 @@ class EnslaverSearch:
             for x in self.order_by:
                 col_name = x['columnName']
                 if col_name == 'ranking':
+                    if not is_fuzzy:
+                        # The ranking column only exists for fuzzy searches.
+                        continue
                     order_by_ranking = x['direction']
                     orm_orderby = []
                     break
@@ -1332,7 +1335,7 @@ class EnslaverSearch:
             if orm_orderby:
                 q = q.order_by(*orm_orderby)
             else:
-                q = q.order_by('pk')
+                q = q.order_by('-cached_properties__enslaved_count')
 
         q = q.distinct()
         q = q.values(*fields)

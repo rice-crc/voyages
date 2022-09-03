@@ -2,8 +2,12 @@ var categoryNames = [
   gettext("Name"),
   gettext("Itinerary"),
   gettext("Personal Data"),
-  gettext("Sources"),
+  gettext("Biographical Sources"),
 ];
+
+function bioSourceHeader() {
+  return `${gettext("Biographical Sources")} <span class="badge badge-pill badge-secondary tooltip-pointer" data-toggle="tooltip" data-placement="top" title="${gettext("Sources for associated voyages appear in each voyage record")}"> SRC </span>`;
+}
 
 var allColumns = [
   // name
@@ -24,7 +28,7 @@ var allColumns = [
   { data: "death_year", className: "text-right", category: 2, header: gettext("Death Year"), isImputed: false },
 
   // sources
-  { data: "sources_list", category: 3, header: gettext("Sources"), isImputed: false, visible: false, orderable: false },
+  { data: "sources_list", category: 3, header: bioSourceHeader(), isImputed: false, visible: false, orderable: false },
 
 ];
 
