@@ -19,39 +19,27 @@ var categoryNames = [
 
 var allColumns = [
   [
-    // name
-    { data: "enslaved_id", category: 0, header: gettext("African ID"), isImputed: false },
-    { data: "names", category: 0, header: gettext("Names"), isImputed: false, nameBadge: true },
+    { data: "enslaved_id", category: 5, header: gettext("African ID"), isImputed: false },
+    { data: "names", category: 0, header: gettext("Historical Name"), isImputed: false, nameBadge: true },
     { data: "ranking", category: 0, header: gettext("Search Ranking"), isImputed: false, isUserSearchBased: true, visible: false },
+    { data: "recordings", category: 5, header: '<i class="fa fa-volume-up" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></i>', isImputed: false, isAudible: true, orderable: false },
     { data: "modern_names", category: 0, header: gettext("Modern Name"), isImputed: false },
-
-    // cultural association
-    // { data: "language_group__modern_country__name", category: 3, header: gettext("Modern Country"), isImputed: false, visible: false },
     { data: "language_group__name", category: 3, header: gettext("Language Group"), isImputed: false },
-
-    // personal data
+    { data: "enslaved_id", category: 5, header: gettext("Contribute"), isImputed: false, isContribute: true, orderable: false  },
+    // { data: "language_group__modern_country__name", category: 3, header: gettext("Modern Country"), isImputed: false, visible: false },
     { data: "age", category: 1, header: gettext("Age"), isImputed: false },
     { data: "gender", category: 1, header: gettext("Sex"), isImputed: false },
     { data: "height", category: 1, header: gettext("Height (in.)"), isImputed: false },
-
-    // itinerary
     { data: "voyage_id", category: 2, header: gettext("Voyage ID"), isImputed: false },
     { data: "voyage__voyage_ship__ship_name", category: 2, header: gettext("Ship Name"), isImputed: false },
+    { data: "voyage__voyage_dates__first_dis_of_slaves", category: 2, header: gettext("Arrival Year"), isImputed: false },
     { data: "voyage__voyage_itinerary__imp_principal_place_of_slave_purchase__place", category: 2, header: gettext("Embarkation Port"), isImputed: false },
     { data: "voyage__voyage_itinerary__imp_principal_port_slave_dis__place", category: 2, header: gettext("Disembarkation Port"), isImputed: false },
-    { data: "voyage__voyage_dates__first_dis_of_slaves", category: 2, header: gettext("Arrival Year"), isImputed: false },
-    { data: "voyage__voyage_itinerary__int_first_port_dis__place", category: 2, header: gettext("Intended Disembarkation Port"), isImputed: false },
-
-    //fate
     { data: "captive_fate__name", category: 3, header: gettext("Captive Fate"), isImputed: false },
+    { data: "voyage__voyage_itinerary__int_first_port_dis__place", category: 2, header: gettext("Intended Disembarkation Port"), isImputed: false },
     { data: "post_disembark_location__place", category: 3, header: gettext("Post Disembarkation Location"), isImputed: false },
     { data: "voyage__voyage_name_outcome__vessel_captured_outcome__label", category: 3, header: gettext("Vessel Fate"), isImputed: false },
-
-    // sources
     { data: "sources_list", category: 4, header: gettext("Sources"), isImputed: false, visible: false, orderable: false },
-
-    { data: "recordings", category: 5, header: '<i class="fa fa-volume-up" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></i>', isImputed: false, isAudible: true, orderable: false },
-    { data: "enslaved_id", category: 5, header: gettext("Contribute"), isImputed: false, isContribute: true, orderable: false  },
   ],
   [
     // Identity

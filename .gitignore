@@ -19,3 +19,8 @@ data/
 tmp/
 google_auth.json
 documents/audio/**
+
+voyages/sitemedia/admin
+voyages/sitemedia/autocomplete_light
+voyages/sitemedia/CACHE
+voyages/sitemedia/filebrowser

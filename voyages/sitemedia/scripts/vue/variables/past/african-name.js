@@ -13,7 +13,7 @@ var_enslaved_id = new NumberVariable({
 
 var_searched_name = new TextVariable({
     varName: "searched_name",
-    label: gettext("Name"),
+    label: gettext("Historical Name"),
     description: "",
   },{
     op: "contains",
