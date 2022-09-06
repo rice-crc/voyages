@@ -53,7 +53,7 @@ from voyages.apps.contribute.publication import (
     export_contributions, export_from_voyages, full_contribution_id,
     get_csv_writer, get_filtered_contributions, get_header_csv_text,
     publish_accepted_contributions, safe_writerow)
-from voyages.apps.past.models import Enslaved, EnslavedContribution, EnslavedContributionLanguageEntry, EnslavedContributionNameEntry, EnslavedContributionStatus, LanguageGroup
+from voyages.apps.past.models import Enslaved, EnslavedContribution, EnslavedContributionLanguageEntry, EnslavedContributionNameEntry, EnslavedContributionStatus, EnslaverAlias, EnslaverIdentity, EnslaverVoyageConnection, LanguageGroup, ModernCountry
 from voyages.apps.past.views import _get_audio_filename
 from voyages.apps.voyage.cache import VoyageCache
 from voyages.apps.voyage.forms import VoyagesSourcesAdminForm
@@ -2229,6 +2229,8 @@ def _expand_contrib(c):
                 "entry_pk": cl.pk,
                 "language_group_pk": cl.language_group.id,
                 "language_group_name": cl.language_group.name,
+                "modern_country_pk": cl.modern_country.id,
+                "modern_country_name": cl.modern_country.name,
             } for cl in c.contributed_language_groups.all()
         ],
         "notes": c.notes,
@@ -2336,6 +2338,7 @@ def publish_origins_editorial_review(request):
     # Note: we accept a value of -1 for language group to indicate that 
     # the language group should be cleared.
     clear_lang_group = False
+    modern_country = None
     if language_group is not None:
         language_group = int(language_group)
         clear_lang_group = language_group == -1
@@ -2343,15 +2346,18 @@ def publish_origins_editorial_review(request):
             lgpk = language_group
             language_group = LanguageGroup.get(pk=lgpk)
             if language_group is None:
-                return JsonResponse({ 'error': f'Language group with key={lgpk} was not found' })
+                return JsonResponse({ 'error': f'Language group with key={lgpk} was not found' }, status=404)
+            modern_country = ModernCountry.get(pk=data.get('modern_country', -1))
+            if modern_country is None:
+                return JsonResponse({ 'error': 'Modern country not found' }, status=404)
     # propagation should be a dict with keys: "pk", "notes" (optional)
     propagation = data['propagation']
     if len(propagation) == 0:
-        return JsonResponse({ 'error': 'At least one record should be selected for propagation' })
+        return JsonResponse({ 'error': 'At least one record should be selected for propagation' }, status=400)
     items = { e.pk: e for e in Enslaved.objects.filter(pk__in=[p["pk"] for p in propagation]) }
     for p in propagation:
         if p.pk not in items:
-            return JsonResponse({ 'error': f"The Enslaved entry with key {p['pk']} was not found" })
+            return JsonResponse({ 'error': f"The Enslaved entry with key {p['pk']} was not found" }, status=404)
     with transaction.atomic():
         for p in propagation:
             e = items[p["pk"]]
@@ -2359,8 +2365,10 @@ def publish_origins_editorial_review(request):
                 e.modern_name = modern_name
             if clear_lang_group:
                 e.language_group = None
+                e.modern_country = None
             elif language_group is not None:
                 e.language_group = language_group
+                e.modern_country = modern_country
             notes = p.get('notes')
             if notes is not None:
                 e.notes = notes
@@ -2368,3 +2376,76 @@ def publish_origins_editorial_review(request):
         contrib.status = EnslavedContributionStatus.ACCEPTED
         contrib.save()
     return JsonResponse({ 'result': f"Contribution propagated to {len(propagation)} records." })
+
+
+@login_required()
+@require_POST
+def init_enslaver_editorial_review(request):
+    # The output is described as follows
+    # mode: "merge" | "edit" | "split"
+    # originals: {pk: <Enslaver original data>}, must contain two for "merge" and 1 otherwise.
+    # <Enslaver original data>: { personal_data: { ... }, aliases: { alias: [ { voyage_id, basic_voyage_fields } ] } }.
+    data = json.loads(request.body)
+    mode = data.get('mode')
+    if mode not in ["merge", "edit", "split"]:
+        return JsonResponse({ 'error': 'Mode must be set to one of merge|edit|split' }, status=400)
+    enslavers = data.get('enslavers')
+    expected = 2 if mode == 'merge' else 1
+    if len(enslavers) != expected:
+        return JsonResponse({ 'error': f'Expected {expected} enslaver(s).' }, status=400)
+    originals = [EnslaverIdentity.objects.filter(pk=eid).values()[0] for eid in enslavers]
+
+    # This is not very efficient, but we do not expect this to be called too
+    # much and the number of objects should be quite small.
+    def _get_alias_data(alias):
+        return list(EnslaverVoyageConnection.objects.filter(enslaver_alias=alias). \
+            values('voyage__voyage_id', 'voyage__voyage_id', 'voyage__voyage_ship__ship_name', \
+                'voyage__voyage_dates__imp_arrival_at_port_of_dis',
+                'voyage__voyage_itinerary__imp_principal_place_of_slave_purchase__place',
+                'voyage__voyage_itinerary__imp_principal_port_slave_dis__place'))
+
+    def _get_enslaver_data(enslaver):
+        eid = enslaver.pop('id')
+        edata = { 'id': eid, 'personal_data': enslaver }
+        edata['aliases'] = { a.alias: _get_alias_data(a) for a in EnslaverAlias.objects.filter(identity=eid) }
+        return edata
+
+    identities = { e['id']: e for e in [_get_enslaver_data(enslaver) for enslaver in originals] }
+    if mode == 'merge':
+        merged = {}
+        for d in identities.values():
+            for k, v in d['personal_data'].items():
+                if v is not None:
+                    merged.setdefault(k, set()).add(v)
+        for k, v in merged.items():
+            v = list(v)
+            if len(v) == 1:
+                merged[k] = v[0]
+            else:
+                merged[k] = "conflict"
+        identities['merged'] = { 'personal_data': merged, 'aliases': { k: v for identity in identities.values() for k, v in identity['aliases'].items() } }
+        for k in identities.keys():
+            if k != 'merged':
+                # Clear the aliases from the original.
+                identities[k]['aliases'] = {}
+    if mode == 'split':
+        identities['split_left'] = { 'personal_data': dict(identities[0]), 'aliases': [] }
+        identities['split_right'] = { 'personal_data': dict(identities[0]), 'aliases': [] }
+    output = {
+        'mode': mode,
+        'identities': identities
+    }
+    return JsonResponse(output)
+
+@login_required()
+@require_POST
+def submit_enslaver_editorial_review(request):
+    """
+    Submit an enslaver editorial review which can be either:
+    - a merge between two EnslaverIdentity objects
+    - an edit of a single EnslaverIdentity
+    - a split of an EnslaverIdentity
+    The data format follows the return value of
+    `init_enslaver_editorial_review` 
+    """
+    raise Exception("TODO")

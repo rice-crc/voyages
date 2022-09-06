@@ -1,11 +1,11 @@
 {% load i18n %}
 
 <li class="nav-item dropdown">
-  <v-menu-title :count="filter.sources.count" title="{% trans 'Sources' %}"></v-menu-title>
+  <v-menu-title :count="filter.sources.count" title="{% trans 'Biographical Sources' %}"></v-menu-title>
 
-  <v-panel-singular @apply="apply" @reset="reset" group="sources" title="{% trans 'Sources' %}" sub-group="sources" :filters="filter.sources.sources" align="left">
+  <v-panel-singular @apply="apply" @reset="reset" group="sources" title="{% trans 'Biographical Sources' %}" sub-group="sources" :filters="filter.sources.sources" align="left">
     <div slot="v-panel-header">
-      <v-panel-header title="{% trans 'Sources' %}" description="{% trans 'Description' %}">
+      <v-panel-header title="{% trans 'Biographical Sources' %}" description="{% trans '' context 'Enslavers bio sources search panel description' %}">
         <div slot="v-modal-content"></div>
       </v-panel-header>
     </div>

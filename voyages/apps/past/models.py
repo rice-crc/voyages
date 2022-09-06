@@ -425,28 +425,6 @@ class EnslaverAlias(models.Model):
         verbose_name = 'Enslaver alias'
 
 
-class EnslaverMerger(EnslaverInfoAbstractBase):
-    """
-    Represents a merger of two or more identities.
-    We inherit from EnslaverInfoAbstractBase so that all personal fields
-    are also contained in the merger.
-    """
-    comments = models.CharField(max_length=1024)
-
-
-class EnslaverMergerItem(models.Model):
-    """
-    Represents a single identity that is part of a merger.
-    """
-    merger = models.ForeignKey('EnslaverMerger',
-                               null=False,
-                               on_delete=models.CASCADE)
-    # We do not use a foreign key to the identity since if the merger
-    # is accepted, some/all of the records may be deleted and the keys
-    # would either be invalid or set to null.
-    enslaver_identity_id = models.IntegerField(null=False)
-
-
 class EnslaverRole(NamedModelAbstractBase):
     pass
 
@@ -553,7 +531,10 @@ class Enslaved(models.Model):
     skin_color = models.CharField(max_length=100, null=True, db_index=True)
     language_group = models.ForeignKey(LanguageGroup, null=True,
                                        on_delete=models.CASCADE,
-                                       db_index=True)
+                                       db_index=True)                             
+    modern_country = models.ForeignKey(ModernCountry, null=True, default=None,
+                                        on_delete=models.CASCADE,
+                                        db_index=True)
     register_country = models.ForeignKey(RegisterCountry, null=True,
                                          on_delete=models.CASCADE,
                                         db_index=True)
@@ -616,6 +597,7 @@ class EnslavedContributionLanguageEntry(models.Model):
                                      related_name='contributed_language_groups')
     language_group = models.ForeignKey(LanguageGroup, null=True,
                                        on_delete=models.CASCADE)
+    modern_country = models.ForeignKey(ModernCountry, null=True, default=None, on_delete=models.CASCADE)
     order = models.IntegerField()
 
 
@@ -994,7 +976,7 @@ class EnslavedSearch:
         if isinstance(self.order_by, list):
             order_by_ranking = None
             for x in self.order_by:
-                if x['columnName'] == 'ranking':
+                if is_fuzzy and x['columnName'] == 'ranking':
                     order_by_ranking = x['direction']
                     break
             orm_orderby = []
@@ -1335,6 +1317,9 @@ class EnslaverSearch:
             for x in self.order_by:
                 col_name = x['columnName']
                 if col_name == 'ranking':
+                    if not is_fuzzy:
+                        # The ranking column only exists for fuzzy searches.
+                        continue
                     order_by_ranking = x['direction']
                     orm_orderby = []
                     break
@@ -1350,7 +1335,7 @@ class EnslaverSearch:
             if orm_orderby:
                 q = q.order_by(*orm_orderby)
             else:
-                q = q.order_by('pk')
+                q = q.order_by('-cached_properties__enslaved_count')
 
         q = q.distinct()
         q = q.values(*fields)

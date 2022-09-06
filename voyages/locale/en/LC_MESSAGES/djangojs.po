@@ -11,7 +11,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-07-19 20:22+0000\n"
 "POT-Creation-Date: 2022-06-10 14:06+0000\n"
-"PO-Revision-Date: 2022-07-22 17:00-0300\n"
+"PO-Revision-Date: 2022-09-03 15:51-0300\n"
 "PO-Revision-Date: 2022-06-10 11:31-0300\n"
 "Last-Translator: \n"
 "Last-Translator: \n"
@@ -26,7 +26,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.1.1\n"
+"X-Generator: Poedit 2.2.3\n"
 "X-Generator: Poedit 3.1\n"
 
 #: voyages/sitemedia/maps/js/voyagesMap.js:144
@@ -1578,7 +1578,7 @@ msgstr "Percentage of captives who died during crossing"
 #: voyages/static/scripts/vue/enslavers/includes/helpers.js:105
 msgctxt "enslavers popup label"
 msgid "AFRINFO"
-msgstr "African Info"
+msgstr "Captive Background"
 
 #: voyages/sitemedia/scripts/vue/enslavers/includes/helpers.js:110
 #: voyages/sitemedia/scripts/vue/includes/helpers.js:2657
@@ -4382,7 +4382,7 @@ msgstr "Percentage of captives who died during crossing"
 #: voyages/static/scripts/vue/past/includes/helpers.js:104
 msgctxt "past popup label"
 msgid "AFRINFO"
-msgstr "African Info"
+msgstr "Captive Background"
 
 #: voyages/sitemedia/scripts/vue/past/search.js:3
 #: voyages/static/scripts/scripts/vue/past/search.js:3
@@ -4770,7 +4770,7 @@ msgstr "Percentage of captives who died during crossing"
 #: voyages/static/scripts/vue/search.js:74
 msgctxt "datatable column header"
 msgid "AFRINFO"
-msgstr "African Info"
+msgstr "Captive Background"
 
 #: voyages/sitemedia/scripts/vue/search.js:77
 #: voyages/static/scripts/vue/search.js:77
@@ -5190,7 +5190,7 @@ msgstr "Please use whole numbers, e.g. 75"
 #: voyages/static/scripts/vue/variables/slave.js:263
 msgctxt "filter select label"
 msgid "AFRINFO"
-msgstr "African Info"
+msgstr "Captive Background"
 
 #: voyages/sitemedia/scripts/vue/variables/source.js:3
 #: voyages/static/scripts/vue/variables/source.js:3
@@ -6410,9 +6410,10 @@ msgstr ""
 msgctxt "filter select description"
 msgid "AFRINFO"
 msgstr ""
-"The list of values below contains labels that may be considered offensive. "
-"These terms are present in historical sources and are used here to "
-"accurately represent them."
+"The list of search terms below contains language many consider offensive. "
+"These terms derive from historical sources produced by slave traders and are "
+"reproduced here to allow users to interpret those sources for information on "
+"enslaved people’s backgrounds."
 
 #~ msgctxt "filter select label IAM"
 #~ msgid "Flag"
