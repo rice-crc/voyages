@@ -1,0 +1,63 @@
+.carousel
+{
+    width:1200px;
+    //margin:auto;
+    margin-left: 50px;
+    margin-right: 50px;
+}
+
+.carousel-inner  img
+{
+    height:300px !important;
+    width:auto !important; 
+    margin: auto;    
+    max-width: 95%;
+    object-fit: cover;
+    
+}
+
+.carousel-caption
+{
+    background: rgba(0, 0, 0, 0.3);        
+}
+
+.carousel-caption h5
+{
+    /*text-shadow: 0 0 2px blue;*/
+}
+
+.carousel-control-prev-icon, .carousel-control-next-icon
+{
+    //background-color: black;
+}
+
+.pagebreak
+{
+    background: white;      
+    overflow-y: scroll;
+}
+
+.pagebreak .card-body
+{
+    color: black !important;
+}
+
+a.popover-more
+{
+    float:right;
+}
+
+.carousel-control-next
+{
+    margin-right: -150px;
+}
+
+.carousel-control-prev
+{
+    margin-left: -150px;
+}
+
+.carousel-control-next, .carousel-control-prev
+{
+    opacity: 1;
+}

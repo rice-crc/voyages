@@ -341,3 +341,12 @@ input.button-save:hover {
 .custom-radio.custom-radio-xl {
     @include radio('xl');
 }
+
+.enslavers-content .badge-secondary {
+  color: #fff;
+  background-color: rgb(63, 150, 125);
+}
+
+.fa-plus-square, .fa-minus-square {
+  color: rgb(63, 150, 125);
+}

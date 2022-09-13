@@ -5,8 +5,32 @@ from builtins import str
 from django.db import models
 from django.db.models import Prefetch
 from django.utils.translation import ugettext as _
+from voyages.apps.common.models import NamedModelAbstractBase
 
 from voyages.apps.common.validators import date_csv_field_validator
+
+class AfricanInfo(NamedModelAbstractBase):
+    """
+    Used to capture information about the ethnicity or background of the
+    captives on a ship if found in merchants records or newspaper ads
+    """
+    possibly_offensive = models.BooleanField(
+        default=False,
+        help_text="Indicates that the wording used in this label might be offensive to readers")
+
+
+class CargoType(NamedModelAbstractBase):
+    """
+    Types of cargo that were shipped on the voyage along with captives.
+    """
+    pass
+
+
+class CargoUnit(NamedModelAbstractBase):
+    """
+    A unit of measure associated with cargo (weight/volume etc).
+    """
+    pass
 
 
 # Voyage Regions and Places
@@ -311,6 +335,21 @@ class VoyageShipOwnerConnection(models.Model):
 
     def __unicode__(self):
         return "Ship owner:"
+
+
+class VoyageCargoConnection(models.Model):
+    """
+    Specifies cargo that was shipped together with captives.
+    """
+    cargo = models.ForeignKey(CargoType, related_name="+",
+                              on_delete=models.CASCADE)
+    voyage = models.ForeignKey('Voyage', related_name="+",
+                               on_delete=models.CASCADE)
+    unit = models.ForeignKey(CargoUnit, related_name="+", null=True)
+    amount = models.FloatField("The amount of cargo according to the unit", null=True)
+
+    class Meta:
+        unique_together = ['voyage', 'cargo']
 
 
 # Voyage Outcome
@@ -1673,9 +1712,26 @@ class VoyageSourcesType(models.Model):
 
 
 class VoyageDataset:
+    """
+    An enumeration of Voyage Datasets. Note that in certain places we are using
+    a bitvector to represent the aggregation of multiple datasets. This means
+    that we use 2 ** DataSetIndex in the bit vector to represent its inclusion.
+    In particular, for a regular INT column in the database this limits the
+    range of indices we can use from [0, 30].
+    """
     Transatlantic = 0
     IntraAmerican = 1
     IntraAfrican = 2
+
+    @classmethod
+    def parse(cls, name):        
+        if name == 'trans':
+            return cls.Transatlantic
+        if name == 'intra':
+            return cls.IntraAmerican
+        if name == 'african':
+            return cls.IntraAfrican
+        raise Exception("Unknown Voyage dataset")
 
 
 # Voyage Sources
@@ -1742,11 +1798,17 @@ class LinkedVoyages(models.Model):
     """
     Allow pairs of voyages to be linked.
     """
-    first = models.ForeignKey('Voyage', related_name="links_to_other_voyages",
+    first = models.ForeignKey('Voyage', related_name="outgoing_to_other_voyages",
                               on_delete=models.CASCADE)
-    second = models.ForeignKey('Voyage', related_name="+",
+    second = models.ForeignKey('Voyage', related_name="incoming_from_other_voyages",
                                on_delete=models.CASCADE)
     mode = models.IntegerField()
+
+    def __str__(self):
+        return self.__unicode__()
+
+    def __unicode__(self):
+        return str(self.first) + " => " + str(self.second)
 
     # In this mode the first voyage is the IntraAmerican voyage
     # and the second is a transatlantic voyage.
@@ -1825,6 +1887,9 @@ class Voyage(models.Model):
                                             related_name='voyage_sources',
                                             blank=True)
 
+    african_info = models.ManyToManyField(AfricanInfo, related_name='african_info', blank=True)
+    cargo = models.ManyToManyField(CargoType, through='VoyageCargoConnection', blank=True)
+
     last_update = models.DateTimeField(auto_now=True)
     dataset = models.IntegerField(
         null=False,
@@ -1832,6 +1897,8 @@ class Voyage(models.Model):
         help_text='Which dataset the voyage belongs to '
                   '(e.g. Transatlantic, IntraAmerican)'
     )
+
+    comments = models.TextField(null=True, blank=True)
 
     # generate natural key
     def natural_key(self):
@@ -1914,6 +1981,9 @@ class VoyagesFullQueryHelper:
             Prefetch('voyage_ship_owner',
                      queryset=VoyageShipOwner.objects.order_by(
                          'owner_name__owner_order')),
+            Prefetch('african_info'),
+            Prefetch('cargo',
+                     queryset=VoyageCargoConnection.objects.prefetch_related('cargo').prefetch_related('unit')),
             Prefetch('group',
                      queryset=VoyageSourcesConnection.objects.prefetch_related(
                          'source').order_by('source_order')),
@@ -1925,9 +1995,13 @@ class VoyagesFullQueryHelper:
                          'particular_outcome', 'resistance', 'outcome_slaves',
                          'vessel_captured_outcome', 'outcome_owner').all()),
             Prefetch(
-                'links_to_other_voyages',
+                'outgoing_to_other_voyages',
                 queryset=LinkedVoyages.objects.select_related('second').only(
-                    'first_id', 'second_id', 'second__voyage_id'))
+                    'first_id', 'second_id', 'second__voyage_id')),
+            Prefetch(
+                'incoming_from_other_voyages',
+                queryset=LinkedVoyages.objects.select_related('first').only(
+                    'first_id', 'second_id', 'first__voyage_id'))
         ]
 
         for k, v in list(self.related_models.items()):

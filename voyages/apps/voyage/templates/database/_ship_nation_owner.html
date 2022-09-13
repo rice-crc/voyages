@@ -60,9 +60,11 @@
         </div>
       </v-panel>
 
-      <v-panel @apply="apply" @reset="reset" group="shipNationOwner" sub-group="flag" title="{% trans 'Flag' %}" :filters="filter.shipNationOwner.flag">
+      <v-panel @apply="apply" @reset="reset" group="shipNationOwner" sub-group="flag" title="{% trans 'NATIONAL' context 'search panel left menu' %}" :filters="filter.shipNationOwner.flag">
         <div slot="v-panel-header">
-          <v-panel-header title="{% trans 'Flag' %}" description="{% trans 'The flag (nationality) of the slave ship' %}">
+          <v-panel-header 
+           title="{% trans 'NATIONAL' context 'subpanel title' %}"
+           description="{% trans 'The flag (nationality) of the slave ship' %}">
             <div slot="v-modal-content"></div>
           </v-panel-header>
         </div>
@@ -107,6 +109,24 @@
           <v-number @change="changed"
             :filter="scope.filters.var_guns_mounted">
           </v-number>
+        </div>
+      </v-panel>
+
+      <v-panel @apply="apply" @reset="reset" group="shipNationOwner" sub-group="cargo" title="{% trans 'CARGO' context 'search panel left menu' %}" :filters="filter.shipNationOwner.cargo">
+        <div slot="v-panel-header">
+          <v-panel-header
+           title="{% trans 'CARGO' context 'subpanel title' %}"
+           description="">
+            <div slot="v-modal-content"></div>
+          </v-panel-header>
+        </div>
+
+        <div slot="v-panel-content" slot-scope="scope">
+          <code v-if="options.debug">{{scope.filters}}</code>
+          <v-treeselect
+            :filter="scope.filters.var_cargo"
+            @change="changed">
+          </v-treeselect>
         </div>
       </v-panel>
       </ul>

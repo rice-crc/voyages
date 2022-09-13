@@ -1,3 +1,7 @@
+function resetPagination(datatable) {
+  datatable.page('first').draw(false);
+}
+
 // main app
 var searchBar = new Vue({
   el: "#search-bar",
@@ -16,10 +20,42 @@ var searchBar = new Vue({
       captainAndCrew: captainAndCrew,
       slave: slave,
       source: source,
-      settings: settings
+      settings: settings,
+      comments: {
+        comments: {
+          var_comments: new TextVariable({
+            varName: "comments",
+            label: pgettext("voyages popup label", "COMMENTS"),
+            description: "",
+          },{
+            op: "contains",
+            searchTerm: null,
+          },{
+            isImputed: false,
+            isAdvanced: false
+          }),
+          count: {
+            changed: 0,
+            activated: 0,
+          }
+        },
+        count: {
+          changed: 0,
+          activated: 0,
+        },
+      }
+
     },
     filterData: {
-      treeselectOptions: {}
+      treeselectOptions: {
+        var_voyage_links: [{
+          id: "True",
+          label: gettext("Doesn't have Linked Voyages")
+        },{
+          id: "False",
+          label: gettext("Has Linked Voyages")
+        }]
+      }
     },
     activated: false,
     saved: [],
@@ -257,6 +293,21 @@ var searchBar = new Vue({
                     value = this.row.data[varName + "_lang"];
                   }
 
+                  // Patch linked voyages
+                  if (varName == "var_voyage_links" && value) {
+                    value = getFormattedLinkedVoyages(value);
+                  }
+
+                  // Patch cargo
+                  if (varName == "var_cargo" && value) {
+                    value = getFormattedCargo(value);
+                  }
+
+                  // Patch afrinfo
+                  if (varName == "var_afrinfo" && value) {
+                    value = getFormattedAfricanInfo(value);
+                  }
+
                   // Patch place variables
                   if (item.type == "place") {
                     value = this.row.data[varName.slice(0, -3) + "_lang"];
@@ -314,6 +365,7 @@ var searchBar = new Vue({
       if (!value) return "";
       if (value == "is one of") return "is";
       if (value == "is equal to") return "is";
+      if (value == "is null") return "is";
       return value;
     },
 
@@ -325,6 +377,13 @@ var searchBar = new Vue({
       if (/[0-9]{4}-[0-9]{2}-[0-9]{2}/.test(value))
         return value.match(/[0-9]{4}-[0-9]{2}-[0-9]{2}/)[0];
       if (Array.isArray(value)) return '"' + value.join('", "') + '"';
+      return value;
+    },
+
+    labelFormat: function(value) {
+      if (value == searchBar.filter.itinerary.voyage_link.var_voyage_links.label) {
+        return gettext("Linked Voyages");
+      }
       return value;
     }
   },
@@ -416,15 +475,15 @@ var searchBar = new Vue({
       // var searchTerms = searchAll(this.filter, this.filterData);
       // alert(JSON.stringify(searchTerms));
       // search(this.searchFilter, searchTerms);
-      $("#results_main_table").DataTable().state.clear();
       this.refresh();
+      resetPagination($("#results_main_table").DataTable());
     },
 
     // reset inputs, filters, and counts back to default state
     reset(group, subGroup) {
-      $("#results_main_table").DataTable().state.clear();
       resetFilter(this.filter, group, subGroup);
       this.refresh();
+      resetPagination($("#results_main_table").DataTable());
     },
 
     clearFilter(filter) {
@@ -440,9 +499,9 @@ var searchBar = new Vue({
     },
 
     resetAll() {
-      $("#results_main_table").DataTable().state.clear();
       this.refreshPage();
       this.resetURL();
+      resetPagination($("#results_main_table").DataTable());
     },
 
     refresh() {

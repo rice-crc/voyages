@@ -1,3 +1,7 @@
+function resetPagination(datatable) {
+  datatable.page('first').draw(false);
+}
+
 // main app
 var searchBar = new Vue({
   el: "#search-bar",
@@ -412,15 +416,15 @@ var searchBar = new Vue({
       // var searchTerms = searchAll(this.filter, this.filterData);
       // alert(JSON.stringify(searchTerms));
       // search(this.searchFilter, searchTerms);
-      $("#results_main_table").DataTable().state.clear();
       this.refresh();
+      resetPagination($("#results_main_table").DataTable());
     },
 
     // reset inputs, filters, and counts back to default state
     reset(group, subGroup) {
-      $("#results_main_table").DataTable().state.clear();
       resetFilter(this.filter, group, subGroup);
       this.refresh();
+      resetPagination($("#results_main_table").DataTable());
     },
 
     clearFilter(filter) {
@@ -436,9 +440,10 @@ var searchBar = new Vue({
     },
 
     resetAll() {
-      $("#results_main_table").DataTable().state.clear();
       this.refreshPage();
       this.resetURL();
+      $("#results_main_table").DataTable().page( 0 ).draw( false );
+      resetPagination($("#results_main_table").DataTable());
     },
 
     refresh() {

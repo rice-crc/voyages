@@ -13,6 +13,7 @@ from django.core.cache import cache
 from django.http import HttpResponse, HttpResponseBadRequest, JsonResponse
 from django.shortcuts import render
 from django.utils.translation import ugettext as _
+from django.utils.translation import pgettext_lazy
 from django.views.decorators.cache import cache_page
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
@@ -26,7 +27,7 @@ from voyages.apps.common.models import (SavedQuery,
                                         get_pks_from_haystack_results, get_values_from_haystack_results)
 from voyages.apps.common.views import \
     get_datatable_json_result as get_results_table
-from voyages.apps.voyage.models import (Nationality, OwnerOutcome,
+from voyages.apps.voyage.models import (AfricanInfo, CargoType, CargoUnit, Nationality, OwnerOutcome,
                                         ParticularOutcome, Place, Resistance,
                                         RigOfVessel, SlavesOutcome, TonType,
                                         VesselCapturedOutcome, Voyage,
@@ -56,9 +57,10 @@ _op_at_least = SearchOperator('is at least', 'gte', False)
 _op_between = SearchOperator('is between', 'range', True)
 _op_contains = SearchOperator('contains', 'contains', False)
 _op_one_of = SearchOperator('is one of', 'in', True)
+_op_isnull = SearchOperator('is null', '', False)
 # A list of operators used with Solr/Haystack to perform searches.
 _operators_list = [
-    _op_eq, _op_at_most, _op_at_least, _op_between, _op_contains, _op_one_of
+    _op_eq, _op_at_most, _op_at_least, _op_between, _op_contains, _op_one_of, _op_isnull
 ]
 _operators_dict = {op.front_end_op_str: op for op in _operators_list}
 
@@ -93,7 +95,7 @@ def perform_search(search, lang):
             term = term[0]
         skip = False
         if operator.front_end_op_str == _op_contains.front_end_op_str:
-            m = re.match(r'^\s*["\u201c](\*?)([^\*]*)(\*?)["\u201d]\s*$', term)
+            m = re.match(r'^\s*["\u201c](\*?)([^\*]*)(\*?)["\u201d]\s*$', str(term))
             if m:
                 # Change to exact match and remove quotes.
                 # Make sure we sanitize the input.
@@ -109,6 +111,10 @@ def perform_search(search, lang):
                 custom_terms.append(
                     f'var_{item["varName"]}_plaintext{xt}:("{term}")')
                 skip = True
+        if operator.front_end_op_str == _op_isnull.front_end_op_str:
+            neg = "-" if term == "True" else ''
+            custom_terms.append(f'{neg}var_{item["varName"]}:*')
+            skip = True
         if not skip:
             search_terms[f'var_{item["varName"]}__'
                          f'{operator.back_end_op_str}'] = term
@@ -131,7 +137,7 @@ def perform_search(search, lang):
             pass
     else:
         try:
-            dataset = int(dataset)
+            dataset = int(dataset) if dataset != '*' else -1
         except Exception:
             dataset = VoyageDataset.Transatlantic
     if dataset >= 0:
@@ -510,43 +516,47 @@ download_header_map = {
     "var_crew_died_complete_voyage":
         "Crew deaths during voyage",
     "var_crew_first_landing":
-        "Crew at first landing of slaves",
+        pgettext_lazy("datatable column header", "CREW3"),
     "var_crew_voyage_outset":
         "Crew at voyage outset",
     "var_date_departed_africa":
-        "Date vessel departed Africa",
+        pgettext_lazy("datatable column header", "DLSLATRA"),
     "var_departure_last_place_of_landing":
         "Date vessel departed for homeport",
     "var_display_settings":
         "Display in compact mode",
     "var_first_dis_of_slaves":
-        "Date vessel arrived with slaves",
+        pgettext_lazy("datatable column header", "DATARR32"),
     "var_first_landing_place_id":
-        "1st place of slave landing",
+        pgettext_lazy("datatable column header", "SLA1PORT"),
     "var_first_place_slave_purchase_id":
-        "1st place of slave purchase",
+        pgettext_lazy("datatable column header", "PLAC1TRA"),
     "var_guns_mounted":
         "Guns mounted",
+    "var_cargo":
+        pgettext_lazy("datatable column header", "CARGO"),
     "var_imp_arrival_at_port_of_dis":
         "Year of arrival at port of disembarkation",
     "var_imp_length_home_to_disembark":
-        "Voyage length, homeport to disembarkation",
+        pgettext_lazy("datatable column header", "VOY1IMP"),
     "var_imp_port_voyage_begin_id":
-        "Place where voyage began",
+        pgettext_lazy("datatable column header", "PTDEPIMP"),
     "var_imp_principal_place_of_slave_purchase_id":
-        "Principal place of slave purchase",
+        pgettext_lazy("datatable column header", "MJBYPTIMP"),
     "var_imp_principal_port_slave_dis_id":
-        "Principal place of slave landing",
+        pgettext_lazy("datatable column header", "MJSLPTIMP"),
     "var_imp_total_num_slaves_purchased":
         "Total embarked",
     "var_imp_total_slaves_disembarked":
         "Total disembarked",
     "var_imputed_death_middle_passage":
-        "Slaves died during middle passage",
+        pgettext_lazy("datatable column header", "VYMRTIMP"),
     "var_imputed_mortality":
-        "Mortality rate",
+        pgettext_lazy("datatable column header", "VYMRTRAT"),
+    "var_afrinfo":
+        pgettext_lazy("datatable column header", "AFRINFO"),
     "var_imputed_nationality":
-        "Flag (imputed)",
+        pgettext_lazy("datatable column header", "NATINIMP"),
     "var_imputed_percentage_boys":
         "Percent boys",
     "var_imputed_percentage_child":
@@ -562,35 +572,35 @@ download_header_map = {
     "var_imputed_sterling_cash":
         "Sterling cash price in Jamaica",
     "var_length_middle_passage_days":
-        "Middle passage",
+        pgettext_lazy("datatable column header", "VOYAGE"),
     "var_nationality":
-        "Flag",
+        pgettext_lazy("datatable column header", "NATIONAL"),
     "var_num_slaves_carried_first_port":
-        "Slaves carried from 1st port",
+        pgettext_lazy("datatable column header", "NCAR13"),
     "var_num_slaves_carried_second_port":
-        "Slaves carried from 2nd port",
+        pgettext_lazy("datatable column header", "NCAR15"),
     "var_num_slaves_carried_third_port":
-        "Slaves carried from 3rd port",
+        pgettext_lazy("datatable column header", "NCAR17"),
     "var_num_slaves_disembark_first_place":
-        "Slaves landed at 1st port",
+        pgettext_lazy("datatable column header", "SLAS32"),
     "var_num_slaves_disembark_second_place":
-        "Slaves landed at 2nd port",
+        pgettext_lazy("datatable column header", "SLAS36"),
     "var_num_slaves_disembark_third_place":
-        "Slaves landed at 3rd port",
+        pgettext_lazy("datatable column header", "SLAS39"),
     "var_num_slaves_intended_first_port":
-        "Slaves intended at 1st place",
+        pgettext_lazy("datatable column header", "SLINTEND"),
     "var_outcome_owner":
         "Outcome of voyage for owner",
     "var_outcome_ship_captured":
         "Outcome of voyage if ship captured",
     "var_outcome_slaves":
-        "Outcome of voyage for slaves",
+        pgettext_lazy("datatable column header", "FATE2"),
     "var_outcome_voyage":
         "Particular outcome of voyage",
     "var_owner":
         "Vessel owner",
     "var_place_voyage_ended_id":
-        "Place where voyage ended",
+        pgettext_lazy("datatable column header", "PORTRET"),
     "var_port_of_call_before_atl_crossing_id":
         "Places of call before Atlantic crossing",
     "var_registered_place_idnum":
@@ -598,39 +608,39 @@ download_header_map = {
     "var_registered_year":
         "Year registered",
     "var_resistance":
-        "African resistance",
+        pgettext_lazy("datatable column header", "RESISTANCE"),
     "var_rig_of_vessel":
-        "Rig of vessel",
+        pgettext_lazy("datatable column header", "RIG"),
     "var_search_settings":
         "Show advanced variables in search filters",
     "var_second_landing_place_id":
-        "2nd place of slave landing",
+        pgettext_lazy("datatable column header", "ADPSALE1"),
     "var_second_place_slave_purchase_id":
-        "2nd place of slave purchase",
+        pgettext_lazy("datatable column header", "PLAC2TRA"),
     "var_ship_name":
         "Vessel name",
     "var_slave_purchase_began":
-        "Date trade began in Africa",
+        pgettext_lazy("datatable column header", "D1SLATRA"),
     "var_sources_plaintext":
         "Source of data",
     "var_third_landing_place_id":
-        "3rd place of slave landing",
+        pgettext_lazy("datatable column header", "ADPSALE2"),
     "var_third_place_slave_purchase_id":
-        "3rd place of slave purchase",
+        pgettext_lazy("datatable column header", "PLAC3TRA"),
     "var_tonnage":
         "Tonnage",
     "var_tonnage_mod":
         "Standardized tonnage",
     "var_total_num_slaves_arr_first_port_embark":
-        "Slaves arrived at 1st port",
+        pgettext_lazy("datatable column header", "SLAARRIV"),
     "var_total_num_slaves_purchased":
         "Total embarked",
     "var_vessel_construction_place_idnum":
         "Place constructed",
     "var_voyage_began":
-        "Date that voyage began",
+        pgettext_lazy("datatable column header", "DATEDEPA"),
     "var_voyage_completed":
-        "Date voyage completed",
+        pgettext_lazy("datatable column header", "DATARR43"),
     "var_voyage_id":
         "Voyage ID",
     "var_year_of_construction":
@@ -750,6 +760,12 @@ _options_model = {
     # Imputed nationality is currently restricted to a subset of code-values.
     'var_imputed_nationality':
         Nationality.objects.filter(value__in=[3, 6, 7, 8, 9, 10, 15, 30]),
+    'var_african_info':
+        AfricanInfo.objects,
+    'var_cargo_type':
+        CargoType.objects,
+    'var_cargo_unit':
+        CargoUnit.objects
 }
 
 
@@ -774,8 +790,8 @@ def get_var_options(request):
     is_cached = response_data is not None
     if not is_cached:
         response_data = [{
-            'label': x.label,
-            'value': x.value,
+            'label': x.label if hasattr(x, "label") else x.name,
+            'value': x.value if hasattr(x, "value") else x.pk,
             'pk': x.pk
         } for x in options_model.all()]
         # Cache the data for 24h.

@@ -10,6 +10,7 @@ from itertools import groupby
 
 from django.db.models import Max, Min
 from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import pgettext_lazy
 from past.builtins import basestring
 from past.utils import old_div
 
@@ -2084,25 +2085,25 @@ summary_statistics_columns = [
 
 summary_statistics = [
     {
-        'display_name': 'Slaves embarked *',
+        'display_name': pgettext_lazy("summary statistics label", "SLAXIMP"),
         'var_name': 'var_imp_total_num_slaves_purchased',
         'has_total': True,
         'is_percentage': False
     },
     {
-        'display_name': 'Slaves disembarked *',
+        'display_name': pgettext_lazy("summary statistics label", "SLAMIMP"),
         'var_name': 'var_imp_total_slaves_disembarked',
         'has_total': True,
         'is_percentage': False
     },
     {
-        'display_name': 'Percentage of slaves embarked who died during voyage',
+        'display_name': pgettext_lazy("summary statistics label", "Percentage of slaves embarked who died during voyage"),
         'var_name': 'var_imputed_mortality',
         'has_total': False,
         'is_percentage': True
     },
     {
-        'display_name': 'Length of Middle Passage (in days)',
+        'display_name': pgettext_lazy("summary statistics label", "VOYAGE"),
         'var_name': 'var_length_middle_passage_days',
         'has_total': False,
         'is_percentage': False
@@ -2120,7 +2121,7 @@ summary_statistics = [
         'is_percentage': True
     },
     {
-        'display_name': 'Tonnage of vessel',
+        'display_name': pgettext_lazy("summary statistics label", "TONNAGE"),
         'var_name': 'var_tonnage',
         'has_total': False,
         'is_percentage': False

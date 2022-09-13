@@ -47,6 +47,7 @@ var flatpage = new Vue({
   methods: {
 
     navigate(value) {
+      
       this.articles.forEach(function(article){
         article.isActive = false;
       });
@@ -58,6 +59,8 @@ var flatpage = new Vue({
       if (currentProtocol == "https:") {
         current.url = current.url.replace(/^http:\/\//i, 'https://');
       }
+
+      
 
       // update breadcrumb
       this.breadcrumb = [];
@@ -77,15 +80,22 @@ var flatpage = new Vue({
 
       axios.get(current.url)
       .then(function (response) {
-        // vm.content = response.data;
-        $("#center-content-inner").html(response.data)
-        // vm.updateNav();
-        // use a hash system to determine a particular page
-        var hashURL = vm.extractURL(currentURL, vm.pathname, true);
-        if (window.location.href.match(/[^#]*/i)) {
-          window.location.href = window.location.href.match(/[^#]*/i)[0] + hashURL;
-        } else {
-          window.location.href = window.location.href + hashURL;
+        if (response.headers['content-type'] == 'application/json')
+        {
+          window.location.href =  response.data;
+        }
+        else
+        {
+          // vm.content = response.data;
+          $("#center-content-inner").html(response.data)
+          // vm.updateNav();
+          // use a hash system to determine a particular page
+          var hashURL = vm.extractURL(currentURL, vm.pathname, true);        
+          if (window.location.href.match(/[^#]*/i)) {
+            window.location.href = window.location.href.match(/[^#]*/i)[0] + hashURL;
+          } else {
+            window.location.href = window.location.href + hashURL;
+          }
         }
       })
       .catch(function (error) {
@@ -162,7 +172,7 @@ var flatpage = new Vue({
   created: function() {
     var vm = this;
     var host = window.location.origin;
-    var prefix = "/common/flatpagehierarchy/";
+  var prefix = "/common/flatpagehierarchy/";
     var pathname = window.location.pathname;
     var url = host + prefix + this.pathname;
 

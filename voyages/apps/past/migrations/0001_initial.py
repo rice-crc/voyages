@@ -94,7 +94,8 @@ class Migration(migrations.Migration):
                                            null=True)),
                 ('contribution',
                  models.ForeignKey(on_delete=django.db.models.deletion.CASCADE,
-                                   to='past.EnslavedContribution')),
+                                   to='past.EnslavedContribution',
+                                   related_name='contributed_language_groups')),
             ],
         ),
         migrations.CreateModel(
@@ -112,7 +113,8 @@ class Migration(migrations.Migration):
                                            null=True)),
                 ('contribution',
                  models.ForeignKey(on_delete=django.db.models.deletion.CASCADE,
-                                   to='past.EnslavedContribution')),
+                                   to='past.EnslavedContribution',
+                                   related_name='contributed_names')),
             ],
         ),
         migrations.CreateModel(

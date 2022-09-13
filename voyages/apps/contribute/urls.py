@@ -103,4 +103,17 @@ urlpatterns = [
     url(r'impute_contribution/(?P<editor_contribution_id>\d+)',
         views.impute_contribution,
         name='impute_contribution'),
+    # African Origins contribution backend API
+    url(r'list_origins_contributions',
+        views.get_origins_contributions,
+        name='list_origins_contributions'),
+    url(r'origins_contribution_details',
+        views.get_origins_contrib_details,
+        name='origins_contribution_details'),
+    url(r'reject_origins_contribution',
+        views.reject_origins_contribution,
+        name='reject_origins_contribution'),
+    url(r'publish_origins_editorial_review',
+        views.publish_origins_editorial_review,
+        name='publish_origins_editorial_review')
 ]

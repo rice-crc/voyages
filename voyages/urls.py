@@ -1,4 +1,7 @@
 from __future__ import absolute_import, unicode_literals
+from voyages.settings import is_feature_enabled
+
+from filebrowser.sites import site
 
 import django.contrib.sitemaps.views
 import django.views.i18n
@@ -27,6 +30,10 @@ js_info_dict = {
 }
 
 urlpatterns = [
+    url('admin/filebrowser/', site.urls),    
+    url('admin/', admin.site.urls),
+
+
     url(r'^',
         include('voyages.apps.static_content.urls',
                 namespace='static_content')),
@@ -40,6 +47,10 @@ urlpatterns = [
     url(r'^enslaved/(?P<link_id>\w+)',
         voyages.apps.past.views.restore_enslaved_permalink,
         name='restore_enslaved_permalink'),
+    url(r'^enslaver/(?P<link_id>\w+)',
+        voyages.apps.past.views.restore_enslaver_permalink,
+        name='restore_enslaver_permalink') \
+            if is_feature_enabled('ENSLAVERS') else None,
 
     # Include url handlers of each section
     url(r'^voyage/', include('voyages.apps.voyage.urls', namespace='voyage')),
@@ -71,6 +82,10 @@ urlpatterns = [
     url(r'^accounts/', include('allauth.urls')),
     url(r'^captcha/', include('captcha.urls'))
 ]
+
+if is_feature_enabled("BLOG"):
+    urlpatterns.append(url(r'^blog/',
+       include('voyages.apps.blog.urls', namespace='blog')))
 
 # XML generated sitemap
 sitemaps = {

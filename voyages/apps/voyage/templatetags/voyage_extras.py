@@ -7,12 +7,13 @@ from django.template import Context, Template
 from django.template.defaultfilters import stringfilter
 
 from voyages.apps.common.filters import (jsonify, replace_star, settings,
-                                         template, trans_log)
+                                         template, trans_log, feature_flag)
 
 register = template.Library()
 register.filter('trans_log', trans_log)
 register.filter('jsonify', jsonify)
 register.filter('replace_star', replace_star)
+register.tag('feature_flag', feature_flag)
 
 
 @register.filter
