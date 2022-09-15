@@ -115,5 +115,8 @@ urlpatterns = [
         name='reject_origins_contribution'),
     url(r'publish_origins_editorial_review',
         views.publish_origins_editorial_review,
-        name='publish_origins_editorial_review')
+        name='publish_origins_editorial_review'),
+    url(r'init_enslaver_interim',
+        views.init_enslaver_interim,
+        name='init_enslaver_interim')
 ]

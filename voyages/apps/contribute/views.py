@@ -2377,18 +2377,23 @@ def publish_origins_editorial_review(request):
         contrib.save()
     return JsonResponse({ 'result': f"Contribution propagated to {len(propagation)} records." })
 
-
-@login_required()
+@csrf_exempt
 @require_POST
-def init_enslaver_editorial_review(request):
-    # The output is described as follows
-    # mode: "merge" | "edit" | "split"
-    # originals: {pk: <Enslaver original data>}, must contain two for "merge" and 1 otherwise.
-    # <Enslaver original data>: { personal_data: { ... }, aliases: { alias: [ { voyage_id, basic_voyage_fields } ] } }.
+def init_enslaver_interim(request):
+    """
+    The output is described as follows
+    type: "merge" | "edit" | "split"
+    identities: {pk: <Enslaver original data>}, must contain two for "merge" and 1 otherwise.
+    <Enslaver original data>: { personal_data: { ... }, aliases: { alias: [ { voyage_id, basic_voyage_fields } ] } }.
+
+    This method does not change the database, it can be used to initialize
+    an interim object that can be modified by the client and submitted as
+    a contribution or editorial review.
+    """
     data = json.loads(request.body)
-    mode = data.get('mode')
+    mode = data.get('type')
     if mode not in ["merge", "edit", "split"]:
-        return JsonResponse({ 'error': 'Mode must be set to one of merge|edit|split' }, status=400)
+        return JsonResponse({ 'error': 'Type must be set to one of merge|edit|split' }, status=400)
     enslavers = data.get('enslavers')
     expected = 2 if mode == 'merge' else 1
     if len(enslavers) != expected:
@@ -2398,16 +2403,20 @@ def init_enslaver_editorial_review(request):
     # This is not very efficient, but we do not expect this to be called too
     # much and the number of objects should be quite small.
     def _get_alias_data(alias):
-        return list(EnslaverVoyageConnection.objects.filter(enslaver_alias=alias). \
-            values('voyage__voyage_id', 'voyage__voyage_id', 'voyage__voyage_ship__ship_name', \
-                'voyage__voyage_dates__imp_arrival_at_port_of_dis',
-                'voyage__voyage_itinerary__imp_principal_place_of_slave_purchase__place',
-                'voyage__voyage_itinerary__imp_principal_port_slave_dis__place'))
+        return {
+            "id": alias.id,
+            "name": alias.alias,
+            "voyages": list(EnslaverVoyageConnection.objects.filter(enslaver_alias=alias). \
+                values('voyage__voyage_id', 'voyage__voyage_id', 'voyage__voyage_ship__ship_name', \
+                    'voyage__voyage_dates__imp_arrival_at_port_of_dis',
+                    'voyage__voyage_itinerary__imp_principal_place_of_slave_purchase_id',
+                    'voyage__voyage_itinerary__imp_principal_port_slave_dis_id'))
+        }
 
     def _get_enslaver_data(enslaver):
         eid = enslaver.pop('id')
         edata = { 'id': eid, 'personal_data': enslaver }
-        edata['aliases'] = { a.alias: _get_alias_data(a) for a in EnslaverAlias.objects.filter(identity=eid) }
+        edata['aliases'] = { a.id: _get_alias_data(a) for a in EnslaverAlias.objects.filter(identity=eid) }
         return edata
 
     identities = { e['id']: e for e in [_get_enslaver_data(enslaver) for enslaver in originals] }
@@ -2432,7 +2441,7 @@ def init_enslaver_editorial_review(request):
         identities['split_left'] = { 'personal_data': dict(identities[0]), 'aliases': [] }
         identities['split_right'] = { 'personal_data': dict(identities[0]), 'aliases': [] }
     output = {
-        'mode': mode,
+        'type': mode,
         'identities': identities
     }
     return JsonResponse(output)

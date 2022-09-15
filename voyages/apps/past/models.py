@@ -353,7 +353,7 @@ class EnslaverCachedProperties(models.Model):
         q_captive_count_relations = EnslaverInRelation.objects \
             .select_related(*relation_fields) \
             .values(identity_field) \
-            .annotate(enslaved_count=Count(related_enslaved_field)) \
+            .annotate(enslaved_count=Count(related_enslaved_field, distinct=True)) \
             .values_list(identity_field, 'enslaved_count')
         for row in q_captive_count_voyageconn:
             helper.add_num(int(row[0]), 'enslaved_count', row[1])
@@ -1297,7 +1297,11 @@ class EnslaverSearch:
         if self.voyage_datasets is not None:
             bitvec = 0
             for x in self.voyage_datasets:
-                bitvec |= 2 ** VoyageDataset.parse(x)
+                idx_dataset = VoyageDataset.parse(x)
+                if idx_dataset < 0:
+                    bitvec = 0
+                    break
+                bitvec |= 2 ** idx_dataset
             if bitvec > 0:
                 q = q.annotate(voyage_datasets=BitsAndFunc('cached_properties__voyage_datasets', Value(bitvec)))
                 q = q.filter(voyage_datasets__gt=0)

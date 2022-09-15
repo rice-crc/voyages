@@ -1731,6 +1731,8 @@ class VoyageDataset:
             return cls.IntraAmerican
         if name == 'african':
             return cls.IntraAfrican
+        if name == 'neither':
+            return -1
         raise Exception("Unknown Voyage dataset")
 
 
