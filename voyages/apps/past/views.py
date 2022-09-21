@@ -33,7 +33,8 @@ def _generate_table(query, table_params, data_adapter=None):
             old_div(int(table_params.get('start', 0)), rows_per_page)
         paginator = Paginator(query, rows_per_page)
         page = paginator.page(current_page_num)
-    except Exception:
+    except Exception as e:
+        print(f"Failed query pagination: {e}")
         page = query
     response_data = {}
     try:
