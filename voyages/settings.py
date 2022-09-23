@@ -5,6 +5,8 @@ import sys
 
 from django.utils.translation import ugettext_lazy as _
 
+DEBUG  = True
+
 # Django settings for voyages project.
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -37,6 +39,9 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 # Example: "http://media.lawrence.com/static/"
 STATIC_URL = '/static/'
 
+FILEBROWSER_DIRECTORY = 'blog/'
+
+
 # SASS_PROCESSOR_ROOT = STATIC_URL
 
 # Additional locations of static files
@@ -44,7 +49,8 @@ STATICFILES_DIRS = (
     # Put strings here, like "/home/html/static" or "C:/www/django/static".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
-    os.path.join(BASE_DIR, 'sitemedia'),)
+    os.path.join(BASE_DIR, 'sitemedia'),
+    )
 
 # List of finder classes that know how to find static files in
 # various locations.
@@ -107,7 +113,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
             ],
             'string_if_invalid': 'Nothing',
-            'debug': True,
+            'debug': DEBUG,
         },
     },
 ]
@@ -119,6 +125,8 @@ SASS_PROCESSOR_INCLUDE_DIRS = [
 ]
 
 INSTALLED_APPS = (
+    'filebrowser',
+
     'autocomplete_light',
     'sass_processor',
     'django.contrib.auth',
@@ -159,7 +167,12 @@ INSTALLED_APPS = (
     # 'allauth.socialaccount.providers.facebook',
     'allauth.socialaccount.providers.google',
     # 'storages',
+    'voyages.apps.blog',    
+    
 )
+
+
+THUMBNAIL_PRESERVE_FORMAT = True
 
 I18N_HELPER_DEBUG = False
 I18N_HELPER_HTML = "<div class='i18n-helper' style='display: inline; "
@@ -188,6 +201,7 @@ LANGUAGES = (
     ('en', _('English')),
     ('es', _('Spanish')),
     ('pt', _('Portuguese')),
+    
 )
 DEFAULT_LANGUAGE = 0
 
@@ -209,6 +223,7 @@ SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 # import localsettings
 # This will override any previously set value
+FEATURE_FLAGS = None
 try:
     from .localsettings import *
 except ImportError as e:
@@ -217,6 +232,19 @@ except ImportError as e:
         setup details.''',
           file=sys.stderr)
     print(str(e))
+
+# In localsettings.py declare a dictionary FEATURE_FLAGS with keys being feature
+# name strings and boolean values indicating whether the feature is enabled or
+# disabled. Any missing key is treated as a *disabled* feature.
+
+def is_feature_enabled(feature_name):
+    if FEATURE_FLAGS is None:
+        return False
+    return FEATURE_FLAGS.get(feature_name, False)
+
+
+
+
 
 # Modify HAYSTACK config for fixture loading durring tests
 # It is not possible to use override_settings decorator
@@ -240,3 +268,4 @@ except Exception as e:
         file=sys.stderr)
 
 del sys
+

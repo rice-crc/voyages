@@ -1,4 +1,6 @@
 {% load i18n %}
+{% load voyage_extras %}
+{% feature_flag "BLOG" %}
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
 	<div class="nav-container">
@@ -61,13 +63,26 @@
 				<li class="nav-item dropdown" id="link-about">
 					<a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false" >{% trans 'About' %}</a>
 					<div class="dropdown-menu dropdown-menu-right">
-						<a class="dropdown-item" href="{% url 'about:about' %}">{% trans "About" %}</a>
-						<a class="dropdown-item" href="/about/about#news/10/en/">{% trans "News" %}</a>
+						<a class="dropdown-item" href="{% url 'about:about' %}">{% trans "About" %}</a>						
+						{% if BLOG %}
+							<a class="dropdown-item" href="{% url 'blog:news' %}">{% trans "News" %}</a>
+						{% endif %}
 						<a class="dropdown-item" href="https://docs.google.com/forms/d/e/1FAIpQLSc2xoG0_OpkW--hZUXAvwTB6ZuNYDze1MDre1c5gyH0MrS8Jw/viewform" rel="noopener noreferrer" target="_blank">{% trans "Provide User Feedback" %}</a>
 						<a class="dropdown-item" href="mailto:svopcom@googlegroups.com?subject=Report an Issue"  rel="noopener noreferrer" target="_blank">{% trans "Report Issues" %}</a>
 					</div>
 				</li>
-
+				{% if BLOG %}
+				<li class="nav-item dropdown" id="link-blog">
+					<a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false" >{% trans 'Blog' %}</a>
+					<div class="dropdown-menu dropdown-menu-right">						
+						<a class="dropdown-item" href="{% url 'blog:blog' %}">{% trans "All Posts" %}</a>
+						<a class="dropdown-item" href="{% url 'blog:institutions' %}">{% trans "Institutions" %}</a>
+						<a class="dropdown-item" href="{% url 'blog:authors' %}">{% trans "Authors" %}</a>
+						
+					</div>
+				</li>						
+				{% endif %}
+		
 				{% get_current_language as LANGUAGE_CODE %}
 				<li class="nav-item dropdown">
 					<a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">{{ LANGUAGE_CODE|upper }}</a>
