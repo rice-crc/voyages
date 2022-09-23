@@ -26,7 +26,7 @@ To set up your local environment and begin developing for this project, complete
 
 *Note: This document is geared toward MacOS but can be easily applied to Linux. Contribution for Windows users is welcome.*
 
-For reference, this document was written while testing on a 2018 MacBook Pro running MacOS Big Sur and Docker Desktop 3.2.2.
+For reference, this document was written while testing on a 2018 MacBook Pro running MacOS Monterey and Docker Desktop 4.12.0.
 
 Make sure the Xcode Command Line Tools are installed.
 
@@ -180,11 +180,11 @@ For more details, check the full [Development Workflow](#development-workflow) s
 git clone https://github.com/<username>/voyages.git
 cd voyages
 
-# Any time you start new work, make sure your develop branch is up-to-date
+# Any time you start new work, make sure your main branch is up-to-date
 # with the remote on GitHub.
 
-git checkout develop
-git fetch upstream && git rebase upstream/develop
+git checkout main
+git fetch upstream && git rebase upstream/main
 
 # Create a working branch to isolate your changes and begin your work.
 
@@ -195,7 +195,7 @@ git checkout -b short-desc
 # When your work is complete, pull the latest changes, resolve any merge
 # conflicts, and then commit your work.
 
-git fetch upstream && git rebase upstream/develop
+git fetch upstream && git rebase upstream/main
 git add . && git commit
 
 # When ready, push your branch to your fork. Visit the repository on GitHub
@@ -205,8 +205,8 @@ git push origin HEAD
 
 # Once the Pull Request is accepted and merged, clean up your work.
 
-git checkout develop && git branch -D short-desc
-git fetch upstream && git rebase upstream/develop
+git checkout main && git branch -D short-desc
+git fetch upstream && git rebase upstream/main
 git push
 ```
 
@@ -216,28 +216,28 @@ Visit the repository on GitHub to make a Pull Request.
 
 ## Development Workflow
 
-There are two protected branches in the repository: main and develop (which serves as an integration branch).
+There is one protected branch in the repository: main.
 
 ### Update Your Fork
 
-Ensure your fork is current and that you have the latest changes from the upstream develop branch.
+Ensure your fork is current and that you have the latest changes from the upstream main branch.
 
 ```bash
-host:~/Projects/voyages (develop)$ git fetch upstream
+host:~/Projects/voyages (main)$ git fetch upstream
 ```
 
-Rebase the upstream repository's develop branch.
+Rebase the upstream repository's main branch.
 
 ```bash
-host:~/Projects/voyages (develop)$ git rebase upstream/develop
+host:~/Projects/voyages (main)$ git rebase upstream/main
 ```
 
-Your local develop branch is now up-to-date with upstream.
+Your local main branch is now up-to-date with upstream.
 
 To update your fork on GitHub, push your changes.
 
 ```bash
-host:~/Projects/voyages (develop)$ git push
+host:~/Projects/voyages (main)$ git push
 ```
 
 [Return to Top](#table-of-contents)
@@ -251,7 +251,7 @@ Continue your development work.
 Create a new local branch using the naming convention "short-desc".
 
 ```bash
-host:~/Projects/voyages (develop)$  git checkout -b short-desc
+host:~/Projects/voyages (main)$  git checkout -b short-desc
 ```
 
 #### Stage & Commit Your Work
@@ -279,7 +279,7 @@ Ensure no additional changes have been made to the upstream repository and rebas
 
 ```bash
 host:~/Projects/voyages (short-desc)$ git fetch upstream
-host:~/Projects/voyages (short-desc)$ git rebase upstream/develop
+host:~/Projects/voyages (short-desc)$ git rebase upstream/main
 ```
 
 #### Push Your Working Branch
@@ -294,7 +294,7 @@ host:~/Projects/voyages (short-desc)$ git push origin HEAD
 
 ### Make a Pull Request
 
-On GitHub, navigate to your forked repository and create a new pull request against upstream/develop which describes the proposed changes.
+On GitHub, navigate to your forked repository and create a new pull request against upstream/main which describes the proposed changes.
 
 [Return to Top](#table-of-contents)
 
@@ -305,30 +305,27 @@ Once the pull request has been reviewed, approved, and merged into the upstream 
 #### Delete the Working Branch
 
 ```bash
-host:~/Projects/voyages (short-desc)$ git checkout develop
-host:~/Projects/voyages (develop)$ git branch -D short-desc
+host:~/Projects/voyages (short-desc)$ git checkout main
+host:~/Projects/voyages (main)$ git branch -D short-desc
 ```
 
 #### Update Your Fork
 
 ```bash
-host:~/Projects/voyages (develop)$ git fetch upstream
-host:~/Projects/voyages (develop)$ git rebase upstream/develop
+host:~/Projects/voyages (main)$ git fetch upstream
+host:~/Projects/voyages (main)$ git rebase upstream/main
 
-host:~/Projects/voyages (develop)$ git push
+host:~/Projects/voyages (main)$ git push
 ```
 
 [Return to Top](#table-of-contents)
 
 ## Deployment Workflow
 
-The OCI build instance pulls updates from the main branch in `rice-crc/voyages` every five minutes.
-
-When changes are received, an offline Django container is automatically built on each of the remote app instances.
-
-Once complete, Nginx containers on the app instances are updated to point at the new Django containers.
-
-The new containers are live and the now-offline containers are removed.
+* The main branch should always be ready to deploy to production. Do not merge untested or unfinished code. PRs should be thoroughly tested beforehand.
+* Once a PR has been merged, the main branch is deployed to a pre-release environment.
+* A tag and GitHub production release is created off the main branch using semantic versioning. Small and short PRs are a patch increment while PRs from a longer-living working branch are a minor increment.
+* A build instance in the OCI production environment is triggered to deploy the new tag.
 
 [Return to Top](#table-of-contents)
 
@@ -340,11 +337,13 @@ Yes, using Docker named volumes.
 
 Be careful if you remove the MySQL and Solr volumes as you'll need to rerun the lengthy reindex.
 
-_first, why would I want to remove these volumes?_
+_Why would I want to remove these volumes?_
+
 Because docker named volumes persist between container restarts, that means that if you switch between branches that, say, have different SQL or Solr schemas, you'll find conflicts arising.
 
-_what are my alternatives to wiping out the volumes?_
-If you're going to be switching frequently between different branches that have breaking changes to components that use persistent data, then consider, for instance, changing the names of [the database](https://github.com/JohnMulligan/voyages/blob/develop/voyages/localsettings.py.dist#L18) and [solr core](https://github.com/JohnMulligan/voyages/blob/develop/voyages/localsettings-local.py.default#L65) you use between these in your localsettings file.
+_What are my alternatives to wiping out the volumes?_
+
+If you're going to be switching frequently between different branches that have breaking changes to components that use persistent data, then consider, for instance, changing the names of [the database](https://github.com/rice-crc/voyages/blob/main/voyages/localsettings-local.py.default#L31) and [solr core](https://github.com/rice-crc/voyages/blob/main/voyages/localsettings-local.py.default#L72) you use between these in your localsettings file.
 
 ### How can I blow away my local copy of the project and restart?
 
