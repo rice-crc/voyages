@@ -9,11 +9,34 @@ from django.core import serializers
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext as _
 from past.builtins import basestring
+from voyages.settings import is_feature_enabled
 
 logger = logging.getLogger('trans')
 register = template.Library()
 re_has_alpha_chars = re.compile(r'.*[a-zA-Z\.]{2,}')
 
+class FeatureFlag(template.Node):
+    def __init__(self, feature_name):
+        self.feature_name = feature_name
+
+    def render(self, context):
+        context[self.feature_name] = is_feature_enabled(self.feature_name)
+        return ""
+
+@register.tag
+def feature_flag(parser, token):
+    try:
+        # split_contents() knows not to split quoted strings.
+        tag_name, feature_name = token.split_contents()
+    except ValueError:
+        raise template.TemplateSyntaxError(
+            "%r tag requires a single argument" % token.contents.split()[0]
+        )
+    if not (feature_name[0] == feature_name[-1] and feature_name[0] in ('"', "'")):
+        raise template.TemplateSyntaxError(
+            "%r tag's argument should be in quotes" % tag_name
+        )
+    return FeatureFlag(feature_name[1:-1])
 
 @register.filter
 def trans_log(val):
