@@ -189,9 +189,9 @@ def get_flat_page_tree(prefix, language=None):
         # order should be numeric
         order = None
         try:
-            order = float(order_str)
+            order = float(order_str) + 1
         except Exception:
-            pass
+            print(f"Bad order in flatpage URL {page.url}")
         d = structure
         for item in path:
             d = d.setdefault(item, {})
