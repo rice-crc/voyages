@@ -23,7 +23,15 @@
 
 
 <div class="nav-header">
-	<div>{% block title %} {% trans 'Echoes: The SlaveVoyages Blog' %} {% endblock title %}</div>
+	<div>
+    {% block title %}    
+      {% if title_override %}
+        {% trans title_override %}
+      {% else %}
+        {% trans 'Echoes: The SlaveVoyages Blog' %}
+      {% endif %}
+    {% endblock title %}
+  </div>
 	<div class="navbar-subtitle flex">
 		
 	</div>
