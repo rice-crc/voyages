@@ -6,6 +6,8 @@ from django.views.generic import TemplateView
 import voyages.apps.resources.views
 import voyages.apps.static_content.views
 
+from voyages.apps.blog.views import PostList
+
 urlpatterns = [
     url(r'^$',
         voyages.apps.static_content.views.get_static_content,
@@ -17,9 +19,7 @@ urlpatterns = [
     url(r'^downloads',
         TemplateView.as_view(template_name='resources/downloads.html'),
         name='downloads'),
-    url(r'^lessons',
-        TemplateView.as_view(template_name='resources/lessons.html'),
-        name='lessons'),
+    url(r'^lessons', PostList.as_view(), kwargs={"tag": "lessonplan", "title_override": "Lesson Plans"}, name='lessons'),
     url(r'^links',
         TemplateView.as_view(template_name='resources/links.html'),
         name='links'),
