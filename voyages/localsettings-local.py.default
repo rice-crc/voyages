@@ -5,6 +5,7 @@ from pygit2 import Repository
 # use the convention of naming the database and Solr core as
 # voyage_{branch name, excluding prefix feature/}
 dev_db_name = 'voyages_' + Repository('.').head.shorthand.replace('feature/', '')
+print("************",dev_db_name,"************")
 
 # Django local settings for voyages project.
 
@@ -69,9 +70,13 @@ LOCALE_PATHS = ('/srv/voyages/voyages/locale',)
 HAYSTACK_CONNECTIONS = {
     'default': {
         'ENGINE': 'haystack.backends.solr_backend.SolrEngine',
-        'URL': 'http://voyages-solr:8983/solr/' + dev_db_name
+        'URL': 'http://voyages-solr:8983/solr/' + dev_db_name,
+        'TIMEOUT': 60 * 5,
+        'BATCH_SIZE': 1000
     },
 }
+
+FEATURE_FLAGS = {'BLOG': True}
 
 # Real time signal processor for updating index
 HAYSTACK_SIGNAL_PROCESSOR = 'haystack.signals.RealtimeSignalProcessor'
