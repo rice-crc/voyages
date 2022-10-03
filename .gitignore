@@ -17,3 +17,7 @@ voyages/sitemedia/scss/**/*.map
 voyages/static
 data/
 tmp/
+google_auth.json
+documents/audio/**
+documents/blog/**
+documents/_versions/**
