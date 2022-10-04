@@ -186,9 +186,9 @@ def search_enslaved(request):
             'voyage__voyage_itinerary__imp_principal_place_of_slave_purchase__place',
             'voyage__voyage_itinerary__imp_principal_port_slave_dis__place',
             'voyage__voyage_name_outcome__vessel_captured_outcome__label',
-            'captive_fate__name', 'post_disembark_location__place',
-            EnslavedSearch.SOURCES_LIST, EnslavedSearch.ENSLAVERS_LIST
-        ] + _name_fields + _modern_name_fields
+            'captive_fate__name', 'post_disembark_location__place'
+        ] + _name_fields + _modern_name_fields + \
+        [helper.projected_name for helper in EnslavedSearch.all_helpers]
     query = search.execute(fields)
     output_type = data.get('output', 'resultsTable')
     # For now we only support outputing the results to DataTables.
