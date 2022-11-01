@@ -1,6 +1,7 @@
 {% load i18n %}
 {% load voyage_extras %}
 {% feature_flag "BLOG" %}
+{% feature_flag "ENSLAVERS" %}
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
 	<div class="nav-container">
@@ -45,8 +46,14 @@
 					<a class="nav-link dropdown-toggle d-xs-block d-lg-none d-xl-block" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false" >{% trans 'People of the Atlantic Slave Trade' %}</a>
 					<a class="nav-link dropdown-toggle d-none d-lg-block d-xl-none" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false" >{% trans 'PAST' %}</a>
 					<div class="dropdown-menu">
-						<a class="dropdown-item" href="{% url 'resources:about' %}">Understanding the Database</a>
-						<a class="dropdown-item" href="{% url 'past:database' %}">{% trans "Database" %}</a>
+						<a class="dropdown-item" href="{% url 'resources:about' %}">Understanding the Enslaved Databases</a>
+						<a class="dropdown-item" href="{% url 'past:database' %}">{% trans "Enslaved Databases" %}</a>
+						<a class="dropdown-item" href="{% url 'past:database' %}/african-origins">&nbsp;&nbsp;&nbsp;&nbsp;{% trans "African Origins" %}</a>
+						<a class="dropdown-item" href="{% url 'past:database' %}/oceans-of-kinfolk">&nbsp;&nbsp;&nbsp;&nbsp;{% trans "Oceans of Kinfolk" %}</a>
+						{% if ENSLAVERS %}
+						<a class="dropdown-item" href="{% url 'resources:enslavers-about' %}">Understanding the Enslavers Database</a>
+						<a class="dropdown-item" href="{% url 'past:enslavers' %}">{% trans "Enslavers Database" %}</a>
+						{% endif %}
 						<a class="dropdown-item" href="{% url 'resources:downloads' %}">{% trans "Downloads" %}</a>
 					</div>
 				</li>
@@ -69,6 +76,7 @@
 						{% endif %}
 						<a class="dropdown-item" href="https://docs.google.com/forms/d/e/1FAIpQLSc2xoG0_OpkW--hZUXAvwTB6ZuNYDze1MDre1c5gyH0MrS8Jw/viewform" rel="noopener noreferrer" target="_blank">{% trans "Provide User Feedback" %}</a>
 						<a class="dropdown-item" href="mailto:svopcom@googlegroups.com?subject=Report an Issue"  rel="noopener noreferrer" target="_blank">{% trans "Report Issues" %}</a>
+						
 					</div>
 				</li>
 				{% if BLOG %}

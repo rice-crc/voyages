@@ -12,7 +12,7 @@ var_outcome_voyage = new TreeselectVariable({
 
 var_outcome_slaves = new TreeselectVariable({
     varName: "outcome_slaves",
-    label: gettext("Outcome of voyage for slaves"),
+    label: pgettext("filter select label", "FATE2"),
     description: "",
   },{
     op: "is one of",
@@ -48,8 +48,8 @@ var_outcome_owner = new TreeselectVariable({
 
 var_resistance = new TreeselectVariable({
     varName: "resistance",
-    label: gettext("African resistance"),
-    description: "",
+    label: pgettext("filter select label", "RESISTANCE"),
+    description: pgettext("filter select description", "RESISTANCE"),
   },{
     op: "is one of",
     searchTerm: [],

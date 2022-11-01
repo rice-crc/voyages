@@ -8,8 +8,7 @@ from datetime import date
 from django.conf import settings
 from django.core.paginator import Paginator
 from django.db import transaction
-from django.db.models import Prefetch
-from django.http import JsonResponse
+from django.http import JsonResponse, FileResponse
 from django.http.response import HttpResponseBadRequest
 from django.shortcuts import redirect, render
 from django.views.decorators.cache import cache_page
@@ -21,8 +20,8 @@ from voyages.apps.common.models import SavedQuery
 from voyages.apps.common.views import get_filtered_results
 from .models import (AltLanguageGroupName, Enslaved,
                      EnslavedContribution, EnslavedContributionLanguageEntry,
-                     EnslavedContributionNameEntry, EnslavedSearch,
-                     LanguageGroup, MultiValueHelper, ModernCountry, NameSearchCache,
+                     EnslavedContributionNameEntry, EnslavedSearch, EnslaverSearch, EnslaverVoyageConnection,
+                     LanguageGroup, MultiValueHelper, ModernCountry, EnslavedNameSearchCache,
                      _modern_name_fields, _name_fields)
 
 ENSLAVED_DATASETS = ['african-origins', 'oceans-of-kinfolk']
@@ -34,7 +33,8 @@ def _generate_table(query, table_params, data_adapter=None):
             old_div(int(table_params.get('start', 0)), rows_per_page)
         paginator = Paginator(query, rows_per_page)
         page = paginator.page(current_page_num)
-    except Exception:
+    except Exception as e:
+        print(f"Failed query pagination: {e}")
         page = query
     response_data = {}
     try:
@@ -64,6 +64,23 @@ def enslaved_database(request, dataset=None):
 
 @csrf_exempt
 @require_POST
+def get_enslaver_filtered_places(request):
+    data = json.loads(request.body)
+    var_name = data.get('var_name')
+    if var_name is None:
+        return JsonResponse({ "error": "var_name must be set" })
+    cache_key = f"_filtered_places_ENSLAVER_{var_name}"
+    var_name = f"voyage__voyage_itinerary__{var_name}"
+    qs = EnslaverVoyageConnection.objects \
+        .select_related(var_name) \
+        .values_list(var_name, flat=True) \
+        .distinct()
+    filtered = get_filtered_results(cache_key, qs)
+    filtered['filtered_var_name'] = var_name
+    return JsonResponse(filtered)
+
+@csrf_exempt
+@require_POST
 def get_enslaved_filtered_places(request):
     """
     Obtains a list of places and corresponding regions/broad regions that are
@@ -75,16 +92,16 @@ def get_enslaved_filtered_places(request):
     dataset = data.get('dataset')
     if var_name is None or dataset is None:
         return JsonResponse({ "error": "Both dataset and var_name must be set" })
-    cache_key = '_filtered_places_ENSLAVED_' + str(dataset) + "_" + var_name
+    cache_key = f"_filtered_places_ENSLAVED_{str(dataset)}_{var_name}"
     # Most location variables come from VoyageItinerary, but
     # post_disembarkation_location is only present in the Enslaved model
     # directly.
     if var_name != 'post_disembark_location_id':
-        var_name = 'voyage__voyage_itinerary__' + var_name
-    qs = Enslaved.objects.filter(dataset=dataset). \
-        select_related(var_name). \
-        values_list(var_name, flat=True). \
-        distinct()
+        var_name = f"voyage__voyage_itinerary__{var_name}"
+    qs = Enslaved.objects.filter(dataset=dataset) \
+        .select_related(var_name) \
+        .values_list(var_name, flat=True) \
+        .distinct()
     filtered = get_filtered_results(cache_key, qs)
     filtered['filtered_var_name'] = var_name
     filtered['dataset'] = dataset
@@ -119,6 +136,14 @@ def get_language_groups(_):
         for item in items], safe=False)
 
 
+@csrf_exempt
+@cache_page(3600)
+def get_enumeration(_, model_name):
+    from django.apps import apps
+    model = apps.get_model(app_label="past", model_name=model_name.replace('-', ''))
+    return JsonResponse({x.pk: x.name for x in model.objects.all()})
+
+
 def restore_enslaved_permalink(_, link_id):
     """Redirect the page with a URL param"""
     q = SavedQuery.objects.get(pk=link_id)
@@ -132,8 +157,14 @@ def restore_enslaved_permalink(_, link_id):
         pass
     return redirect("/past/database" + ds_name + "#searchId=" + link_id)
 
+
+def restore_enslaver_permalink(_, link_id):
+    return redirect(f"/past/enslavers#searchId={link_id}")
+
+
 def is_valid_name(name):
     return name is not None and name.strip() != ""
+
 
 @require_POST
 @csrf_exempt
@@ -154,9 +185,10 @@ def search_enslaved(request):
             'voyage__voyage_itinerary__int_first_port_dis__place',
             'voyage__voyage_itinerary__imp_principal_place_of_slave_purchase__place',
             'voyage__voyage_itinerary__imp_principal_port_slave_dis__place',
-            'captive_fate__name', 'post_disembark_location__place',
-            EnslavedSearch.SOURCES_LIST, EnslavedSearch.ENSLAVERS_LIST
-        ] + _name_fields + _modern_name_fields
+            'voyage__voyage_name_outcome__vessel_captured_outcome__label',
+            'captive_fate__name', 'post_disembark_location__place'
+        ] + _name_fields + _modern_name_fields + \
+        [helper.projected_name for helper in EnslavedSearch.all_helpers]
     query = search.execute(fields)
     output_type = data.get('output', 'resultsTable')
     # For now we only support outputing the results to DataTables.
@@ -191,13 +223,45 @@ def search_enslaved(request):
 
         table = _generate_table(query, data.get('tableParams', {}), adapter)
         page = table.get('data', [])
-        NameSearchCache.load()
+        EnslavedNameSearchCache.load()
         for entry in page:
-            entry['recordings'] = NameSearchCache.get_recordings(
+            entry['recordings'] = EnslavedNameSearchCache.get_recordings(
                 [entry[f] for f in _name_fields if f in entry])
         return JsonResponse(table)
     return JsonResponse({'error': 'Unsupported'})
 
+
+@require_POST
+@csrf_exempt
+def search_enslaver(request):
+    data = json.loads(request.body)
+    search = EnslaverSearch(**data['search_query'])
+    fields = data.get('fields')
+    if fields is None:
+        fields = [
+            'id',
+            'principal_alias',
+            'birth_year', 'birth_month', 'birth_day',
+            'death_year', 'death_month', 'death_day',
+            'cached_properties__enslaved_count',
+            EnslaverSearch.ALIASES_LIST,
+            EnslaverSearch.VOYAGES_LIST,
+            EnslaverSearch.SOURCES_LIST,
+            EnslaverSearch.RELATIONS_LIST
+        ]
+    query = search.execute(fields)
+    output_type = data.get('output', 'resultsTable')
+    # For now we only support outputing the results to DataTables.
+    if output_type == 'resultsTable':
+
+        def adapter(page):
+            for row in page:
+                EnslaverSearch.patch_row(row)
+            return page
+
+        table = _generate_table(query, data.get('tableParams', {}), adapter)
+        return JsonResponse(table)
+    return JsonResponse({'error': 'Unsupported'})
 
 @require_POST
 @csrf_exempt
@@ -221,7 +285,6 @@ def enslaved_contribution(request):
     contrib.date = date.today()
     contrib.enslaved = enslaved
     contrib.notes = str(data.get('notes', ''))  # Optional notes
-    # TODO: Do we require the user to be authenticated in order to contribute?
     contrib.contributor = request.user if request.user.is_authenticated(
     ) else None
     contrib.is_multilingual = bool(data.get('is_multilingual', False))
@@ -257,7 +320,6 @@ def enslaved_contribution(request):
                     'Invalid language entry in contribution')
             lang_entry.language_group = LanguageGroup.objects.get(
                 pk=lang_group_id) if lang_group_id else None
-            lang_entry.notes = lang.get('notes', '')
             lang_entry.save()
             language_ids.append(lang_entry.pk)
         result['language_ids'] = language_ids
@@ -267,6 +329,16 @@ def enslaved_contribution(request):
     result['audio_token'] = token
     return JsonResponse(result)
 
+def _get_audio_filename(contrib_pk, name_pk, full_path=True, check_exists=False):
+    filename = f"audio/{contrib_pk}_{name_pk}.webm"
+    fullname = f"{settings.MEDIA_ROOT}{filename}"
+    if full_path:
+        filename = fullname
+    if check_exists:
+        from os.path import exists
+        if not exists(fullname):
+            return None
+    return filename
 
 @require_POST
 @csrf_exempt
@@ -278,8 +350,7 @@ def store_audio(request, contrib_pk, name_pk, token):
     if contrib is None or contrib.token != token:
         return HttpResponseBadRequest('Contribution not found')
     name_pk = int(name_pk)
-    file_name = str(contrib_pk) + "_" + str(name_pk) + ".webm"
-    with open('%s/%s/%s' % (settings.MEDIA_ROOT, 'audio', file_name),
-              'wb+') as destination:
+    file_name = _get_audio_filename(contrib_pk, name_pk)
+    with open(file_name, 'wb+') as destination:
         destination.write(request.body)
     return JsonResponse({'len': len(request.body)})

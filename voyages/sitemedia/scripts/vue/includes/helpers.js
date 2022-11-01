@@ -186,6 +186,21 @@ function getFormattedSourceInTable(sources) {
   return value;
 }
 
+// get formated linked voyages by parsing through the backend response
+function getFormattedLinkedVoyages(linkedVoyages) {
+  var value = ""; // empty value string
+  if (linkedVoyages) {
+    linkedVoyages.forEach(function(linkedVoyage) {
+      var url = window.location.origin +
+                  "/voyage/" +
+                  linkedVoyage +
+                  '/variables';
+      value += "<div><a href=\""+url+"\" target=\"_blank\">"+linkedVoyage+"</a></div>";
+    });
+  }
+  return value;
+}
+
 // solr date format
 const SOLR_DATE_FORMAT = "YYYY-MM-DDThh:mm:ss[Z]";
 
@@ -226,6 +241,7 @@ var variableMapping = {
   tonnage: "var_tonnage",
   tonnage_mod: "var_tonnage_mod",
   guns_mounted: "var_guns_mounted",
+  cargo: "var_cargo",
 
   imp_port_voyage_begin_idnum: "var_imp_port_voyage_begin_id",
   imp_principal_place_of_slave_purchase_idnum:
@@ -262,6 +278,7 @@ var variableMapping = {
   imputed_sterling_cash: "var_imputed_sterling_cash",
   imputed_death_middle_passage: "var_imputed_death_middle_passage",
   imputed_mortality: "var_imputed_mortality",
+  afrinfo: "var_afrinfo",
 
   imp_length_home_to_disembark: "var_imp_length_home_to_disembark",
   length_middle_passage_days: "var_length_middle_passage_days",
@@ -418,18 +435,20 @@ function searchAll(filter, filterData) {
                     filter[key1][key2][key3].constructor.name ===
                     "TreeselectVariable"
                   ) {
-                    var sortedSelections = filter[key1][key2][key3].value[
-                      "searchTerm"
-                    ].sort(sortNumber);
-                    var searchTerm = [];
+                    if (Array.isArray(filter[key1][key2][key3].value["searchTerm"])) {
+                      var sortedSelections = filter[key1][key2][key3].value["searchTerm"].sort(sortNumber);
+                      var searchTerm = [];
 
-                    if (sortedSelections.includes("0")) {
-                      // select all
-                      filterData.treeselectOptions[varName][0].children.forEach(
-                        function(options) {
-                          searchTerm.push(options.id);
-                        }
-                      );
+                      if (sortedSelections.includes("0")) {
+                        // select all
+                        filterData.treeselectOptions[varName][0].children.forEach(
+                          function(options) {
+                            searchTerm.push(options.id);
+                          }
+                        );
+                      } else {
+                        searchTerm = filter[key1][key2][key3].value["searchTerm"];
+                      }
                     } else {
                       searchTerm = filter[key1][key2][key3].value["searchTerm"];
                     }
@@ -535,6 +554,14 @@ function searchAll(filter, filterData) {
                   item["varName"] = filter[key1][key2][key3].varName + "_idnum";
                 }
 
+                if (filter[key1][key2][key3].varName == "afrinfo") {
+                  item["varName"] = "afrinfo_ids";
+                }
+
+                if (filter[key1][key2][key3].varName == "cargo") {
+                  item["varName"] = "cargo_ids";
+                }
+
                 items.push(item);
               }
             }
@@ -627,13 +654,22 @@ function getTreeselectLabel(currentVariable, searchTerms, treeselectOptions) {
 
   if (currentVariable.constructor.name == "TreeselectVariable") {
     treeselectOptions = treeselectOptions["var_" + currentVariable.varName];
-    searchTerms.forEach(function(searchTerm) {
+
+    if (Array.isArray(searchTerms)) {
+      searchTerms.forEach(function(searchTerm) {
+        treeselectOptions.forEach(function(treeselectOption) {
+          if (treeselectOption.value == searchTerm) {
+            labels.push(treeselectOption.label);
+          }
+        });
+      });
+    } else {
       treeselectOptions.forEach(function(treeselectOption) {
-        if (treeselectOption.value == searchTerm) {
+        if (treeselectOption.value == searchTerms || treeselectOption.id == searchTerms) {
           labels.push(treeselectOption.label);
         }
       });
-    });
+    }
   } else if (currentVariable.constructor.name == "PlaceVariable") {
     treeselectOptions = treeselectOptions[currentVariable.varName][0];
     searchTerms.forEach(function(searchTerm) {
@@ -733,27 +769,39 @@ function loadTreeselectOptions(vm, vTreeselect, filter, callback) {
 
     // load TreeselectVariable
     else if (loadType == "treeselect") {
-      varName = "var_" + varName;
-      axios
-        .post("/voyage/var-options", {
-          var_name: varName
-        })
-        .then(function(response) {
-          response.data.data.map(function(data) {
-            data["id"] = data["value"];
+      if (varName == 'voyage_links') {
+        vTreeselect.treeselectOptions =
+              vm.filterData.treeselectOptions["var_" + varName];
+        callback(); // notify vue-treeselect about data population completion
+        return;
+      } else {
+        if (varName == "afrinfo") {
+          varName = "var_african_info";
+        } else if (varName == "cargo") {
+          varName = "var_cargo_type";
+        } else {
+          varName = "var_" + varName;
+        }
+        axios
+          .post("/voyage/var-options", {
+            var_name: varName
+          })
+          .then(function(response) {
+            response.data.data.map(function(data) {
+              data["id"] = data["value"];
+            });
+            vm.filterData.treeselectOptions[varName] = response.data.data;
+            vTreeselect.treeselectOptions =
+              vm.filterData.treeselectOptions[varName];
+            callback(); // notify vue-treeselect about data population completion
+            return;
+          })
+          .catch(function(error) {
+            $("#sv-loader").addClass("display-none");
+            $("#sv-loader-error").removeClass("display-none");
+            return error;
           });
-          vm.filterData.treeselectOptions[varName] = response.data.data;
-          vTreeselect.treeselectOptions =
-            vm.filterData.treeselectOptions[varName];
-          callback(); // notify vue-treeselect about data population completion
-          return;
-        })
-        .catch(function(error) {
-          options.errorMessage = error;
-          $("#sv-loader").addClass("display-none");
-          $("#sv-loader-error").removeClass("display-none");
-          return error;
-        });
+      }
     }
 
     // load weird place variables
@@ -930,8 +978,8 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
           // TEMP Yang: I don't think this is the right place for this code...
           // Besides, I think that this is attaching multiple handlers for
           // the click, which is inefficient.
-          $("#results_main_table tbody").on("click", "tr", function() {
-            searchBar.row.data = mainDatatable.row(this).data();
+          $("#results_main_table tbody").on("click", "td:not(.linked-voyages)", function() {
+            searchBar.row.data = mainDatatable.row($(this).parent()).data();
           });
 
           return JSON.stringify({
@@ -1071,15 +1119,15 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
         "<'row'<'col-sm-12'tr>>" +
         "<'row'<'col-sm-5'><'col-sm-7'p>>",
       lengthMenu: [
-        [15, 50, 100, 200],
-        ["15 rows", "50 rows", "100 rows", "200 rows"]
+        [15],
+        ["15 rows"]
       ],
 
       language: dtLanguage,
 
       buttons: [
         columnToggleMenu,
-        pageLength,
+        //pageLength,
         {
           extend: "collection",
           text:
@@ -1518,7 +1566,7 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
           scrollX: true,
           scrollCollapse: true,
           pageLength: 15,
-          lengthMenu: [[15, 50, 100, 200], ["15", "50", "100", "200"]],
+          lengthMenu: [[15], ["15"]],
           processing: true,
           dom:
             "<'flex-container'iB>" +
@@ -2512,4 +2560,158 @@ function redirectToIntraAmerican(query) {
   var isIntraAmericanQuery = varNames.includes("intra_american_voyage");
   var isTransAtlanticURL = window.location.href.includes("voyage/database");
   return isIntraAmericanQuery && isTransAtlanticURL;
+}
+
+function openVoyageModal(voyageId, dataset) {
+  var voyageColumns = [
+    {
+      group : 'ship_nation_owner',
+      groupName : gettext('Ship, Nation, Owners'),
+      fields : [
+        { data: "var_voyage_id"},
+        { data: "var_ship_name"},
+        { data: "var_owner"},
+        { data: "var_nationality"},
+        { data: "var_imputed_nationality"},
+        { data: "var_vessel_construction_place_lang"},
+        { data: "var_year_of_construction"},
+        { data: "var_registered_place_lang"},
+        { data: "var_registered_year"},
+        { data: "var_rig_of_vessel"},
+        { data: "var_tonnage"},
+        { data: "var_tonnage_mod"},
+        { data: "var_guns_mounted"},
+        { data: "var_cargo"}
+      ]
+    },
+    {
+      group : 'outcome',
+      groupName : gettext('Outcome'),
+      fields : [
+        { data: "var_outcome_voyage_lang"},
+        { data: "var_outcome_slaves_lang"},
+        { data: "var_outcome_ship_captured_lang"},
+        { data: "var_outcome_owner_lang"},
+        { data: "var_resistance_lang"}
+      ]
+    },
+    {
+      group : 'itinerary',
+      groupName : gettext('Itinerary'),
+      fields : [
+        { data: "var_imp_port_voyage_begin_lang"},
+        { data: "var_imp_principal_place_of_slave_purchase_lang"},
+        { data: "var_first_place_slave_purchase_lang"},
+        { data: "var_second_place_slave_purchase_lang"},
+        { data: "var_third_place_slave_purchase_lang"},
+        { data: "var_port_of_call_before_atl_crossing_lang"},
+        { data: "var_imp_principal_port_slave_dis_lang"},
+        { data: "var_first_landing_place_lang"},
+        { data: "var_second_landing_place_lang"},
+        { data: "var_third_landing_place_lang"},
+        { data: "var_place_voyage_ended_lang"},
+        { data: "var_voyage_links"}
+      ]
+    },
+    {
+      group : 'dates',
+      groupName : gettext('Dates'),
+      fields : [
+        { data: "var_imp_length_home_to_disembark"},
+        { data: "var_length_middle_passage_days"},
+        { data: "var_imp_arrival_at_port_of_dis"},
+        { data: "var_voyage_began_partial"},
+        { data: "var_slave_purchase_began_partial"},
+        { data: "var_date_departed_africa_partial"},
+        { data: "var_first_dis_of_slaves_partial"},
+        { data: "var_departure_last_place_of_landing_partial"},
+        { data: "var_voyage_completed_partial"}
+      ]
+    },
+    {
+      group : 'captain_and_crew',
+      groupName : gettext('Captain and Crew'),
+      fields : [
+        { data: "var_captain"},
+        { data: "var_crew_voyage_outset"},
+        { data: "var_crew_first_landing"},
+        { data: "var_crew_died_complete_voyage"}
+      ]
+    },
+    {
+      group : 'slaves',
+      groupName : gettext('Slaves'),
+      fields : [
+        { data: "var_imp_total_num_slaves_purchased"},
+        { data: "var_total_num_slaves_purchased"},
+        { data: "var_imp_total_slaves_disembarked"},
+        { data: "var_num_slaves_intended_first_port"},
+        { data: "var_num_slaves_carried_first_port"},
+        { data: "var_num_slaves_carried_second_port"},
+        { data: "var_num_slaves_carried_third_port"},
+        { data: "var_total_num_slaves_arr_first_port_embark"},
+        { data: "var_num_slaves_disembark_first_place"},
+        { data: "var_num_slaves_disembark_second_place"},
+        { data: "var_num_slaves_disembark_third_place"},
+        { data: "var_imputed_percentage_men"},
+        { data: "var_imputed_percentage_women"},
+        { data: "var_imputed_percentage_boys"},
+        { data: "var_imputed_percentage_girls"},
+        { data: "var_imputed_percentage_male"},
+        { data: "var_imputed_percentage_child"},
+        { data: "var_imputed_sterling_cash"},
+        { data: "var_imputed_death_middle_passage"},
+        { data: "var_imputed_mortality"},
+        { data: "var_afrinfo"}
+      ]
+    },
+    {
+      group : 'sources',
+      groupName : gettext('Source'),
+      fields : [
+        { data: "var_sources"}
+      ]
+    }
+  ];
+
+  var columns = [];
+  voyageColumns.forEach(function(group, key){
+    group.fields.forEach(function(field, key){
+      columns.push(field);
+    });
+  });
+  var params = {
+    "searchData": {
+      "items": [
+        {
+          "op": "equals",
+          "varName": "voyage_id",
+          "searchTerm": voyageId,
+        },
+        {
+          "op": "equals",
+          "varName": "dataset",
+          "searchTerm": dataset == undefined || dataset == null ? "-1" : dataset,
+        }
+      ]
+    },
+    "tableParams": {
+      "columns": columns
+    },
+    "output" : "resultsTable"
+  };
+
+  axios
+    .post('/voyage/api/search', params)
+    .then(function(response) {
+      if (response.data.data[0]) {
+        response.data.data[0]["var_sources_raw"] = response.data.data[0]["var_sources"];
+        searchBar.row.data = response.data.data[0];
+        searchBar.rowModalShow = true;
+      }
+      return;
+    })
+    .catch(function(error) {
+      return error;
+    });
 }

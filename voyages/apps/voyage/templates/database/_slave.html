@@ -148,6 +148,24 @@
 				</div>
 			</v-panel>
 
+			<v-panel @apply="apply" @reset="reset" group="slave" sub-group="africanInfo" title="{% trans 'AFRINFO' context 'search panel left menu' %}" :filters="filter.slave.africanInfo">
+				<div slot="v-panel-header">
+					<v-panel-header
+						title="{% trans 'AFRINFO' context 'subpanel title' %}"
+						description="">
+						<div slot="v-modal-content"></div>
+					</v-panel-header>
+				</div>
+
+				<div slot="v-panel-content" slot-scope="scope">
+					<code v-if="options.debug">{{scope.filters}}</code>
+					<v-treeselect
+						:filter="scope.filters.var_afrinfo"
+						@change="changed">
+					</v-treeselect>
+				</div>
+			</v-panel>
+
 			</ul>
 	</div>
 </li>

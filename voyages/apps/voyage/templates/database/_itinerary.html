@@ -5,10 +5,10 @@
 	<div class="">
 		<ul class="dropdown-menu search-menu" id="itinerary" role="menu">
 
-			<v-panel @reset="reset" group="itinerary" sub-group="departure" @apply="apply" title="{% trans 'Place of departure' %}" :filters="filter.itinerary.departure">
+			<v-panel @reset="reset" group="itinerary" sub-group="departure" @apply="apply" title="{% trans 'PORTDEP' context 'search panel left menu' %}" :filters="filter.itinerary.departure">
 
 				<div slot="v-panel-header">
-					<v-panel-header title="{% trans 'Place of departure' %}" description="{% trans 'Locations where the voyage began' %}">
+					<v-panel-header title="{% trans 'PORTDEP' context 'subpanel title' %}" description="{% trans 'Locations where the voyage began' %}">
 						<div slot="v-modal-content"></div>
 					</v-panel-header>
 				</div>
@@ -24,9 +24,9 @@
 				</div>
 			</v-panel>
 
-			<v-panel @reset="reset" group="itinerary" sub-group="purchase" @apply="apply" title="{% trans 'Place of purchase' %}" :filters="filter.itinerary.purchase">
+			<v-panel @reset="reset" group="itinerary" sub-group="purchase" @apply="apply" title="{% trans 'MAJBUYPT' context 'search panel left menu' %}" :filters="filter.itinerary.purchase">
 				<div slot="v-panel-header">
-					<v-panel-header title="{% trans 'Place of purchase' %}" description="{% trans 'Locations where captives embarked' %}">
+					<v-panel-header title="{% trans 'MAJBUYPT' context 'subpanel title' %}" description="{% trans 'Locations where captives embarked' %}">
 						<div slot="v-modal-content"></div>
 					</v-panel-header>
 				</div>
@@ -76,9 +76,9 @@
 				</div>
 			</v-panel>
 
-			<v-panel @reset="reset" group="itinerary" sub-group="landing" @apply="apply" title="{% trans 'Place of landing' %}" :filters="filter.itinerary.landing">
+			<v-panel @reset="reset" group="itinerary" sub-group="landing" @apply="apply" title="{% trans 'MAJSELPT' context 'search panel left menu' %}" :filters="filter.itinerary.landing">
 				<div slot="v-panel-header">
-					<v-panel-header title="{% trans 'Place of landing' %}" description="{% trans 'Locations where captives disembarked' %}">
+					<v-panel-header title="{% trans 'MAJSELPT' context 'subpanel title' %}" description="{% trans 'Locations where captives disembarked' %}">
 						<div slot="v-modal-content"></div>
 					</v-panel-header>
 				</div>
@@ -110,9 +110,9 @@
 				</div>
 			</v-panel>
 
-			<v-panel @reset="reset" group="itinerary" sub-group="destination" @apply="apply" title="{% trans 'Place where voyage ended' %}" :filters="filter.itinerary.destination">
+			<v-panel @reset="reset" group="itinerary" sub-group="destination" @apply="apply" title="{% trans 'PORTRET' context 'search panel left menu' %}" :filters="filter.itinerary.destination">
 				<div slot="v-panel-header">
-					<v-panel-header title="{% trans 'Place where voyage ended' %}" description="{% trans '' %}">
+					<v-panel-header title="{% trans 'PORTRET' context 'subpanel title' %}" description="{% trans '' %}">
 						<div slot="v-modal-content"></div>
 					</v-panel-header>
 				</div>
@@ -123,6 +123,22 @@
 						:filter="scope.filters.var_place_voyage_ended_id"
 						@change="changed">
 					</v-treeselect>
+
+				</div>
+			</v-panel>
+
+			<v-panel @reset="reset" group="itinerary" sub-group="voyage_link" @apply="apply" title="{% trans 'Linked Voyages' %}" :filters="filter.itinerary.voyage_link">
+				<div slot="v-panel-header">
+					<v-panel-header title="{% trans 'Linked Voyages' %}" description="{% trans '' %}">
+						<div slot="v-modal-content"></div>
+					</v-panel-header>
+				</div>
+
+				<div slot="v-panel-content" slot-scope="scope">
+					<code v-if="options.debug">{{scope.filters}}</code>
+					<v-toggle @change="changed"
+						:filter="scope.filters.var_voyage_links">
+					</v-toggle>
 
 				</div>
 			</v-panel>

@@ -216,6 +216,8 @@ def get_flat_page_tree(prefix, language=None):
 def get_flat_page_content(_, url):
     page = get_object_or_404(FlatPage, url=url)
     # Remove CDATA before we return
+
+    
     content = page.content.replace("// <![CDATA[", "").replace("// ]]>", "")
     content = re.sub(r'\{\{\s*MEDIA_URL\s*\}\}',
                      settings.MEDIA_URL,

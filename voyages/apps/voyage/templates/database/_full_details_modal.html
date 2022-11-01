@@ -28,7 +28,7 @@
           <b-card-body>
             <div class="row" v-for="variable in result.variables">
               <div class='col-md-4 text-bold'>
-                {{variable.label}}
+                {{variable.label | labelFormat}}
                 {% endverbatim %}
                 <b-badge pill v-if="variable.isImputed" v-b-tooltip.hover
                   title="{% trans 'Imputed results are calculated by an algorithm.' %}" variant="secondary"

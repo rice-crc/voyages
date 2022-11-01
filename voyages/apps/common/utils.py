@@ -77,11 +77,13 @@ class RowHelper:
         val = self.row.get(field_name, default)
         if val:
             val = val.strip()
-        if max_chars and len(val) > max_chars:
-            self.error_reporting.report('Field ' + field_name + ' is too long (>' + str(max_chars) + ' chars)')
+        if max_chars and val and len(val) > max_chars:
+            self.error_reporting.report('Field "' + field_name + '" is too long (>' + str(max_chars) + ' chars)')
+            # Truncate the field
+            val = val[:max_chars]
         return val
 
-    def get_by_value(self, model_type, field_name, key_name = 'value', allow_null=True, manager=None):
+    def get_by_value(self, model_type, field_name, key_name = 'value', allow_null=True, manager=None, remap=None):
         """
         Gets a model object of the given type by
         using its (integer) key code.
@@ -90,22 +92,36 @@ class RowHelper:
         """
         model_type_name = str(model_type)
         cached_cols = self.__class__.cached
-        col = cached_cols.get(model_type_name)
+        cache_key = model_type_name + '>>' + key_name
+        col = cached_cols.get(cache_key)
         if manager is None:
             manager = model_type.objects
         if col is None:
-            col = {getattr(x, key_name): x for x in manager.all()}
-            cached_cols[model_type_name] = col
-        ival = self.cint(field_name, allow_null)
-        if ival is None:
+            col = {str(getattr(x, key_name)): x for x in manager.all()}
+            cached_cols[cache_key] = col
+        src_val = self.get(field_name)
+        if src_val is None or src_val == '':
+            if not allow_null:
+                self.error_reporting.report('Null value for ' + field_name)
             return None
-        val = col.get(ival)
+        val = col.get(src_val)
+        if val is None and remap is not None:
+            remaped_val = remap.get(src_val)
+            if remaped_val is not None:
+                if isinstance(remaped_val, list):
+                    for rval in remaped_val:
+                        val = col.get(rval)
+                        if val is not None:
+                            break
+                else:
+                    val = col.get(remaped_val)
         if val is None:
-            msg = 'Failed to locate "' + model_type_name + '" with value: ' + \
-                str(ival) + ' for field "' + field_name + '"'
+            msg = 'Failed to locate "' + model_type_name + '" with value: "' + \
+                str(src_val) + '" for field "' + field_name + '"'
+            self.error_reporting.add_missing(model_type_name, src_val)
             if not allow_null:
                 raise Exception(msg)
-            self.error_reporting.report(msg, field_name + str(ival))
+            self.error_reporting.report(msg, field_name + str(src_val))
         return val
 
 
@@ -114,8 +130,8 @@ class BulkImportationHelper:
     Helper methods for bulk data importation.
     """
 
-    def __init__(self, target_db):
-        self.target_db = target_db
+    def __init__(self, target_db = None):
+        self.target_db = target_db if target_db else 'mysql'
 
     @staticmethod
     def read_to_dict(file):
@@ -128,7 +144,7 @@ class BulkImportationHelper:
                 [next(iterator).decode("utf-8-sig").lower().replace("_", "").encode('utf-8')],
                 iterator)
 
-        return unicodecsv.DictReader(lower_headers(file), delimiter=',', encoding='utf-8')
+        return unicodecsv.DictReader(lower_headers(file), delimiter=',', encoding='utf-8-sig')
 
     @staticmethod
     def bulk_insert(model, lst, attr_key=None, manager=None):
@@ -136,7 +152,7 @@ class BulkImportationHelper:
         Bulk insert model entries
         """
 
-        print('Bulk inserting ' + str(model))
+        print('Bulk inserting [' + str(len(lst)) + '] ' + str(model))
         if manager is None:
             manager = model.objects
         manager.bulk_create(lst, batch_size=100)
@@ -199,12 +215,16 @@ class ErrorReporting:
         self.line = 0
         self.errors = 0
         self.reported = {}
+        self.missing = {}
 
     def add_error(self):
         """
         Add 1 to the error count.
         """
         self.errors += 1
+
+    def add_missing(self, model, search_key):
+        self.missing.setdefault(model, []).append(search_key)
 
     def next_row(self):
         """
@@ -232,9 +252,75 @@ class ErrorReporting:
         self.reported[key] = msg_count + 1
         saturated = msg_count > 1
         if self.line > 0 and not saturated:
-            msg = '[' + str(self.line) +'] ' + msg
+            msg = f"{msg} [{self.line}]"
         if not saturated:
             sys.stderr.write(msg + '\n')
+
+
+class Trie:
+    def __init__(self, excluded_chars=[' ', ',', '(', ')'], multivalued=False):
+        self.trie = {}
+        self._end = '_end'
+        self.excluded_chars = excluded_chars
+        self.multivalued = multivalued
+
+    def add(self, key, value):
+        """
+        Add an entry to the tree. If multivalued, all the values will be placed
+        in a list and the key will map to that list. For single-valued tries,
+        only the last added entry with the same key is kept and no Exception is
+        raised in case a key is re-added.
+        """
+        dictionary = self.trie
+        has_star = False
+        for letter in key:
+            if letter in self.excluded_chars:
+                continue
+            if has_star:
+                raise Exception("Our trie only accepts a single * element and it must be the last character")
+            has_star = letter == '*'
+            dictionary = dictionary.setdefault(letter, {})
+        if self.multivalued:
+            leaf = dictionary.setdefault(self._end, [])
+            leaf.append(value)
+        else:
+            # Overwrite any existing value.
+            dictionary[self._end] = value
+
+    def get(self, key):
+        """
+        Look for an exact match in the Trie. If not found, None is returned. For
+        multivalued tries, the return is either a list with one or more matches
+        or None.
+        """
+        (best, _, is_exact) = self.get_longest_prefix_match(key)
+        return best if is_exact else None
+
+    def get_longest_prefix_match(self, key):
+        """
+        This method searches the trie and obtain the value whose key matches the
+        longest prefix of the given key.
+        """
+        best = None
+        match = ''
+        dictionary = self.trie
+        is_exact = True
+        star_match = None
+        for letter in key:
+            if letter in self.excluded_chars:
+                continue
+            is_exact = False
+            dictionary = dictionary.get(letter)
+            if dictionary is None:
+                break
+            match += letter
+            best = dictionary.get(self._end, best)
+            star_match = dictionary.get('*') or star_match
+            is_exact = True
+        if (not is_exact or (is_exact and best is None)) and star_match is not None and self._end in star_match:
+            best = star_match.get(self._end)
+            is_exact = True
+        return best, match, is_exact
 
 
 class SourceReferenceFinder:
@@ -242,30 +328,14 @@ class SourceReferenceFinder:
     This helper indexes source references.
     """
 
-    @staticmethod
-    def is_char_excluded(letter):
-        """
-        Determine if the character should be excluded when matching sources.
-        """
-        return letter in (' ', ',')
-
-    def __init__(self):
-        all_sources = VoyageSources.objects.all()
-        trie = {}
-        self._end = '_end'
-
-        def add_to_trie(_, value):
-            dictionary = trie
-            for letter in plain:
-                if self.__class__.is_char_excluded(letter):
-                    continue
-                dictionary = dictionary.setdefault(letter, {})
-            dictionary[self._end] = value
+    def __init__(self, all_sources = None):
+        if not all_sources:
+            all_sources = VoyageSources.objects.all()
+        self.trie = Trie()
 
         for source in all_sources:
             plain = unidecode(source.short_ref).lower()
-            add_to_trie(plain, source)
-        self.trie = trie
+            self.trie.add(plain, source)
 
     def get(self, ref):
         """
@@ -273,16 +343,6 @@ class SourceReferenceFinder:
         Source whose short reference matches the longest
         prefix of the given reference.
         """
-        best = None
-        match = ''
-        dictionary = self.trie
         plain = unidecode(ref).lower()
-        for letter in plain:
-            if self.__class__.is_char_excluded(letter):
-                continue
-            dictionary = dictionary.get(letter)
-            if dictionary is None:
-                break
-            match += letter
-            best = dictionary.get(self._end, best)
+        (best, match, _) = self.trie.get_longest_prefix_match(plain)
         return best, match

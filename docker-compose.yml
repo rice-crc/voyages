@@ -15,6 +15,7 @@ services:
       - "voyages"
     volumes:
       - "mysql_volume:/var/lib/mysql"
+    command: --slow-query-log=ON --long-query-time=3 --slow-query-log-file=/tmp/slow.log
     environment:
       MYSQL_ROOT_PASSWORD: "voyages"
 
