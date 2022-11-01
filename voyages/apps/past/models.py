@@ -422,7 +422,7 @@ class EnslaverCachedProperties(models.Model):
             .values(identity_field) \
             .annotate(enslaved_count=Sum(enslaved_count_field)) \
             .values_list(identity_field, 'enslaved_count')
-        related_enslaved_field = 'relation__enslaved__id'
+        related_enslaved_field = 'relation__enslaved__enslaved_id'
         relation_fields = [identity_field, related_enslaved_field]
         q_captive_count_relations = EnslaverInRelation.objects \
             .select_related(*relation_fields) \
