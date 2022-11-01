@@ -25,7 +25,7 @@ var_crew_voyage_outset = new NumberVariable({
 
 var_crew_first_landing = new NumberVariable({
     varName: "crew_first_landing",
-    label: gettext("Crew at first landing of slaves"),
+    label: pgettext("filter select label", "CREW3"),
     description: "",
   },{
     op: "is equal to",

@@ -9,7 +9,12 @@ register = template.Library()
 class PostList(generic.ListView):    
     template_name = 'blog/index.html'
     paginate_by = 10
-
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title_override'] = self.kwargs.get('title_override')
+        return context
+	
     def get_queryset(self):
         lang_code = self.request.LANGUAGE_CODE or "en"
 

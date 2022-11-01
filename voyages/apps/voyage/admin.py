@@ -11,7 +11,7 @@ from .forms import (VoyageCaptainConnectionForm, VoyageCrewForm,
                     VoyageShipForm, VoyageShipOwnerConnectionForm,
                     VoyageSlavesNumbersForm, VoyageSourcesConnectionForm,
                     VoyagesSourcesAdminForm)
-from .models import (BroadRegion, Nationality, OwnerOutcome, ParticularOutcome,
+from .models import (AfricanInfo, BroadRegion, CargoType, CargoUnit, LinkedVoyages, Nationality, OwnerOutcome, ParticularOutcome,
                      Place, Region, RigOfVessel, SlavesOutcome, TonType,
                      VesselCapturedOutcome, Voyage, VoyageCaptainConnection,
                      VoyageCrew, VoyageDates, VoyageGroupings, VoyageItinerary,
@@ -347,6 +347,11 @@ class VoyageAdmin(admin.ModelAdmin):
     class Meta:
         fields = '__all__'
 
+
+admin.site.register(AfricanInfo)
+admin.site.register(CargoType)
+admin.site.register(CargoUnit)
+admin.site.register(LinkedVoyages)
 
 # Re-register FlatPageAdmin
 admin.site.unregister(FlatPage)

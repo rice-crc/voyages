@@ -1185,8 +1185,6 @@ function addNotesPopup(id, $wrapper, spanStyle) {
 	
 			$wrapper          = $('<div>').addClass(settings.wrapperClass).addClass(classes).addClass(inputMode);
 			$control          = $('<div>').addClass(settings.inputClass).addClass('items').appendTo($wrapper)
-								.css("border-top-right-radius", "0")
-								.css("border-bottom-right-radius", "0")
 								.css("margin-right", "-1px");
 			var hasNotesPopup = !settings.hasOwnProperty('notesButton') || settings['notesButton'];
 			if (hasNotesPopup) {
@@ -1198,6 +1196,9 @@ function addNotesPopup(id, $wrapper, spanStyle) {
 				id = $input.attr('name');
 			}
 			if (hasNotesPopup) {
+				$control = $control
+					.css("border-top-right-radius", "0")
+					.css("border-bottom-right-radius", "0");
 				addNotesPopup(id, $wrapper, 'display: inline-block; vertical-align: top;');
 			}
 			$dropdown_parent  = $(settings.dropdownParent || $wrapper);

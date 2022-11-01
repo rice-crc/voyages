@@ -1,6 +1,6 @@
 var_source = new TextVariable({
     varName: "source",
-    label: gettext("Source"),
+    label: gettext("Biographical Source"),
     description: "",
   },{
     op: "contains",

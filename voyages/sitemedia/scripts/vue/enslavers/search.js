@@ -2,13 +2,17 @@ var categoryNames = [
   gettext("Name"),
   gettext("Itinerary"),
   gettext("Personal Data"),
-  gettext("Sources"),
+  gettext("Biographical Sources"),
 ];
+
+function bioSourceHeader() {
+  return `${gettext("Biographical Sources")} <span class="badge badge-pill badge-secondary tooltip-pointer" data-toggle="tooltip" data-placement="top" title="${gettext("Sources for associated voyages appear in each voyage record")}"> SRC </span>`;
+}
 
 var allColumns = [
   // name
-  { data: "principal_alias", category: 0, header: gettext("Full Name"), isImputed: false },
-  { data: "alias_list", category: 0, header: gettext("Alias List"), isImputed: false, orderable: false },
+  { data: "alias_list", category: 0, header: gettext("Full Name"), isImputed: false, orderable: false },
+  { data: "ranking", category: 0, header: gettext("Search Ranking"), isImputed: false, isUserSearchBased: true, visible: false },
 
   // voyages
   { data: "voyages_list", className: "dt-control text-center voyages", category: 1, header: gettext("Voyages"), isImputed: false, orderable: false, defaultContent: '' },
@@ -24,7 +28,7 @@ var allColumns = [
   { data: "death_year", className: "text-right", category: 2, header: gettext("Death Year"), isImputed: false },
 
   // sources
-  { data: "sources_list", category: 3, header: gettext("Sources"), isImputed: false, visible: false, orderable: false },
+  { data: "sources_list", category: 3, header: bioSourceHeader(), isImputed: false, visible: false, orderable: false },
 
 ];
 
@@ -33,13 +37,6 @@ var categories = $.map(categoryNames, function(name) {
     name: name,
     columns: []
   };
-});
-
-$(function(){
-  $("#results_main_table").on('page.dt', function () {
-      $('audio').remove();
-  } );
-
 });
 
 allColumns.forEach(function(c, index) {
@@ -75,46 +72,10 @@ allColumns.forEach(function(c, index) {
         if (data.length > 0) {
           formattedString = '<i class="fa fa-plus-square" aria-hidden="true"></i>';
         }
-      } else if (c.isContribute) {
-          formattedString = '<a href="contribute/' + data + '"><i class="fas fa-microphone-alt btn btn-transparent"></i></a>';
-      } else if (c.isAudible) {
-        if (!jQuery.isEmptyObject(data)) {
-          var audiosList = $('<div></div>');
-          $.each(data, function (key, item) {
-            $.each(item.langs, function (langKey, langItem) {
-              $.each(langItem.records, function (recordKey, recordItem) {
-                var elementId = (''+recordItem).replace(/\./g, '_');
-
-                var recordVersion = '';
-                if (langItem.records.length > 1) {
-                  recordVersion = ' - v'+recordItem.split('.')[2];
-                }
-
-                var itemList = $("<div></div>", {
-                    "text": '<button data-audio-id=\'' + elementId + '\' class=\'btn btn-transparent far fa-play-circle mr-1 audio-player px-1\'></button>' +
-                    key + ' (' + langItem.lang + ')' + recordVersion
-                });
-                audiosList.append(itemList);
-              });
-            });
-          });
-
-          formattedString = ''+
-              '<button type="button" class="fa fa-volume-up btn btn-transparent" data-toggle="popover" data-html="true" data-content="<div class=\'audios-'+row.enslaved_id+'\'>'+audiosList.html()+'</div>" data-enslaved-id="' + row.enslaved_id + '"></button>';
-        }
-      } else if (c.isEnslaversList) {
-        var enslaversList = $.map(data, function(value, index) {
-          return {
-            name: index,
-            roles: value.join(', '),
-          };
-        });
-        enslaversList.forEach((value) => {
-          formattedString += "<span class=\"h6 pr-2\"><span class=\"badge badge-pill badge-secondary tooltip-pointer\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"\" data-original-title=\""+value.roles+"\">"+value.name+"</span></span>";
-        });
       } else if (c.data == 'alias_list') {
+        formattedString += "<span class=\"h6 pr-2\"><span class=\"badge badge-pill badge-secondary\">"+row.principal_alias+"</span></span>";
         data.forEach((value) => {
-          formattedString += "<span class=\"h6 pr-2\"><span class=\"badge badge-pill badge-secondary\">"+value+"</span></span>";
+          formattedString += "<span class=\"h6 pr-2\"><span class=\"badge badge-pill badge-secondary font-weight-normal\">"+value+"</span></span>";
         });
       } else {
         formattedString = "<span>" + data + "</span>";

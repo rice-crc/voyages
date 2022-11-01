@@ -18,6 +18,13 @@
         <span class="col-sm-4 old_values_header"></span>
         <span class="col-sm-4">{% trans "Contributed value" %}</span>
     </div>
+    {% with form.voyage_comments as f %}
+        <div class="row{% if f.value == None or f.value == '' %} blank{% endif%}">
+            {{ f.label_tag }}
+            <div class="old_values" id="old_{{ f.html_name }}"></div>
+            <span id="{{ f.html_name }}">{{ f.value|default_if_none:blank_text }}</span>
+        </div>
+    {% endwith %}
     <h3>{% trans "Ship, nation, owners" %}</h3>
     {% with form.name_of_vessel as f %}
         <div class="row{% if f.value == None or f.value == '' %} blank{% endif%}">
@@ -105,6 +112,13 @@
     {% endwith %}
     {% with form.additional_ship_owners as f %}
         <div class="multiline_value row{% if f.value == None or f.value == '' %} blank{% endif%}">
+            {{ f.label_tag }}
+            <div class="old_values" id="old_{{ f.html_name }}"></div>
+            <span id="{{ f.html_name }}">{{ f.value|default_if_none:blank_text }}</span>
+        </div>
+    {% endwith %}
+    {% with form.cargo as f %}
+        <div class="row{% if f.value == None or f.value == '' %} blank{% endif%}">
             {{ f.label_tag }}
             <div class="old_values" id="old_{{ f.html_name }}"></div>
             <span id="{{ f.html_name }}">{{ f.value|default_if_none:blank_text }}</span>
@@ -537,6 +551,15 @@
 
     <h3>{% trans "Slaves (characteristics)" %}</h3>
 
+    {% with form.african_info as f %}
+        <!-- TODO (new fields) load the labels for these values -->
+        <div class="row{% if f.value == None or f.value == '' %} blank{% endif%}">
+            {{ f.label_tag }}
+            <div class="old_values" id="old_{{ f.html_name }}"></div>
+            <span id="{{ f.html_name }}">{{ f.value|default_if_none:blank_text }}</span>
+        </div>
+    {% endwith %}
+
     <table id="demographics_table" class="table table-striped" style="width: auto">
         <thead>
             <tr>
@@ -683,6 +706,7 @@
 <script type="text/javascript" src="{{ STATIC_URL }}scripts/contribute/interim.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}scripts/library/js.cookie@2.1.0.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}scripts/contribute/common.js"></script>
+<script src="{{ STATIC_URL }}scripts/vue/includes/format-badges.js" type="text/javascript"></script>
 <!-- I18n of javascript text -->
 <script type="text/javascript" src="{% url 'javascript-catalog' %}"></script>
 <!-- Use a global JS constant to specify the root of static urls -->
@@ -817,6 +841,29 @@
             }
         }
     });
+    
+    fetchAfricanInfoAndCargo()
+        .then(({ africanInfo, cargoType, cargoUnit }) => {
+            // Replace raw JSON data with badges.
+            const cargoMap = createCargoRowMap(cargoType, cargoUnit);
+            const safeParse = s => {
+                let data = [];
+                try {
+                    data = JSON.parse(s);
+                } catch { }
+                return data;
+            }
+            const cargoCellUpdater = sel => {
+                sel.html(cargoToBadges(safeParse(sel.html()).map(cargoMap)));
+            };
+            cargoCellUpdater($("#cargo"));
+            cargoCellUpdater($("#old_cargo>span"));
+            const afrinfoCellUpdater = sel => {
+                sel.html(safeParse(sel.html()).map(aid => getBadgeFormattedValue(africanInfo.index[aid])));
+            };
+            afrinfoCellUpdater($("#african_info"));
+            afrinfoCellUpdater($("#old_african_info>span"));
+        });
 
     $('.old_values').each(function() {
         var $div = $(this);
