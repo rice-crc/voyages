@@ -4,7 +4,8 @@ import json
 import uuid
 from builtins import str
 from datetime import date
-
+import time
+import copy
 from django.conf import settings
 from django.core.paginator import Paginator
 from django.db import transaction
@@ -23,6 +24,10 @@ from .models import (AltLanguageGroupName, Enslaved,
                      EnslavedContributionNameEntry, EnslavedSearch, EnslaverSearch, EnslaverVoyageConnection,
                      LanguageGroup, MultiValueHelper, ModernCountry, EnslavedNameSearchCache,
                      _modern_name_fields, _name_fields)
+from voyages.apps.voyage.models import Place,Region
+from voyages.apps.past.routes_curves import *
+from voyages.apps.past.region_vals_to_port_ids import *
+from collections import Counter
 
 ENSLAVED_DATASETS = ['african-origins', 'oceans-of-kinfolk']
 
@@ -169,18 +174,40 @@ def is_valid_name(name):
 @require_POST
 @csrf_exempt
 def search_enslaved(request):
+    st=time.time()
     # A little bit of Python magic where we pass the dictionary
     # decoded from the JSON body as arguments to the EnslavedSearch
     # constructor.
     data = json.loads(request.body)
     search = EnslavedSearch(**data['search_query'])
-    fields = data.get('fields')
+    fields=data.get('fields',None)
+    output_type = data.get('output', 'resultsTable')
+    
+    if output_type == 'maps':
+#         fields = [
+#             'language_group__id',
+#             'voyage__voyage_itinerary__imp_principal_place_of_slave_purchase__value',
+#             'voyage__voyage_itinerary__imp_principal_port_slave_dis__value',
+#             'post_disembark_location__value'
+#         ]
+        fields = [
+            'language_group__id',
+            'voyage__voyage_itinerary__imp_principal_region_of_slave_purchase__value',
+            'voyage__voyage_itinerary__imp_principal_region_slave_dis__value',
+            'post_disembark_location__value'
+        ]
+
     if fields is None:
         fields = [
-            'enslaved_id', 'age', 'gender', 'height', 'skin_color',
+            'enslaved_id',
+            'age',
+            'gender',
+            'height',
+            'skin_color',
             'language_group__name',
             'register_country__name',
-            'voyage_id', 'voyage__voyage_ship__ship_name',
+            'voyage_id',
+            'voyage__voyage_ship__ship_name',
             'voyage__voyage_dates__first_dis_of_slaves',
             'voyage__voyage_itinerary__int_first_port_dis__place',
             'voyage__voyage_itinerary__imp_principal_place_of_slave_purchase__place',
@@ -189,8 +216,9 @@ def search_enslaved(request):
             'captive_fate__name', 'post_disembark_location__place'
         ] + _name_fields + _modern_name_fields + \
         [helper.projected_name for helper in EnslavedSearch.all_helpers]
+        
     query = search.execute(fields)
-    output_type = data.get('output', 'resultsTable')
+    
     # For now we only support outputing the results to DataTables.
     if output_type == 'resultsTable':
 
@@ -227,7 +255,191 @@ def search_enslaved(request):
         for entry in page:
             entry['recordings'] = EnslavedNameSearchCache.get_recordings(
                 [entry[f] for f in _name_fields if f in entry])
+        print("enslavedsearch response time (table):",time.time()-st)
         return JsonResponse(table)
+    elif output_type=='maps':
+        
+        mapmode=data.get('mapmode', 'points')
+        paginator = Paginator(query, len(query))
+        page = paginator.page(1)  
+        print(time.time()-st)
+#         itineraries=[
+#             [i[k] for k in 
+#             ['language_group__id',
+#             'voyage__voyage_itinerary__imp_principal_place_of_slave_purchase__value',
+#             'voyage__voyage_itinerary__imp_principal_port_slave_dis__value',
+#             'post_disembark_location__value'
+#             ]]
+#             for i in page
+#         ]
+        itineraries=[
+            [i[k] for k in 
+            ['language_group__id',
+            'voyage__voyage_itinerary__imp_principal_region_of_slave_purchase__value',
+            'voyage__voyage_itinerary__imp_principal_region_slave_dis__value',
+            'post_disembark_location__value'
+            ]]
+            for i in page
+        ]        
+        
+        if mapmode=='points':
+            language_group_counts=dict(Counter(i[0] for i in itineraries))
+            embarkation_location_counts=dict(Counter(i[1] for i in itineraries))
+            disembarkation_location_counts=dict(Counter(i[2] for i in itineraries))
+            final_location_counts=dict(Counter(i[3] for i in itineraries))
+        
+            d=open("voyages/apps/past/routes_points.json","r")
+            t=d.read()
+            j=json.loads(t)
+            routes_points={int(i):j[i] for i in j}
+            d.close()
+            language_group_ids_offset=1000000
+            
+#             print(language_group_counts)
+            
+            points_dict={
+                p_id:{
+                    'name':routes_points[p_id][1],
+                    'coords':[routes_points[p_id][0][1],routes_points[p_id][0][0]],
+                    'pk':routes_points[p_id][2],
+                    'nodesize':0
+                } for p_id in routes_points
+            }
+            
+            for p_id in routes_points:
+                for triple in [
+                    [language_group_counts,'origin',language_group_ids_offset],
+                    [embarkation_location_counts,'embarkation',0],
+                    [disembarkation_location_counts,'disembarkation',0],
+                    [final_location_counts,'post-disembarkation',0]
+                ]:
+                    this_dict,tag,offset=triple
+                    if p_id-offset in this_dict:
+                        weight=this_dict[p_id-offset]
+                        if tag in points_dict:
+                            points_dict[p_id][tag]+=weight
+                        else:
+                            points_dict[p_id][tag]=weight
+                        points_dict[p_id]['nodesize']+=weight
+            
+               
+            featurecollection=[]
+            for point_id in points_dict:
+                point=points_dict[point_id]
+                coords=point['coords']
+                name=point['name']
+                nodesize=point['nodesize']
+                pk=point['pk']
+                if nodesize > 0:
+                    popuplines=[]
+                    pointtags={}
+                    for tag in ['origin','embarkation','disembarkation','post-disembarkation']:
+                        if tag in point:
+                            ##yes, you guessed it! on post-disembark,
+                            ##someone decided to use place names instead of primary keys or spss codes!
+                            ##and even better than that, they used spss codes for the parent regions of the ports
+                            ##which all appear to be fed into the same endpoint as unique id's, which is not guaranteed
+                            ##unless i'm mistaken
+                            if tag in ('post-disembarkation','origin'):
+                                href_event='<a id="%d" \
+                                title="" \
+                                href="#" \
+                                onclick="linkfilter(%d,\'%s\');\
+                                return false;">'\
+                                %(int(point_id),int(pk),tag)
+                            else:
+                                href_event='<a id="%d" \
+                                    title="" \
+                                    href="#" \
+                                    onclick="linkfilter(%d,\'%s\');\
+                                    return false;">'\
+                                    %(int(point_id),int(point_id),tag)
+                            tag_size=point[tag]
+                            if tag_size==1:
+                                person_or_people="person"
+                            else:
+                                person_or_people="people"
+                            if tag=='origin':
+# currently, the language groups are, in the search interface, keyed against an on the fly index of the country (0-15) concatenated with the language group pk
+## e.g. 13-160515 for Yoruba, because Nigeria is how Yoruba gets nested and Nigeria is the 13th top-level nest
+## this is either a result of trying to keep m2m relations between countries and language groups, or just a trick to keep the nested items tracked
+## but either way i can't get my click events to interface with it until it's cleaned up
+#                               popupULline="%s%d %s originated here</a>" %(href_event,point[tag],person_or_people)
+                                popupULline="%d %s originated here." %(point[tag],person_or_people)
+                            elif tag=='embarkation':
+                                popupULline="%d %s embarked here. %sFilter</a>" %(point[tag],person_or_people,href_event)
+                            elif tag=='disembarkation':
+                                popupULline="%d %s disembarked here. %sFilter</a>" %(point[tag],person_or_people,href_event)
+                            elif tag=='post-disembarkation':
+                                popupULline="%d %s ended up here. %sFilter</a>" %(point[tag],person_or_people,href_event)
+                            else:
+                                print("??????")
+                            popuplines.append(popupULline)
+                            
+                            pointtags[tag]=point[tag]
+                            
+                    popupcontent="<strong>%s</strong><ul><li>%s</li></ul>" %(name,"</li><li>".join(popuplines))
+                    feature_properties={
+                        "name":name,
+                        "size":nodesize,
+                        "popupcontent":popupcontent,
+                        "node_classes":pointtags,
+                        "region_spss_code":point_id
+                    }
+                
+                    feature_geometry={
+                        "type":"Point",
+                        "coordinates":coords
+                    }
+                
+                    feature={
+                        "type":"Feature",
+                        "properties":feature_properties,
+                        "geometry":{
+                            "type":"Point",
+                            "coordinates":coords
+                        }
+                    }
+                
+                    featurecollection.append(feature)
+                
+            result_points={
+                "type": "FeatureCollection",
+                "features": []
+            }
+            
+            for feature in featurecollection:
+                result_points['features'].append(feature)
+            print("point map time:",time.time()-st)
+        
+            itinerary_names=["-".join([str(i) for i in itinerary]) for itinerary in itineraries]
+            itinerary_names=[i for i in itinerary_names if i in route_curves]
+            print(time.time()-st)
+        
+            leg_weights=Counter([l for i in itinerary_names for l in route_curves[i]])
+            itinerary_weights=Counter(itinerary_names).most_common()
+            itinerary_weights.reverse()
+            #this trickery ensures that the heaviest route determines which sub-leg's geometry gets used
+            leg_geometry={l:route_curves[i[0]][l] for i in itinerary_weights for l in route_curves[i[0]]}
+        
+            result_routes=[
+                {
+                    'geometry':leg_geometry[l]
+                    ,'weight':leg_weights[l]
+                } for l in leg_weights
+            ]
+            
+            result={
+                'routes':result_routes,
+                'points':result_points,
+                'region_vals_to_port_ids':region_vals_to_port_ids,
+                'total_results_count':len(query)
+            }
+            
+            return JsonResponse(result,safe=False)
+            print("line map time:",time.time()-st)
+        return JsonResponse(result,safe=False)
+        
     return JsonResponse({'error': 'Unsupported'})
 
 

@@ -284,7 +284,7 @@ function activateFilter(filter, group, subGroup, filterValues) {
 // reset filter
 function resetFilter(filter, group, subGroup) {
   for (key in filter[group][subGroup]) {
-    if (key !== "count") {
+    if (key !== "count") {	
       if (filter[group][subGroup][key].value["searchTerm0"] === undefined) {
         // has only one search term
         filter[group][subGroup][key].value["searchTerm"] =
@@ -1041,15 +1041,15 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
         "<'row'<'col-sm-12'tr>>" +
         "<'row'<'col-sm-5'><'col-sm-7'p>>",
       lengthMenu: [
-        [15],
-        ["15 rows"]
+        [15, 50, 100, 200],
+        ["15 rows", "50 rows", "100 rows", "200 rows"]
       ],
 
       language: dtLanguage,
 
       buttons: [
         columnToggleMenu,
-        //pageLength,
+        pageLength,
       ],
       //pagingType: "input",
       bFilter: false,
@@ -1080,7 +1080,75 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
       $('[data-toggle="tooltip"]').tooltip();
       initAudioActions();
     });
-  }
+  } else if (currentTab == "maps") {
+	
+// 	console.log(filter);
+// 	console.log(filterData);
+	var currentSearchObj = searchAll(filter, filterData);
+// I'd like to have this, but once it runs, the filters bar simply won't go away!	
+// 	$('#panelCollapse').show();
+	
+	$("#map_container").html('<div id="jcm10map" style="width:100%; height:100%; min-height:600px"></div>');
+
+	var mappingSpecialists=L.tileLayer(
+	  'https://api.mapbox.com/styles/v1/jcm10/cl5v6xvhf001b14o4tdjxm8vh/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoiamNtMTAiLCJhIjoiY2wyOTcyNjJsMGY5dTNwbjdscnljcGd0byJ9.kZvEfo7ywl2yLbztc_SSjw',
+	  {attribution: '<a href="https://www.mappingspecialists.com/" target="blank">Mapping Specialists</a>'});
+
+		var basemap = {"Mapping Specialists":mappingSpecialists}
+		
+	var jcm10map = L.map('jcm10map', {
+		//can't quite use this --
+		//because my map interactions interface with the rest of the search, it triggers a refresh
+		//which pulls you out of fullscreen rather abruptly
+		//i could update the search bar then construct my own search object and run again without refreshing the ui
+		//except even that wouldn't quite work, because it would refresh the map per the below...
+		fullscreenControl: false,
+		center:[0,0],
+		zoom:3,
+		layers:	[mappingSpecialists],
+		minZoom:1.7
+	});	
+	
+	
+	
+	L.control.scale({ position: "bottomright" }).addTo(jcm10map);
+	
+	var mappingSpecialistsRivers=L.tileLayer(
+	  'https://api.mapbox.com/styles/v1/jcm10/cl98xvv9r001z14mm17w970no/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoiamNtMTAiLCJhIjoiY2wyOTcyNjJsMGY5dTNwbjdscnljcGd0byJ9.kZvEfo7ywl2yLbztc_SSjw').addTo(jcm10map);
+
+	var mappingSpecialistsCountries=L.tileLayer(
+	  'https://api.mapbox.com/styles/v1/jcm10/cl98yryw3003t14o66r6fx4m9/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoiamNtMTAiLCJhIjoiY2wyOTcyNjJsMGY5dTNwbjdscnljcGd0byJ9.kZvEfo7ywl2yLbztc_SSjw');
+	  
+	var featurelayers = {
+		"Rivers":mappingSpecialistsRivers,
+		"Modern Countries":mappingSpecialistsCountries
+	}
+	
+	var layerControl = L.control.layers(null,featurelayers).addTo(jcm10map);
+// 	NOTE WELL!!!
+// 	THE ANIMATIONS INVOKED BY APPLYING THE FADE CLASS TO THE TABS BREAK LEAFLET'S ABILITY TO DETECT THE SIZE OF ITS DIV, WHICH BREAKS ITS ABILITY TO REQUEST MAPTILES PROPERLY AND CENTER THE MAP
+// 	SO YOU CAN DELAY, AS BELOW, WHICH SUCKS, OR YOU CAN DISABLE THE ANIMATION
+	
+	window.setTimeout(function() {
+		jcm10map.invalidateSize();
+	}, 1000);
+	  
+	$.ajax({
+		type: "POST",
+		url: SEARCH_URL,
+		data: JSON.stringify({
+				search_query: currentSearchObj,
+				output: "maps"
+			}),
+		success: function(d){
+			drawUpdateRoutes(jcm10map,d.routes);
+			drawUpdatePoints(jcm10map,d.points);
+			drawUpdateCount(jcm10map,d.total_results_count);
+			drawLegend(jcm10map);
+		}
+	});
+	
+} 
 }
 
 function initAudioActions() {

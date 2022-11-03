@@ -1,0 +1,52 @@
+/*borrowed from https://codepen.io/haakseth/pen/KQbjdO*/
+/*Legend specific*/
+.legend {
+  padding: 3px 3px;
+  font: 14px Arial, Helvetica, sans-serif;
+  background: white;
+  background: rgba(255, 255, 255, 0.8);
+  /*box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);*/
+  border-radius: 5px;
+  color: #555;
+}
+
+
+.legendp {
+  vertical-align: middle;
+  text-align: left;
+  margin: 5px 5px 5px 5px;
+}
+
+.legendlinewrapper {
+	clear: both;
+}
+
+.legendtable {
+
+	border=0px;
+	cellpadding=2px;
+
+}
+
+.legend span {
+  position: relative;
+  bottom: 3px;
+}
+
+/*borrowed from https://stackoverflow.com/questions/6921792/how-to-draw-circle-in-html-page*/
+.circle {
+      width: 20px;
+      height: 20px;
+      -webkit-border-radius: 10px;
+      -moz-border-radius: 10px;
+      border-radius: 10px;
+      float: left;
+    }
+    
+.legendlabeldiv {
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+	margin: 5px 5px 5px 5px;
+}
+
+
