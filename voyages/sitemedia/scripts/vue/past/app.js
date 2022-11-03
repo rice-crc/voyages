@@ -1,6 +1,18 @@
 function resetPagination(datatable) {
+	console.log("resetpagination");
   datatable.page('first').draw(false);
 }
+
+//The tabs were always triggering the table results search in views.py -- so maps would make 2 calls, each of which would slow the other
+//This is my fix, but there might be a better one :) -- jcm
+var selected_tab=location.toString().split("#");
+if (selected_tab.length>1) {
+	var currentTab = selected_tab[selected_tab.length-1]
+} else {
+	var currentTab = "results"
+};
+
+console.log(location.toString().split("#"));
 
 // main app
 var searchBar = new Vue({
@@ -65,7 +77,7 @@ var searchBar = new Vue({
     hasCurrentQuery: false,
     rowModalShow: false,
     enslavedDatasetModalShow: false,
-    currentTab: "results",// currently active tab
+    currentTab: currentTab,// currently active tab
     timelapse: {
       ui: {},
       options: {},

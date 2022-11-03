@@ -266,14 +266,14 @@ def search_enslaved(request):
         for entry in page:
             entry['recordings'] = EnslavedNameSearchCache.get_recordings(
                 [entry[f] for f in _name_fields if f in entry])
-        print("enslavedsearch response time (table):",time.time()-st)
+        print("TABLE enslavedsearch response time:",time.time()-st)
         return JsonResponse(table)
     elif output_type=='maps':
         
         mapmode=data.get('mapmode', 'points')
         paginator = Paginator(query, len(query))
         page = paginator.page(1)  
-        print(time.time()-st)
+#         print(time.time()-st)
 #         itineraries=[
 #             [i[k] for k in 
 #             ['language_group__id',
@@ -416,11 +416,11 @@ def search_enslaved(request):
             
             for feature in featurecollection:
                 result_points['features'].append(feature)
-            print("point map time:",time.time()-st)
+#             print("point map time:",time.time()-st)
         
             itinerary_names=["-".join([str(i) for i in itinerary]) for itinerary in itineraries]
             itinerary_names=[i for i in itinerary_names if i in route_curves]
-            print(time.time()-st)
+#             print(time.time()-st)
         
             leg_weights=Counter([l for i in itinerary_names for l in route_curves[i]])
             itinerary_weights=Counter(itinerary_names).most_common()
@@ -441,9 +441,8 @@ def search_enslaved(request):
                 'region_vals_to_port_ids':region_vals_to_port_ids,
                 'total_results_count':len(query)
             }
-            
+            print("MAP enslavedsearch response time:",time.time()-st)
             return JsonResponse(result,safe=False)
-            print("line map time:",time.time()-st)
         return JsonResponse(result,safe=False)
         
     return JsonResponse({'error': 'Unsupported'})
