@@ -124,7 +124,7 @@ class VoyageRoutesCache:
         with cls._lock:
             if force_reload or not cls._cache:
                 name = os.path.dirname(os.path.abspath(__file__))
-                with open(name + '/../../sitemedia/maps/js/route_nodes.js',
+                with open(name + '/../../sitemedia/maps/js/routeNodes.js',
                           'r') as f:
                     s = f.read()
                 nodes = [(float(m.group(1)), float(m.group(2)))
