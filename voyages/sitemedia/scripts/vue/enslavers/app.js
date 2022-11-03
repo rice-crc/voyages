@@ -2,6 +2,8 @@ function resetPagination(datatable) {
   datatable.page('first').draw(false);
 }
 
+var enslavedDataset = null;
+
 // main app
 var searchBar = new Vue({
   el: "#search-bar",

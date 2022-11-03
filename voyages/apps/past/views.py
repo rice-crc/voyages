@@ -25,8 +25,6 @@ from .models import (AltLanguageGroupName, Enslaved,
                      LanguageGroup, MultiValueHelper, ModernCountry, EnslavedNameSearchCache,
                      _modern_name_fields, _name_fields)
 from voyages.apps.voyage.models import Place,Region
-from voyages.apps.past.routes_curves import *
-from voyages.apps.past.region_vals_to_port_ids import *
 from collections import Counter
 
 ENSLAVED_DATASETS = ['african-origins', 'oceans-of-kinfolk']
@@ -171,6 +169,19 @@ def is_valid_name(name):
     return name is not None and name.strip() != ""
 
 
+
+try:
+    d=open("voyages/apps/past/static/routes_points.json","r")
+    t=d.read()
+    j=json.loads(t)
+    routes_points={int(i):j[i] for i in j}
+    d.close()
+    from voyages.apps.past.static.routes_curves import *
+    from voyages.apps.past.static.region_vals_to_port_ids import *
+except:
+    print("------>  warning. missing essential mapping static files. diaspora map will not run")
+
+
 @require_POST
 @csrf_exempt
 def search_enslaved(request):
@@ -288,11 +299,6 @@ def search_enslaved(request):
             disembarkation_location_counts=dict(Counter(i[2] for i in itineraries))
             final_location_counts=dict(Counter(i[3] for i in itineraries))
         
-            d=open("voyages/apps/past/routes_points.json","r")
-            t=d.read()
-            j=json.loads(t)
-            routes_points={int(i):j[i] for i in j}
-            d.close()
             language_group_ids_offset=1000000
             
 #             print(language_group_counts)

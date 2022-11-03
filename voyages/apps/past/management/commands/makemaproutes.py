@@ -16,7 +16,7 @@ class Command(BaseCommand):
 	def handle(self, *args, **options):
 		from voyages.apps.past.management.commands.ao_individuals_map import routeNodes,links
 		
-		base_path='voyages/apps/past/'
+		base_path='voyages/apps/past/static/'
 		print('making a directed network graph of the oceanic waypoints from ao_individuals_map.py')
 		
 		#1. oceanic network
