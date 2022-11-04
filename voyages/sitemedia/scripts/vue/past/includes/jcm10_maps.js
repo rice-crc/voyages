@@ -41,7 +41,7 @@
 		var results_count_div = L.control({ position: "topleft" });
 		results_count_div.onAdd = function(map) {
 			var div = L.DomUtil.create("div", "legend");
-			div.innerHTML += '<p class="legendp">'+results_count.toString()+' '+personorpeople(results_count)+'</p>';
+			div.innerHTML += '<p class="legendp"><a href="#results">'+results_count.toString()+' '+personorpeople(results_count)+' selected.<br/>← Read their names</a></p>';
 			return div
 		};
 		results_count_div.addTo(map);
@@ -111,6 +111,8 @@
 			return thiscolor
 		}
 		
+		//scale the nodes sizes logarithmically 
+		
 		var valueMin = d3.min(points.features, function (p) {
 			return p.properties.size;
 		  });
@@ -118,7 +120,28 @@
 			return p.properties.size;
 		  });
 	
-		  var valueScale = d3.scaleLog().domain([valueMin, valueMax]).range([1, 20]);  
+		var valueScale = d3.scaleLog().domain([valueMin, valueMax]).range([1, 20]);  
+		
+		//while we're at it, let's make the map zoom & pan to fit our collection of points
+		  
+		  var latmin = d3.min(points.features, function (p) {
+		  	return p.geometry.coordinates[1];
+		  });
+		  
+		  var latmax = d3.max(points.features, function (p) {
+		  	return p.geometry.coordinates[1]
+		  });
+		  
+		  var longmin = d3.min(points.features, function (p) {
+		  	return p.geometry.coordinates[0]
+		  });
+		  
+		  var longmax = d3.max(points.features, function (p) {
+		  	return p.geometry.coordinates[0]
+		  });
+		
+		var minmax_group = new L.featureGroup([L.marker([latmin,longmin]),L.marker([latmax,longmax])]);
+		map.fitBounds(minmax_group.getBounds());
 		
 	  
 		L.geoJSON(points.features, {

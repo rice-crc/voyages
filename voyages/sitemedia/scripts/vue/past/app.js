@@ -3,8 +3,6 @@ function resetPagination(datatable) {
   datatable.page('first').draw(false);
 }
 
-//The tabs were always triggering the table results search in views.py -- so maps would make 2 calls, each of which would slow the other
-//This is my fix, but there might be a better one :) -- jcm
 var selected_tab=location.toString().split("#");
 if (selected_tab.length>1) {
 	var currentTab = selected_tab[selected_tab.length-1]
@@ -728,22 +726,27 @@ jQuery(document).on("shown.bs.tab", 'a[data-toggle="tab"]', function(e) {
 // for maps: passes map node clicks into filter
 function linkfilter(id,tag) {
 	
-	if (tag==='embarkation') {
-		console.log(searchBar.filter.itinerary.itinerary.var_embarkation_ports.value.searchTerm);
-		searchBar.filter.itinerary.itinerary.var_embarkation_ports.value.searchTerm.push(id);
-		searchBar.filter.itinerary.itinerary.var_embarkation_ports.activated = true;
-		searchBar.filter.itinerary.itinerary.var_embarkation_ports.changed = true;
+	switch (tag) {
+		case 'embarkation':
+			var this_search_var = searchBar.filter.itinerary.itinerary.var_embarkation_ports;
+			break;
+		case 'disembarkation':
+			var this_search_var = searchBar.filter.itinerary.itinerary.var_disembarkation_ports;
+			break;
+		case 'post-disembarkation':
+			var this_search_var = searchBar.filter.fate.fate.var_post_disembark_location;
+			break;
+		default:
+			console.log(tag);
+	};
+	
+	if (!this_search_var.value.searchTerm.includes(id)) {
+		this_search_var.value.searchTerm.push(id);
+		this_search_var.activated = true;
+		this_search_var.changed = true;
 		searchBar.refresh();
-	} else if (tag==='disembarkation') {
-		searchBar.filter.itinerary.itinerary.var_disembarkation_ports.value.searchTerm.push(id);
-		searchBar.filter.itinerary.itinerary.var_disembarkation_ports.activated = true;
-		searchBar.filter.itinerary.itinerary.var_disembarkation_ports.changed = true;
-		searchBar.refresh();
-	} else if (tag==='post-disembarkation') {
-		searchBar.filter.fate.fate.var_post_disembark_location.value.searchTerm.push(id);
-		searchBar.filter.fate.fate.var_post_disembark_location.activated = true;
-		searchBar.filter.fate.fate.var_post_disembark_location.changed = true;
-		searchBar.refresh();
-	} else { console.log(tag) }
-		
+	} else {
+		console.log('you already selected this filter!')
+	}
+	
 };
