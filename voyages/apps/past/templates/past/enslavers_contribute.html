@@ -49,16 +49,16 @@
             <!-- Tabs -->
             <ul class="nav nav-tabs trans-tab">
                 <li class="nav-item">
-                    <a class="nav-link active" @click="setActive('aliases')" href="#aliases" data-toggle="tab" data-target="#aliases">{% trans 'Aliases and Voyages' %}</a>
+                    <a class="nav-link active" href="#aliases" data-toggle="tab" data-target="#aliases">{% trans 'Aliases and Voyages' %}</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" @click="setActive('personal')" href="#personal" data-toggle="tab" data-target="#personal">{% trans 'Personal information' %}</a>
+                    <a class="nav-link" href="#personal" data-toggle="tab" data-target="#personal">{% trans 'Personal information' %}</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" @click="setActive('notes')" href="#notes" data-toggle="tab" data-target="#notes">{% trans 'Notes' %}</a>
+                    <a class="nav-link" href="#notes" data-toggle="tab" data-target="#notes">{% trans 'Notes' %}</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" @click="setActive('review')" href="#review" data-toggle="tab" data-target="#review">{% trans 'Review and Submit' %}</a>
+                    <a class="nav-link" href="#review" data-toggle="tab" data-target="#review">{% trans 'Review and Submit' %}</a>
                 </li>
             </ul>
             
@@ -82,6 +82,13 @@
                         <ul>
                             <li v-for="error in validation">[[ error ]]</li>
                         </ul>
+                    </div>
+                    <div class="panel" v-if="validation.length === 0">
+                        <button v-on:click="previewActions">
+                            {% trans "Preview Actions" %}
+                        </button>
+                        <textarea class="form-control enslaver_contrib_fullspan_control" style="font-family: monospace" v-model="contribActions">
+                        </textarea>
                     </div>
                 </div>
             </div>
@@ -147,7 +154,7 @@
                 if (val === 'conflict') {
                     res.push(gettext("Merge conflict for property {0}").replace('{0}', key));
                 }
-                if (val !== '' && key.endsWith('day')) {
+                if (!!val && key.endsWith('day')) {
                     const day = parseInt(val);
                     if (isNaN(day) || day < 1) {
                         res.push(gettext("Invalid value for {0}").replace('{0}', key));
@@ -179,7 +186,8 @@
                     : interim.identities[Object.keys(interim.identities)[0]],
                 selectAliasChildren: [],
                 linkVoyageInput: null,
-                createAliasInput: null
+                createAliasInput: null,
+                contribActions: ""
             },
             computed: {
                 validation() {
@@ -331,6 +339,21 @@
                         }
                     }
                     closeModals();
+                },
+                previewActions: async function() {
+                    // Clear actions first.
+                    this.contribActions = "";
+                    const interim = Object.assign({}, this.interim);
+                    const res = await fetch("/contribute/enslaver_update_actions", {
+                        method: 'POST',
+                        body: JSON.stringify(interim)
+                    });
+                    const data = await res.json();
+                    if (data.error || !data.actions) {
+                        alert(data.error || 'Error');
+                        return;
+                    }
+                    this.contribActions = JSON.stringify(data.actions, null, 2);
                 }
             }
         });
