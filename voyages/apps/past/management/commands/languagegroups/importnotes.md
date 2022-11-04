@@ -11,11 +11,13 @@ these next two can't be reversed because they're links to the old language names
 
 	delete from past_moderncountry_languages;
 	delete from past_enslavedcontributionlanguageentry;
+	delete from past_altlanguagegroupname;
 
 finally let's drop the languages table
 
 	delete from past_languagegroup;
+	
 
 now let's add the languages back in
 
-	python --> 
+	python3.6 manage.py updatelanguagegroups

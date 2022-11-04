@@ -201,8 +201,14 @@ def search_enslaved(request):
 #             'voyage__voyage_itinerary__imp_principal_port_slave_dis__value',
 #             'post_disembark_location__value'
 #         ]
+#         fields = [
+#             'language_group__id',
+#             'voyage__voyage_itinerary__imp_principal_region_of_slave_purchase__value',
+#             'voyage__voyage_itinerary__imp_principal_region_slave_dis__value',
+#             'post_disembark_location__value'
+#         ]
         fields = [
-            'language_group__id',
+        	'language_group__moderncountry__id',
             'voyage__voyage_itinerary__imp_principal_region_of_slave_purchase__value',
             'voyage__voyage_itinerary__imp_principal_region_slave_dis__value',
             'post_disembark_location__value'
@@ -283,16 +289,26 @@ def search_enslaved(request):
 #             ]]
 #             for i in page
 #         ]
+#         itineraries=[
+#             [i[k] for k in 
+#             ['language_group__id',
+#             'voyage__voyage_itinerary__imp_principal_region_of_slave_purchase__value',
+#             'voyage__voyage_itinerary__imp_principal_region_slave_dis__value',
+#             'post_disembark_location__value'
+#             ]]
+#             for i in page
+#         ]        
+
         itineraries=[
             [i[k] for k in 
-            ['language_group__id',
+            ['language_group__moderncountry__id',
             'voyage__voyage_itinerary__imp_principal_region_of_slave_purchase__value',
             'voyage__voyage_itinerary__imp_principal_region_slave_dis__value',
             'post_disembark_location__value'
             ]]
             for i in page
-        ]        
-        
+        ]  
+
         if mapmode=='points':
             language_group_counts=dict(Counter(i[0] for i in itineraries))
             embarkation_location_counts=dict(Counter(i[1] for i in itineraries))

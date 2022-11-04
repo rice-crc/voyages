@@ -6,7 +6,7 @@ import os
 import re
 import json
 from math import sqrt
-from voyages.apps.past.models import Enslaved,LanguageGroup,ModernCountry
+from voyages.apps.past.models import Enslaved,LanguageGroup
 from voyages.apps.voyage.models import Place,Region,Voyage
 import networkx as nx
 
@@ -78,52 +78,35 @@ class Command(BaseCommand):
 #             'post_disembark_location'
 # 		)
 		
-# 		enslaved_individuals.select_related(
-# 			'language_group',
-# 			'voyage__voyage_itinerary__imp_principal_region_of_slave_purchase',
-# 			'voyage__voyage_itinerary__imp_principal_region_slave_dis',
-# 			'post_disembark_location'
-# 		)
+		enslaved_individuals.select_related(
+			'language_group',
+            'voyage__voyage_itinerary__imp_principal_region_of_slave_purchase',
+            'voyage__voyage_itinerary__imp_principal_region_slave_dis',
+            'post_disembark_location'
+		)
 		
 		print("creating geo data for",len(african_origins_individuals),"enslaved individuals")
 		
 		##2a. enslaved origin point (via language group)
 		
-		african_origins_individuals.prefetch_related('language_group__moderncountry_set')
 		african_origins_individuals.select_related('language_group')
-		
-		
-		individuals_with_languagegroup=african_origins_individuals.filter(language_group__isnull=False)
-# 		individuals_with_languagegroup=individuals_with_languagegroup.filter(language_group__latitude__isnull=False)
-# 		individuals_with_languagegroup=individuals_with_languagegroup.filter(language_group__longitude__isnull=False)
-
-
+		individuals_with_languagegroup=enslaved_individuals.filter(language_group__isnull=False)
+		individuals_with_languagegroup=individuals_with_languagegroup.filter(language_group__latitude__isnull=False)
+		individuals_with_languagegroup=individuals_with_languagegroup.filter(language_group__longitude__isnull=False)
 		print("...",len(individuals_with_languagegroup),"have a valid language group")
 		
-# 		languagegroup_nodes=list(set(individuals_with_languagegroup.values_list(
-# 			'language_group__id',
-# 			'language_group__latitude',
-# 			'language_group__longitude',
-# 			'language_group__name'
-# 		)))
-		
-		moderncountry_nodes=[i for i in list(set(individuals_with_languagegroup.values_list(
-			'language_group__moderncountry__id',
-			'language_group__moderncountry__latitude',
-			'language_group__moderncountry__longitude',
-			'language_group__moderncountry__name'
-		))) if None not in i]
+		languagegroup_nodes=list(set(individuals_with_languagegroup.values_list(
+			'language_group__id',
+			'language_group__latitude',
+			'language_group__longitude',
+			'language_group__name'
+		)))
 		
 		language_group_ids_offset=1000000
-# 		for languagegroup_node in languagegroup_nodes:
-# 			id,latitude,longitude,name=languagegroup_node
-# 			G.add_node(id+language_group_ids_offset,coords=(float(latitude),float(longitude)),name=name,tags=["origin"],type="african origin",pk=id)
-# 		print("added",len(languagegroup_nodes),"african origin nodes")
-
-		for moderncountry_node in moderncountry_nodes:
-			id,latitude,longitude,name=moderncountry_node
+		for languagegroup_node in languagegroup_nodes:
+			id,latitude,longitude,name=languagegroup_node
 			G.add_node(id+language_group_ids_offset,coords=(float(latitude),float(longitude)),name=name,tags=["origin"],type="african origin",pk=id)
-		print("added",len(moderncountry_nodes),"african origin nodes")
+		print("added",len(languagegroup_nodes),"african origin nodes")
 	
 		##2b. final destinations
 		african_origins_individuals.select_related('post_disembark_location')
@@ -293,17 +276,11 @@ class Command(BaseCommand):
 		#NOTE: 4 IS KIND OF A MAGIC NUMBER HERE -- BEYOND THAT WE HAVE TO DO SOME FUNKY HANDLING ON DISCONTINUOUS ROUTES
 		#WITH 4 SLOTS, ALL OF THE FOLLOWING HOPS ARE CONTINUOUS: 4 ENTRIES-->3 HOPS; 3 ENTRIES --> MAX 2, MIN 1 HOP; 2 ENTRIES --> MAX 1 HOP
 		all_individual_itineraries=list(set(african_origins_individuals.values_list(
-			'language_group__moderncountry__id',
+			'language_group__id',
             'voyage__voyage_itinerary__imp_principal_region_of_slave_purchase__value',
             'voyage__voyage_itinerary__imp_principal_region_slave_dis__value',
 			'post_disembark_location__value'
 		)))
-# 		all_individual_itineraries=list(set(african_origins_individuals.values_list(
-# 			'language_group__id',
-#             'voyage__voyage_itinerary__imp_principal_region_of_slave_purchase__value',
-#             'voyage__voyage_itinerary__imp_principal_region_slave_dis__value',
-# 			'post_disembark_location__value'
-# 		)))
 		
 # 		all_individual_itineraries=list(set(african_origins_individuals.values_list(
 # 			'language_group__id',
