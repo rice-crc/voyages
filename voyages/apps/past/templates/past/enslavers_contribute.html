@@ -93,7 +93,7 @@
                             <button v-if="editorialMode" v-on:click="rejectContrib" v-bind:class="{ disabled: isBusy }" class="btn btn-warning">
                                 {% trans "Reject" %}
                             </button>
-                            <button v-if="editorialMode" v-on:click="acceptContrib" v-bind:class="{ disabled: !contribActions || isBusy }" v-on:click="submitContrib" class="btn btn-danger">
+                            <button v-if="editorialMode" v-on:click="acceptContrib" v-bind:class="{ disabled: !contribActions || contribActions.length === 0 || isBusy }" v-on:click="submitContrib" class="btn btn-danger">
                                 {% trans "Accept" %}
                             </button>
                         </div>
@@ -409,6 +409,7 @@
                         alert(err.message);
                     } finally {
                         this.isBusy = false;
+                        this.contribActions = null;
                     }
                 },
                 acceptContrib: async function() {
@@ -421,7 +422,7 @@
                             method: 'POST',
                             body: JSON.stringify({ 
                                 'decision': 'ACCEPT',
-                                iterim: this.interim,
+                                interim: this.interim,
                                 'contrib_pk': '{{ contrib_pk }}'
                             })
                         });
@@ -435,6 +436,7 @@
                         alert(err.message);
                     } finally {
                         this.isBusy = false;
+                        this.contribActions = null;
                     }
                 },
                 rejectContrib: async function() {
@@ -457,6 +459,7 @@
                         alert(err.message);
                     } finally {
                         this.isBusy = false;
+                        this.contribActions = null;
                     }
                 }
             }

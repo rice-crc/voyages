@@ -2511,7 +2511,7 @@ def _create_enslaver_update_actions(contrib):
             'action': 'new',
             'model': EnslaverIdentity.__name__,
             'data': source['personal_data'],
-            'tag': f"EI_{key}"
+            'tag': f"{EnslaverIdentity.__name__}_{key}"
         })
         saved_identities.append(source)
     if type in ['edit', 'split']:
@@ -2532,7 +2532,12 @@ def _create_enslaver_update_actions(contrib):
         else:
             changed = False
             for k, v in data.items():
-                changed = v != matches[0].get(k)
+                current_val = matches[0].get(k)
+                changed = v != current_val
+                if changed and _isint(v) and _isint(current_val):
+                    # Sometimes we may get a string vs number and we need to
+                    # cast for the correct comparison.
+                    changed = int(v) != int(current_val)
                 if changed:
                     break
             if changed:
@@ -2552,7 +2557,7 @@ def _create_enslaver_update_actions(contrib):
         (int(c['enslaver_alias_id']), int(c['voyage_id'])): c \
         for c in EnslaverVoyageConnection.objects \
             .filter(enslaver_alias_id__in=current_aliases.keys()) \
-            .values('enslaver_alias_id', 'voyage_id', 'role', 'order')
+            .values('enslaver_alias_id', 'voyage_id', 'role_id', 'order')
     }
     current_relations = {int(r['relation_id']): r for r in EnslaverInRelation.objects \
         .filter(enslaver_alias_id__in=current_aliases.keys()) \
@@ -2581,11 +2586,11 @@ def _create_enslaver_update_actions(contrib):
                         'description': u_('Updating existing enslaver alias'),
                         'action': 'update',
                         'model': EnslaverAlias.__name__,
-                        'data': { 'identity_id': int(si['id']) if _isint(si['id']) else f"EI_{si['id']}" },
+                        'data': { 'identity_id': int(si['id']) if _isint(si['id']) else f"{EnslaverIdentity.__name__}_{si['id']}" },
                         'match': { 'pk': tag, 'alias': a['name'] }
                     })
             else:
-                tag = f"EA_{aid}"
+                tag = f"{EnslaverAlias.__name__}_{aid}"
                 actions.append({
                     'description': u_('Creating a new enslaver alias'),
                     'action': 'new',
@@ -2598,7 +2603,7 @@ def _create_enslaver_update_actions(contrib):
                 proposed_voyage_conn[(tag, vid)] = {
                     'enslaver_alias_id': tag,
                     'voyage_id': vid,
-                    'role': vc.get('role'),
+                    'role_id': vc.get('role'),
 			        'order': vc.get('order')
                 }
             for r in a['relations']:
@@ -2608,7 +2613,7 @@ def _create_enslaver_update_actions(contrib):
     exact_vconn_matches = set()
     for key, rel in current_voyage_conn.items():
         match = proposed_voyage_conn.get(key)
-        if match is not None and match['role'] == rel['role'] and match['order'] == rel['order']:
+        if match is not None and match['role_id'] == rel['role_id'] and match['order'] == rel['order']:
             exact_vconn_matches.add(key)
     for key in exact_vconn_matches:
         current_voyage_conn.pop(key)
@@ -2678,6 +2683,8 @@ def get_enslaver_update_actions(request):
     actions = _create_enslaver_update_actions(contrib)
     return JsonResponse({ 'contrib': contrib, 'actions': actions })
 
+_empty_action_warning = u_('The contribution does not modify the current data')
+
 @login_required
 @csrf_exempt
 @require_POST
@@ -2689,7 +2696,7 @@ def submit_enslaver_contribution(request):
         data = json.loads(request.body)
         actions = _create_enslaver_update_actions(data)
         if len(actions) == 0:
-            return JsonResponse({ 'error': u_('The contribution does not modify the current data') })
+            return JsonResponse({ 'error': _empty_action_warning })
     except:
         return JsonResponse({ 'error': 'Invalid JSON in request body' })
     contrib = EnslaverContribution()
@@ -2734,4 +2741,63 @@ def submit_enslaver_editorial_review(request):
     The data format follows the return value of
     `init_enslaver_editorial_review`
     """
-    return JsonResponse({ "error": "TODO" })
+    actions = None
+    try:
+        data = json.loads(request.body)
+        status = EnslavedContributionStatus.ACCEPTED if data['decision'] == 'ACCEPT' \
+            else EnslavedContributionStatus.REJECTED
+        if status == EnslavedContributionStatus.ACCEPTED:
+            actions = _create_enslaver_update_actions(data['interim'])
+    except Exception as ex:
+        return JsonResponse({ 'error': 'Invalid JSON in request body', 'details': str(ex) })
+    if actions is not None and len(actions) == 0:
+        return JsonResponse({ 'error': _empty_action_warning })
+    models = [EnslaverIdentity, EnslaverAlias, EnslaverInRelation, EnslaverVoyageConnection]
+    tags = {}
+    with transaction.atomic():
+        contrib = EnslaverContribution.objects.get(pk=data['contrib_pk'])
+        contrib.status = status
+        contrib.save()
+        for idx, a in enumerate(actions):
+            action_type = a['action']
+            if action_type not in ['new', 'update', 'delete']:
+                continue
+            model = [m for m in models if m.__name__ == a['model']][0]
+            target = None
+            if action_type != 'new':
+                q = model.objects.filter(**a['match'])
+                target = list(q)
+                if len(target) != 1:
+                    transaction.set_rollback(True)
+                    return JsonResponse({ "error": "Failed to find matching record", "action_index": idx })
+                target = target[0]
+            else:
+                target = model()
+            if action_type == 'delete':
+                try:
+                    target.delete()
+                except Exception as ex:
+                    transaction.set_rollback(True)
+                    return JsonResponse({ "error": "Failed to delete record", "action_index": idx, 'details': str(ex) })
+            else:
+                # Set/update model fields.
+                for k, v in a['data'].items():
+                    val = v
+                    if k.endswith('_id') and v in tags:
+                        val = tags[v]
+                    setattr(target, k, val)
+                try:
+                    target.save()
+                except Exception as ex:
+                    transaction.set_rollback(True)
+                    return JsonResponse({ "error": f"Failed to {'insert' if action_type == 'new' else action_type} record", "action_index": idx, 'details': str(ex) })
+                if action_type == 'new' and 'tag' in a:
+                    # Include newly saved pk in the tagged dict.
+                    tags[a['tag']] = target.pk
+        if actions is not None:
+            # At this point we *should* be in perfect sync with the contribution.
+            missing_actions = _create_enslaver_update_actions(data['interim'])
+            if len(missing_actions) > 0:
+                transaction.set_rollback(True)
+                return JsonResponse({ "error": "Contribution not in sync with transactional update", "details": missing_actions })
+    return JsonResponse({ "result": "OK" })

@@ -124,6 +124,8 @@
             </div>
             <div class="modal-body">
                 <input class="form-control" name="linkVoyageIdField" type="number" v-model="linkVoyageInput" autofocus />
+                <!-- TODO: selection box with roles. -->
+                <input class="form-control" name="linkVoyageRole" type="number" v-model="linkVoyageRole" autofocus />
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary" v-on:click="linkVoyage">{% trans "Link" %}</button>
