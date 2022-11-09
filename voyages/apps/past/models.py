@@ -1458,3 +1458,14 @@ class EnslaverSearch:
         for helper in cls.all_helpers:
             row = helper.patch_row(row)
         return row
+
+
+class EnslaverContribution(models.Model):
+    # We allow NULLs because the enslaver may be deleted and we still want to
+    # keep the contribution (it might even be the reason the identity was
+    # deleted, say in the case of a merge).
+    enslaver = models.ForeignKey(EnslaverIdentity, null=True, on_delete=models.SET_NULL)
+    contributor = models.ForeignKey(User)
+    created = models.DateTimeField(auto_now_add=True)
+    status = models.IntegerField(null=False)
+    data = models.TextField(null=False)

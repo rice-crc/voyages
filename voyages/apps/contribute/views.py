@@ -53,7 +53,7 @@ from voyages.apps.contribute.publication import (
     export_contributions, export_from_voyages, full_contribution_id,
     get_csv_writer, get_filtered_contributions, get_header_csv_text,
     publish_accepted_contributions, safe_writerow)
-from voyages.apps.past.models import Enslaved, EnslavedContribution, EnslavedContributionLanguageEntry, EnslavedContributionNameEntry, EnslavedContributionStatus, EnslaverAlias, EnslaverIdentity, EnslaverVoyageConnection, LanguageGroup, ModernCountry
+from voyages.apps.past.models import Enslaved, EnslavedContribution, EnslavedContributionLanguageEntry, EnslavedContributionNameEntry, EnslavedContributionStatus, EnslavementRelation, EnslaverAlias, EnslaverContribution, EnslaverIdentity, EnslaverInRelation, EnslaverVoyageConnection, LanguageGroup, ModernCountry
 from voyages.apps.past.views import _get_audio_filename
 from voyages.apps.voyage.cache import VoyageCache
 from voyages.apps.voyage.forms import VoyagesSourcesAdminForm
@@ -2507,7 +2507,7 @@ def _create_enslaver_update_actions(contrib):
         key = 'merged' if type == 'merge' else type
         source = identities[key]
         actions.append({
-            'description': 'Creating a new enslaver identity',
+            'description': u_('Creating a new enslaver identity'),
             'action': 'new',
             'model': EnslaverIdentity.__name__,
             'data': source['personal_data'],
@@ -2523,20 +2523,26 @@ def _create_enslaver_update_actions(contrib):
         source = identities[key]
         data = source['personal_data']
         matches = list(EnslaverIdentity.objects.filter(pk=int(key)).values(*data.keys())[:2])
-        changed = len(matches) != 1
-        if not changed:
+        if len(matches) != 1:
+            actions.append({
+                'description': u_('Warning: Enslaver identity not found!'),
+                'action': 'noop',
+                'match': { 'pk': int(key) }
+            })
+        else:
+            changed = False
             for k, v in data.items():
                 changed = v != matches[0].get(k)
                 if changed:
                     break
-        if changed:
-            actions.append({
-                'description': 'Updating existing enslaver identity',
-                'action': 'update',
-                'model': EnslaverIdentity.__name__,
-                'data': data,
-                'match': { 'pk': int(key) }
-            })
+            if changed:
+                actions.append({
+                    'description': u_('Updating existing enslaver identity'),
+                    'action': 'update',
+                    'model': EnslaverIdentity.__name__,
+                    'data': data,
+                    'match': { 'pk': int(key), 'principal_alias': matches[0]['principal_alias'] }
+                })
         saved_identities.append(source)
     # Update/create enslaver aliases to make sure they align with identities.
     current_aliases = {int(a['pk']): a for a in EnslaverAlias.objects \
@@ -2563,10 +2569,16 @@ def _create_enslaver_update_actions(contrib):
                     # Perhaps the alias was deleted between the time the
                     # contribution was submitted and the editorial evaluation?
                     tag = int(aid)
+                else:                    
+                    actions.append({
+                        'description': u_('Warning: alias was not found'),
+                        'action': 'noop',
+                        'match': { 'pk': aid, 'alias': a['name']  }
+                    })
             if tag is not None:
                 if current is None or int(current['identity_id']) != int(si['id']) or current['alias'] != a['name']:
                     actions.append({
-                        'description': 'Updating existing enslaver alias',
+                        'description': u_('Updating existing enslaver alias'),
                         'action': 'update',
                         'model': EnslaverAlias.__name__,
                         'data': { 'identity_id': int(si['id']) if _isint(si['id']) else f"EI_{si['id']}" },
@@ -2575,7 +2587,7 @@ def _create_enslaver_update_actions(contrib):
             else:
                 tag = f"EA_{aid}"
                 actions.append({
-                    'description': 'Creating a new enslaver alias',
+                    'description': u_('Creating a new enslaver alias'),
                     'action': 'new',
                     'model': EnslaverAlias.__name__,
                     'data': { 'identity_id': si['id'], 'alias': a['name'] },
@@ -2604,14 +2616,14 @@ def _create_enslaver_update_actions(contrib):
     # We only have deltas to worry now.
     for rel in current_voyage_conn.values():
         actions.append({
-            'description': 'Deleting voyage connection for existing alias',
+            'description': u_('Deleting voyage connection for existing alias'),
             'action': 'delete',
             'model': EnslaverVoyageConnection.__name__,
             'match': { 'enslaver_alias_id': rel['enslaver_alias_id'], 'voyage_id': rel['voyage_id'] }
         })
     for rel in proposed_voyage_conn.values():
         actions.append({
-            'description': 'Creating an enslaver alias <-> voyage connection',
+            'description': u_('Creating an enslaver alias <-> voyage connection'),
             'action': 'new',
             'model': EnslaverVoyageConnection.__name__,
             'data': rel
@@ -2636,11 +2648,23 @@ def _create_enslaver_update_actions(contrib):
                 'data': rel,
                 'match': current_relations[key]
             })
+    existing_aliases = {pair[0]: pair[1] for pair in EnslaverAlias.objects \
+        .filter(identity_id__in=identities.keys()).values_list('pk', 'alias')}
+    for key, alias in existing_aliases.items():
+        if key not in current_aliases:
+            # Delete existing alias.
+            actions.append({
+                'description': u_('Delete existing enslaver alias and all its voyages/relations'),
+                'action': 'delete',
+                'model': EnslaverAlias.__name__,
+                'match': { 'pk': key, 'alias': alias }
+            })
     if type == 'merge':
         # Delete previous identities.
         for k in identities.keys():
             if k != 'merged':
                 actions.push({
+                    'description': u_('Deleting pre-merge identity'),
                     'action': 'delete',
                     'model': EnslaverIdentity.__name__,
                     'match': { 'pk': int(k) }
@@ -2654,17 +2678,51 @@ def get_enslaver_update_actions(request):
     actions = _create_enslaver_update_actions(contrib)
     return JsonResponse({ 'contrib': contrib, 'actions': actions })
 
-@login_required()
+@login_required
 @csrf_exempt
 @require_POST
 def submit_enslaver_contribution(request):
     """
     Submit a user contribution to an enslaver.
     """
-    raise Exception("TODO")
+    try:
+        data = json.loads(request.body)
+        actions = _create_enslaver_update_actions(data)
+        if len(actions) == 0:
+            return JsonResponse({ 'error': u_('The contribution does not modify the current data') })
+    except:
+        return JsonResponse({ 'error': 'Invalid JSON in request body' })
+    contrib = EnslaverContribution()
+    if data['type'] in ['edit', 'split']:
+        try:
+            contrib.enslaver = EnslaverIdentity.objects \
+                .get(pk=[int(x) for x in data['identities'].keys() if _isint(x)][0])
+        except:
+            return JsonResponse({ 'error': u_('Enslaver not found!') })
+    contrib.data = json.dumps(data)
+    contrib.contributor = request.user
+    contrib.status = EnslavedContributionStatus.PENDING
+    contrib.save()
+    return JsonResponse({ 'result': 'OK' })
 
+@login_required
+@csrf_exempt
+@require_POST
+def get_enslaver_contribution_list(request):
+    data = json.loads(request.body) if request.body else {}
+    statuses = data.get('statuses', [EnslavedContributionStatus.PENDING])
+    q = EnslaverContribution.objects.filter(status__in=statuses) \
+        .values('pk', 'enslaver__principal_alias', 'contributor__username', 'created', 'status', 'data')
+    count = len(q)
+    start = data.get('startOffset', 0)
+    end = data.get('endOffset', 10000)
+    q = q[start:end]
+    results = list(q)
+    for r in results:
+        r['data'] = json.loads(r['data'])
+    return JsonResponse({ 'count': count, 'results': results })
 
-@login_required()
+@login_required
 @csrf_exempt
 @require_POST
 def submit_enslaver_editorial_review(request):
@@ -2674,6 +2732,6 @@ def submit_enslaver_editorial_review(request):
     - an edit of a single EnslaverIdentity
     - a split of an EnslaverIdentity
     The data format follows the return value of
-    `init_enslaver_editorial_review` 
+    `init_enslaver_editorial_review`
     """
-    raise Exception("TODO")
+    return JsonResponse({ "error": "TODO" })

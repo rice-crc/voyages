@@ -4,6 +4,7 @@ from django.conf.urls import url
 from django.views.generic import TemplateView
 
 from voyages.apps.contribute import views
+from voyages.apps import past
 
 urlpatterns = [
     url(r'^$', views.index, name='index'),
@@ -42,6 +43,9 @@ urlpatterns = [
         views.interim_summary,
         name='interim_summary_editor'),
     url(r'legal', views.legal, name='legal'),
+    url(r'enslaver_contribution_review/(?P<pk>\d+)$',
+        past.views.enslaver_contrib_editorial_review,
+        name='get_enslaver_contribution_list'),
     url(r'edit_voyage', views.edit, name='edit_voyage'),
     url(r'merge_voyages', views.merge, name='merge_voyages'),
     url(r'new_voyage', views.new_voyage, name='new_voyage'),
@@ -116,10 +120,22 @@ urlpatterns = [
     url(r'publish_origins_editorial_review',
         views.publish_origins_editorial_review,
         name='publish_origins_editorial_review'),
+    url(r'voyage_summary/(?P<pk>\d+)$',
+        views.get_voyage_summary,
+        name='get_voyage_summary'),
     url(r'init_enslaver_interim',
         views.init_enslaver_interim,
         name='init_enslaver_interim'),
     url(r'enslaver_update_actions',
         views.get_enslaver_update_actions,
-        name='get_enslaver_update_actions')
+        name='get_enslaver_update_actions'),
+    url(r'submit_enslaver_contribution',
+        views.submit_enslaver_contribution,
+        name='submit_enslaver_contribution'),
+    url(r'enslaver_contribution_list',
+        views.get_enslaver_contribution_list,
+        name='get_enslaver_contribution_list'),
+    url(r'submit_enslaver_editorial_review',
+        views.submit_enslaver_editorial_review,
+        name='submit_enslaver_editorial_review')
 ]

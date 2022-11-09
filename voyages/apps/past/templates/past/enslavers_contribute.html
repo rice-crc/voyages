@@ -74,21 +74,39 @@
                     <textarea name="notes" class="form-control enslaver_contrib_fullspan_control" v-model="interim.notes"></textarea>
                 </div>
                 <div id="review" class="tab-pane fade">
-                    TODO: action buttons (For contributor: submit, for editor: approve/reject)
                     <div class="panel panel-danger" v-if="validation.length > 0">
                         <div class="panel-heading">
                           <h3 class="panel-title">{% trans "Validation Errors" %}</h3>
                         </div>
-                        <ul>
+                        <ul class="list-group">
                             <li v-for="error in validation">[[ error ]]</li>
                         </ul>
                     </div>
                     <div class="panel" v-if="validation.length === 0">
-                        <button v-on:click="previewActions">
-                            {% trans "Preview Actions" %}
-                        </button>
-                        <textarea class="form-control enslaver_contrib_fullspan_control" style="font-family: monospace" v-model="contribActions">
-                        </textarea>
+                        <div class="btn-group" role="group" aria-label="Contribution actions">
+                            <button v-on:click="previewActions" class="btn btn-secondary">
+                                {% trans "Preview Actions" %}
+                            </button>
+                            <button v-if="!editorialMode" v-on:click="submitContrib" v-bind:class="{ disabled: isBusy }" class="btn btn-primary">
+                                {% trans "Submit" %}
+                            </button>
+                            <button v-if="editorialMode" v-on:click="rejectContrib" v-bind:class="{ disabled: isBusy }" class="btn btn-warning">
+                                {% trans "Reject" %}
+                            </button>
+                            <button v-if="editorialMode" v-on:click="acceptContrib" v-bind:class="{ disabled: !contribActions || isBusy }" v-on:click="submitContrib" class="btn btn-danger">
+                                {% trans "Accept" %}
+                            </button>
+                        </div>
+                        <ul class="list-group">
+                            <li class="list-group-item" v-for="action in contribActions">
+                                <h4>
+                                    <i class="fa" v-bind:class="{ 'fa-trash': action.action === 'delete', 'fa-plus': action.action === 'new', 'fa-edit': action.action === 'update', 'fa-warning': action.action === 'noop' }"></i>
+                                    [[ action.description ]]
+                                </h4>
+                                <span><b>[[ !!action.data ? gettext('with: ') : '' ]]</b> [[ JSON.stringify(action.data, null, 2) ]]</span>
+                                <span><b>[[ !!action.match ? gettext('matching: ') : '' ]]</b> [[ JSON.stringify(action.match, null, 2) ]]</span>
+                            </li>
+                        </ul>
                     </div>
                 </div>
             </div>
@@ -126,21 +144,24 @@
         });
 
     async function initialize() {
-        // The interim is either injected via Django view or we need to fetch it
-        // based on URL params.
-        let interim = {% if interim %}`{{ interim }}`{% else %}null{% endif %};
-        if (interim === null) {
-            // Initialize an interim Enslaver for this contribution.
-            const data = await fetch("/contribute/init_enslaver_interim", {
-                method: 'POST',
-                body: JSON.stringify({ type: '{{ mode }}', enslavers: [{{ id }}] })
-            });
-            interim = await data.json();
-            if (!!interim.error) {
-                alert(`Error: ${interim.error}`);
-                return;
-            }
+        {% comment %}
+        The interim contribution is either injected via Django view or we need to fetch it
+        based on URL params.
+        {% endcomment %}
+        {% if interim %}
+        const interim = {{ interim|safe }};
+        {% else %}
+        // Initialize an interim Enslaver for this contribution.
+        const data = await fetch("/contribute/init_enslaver_interim", {
+            method: 'POST',
+            body: JSON.stringify({ type: '{{ mode }}', enslavers: [{{ id }}] })
+        });
+        const interim = await data.json();
+        if (!!interim.error) {
+            alert(`Error: ${interim.error}`);
+            return;
         }
+        {% endif %}
         let places = await fetch("/contribute/places_ajax");
         places = await places.json();
         places = places.filter(p => p.type === "port").map(p => ({ id: parseInt(p.value), name: `${p.port} (${p.code})` }));
@@ -187,7 +208,9 @@
                 selectAliasChildren: [],
                 linkVoyageInput: null,
                 createAliasInput: null,
-                contribActions: ""
+                contribActions: null,
+                editorialMode: "{{ editorialMode }}" === "True",
+                isBusy: false
             },
             computed: {
                 validation() {
@@ -205,6 +228,12 @@
                 }
             },
             watch: {
+                interim: {
+                    handler() {
+                        this.contribActions = null;
+                    },
+                    deep: true
+                },
                 selectedIdentity(oldValue, newValue) {
                     this.selectedAlias = null;
                     this.selectAliasChildren = [];
@@ -246,6 +275,7 @@
                     this.selectedAlias = key;
                     this.createAliasInput = null;
                     closeModals();
+                    this.contribActions = null;
                 },
                 delSelAlias: function() {
                     if (!this.selectedAlias) {
@@ -263,6 +293,7 @@
                     }
                     delete this.selectedIdentity.aliases[this.selectedAlias];
                     this.selectedAlias = null;
+                    this.contribActions = null;
                 },
                 moveAlias: function(event) {
                     const target = this.interim.identities[event.target.getAttribute("value")];
@@ -274,6 +305,7 @@
                     delete this.selectedIdentity.aliases[key];
                     target.aliases[key] = alias;
                     this.selectedAlias = null;
+                    this.contribActions = null;
                 },
                 moveChildren: function(event) {
                     const target = this.selectedIdentity.aliases[event.target.getAttribute("value")];
@@ -289,6 +321,7 @@
                                 target.relations.push(m.val);
                             }
                         }
+                        this.contribActions = null;
                     }
                 },
                 setPrincipal: function() {
@@ -323,6 +356,7 @@
                     source.relations = filterMatches(source.relations, this.selectAliasChildren, matches, 'R');
                     if (matches) {
                         this.selectAliasChildren = [];
+                        this.contribActions = null;
                     }
                     return matches;
                 },
@@ -336,7 +370,8 @@
                         } else {
                             alias.voyages.push(data);
                             this.linkVoyageInput = null;
-                        }
+                        }    
+                        this.contribActions = null;
                     }
                     closeModals();
                 },
@@ -353,7 +388,76 @@
                         alert(data.error || 'Error');
                         return;
                     }
-                    this.contribActions = JSON.stringify(data.actions, null, 2);
+                    this.contribActions = data.actions;
+                },
+                submitContrib: async function() {
+                    try {
+                        this.isBusy = true;
+                        let res = await fetch("/contribute/submit_enslaver_contribution", {
+                            method: 'POST',
+                            body: JSON.stringify(interim)
+                        });
+                        res = await res.json();
+                        if (res.result !== 'OK') {
+                            alert(res.error || gettext("Failed to submit contribution"));
+                        } else {
+                            alert(gettext("Thank you for your contribution to the Enslavers database"));
+                            // Move to the enslavers main page.
+                            window.location.href = "/past/enslavers";
+                        }
+                    } catch (err) {
+                        alert(err.message);
+                    } finally {
+                        this.isBusy = false;
+                    }
+                },
+                acceptContrib: async function() {
+                    if (!confirm(gettext('The contribution will be accepted and the database will be updated immediately. Do you wish to proceed?'))) {
+                        return;
+                    }
+                    try {
+                        this.isBusy = true;
+                        let res = await fetch('/contribute/submit_enslaver_editorial_review', {
+                            method: 'POST',
+                            body: JSON.stringify({ 
+                                'decision': 'ACCEPT',
+                                iterim: this.interim,
+                                'contrib_pk': '{{ contrib_pk }}'
+                            })
+                        });
+                        res = await res.json();
+                        if (res.result !== 'OK') {
+                            alert(res.error || gettext("Failed to submit decision"));
+                        } else {
+                            alert('TODO: need a URL to redirect to...');
+                        }
+                    } catch (err) {
+                        alert(err.message);
+                    } finally {
+                        this.isBusy = false;
+                    }
+                },
+                rejectContrib: async function() {
+                    if (!confirm(gettext('The contribution will be marked as rejected. Do you wish to proceed?'))) {
+                        return;
+                    }
+                    try {
+                        this.isBusy = true;
+                        let res = await fetch('/contribute/submit_enslaver_editorial_review', {
+                            method: 'POST',
+                            body: JSON.stringify({ 'decision': 'REJECT', 'contrib_pk': '{{ contrib_pk }}' })
+                        });
+                        res = await res.json();
+                        if (res.result !== 'OK') {
+                            alert(res.error || gettext("Failed to submit decision"));
+                        } else {
+                            alert('TODO: need a URL to redirect to...');
+                        }
+                    } catch (err) {
+                        alert(err.message);
+                    } finally {
+                        this.isBusy = false;
+                    }
                 }
             }
         });
