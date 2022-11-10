@@ -48,6 +48,9 @@
         <div id="center-content-inner" class="enslavers-content">
             <!-- Tabs -->
             <ul class="nav nav-tabs trans-tab">
+                <li>                            
+                    <button v-on:click="goBack"><i class="fa fa-arrow-left"></i></button>
+                </li>
                 <li class="nav-item">
                     <a class="nav-link active" href="#aliases" data-toggle="tab" data-target="#aliases">{% trans 'Aliases and Voyages' %}</a>
                 </li>
@@ -121,9 +124,12 @@
 </div>
 <script src="{{ STATIC_URL }}scripts/library/vue@2.6.7.min.js" type="text/javascript"></script>
 <script>
+    const redirectUrl = () => {
+        window.location.href = "/past/enslavers"
+    };
     const closeModals = () => $('.modal').modal("hide");
     const formatCsvDate = date => {
-        const components = date.split(',').map(s => parseInt(s));
+        const components = (date || "").split(',').map(s => parseInt(s));
         let val = date;
         if (components.length === 3) {
             // Year:
@@ -221,10 +227,11 @@
                 createAliasInput: null,
                 contribActions: null,
                 editorialMode: "{{ editorialMode }}" === "True",
-                isBusy: false
+                isBusy: false,
+                isDirty: false
             },
             computed: {
-                isThreeColumnLayot() {
+                isThreeColumnLayout() {
                     return this.interim.type === 'merge' || this.interim.type === 'split';
                 },
                 validation() {
@@ -245,6 +252,7 @@
                 interim: {
                     handler() {
                         this.contribActions = null;
+                        this.isDirty = true;
                     },
                     deep: true
                 },
@@ -416,8 +424,7 @@
                             alert(res.error || gettext("Failed to submit contribution"));
                         } else {
                             alert(gettext("Thank you for your contribution to the Enslavers database"));
-                            // Move to the enslavers main page.
-                            window.location.href = "/past/enslavers";
+                            redirectUrl();
                         }
                     } catch (err) {
                         alert(err.message);
@@ -444,7 +451,7 @@
                         if (res.result !== 'OK') {
                             alert(res.error || gettext("Failed to submit decision"));
                         } else {
-                            alert('TODO: need a URL to redirect to...');
+                            redirectUrl();
                         }
                     } catch (err) {
                         alert(err.message);
@@ -467,13 +474,18 @@
                         if (res.result !== 'OK') {
                             alert(res.error || gettext("Failed to submit decision"));
                         } else {
-                            alert('TODO: need a URL to redirect to...');
+                            redirectUrl();
                         }
                     } catch (err) {
                         alert(err.message);
                     } finally {
                         this.isBusy = false;
                         this.contribActions = null;
+                    }
+                },
+                goBack: function() {
+                    if (!this.isDirty || confirm(gettext('Abandon changes?'))) {
+                        window.history.back();
                     }
                 }
             }

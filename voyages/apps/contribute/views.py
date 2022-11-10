@@ -2705,14 +2705,14 @@ def _create_enslaver_update_actions(contrib, check_transaction_tags=None):
             })
     if type == 'merge':
         # Delete previous identities.
-        for k in identities.keys():
+        for k, v in identities.items():
             if k != 'merged':
                 if len(EnslaverIdentity.objects.filter(pk=int(k))) != 0:
                     actions.append({
                         'description': u_('Deleting pre-merge identity'),
                         'action': 'delete',
                         'model': EnslaverIdentity.__name__,
-                        'match': { 'pk': int(k) }
+                        'match': { 'pk': int(k), 'principal_alias': v['personal_data']['principal_alias'] }
                     })
     return actions
 

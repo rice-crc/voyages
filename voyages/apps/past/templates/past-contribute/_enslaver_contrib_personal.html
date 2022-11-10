@@ -7,7 +7,7 @@
         </div>
         <div 
             v-for="identity in interim.identities" 
-            v-bind:class="[[ isThreeColumnLayot ? 'col-md-3' : 'col-md-9' ]]">
+            v-bind:class="[[ isThreeColumnLayout ? 'col-md-3' : 'col-md-9' ]]">
             <h2>[[ identity.id ]]</h2>
         </div>
     </div>
@@ -17,7 +17,7 @@
         </div>
         <div 
             v-for="identity in interim.identities" 
-            v-bind:class="[[ isThreeColumnLayot ? 'col-md-3' : 'col-md-9' ]]">
+            v-bind:class="[[ isThreeColumnLayout ? 'col-md-3' : 'col-md-9' ]]">
             <input class="form-control" type="text" v-model="identity.personal_data.principal_alias"
                 v-bind:disabled="interim.type === 'merge' && identity.id !== 'merged'">
         </div>
@@ -28,7 +28,7 @@
         </div>
         <div 
             v-for="identity in interim.identities" 
-            v-bind:class="[[ isThreeColumnLayot ? 'col-md-3' : 'col-md-9' ]]">
+            v-bind:class="[[ isThreeColumnLayout ? 'col-md-3' : 'col-md-9' ]]">
             <input class="form-control" type="number" v-model="identity.personal_data.birth_year"
                 v-bind:disabled="interim.type === 'merge' && identity.id !== 'merged'">
         </div>
@@ -39,7 +39,7 @@
         </div>
         <div 
             v-for="identity in interim.identities" 
-            v-bind:class="[[ isThreeColumnLayot ? 'col-md-3' : 'col-md-9' ]]">
+            v-bind:class="[[ isThreeColumnLayout ? 'col-md-3' : 'col-md-9' ]]">
             <input class="form-control" type="number" v-model="identity.personal_data.birth_month"
                 v-bind:disabled="interim.type === 'merge' && identity.id !== 'merged'">
         </div>
@@ -50,7 +50,7 @@
         </div>
         <div 
             v-for="identity in interim.identities" 
-            v-bind:class="[[ isThreeColumnLayot ? 'col-md-3' : 'col-md-9' ]]">
+            v-bind:class="[[ isThreeColumnLayout ? 'col-md-3' : 'col-md-9' ]]">
             <input class="form-control" type="number" v-model="identity.personal_data.birth_day"
                 v-bind:disabled="interim.type === 'merge' && identity.id !== 'merged'">
         </div>
@@ -61,7 +61,7 @@
         </div>
         <div 
             v-for="identity in interim.identities" 
-            v-bind:class="[[ isThreeColumnLayot ? 'col-md-3' : 'col-md-9' ]]">
+            v-bind:class="[[ isThreeColumnLayout ? 'col-md-3' : 'col-md-9' ]]">
             <select class="form-control" type="number" v-model="identity.personal_data.birth_place_id"
                 v-bind:disabled="interim.type === 'merge' && identity.id !== 'merged'">
                 <option disabled>
@@ -78,7 +78,7 @@
         </div>
         <div 
             v-for="identity in interim.identities" 
-            v-bind:class="[[ isThreeColumnLayot ? 'col-md-3' : 'col-md-9' ]]">
+            v-bind:class="[[ isThreeColumnLayout ? 'col-md-3' : 'col-md-9' ]]">
             <input class="form-control" type="number" v-model="identity.personal_data.death_year"
                 v-bind:disabled="interim.type === 'merge' && identity.id !== 'merged'">
         </div>
@@ -89,7 +89,7 @@
         </div>
         <div 
             v-for="identity in interim.identities" 
-            v-bind:class="[[ isThreeColumnLayot ? 'col-md-3' : 'col-md-9' ]]">
+            v-bind:class="[[ isThreeColumnLayout ? 'col-md-3' : 'col-md-9' ]]">
             <input class="form-control" type="number" v-model="identity.personal_data.death_month"
                 v-bind:disabled="interim.type === 'merge' && identity.id !== 'merged'">
         </div>
@@ -100,7 +100,7 @@
         </div>
         <div 
             v-for="identity in interim.identities" 
-            v-bind:class="[[ isThreeColumnLayot ? 'col-md-3' : 'col-md-9' ]]">
+            v-bind:class="[[ isThreeColumnLayout ? 'col-md-3' : 'col-md-9' ]]">
             <input class="form-control" type="number" v-model="identity.personal_data.death_day"
                 v-bind:disabled="interim.type === 'merge' && identity.id !== 'merged'">
         </div>
@@ -111,7 +111,7 @@
         </div>
         <div 
             v-for="identity in interim.identities" 
-            v-bind:class="[[ isThreeColumnLayot ? 'col-md-3' : 'col-md-9' ]]">
+            v-bind:class="[[ isThreeColumnLayout ? 'col-md-3' : 'col-md-9' ]]">
             <select class="form-control" type="number" v-model="identity.personal_data.death_place_id"
                 v-bind:disabled="interim.type === 'merge' && identity.id !== 'merged'">
                 <option disabled>
@@ -128,7 +128,7 @@
         </div>
         <div 
             v-for="identity in interim.identities" 
-            v-bind:class="[[ isThreeColumnLayot ? 'col-md-3' : 'col-md-9' ]]">
+            v-bind:class="[[ isThreeColumnLayout ? 'col-md-3' : 'col-md-9' ]]">
             <input class="form-control" type="text" v-model="identity.personal_data.father_name"
                 v-bind:disabled="interim.type === 'merge' && identity.id !== 'merged'">
         </div>
@@ -139,7 +139,7 @@
         </div>
         <div 
             v-for="identity in interim.identities" 
-            v-bind:class="[[ isThreeColumnLayot ? 'col-md-3' : 'col-md-9' ]]">
+            v-bind:class="[[ isThreeColumnLayout ? 'col-md-3' : 'col-md-9' ]]">
             <input class="form-control" type="text" v-model="identity.personal_data.father_occupation"
                 v-bind:disabled="interim.type === 'merge' && identity.id !== 'merged'">
         </div>
@@ -150,7 +150,7 @@
         </div>
         <div 
             v-for="identity in interim.identities" 
-            v-bind:class="[[ isThreeColumnLayot ? 'col-md-3' : 'col-md-9' ]]">
+            v-bind:class="[[ isThreeColumnLayout ? 'col-md-3' : 'col-md-9' ]]">
             <input class="form-control" type="text" v-model="identity.personal_data.mother_name"
                 v-bind:disabled="interim.type === 'merge' && identity.id !== 'merged'">
         </div>
@@ -161,8 +161,8 @@
         </div>
         <div 
             v-for="identity in interim.identities" 
-            v-bind:class="[[ isThreeColumnLayot ? 'col-md-3' : 'col-md-9' ]]">
-            <select class="form-control" type="number" v-model="identity.personal_data.principal_location"
+            v-bind:class="[[ isThreeColumnLayout ? 'col-md-3' : 'col-md-9' ]]">
+            <select class="form-control" type="number" v-model="identity.personal_data.principal_location_id"
                 v-bind:disabled="interim.type === 'merge' && identity.id !== 'merged'">
                 <option disabled>
                     {% trans "If the desired place is not in the list, please use the notes tab" %}
@@ -178,7 +178,7 @@
         </div>
         <div 
             v-for="identity in interim.identities" 
-            v-bind:class="[[ isThreeColumnLayot ? 'col-md-3' : 'col-md-9' ]]">
+            v-bind:class="[[ isThreeColumnLayout ? 'col-md-3' : 'col-md-9' ]]">
             <input class="form-control" type="text" v-model="identity.personal_data.probate_date"
                 v-bind:disabled="interim.type === 'merge' && identity.id !== 'merged'">
         </div>
@@ -189,7 +189,7 @@
         </div>
         <div 
             v-for="identity in interim.identities" 
-            v-bind:class="[[ isThreeColumnLayot ? 'col-md-3' : 'col-md-9' ]]">
+            v-bind:class="[[ isThreeColumnLayout ? 'col-md-3' : 'col-md-9' ]]">
             <input class="form-control" type="number" v-model="identity.personal_data.will_value_pounds"
                 v-bind:disabled="interim.type === 'merge' && identity.id !== 'merged'">
         </div>
@@ -200,7 +200,7 @@
         </div>
         <div 
             v-for="identity in interim.identities" 
-            v-bind:class="[[ isThreeColumnLayot ? 'col-md-3' : 'col-md-9' ]]">
+            v-bind:class="[[ isThreeColumnLayout ? 'col-md-3' : 'col-md-9' ]]">
             <input class="form-control" type="number" v-model="identity.personal_data.will_value_dollars"
                 v-bind:disabled="interim.type === 'merge' && identity.id !== 'merged'">
         </div>
@@ -211,7 +211,7 @@
         </div>
         <div 
             v-for="identity in interim.identities" 
-            v-bind:class="[[ isThreeColumnLayot ? 'col-md-3' : 'col-md-9' ]]">
+            v-bind:class="[[ isThreeColumnLayout ? 'col-md-3' : 'col-md-9' ]]">
             <input class="form-control" type="text" v-model="identity.personal_data.will_court"
                 v-bind:disabled="interim.type === 'merge' && identity.id !== 'merged'">
         </div>
@@ -222,7 +222,7 @@
         </div>
         <div 
             v-for="identity in interim.identities" 
-            v-bind:class="[[ isThreeColumnLayot ? 'col-md-3' : 'col-md-9' ]]">
+            v-bind:class="[[ isThreeColumnLayout ? 'col-md-3' : 'col-md-9' ]]">
             <input class="form-control" type="number" v-model="identity.personal_data.notes"
                 v-bind:disabled="interim.type === 'merge' && identity.id !== 'merged'">
         </div>

@@ -3,6 +3,7 @@ var categoryNames = [
   gettext("Itinerary"),
   gettext("Personal Data"),
   gettext("Biographical Sources"),
+  gettext("Contribution"),
 ];
 
 function bioSourceHeader() {
@@ -13,7 +14,7 @@ var allColumns = [
   // name
   { data: "alias_list", category: 0, header: gettext("Full Name"), isImputed: false, orderable: false },
   { data: "ranking", category: 0, header: gettext("Search Ranking"), isImputed: false, isUserSearchBased: true, visible: false },
-
+  
   // voyages
   { data: "voyages_list", className: "dt-control text-center voyages", category: 1, header: gettext("Voyages"), isImputed: false, orderable: false, defaultContent: '' },
   { data: "relations_list", className: "dt-control text-center relations", category: 1, header: gettext("Relations"), isImputed: false, orderable: false, defaultContent: '' },
@@ -30,6 +31,8 @@ var allColumns = [
   // sources
   { data: "sources_list", category: 3, header: bioSourceHeader(), isImputed: false, visible: false, orderable: false },
 
+  { data: "id", category: 4, header: gettext("Contribute"), isImputed: false, isContribute: true, orderable: false },
+  
 ];
 
 var categories = $.map(categoryNames, function(name) {
@@ -68,6 +71,8 @@ allColumns.forEach(function(c, index) {
     if (data !== null) {
       if (c.data == 'sources_list') {
         formattedString = data;
+      } else if (c.isContribute) {
+        formattedString = `<a href="/past/enslavers_contribute/edit/${data}"><i class="fas fa-edit btn btn-transparent"></i></a>`;
       } else if (c.data == 'voyages_list' || c.data == 'relations_list') {
         if (data.length > 0) {
           formattedString = '<i class="fa fa-plus-square" aria-hidden="true"></i>';
