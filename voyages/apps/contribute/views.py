@@ -2493,7 +2493,31 @@ def _isint(x):
     except:
         return False
 
-def _create_enslaver_update_actions(contrib):
+def _compare_data(left, right):
+    delta = {}
+    for k, v in left.items():
+        right_val = right.get(k)
+        changed = v != right_val
+        if changed and _isint(v) and _isint(right_val):
+            # Sometimes we may get a string vs number and we need to
+            # cast for the correct comparison.
+            v = int(v)
+            right_val = int(right_val)
+            changed = v != right_val
+        if changed:
+            delta[k] = (v, right_val)
+    return None if len(delta) == 0 else delta
+
+def _get_single_entity(model, pk, fields):
+    matches = list(EnslaverIdentity.objects.filter(pk=pk).values(*fields)[:2])
+    return matches[0] if len(matches) == 1 else None
+
+def _get_tag_replaced_data(data, tags):
+    if tags is None:
+        return data
+    return { k: tags[v] if k.endswith('_id') and v in tags else v for k, v in data.items() }
+
+def _create_enslaver_update_actions(contrib, check_transaction_tags=None):
     """
     Describe all the actions that would be performed in a
     db transaction if the contribution is accepted.
@@ -2506,13 +2530,28 @@ def _create_enslaver_update_actions(contrib):
         # Create a new identity.
         key = 'merged' if type == 'merge' else type
         source = identities[key]
-        actions.append({
-            'description': u_('Creating a new enslaver identity'),
-            'action': 'new',
-            'model': EnslaverIdentity.__name__,
-            'data': source['personal_data'],
-            'tag': f"{EnslaverIdentity.__name__}_{key}"
-        })
+        tag = f"{EnslaverIdentity.__name__}_{key}"
+        if not check_transaction_tags or not tag in check_transaction_tags:
+            actions.append({
+                'description': u_('Creating a new enslaver identity'),
+                'action': 'new',
+                'model': EnslaverIdentity.__name__,
+                'data': source['personal_data'],
+                'tag': tag
+            })
+        else:
+            data = source['personal_data']
+            key = check_transaction_tags[tag]
+            created = _get_single_entity(EnslaverIdentity, key, data.keys())
+            # Match against expected data.
+            delta = _compare_data(data, created)
+            if delta is not None:
+                actions.append({
+                    'description': u_('Transactional check warning: Enslaver identity data mismatch!'),
+                    'action': 'noop',
+                    'data': delta,
+                    'match': { 'pk': int(key) }
+                })
         saved_identities.append(source)
     if type in ['edit', 'split']:
         # Update the original identity.
@@ -2522,36 +2561,31 @@ def _create_enslaver_update_actions(contrib):
         key = key[0]
         source = identities[key]
         data = source['personal_data']
-        matches = list(EnslaverIdentity.objects.filter(pk=int(key)).values(*data.keys())[:2])
-        if len(matches) != 1:
+        current = _get_single_entity(EnslaverIdentity, int(key), data.keys())
+        if current is None:
             actions.append({
                 'description': u_('Warning: Enslaver identity not found!'),
                 'action': 'noop',
                 'match': { 'pk': int(key) }
             })
         else:
-            changed = False
-            for k, v in data.items():
-                current_val = matches[0].get(k)
-                changed = v != current_val
-                if changed and _isint(v) and _isint(current_val):
-                    # Sometimes we may get a string vs number and we need to
-                    # cast for the correct comparison.
-                    changed = int(v) != int(current_val)
-                if changed:
-                    break
-            if changed:
+            changed = _compare_data(data, current)
+            if changed is not None:
                 actions.append({
                     'description': u_('Updating existing enslaver identity'),
                     'action': 'update',
                     'model': EnslaverIdentity.__name__,
                     'data': data,
-                    'match': { 'pk': int(key), 'principal_alias': matches[0]['principal_alias'] }
+                    'match': { 'pk': int(key), 'principal_alias': current['principal_alias'] }
                 })
         saved_identities.append(source)
     # Update/create enslaver aliases to make sure they align with identities.
+    aliases_keys = [aid for si in saved_identities for aid in si['aliases'].keys()]
+    if check_transaction_tags:
+        # Remap tags to ids when checking.
+        aliases_keys = [check_transaction_tags.get(x, x) if not _isint(x) else int(x) for x in aliases_keys]
     current_aliases = {int(a['pk']): a for a in EnslaverAlias.objects \
-        .filter(pk__in=[aid for si in saved_identities for aid in si['aliases'].keys() if _isint(aid)]) \
+        .filter(pk__in=[aid for aid in aliases_keys if _isint(aid)]) \
         .values('pk', 'identity_id', 'alias')}
     current_voyage_conn = {
         (int(c['enslaver_alias_id']), int(c['voyage_id'])): c \
@@ -2568,6 +2602,8 @@ def _create_enslaver_update_actions(contrib):
         for aid, a in si['aliases'].items():
             current = None
             tag = None
+            if check_transaction_tags and not _isint(aid) and aid in check_transaction_tags:
+                aid = check_transaction_tags.get(aid)
             if _isint(aid):
                 current = current_aliases.get(int(aid))
                 if current is not None:
@@ -2580,13 +2616,16 @@ def _create_enslaver_update_actions(contrib):
                         'action': 'noop',
                         'match': { 'pk': aid, 'alias': a['name']  }
                     })
+            identity_id = si['id']
+            if check_transaction_tags is not None and not _isint(identity_id):
+                identity_id = check_transaction_tags.get(f"{EnslaverIdentity.__name__}_{identity_id}", identity_id)
             if tag is not None:
-                if current is None or int(current['identity_id']) != int(si['id']) or current['alias'] != a['name']:
+                if current is None or not _isint(identity_id) or int(current['identity_id']) != int(identity_id) or current['alias'] != a['name']:
                     actions.append({
                         'description': u_('Updating existing enslaver alias'),
                         'action': 'update',
                         'model': EnslaverAlias.__name__,
-                        'data': { 'identity_id': int(si['id']) if _isint(si['id']) else f"{EnslaverIdentity.__name__}_{si['id']}" },
+                        'data': { 'identity_id': int(identity_id) if _isint(identity_id) else f"{EnslaverIdentity.__name__}_{identity_id}" },
                         'match': { 'pk': tag, 'alias': a['name'] }
                     })
             else:
@@ -2654,7 +2693,7 @@ def _create_enslaver_update_actions(contrib):
                 'match': current_relations[key]
             })
     existing_aliases = {pair[0]: pair[1] for pair in EnslaverAlias.objects \
-        .filter(identity_id__in=identities.keys()).values_list('pk', 'alias')}
+        .filter(identity_id__in=[k for k in identities.keys() if _isint(k)]).values_list('pk', 'alias')}
     for key, alias in existing_aliases.items():
         if key not in current_aliases:
             # Delete existing alias.
@@ -2668,12 +2707,13 @@ def _create_enslaver_update_actions(contrib):
         # Delete previous identities.
         for k in identities.keys():
             if k != 'merged':
-                actions.push({
-                    'description': u_('Deleting pre-merge identity'),
-                    'action': 'delete',
-                    'model': EnslaverIdentity.__name__,
-                    'match': { 'pk': int(k) }
-                })
+                if len(EnslaverIdentity.objects.filter(pk=int(k))) != 0:
+                    actions.append({
+                        'description': u_('Deleting pre-merge identity'),
+                        'action': 'delete',
+                        'model': EnslaverIdentity.__name__,
+                        'match': { 'pk': int(k) }
+                    })
     return actions
 
 @csrf_exempt
@@ -2758,7 +2798,7 @@ def submit_enslaver_editorial_review(request):
         contrib = EnslaverContribution.objects.get(pk=data['contrib_pk'])
         contrib.status = status
         contrib.save()
-        for idx, a in enumerate(actions):
+        for idx, a in enumerate(actions or []):
             action_type = a['action']
             if action_type not in ['new', 'update', 'delete']:
                 continue
@@ -2781,11 +2821,8 @@ def submit_enslaver_editorial_review(request):
                     return JsonResponse({ "error": "Failed to delete record", "action_index": idx, 'details': str(ex) })
             else:
                 # Set/update model fields.
-                for k, v in a['data'].items():
-                    val = v
-                    if k.endswith('_id') and v in tags:
-                        val = tags[v]
-                    setattr(target, k, val)
+                for k, v in _get_tag_replaced_data(a['data'], tags).items():
+                    setattr(target, k, v)
                 try:
                     target.save()
                 except Exception as ex:
@@ -2796,7 +2833,7 @@ def submit_enslaver_editorial_review(request):
                     tags[a['tag']] = target.pk
         if actions is not None:
             # At this point we *should* be in perfect sync with the contribution.
-            missing_actions = _create_enslaver_update_actions(data['interim'])
+            missing_actions = _create_enslaver_update_actions(data['interim'], tags)
             if len(missing_actions) > 0:
                 transaction.set_rollback(True)
                 return JsonResponse({ "error": "Contribution not in sync with transactional update", "details": missing_actions })

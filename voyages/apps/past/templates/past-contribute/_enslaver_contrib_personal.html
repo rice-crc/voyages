@@ -1,0 +1,230 @@
+{% load i18n %}
+
+<div style="max-height: calc(100vh - 150px); overflow-x: clip; overflow-y: scroll;">
+    <div class="row">
+        <div class="col-md-3">
+            <!-- Should be blank -->
+        </div>
+        <div 
+            v-for="identity in interim.identities" 
+            v-bind:class="[[ isThreeColumnLayot ? 'col-md-3' : 'col-md-9' ]]">
+            <h2>[[ identity.id ]]</h2>
+        </div>
+    </div>
+    <div class="row odd_row">
+        <div class="col-md-3">
+            {% trans "Principal Alias" %}
+        </div>
+        <div 
+            v-for="identity in interim.identities" 
+            v-bind:class="[[ isThreeColumnLayot ? 'col-md-3' : 'col-md-9' ]]">
+            <input class="form-control" type="text" v-model="identity.personal_data.principal_alias"
+                v-bind:disabled="interim.type === 'merge' && identity.id !== 'merged'">
+        </div>
+    </div>
+    <div class="row even_row">
+        <div class="col-md-3">
+            {% trans "Birth Year" %}
+        </div>
+        <div 
+            v-for="identity in interim.identities" 
+            v-bind:class="[[ isThreeColumnLayot ? 'col-md-3' : 'col-md-9' ]]">
+            <input class="form-control" type="number" v-model="identity.personal_data.birth_year"
+                v-bind:disabled="interim.type === 'merge' && identity.id !== 'merged'">
+        </div>
+    </div>
+    <div class="row odd_row">
+        <div class="col-md-3">
+            {% trans "Birth Month" %}
+        </div>
+        <div 
+            v-for="identity in interim.identities" 
+            v-bind:class="[[ isThreeColumnLayot ? 'col-md-3' : 'col-md-9' ]]">
+            <input class="form-control" type="number" v-model="identity.personal_data.birth_month"
+                v-bind:disabled="interim.type === 'merge' && identity.id !== 'merged'">
+        </div>
+    </div>
+    <div class="row even_row">
+        <div class="col-md-3">
+            {% trans "Birth Day" %}
+        </div>
+        <div 
+            v-for="identity in interim.identities" 
+            v-bind:class="[[ isThreeColumnLayot ? 'col-md-3' : 'col-md-9' ]]">
+            <input class="form-control" type="number" v-model="identity.personal_data.birth_day"
+                v-bind:disabled="interim.type === 'merge' && identity.id !== 'merged'">
+        </div>
+    </div>
+    <div class="row odd_row">
+        <div class="col-md-3">
+            {% trans "Birth Place" %}
+        </div>
+        <div 
+            v-for="identity in interim.identities" 
+            v-bind:class="[[ isThreeColumnLayot ? 'col-md-3' : 'col-md-9' ]]">
+            <select class="form-control" type="number" v-model="identity.personal_data.birth_place_id"
+                v-bind:disabled="interim.type === 'merge' && identity.id !== 'merged'">
+                <option disabled>
+                    {% trans "If the desired place is not in the list, please use the notes tab" %}
+                </option>
+                <option>{% trans "(blank)" %}</option>
+                <option v-for="place in places" v-bind:value="place.id">[[ place.name ]]</option>
+            </select>
+        </div>
+    </div>
+    <div class="row even_row">
+        <div class="col-md-3">
+            {% trans "Death Year" %}
+        </div>
+        <div 
+            v-for="identity in interim.identities" 
+            v-bind:class="[[ isThreeColumnLayot ? 'col-md-3' : 'col-md-9' ]]">
+            <input class="form-control" type="number" v-model="identity.personal_data.death_year"
+                v-bind:disabled="interim.type === 'merge' && identity.id !== 'merged'">
+        </div>
+    </div>
+    <div class="row odd_row">
+        <div class="col-md-3">
+            {% trans "Death Month" %}
+        </div>
+        <div 
+            v-for="identity in interim.identities" 
+            v-bind:class="[[ isThreeColumnLayot ? 'col-md-3' : 'col-md-9' ]]">
+            <input class="form-control" type="number" v-model="identity.personal_data.death_month"
+                v-bind:disabled="interim.type === 'merge' && identity.id !== 'merged'">
+        </div>
+    </div>
+    <div class="row even_row">
+        <div class="col-md-3">
+            {% trans "Death Day" %}
+        </div>
+        <div 
+            v-for="identity in interim.identities" 
+            v-bind:class="[[ isThreeColumnLayot ? 'col-md-3' : 'col-md-9' ]]">
+            <input class="form-control" type="number" v-model="identity.personal_data.death_day"
+                v-bind:disabled="interim.type === 'merge' && identity.id !== 'merged'">
+        </div>
+    </div>
+    <div class="row odd_row">
+        <div class="col-md-3">
+            {% trans "Death Place" %}
+        </div>
+        <div 
+            v-for="identity in interim.identities" 
+            v-bind:class="[[ isThreeColumnLayot ? 'col-md-3' : 'col-md-9' ]]">
+            <select class="form-control" type="number" v-model="identity.personal_data.death_place_id"
+                v-bind:disabled="interim.type === 'merge' && identity.id !== 'merged'">
+                <option disabled>
+                    {% trans "If the desired place is not in the list, please use the notes tab" %}
+                </option>
+                <option>{% trans "(blank)" %}</option>
+                <option v-for="place in places" v-bind:value="place.id">[[ place.name ]]</option>
+            </select>
+        </div>
+    </div>
+    <div class="row even_row">
+        <div class="col-md-3">
+            {% trans "Father's Name" %}
+        </div>
+        <div 
+            v-for="identity in interim.identities" 
+            v-bind:class="[[ isThreeColumnLayot ? 'col-md-3' : 'col-md-9' ]]">
+            <input class="form-control" type="text" v-model="identity.personal_data.father_name"
+                v-bind:disabled="interim.type === 'merge' && identity.id !== 'merged'">
+        </div>
+    </div>
+    <div class="row odd_row">
+        <div class="col-md-3">
+            {% trans "Father's Occupation" %}
+        </div>
+        <div 
+            v-for="identity in interim.identities" 
+            v-bind:class="[[ isThreeColumnLayot ? 'col-md-3' : 'col-md-9' ]]">
+            <input class="form-control" type="text" v-model="identity.personal_data.father_occupation"
+                v-bind:disabled="interim.type === 'merge' && identity.id !== 'merged'">
+        </div>
+    </div>
+    <div class="row even_row">
+        <div class="col-md-3">
+            {% trans "Mother's Name" %}
+        </div>
+        <div 
+            v-for="identity in interim.identities" 
+            v-bind:class="[[ isThreeColumnLayot ? 'col-md-3' : 'col-md-9' ]]">
+            <input class="form-control" type="text" v-model="identity.personal_data.mother_name"
+                v-bind:disabled="interim.type === 'merge' && identity.id !== 'merged'">
+        </div>
+    </div>
+    <div class="row odd_row">
+        <div class="col-md-3">
+            {% trans "Principal Location" %}
+        </div>
+        <div 
+            v-for="identity in interim.identities" 
+            v-bind:class="[[ isThreeColumnLayot ? 'col-md-3' : 'col-md-9' ]]">
+            <select class="form-control" type="number" v-model="identity.personal_data.principal_location"
+                v-bind:disabled="interim.type === 'merge' && identity.id !== 'merged'">
+                <option disabled>
+                    {% trans "If the desired place is not in the list, please use the notes tab" %}
+                </option>
+                <option>{% trans "(blank)" %}</option>
+                <option v-for="place in places" v-bind:value="place.id">[[ place.name ]]</option>
+            </select>
+        </div>
+    </div>
+    <div class="row even_row">
+        <div class="col-md-3">
+            {% trans "Probate Date" %}
+        </div>
+        <div 
+            v-for="identity in interim.identities" 
+            v-bind:class="[[ isThreeColumnLayot ? 'col-md-3' : 'col-md-9' ]]">
+            <input class="form-control" type="text" v-model="identity.personal_data.probate_date"
+                v-bind:disabled="interim.type === 'merge' && identity.id !== 'merged'">
+        </div>
+    </div>
+    <div class="row odd_row">
+        <div class="col-md-3">
+            {% trans "Will Value (Pounds)" %}
+        </div>
+        <div 
+            v-for="identity in interim.identities" 
+            v-bind:class="[[ isThreeColumnLayot ? 'col-md-3' : 'col-md-9' ]]">
+            <input class="form-control" type="number" v-model="identity.personal_data.will_value_pounds"
+                v-bind:disabled="interim.type === 'merge' && identity.id !== 'merged'">
+        </div>
+    </div>
+    <div class="row even_row">
+        <div class="col-md-3">
+            {% trans "Will Value (Dollars)" %}
+        </div>
+        <div 
+            v-for="identity in interim.identities" 
+            v-bind:class="[[ isThreeColumnLayot ? 'col-md-3' : 'col-md-9' ]]">
+            <input class="form-control" type="number" v-model="identity.personal_data.will_value_dollars"
+                v-bind:disabled="interim.type === 'merge' && identity.id !== 'merged'">
+        </div>
+    </div>
+    <div class="row odd_row">
+        <div class="col-md-3">
+            {% trans "Will Court" %}
+        </div>
+        <div 
+            v-for="identity in interim.identities" 
+            v-bind:class="[[ isThreeColumnLayot ? 'col-md-3' : 'col-md-9' ]]">
+            <input class="form-control" type="text" v-model="identity.personal_data.will_court"
+                v-bind:disabled="interim.type === 'merge' && identity.id !== 'merged'">
+        </div>
+    </div>
+    <div class="row even_row">
+        <div class="col-md-3">
+            {% trans "Notes" %}
+        </div>
+        <div 
+            v-for="identity in interim.identities" 
+            v-bind:class="[[ isThreeColumnLayot ? 'col-md-3' : 'col-md-9' ]]">
+            <input class="form-control" type="number" v-model="identity.personal_data.notes"
+                v-bind:disabled="interim.type === 'merge' && identity.id !== 'merged'">
+        </div>
+    </div>
+</div>

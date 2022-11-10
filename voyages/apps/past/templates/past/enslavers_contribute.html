@@ -55,7 +55,13 @@
                     <a class="nav-link" href="#personal" data-toggle="tab" data-target="#personal">{% trans 'Personal information' %}</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#notes" data-toggle="tab" data-target="#notes">{% trans 'Notes' %}</a>
+                    <a class="nav-link" href="#notes" data-toggle="tab" data-target="#notes">
+                        {% if editorialMode %}
+                            {% trans 'Notes from contributor' %}
+                        {% else %}
+                            {% trans 'Notes to editor' %}
+                        {% endif %}
+                    </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="#review" data-toggle="tab" data-target="#review">{% trans 'Review and Submit' %}</a>
@@ -162,8 +168,11 @@
             return;
         }
         {% endif %}
-        let places = await fetch("/contribute/places_ajax");
-        places = await places.json();
+        const tasks = Promise.all([
+            fetch("/contribute/places_ajax").then(res => res.json()),
+            fetch("/past/get-enum/enslaver-roles").then(res => res.json())
+        ])
+        let [places, enslaverRoles] = await tasks;
         places = places.filter(p => p.type === "port").map(p => ({ id: parseInt(p.value), name: `${p.port} (${p.code})` }));
         places.sort((a, b) => a.name.localeCompare(b.name));
         let newCount = 0;
@@ -200,6 +209,7 @@
             delimiters: ['[[', ']]'],
             data: {
                 places,
+                enslaverRoles: Object.entries(enslaverRoles),
                 interim,
                 selectedAlias: null,
                 selectedIdentity: interim.type === "merge"
@@ -207,12 +217,16 @@
                     : interim.identities[Object.keys(interim.identities)[0]],
                 selectAliasChildren: [],
                 linkVoyageInput: null,
+                linkVoyageRole: null,
                 createAliasInput: null,
                 contribActions: null,
                 editorialMode: "{{ editorialMode }}" === "True",
                 isBusy: false
             },
             computed: {
+                isThreeColumnLayot() {
+                    return this.interim.type === 'merge' || this.interim.type === 'split';
+                },
                 validation() {
                     const t = this.interim.type;
                     if (t === 'merge') {

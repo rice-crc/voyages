@@ -20,7 +20,7 @@ from voyages.apps.common.models import SavedQuery
 from voyages.apps.common.views import get_filtered_results
 from .models import (AltLanguageGroupName, Enslaved,
                      EnslavedContribution, EnslavedContributionLanguageEntry,
-                     EnslavedContributionNameEntry, EnslavedInRelation, EnslavedSearch, EnslavementRelation, EnslaverContribution, EnslaverInRelation, EnslaverSearch, EnslaverVoyageConnection,
+                     EnslavedContributionNameEntry, EnslavedContributionStatus, EnslavedInRelation, EnslavedSearch, EnslavementRelation, EnslaverContribution, EnslaverInRelation, EnslaverSearch, EnslaverVoyageConnection,
                      LanguageGroup, MultiValueHelper, ModernCountry, EnslavedNameSearchCache,
                      _modern_name_fields, _name_fields)
 
@@ -390,6 +390,8 @@ def get_enslavement_relation_info(request, relation_pk):
 @login_required
 def enslaver_contrib_editorial_review(request, pk):
     contrib = get_object_or_404(EnslaverContribution, pk=pk)
+    if contrib.status == EnslavedContributionStatus.ACCEPTED:
+        raise Http404("This contribution has already been accepted")
     return render(request, 'past/enslavers_contribute.html', {
         'interim': contrib.data,
         'editorialMode': True,
