@@ -24,7 +24,27 @@ urlpatterns = [
     url(r'^database',
         voyages.apps.past.views.enslaved_database,
         name='database'),
-     url(r'^enslavers',
+    url(r'^enslavement_relation/(?P<relation_pk>[\w\-]+)$',
+        voyages.apps.past.views.get_enslavement_relation_info,
+        name='enslavement_relation') \
+            if is_feature_enabled('ENSLAVERS') else None,
+    url(r'^enslavers_contribute/new$',
+        voyages.apps.past.views.enslaver_contrib_new,
+        name='enslaver_contribute_new') \
+            if is_feature_enabled('ENSLAVERS') else None,
+    url(r'^enslavers_contribute/edit/(?P<id>.*)',
+        voyages.apps.past.views.enslaver_contrib_edit,
+        name='enslaver_contribute_edit') \
+            if is_feature_enabled('ENSLAVERS') else None,
+    url(r'^enslavers_contribute/split/(?P<id>.*)',
+        voyages.apps.past.views.enslaver_contrib_split,
+        name='enslaver_contribute_split') \
+            if is_feature_enabled('ENSLAVERS') else None,
+    url(r'^enslavers_contribute/merge/(?P<merge_a>.*)/(?P<merge_b>.*)',
+        voyages.apps.past.views.enslaver_contrib_merge,
+        name='enslaver_contribute_merge') \
+            if is_feature_enabled('ENSLAVERS') else None,
+     url(r'^enslavers$',
         TemplateView.as_view(template_name='past/enslavers.html'),
         name='enslavers') \
             if is_feature_enabled('ENSLAVERS') else None,

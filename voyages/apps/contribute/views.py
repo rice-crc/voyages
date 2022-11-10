@@ -14,7 +14,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
 from django.core.urlresolvers import reverse
 from django.db import connection, transaction
-from django.db.models import Q
+from django.db.models import F, Q, Count
 from django.db.models.fields import Field
 from django.http import (Http404, HttpResponse, HttpResponseBadRequest,
                          HttpResponseForbidden, HttpResponseRedirect,
@@ -2407,10 +2407,13 @@ def init_enslaver_interim(request):
     """
     data = json.loads(request.body)
     mode = data.get('type')
-    if mode not in ["merge", "edit", "split"]:
+    if mode not in ["new", "merge", "edit", "split"]:
         return JsonResponse({ 'error': 'Type must be set to one of merge|edit|split' }, status=400)
     enslavers = data.get('enslavers')
-    expected = 2 if mode == 'merge' else 1
+    if mode == 'new':
+        expected = 0
+    else:
+        expected = 2 if mode == 'merge' else 1
     if len(enslavers) != expected:
         return JsonResponse({ 'error': f'Expected {expected} enslaver(s).' }, status=400)
     identities = {}
@@ -2448,11 +2451,9 @@ def init_enslaver_interim(request):
         return {
             "id": alias.id,
             "name": alias.alias,
-            "voyages": list(EnslaverVoyageConnection.objects.filter(enslaver_alias=alias). \
-                values('voyage__voyage_id', 'voyage__voyage_id', 'voyage__voyage_ship__ship_name', \
-                    'voyage__voyage_dates__imp_arrival_at_port_of_dis',
-                    'voyage__voyage_itinerary__imp_principal_place_of_slave_purchase_id',
-                    'voyage__voyage_itinerary__imp_principal_port_slave_dis_id'))
+            "voyages": list(_voyage_summary_fields(
+                EnslaverVoyageConnection.objects.filter(enslaver_alias=alias), 'voyage__')),
+            "relations": relations
         }
 
     def _get_enslaver_data(enslaver):
@@ -2474,7 +2475,7 @@ def init_enslaver_interim(request):
                 merged[k] = v[0]
             else:
                 merged[k] = "conflict"
-        identities['merged'] = { 'personal_data': merged, 'aliases': { k: v for identity in identities.values() for k, v in identity['aliases'].items() } }
+        identities['merged'] = { 'id': 'merged', 'personal_data': merged, 'aliases': { k: v for identity in identities.values() for k, v in identity['aliases'].items() } }
         for k in identities.keys():
             if k != 'merged':
                 # Clear the aliases from the original.
