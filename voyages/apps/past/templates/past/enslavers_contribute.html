@@ -1,0 +1,500 @@
+{% extends "_base.html" %} {% load sass_tags %} {% load compress %}
+
+<!-- Basic template for pages in the Voyage section -->
+{% load i18n %}
+{% block csslist %}
+	{% compress css %}
+	<link href="{% sass_src 'scss/navbar-site.scss' %}" rel="stylesheet" type="text/css" />
+	<link href="{% sass_src 'scss/main.scss' %}" rel="stylesheet" type="text/css" />
+	<link href="{% sass_src 'scss/past.scss' %}" rel="stylesheet" type="text/css" />
+    <link href="{% sass_src 'scss/off-canvas.scss' %}" rel="stylesheet" type="text/css" />
+    <link href="{% sass_src 'scss/search-ui.scss' %}" rel="stylesheet" type="text/css" />
+    <link href="{% sass_src 'scss/v-component.scss' %}" rel="stylesheet" type="text/css" />
+    <link href="{% sass_src 'scss/trans-search.scss' %}" rel="stylesheet" type="text/css" />
+    <link href="{% sass_src 'scss/animations.scss' %}" rel="stylesheet" type="text/css" />
+    <link href="{% sass_src 'scss/sidebar.scss' %}" rel="stylesheet" type="text/css" />
+    <link href="{% sass_src 'scss/library/loading.css' %}" rel="stylesheet" type="text/css" />
+    <link href="{% sass_src 'scss/library/vue-treeselect@0.0.37.min.css' %}" rel="stylesheet" type="text/css" />
+	{% endcompress %}
+    <style>
+        .enslaver_contrib_fullspan_control {
+            height: calc(100vh - 250px);
+            margin-top: 8px;
+        }
+
+        .disabled {
+            pointer-events: none;
+        }
+
+        .even_row {
+            align-items: center;
+        }
+
+        .odd_row {
+            align-items: center;
+            background-color: lightblue;
+        }
+    </style>
+{% endblock %}
+
+{% block title %}
+	{% trans 'Contribution to Enslavers Database' %}
+{% endblock %}
+
+{% block content %}
+
+<div class="trans-container">
+    <div class="col-md-12">
+        <div id="center-content-inner" class="enslavers-content">
+            <!-- Tabs -->
+            <ul class="nav nav-tabs trans-tab">
+                <li>                            
+                    <button v-on:click="goBack"><i class="fa fa-arrow-left"></i></button>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="#aliases" data-toggle="tab" data-target="#aliases">{% trans 'Aliases and Voyages' %}</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#personal" data-toggle="tab" data-target="#personal">{% trans 'Personal information' %}</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#notes" data-toggle="tab" data-target="#notes">
+                        {% if editorialMode %}
+                            {% trans 'Notes from contributor' %}
+                        {% else %}
+                            {% trans 'Notes to editor' %}
+                        {% endif %}
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#review" data-toggle="tab" data-target="#review">{% trans 'Review and Submit' %}</a>
+                </li>
+            </ul>
+            
+            <!-- TabContainers -->
+            <div id="tabsJustifiedContent" class="tab-content">
+                <div id="aliases" class="tab-pane fade active show">
+                    {% include "past-contribute/_enslaver_contrib_aliases.html" %}
+                </div>
+                <div id="personal" class="tab-pane fade">
+                    {% include "past-contribute/_enslaver_contrib_personal.html" %}
+                </div>
+                <div id="notes" class="tab-pane fade">
+                    <textarea name="notes" class="form-control enslaver_contrib_fullspan_control" v-model="interim.notes"></textarea>
+                </div>
+                <div id="review" class="tab-pane fade">
+                    <div class="panel panel-danger" v-if="validation.length > 0">
+                        <div class="panel-heading">
+                          <h3 class="panel-title">{% trans "Validation Errors" %}</h3>
+                        </div>
+                        <ul class="list-group">
+                            <li v-for="error in validation">[[ error ]]</li>
+                        </ul>
+                    </div>
+                    <div class="panel" v-if="validation.length === 0">
+                        <div class="btn-group" role="group" aria-label="Contribution actions">
+                            <button v-on:click="previewActions" class="btn btn-secondary">
+                                {% trans "Preview Actions" %}
+                            </button>
+                            <button v-if="!editorialMode" v-on:click="submitContrib" v-bind:class="{ disabled: isBusy }" class="btn btn-primary">
+                                {% trans "Submit" %}
+                            </button>
+                            <button v-if="editorialMode" v-on:click="rejectContrib" v-bind:class="{ disabled: isBusy }" class="btn btn-warning">
+                                {% trans "Reject" %}
+                            </button>
+                            <button v-if="editorialMode" v-on:click="acceptContrib" v-bind:class="{ disabled: !contribActions || contribActions.length === 0 || isBusy }" v-on:click="submitContrib" class="btn btn-danger">
+                                {% trans "Accept" %}
+                            </button>
+                        </div>
+                        <ul class="list-group">
+                            <li class="list-group-item" v-for="action in contribActions">
+                                <h4>
+                                    <i class="fa" v-bind:class="{ 'fa-trash': action.action === 'delete', 'fa-plus': action.action === 'new', 'fa-edit': action.action === 'update', 'fa-warning': action.action === 'noop' }"></i>
+                                    [[ action.description ]]
+                                </h4>
+                                <span><b>[[ !!action.data ? gettext('with: ') : '' ]]</b> [[ JSON.stringify(action.data, null, 2) ]]</span>
+                                <span><b>[[ !!action.match ? gettext('matching: ') : '' ]]</b> [[ JSON.stringify(action.match, null, 2) ]]</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="{{ STATIC_URL }}scripts/library/vue@2.6.7.min.js" type="text/javascript"></script>
+<script>
+    const redirectUrl = () => {
+        window.location.href = "/past/enslavers"
+    };
+    const closeModals = () => $('.modal').modal("hide");
+    const formatCsvDate = date => {
+        const components = (date || "").split(',').map(s => parseInt(s));
+        let val = date;
+        if (components.length === 3) {
+            // Year:
+            val = components[2];
+            if (components[0]) {
+                // Month:
+                val += `-${components[0]}`;
+            }
+            if (components[1]) {
+                // Day:
+                val += `-${components[1]}`;
+            }
+        }
+        return val;
+    };
+
+    const filterMatches = (source, selection, matches, prefix) => source.filter(
+        (val) => {
+            const isMatch = selection.indexOf(prefix + val.pk) >= 0;
+            if (isMatch) {
+                matches.push({ prefix, val });
+            }
+            return !isMatch;
+        });
+
+    async function initialize() {
+        {% comment %}
+        The interim contribution is either injected via Django view or we need to fetch it
+        based on URL params.
+        {% endcomment %}
+        {% if interim %}
+        const interim = {{ interim|safe }};
+        {% else %}
+        // Initialize an interim Enslaver for this contribution.
+        const data = await fetch("/contribute/init_enslaver_interim", {
+            method: 'POST',
+            body: JSON.stringify({ type: '{{ mode }}', enslavers: [{{ id }}] })
+        });
+        const interim = await data.json();
+        if (!!interim.error) {
+            alert(`Error: ${interim.error}`);
+            return;
+        }
+        {% endif %}
+        const tasks = Promise.all([
+            fetch("/contribute/places_ajax").then(res => res.json()),
+            fetch("/past/get-enum/enslaver-roles").then(res => res.json())
+        ])
+        let [places, enslaverRoles] = await tasks;
+        places = places.filter(p => p.type === "port").map(p => ({ id: parseInt(p.value), name: `${p.port} (${p.code})` }));
+        places.sort((a, b) => a.name.localeCompare(b.name));
+        let newCount = 0;
+        const validate = personalData => {
+            const res = []
+            for (const [key, val] of Object.entries(personalData || {})) {
+                // Just check that no conflict string has been left (only useful
+                // in merge contribs).
+                if (val === 'conflict') {
+                    res.push(gettext("Merge conflict for property {0}").replace('{0}', key));
+                }
+                if (!!val && key.endsWith('day')) {
+                    const day = parseInt(val);
+                    if (isNaN(day) || day < 1) {
+                        res.push(gettext("Invalid value for {0}").replace('{0}', key));
+                        continue;
+                    }
+                    // Must have corresponding month set.
+                    const month = parseInt(personalData[key.replace('day', 'month')]);
+                    if (isNaN(month) || month < 1 || month > 12) {
+                        res.push(gettext("No valid month for {0}").replace('{0}', key));
+                    } else {
+                        const monthSize = [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 ];
+                        if (day > monthSize[month - 1]) {
+                            res.push(gettext("Invalid value for {0}").replace('{0}', key));
+                        }
+                    }
+                }
+            }
+            return res;
+        };
+        const viewModel = new Vue({
+            el: "#center-content-inner",
+            delimiters: ['[[', ']]'],
+            data: {
+                places,
+                enslaverRoles: Object.entries(enslaverRoles),
+                interim,
+                selectedAlias: null,
+                selectedIdentity: interim.type === "merge"
+                    ? interim.identities["merged"]
+                    : interim.identities[Object.keys(interim.identities)[0]],
+                selectAliasChildren: [],
+                linkVoyageInput: null,
+                linkVoyageRole: null,
+                createAliasInput: null,
+                contribActions: null,
+                editorialMode: "{{ editorialMode }}" === "True",
+                isBusy: false,
+                isDirty: false
+            },
+            computed: {
+                isThreeColumnLayout() {
+                    return this.interim.type === 'merge' || this.interim.type === 'split';
+                },
+                validation() {
+                    const t = this.interim.type;
+                    if (t === 'merge') {
+                        return validate(this.interim.identities["merged"].personal_data);
+                    } else if (t === 'split') {
+                        let valid = [];
+                        for (const identity in Object.values(this.interim.identities)) {
+                            valid = valid.concat(validate(identity.personal_data));
+                        }
+                        return valid;
+                    }
+                    return validate(this.selectedIdentity.personal_data);
+                }
+            },
+            watch: {
+                interim: {
+                    handler() {
+                        this.contribActions = null;
+                        this.isDirty = true;
+                    },
+                    deep: true
+                },
+                selectedIdentity(oldValue, newValue) {
+                    this.selectedAlias = null;
+                    this.selectAliasChildren = [];
+                },
+                selectedAlias(oldValue, newValue) {
+                    this.selectAliasChildren = [];
+                }
+            },
+            methods: {
+                selAlias: function() {
+                    if (!this.selectedAlias) {
+                        return null;
+                    }
+                    return this.selectedIdentity.aliases[this.selectedAlias];
+                },
+                isNewAliasValid: function() {
+                    const name = this.createAliasInput;
+                    // Simple validation.
+                    return name.length > 3 && name.match(/^[\.,\sa-zA-Z\u00C0-\u024F\u1E00-\u1EFF]+$/);
+                },
+                createAlias: function() {
+                    if (!this.selectedIdentity) {
+                        return;
+                    }
+                    const name = this.createAliasInput;
+                    // Simple validation.
+                    if (!this.isNewAliasValid()) {
+                        alert(gettext("Validation for name failed: too short or containing invalid characters"));
+                        return;
+                    }
+                    ++newCount;
+                    const key = `new_${newCount}`;
+                    this.selectedIdentity.aliases[key] = {
+                        id: key,
+                        name,
+                        voyages: [],
+                        relations: []
+                    };
+                    this.selectedAlias = key;
+                    this.createAliasInput = null;
+                    closeModals();
+                    this.contribActions = null;
+                },
+                delSelAlias: function() {
+                    if (!this.selectedAlias) {
+                        return;
+                    }
+                    const current = this.selAlias();
+                    const alias_val = current.name;
+                    const num_voyages = current.voyages.length;
+                    // The translated text should preserve "{num}" segments.
+                    const msg = gettext("Delete alias '{0}' with {1} linked voyages?")
+                        .replace('{0}', alias_val)
+                        .replace('{1}', num_voyages);
+                    if (!confirm(msg)) {
+                        return;
+                    }
+                    delete this.selectedIdentity.aliases[this.selectedAlias];
+                    this.selectedAlias = null;
+                    this.contribActions = null;
+                },
+                moveAlias: function(event) {
+                    const target = this.interim.identities[event.target.getAttribute("value")];
+                    const alias = this.selAlias();
+                    if (!this.selectedAlias || !target) {
+                        return;
+                    }
+                    const key = this.selectedAlias;
+                    delete this.selectedIdentity.aliases[key];
+                    target.aliases[key] = alias;
+                    this.selectedAlias = null;
+                    this.contribActions = null;
+                },
+                moveChildren: function(event) {
+                    const target = this.selectedIdentity.aliases[event.target.getAttribute("value")];
+                    if (!target) {
+                        return;
+                    }
+                    const match = this.unlinkChildren({ force: true });
+                    if (match) {
+                        for (const m of match) {
+                            if (m.prefix === 'V') {
+                                target.voyages.push(m.val);
+                            } else {
+                                target.relations.push(m.val);
+                            }
+                        }
+                        this.contribActions = null;
+                    }
+                },
+                setPrincipal: function() {
+                    const alias = this.selAlias();
+                    if (alias && this.selectedIdentity) {
+                        this.selectedIdentity.personal_data.principal_alias = alias.name;
+                    }
+                },
+                showChildInfo: function() {
+                    if (this.selectAliasChildren) {
+                        let pk = this.selectAliasChildren[0];
+                        if (pk[0] === 'V') {
+                            window.open(
+                                `/voyage/${pk.substring(1)}/variables`,
+                                gettext('Voyage details'),
+                                'location=no,toolbar=no,menubar=no');
+                        } else {
+                            alert('view for relations not implemented');
+                        }
+                    }
+                },
+                unlinkChildren: function(event) {
+                    const source = this.selAlias();
+                    if (!source) {
+                        return null;
+                    }
+                    if (!event.force && !confirm(gettext('Confirm voyage removal from the alias?'))) {
+                        return null;
+                    }
+                    const matches = [];
+                    source.voyages = filterMatches(source.voyages, this.selectAliasChildren, matches, 'V');
+                    source.relations = filterMatches(source.relations, this.selectAliasChildren, matches, 'R');
+                    if (matches) {
+                        this.selectAliasChildren = [];
+                        this.contribActions = null;
+                    }
+                    return matches;
+                },
+                linkVoyage: async function() {
+                    const alias = this.selAlias();
+                    if (alias && this.linkVoyageInput) {
+                        const res = await fetch(`/contribute/voyage_summary/${this.linkVoyageInput}`);
+                        const data = await res.json();
+                        if (data.error || !data.pk) {
+                            alert(`Error fetching voyage id ${this.linkVoyageInput}: ${data.error}.`);
+                        } else {
+                            alias.voyages.push(data);
+                            this.linkVoyageInput = null;
+                        }    
+                        this.contribActions = null;
+                    }
+                    closeModals();
+                },
+                previewActions: async function() {
+                    // Clear actions first.
+                    this.contribActions = "";
+                    const interim = Object.assign({}, this.interim);
+                    const res = await fetch("/contribute/enslaver_update_actions", {
+                        method: 'POST',
+                        body: JSON.stringify(interim)
+                    });
+                    const data = await res.json();
+                    if (data.error || !data.actions) {
+                        alert(data.error || 'Error');
+                        return;
+                    }
+                    this.contribActions = data.actions;
+                },
+                submitContrib: async function() {
+                    try {
+                        this.isBusy = true;
+                        let res = await fetch("/contribute/submit_enslaver_contribution", {
+                            method: 'POST',
+                            body: JSON.stringify(interim)
+                        });
+                        res = await res.json();
+                        if (res.result !== 'OK') {
+                            alert(res.error || gettext("Failed to submit contribution"));
+                        } else {
+                            alert(gettext("Thank you for your contribution to the Enslavers database"));
+                            redirectUrl();
+                        }
+                    } catch (err) {
+                        alert(err.message);
+                    } finally {
+                        this.isBusy = false;
+                        this.contribActions = null;
+                    }
+                },
+                acceptContrib: async function() {
+                    if (!confirm(gettext('The contribution will be accepted and the database will be updated immediately. Do you wish to proceed?'))) {
+                        return;
+                    }
+                    try {
+                        this.isBusy = true;
+                        let res = await fetch('/contribute/submit_enslaver_editorial_review', {
+                            method: 'POST',
+                            body: JSON.stringify({ 
+                                'decision': 'ACCEPT',
+                                interim: this.interim,
+                                'contrib_pk': '{{ contrib_pk }}'
+                            })
+                        });
+                        res = await res.json();
+                        if (res.result !== 'OK') {
+                            alert(res.error || gettext("Failed to submit decision"));
+                        } else {
+                            redirectUrl();
+                        }
+                    } catch (err) {
+                        alert(err.message);
+                    } finally {
+                        this.isBusy = false;
+                        this.contribActions = null;
+                    }
+                },
+                rejectContrib: async function() {
+                    if (!confirm(gettext('The contribution will be marked as rejected. Do you wish to proceed?'))) {
+                        return;
+                    }
+                    try {
+                        this.isBusy = true;
+                        let res = await fetch('/contribute/submit_enslaver_editorial_review', {
+                            method: 'POST',
+                            body: JSON.stringify({ 'decision': 'REJECT', 'contrib_pk': '{{ contrib_pk }}' })
+                        });
+                        res = await res.json();
+                        if (res.result !== 'OK') {
+                            alert(res.error || gettext("Failed to submit decision"));
+                        } else {
+                            redirectUrl();
+                        }
+                    } catch (err) {
+                        alert(err.message);
+                    } finally {
+                        this.isBusy = false;
+                        this.contribActions = null;
+                    }
+                },
+                goBack: function() {
+                    if (!this.isDirty || confirm(gettext('Abandon changes?'))) {
+                        window.history.back();
+                    }
+                }
+            }
+        });
+    }
+    try {
+        initialize();
+    } catch {
+        alert("An error has occurred");
+    }
+</script>
+{% endblock %}
