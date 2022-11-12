@@ -53,7 +53,7 @@ from voyages.apps.contribute.publication import (
     export_contributions, export_from_voyages, full_contribution_id,
     get_csv_writer, get_filtered_contributions, get_header_csv_text,
     publish_accepted_contributions, safe_writerow)
-from voyages.apps.past.models import Enslaved, EnslavedContribution, EnslavedContributionLanguageEntry, EnslavedContributionNameEntry, EnslavedContributionStatus, EnslavementRelation, EnslaverAlias, EnslaverContribution, EnslaverIdentity, EnslaverInRelation, EnslaverVoyageConnection, LanguageGroup, ModernCountry
+from voyages.apps.past.models import Enslaved, EnslavedContribution, EnslavedContributionLanguageEntry, EnslavedContributionNameEntry, EnslavedContributionStatus, EnslavementRelation, EnslaverAlias, EnslaverCachedProperties, EnslaverContribution, EnslaverIdentity, EnslaverInRelation, EnslaverVoyageConnection, LanguageGroup, ModernCountry
 from voyages.apps.past.views import _get_audio_filename
 from voyages.apps.voyage.cache import VoyageCache
 from voyages.apps.voyage.forms import VoyagesSourcesAdminForm
@@ -2804,6 +2804,7 @@ def submit_enslaver_editorial_review(request):
         contrib = EnslaverContribution.objects.get(pk=data['contrib_pk'])
         contrib.status = status
         contrib.save()
+        all_identities = []
         for idx, a in enumerate(actions or []):
             action_type = a['action']
             if action_type not in ['new', 'update', 'delete']:
@@ -2833,14 +2834,22 @@ def submit_enslaver_editorial_review(request):
                     target.save()
                 except Exception as ex:
                     transaction.set_rollback(True)
-                    return JsonResponse({ "error": f"Failed to {'insert' if action_type == 'new' else action_type} record", "action_index": idx, 'details': str(ex) })
+                    return JsonResponse({
+                        "error": f"Failed to {'insert' if action_type == 'new' else action_type} record", "action_index": idx,
+                        'details': str(ex)
+                    })
                 if action_type == 'new' and 'tag' in a:
                     # Include newly saved pk in the tagged dict.
                     tags[a['tag']] = target.pk
+            if model == EnslaverIdentity and action_type != 'delete':
+                all_identities.append(target.pk)
         if actions is not None:
             # At this point we *should* be in perfect sync with the contribution.
             missing_actions = _create_enslaver_update_actions(data['interim'], tags)
             if len(missing_actions) > 0:
                 transaction.set_rollback(True)
                 return JsonResponse({ "error": "Contribution not in sync with transactional update", "details": missing_actions })
+        # Update Cached properties for the identities in this contribution.
+        for prop in EnslaverCachedProperties.compute(all_identities):
+            prop.save()
     return JsonResponse({ "result": "OK" })
