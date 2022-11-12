@@ -2,13 +2,14 @@ var categoryNames = [
   gettext("Name"),
   gettext("Itinerary"),
   gettext("Personal Data"),
-  gettext("Biographical Sources"),
-  gettext("Contribution"),
+  gettext("Biographical Sources")
 ];
 
 function bioSourceHeader() {
   return `${gettext("Biographical Sources")} <span class="badge badge-pill badge-secondary tooltip-pointer" data-toggle="tooltip" data-placement="top" title="${gettext("Sources for associated voyages appear in each voyage record")}"> SRC </span>`;
 }
+
+const contributeCol = { data: "id", header: "", name: "contribute", className: "text-center", isImputed: false, isContribute: true, orderable: false, visible: false };
 
 var allColumns = [
   // name
@@ -31,7 +32,7 @@ var allColumns = [
   // sources
   { data: "sources_list", category: 3, header: bioSourceHeader(), isImputed: false, visible: false, orderable: false },
 
-  { data: "id", category: 4, header: gettext("Contribute"), isImputed: false, isContribute: true, orderable: false },
+  contributeCol
   
 ];
 
@@ -42,17 +43,48 @@ var categories = $.map(categoryNames, function(name) {
   };
 });
 
-allColumns.forEach(function(c, index) {
+const contribStateStorageKey = "enslaverContributeState";
 
+const contribMergeChange = (sel) => {
+  try {
+    const contribState = JSON.parse(sessionStorage.getItem(contribStateStorageKey));
+    const { selection } = contribState;
+    const key = parseInt(sel.value);
+    if (!!sel.checked === selection.includes(key)) {
+      // Nothing changes.
+      return;
+    }
+    if (sel.checked) {
+      selection.push(key);
+      if (selection.length >= 2) {
+        // Ready to merge.
+        sessionStorage.setItem(contribStateStorageKey, "{}");
+        window.location.href = `/past/enslavers_contribute/merge/${selection[0]}/${selection[1]}`;
+        return;
+      }
+    } else {
+      selection.splice(selection.indexOf(key), 1);
+    }
+    updateContribState(contribState);
+  } catch {
+  }
+};
+
+allColumns.forEach(function(c, index) {
   var title = c.isImputed ? "<span>" + c.header + "</span> <span class='badge badge-pill badge-secondary' data-toggle='tooltip' data-placement='top' title='" + gettext("Imputed results are calculated by an algorithm.") + "'> IMP </span>" : gettext(c.header);
 
-  categories[c.category].columns.push({
-    extend: 'columnToggle',
-    text: title,
-    columns: index,
-  });
-
-  c.title = "<span class='column-header'>" + c.header + "</span>";
+  if (c.category) {
+    categories[c.category].columns.push({
+      extend: 'columnToggle',
+      text: title,
+      columns: index,
+    });
+  }
+  
+  if (c.isContribute) {
+  } else {
+    c.title = "<span class='column-header'>" + c.header + "</span>";
+  }
 
   // add render function to customize the display of imputed variables
   if (c.isImputed) {
@@ -75,10 +107,27 @@ allColumns.forEach(function(c, index) {
         // Read local storage to determine what type of contribution was
         // started in the UI.
         formattedString = "";
-        //formattedString = `<a href="/past/enslavers_contribute/edit/${data}"><i class="fas fa-edit btn btn-transparent"></i></a>`;
+        try {
+          const contribState = JSON.parse(sessionStorage.getItem(contribStateStorageKey) || "{}");
+          if (contribState?.mode === 'edit' || contribState?.mode === 'split') {
+            let icon = contribState.mode;
+            if (icon === 'split') {
+              icon = 'columns';
+            }
+            formattedString = `<a href="/past/enslavers_contribute/${contribState.mode}/${data}"><i class="fas fa-blended-color fa-${icon} btn btn-transparent"></i></a>`;
+          } else if (contribState?.mode === 'delete') {
+            // TODO: implement delete contrib.
+            formattedString = `<a href="#" onclick="alert('not implemented yet')"><i class="fas fa-blended-color fa-trash btn btn-transparent"></i></a>`;
+            // formattedString = `<a href="/past/enslavers_contribute/delete/${data}"><i class="fas fa-trash btn btn-transparent"></i></a>`;
+          } else if (contribState?.mode === 'merge') {
+            const isChecked = contribState.selection.includes(data);
+            formattedString = `<input onchange="contribMergeChange(this)" type="checkbox" value="${data}"${isChecked ? " checked" : ""}></input>`;
+          }
+        } catch {
+        }
       } else if (c.data == 'voyages_list' || c.data == 'relations_list') {
         if (data.length > 0) {
-          formattedString = '<i class="fa fa-plus-square" aria-hidden="true"></i>';
+          formattedString = '<i class="fa fa-plus-square fa-blended-color" aria-hidden="true"></i>';
         }
       } else if (c.data == 'alias_list') {
         formattedString += "<span class=\"h6 pr-2\"><span class=\"badge badge-pill badge-secondary\">"+row.principal_alias+"</span></span>";
@@ -117,6 +166,71 @@ var restoreBtn = {
 };
 
 defaultBtns.push(restoreBtn);
+
+const contributeColHeaders = {
+  "edit": gettext("Edit"),
+  "merge": gettext("Merge"),
+  "delete": gettext("Delete"),
+  "split": gettext("Split aliases"),
+}
+
+const updateContribState = (state) => {
+  const col = mainDatatable.column("contribute:name");
+  const prev = JSON.parse(sessionStorage.getItem(contribStateStorageKey) || "{}");
+  if (!!state?.mode) {
+    sessionStorage.setItem(contribStateStorageKey, JSON.stringify(state));
+    let header = contributeColHeaders[state.mode];
+    if (state.mode === 'merge' && state.selection.length > 0) {
+      header = `${header} <span class="badge badge-pill badge-secondary tooltip-pointer" data-toggle="tooltip" data-placement="top" title="${gettext('There is already an enslaver selected for the merge operation')}" data-original-title=""> ${state.selection.length} </span>`;
+    }
+    col.header().innerHTML = header;
+  } else {
+    sessionStorage.setItem(contribStateStorageKey, "{}");
+  }
+  col.visible(!!state?.mode);
+  if (prev?.mode !== state?.mode) {
+    mainDatatable.draw();
+  }
+}
+
+const enslaversContributeMenu = {
+  extend: 'collection',
+  autoClose: true,
+  text: gettext('Contribute data'),
+  titleAttr: gettext('Propose changes or additions to the Enslavers dataset'),
+  className: 'btn btn-info buttons-collection dropdown-toggle',
+  buttons: [{
+    text: gettext('New enslaver record'),
+    action: function() {
+      window.location.href = "/past/enslavers_contribute/new";
+    }
+  }, {
+    text: gettext('Edit an enslaver record'),
+    action: function() {
+      updateContribState({ mode: "edit" });
+    }
+  }, {
+    text: gettext('Merge duplicate enslaver records'),
+    action: function() {
+      updateContribState({ mode: "merge", selection: [] });
+    }
+  }, {
+    text: gettext('Delete an enslaver record'),
+    action: function() {
+      updateContribState({ mode: "delete" });
+    }
+  }, {
+    text: gettext('Unlink an alias from the enslaver'),
+    action: function() {
+      updateContribState({ mode: "split" });
+    }
+  }, {
+    text: gettext('Hide action column'),
+    action: function() {
+      updateContribState(null);
+    }
+  }]
+};
 
 var columnToggleMenu = {
   extend: 'collection',
