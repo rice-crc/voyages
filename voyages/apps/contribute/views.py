@@ -2397,7 +2397,7 @@ def get_voyage_summary(request, pk):
 def init_enslaver_interim(request):
     """
     The output is described as follows
-    type: "merge" | "edit" | "split"
+    type: "new" | "merge" | "edit" | "split"
     identities: {pk: <Enslaver original data>}, must contain two for "merge" and 1 otherwise.
     <Enslaver original data>: { personal_data: { ... }, aliases: { alias: [ { voyage_id, basic_voyage_fields } ] } }.
 
@@ -2408,7 +2408,7 @@ def init_enslaver_interim(request):
     data = json.loads(request.body)
     mode = data.get('type')
     if mode not in ["new", "merge", "edit", "split"]:
-        return JsonResponse({ 'error': 'Type must be set to one of merge|edit|split' }, status=400)
+        return JsonResponse({ 'error': 'Type must be set to one of new|merge|edit|split' }, status=400)
     enslavers = data.get('enslavers')
     if mode == 'new':
         expected = 0
@@ -2760,14 +2760,17 @@ def get_enslaver_contribution_list(request):
     data = json.loads(request.body) if request.body else {}
     statuses = data.get('statuses', [EnslavedContributionStatus.PENDING])
     q = EnslaverContribution.objects.filter(status__in=statuses) \
-        .values('pk', 'enslaver__principal_alias', 'contributor__username', 'created', 'status', 'data')
+        .values('pk', 'created', 'status', 'data', \
+            enslaver_identity=F('enslaver__principal_alias'), \
+            contributor_name=F('contributor__username'))
     count = len(q)
     start = data.get('startOffset', 0)
     end = data.get('endOffset', 10000)
     q = q[start:end]
     results = list(q)
-    for r in results:
-        r['data'] = json.loads(r['data'])
+    for item in results:
+        data = json.loads(item.pop('data'))
+        item['type'] = data['type']
     return JsonResponse({ 'count': count, 'results': results })
 
 @login_required
@@ -2782,6 +2785,8 @@ def submit_enslaver_editorial_review(request):
     The data format follows the return value of
     `init_enslaver_editorial_review`
     """
+    if not request.user.is_staff:
+        raise JsonResponse({ "error": "Only staff can submit editorial reviews" })
     actions = None
     try:
         data = json.loads(request.body)

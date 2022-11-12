@@ -37,6 +37,7 @@
   <ul class="nav nav-pills nav-fill" role="tablist">
     <li class="nav-item" role="presentation"><a class="nav-link " id="tab_pending" href="#pending" aria-controls="voyages" role="tab" data-toggle="tab">{% trans "Voyages" %}</a></li>
     <li class="nav-item" role="presentation"><a class="nav-link active" id="tab_requests" href="#requests" aria-controls="requests" role="tab" data-toggle="tab">{% trans "Requests" %}</a></li>
+    <li class="nav-item" role="presentation"><a class="nav-link" id="tab_enslavers_contrib" href="#enslavers_contrib" aria-controls="requests" role="tab" data-toggle="tab">{% trans "Enslavers" %}</a></li>
     <li class="nav-item" role="presentation"><a class="nav-link " href="#users" aria-controls="users" role="tab" data-toggle="tab">{% trans "Users" %}</a></li>
     <li class="nav-item" role="presentation"><a class="nav-link " href="#sources" aria-controls="sources" role="tab" data-toggle="tab">{% trans "Source Codes" %}</a></li>
     <li class="nav-item" role="presentation"><a class="nav-link " href="#publish" aria-controls="publish" role="tab" data-toggle="tab">{% trans "Publish New DB Version" %}</a></li>
@@ -94,6 +95,20 @@
             </tbody>
         </table>
       </div>
+    </div>
+    <div role="tabpanel" class="tab-pane" id="enslavers_contrib">
+        <table id="enslavers_table" class="table table-striped table-bordered" cellspacing="0" width="100%">
+            <thead>
+            <tr>
+                <th>{% trans "Type" %}</th>
+                <th>{% trans "Enslaver" %}</th>
+                <th>{% trans "Contributor" %}</th>
+                <th>{% trans "Date" %}</th>
+            </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
     </div>
     <div role="tabpanel" class="tab-pane" id="users">
       <div class="page-title-1">
@@ -263,11 +278,56 @@
         });
     }
 
+    const icons = {
+        "new": "file-alt",
+        "merge": "code-fork",
+        "split": "random"
+    };
+
+    async function loadEnslaversContribList() {
+        // This is a later development that uses more recent js features.
+        const res = await fetch("/contribute/enslaver_contribution_list", {
+            method: 'POST',
+            data: "{}"
+        });
+        const data = await res.json();
+        if (!$('#enslavers_table').data('hasInitialized')) {
+            $("#enslavers_table").DataTable({
+                dom: '<"toolbar">',
+                data: data.results,
+                columns: [{
+                        data: function(row, type, set) {
+                            return {
+                                icon: icons[row.type] || row.type,
+                                pk: row.pk
+                            };
+                        },
+                        render: function(data, type) {
+                            if (type === 'display') {
+                                return `<a href="/contribute/enslaver_contribution_review/${data.pk}"><i class="fa fa-${data.icon}"></i></a>`;
+                            }
+                            return data;
+                        }
+                    },
+                    { data: 'enslaver_identity' },
+                    { data: 'contributor_name' },
+                    { data: 'created' }
+                ],
+                paging: false,
+                info: false,
+                bFilter: false
+            });
+            $('#enslavers_table').data('hasInitialized', true);
+        }
+    }
+
     var loadTabData = function(href) {
         if (href == '#requests') {
             loadRequestsList();
         } else if (href == '#pending') {
             loadPendingList();
+        } else if (href == '#enslavers_contrib') {
+            loadEnslaversContribList();
         }
     };
     loadTabData('#' + $('.tab-pane.active').attr('id'));
