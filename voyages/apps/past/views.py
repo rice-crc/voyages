@@ -144,7 +144,7 @@ def get_language_groups(_):
 def get_enumeration(_, model_name):
     from django.apps import apps
     model = apps.get_model(app_label="past", model_name=model_name.replace('-', ''))
-    return JsonResponse({x.pk: x.name for x in model.objects.all()})
+    return JsonResponse({int(x.pk): x.name for x in model.objects.all()})
 
 
 def restore_enslaved_permalink(_, link_id):

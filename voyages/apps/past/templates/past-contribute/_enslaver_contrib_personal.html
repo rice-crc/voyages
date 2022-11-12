@@ -223,7 +223,7 @@
         <div 
             v-for="identity in interim.identities" 
             v-bind:class="[[ isThreeColumnLayout ? 'col-md-3' : 'col-md-9' ]]">
-            <input class="form-control" type="number" v-model="identity.personal_data.notes"
+            <input class="form-control" type="text" v-model="identity.personal_data.notes"
                 v-bind:disabled="interim.type === 'merge' && identity.id !== 'merged'">
         </div>
     </div>

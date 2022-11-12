@@ -215,7 +215,7 @@
             delimiters: ['[[', ']]'],
             data: {
                 places,
-                enslaverRoles: Object.entries(enslaverRoles),
+                enslaverRoles,
                 interim,
                 selectedAlias: null,
                 selectedIdentity: interim.type === "merge"
@@ -384,12 +384,13 @@
                 },
                 linkVoyage: async function() {
                     const alias = this.selAlias();
-                    if (alias && this.linkVoyageInput) {
+                    if (alias && this.linkVoyageInput && this.linkVoyageRole) {
                         const res = await fetch(`/contribute/voyage_summary/${this.linkVoyageInput}`);
                         const data = await res.json();
                         if (data.error || !data.pk) {
                             alert(`Error fetching voyage id ${this.linkVoyageInput}: ${data.error}.`);
                         } else {
+                            data["role"] = parseInt(this.linkVoyageRole);
                             alias.voyages.push(data);
                             this.linkVoyageInput = null;
                         }    

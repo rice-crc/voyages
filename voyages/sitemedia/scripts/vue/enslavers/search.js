@@ -72,7 +72,10 @@ allColumns.forEach(function(c, index) {
       if (c.data == 'sources_list') {
         formattedString = data;
       } else if (c.isContribute) {
-        formattedString = `<a href="/past/enslavers_contribute/edit/${data}"><i class="fas fa-edit btn btn-transparent"></i></a>`;
+        // Read local storage to determine what type of contribution was
+        // started in the UI.
+        formattedString = "";
+        //formattedString = `<a href="/past/enslavers_contribute/edit/${data}"><i class="fas fa-edit btn btn-transparent"></i></a>`;
       } else if (c.data == 'voyages_list' || c.data == 'relations_list') {
         if (data.length > 0) {
           formattedString = '<i class="fa fa-plus-square" aria-hidden="true"></i>';
