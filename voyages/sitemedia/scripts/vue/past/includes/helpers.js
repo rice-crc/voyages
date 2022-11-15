@@ -1082,13 +1082,273 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
     });
   } else if (currentTab == "maps") {
 	
+	function personorpeople(count){
+		if (count===1) {
+			var result="person"
+		} else {
+			var result="people"
+		}
+		return result
+	};
+
+	  function makePopUp(r) {
+	  	var weightline = r.weight + " " + personorpeople(r.weight);
+	  	return weightline;
+	  };
+
+	var valueScale = d3.scaleLog();
+	
+	var hiddenroutes = new Object();
+	
+		
+	function addRoute(map,route){
+		var commands = [];
+		commands.push("M", route.geometry[0][0]);
+		commands.push("C", route.geometry[1][0], route.geometry[1][1], route.geometry[0][1]);
+		var newroute=L.curve(commands, { color: "rgb(96,192,171)", weight: valueScale(route.weight) })
+		  .bindPopup(makePopUp(route),{'maxHeight':'300'})
+		  .addTo(map);
+		return newroute._leaflet_id;
+	  };
+
+	function drawUpdateRoutes(map, routes) {
+		var mapRouteValueMin = d3.min(routes, function (r) {
+			return r.weight;
+		});
+		var mapRouteValueMax = d3.max(routes, function (r) {
+			return r.weight;
+		});
+	  
+	  valueScale.domain([mapRouteValueMin, mapRouteValueMax]).range([1, 10]);
+	  
+	  routes.map((route) => {
+	  	if (route.visible){
+			newroute=addRoute(map,route,valueScale);
+		} else {
+			hiddenroutes[route.id]=route;
+		}
+	})
+	};
+	
+// borrowed from https://codepen.io/haakseth/pen/KQbjdO
+	function drawUpdateCount(map,results_count) {
+		var results_count_div = L.control({ position: "topleft" });
+		results_count_div.onAdd = function(map) {
+			var div = L.DomUtil.create("div", "legend");
+			div.innerHTML += '<p class="legendp"><a href="#results">'+results_count.toString()+' '+personorpeople(results_count)+'.<br/>← Read their names</a></p>';
+			return div
+		};
+		results_count_div.addTo(map);
+	};
+	
+	function drawLegend(map) {
+		var legend_div = L.control({ position: "bottomleft" });
+		legend_div.onAdd = function(map) {
+			var div = L.DomUtil.create("div", "legend");
+			div.innerHTML= '<table class=legendtable>\
+				<tr>\
+					<td><div class="circle" style="background-color:rgb(167,224,169);"></div><td>\
+					<td>Origins</td>\
+				</tr>\
+				<tr>\
+					<td><div class="circle" style="background-color:rgb(255,0,0);"></div><td>\
+					<td>Embarkations</td>\
+				</tr>\
+				<tr>\
+					<td><div class="circle" style="background-color:rgb(163,0,255);"></div><td>\
+					<td>Embark & Disembark</td>\
+				</tr>\
+				<tr>\
+					<td><div class="circle" style="background-color:rgb(0,0,255);"></div><td>\
+					<td>Disembarkations</td>\
+				</tr>\
+				<tr>\
+					<td><div class="circle" style="background-color:rgb(246,193,60);"></div><td>\
+					<td>Post-Disembark Locations</td>\
+				</tr>\
+				</table>'
+			return div
+		};
+		legend_div.addTo(map);
+	};
+	
+	var tmp_route_ids = new Object();
+	
+	function maybeshowroute(map,route) {
+			if (route) {
+				var leaflet_route_id=addRoute(map,route);
+				tmp_route_ids[route.id]=leaflet_route_id;
+			}
+		};
+	
+	function displayhiddenroutes(map,hidden_edge_ids) {
+		tmp_route_ids = new Object;
+		hidden_edge_ids.forEach(edge_id => maybeshowroute(map,hiddenroutes[edge_id]))
+// 		console.log(tmp_route_ids);
+	};
+	
+	function maybedeletepath(map,route) {
+		if (route){
+		var leaflet_path_id = tmp_route_ids[route.id];
+		var thislayer=map._layers[leaflet_path_id];
+		thislayer.remove()
+		};
+	}
+	
+	function hidehiddenroutes(map,hidden_edge_ids) {
+		hidden_edge_ids.forEach(edge_id => maybedeletepath(map,hiddenroutes[edge_id]))
+	};
+	
+	function formatNodePopUpListItem(k,v) {
+		var nodeclass_labels={
+			'embarkation':'embarked',
+			'disembarkation':'disembarked',
+			'post-disembarkation':'ended up',
+			'origin':'originated'
+		};
+		
+		var label = nodeclass_labels[k];
+		
+		var count = v.count;
+		
+		var key = v.key;
+		
+		if (k!='origin') {
+			var formattedlabel='<a href="#" onclick="linkfilter(' + key.toString() + ',\'' + k + '\'); return false;">' + label + ' here.</a>'
+		} else {
+			var formattedlabel=label+' here.'
+		};
+		
+		var text=['<li>',count.toString(),personorpeople(count),formattedlabel,'</li>'].join(' ');
+		
+		return text;
+	};
+		
+	function makeNodePopUp(node_classes,node_title) {
+		
+		var popupheader='<p><strong>'+node_title+'</strong></p>';
+		
+		var popupsubheads=[];
+		
+		//a node can have multiple classes (mostly this is just sierra leone)
+		Object.entries(node_classes).forEach(([k,v]) => popupsubheads.push(formatNodePopUpListItem (k,v)));
+		
+		var popupcontent=popupheader + "<ul>" + popupsubheads.join('') + "</ul>";
+		
+		return(popupcontent);
+		
+	};
+	
+	function drawUpdatePoints(map, points) {
+// 	  console.log(points);
+		function onEachFeature(feature, layer) {
+			
+			var node_classes=feature.properties.node_classes
+			var node_title=feature.properties.name
+			
+			layer.bindPopup(makeNodePopUp(node_classes,node_title));
+			
+			layer.on('mouseover', function() {
+				layer.openPopup();
+				displayhiddenroutes(map,feature.properties.hidden_edges);
+			});
+			layer.on('mouseout', function() {
+				hidehiddenroutes(map,feature.properties.hidden_edges);
+			});
+			
+		};
+		
+		function colorPicker(nodeclasses) {
+			if ('post-disembarkation' in nodeclasses) {
+				var thiscolor=d3.rgb(246,193,60);
+			} else if ('origin' in nodeclasses) {
+				var thiscolor= d3.rgb(167,227,153);
+			} else {
+				if ('embarkation' in nodeclasses && 'disembarkation' in nodeclasses) {
+					var embark=nodeclasses.embarkation.count;
+					var disembark=nodeclasses.disembarkation.count;
+					var embarkratio=embark/(embark+disembark)
+					var disembarkratio=disembark/(embark+disembark)
+					var thiscolor=d3.rgb(embarkratio*255,0,disembarkratio*255);
+					return thiscolor
+				} else {
+					if ('embarkation' in nodeclasses) {
+						var thiscolor=d3.rgb(255,0,0);
+					} else if ('disembarkation' in nodeclasses) {
+						var thiscolor=d3.rgb(0,0,255);
+					}
+				}
+			}
+			return thiscolor
+		}
+		
+		//scale the nodes sizes logarithmically 
+		
+		var valueMin = d3.min(points.features, function (p) {
+			return p.properties.size;
+		  });
+		  var valueMax = d3.max(points.features, function (p) {
+			return p.properties.size;
+		  });
+	
+		var valueScale = d3.scaleLog().domain([valueMin, valueMax]).range([1, 20]);  
+		
+		//while we're at it, let's make the map zoom & pan to fit our collection of points
+		  
+		  var latmin = d3.min(points.features, function (p) {
+		  	return p.geometry.coordinates[1];
+		  });
+		  
+		  var latmax = d3.max(points.features, function (p) {
+		  	return p.geometry.coordinates[1]
+		  });
+		  
+		  var longmin = d3.min(points.features, function (p) {
+		  	return p.geometry.coordinates[0]
+		  });
+		  
+		  var longmax = d3.max(points.features, function (p) {
+		  	return p.geometry.coordinates[0]
+		  });
+		
+		var minmax_group = new L.featureGroup([L.marker([latmin,longmin]),L.marker([latmax,longmax])]);
+		map.fitBounds(minmax_group.getBounds());
+		
+	  
+		L.geoJSON(points.features, {
+			pointToLayer: function (feature, latlng) {
+				return L.circleMarker(latlng, {
+					radius: valueScale(feature.properties.size),
+					fillColor: colorPicker(feature.properties.node_classes),
+					color: "#000",
+					weight: 1,
+					opacity: 1,
+					fillOpacity: 0.6
+				});
+				
+			},
+			onEachFeature: onEachFeature
+
+		}).addTo(map);
+	  
+	};
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 // 	console.log(filter);
 // 	console.log(filterData);
 	var currentSearchObj = searchAll(filter, filterData);
 // I'd like to have this, but once it runs, the filters bar simply won't go away!	
 // 	$('#panelCollapse').show();
 	
-	$("#map_container").html('<div id="jcm10map" style="width:100%; height:100%; min-height:600px"></div>');
+	$("#map_container").html('<div id="AO_map" style="width:100%; height:100%; min-height:600px"></div>');
 
 	var mappingSpecialists=L.tileLayer(
 	  'https://api.mapbox.com/styles/v1/jcm10/cl5v6xvhf001b14o4tdjxm8vh/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoiamNtMTAiLCJhIjoiY2wyOTcyNjJsMGY5dTNwbjdscnljcGd0byJ9.kZvEfo7ywl2yLbztc_SSjw',
@@ -1096,7 +1356,7 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 
 		var basemap = {"Mapping Specialists":mappingSpecialists}
 		
-	var jcm10map = L.map('jcm10map', {
+	var AO_map = L.map('AO_map', {
 		//can't quite use this --
 		//because my map interactions interface with the rest of the search, it triggers a refresh
 		//which pulls you out of fullscreen rather abruptly
@@ -1111,10 +1371,10 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 	
 	
 	
-	L.control.scale({ position: "bottomright" }).addTo(jcm10map);
+	L.control.scale({ position: "bottomright" }).addTo(AO_map);
 	
 	var mappingSpecialistsRivers=L.tileLayer(
-	  'https://api.mapbox.com/styles/v1/jcm10/cl98xvv9r001z14mm17w970no/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoiamNtMTAiLCJhIjoiY2wyOTcyNjJsMGY5dTNwbjdscnljcGd0byJ9.kZvEfo7ywl2yLbztc_SSjw').addTo(jcm10map);
+	  'https://api.mapbox.com/styles/v1/jcm10/cl98xvv9r001z14mm17w970no/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoiamNtMTAiLCJhIjoiY2wyOTcyNjJsMGY5dTNwbjdscnljcGd0byJ9.kZvEfo7ywl2yLbztc_SSjw').addTo(AO_map);
 
 	var mappingSpecialistsCountries=L.tileLayer(
 	  'https://api.mapbox.com/styles/v1/jcm10/cl98yryw3003t14o66r6fx4m9/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoiamNtMTAiLCJhIjoiY2wyOTcyNjJsMGY5dTNwbjdscnljcGd0byJ9.kZvEfo7ywl2yLbztc_SSjw');
@@ -1124,15 +1384,15 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 		"Modern Countries":mappingSpecialistsCountries
 	}
 	
-	var layerControl = L.control.layers(null,featurelayers).addTo(jcm10map);
+	var layerControl = L.control.layers(null,featurelayers).addTo(AO_map);
 // 	NOTE WELL!!!
 // 	THE ANIMATIONS INVOKED BY APPLYING THE FADE CLASS TO THE TABS BREAK LEAFLET'S ABILITY TO DETECT THE SIZE OF ITS DIV, WHICH BREAKS ITS ABILITY TO REQUEST MAPTILES PROPERLY AND CENTER THE MAP
 // 	SO YOU CAN DELAY, AS BELOW, WHICH SUCKS, OR YOU CAN DISABLE THE ANIMATION
 	
 	window.setTimeout(function() {
-		jcm10map.invalidateSize();
+		AO_map.invalidateSize();
 	}, 1000);
-	  
+	
 	$.ajax({
 		type: "POST",
 		url: SEARCH_URL,
@@ -1141,10 +1401,11 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 				output: "maps"
 			}),
 		success: function(d){
-			drawUpdateRoutes(jcm10map,d.routes);
-			drawUpdatePoints(jcm10map,d.points);
-			drawUpdateCount(jcm10map,d.total_results_count);
-			drawLegend(jcm10map);
+// 			console.log(d);
+			drawUpdateRoutes(AO_map,d.region.routes);
+			drawUpdatePoints(AO_map,d.region.points);
+			drawUpdateCount(AO_map,d.region.total_results_count);
+			drawLegend(AO_map);
 		}
 	});
 	
