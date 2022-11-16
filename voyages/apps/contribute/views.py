@@ -53,7 +53,7 @@ from voyages.apps.contribute.publication import (
     export_contributions, export_from_voyages, full_contribution_id,
     get_csv_writer, get_filtered_contributions, get_header_csv_text,
     publish_accepted_contributions, safe_writerow)
-from voyages.apps.past.models import Enslaved, EnslavedContribution, EnslavedContributionLanguageEntry, EnslavedContributionNameEntry, EnslavedContributionStatus, EnslavementRelation, EnslaverAlias, EnslaverContribution, EnslaverIdentity, EnslaverInRelation, EnslaverVoyageConnection, LanguageGroup, ModernCountry
+from voyages.apps.past.models import Enslaved, EnslavedContribution, EnslavedContributionLanguageEntry, EnslavedContributionNameEntry, EnslavedContributionStatus, EnslavementRelation, EnslaverAlias, EnslaverCachedProperties, EnslaverContribution, EnslaverIdentity, EnslaverInRelation, EnslaverVoyageConnection, LanguageGroup, ModernCountry
 from voyages.apps.past.views import _get_audio_filename
 from voyages.apps.voyage.cache import VoyageCache
 from voyages.apps.voyage.forms import VoyagesSourcesAdminForm
@@ -2397,7 +2397,7 @@ def get_voyage_summary(request, pk):
 def init_enslaver_interim(request):
     """
     The output is described as follows
-    type: "merge" | "edit" | "split"
+    type: "new" | "merge" | "edit" | "split" | "delete
     identities: {pk: <Enslaver original data>}, must contain two for "merge" and 1 otherwise.
     <Enslaver original data>: { personal_data: { ... }, aliases: { alias: [ { voyage_id, basic_voyage_fields } ] } }.
 
@@ -2407,8 +2407,8 @@ def init_enslaver_interim(request):
     """
     data = json.loads(request.body)
     mode = data.get('type')
-    if mode not in ["new", "merge", "edit", "split"]:
-        return JsonResponse({ 'error': 'Type must be set to one of merge|edit|split' }, status=400)
+    if mode not in ["new", "merge", "edit", "split", "delete"]:
+        return JsonResponse({ 'error': 'Type must be set to one of new|merge|edit|split|delete' }, status=400)
     enslavers = data.get('enslavers')
     if mode == 'new':
         expected = 0
@@ -2682,7 +2682,8 @@ def _create_enslaver_update_actions(contrib, check_transaction_tags=None):
                 'match': rel
             })
     for key, rel in proposed_relations.items():
-        # We are not allowing creating new relations, so it must exist.
+        # We are not allowing creating new relations, so they must exist for an
+        # update to happen.
         if key not in current_relations:
             raise Exception(f"Enslavement relation {key} not found")
         if rel['enslaver_alias_id'] != current_relations[key]['enslaver_alias_id']:
@@ -2704,13 +2705,13 @@ def _create_enslaver_update_actions(contrib, check_transaction_tags=None):
                 'model': EnslaverAlias.__name__,
                 'match': { 'pk': key, 'alias': alias }
             })
-    if type == 'merge':
+    if type == 'merge' or type == 'delete':
         # Delete previous identities.
         for k, v in identities.items():
-            if k != 'merged':
+            if _isint(k):
                 if len(EnslaverIdentity.objects.filter(pk=int(k))) != 0:
                     actions.append({
-                        'description': u_('Deleting pre-merge identity'),
+                        'description': u_('Deleting identity'),
                         'action': 'delete',
                         'model': EnslaverIdentity.__name__,
                         'match': { 'pk': int(k), 'principal_alias': v['personal_data']['principal_alias'] }
@@ -2741,7 +2742,7 @@ def submit_enslaver_contribution(request):
     except:
         return JsonResponse({ 'error': 'Invalid JSON in request body' })
     contrib = EnslaverContribution()
-    if data['type'] in ['edit', 'split']:
+    if data['type'] in ['edit', 'split', 'delete']:
         try:
             contrib.enslaver = EnslaverIdentity.objects \
                 .get(pk=[int(x) for x in data['identities'].keys() if _isint(x)][0])
@@ -2760,14 +2761,23 @@ def get_enslaver_contribution_list(request):
     data = json.loads(request.body) if request.body else {}
     statuses = data.get('statuses', [EnslavedContributionStatus.PENDING])
     q = EnslaverContribution.objects.filter(status__in=statuses) \
-        .values('pk', 'enslaver__principal_alias', 'contributor__username', 'created', 'status', 'data')
+        .values('pk', 'created', 'status', 'data', \
+            enslaver_identity=F('enslaver__principal_alias'), \
+            contributor_name=F('contributor__username'))
     count = len(q)
     start = data.get('startOffset', 0)
     end = data.get('endOffset', 10000)
     q = q[start:end]
     results = list(q)
-    for r in results:
-        r['data'] = json.loads(r['data'])
+    for item in results:
+        data = json.loads(item.pop('data'))
+        item['type'] = data['type']
+        if item['type'] == 'merge':
+            item['enslaver_identity'] = ' ··· '.join(EnslaverIdentity.objects \
+                .filter(pk__in=[pk for pk in data['identities'].keys() if _isint(pk)]) \
+                .values_list('principal_alias', flat=True))
+        if item['type'] == 'new':
+            item['enslaver_identity'] =  next(iter(data['identities'].values()))['personal_data']['principal_alias']
     return JsonResponse({ 'count': count, 'results': results })
 
 @login_required
@@ -2782,6 +2792,8 @@ def submit_enslaver_editorial_review(request):
     The data format follows the return value of
     `init_enslaver_editorial_review`
     """
+    if not request.user.is_staff:
+        raise JsonResponse({ "error": "Only staff can submit editorial reviews" })
     actions = None
     try:
         data = json.loads(request.body)
@@ -2799,6 +2811,7 @@ def submit_enslaver_editorial_review(request):
         contrib = EnslaverContribution.objects.get(pk=data['contrib_pk'])
         contrib.status = status
         contrib.save()
+        all_identities = []
         for idx, a in enumerate(actions or []):
             action_type = a['action']
             if action_type not in ['new', 'update', 'delete']:
@@ -2828,14 +2841,22 @@ def submit_enslaver_editorial_review(request):
                     target.save()
                 except Exception as ex:
                     transaction.set_rollback(True)
-                    return JsonResponse({ "error": f"Failed to {'insert' if action_type == 'new' else action_type} record", "action_index": idx, 'details': str(ex) })
+                    return JsonResponse({
+                        "error": f"Failed to {'insert' if action_type == 'new' else action_type} record", "action_index": idx,
+                        'details': str(ex)
+                    })
                 if action_type == 'new' and 'tag' in a:
                     # Include newly saved pk in the tagged dict.
                     tags[a['tag']] = target.pk
+            if model == EnslaverIdentity and action_type != 'delete':
+                all_identities.append(target.pk)
         if actions is not None:
             # At this point we *should* be in perfect sync with the contribution.
             missing_actions = _create_enslaver_update_actions(data['interim'], tags)
             if len(missing_actions) > 0:
                 transaction.set_rollback(True)
                 return JsonResponse({ "error": "Contribution not in sync with transactional update", "details": missing_actions })
+        # Update Cached properties for the identities in this contribution.
+        for prop in EnslaverCachedProperties.compute(all_identities):
+            prop.save()
     return JsonResponse({ "result": "OK" })

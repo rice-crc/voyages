@@ -1056,6 +1056,8 @@ function formatRelations ( d ) {
   return relationsTable;
 }
 
+var mainDatatable = null;
+
 function refreshUi(filter, filterData, currentTab, tabData, options) {
   if (currentTab == "results") {
     var currentSearchObj = searchAll(filter, filterData);
@@ -1070,7 +1072,7 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
       className: "btn btn-info buttons-collection dropdown-toggle"
     };
 
-    var mainDatatable = $("#results_main_table").DataTable({
+    mainDatatable = $("#results_main_table").DataTable({
       ajax: {
         url: SEARCH_URL,
         type: "POST",
@@ -1088,9 +1090,10 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
             }
 
             currentSearchObj.order_by = $.map(d.order, function(item) {
-              var columnIndex = mainDatatable
+              // TODO [colReorder disabled]
+              var columnIndex = /* mainDatatable
                 ? mainDatatable.colReorder.order()[item.column]
-                : item.column;
+                :*/ item.column;
               return {
                 columnName: allColumns[columnIndex].data,
                 direction: item.dir
@@ -1123,7 +1126,10 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 
       scrollX: true,
 
-      colReorder: true,
+      // TODO [colReorder disabled]: mainDatatable.colReorder.order() is
+      // throwing and the reason is not clear yet (maybe a bug in the library).
+      
+      //colReorder: true,
 
       order: [[4, "desc"]],
       destroy: true,
@@ -1144,6 +1150,7 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
       language: dtLanguage,
 
       buttons: [
+        enslaversContributeMenu,
         columnToggleMenu,
         //pageLength,
       ],
@@ -1157,7 +1164,8 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
       initComplete: function() {
         $('[data-toggle="tooltip"]').tooltip();
         initAudioActions();
-      },
+        updateContribState(JSON.parse(sessionStorage.getItem(contribStateStorageKey) || "{}"));
+      }
     });
 
     mainDatatable.on("column-reorder", function(e, settings, details) {

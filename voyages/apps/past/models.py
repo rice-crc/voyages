@@ -375,12 +375,15 @@ class EnslaverCachedProperties(models.Model):
     voyage_datasets = models.IntegerField(db_index=True, null=True)
 
     @staticmethod
-    def compute():
+    def compute(identities=None):
         """
         Compute cached properties for the Enslaver. This method seeds the
         EnslaverCachedProperties table which can be used to search and sort
         enslavers based on aggregated values.
         """
+        def apply_filter(q):
+            return q.filter(**{f"{identity_field}__in": identities}) if identities is not None else q
+
         helper = PropHelper()
         identity_field = 'enslaver_alias__identity__id'
         voyage_year_field = 'voyage__voyage_dates__imp_arrival_at_port_of_dis'
@@ -390,6 +393,7 @@ class EnslaverCachedProperties(models.Model):
             .annotate(min_year=Min(voyage_year_field)) \
             .annotate(max_year=Max(voyage_year_field)) \
             .values_list(identity_field, 'min_year', 'max_year')
+        q_years = apply_filter(q_years)
 
         def get_year(s):
             if s is None or len(s) < 4:
@@ -408,6 +412,7 @@ class EnslaverCachedProperties(models.Model):
             .values(identity_field) \
             .annotate(datasets=BitOrAgg(PowerFunc(Value(2), F('voyage__dataset')))) \
             .values_list(identity_field, 'datasets')
+        q_datasets = apply_filter(q_datasets)
         for row in q_datasets:
             helper.set(int(row[0]), 'datasets', int(row[1]))
 
@@ -422,6 +427,7 @@ class EnslaverCachedProperties(models.Model):
             .values(identity_field) \
             .annotate(enslaved_count=Sum(enslaved_count_field)) \
             .values_list(identity_field, 'enslaved_count')
+        q_captive_count_voyageconn = apply_filter(q_captive_count_voyageconn)
         related_enslaved_field = 'relation__enslaved__enslaved_id'
         relation_fields = [identity_field, related_enslaved_field]
         q_captive_count_relations = EnslaverInRelation.objects \
@@ -429,6 +435,7 @@ class EnslaverCachedProperties(models.Model):
             .values(identity_field) \
             .annotate(enslaved_count=Count(related_enslaved_field, distinct=True)) \
             .values_list(identity_field, 'enslaved_count')
+        q_captive_count_relations = apply_filter(q_captive_count_relations)
         for row in q_captive_count_voyageconn:
             helper.add_num(int(row[0]), 'enslaved_count', row[1])
         for row in q_captive_count_relations:
@@ -439,12 +446,15 @@ class EnslaverCachedProperties(models.Model):
             .values(identity_field) \
             .annotate(amount_sum=Sum(amount_fields[1])) \
             .values_list(identity_field, 'amount_sum')
+        q_transaction_amount = apply_filter(q_transaction_amount)
         for row in q_transaction_amount:
             helper.add_num(int(row[0]), 'tot_amount', row[1])
         q_roles = EnslaverInRelation.objects.values_list(identity_field, 'role')
+        q_roles = apply_filter(q_roles)
         for row in q_roles:
             helper.add_to_set(int(row[0]), 'roles', row[1])
         q_roles = EnslaverVoyageConnection.objects.values_list(identity_field, 'role')
+        q_roles = apply_filter(q_roles)
         for row in q_roles:
             helper.add_to_set(int(row[0]), 'roles', row[1])
         for id, item in helper.data.items():

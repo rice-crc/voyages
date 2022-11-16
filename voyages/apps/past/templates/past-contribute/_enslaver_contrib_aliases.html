@@ -77,7 +77,7 @@
                     {% trans "No linked voyage" %}
                 </option>
                 <option v-for="voyage in selAlias().voyages" class="list-group-item" v-bind:value="'V' + [[ voyage.pk ]]">
-                    {% trans "Voyage" %} [[ voyage.pk ]] - [[ voyage.ship_name ]], [[ voyage.arrival.replaceAll(',', '') ]]
+                    {% trans "Voyage" %} [[ voyage.pk ]] - [[ voyage.ship_name ]], [[ voyage.arrival.replaceAll(',', '') ]] [[ voyage.role ? `(${enslaverRoles[voyage.role]})` : "" ]]
                 </option>
                 <option disabled v-if="selAlias().relations?.length === 0">
                     {% trans "No enslavement relations" %}
@@ -123,12 +123,17 @@
                 </button>
             </div>
             <div class="modal-body">
+                <label for="linkVoyageIdField">{% trans "Voyage ID" %}:</label>
                 <input class="form-control" name="linkVoyageIdField" type="number" v-model="linkVoyageInput" autofocus />
-                <!-- TODO: selection box with roles. -->
-                <input class="form-control" name="linkVoyageRole" type="number" v-model="linkVoyageRole" autofocus />
+                <label for="linkVoyageRoleField">{% trans "Enslaver Role" %}:</label>
+                <select v-model="linkVoyageRole" name="linkVoyageRoleField" class="form-control">
+                    <option v-for="[ key, val ] in Object.entries(enslaverRoles)" v-bind:value="key">
+                        [[val]]
+                    </option>
+                </select>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" v-on:click="linkVoyage">{% trans "Link" %}</button>
+                <button type="button" class="btn btn-primary" v-bind:class="{ disabled: !linkVoyageInput || !linkVoyageRole }" v-on:click="linkVoyage">{% trans "Link" %}</button>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">{% trans "Close" %}</button>
             </div>
         </div>
