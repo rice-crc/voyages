@@ -1082,6 +1082,8 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
     });
   } else if (currentTab == "maps") {
 	
+	// widely-used formatting functions
+	
 	function personorpeople(count){
 		if (count===1) {
 			var result="person"
@@ -1091,27 +1093,128 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 		return result
 	};
 
-	  function makePopUp(r) {
-	  	var weightline = r.weight + " " + personorpeople(r.weight);
-	  	return weightline;
-	  };
-
 	var valueScale = d3.scaleLog();
 	
+	function legColorPicker(leg_type,alpha=1) {
+		if (leg_type == 'final_destination') {
+			var thiscolor=d3.color("rgba(246,193,60,"+alpha+")");
+// 			console.log(thiscolor)
+		} else if (leg_type == 'origin') {
+// 			var thiscolor= d3.rgb(167,227,153);
+			var thiscolor=d3.color("rgba(96,192,171,"+alpha+")");
+		} else {
+// 			var thiscolor=d3.rgb(96,192,171);
+// 			var thiscolor=d3.rgb(163,0,255);
+			var thiscolor=d3.color("rgba(215,153,250,"+alpha+")");		
+		};
+		return thiscolor;
+	};
+		
+	function nodeColorPicker(nodeclasses) {
+		if ('post-disembarkation' in nodeclasses) {
+			var thiscolor=d3.rgb(246,193,60);
+		} else if ('origin' in nodeclasses) {
+// 			var thiscolor= d3.rgb(167,227,153);
+			var thiscolor=d3.rgb(96,192,171);
+		} else {
+		//again -- routes can be both embark & disembark points (mostly sierra leone)
+			if ('embarkation' in nodeclasses && 'disembarkation' in nodeclasses) {
+				var embark=nodeclasses.embarkation.count;
+				var disembark=nodeclasses.disembarkation.count;
+				var embarkratio=embark/(embark+disembark)
+				var disembarkratio=disembark/(embark+disembark)
+				var thiscolor=d3.rgb(embarkratio*255,0,disembarkratio*255);
+				return thiscolor
+			} else {
+				if ('embarkation' in nodeclasses) {
+					var thiscolor=d3.rgb(255,0,0);
+				} else if ('disembarkation' in nodeclasses) {
+					var thiscolor=d3.rgb(0,0,255);
+				}
+			}
+		}
+		return thiscolor
+	}
+	
+	
+	  function makeRoutePopUp(r) {
+
+ 	  	if (r.leg_type=='final_destination') {
+			var routesource=nodesdict[r.source_target[0]]
+			var routetarget=nodesdict[r.source_target[1]]
+ 	  		var popuptext = [
+ 	  			r.weight,
+ 	  			personorpeople(r.weight),
+ 	  			"ended up in",
+ 	  			routetarget.name,
+ 	  			"after landing in",
+ 	  			routesource.name
+ 	  			].join(" ")
+ 	  	} else if (r.leg_type=='origin') {
+			var routesource=nodesdict[r.source_target[0]]
+			var routetarget=nodesdict[r.source_target[1]]
+ 	  		var popuptext = [
+ 	  			r.weight,
+ 	  			routesource.name,
+ 	  			personorpeople(r.weight),
+ 	  			"taken to",
+ 	  			routetarget.name
+ 	  			].join(" ")
+ 	  	} else if (r.leg_type=='offramp') {
+			var routetarget=nodesdict[r.source_target[1]]
+ 	  		var popuptext = [
+ 	  			r.weight,
+ 	  			personorpeople(r.weight),
+ 	  			"transported to",
+ 	  			routetarget.name
+ 	  			].join(" ")
+ 	  	} else if (r.leg_type=='onramp') { 	
+//  	  		console.log(r.source_target) 
+			var routesource=nodesdict[r.source_target[0]]
+// 			console.log(routesource)
+ 	  		var popuptext = [
+ 	  			r.weight,
+ 	  			personorpeople(r.weight),
+ 	  			"taken from",
+ 	  			routesource.name
+ 	  			].join(" ")
+ 	  	} else {
+			var popuptext = [r.weight,personorpeople(r.weight),"transported."].join(" ");
+		}
+	  	
+	  	return popuptext;
+	  };
+	  
 	var hiddenroutes = new Object();
 	
-		
-	function addRoute(map,route){
+	function addRoute(map,route,layergroup,point_id=null){
 		var commands = [];
 		commands.push("M", route.geometry[0][0]);
 		commands.push("C", route.geometry[1][0], route.geometry[1][1], route.geometry[0][1]);
-		var newroute=L.curve(commands, { color: "rgb(96,192,171)", weight: valueScale(route.weight) })
-		  .bindPopup(makePopUp(route),{'maxHeight':'300'})
-		  .addTo(map);
-		return newroute._leaflet_id;
+		var newroute=L.curve(commands, { color: legColorPicker(route.leg_type), weight: valueScale(route.weight) })
+		  .bindPopup(makeRoutePopUp(route),{'className':'leafletAOPopup','padding':'0px','width':'auto','background':legColorPicker(route.leg_type,.7)})
+		  .addTo(layergroup);
+		if (['origin','final_destination'].includes(route.leg_type)) {
+			var hovernode_leaflet_id=nodesdict[point_id].leaflet_id;
+			var hovernode_layer = nodeslayergroup.getLayer(geojsonlayerid).getLayer(hovernode_leaflet_id)
+			hovernode_layer.bringToFront();
+		};
+		newroute.on('mouseover', function () {	
+			newroute.openPopup();
+		});
+		if (['onramp','offramp','oceanic_leg'].includes(route.leg_type)) {
+			newroute.on('mouseover', function () {	
+				hiddenrouteslayergroup.clearLayers();
+			});
+		
+			
+		};
+		newroute.on('mouseout', function () {	
+			newroute.closePopup();
+		});
 	  };
-
-	function drawUpdateRoutes(map, routes) {
+				
+	function drawMainRoutes(map, routes) {
 		var mapRouteValueMin = d3.min(routes, function (r) {
 			return r.weight;
 		});
@@ -1123,7 +1226,7 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 	  
 	  routes.map((route) => {
 	  	if (route.visible){
-			newroute=addRoute(map,route,valueScale);
+			newroute=addRoute(map,route,mainrouteslayergroup);
 		} else {
 			hiddenroutes[route.id]=route;
 		}
@@ -1172,33 +1275,21 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 		legend_div.addTo(map);
 	};
 	
-	var tmp_route_ids = new Object();
+//HANDLING HIDDEN ROUTES (ORIGINS->EMBARKATIONS & DISEMBARKATIONS->POST-DISEMBARKATIONS)
 	
-	function maybeshowroute(map,route) {
+	function maybeshowroute(map,route,point_id) {
 			if (route) {
-				var leaflet_route_id=addRoute(map,route);
-				tmp_route_ids[route.id]=leaflet_route_id;
+				var leaflet_route_id=addRoute(map,route,hiddenrouteslayergroup,point_id);
 			}
 		};
 	
-	function displayhiddenroutes(map,hidden_edge_ids) {
-		tmp_route_ids = new Object;
-		hidden_edge_ids.forEach(edge_id => maybeshowroute(map,hiddenroutes[edge_id]))
-// 		console.log(tmp_route_ids);
+	function displayhiddenroutes(map,node) {
+		hiddenrouteslayergroup.clearLayers();
+		var hidden_edge_ids=node.properties.hidden_edges;
+		hidden_edge_ids.forEach(edge_id => maybeshowroute(map,hiddenroutes[edge_id],node.properties.point_id));
 	};
-	
-	function maybedeletepath(map,route) {
-		if (route){
-		var leaflet_path_id = tmp_route_ids[route.id];
-		var thislayer=map._layers[leaflet_path_id];
-		thislayer.remove()
-		};
-	}
-	
-	function hidehiddenroutes(map,hidden_edge_ids) {
-		hidden_edge_ids.forEach(edge_id => maybedeletepath(map,hiddenroutes[edge_id]))
-	};
-	
+
+//CREATING NODE POPUPS
 	function formatNodePopUpListItem(k,v) {
 		var nodeclass_labels={
 			'embarkation':'embarked',
@@ -1213,74 +1304,66 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 		
 		var key = v.key;
 		
-		if (k!='origin') {
-			var formattedlabel='<a href="#" onclick="linkfilter(' + key.toString() + ',\'' + k + '\'); return false;">' + label + ' here.</a>'
-		} else {
-			var formattedlabel=label+' here.'
-		};
+		var formattedstring=[count.toString(),personorpeople(count),label].join(' ')
 		
-		var text=['<li>',count.toString(),personorpeople(count),formattedlabel,'</li>'].join(' ');
+		if (k!='origin') {
+			var text='<a href="#" onclick="linkfilter(' + key.toString() + ',\'' + k + '\'); return false;">' + formattedstring + '</a>'
+		} else {
+			var text = false
+		};
 		
 		return text;
 	};
 		
 	function makeNodePopUp(node_classes,node_title) {
 		
-		var popupheader='<p><strong>'+node_title+'</strong></p>';
-		
 		var popupsubheads=[];
 		
-		//a node can have multiple classes (mostly this is just sierra leone)
+		//a node can have multiple classes (mostly this is for sierra leone)
+		
 		Object.entries(node_classes).forEach(([k,v]) => popupsubheads.push(formatNodePopUpListItem (k,v)));
 		
-		var popupcontent=popupheader + "<ul>" + popupsubheads.join('') + "</ul>";
+		if (!popupsubheads.includes(false)){
+			var popupcontent=popupsubheads.join(' and ') + " in " + node_title;
+		} else {
+			var count=node_classes['origin']['count'];
+			var popupcontent=[count,personorpeople(count),"with",node_title,"origins."].join(" ")
+		}
+		
+		
 		
 		return(popupcontent);
 		
 	};
 	
-	function drawUpdatePoints(map, points) {
-// 	  console.log(points);
+	var geojsonlayerid;
+	
+	function drawUpdatePoints(map, points,zoomtofit=true) {
 		function onEachFeature(feature, layer) {
 			
 			var node_classes=feature.properties.node_classes
 			var node_title=feature.properties.name
 			
-			layer.bindPopup(makeNodePopUp(node_classes,node_title));
+			layer.bindPopup(makeNodePopUp(node_classes,node_title),{'className':'leafletAOPopup'});
 			
 			layer.on('mouseover', function() {
 				layer.openPopup();
-				displayhiddenroutes(map,feature.properties.hidden_edges);
-			});
-			layer.on('mouseout', function() {
-				hidehiddenroutes(map,feature.properties.hidden_edges);
+				displayhiddenroutes(map,feature);
 			});
 			
+			var l_id=L.stamp(layer);
+			var point_id=feature.properties.point_id
+			
+			nodesdict[point_id]['leaflet_id']=l_id;
+			
+// 			
+// 			
+// 			if (point_id==60213) {
+// 				console.log(feature);
+// 				console.log(nodesdict[point_id]);
+// 			}
+			
 		};
-		
-		function colorPicker(nodeclasses) {
-			if ('post-disembarkation' in nodeclasses) {
-				var thiscolor=d3.rgb(246,193,60);
-			} else if ('origin' in nodeclasses) {
-				var thiscolor= d3.rgb(167,227,153);
-			} else {
-				if ('embarkation' in nodeclasses && 'disembarkation' in nodeclasses) {
-					var embark=nodeclasses.embarkation.count;
-					var disembark=nodeclasses.disembarkation.count;
-					var embarkratio=embark/(embark+disembark)
-					var disembarkratio=disembark/(embark+disembark)
-					var thiscolor=d3.rgb(embarkratio*255,0,disembarkratio*255);
-					return thiscolor
-				} else {
-					if ('embarkation' in nodeclasses) {
-						var thiscolor=d3.rgb(255,0,0);
-					} else if ('disembarkation' in nodeclasses) {
-						var thiscolor=d3.rgb(0,0,255);
-					}
-				}
-			}
-			return thiscolor
-		}
 		
 		//scale the nodes sizes logarithmically 
 		
@@ -1294,32 +1377,34 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 		var valueScale = d3.scaleLog().domain([valueMin, valueMax]).range([1, 20]);  
 		
 		//while we're at it, let's make the map zoom & pan to fit our collection of points
+		//but not if that's been disabled
+		  if (zoomtofit){
+			  var latmin = d3.min(points.features, function (p) {
+				return p.geometry.coordinates[1];
+			  });
 		  
-		  var latmin = d3.min(points.features, function (p) {
-		  	return p.geometry.coordinates[1];
-		  });
+			  var latmax = d3.max(points.features, function (p) {
+				return p.geometry.coordinates[1]
+			  });
 		  
-		  var latmax = d3.max(points.features, function (p) {
-		  	return p.geometry.coordinates[1]
-		  });
+			  var longmin = d3.min(points.features, function (p) {
+				return p.geometry.coordinates[0]
+			  });
 		  
-		  var longmin = d3.min(points.features, function (p) {
-		  	return p.geometry.coordinates[0]
-		  });
-		  
-		  var longmax = d3.max(points.features, function (p) {
-		  	return p.geometry.coordinates[0]
-		  });
+			  var longmax = d3.max(points.features, function (p) {
+				return p.geometry.coordinates[0]
+			  });
 		
-		var minmax_group = new L.featureGroup([L.marker([latmin,longmin]),L.marker([latmax,longmax])]);
-		map.fitBounds(minmax_group.getBounds());
+			var minmax_group = new L.featureGroup([L.marker([latmin,longmin]),L.marker([latmax,longmax])]);
+			map.fitBounds(minmax_group.getBounds());
+		}
 		
 	  
-		L.geoJSON(points.features, {
+		var geojsonlayer = L.geoJSON(points.features, {
 			pointToLayer: function (feature, latlng) {
 				return L.circleMarker(latlng, {
 					radius: valueScale(feature.properties.size),
-					fillColor: colorPicker(feature.properties.node_classes),
+					fillColor: nodeColorPicker(feature.properties.node_classes),
 					color: "#000",
 					weight: 1,
 					opacity: 1,
@@ -1329,21 +1414,12 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 			},
 			onEachFeature: onEachFeature
 
-		}).addTo(map);
+		}).addTo(nodeslayergroup);
+		
+		geojsonlayerid=geojsonlayer._leaflet_id;
 	  
 	};
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-// 	console.log(filter);
-// 	console.log(filterData);
 	var currentSearchObj = searchAll(filter, filterData);
 // I'd like to have this, but once it runs, the filters bar simply won't go away!	
 // 	$('#panelCollapse').show();
@@ -1370,6 +1446,28 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 	});	
 	
 	
+	var hiddenrouteslayergroup = L.layerGroup();
+	
+	var mainrouteslayergroup = L.layerGroup();
+	
+	var nodeslayergroup = L.layerGroup();
+	
+	hiddenrouteslayergroup.addTo(AO_map);
+	
+	mainrouteslayergroup.addTo(AO_map);
+	
+	nodeslayergroup.addTo(AO_map);
+	
+	//The nodesdict object allows us to look up nodes by id
+	var nodesdict = new Object;
+	
+	function makeRoutesDict(network) {
+		
+		var features=network.points.features;
+		
+		features.forEach(feature => nodesdict[feature.properties.point_id]=feature.properties);
+		
+	}
 	
 	L.control.scale({ position: "bottomright" }).addTo(AO_map);
 	
@@ -1384,6 +1482,8 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 		"Modern Countries":mappingSpecialistsCountries
 	}
 	
+	var allnetworks=new Object;
+	
 	var layerControl = L.control.layers(null,featurelayers).addTo(AO_map);
 // 	NOTE WELL!!!
 // 	THE ANIMATIONS INVOKED BY APPLYING THE FADE CLASS TO THE TABS BREAK LEAFLET'S ABILITY TO DETECT THE SIZE OF ITS DIV, WHICH BREAKS ITS ABILITY TO REQUEST MAPTILES PROPERLY AND CENTER THE MAP
@@ -1393,6 +1493,33 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 		AO_map.invalidateSize();
 	}, 1000);
 	
+	
+	
+	function refreshmapwithnewnetwork(map,network,zoomtofit=true) {
+			console.log('makingroutes');
+			makeRoutesDict(network);
+			console.log('clearinglayers');
+			hiddenrouteslayergroup.clearLayers();
+			console.log('clearingotherlayers');
+			mainrouteslayergroup.clearLayers();
+			console.log('clearingyetotherlayers');
+			nodeslayergroup.clearLayers();
+			console.log('drawingroutes');
+			drawMainRoutes(map,network.routes);
+			console.log('drawingnewpoints');
+			drawUpdatePoints(map,network.points,zoomtofit);
+	};
+	
+	AO_map.on('zoomend', function() {
+		var currentzoom=AO_map.getZoom()
+		if (currentzoom>4){
+			refreshmapwithnewnetwork(AO_map,allnetworks.place,false)
+		} else {
+			refreshmapwithnewnetwork(AO_map,allnetworks.region,false)
+		}
+		
+	});
+	
 	$.ajax({
 		type: "POST",
 		url: SEARCH_URL,
@@ -1401,11 +1528,14 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 				output: "maps"
 			}),
 		success: function(d){
-// 			console.log(d);
-			drawUpdateRoutes(AO_map,d.region.routes);
-			drawUpdatePoints(AO_map,d.region.points);
-			drawUpdateCount(AO_map,d.region.total_results_count);
+			allnetworks = d;
+			console.log(d);
+			refreshmapwithnewnetwork(AO_map,allnetworks.region)
+			console.log('refreshed')
+			drawUpdateCount(AO_map,allnetworks.region.total_results_count);
+			console.log('drewupdatecount');
 			drawLegend(AO_map);
+			console.log('drewlegend');
 		}
 	});
 	

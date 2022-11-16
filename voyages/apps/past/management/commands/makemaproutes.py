@@ -283,7 +283,7 @@ class Command(BaseCommand):
 					ControlX = B[0] + smoothing*(A[0]-C[0])
 					ControlY = B[1] + smoothing*(A[1]-C[1])
 					Control=(ControlX,ControlY)
-					result[ab_id]=[[A, B], [Control, Control]]
+					result[ab_id]=[[[A, B], [Control, Control]]]
 					return result,Control
 				else:
 					#last edge
@@ -297,14 +297,14 @@ class Command(BaseCommand):
 					ControlY = A[1]*2 - prev_ControlY
 					next_ControlX = B[0] + smoothing*(A[0]-C[0])
 					next_ControlY = B[1] + smoothing*(A[1]-C[1])
-					result[ab_id]=[[A, B],[[ControlX,ControlY],[next_ControlX,next_ControlY]]]
+					result[ab_id]=[[[A, B],[[ControlX,ControlY],[next_ControlX,next_ControlY]]]]
 					return result,(next_ControlX,next_ControlY)
 				
 			def straightab(A,B,ab_id,result):
 				midx=(A[0]+B[0])/2
 				midy=(A[1]+B[1])/2
 				Control=(midx,midy)
-				result[ab_id]=[[A, B], [Control, Control]]
+				result[ab_id]=[[[A, B], [Control, Control]]]
 				isstraight=True
 				return result,Control
 		
@@ -387,6 +387,8 @@ class Command(BaseCommand):
 					a_coords=G.nodes[a_id]['coords']
 					b_coords=G.nodes[b_id]['coords']
 					route,control=straightab(a_coords,b_coords,edge_id,{})
+					route[edge_id].append([a_id,b_id])
+					route[edge_id].append(data['tag'])
 				elif len(route_edge_ids)>1:
 					edgepairs=[(route_edge_ids[i],route_edge_ids[i+1]) for i in range(len(route_edge_ids)-1)]
 					prev_controlXY=None
@@ -404,14 +406,23 @@ class Command(BaseCommand):
 						bc_iscurved=bcdata['curve']
 						if ab_iscurved:
 							route,prev_controlXY=curvedab(A,B,C,ab_id,prev_controlXY,prev_wasstraight,route)
+							route[ab_id].append([a_id,b_id])
+							route[ab_id].append(abdata['tag'])
 							prev_wasstraight=False
 						else:
 							route,prev_controlXY=straightab(A,B,ab_id,route)
+							route[ab_id].append([a_id,b_id])
+							route[ab_id].append(abdata['tag'])
 							prev_wasstraight=True
 					if bc_iscurved:
 						route,prev_controlXY=curvedab(B,C,None,bc_id,prev_controlXY,prev_wasstraight,route)
+						route[bc_id].append([b_id,c_id])
+						route[bc_id].append(bcdata['tag'])
 					else:
 						route,prev_controlXY=straightab(B,C,bc_id,route)
+						route[bc_id].append([b_id,c_id])
+						route[bc_id].append(bcdata['tag'])
+						
 				
 				else:
 					print("bad itinerary:",itinerary,offset_itinerary,legs,route_edge_ids,shortest_path)
@@ -461,7 +472,7 @@ class Command(BaseCommand):
 						if not edgetagvisibilitydict[e_tag]:
 							node_hidden_edges.append(e_id)
 					
-					print(node_hidden_edges)
+# 					print(node_hidden_edges)
 					
 					coords=node['coords']
 					name=node['name']

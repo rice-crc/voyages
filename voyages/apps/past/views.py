@@ -313,17 +313,7 @@ def search_enslaved(request):
             'post_disembark_location__value'
             ]]
             for i in page
-        ]        
-
-#         itineraries=[
-#             [i[k] for k in 
-#             ['language_group__moderncountry__id',
-#             'voyage__voyage_itinerary__imp_principal_region_of_slave_purchase__value',
-#             'voyage__voyage_itinerary__imp_principal_region_slave_dis__value',
-#             'post_disembark_location__value'
-#             ]]
-#             for i in page
-#         ]  
+        ]
         
         final_result={}
         
@@ -340,8 +330,6 @@ def search_enslaved(request):
             final_location_counts=dict(Counter(i[3] for i in itineraries))
     
             language_group_ids_offset=1000000
-        
-#             print(language_group_counts)
         
             points_dict={
                 p_id:{
@@ -384,46 +372,18 @@ def search_enslaved(request):
                     
                     popuplines=[]
                     live_tags=['origin','embarkation','disembarkation','post-disembarkation']
-                    pointtags={tag:{"count":point[tag],"key": int(pk) if tag in ('post-disembarkation','origin') else int(point_id)}
-                    	for tag in live_tags if tag in point
-                    }
-#                     for tag in ['origin','embarkation','disembarkation','post-disembarkation']:
-#                         if tag in point:
-#                             if tag in ('post-disembarkation','origin'):
-#                                 href_event='<a id="%d" \
-#                                     title="" \
-#                                     href="#" \
-#                                     onclick="linkfilter(%d,\'%s\'); return false;" \
-#                                     >' %(int(point_id),int(pk),tag)
-#                             else:
-#                                 href_event='<a id="%d" \
-#                                     title="" \
-#                                     href="#" \
-#                                     onclick="linkfilter(%d,\'%s\'); return false;" \
-#                                     >' %(int(point_id),int(point_id),tag)
-#                             tag_size=point[tag]
-#                             if tag_size==1:
-#                                 person_or_people="person"
-#                             else:
-#                                 person_or_people="people"
-#                             if tag=='origin':
-#                                 popupULline="%d %s originated here." %(point[tag],person_or_people)
-#                             elif tag=='embarkation':
-#                                 popupULline="%d %s embarked here. %sFilter</a>" %(point[tag],person_or_people,href_event)
-#                             elif tag=='disembarkation':
-#                                 popupULline="%d %s disembarked here. %sFilter</a>" %(point[tag],person_or_people,href_event)
-#                             elif tag=='post-disembarkation':
-#                                 popupULline="%d %s ended up here. %sFilter</a>" %(point[tag],person_or_people,href_event)
-#                             else:
-#                                 print("??????")
-#                             popuplines.append(popupULline)     
-#                             pointtags[tag]=point[tag]
-                        
-#                     popupcontent="<strong>%s</strong><ul><li>%s</li></ul>" %(name,"</li><li>".join(popuplines))
+                    if itinerary_group_name=='region':
+                        pointtags={tag:{"count":point[tag],"key": int(pk) if tag in ('post-disembarkation','origin') else int(point_id)}
+                            for tag in live_tags if tag in point
+                        }
+                    elif itinerary_group_name=='place':
+                        pointtags={tag:{"count":point[tag],"key": int(pk)}
+                            for tag in live_tags if tag in point
+                        }
+
                     feature_properties={
                         "name":name,
                         "size":nodesize,
-#                         "popupcontent":popupcontent,
                         "node_classes":pointtags,
                         "point_id":point_id,
                         "hidden_edges":points_dict[point_id]['hidden_edges']
@@ -456,12 +416,14 @@ def search_enslaved(request):
             leg_weights=Counter([l for i in itinerary_names for l in route_curves[i]])
             itinerary_weights=Counter(itinerary_names).most_common()
             itinerary_weights.reverse()
-            #this trickery ensures that the heaviest route determines which sub-leg's geometry gets used
-            leg_geometry={l:route_curves[i[0]][l] for i in itinerary_weights for l in route_curves[i[0]]}
-    
+            #this trickery ensures that the heaviest route determines which leg's geometry gets used
+            leg_data={l:route_curves[i[0]][l] for i in itinerary_weights for l in route_curves[i[0]]}
+            
             result_routes=[
                 {
-                    'geometry':leg_geometry[l],
+                    'geometry':leg_data[l][0],
+                    'source_target':leg_data[l][1],
+                    'leg_type':leg_data[l][2],
                     'weight':leg_weights[l],
                     'id':l,
                     'visible':edge_ids_visibility[l]

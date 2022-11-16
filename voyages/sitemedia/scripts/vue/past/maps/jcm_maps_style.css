@@ -50,3 +50,17 @@
 }
 
 
+
+.leafletAOPopup .leaflet-popup-tip {
+	display: none;
+}
+
+.leafletAOPopup .leaflet-popup-close-button {
+	display: none;
+}
+
+.leafletAOPopup .leaflet-popup-content-wrapper {
+/*     background: rgba(167, 224, 169, 0.7); */
+    padding: 0px;
+    width: auto;
+}
