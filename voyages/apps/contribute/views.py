@@ -2397,7 +2397,7 @@ def get_voyage_summary(request, pk):
 def init_enslaver_interim(request):
     """
     The output is described as follows
-    type: "new" | "merge" | "edit" | "split"
+    type: "new" | "merge" | "edit" | "split" | "delete
     identities: {pk: <Enslaver original data>}, must contain two for "merge" and 1 otherwise.
     <Enslaver original data>: { personal_data: { ... }, aliases: { alias: [ { voyage_id, basic_voyage_fields } ] } }.
 
@@ -2407,8 +2407,8 @@ def init_enslaver_interim(request):
     """
     data = json.loads(request.body)
     mode = data.get('type')
-    if mode not in ["new", "merge", "edit", "split"]:
-        return JsonResponse({ 'error': 'Type must be set to one of new|merge|edit|split' }, status=400)
+    if mode not in ["new", "merge", "edit", "split", "delete"]:
+        return JsonResponse({ 'error': 'Type must be set to one of new|merge|edit|split|delete' }, status=400)
     enslavers = data.get('enslavers')
     if mode == 'new':
         expected = 0
@@ -2682,7 +2682,8 @@ def _create_enslaver_update_actions(contrib, check_transaction_tags=None):
                 'match': rel
             })
     for key, rel in proposed_relations.items():
-        # We are not allowing creating new relations, so it must exist.
+        # We are not allowing creating new relations, so they must exist for an
+        # update to happen.
         if key not in current_relations:
             raise Exception(f"Enslavement relation {key} not found")
         if rel['enslaver_alias_id'] != current_relations[key]['enslaver_alias_id']:
@@ -2704,13 +2705,13 @@ def _create_enslaver_update_actions(contrib, check_transaction_tags=None):
                 'model': EnslaverAlias.__name__,
                 'match': { 'pk': key, 'alias': alias }
             })
-    if type == 'merge':
+    if type == 'merge' or type == 'delete':
         # Delete previous identities.
         for k, v in identities.items():
-            if k != 'merged':
+            if _isint(k):
                 if len(EnslaverIdentity.objects.filter(pk=int(k))) != 0:
                     actions.append({
-                        'description': u_('Deleting pre-merge identity'),
+                        'description': u_('Deleting identity'),
                         'action': 'delete',
                         'model': EnslaverIdentity.__name__,
                         'match': { 'pk': int(k), 'principal_alias': v['personal_data']['principal_alias'] }
@@ -2741,7 +2742,7 @@ def submit_enslaver_contribution(request):
     except:
         return JsonResponse({ 'error': 'Invalid JSON in request body' })
     contrib = EnslaverContribution()
-    if data['type'] in ['edit', 'split']:
+    if data['type'] in ['edit', 'split', 'delete']:
         try:
             contrib.enslaver = EnslaverIdentity.objects \
                 .get(pk=[int(x) for x in data['identities'].keys() if _isint(x)][0])
@@ -2771,6 +2772,12 @@ def get_enslaver_contribution_list(request):
     for item in results:
         data = json.loads(item.pop('data'))
         item['type'] = data['type']
+        if item['type'] == 'merge':
+            item['enslaver_identity'] = ' ··· '.join(EnslaverIdentity.objects \
+                .filter(pk__in=[pk for pk in data['identities'].keys() if _isint(pk)]) \
+                .values_list('principal_alias', flat=True))
+        if item['type'] == 'new':
+            item['enslaver_identity'] =  next(iter(data['identities'].values()))['personal_data']['principal_alias']
     return JsonResponse({ 'count': count, 'results': results })
 
 @login_required

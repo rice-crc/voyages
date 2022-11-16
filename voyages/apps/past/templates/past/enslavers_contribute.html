@@ -51,16 +51,27 @@
                 <li>                            
                     <button v-on:click="goBack"><i class="fa fa-arrow-left"></i></button>
                 </li>
+                {% if mode != 'delete' %}
                 <li class="nav-item">
-                    <a class="nav-link active" href="#aliases" data-toggle="tab" data-target="#aliases">{% trans 'Aliases and Voyages' %}</a>
+                    <a class="nav-link active" href="#aliases" data-
+toggle="tab" data-target="#aliases">{% trans 'Aliases and Voyages' %}</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="#personal" data-toggle="tab" data-target="#personal">{% trans 'Personal information' %}</a>
                 </li>
+                {% endif %}
                 <li class="nav-item">
-                    <a class="nav-link" href="#notes" data-toggle="tab" data-target="#notes">
+                    <a 
+                        {% if mode != 'delete' %}
+                        class="nav-link"
+                        {% else %}
+                        class="nav-link active"
+                        {% endif %}
+                        href="#notes" data-toggle="tab" data-target="#notes">
                         {% if editorialMode %}
                             {% trans 'Notes from contributor' %}
+                        {% elif mode == 'delete' %}
+                            {% trans 'Why should this record be deleted?' %}
                         {% else %}
                             {% trans 'Notes to editor' %}
                         {% endif %}
@@ -73,14 +84,25 @@
             
             <!-- TabContainers -->
             <div id="tabsJustifiedContent" class="tab-content">
+                {% if mode != 'delete' %}
                 <div id="aliases" class="tab-pane fade active show">
                     {% include "past-contribute/_enslaver_contrib_aliases.html" %}
                 </div>
                 <div id="personal" class="tab-pane fade">
                     {% include "past-contribute/_enslaver_contrib_personal.html" %}
                 </div>
-                <div id="notes" class="tab-pane fade">
+                {% endif %}
+                <div
+                    {% if mode != 'delete' %}
+                        class="tab-pane fade"
+                    {% else %}
+                        class="tab-pane active show"
+                    {% endif %}
+                        id="notes">
                     <textarea name="notes" class="form-control enslaver_contrib_fullspan_control" v-model="interim.notes"></textarea>
+                    {% if mode == 'delete' %}
+                        
+                    {% endif %}
                 </div>
                 <div id="review" class="tab-pane fade">
                     <div class="panel panel-danger" v-if="validation.length > 0">

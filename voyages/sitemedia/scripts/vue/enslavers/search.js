@@ -109,16 +109,9 @@ allColumns.forEach(function(c, index) {
         formattedString = "";
         try {
           const contribState = JSON.parse(sessionStorage.getItem(contribStateStorageKey) || "{}");
-          if (contribState?.mode === 'edit' || contribState?.mode === 'split') {
-            let icon = contribState.mode;
-            if (icon === 'split') {
-              icon = 'columns';
-            }
+          if (contribState?.mode === 'edit' || contribState?.mode === 'split' || contribState?.mode === 'delete') {
+            let icon = get_enslaver_contrib_icon(contribState.mode);
             formattedString = `<a href="/past/enslavers_contribute/${contribState.mode}/${data}"><i class="fas fa-blended-color fa-${icon} btn btn-transparent"></i></a>`;
-          } else if (contribState?.mode === 'delete') {
-            // TODO: implement delete contrib.
-            formattedString = `<a href="#" onclick="alert('not implemented yet')"><i class="fas fa-blended-color fa-trash btn btn-transparent"></i></a>`;
-            // formattedString = `<a href="/past/enslavers_contribute/delete/${data}"><i class="fas fa-trash btn btn-transparent"></i></a>`;
           } else if (contribState?.mode === 'merge') {
             const isChecked = contribState.selection.includes(data);
             formattedString = `<input onchange="contribMergeChange(this)" type="checkbox" value="${data}"${isChecked ? " checked" : ""}></input>`;
@@ -176,6 +169,7 @@ const contributeColHeaders = {
 
 const updateContribState = (state) => {
   const col = mainDatatable.column("contribute:name");
+  const btn = mainDatatable.button('hide_enslaver_contrib_action:name');
   const prev = JSON.parse(sessionStorage.getItem(contribStateStorageKey) || "{}");
   if (!!state?.mode) {
     sessionStorage.setItem(contribStateStorageKey, JSON.stringify(state));
@@ -184,8 +178,10 @@ const updateContribState = (state) => {
       header = `${header} <span class="badge badge-pill badge-secondary tooltip-pointer" data-toggle="tooltip" data-placement="top" title="${gettext('There is already an enslaver selected for the merge operation')}" data-original-title=""> ${state.selection.length} </span>`;
     }
     col.header().innerHTML = header;
+    btn.enable();
   } else {
     sessionStorage.setItem(contribStateStorageKey, "{}");
+    btn.disable();
   }
   col.visible(!!state?.mode);
   if (prev?.mode !== state?.mode) {
@@ -226,6 +222,7 @@ const enslaversContributeMenu = {
     }
   }, {
     text: gettext('Hide action column'),
+    name: 'hide_enslaver_contrib_action',
     action: function() {
       updateContribState(null);
     }

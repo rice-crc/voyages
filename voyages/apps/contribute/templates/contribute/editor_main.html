@@ -150,6 +150,7 @@
 <script type="text/javascript" src="{{ STATIC_URL }}scripts/contribute/common.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}scripts/contribute/editorial.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}scripts/legacy/utils.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}scripts/vue/enslavers/icons.js"></script>
 <script type="text/javascript">
     var reviewClasses = ['alert-info', 'alert-success', 'alert-danger'];
     var contribTypes = {'edit': '<span class="fa fa-edit">',
@@ -277,13 +278,6 @@
             }
         });
     }
-
-    const icons = {
-        "new": "file-alt",
-        "merge": "code-fork",
-        "split": "random"
-    };
-
     async function loadEnslaversContribList() {
         // This is a later development that uses more recent js features.
         const res = await fetch("/contribute/enslaver_contribution_list", {
@@ -298,7 +292,7 @@
                 columns: [{
                         data: function(row, type, set) {
                             return {
-                                icon: icons[row.type] || row.type,
+                                icon: get_enslaver_contrib_icon(row.type),
                                 pk: row.pk
                             };
                         },

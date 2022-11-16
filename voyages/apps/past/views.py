@@ -363,6 +363,9 @@ def _enslaver_contrib_action(request, data):
         return HttpResponseRedirect(reverse('account_login'))
     return render(request, 'past/enslavers_contribute.html', data)
 
+def enslaver_contrib_delete(request, id):
+    return _enslaver_contrib_action(request, { "mode": "delete", "id": id })
+
 def enslaver_contrib_edit(request, id):
     return _enslaver_contrib_action(request, { "mode": "edit", "id": id })
 
@@ -395,7 +398,10 @@ def enslaver_contrib_editorial_review(request, pk):
     contrib = get_object_or_404(EnslaverContribution, pk=pk)
     if contrib.status == EnslavedContributionStatus.ACCEPTED:
         raise Http404("This contribution has already been accepted")
+    # Parsing makes sure that we have valid JSON data.
+    interim = json.loads(contrib.data)
     return render(request, 'past/enslavers_contribute.html', {
+        'mode': interim['type'],
         'interim': contrib.data,
         'editorialMode': True,
         'contrib_pk': pk
