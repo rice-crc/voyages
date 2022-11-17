@@ -1588,7 +1588,7 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 			}),
 		success: function(d){
 			allnetworks = d;
-			console.log(d);
+// 			console.log(d);
 			refreshmapwithnewnetwork(AO_map,allnetworks.region)
 			drawUpdateCount(AO_map,allnetworks.region.total_results_count);
 			drawLegend(AO_map);
