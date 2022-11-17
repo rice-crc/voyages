@@ -2,9 +2,10 @@
 
 ## 1. fix oddities with the search ui
 
-* there are certain searches that crash the interface, e.g.
-	* Itinerary: Disembarkation Port: Bahamas, port unspecified && Fate: Post Disembarkion Location: Rio Pongo
-* and certain ports that i think don't come back right -- for instance, Bissau (60213) is coded under the wrong region
+* there are certain ports that aren't rendering properly when we search
+	* rio pongo when region of embarkation is senegambia & offshore atlantic --> why is it even appearing in the results?
+
+I am pretty sure this is an issue with the search ui, not with my use of it
 
 ## 2. handle mapping for geographically distributed languages
 

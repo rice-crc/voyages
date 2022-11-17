@@ -1,5 +1,4 @@
 function resetPagination(datatable) {
-	console.log("resetpagination");
   datatable.page('first').draw(false);
 }
 
@@ -429,7 +428,12 @@ var searchBar = new Vue({
       // alert(JSON.stringify(searchTerms));
       // search(this.searchFilter, searchTerms);
       this.refresh();
-      resetPagination($("#results_main_table").DataTable());
+      //the below presupposes that the results_main_table element has a datatable element
+      //but outside of the results tab, it's just a placeholder element
+      //and so resetting the pagination fails
+      if (this.currentTab=='results'){
+		  resetPagination($("#results_main_table").DataTable());
+      }
     },
 
     // reset inputs, filters, and counts back to default state
