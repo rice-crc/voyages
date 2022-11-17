@@ -1133,9 +1133,9 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 	var AO_map = L.map('AO_map', {
 		fullscreenControl: false,
 		center:[0,0],
-		zoom:3,
+		zoom:3.2,
+		minZoom:3.2,
 		layers:	[mappingSpecialists],
-		minZoom:1.7
 	});	
 	
 	var hiddenrouteslayergroup = L.layerGroup();
