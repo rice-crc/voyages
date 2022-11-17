@@ -403,7 +403,7 @@ function searchAll(filter, filterData) {
                       var sortedSelections = filter[key1][key2][key3].value["searchTerm"].sort(sortNumber);
                       var searchTerm = [];
 
-                      console.log(sortedSelections);
+//                       console.log(sortedSelections);
                       if (sortedSelections.includes("0")) {
                         // select all
                         filterData.treeselectOptions[varName][0].children.forEach(
@@ -1081,9 +1081,91 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
       initAudioActions();
     });
   } else if (currentTab == "maps") {
+
+	//GLOBALS FOR MAPPING
+	//A. Those that we refresh when we switch btw region & place zoom levels
+	//A1. hiddenroutes keeps track of the origin & final destination routes that only show on rollover
+	var hiddenroutes = new Object();
+	var geojsonlayerid = new Object();
+	var valueScale = d3.scaleLog();
 	
+	//B. Those that are more frequently reset according to custom functions for interactivity
+	//B1. keep track of the popup (since they're getting created & destroyed so quickly by the nodes)
+	var currently_open_popup_layer = L.Layer;
+	//B2. this one allows us to tie the hidden routes' animations to the main routes' animations, despite these being in different layer groups (maybe there's a better fix?)
+	var animationmode = true;
+	//B3. The nodesdict object allows us to look up nodes by id
+	var nodesdict = new Object;
+	//C. Those which are refreshed infrequently, if at all
+	//C1. the regions + nodes full response to any query:
+	var allnetworks=new Object;
+	
+	function clearMostGlobals() {
+		geojsonlayerid = new Object();
+		hiddenroutes = new Object();
+		hiddenrouteslayergroup.clearLayers();
+		mainrouteslayergroup.clearLayers();
+		hiddenanimationrouteslayergroup.clearLayers();
+		mainanimationrouteslayergroup.clearLayers();
+		nodeslayergroup.clearLayers();
+	}
+	
+	function refreshmapwithnewnetwork(map,network,zoomtofit=true,regionorplace="region") {
+			clearMostGlobals();
+			makeRoutesDict(network);
+			drawMainRoutes(map,network.routes);
+			drawUpdatePoints(map,network.points,zoomtofit,regionorplace);
+	};
+
+	//D. MAP AND DOM GLOBALS
+	
+	var currentSearchObj = searchAll(filter, filterData);
+	// I'd like to have this, but once it runs, the filters bar simply won't go away!	
+	// $('#panelCollapse').show();
+		$("#map_container").html('<div id="AO_map" style="width:100%; height:100%; min-height:600px"></div>');
+
+	var mappingSpecialists=L.tileLayer(
+	  'https://api.mapbox.com/styles/v1/jcm10/cl5v6xvhf001b14o4tdjxm8vh/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoiamNtMTAiLCJhIjoiY2wyOTcyNjJsMGY5dTNwbjdscnljcGd0byJ9.kZvEfo7ywl2yLbztc_SSjw',
+	  {attribution: '<a href="https://www.mappingspecialists.com/" target="blank">Mapping Specialists</a>'});
+
+		var basemap = {"Mapping Specialists":mappingSpecialists}
+		
+	var AO_map = L.map('AO_map', {
+		fullscreenControl: false,
+		center:[0,0],
+		zoom:3,
+		layers:	[mappingSpecialists],
+		minZoom:1.7
+	});	
+	
+	var hiddenrouteslayergroup = L.layerGroup();
+	hiddenrouteslayergroup.addTo(AO_map);
+
+	var mainrouteslayergroup = L.layerGroup();
+	mainrouteslayergroup.addTo(AO_map);
+	
+	var nodeslayergroup = L.layerGroup();
+	nodeslayergroup.addTo(AO_map);
+	
+	var mainanimationrouteslayergroup = L.layerGroup();
+	mainanimationrouteslayergroup.addTo(AO_map);
+	var hiddenanimationrouteslayergroup = L.layerGroup();
+	hiddenanimationrouteslayergroup.addTo(AO_map);
+	L.control.scale({ position: "bottomright" }).addTo(AO_map);
+	
+	var mappingSpecialistsRivers=L.tileLayer(
+	  'https://api.mapbox.com/styles/v1/jcm10/cl98xvv9r001z14mm17w970no/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoiamNtMTAiLCJhIjoiY2wyOTcyNjJsMGY5dTNwbjdscnljcGd0byJ9.kZvEfo7ywl2yLbztc_SSjw').addTo(AO_map);
+	var mappingSpecialistsCountries=L.tileLayer(
+	  'https://api.mapbox.com/styles/v1/jcm10/cl98yryw3003t14o66r6fx4m9/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoiamNtMTAiLCJhIjoiY2wyOTcyNjJsMGY5dTNwbjdscnljcGd0byJ9.kZvEfo7ywl2yLbztc_SSjw');
+	var featurelayers = {
+		"Rivers":mappingSpecialistsRivers,
+		"Modern Countries":mappingSpecialistsCountries,
+		"Animation": mainanimationrouteslayergroup,
+	}
+	var layerControl = L.control.layers(null,featurelayers).addTo(AO_map);
+
+
 	// widely-used formatting functions
-	
 	function personorpeople(count){
 		if (count===1) {
 			var result="person"
@@ -1092,32 +1174,24 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 		}
 		return result
 	};
-
-	var valueScale = d3.scaleLog();
 	
 	function legColorPicker(leg_type,alpha=1) {
 		if (leg_type == 'final_destination') {
 			var thiscolor=d3.color("rgba(246,193,60,"+alpha+")");
-// 			console.log(thiscolor)
 		} else if (leg_type == 'origin') {
-// 			var thiscolor= d3.rgb(167,227,153);
 			var thiscolor=d3.color("rgba(96,192,171,"+alpha+")");
 		} else {
-// 			var thiscolor=d3.rgb(96,192,171);
-// 			var thiscolor=d3.rgb(163,0,255);
 			var thiscolor=d3.color("rgba(215,153,250,"+alpha+")");		
 		};
 		return thiscolor;
 	};
 		
+	//Node color rules:
+	//Priority given to embarkations & disembarkations, and their combination
+	//So my only color "scale" is red<-->blue
+	//Only nodes that have no embark or disembark get colored as yellow (final destination) or green (origin)
 	function nodeColorPicker(nodeclasses) {
-		if ('post-disembarkation' in nodeclasses) {
-			var thiscolor=d3.rgb(246,193,60);
-		} else if ('origin' in nodeclasses) {
-// 			var thiscolor= d3.rgb(167,227,153);
-			var thiscolor=d3.rgb(96,192,171);
-		} else {
-		//again -- routes can be both embark & disembark points (mostly sierra leone)
+		if ('embarkation' in nodeclasses || 'disembarkation' in nodeclasses) {
 			if ('embarkation' in nodeclasses && 'disembarkation' in nodeclasses) {
 				var embark=nodeclasses.embarkation.count;
 				var disembark=nodeclasses.disembarkation.count;
@@ -1132,88 +1206,157 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 					var thiscolor=d3.rgb(0,0,255);
 				}
 			}
-		}
+		} else if ('post-disembarkation' in nodeclasses) {
+			var thiscolor=d3.rgb(246,193,60);
+		} else if ('origin' in nodeclasses) {
+			var thiscolor=d3.rgb(96,192,171);
+		};
 		return thiscolor
 	}
 	
-	
-	  function makeRoutePopUp(r) {
-
+	//Routes get tooltips. And here is where we make them!
+	  function makeRouteToolTip(r) {
  	  	if (r.leg_type=='final_destination') {
 			var routesource=nodesdict[r.source_target[0]]
 			var routetarget=nodesdict[r.source_target[1]]
- 	  		var popuptext = [
- 	  			r.weight,
- 	  			personorpeople(r.weight),
- 	  			"ended up in",
- 	  			routetarget.name,
- 	  			"after landing in",
- 	  			routesource.name
- 	  			].join(" ")
+ 	  		try {
+				var popuptext = [
+					r.weight,
+					personorpeople(r.weight),
+					"ended up in",
+					routetarget.name,
+					"after landing in",
+					routesource.name
+					].join(" ")
+ 	  		} catch(error) {
+				console.log("BAD SOURCE OR TARGET NODE-->",r);
+				var st=r.source_target;
+				var popuptext=["bad source or target node. source: ",st[0],". target: ",st[1]].join('')
+			}
  	  	} else if (r.leg_type=='origin') {
 			var routesource=nodesdict[r.source_target[0]]
 			var routetarget=nodesdict[r.source_target[1]]
- 	  		var popuptext = [
- 	  			r.weight,
- 	  			routesource.name,
- 	  			personorpeople(r.weight),
- 	  			"taken to",
- 	  			routetarget.name
- 	  			].join(" ")
+ 	  		try {
+				var popuptext = [
+					r.weight,
+					routesource.name,
+					personorpeople(r.weight),
+					"taken to",
+					routetarget.name
+					].join(" ")
+ 	  		} catch(error) {
+				console.log("BAD SOURCE OR TARGET NODE-->",r);
+				var st=r.source_target;
+				var popuptext=["bad source or target node. source: ",st[0],". target: ",st[1]].join('')
+			}
  	  	} else if (r.leg_type=='offramp') {
 			var routetarget=nodesdict[r.source_target[1]]
- 	  		var popuptext = [
- 	  			r.weight,
- 	  			personorpeople(r.weight),
- 	  			"transported to",
- 	  			routetarget.name
- 	  			].join(" ")
+			try {
+				var popuptext = [
+					r.weight,
+					personorpeople(r.weight),
+					"transported to",
+					routetarget.name
+					].join(" ")
+			} catch (error) {
+				console.log("BAD TARGET NODE-->",r);
+				var st=r.source_target;
+				var popuptext=["bad target node: ",st[1]].join('')
+			}
  	  	} else if (r.leg_type=='onramp') { 	
-//  	  		console.log(r.source_target) 
 			var routesource=nodesdict[r.source_target[0]]
-// 			console.log(routesource)
- 	  		var popuptext = [
- 	  			r.weight,
- 	  			personorpeople(r.weight),
- 	  			"taken from",
- 	  			routesource.name
- 	  			].join(" ")
+ 	  		try {
+				var popuptext = [
+					r.weight,
+					personorpeople(r.weight),
+					"taken from",
+					routesource.name
+					].join(" ")
+ 	  		} catch(error) {
+				console.log("BAD SOURCE NODE-->",r);
+				var st=r.source_target;
+				var popuptext=["bad source node: ",st[0]].join('')
+ 	  		}
  	  	} else {
 			var popuptext = [r.weight,personorpeople(r.weight),"transported."].join(" ");
 		}
-	  	
 	  	return popuptext;
 	  };
-	  
-	var hiddenroutes = new Object();
 	
-	function addRoute(map,route,layergroup,point_id=null){
+	//This function creates a bezier curve
+	//& is used for all curve creation, including animations and interactivity bindings.
+	//note that w 
+	function addRoute(map,route,mainlayergroup,point_id=null,animationlayergroup=null){
+		//parse the geometry, classes, features, and draw a route curve 
 		var commands = [];
 		commands.push("M", route.geometry[0][0]);
 		commands.push("C", route.geometry[1][0], route.geometry[1][1], route.geometry[0][1]);
-		var newroute=L.curve(commands, { color: legColorPicker(route.leg_type), weight: valueScale(route.weight) })
-		  .bindPopup(makeRoutePopUp(route),{'className':'leafletAOPopup','padding':'0px','width':'auto','background':legColorPicker(route.leg_type,.7)})
-		  .addTo(layergroup);
+		var weight=valueScale(route.weight);
+		var newroute=L.curve(commands, {
+			color: legColorPicker(route.leg_type),
+			weight: weight,
+			stroke: true,
+		})
+		.bindTooltip(makeRouteToolTip(route),{'sticky':true})
+		.addTo(mainlayergroup);
+		
+		//then layer on the animation curves
+		//in oder to do which (using basic css) we need to know how long these curves are
+		//because the css animation works on the basis of animation duration (how long it should take to complete a run)
+		//and if what we're animating is the traversal of a small dot along a bezier curve
+		//then we have to make the time apportioned inversely proportional to the length of the curve
+		//tldr: in order that the dots on longer routes and shorter routes move the same speed, the longer routes need animations of longer duration, and vice versa
+		//increase timingscalar to slow this down, decrease it to speed it up
+		var dist=0
+		var timingscalar = 50
+		//the distance traversed has to be measured in *PIXELS* or else the speed increases with zoom level
+		pairs=d3.pairs(newroute.trace([0,.05,.1,.15,.2,.25,.3,.35,.4,.45,.5,.55,.6,.65,.7,.75,.8,.85,.9,.95,1]));
+		function euclideandistance(p1,p2) {
+			xyone=AO_map.latLngToContainerPoint(p1);
+			xytwo=AO_map.latLngToContainerPoint(p2);
+			var ed=Math.sqrt((xyone.x-xytwo.x)**2+(xyone.y-xytwo.y)**2)
+			return ed
+		}
+		if (pairs.length>1){
+			pairs.forEach(sp=>dist+=euclideandistance(sp[0],sp[1]))
+		}
+		if (animationlayergroup && animationmode){
+			var newanimationroute=L.curve(commands, {
+				color: "#6c757d6b",
+				weight: 1,
+				dashArray:"1 10",
+				animate: {'duration':dist*timingscalar,"iterations":Infinity,"direction":'normal'}
+			}).addTo(animationlayergroup);
+		};
+		
+		//this is some interactivity micro-tuning/crafting
+		//when you roll over a node with hidden routes (i.e., inland to origination point or final destination)
+		//you want the node you're rolling over to be on top of the routes that are drawn emanating from it -- otherwise, those routes' interactivities make it very likely you'll get rid of your node popup immediately by having these appear directly under your mouse and on top of the node
+		//however, we want *only* that node to come to the front, because you do want to be able to roll your mouse off that node and immediately onto one of the emanating routes, potentially to follow it out to the other, connected nodes -- which, when you hit them, you want to be able to roll off the route onto the node to bring that node to the front and draw the routes emanating from *it* etc. etc.
 		if (['origin','final_destination'].includes(route.leg_type)) {
 			var hovernode_leaflet_id=nodesdict[point_id].leaflet_id;
 			var hovernode_layer = nodeslayergroup.getLayer(geojsonlayerid).getLayer(hovernode_leaflet_id)
 			hovernode_layer.bringToFront();
-		};
-		newroute.on('mouseover', function () {	
-			newroute.openPopup();
-		});
-		if (['onramp','offramp','oceanic_leg'].includes(route.leg_type)) {
+			newroute.on('mouseover', function () {	
+				if (currently_open_popup_layer.closePopup) {
+					currently_open_popup_layer.closePopup();
+				}
+			});
+		//and this bad boy makes sure that those node popups go away once you hit one of the other non-hidden routes
+		} else if (['onramp','offramp','oceanic_leg'].includes(route.leg_type)) {
 			newroute.on('mouseover', function () {	
 				hiddenrouteslayergroup.clearLayers();
+				hiddenanimationrouteslayergroup.clearLayers();
+				if (currently_open_popup_layer.closePopup) {
+					currently_open_popup_layer.closePopup();
+				}
 			});
-		
-			
 		};
-		newroute.on('mouseout', function () {	
-			newroute.closePopup();
-		});
 	  };
-				
+	
+	//Main routes are drawn when the map is refreshed. These are the embarkation-->disembarkation routes
+	//Which include connections from the embarkation point into the oceanic network, and from that back out to the disembarkation port
+	//We are for now calling those final-mile connections "onramps" and "offramps"
 	function drawMainRoutes(map, routes) {
 		var mapRouteValueMin = d3.min(routes, function (r) {
 			return r.weight;
@@ -1221,19 +1364,21 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 		var mapRouteValueMax = d3.max(routes, function (r) {
 			return r.weight;
 		});
-	  
-	  valueScale.domain([mapRouteValueMin, mapRouteValueMax]).range([1, 10]);
+	  valueScale.domain([mapRouteValueMin, mapRouteValueMax]).range([3, 13]);
 	  
 	  routes.map((route) => {
 	  	if (route.visible){
-			newroute=addRoute(map,route,mainrouteslayergroup);
+			newroute=addRoute(map,route,mainrouteslayergroup,null,mainanimationrouteslayergroup);
 		} else {
 			hiddenroutes[route.id]=route;
 		}
 	})
 	};
-	
-// borrowed from https://codepen.io/haakseth/pen/KQbjdO
+
+
+	// MORE OR LESS STABLE MAP ELEMENTS
+	// UPPER-LEFT LEGEND/LINK SHOWING THE TOTAL NUMBER OF PEOPLE IN THE SEARCH RESULT
+	// borrowed from https://codepen.io/haakseth/pen/KQbjdO
 	function drawUpdateCount(map,results_count) {
 		var results_count_div = L.control({ position: "topleft" });
 		results_count_div.onAdd = function(map) {
@@ -1243,7 +1388,7 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 		};
 		results_count_div.addTo(map);
 	};
-	
+	// LOWER LEFT LEGEND SHOWING THE COLOR CODES FOR THE NODES
 	function drawLegend(map) {
 		var legend_div = L.control({ position: "bottomleft" });
 		legend_div.onAdd = function(map) {
@@ -1275,21 +1420,19 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 		legend_div.addTo(map);
 	};
 	
-//HANDLING HIDDEN ROUTES (ORIGINS->EMBARKATIONS & DISEMBARKATIONS->POST-DISEMBARKATIONS)
-	
-	function maybeshowroute(map,route,point_id) {
+	//HANDLING HIDDEN ROUTES (ORIGINS->EMBARKATIONS & DISEMBARKATIONS->POST-DISEMBARKATIONS)	
+	function maybeshowroute(map,route,point_id,animationrouteslayergroup) {
 			if (route) {
-				var leaflet_route_id=addRoute(map,route,hiddenrouteslayergroup,point_id);
+				var leaflet_route_id=addRoute(map,route,hiddenrouteslayergroup,point_id,animationrouteslayergroup);
 			}
 		};
-	
 	function displayhiddenroutes(map,node) {
 		hiddenrouteslayergroup.clearLayers();
+		hiddenanimationrouteslayergroup.clearLayers();
 		var hidden_edge_ids=node.properties.hidden_edges;
-		hidden_edge_ids.forEach(edge_id => maybeshowroute(map,hiddenroutes[edge_id],node.properties.point_id));
+		hidden_edge_ids.forEach(edge_id => maybeshowroute(map,hiddenroutes[edge_id],node.properties.point_id,hiddenanimationrouteslayergroup));
 	};
-
-//CREATING NODE POPUPS
+	//CREATING NODE POPUPS
 	function formatNodePopUpListItem(k,v) {
 		var nodeclass_labels={
 			'embarkation':'embarked',
@@ -1299,74 +1442,57 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 		};
 		
 		var label = nodeclass_labels[k];
-		
 		var count = v.count;
-		
 		var key = v.key;
-		
 		var formattedstring=[count.toString(),personorpeople(count),label].join(' ')
-		
 		if (k!='origin') {
 			var text='<a href="#" onclick="linkfilter(' + key.toString() + ',\'' + k + '\'); return false;">' + formattedstring + '</a>'
 		} else {
 			var text = false
 		};
-		
 		return text;
 	};
 		
 	function makeNodePopUp(node_classes,node_title) {
-		
 		var popupsubheads=[];
-		
 		//a node can have multiple classes (mostly this is for sierra leone)
-		
 		Object.entries(node_classes).forEach(([k,v]) => popupsubheads.push(formatNodePopUpListItem (k,v)));
-		
 		if (!popupsubheads.includes(false)){
 			var popupcontent=popupsubheads.join(' and ') + " in " + node_title;
 		} else {
 			var count=node_classes['origin']['count'];
 			var popupcontent=[count,personorpeople(count),"with",node_title,"origins."].join(" ")
 		}
-		
-		
-		
 		return(popupcontent);
-		
 	};
 	
-	var geojsonlayerid;
-	
-	function drawUpdatePoints(map, points,zoomtofit=true) {
+	function drawUpdatePoints(map, points,zoomtofit=true,regionorplace="region") {
 		function onEachFeature(feature, layer) {
 			
-			var node_classes=feature.properties.node_classes
-			var node_title=feature.properties.name
+			var node_classes=feature.properties.node_classes;
+			var node_title=feature.properties.name;
 			
+			//Nodes get popups, but we're making these render on rollover then stick until
+			//another popup (from a node) is called
+			//or a tooltip (from a route) is called
+			//This is the best solution to allow a user to roll from a node to the mini-filter menu for that node, without losing the popup (which would keep them from clicking on the filter link...)
+			//Necessary tradeoff is that these popups tend to be pretty bulky, which means they cover stuff on a dense map
+			//I should restyle a bit... coloring, alpha...
+			//But if I dial down the padding then the popup bubble disconnects from the arrow tip. Bummer.
 			layer.bindPopup(makeNodePopUp(node_classes,node_title),{'className':'leafletAOPopup'});
 			
 			layer.on('mouseover', function() {
-				layer.openPopup();
+				currently_open_popup_layer=layer.openPopup();
 				displayhiddenroutes(map,feature);
 			});
 			
 			var l_id=L.stamp(layer);
 			var point_id=feature.properties.point_id
-			
 			nodesdict[point_id]['leaflet_id']=l_id;
-			
-// 			
-// 			
-// 			if (point_id==60213) {
-// 				console.log(feature);
-// 				console.log(nodesdict[point_id]);
-// 			}
 			
 		};
 		
 		//scale the nodes sizes logarithmically 
-		
 		var valueMin = d3.min(points.features, function (p) {
 			return p.properties.size;
 		  });
@@ -1374,7 +1500,7 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 			return p.properties.size;
 		  });
 	
-		var valueScale = d3.scaleLog().domain([valueMin, valueMax]).range([1, 20]);  
+		var valueScale = d3.scaleLog().domain([valueMin, valueMax]).range([4, 25]);  
 		
 		//while we're at it, let's make the map zoom & pan to fit our collection of points
 		//but not if that's been disabled
@@ -1398,8 +1524,6 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 			var minmax_group = new L.featureGroup([L.marker([latmin,longmin]),L.marker([latmax,longmax])]);
 			map.fitBounds(minmax_group.getBounds());
 		}
-		
-	  
 		var geojsonlayer = L.geoJSON(points.features, {
 			pointToLayer: function (feature, latlng) {
 				return L.circleMarker(latlng, {
@@ -1413,113 +1537,48 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 				
 			},
 			onEachFeature: onEachFeature
-
 		}).addTo(nodeslayergroup);
-		
+		//we need this to access the nodes via their leaflet id's as it's their parent feature layer group. might be a better way, though
 		geojsonlayerid=geojsonlayer._leaflet_id;
-	  
 	};
 	
-	var currentSearchObj = searchAll(filter, filterData);
-// I'd like to have this, but once it runs, the filters bar simply won't go away!	
-// 	$('#panelCollapse').show();
-	
-	$("#map_container").html('<div id="AO_map" style="width:100%; height:100%; min-height:600px"></div>');
-
-	var mappingSpecialists=L.tileLayer(
-	  'https://api.mapbox.com/styles/v1/jcm10/cl5v6xvhf001b14o4tdjxm8vh/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoiamNtMTAiLCJhIjoiY2wyOTcyNjJsMGY5dTNwbjdscnljcGd0byJ9.kZvEfo7ywl2yLbztc_SSjw',
-	  {attribution: '<a href="https://www.mappingspecialists.com/" target="blank">Mapping Specialists</a>'});
-
-		var basemap = {"Mapping Specialists":mappingSpecialists}
-		
-	var AO_map = L.map('AO_map', {
-		//can't quite use this --
-		//because my map interactions interface with the rest of the search, it triggers a refresh
-		//which pulls you out of fullscreen rather abruptly
-		//i could update the search bar then construct my own search object and run again without refreshing the ui
-		//except even that wouldn't quite work, because it would refresh the map per the below...
-		fullscreenControl: false,
-		center:[0,0],
-		zoom:3,
-		layers:	[mappingSpecialists],
-		minZoom:1.7
-	});	
-	
-	
-	var hiddenrouteslayergroup = L.layerGroup();
-	
-	var mainrouteslayergroup = L.layerGroup();
-	
-	var nodeslayergroup = L.layerGroup();
-	
-	hiddenrouteslayergroup.addTo(AO_map);
-	
-	mainrouteslayergroup.addTo(AO_map);
-	
-	nodeslayergroup.addTo(AO_map);
-	
-	//The nodesdict object allows us to look up nodes by id
-	var nodesdict = new Object;
-	
 	function makeRoutesDict(network) {
-		
 		var features=network.points.features;
-		
 		features.forEach(feature => nodesdict[feature.properties.point_id]=feature.properties);
-		
 	}
 	
-	L.control.scale({ position: "bottomright" }).addTo(AO_map);
 	
-	var mappingSpecialistsRivers=L.tileLayer(
-	  'https://api.mapbox.com/styles/v1/jcm10/cl98xvv9r001z14mm17w970no/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoiamNtMTAiLCJhIjoiY2wyOTcyNjJsMGY5dTNwbjdscnljcGd0byJ9.kZvEfo7ywl2yLbztc_SSjw').addTo(AO_map);
-
-	var mappingSpecialistsCountries=L.tileLayer(
-	  'https://api.mapbox.com/styles/v1/jcm10/cl98yryw3003t14o66r6fx4m9/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoiamNtMTAiLCJhIjoiY2wyOTcyNjJsMGY5dTNwbjdscnljcGd0byJ9.kZvEfo7ywl2yLbztc_SSjw');
-	  
-	var featurelayers = {
-		"Rivers":mappingSpecialistsRivers,
-		"Modern Countries":mappingSpecialistsCountries
-	}
-	
-	var allnetworks=new Object;
-	
-	var layerControl = L.control.layers(null,featurelayers).addTo(AO_map);
-// 	NOTE WELL!!!
-// 	THE ANIMATIONS INVOKED BY APPLYING THE FADE CLASS TO THE TABS BREAK LEAFLET'S ABILITY TO DETECT THE SIZE OF ITS DIV, WHICH BREAKS ITS ABILITY TO REQUEST MAPTILES PROPERLY AND CENTER THE MAP
-// 	SO YOU CAN DELAY, AS BELOW, WHICH SUCKS, OR YOU CAN DISABLE THE ANIMATION
-	
+	// GENERAL MAP APPEARANCE MANAGEMENT FUNCTIONS
+	// 	N.B.!!!
+	// 	THE VUE.JS ANIMATIONS INVOKED BY APPLYING THE FADE CLASS TO THE TABS BREAK LEAFLET'S ABILITY TO DETECT THE SIZE OF ITS DIV, WHICH BREAKS ITS ABILITY TO REQUEST MAPTILES PROPERLY AND CENTER THE MAP
+	// 	SO YOU CAN DELAY, AS BELOW, WHICH SUCKS, GRANTED, OR YOU CAN DISABLE THE ANIMATION
 	window.setTimeout(function() {
 		AO_map.invalidateSize();
 	}, 1000);
-	
-	
-	
-	function refreshmapwithnewnetwork(map,network,zoomtofit=true) {
-			console.log('makingroutes');
-			makeRoutesDict(network);
-			console.log('clearinglayers');
-			hiddenrouteslayergroup.clearLayers();
-			console.log('clearingotherlayers');
-			mainrouteslayergroup.clearLayers();
-			console.log('clearingyetotherlayers');
-			nodeslayergroup.clearLayers();
-			console.log('drawingroutes');
-			drawMainRoutes(map,network.routes);
-			console.log('drawingnewpoints');
-			drawUpdatePoints(map,network.points,zoomtofit);
-	};
-	
 	AO_map.on('zoomend', function() {
 		var currentzoom=AO_map.getZoom()
 		if (currentzoom>4){
-			refreshmapwithnewnetwork(AO_map,allnetworks.place,false)
+			refreshmapwithnewnetwork(AO_map,allnetworks.place,false,"place");
 		} else {
-			refreshmapwithnewnetwork(AO_map,allnetworks.region,false)
+			refreshmapwithnewnetwork(AO_map,allnetworks.region,false,"region")
 		}
-		
 	});
-	
+	AO_map.on('overlayremove', function (e){
+		//n.b. --> "name" property here refers to the control panel's text name for the overlay
+		//see var featurelayer definition above
+		if (e.name=="Animation"){
+			hiddenanimationrouteslayergroup.removeFrom(AO_map);
+			animationmode = false;
+		}
+	});
+	AO_map.on('overlayadd', function (e){
+		if (e.name=="Animation"){
+			hiddenanimationrouteslayergroup.addTo(AO_map);
+			animationmode = true;
+		}
+	});
+		
+	//------------>AND HERE IS WHERE WE MAKE THE CALL FOR THE DATA
 	$.ajax({
 		type: "POST",
 		url: SEARCH_URL,
@@ -1531,11 +1590,8 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 			allnetworks = d;
 			console.log(d);
 			refreshmapwithnewnetwork(AO_map,allnetworks.region)
-			console.log('refreshed')
 			drawUpdateCount(AO_map,allnetworks.region.total_results_count);
-			console.log('drewupdatecount');
 			drawLegend(AO_map);
-			console.log('drewlegend');
 		}
 	});
 	
