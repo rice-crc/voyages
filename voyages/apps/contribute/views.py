@@ -2793,7 +2793,7 @@ def submit_enslaver_editorial_review(request):
     `init_enslaver_editorial_review`
     """
     if not request.user.is_staff:
-        raise JsonResponse({ "error": "Only staff can submit editorial reviews" })
+        return JsonResponse({ "error": "Only staff can submit editorial reviews" })
     actions = None
     try:
         data = json.loads(request.body)
