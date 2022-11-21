@@ -358,9 +358,12 @@ def store_audio(request, contrib_pk, name_pk, token):
         destination.write(request.body)
     return JsonResponse({'len': len(request.body)})
 
+def _get_login_url(next_url):
+    return f"{reverse('account_login')}?next={next_url}"
+    
 def _enslaver_contrib_action(request, data):
     if not request.user.is_authenticated():
-        return HttpResponseRedirect(reverse('account_login'))
+        return HttpResponseRedirect(_get_login_url(request.build_absolute_uri()))
     return render(request, 'past/enslavers_contribute.html', data)
 
 def enslaver_contrib_delete(request, id):
@@ -393,8 +396,9 @@ def get_enslavement_relation_info(request, relation_pk):
         .values(name=F('enslaved__documented_name')))
     return JsonResponse(relation)
 
-@login_required
 def enslaver_contrib_editorial_review(request, pk):
+    if not request.user.is_authenticated():
+        return HttpResponseRedirect(_get_login_url(request.build_absolute_uri()))
     contrib = get_object_or_404(EnslaverContribution, pk=pk)
     if contrib.status == EnslavedContributionStatus.ACCEPTED:
         raise Http404("This contribution has already been accepted")

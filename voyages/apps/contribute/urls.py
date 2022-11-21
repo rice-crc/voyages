@@ -45,7 +45,7 @@ urlpatterns = [
     url(r'legal', views.legal, name='legal'),
     url(r'enslaver_contribution_review/(?P<pk>\d+)$',
         past.views.enslaver_contrib_editorial_review,
-        name='get_enslaver_contribution_list'),
+        name='enslaver_contrib_editorial_review'),
     url(r'edit_voyage', views.edit, name='edit_voyage'),
     url(r'merge_voyages', views.merge, name='merge_voyages'),
     url(r'new_voyage', views.new_voyage, name='new_voyage'),
