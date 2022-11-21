@@ -216,7 +216,7 @@ const enslaversContributeMenu = {
       updateContribState({ mode: "delete" });
     }
   }, {
-    text: gettext('Unlink an alias from the enslaver'),
+    text: gettext('Delink an alias from the enslaver'),
     action: function() {
       updateContribState({ mode: "split" });
     }

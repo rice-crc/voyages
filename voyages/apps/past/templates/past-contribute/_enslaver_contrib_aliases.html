@@ -62,7 +62,7 @@
             <button type="button" v-on:click="showChildInfo" v-bind:class="{ disabled: selectAliasChildren.length === 0 }"
                 class="btn btn-info">Show</button>
             <button type="button" v-on:click="unlinkChildren"
-                v-bind:class="{ disabled: !selectedAlias || selectAliasChildren.length === 0 }" class="btn btn-danger">{% trans "Unlink" %}
+                v-bind:class="{ disabled: !selectedAlias || selectAliasChildren.length === 0 }" class="btn btn-danger">{% trans "Delink" %}
             </button>
             <button type="button" v-bind:class="{ disabled: !selectedAlias }"
                 class="btn btn-primary" type="button"
