@@ -972,10 +972,10 @@ def voyage_to_dict(voyage):
 
 
 @login_required()
-def editor_main(request):
+def editor_main(request, active_tab):
     if not request.user.is_superuser:
         return HttpResponseForbidden()
-    return render(request, 'contribute/editor_main.html')
+    return render(request, 'contribute/editor_main.html', { "active_tab": active_tab or "requests" })
 
 
 def get_reviews_by_status(statuses, display_interim_data=False):
