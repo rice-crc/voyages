@@ -1897,6 +1897,58 @@ def impute_contribution(request, editor_contribution_id):
         }
     return JsonResponse(res)
 
+def _update_source_from_interim(source, interim_source_dict):
+    src_type = interim_source_dict['type']
+    formatted_content = ''
+    all_types = {
+        x.group_name: x for x in VoyageSourcesType.objects.all()
+    }
+    if src_type == 'Primary source':
+        formatted_content = '<em>' + \
+            interim_source_dict['name_of_library_or_archive'] + \
+            '</em> (' + \
+            interim_source_dict['location_of_library_or_archive'] + ')'
+        source.source_type = all_types['Documentary source']
+    elif src_type == 'Article source':
+        formatted_content = interim_source_dict['authors'] + \
+            ' "' + interim_source_dict['article_title'] + '", <em>' + \
+            interim_source_dict['journal'] + '</em>, ' + \
+            interim_source_dict.get('volume_number', 'vol??') + \
+            ' (' + interim_source_dict.get('year', 'year??') + '): ' + \
+            interim_source_dict.get('page_start', 'page_start') + '-' + \
+            interim_source_dict.get('page_end', 'page_end')
+        source.source_type = all_types['Published source']
+    elif src_type == 'Book source':
+        formatted_content = interim_source_dict['authors'] + ','
+        if interim_source_dict['source_is_essay_in_book'] == 'true':
+            formatted_content += (
+                ' "' + interim_source_dict['essay_title'] + '",'
+                ' ' + interim_source_dict['editors'] + ' (ed.)')
+        place = interim_source_dict.get('place_of_publication', 'place??')
+        year = interim_source_dict.get('year', 'year??')
+        formatted_content += (
+            ' <em>' + interim_source_dict['book_title'] + '</em> '
+            '(' + place + ', ' + year + ')')
+        source.source_type = all_types['Published source']
+    elif src_type == 'Newspaper source':
+        alt_name = interim_source_dict.get('alternative_name')
+        formatted_content = \
+            '<em>' + interim_source_dict['name'] + '</em>' + \
+            ((' (later, ' + alt_name + ')') if alt_name else '') + \
+            ', (' + interim_source_dict.get('city', 'city??') + ', ' + \
+            interim_source_dict.get('country', 'country??') + ')'
+        source.source_type = all_types['Newspaper']
+    elif src_type == 'Private note or collection source':
+        formatted_content = interim_source_dict['authors'] + ', ' + \
+            interim_source_dict['title'] + \
+            ' (' + interim_source_dict.get('location', 'location??') + ')'
+        source.source_type = all_types['Private note or collection']
+    elif src_type == 'Unpublished secondary source':
+        formatted_content = interim_source_dict['authors'] + ', ' + \
+            interim_source_dict['title'] + \
+            ' (' + interim_source_dict.get('location', 'location??') + ')'
+        source.source_type = all_types['Unpublished secondary source']
+    source.full_ref = formatted_content
 
 @login_required()
 @require_POST
@@ -1969,57 +2021,7 @@ def editorial_sources(request):
                 'interim_source_id': interim_source_id
             })
     if mode == 'new':
-        src_type = interim_source_dict['type']
-        formatted_content = ''
-        all_types = {
-            x.group_name: x for x in VoyageSourcesType.objects.all()
-        }
-        if src_type == 'Primary source':
-            formatted_content = '<em>' + \
-                interim_source_dict['name_of_library_or_archive'] + \
-                '</em> (' + \
-                interim_source_dict['location_of_library_or_archive'] + ')'
-            source.source_type = all_types['Documentary source']
-        elif src_type == 'Article source':
-            formatted_content = interim_source_dict['authors'] + \
-                ' "' + interim_source_dict['article_title'] + '", <em>' + \
-                interim_source_dict['journal'] + '</em>, ' + \
-                interim_source_dict.get('volume_number', 'vol??') + \
-                ' (' + interim_source_dict.get('year', 'year??') + '): ' + \
-                interim_source_dict.get('page_start', 'page_start') + '-' + \
-                interim_source_dict.get('page_end', 'page_end')
-            source.source_type = all_types['Published source']
-        elif src_type == 'Book source':
-            formatted_content = interim_source_dict['authors'] + ','
-            if interim_source_dict['source_is_essay_in_book'] == 'true':
-                formatted_content += (
-                    ' "' + interim_source_dict['essay_title'] + '",'
-                    ' ' + interim_source_dict['editors'] + ' (ed.)')
-            place = interim_source_dict.get('place_of_publication', 'place??')
-            year = interim_source_dict.get('year', 'year??')
-            formatted_content += (
-                ' <em>' + interim_source_dict['book_title'] + '</em> '
-                '(' + place + ', ' + year + ')')
-            source.source_type = all_types['Published source']
-        elif src_type == 'Newspaper source':
-            alt_name = interim_source_dict.get('alternative_name')
-            formatted_content = \
-                '<em>' + interim_source_dict['name'] + '</em>' + \
-                ((' (later, ' + alt_name + ')') if alt_name else '') + \
-                ', (' + interim_source_dict.get('city', 'city??') + ', ' + \
-                interim_source_dict.get('country', 'country??') + ')'
-            source.source_type = all_types['Newspaper']
-        elif src_type == 'Private note or collection source':
-            formatted_content = interim_source_dict['authors'] + ', ' + \
-                interim_source_dict['title'] + \
-                ' (' + interim_source_dict.get('location', 'location??') + ')'
-            source.source_type = all_types['Private note or collection']
-        elif src_type == 'Unpublished secondary source':
-            formatted_content = interim_source_dict['authors'] + ', ' + \
-                interim_source_dict['title'] + \
-                ' (' + interim_source_dict.get('location', 'location??') + ')'
-            source.source_type = all_types['Unpublished secondary source']
-        source.full_ref = formatted_content
+        _update_source_from_interim(source, interim_source_dict)
     form = VoyagesSourcesAdminForm(instance=source)
     return render(request, 'contribute/sources_form.html', {
         'form': form,
@@ -2614,16 +2616,17 @@ def _create_enslaver_update_actions(contrib, check_transaction_tags=None):
             if _isint(aid):
                 current = current_aliases.get(int(aid))
                 if current is not None:
+                    tag = int(aid)
+                else:
                     # Perhaps the alias was deleted between the time the
                     # contribution was submitted and the editorial evaluation?
-                    tag = int(aid)
-                else:                    
                     actions.append({
                         'description': u_('Warning: alias was not found'),
                         'action': 'noop',
                         'match': { 'pk': aid, 'alias': a['name']  }
                     })
             identity_id = si['id']
+            identity_tag_or_id = int(identity_id) if _isint(identity_id) else f"{EnslaverIdentity.__name__}_{identity_id}"
             if check_transaction_tags is not None and not _isint(identity_id):
                 identity_id = check_transaction_tags.get(f"{EnslaverIdentity.__name__}_{identity_id}", identity_id)
             if tag is not None:
@@ -2632,7 +2635,7 @@ def _create_enslaver_update_actions(contrib, check_transaction_tags=None):
                         'description': u_('Updating existing enslaver alias'),
                         'action': 'update',
                         'model': EnslaverAlias.__name__,
-                        'data': { 'identity_id': int(identity_id) if _isint(identity_id) else f"{EnslaverIdentity.__name__}_{identity_id}" },
+                        'data': { 'identity_id': identity_tag_or_id },
                         'match': { 'pk': tag, 'alias': a['name'] }
                     })
             else:
@@ -2657,29 +2660,61 @@ def _create_enslaver_update_actions(contrib, check_transaction_tags=None):
                 proposed_relations[rid] = {'relation_id': rid, 'enslaver_alias_id': tag}
         # Now handle source connections (these are directly attached to the
         # EnslaverIdentity).
-        for source in si.get('sources', {}).items():
-            if not _isint(source['source_id']):
+        source_order = 1
+        for src in current_sources.values():
+            if src.identity_id == si['id'] and src.source_order >= source_order:
+                source_order = src.source_order + 1
+        for source_conn_pk, source in si.get('sources', {}).items():
+            if "data" in source:
                 # This is a newly created source.
-                actions.append({
-                    'description': u_('Creating a new biographical source'),
-                    'action': 'new',
-                    'model': VoyageSources.__name__,
-                    'data': { k: source[k] for k in ['short_ref', 'full_ref', 'source_type'] },
-                    'tag': f"{VoyageSources.__name__}__{source['source_id']}"
-                })
-            if not source['pk'] in current_sources:
+                source_data = source['data']
+                if not source.get('text_ref') or not source_data.get('short_ref'):
+                    actions.append({
+                        'description': u_("An editor (reviewer) must create a new source"),
+                        'action': 'noop',
+                        'model': VoyageSources.__name__,
+                        'data': source_data
+                    })
+                else:
+                    source.pop('data')
+                    s = VoyageSources()
+                    s.short_ref = source_data.get('short_ref', '')
+                    _update_source_from_interim(s, source_data)
+                    actions.append({
+                        'description': u_('Creating a new biographical source'),
+                        'action': 'new',
+                        'model': VoyageSources.__name__,
+                        'data': {
+                            'short_ref': s.short_ref,
+                            'full_ref': s.full_ref,
+                            'source_type_id': s.source_type_id
+                        },
+                        'tag': source_conn_pk
+                    })
+            source_conn_tag = f"conn_{source['source_id']}"
+            if check_transaction_tags is not None and source_conn_tag in check_transaction_tags:
+                source_conn_pk = check_transaction_tags[source_conn_tag]
+            if not _isint(source_conn_pk) or not int(source_conn_pk) in current_sources:
                 # Create new source connection.
                 # Note: we do not support updating a source connection (the
                 # contributor/editor can always delete and create a new one if
                 # needed).
+                source_conn_data = dict(source)
+                source_conn_data['identity_id'] = identity_tag_or_id
+                source_conn_data['source_order'] = source_order
+                source_order += 1
                 actions.append({
                     'description': u_('Creating an enslaver identity <-> biographical source connection'),
                     'action': 'new',
                     'model': EnslaverIdentitySourceConnection.__name__,
-                    'data': source
+                    'data': source_conn_data,
+                    'tag': source_conn_tag
                 })
             else:
-                current_sources.pop(source['pk'])
+                # Keep the source conn alive by removing it from the
+                # current_sources dict (any remaining connection will be marked
+                # for deletion).
+                current_sources.pop(int(source_conn_pk))
     # Delete any EnslaverIdentitySourceConnection that still remains.
     for s in current_sources.values():
         actions.append({
@@ -2844,7 +2879,11 @@ def submit_enslaver_editorial_review(request):
         return JsonResponse({ 'error': 'Invalid JSON in request body', 'details': str(ex) })
     if actions is not None and len(actions) == 0:
         return JsonResponse({ 'error': _empty_action_warning })
-    models = [EnslaverIdentity, EnslaverAlias, EnslaverInRelation, EnslaverVoyageConnection]
+    warnings = [w for w in actions if w['action'] == 'noop'] if actions else []
+    if status == EnslavedContributionStatus.ACCEPTED and len(warnings) > 0:
+        return JsonResponse({ 'error': "Cannot accept contribution with warnings", "warnings": warnings })
+    models = [EnslaverIdentity, EnslaverAlias, EnslaverInRelation,
+        EnslaverVoyageConnection, EnslaverIdentitySourceConnection, VoyageSources]
     tags = {}
     with transaction.atomic():
         contrib = EnslaverContribution.objects.get(pk=data['contrib_pk'])

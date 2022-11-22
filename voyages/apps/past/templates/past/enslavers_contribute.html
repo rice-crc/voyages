@@ -147,6 +147,7 @@
     </div>
 </div>
 <script src="{{ STATIC_URL }}scripts/library/vue@2.6.7.min.js" type="text/javascript"></script>
+<script src="{{ STATIC_URL }}scripts/contribute/interim.js" type="text/javascript"></script>
 <script>
     const redirectUrl = () => {
         window.location.href = "/past/enslavers"
@@ -203,6 +204,7 @@
             fetch("/past/get-enum/enslaver-roles").then(res => res.json())
         ])
         let [places, enslaverRoles] = await tasks;
+        let allSources = null;
         places = places.filter(p => p.type === "port").map(p => ({ id: parseInt(p.value), name: `${p.port} (${p.code})` }));
         places.sort((a, b) => a.name.localeCompare(b.name));
         let newCount = 0;
@@ -296,6 +298,12 @@
                     }
                     return this.selectedIdentity.aliases[this.selectedAlias];
                 },
+                selSource: function() {
+                    if (!this.selectedIdentity || !this.selectedSource) {
+                        return null;
+                    }
+                    return this.selectedIdentity.sources[this.selectedSource];
+                },
                 isNewAliasValid: function() {
                     const name = this.createAliasInput;
                     // Simple validation.
@@ -324,6 +332,67 @@
                     closeModals();
                     this.contribActions = null;
                 },
+                createLinkToSource: async function() {
+                    if (!allSources) {
+                        allSources = await fetch('/voyage/get-all-sources', {
+                            method: 'POST',
+                            body: "{}"
+                        });
+                        allSources = await allSources.json()
+                        allSources = allSources.data;
+                        $('#sourcesTable').DataTable({
+                            data: allSources,
+                            columns: [
+                                { data: 'short_ref' },
+                                { data: 'full_ref' },
+                                { data: 'group_name' },
+                            ],
+                            scrollY: '50vh',
+                            paginate: true,
+                            info: false,
+                            bFilter: true
+                        });
+                    }
+                    $('#linkRefModal').modal('show');   
+                },
+                createSourceConn: function() {
+                    if (!this.selectedIdentity) {
+                        return;
+                    }
+                    const typeName = $("ul#tab_control li > .nav-link.active").parent()[0].dataset.sourcetype;
+                    const sourceModel = createSourceByTypeName(typeName);
+                    sourceModel.bindFromForm();
+                    // Delete private fields/functions before serializing.
+                    Object.keys(sourceModel).forEach(x => { if (x.startsWith("_")) { delete sourceModel[x] } })
+                    const key = `new_src_${newCount++}`;
+                    this.selectedIdentity.sources = Object.assign({ 
+                            [key]: {
+                                source_id: key,
+                                data: JSON.parse(JSON.stringify(sourceModel))
+                            }
+                        },
+                        this.selectedIdentity.sources);
+                    $('#referencesModal').modal('hide');
+                    $("#referencesModal input, #referencesModal textarea").val('');
+                },
+                createSourceRef: function() {
+                    const source = this.selSource();
+                    if (!source || !source.data) {
+                        return;
+                    }
+                    const shortRef = $("#shortRefField").val();
+                    if (!shortRef || shortRef.length < 3) {
+                        alert(gettext("Invalid short reference value: too short"));
+                        return;
+                    }
+                    source.data['short_ref'] = shortRef;
+                    const complement = $("#textRefComplement").val();
+                    const textRef = !!complement ? `${shortRef}, ${complement}` : shortRef;
+                    source['text_ref'] = textRef;
+                    $('#textRefModal').modal('hide');        
+                    $("#textRefModal input").val('');
+                    this.$forceUpdate();
+                },
                 delSelAlias: function() {
                     if (!this.selectedAlias) {
                         return;
@@ -343,7 +412,7 @@
                     this.contribActions = null;
                 },
                 delSourceConn: function(event) {
-                    if (!!this.selectedIdentity && !!this.selectedSource) {
+                    if (!!this.selectedIdentity && !!this.selectedSource && confirm(gettext('Confirm deletion of this source reference?'))) {
                         delete this.selectedIdentity.sources[this.selectedSource]
                         this.selectedSource = null;
                         this.contribActions = null;
