@@ -53,7 +53,7 @@ from voyages.apps.contribute.publication import (
     export_contributions, export_from_voyages, full_contribution_id,
     get_csv_writer, get_filtered_contributions, get_header_csv_text,
     publish_accepted_contributions, safe_writerow)
-from voyages.apps.past.models import Enslaved, EnslavedContribution, EnslavedContributionLanguageEntry, EnslavedContributionNameEntry, EnslavedContributionStatus, EnslavementRelation, EnslaverAlias, EnslaverCachedProperties, EnslaverContribution, EnslaverIdentity, EnslaverInRelation, EnslaverVoyageConnection, LanguageGroup, ModernCountry
+from voyages.apps.past.models import Enslaved, EnslavedContribution, EnslavedContributionLanguageEntry, EnslavedContributionNameEntry, EnslavedContributionStatus, EnslavementRelation, EnslaverAlias, EnslaverCachedProperties, EnslaverContribution, EnslaverIdentity, EnslaverInRelation, EnslaverVoyageConnection, LanguageGroup, ModernCountry, EnslaverIdentitySourceConnection
 from voyages.apps.past.views import _get_audio_filename
 from voyages.apps.voyage.cache import VoyageCache
 from voyages.apps.voyage.forms import VoyagesSourcesAdminForm
@@ -972,7 +972,7 @@ def voyage_to_dict(voyage):
 
 
 @login_required()
-def editor_main(request, active_tab):
+def editor_main(request, active_tab=None):
     if not request.user.is_superuser:
         return HttpResponseForbidden()
     return render(request, 'contribute/editor_main.html', { "active_tab": active_tab or "requests" })
@@ -2460,6 +2460,10 @@ def init_enslaver_interim(request):
         eid = enslaver.pop('id')
         edata = { 'id': eid, 'personal_data': enslaver }
         edata['aliases'] = { a.id: _get_alias_data(a) for a in EnslaverAlias.objects.filter(identity=eid) }
+        edata['sources'] = { s['pk']: s for s in EnslaverIdentitySourceConnection.objects \
+            .filter(identity_id=eid) \
+            .values('pk', 'source_id', 'source_order', 'text_ref', full_ref=F('source__full_ref'))
+        }
         return edata
 
     identities = { e['id']: e for e in [_get_enslaver_data(enslaver) for enslaver in originals] }
@@ -2597,6 +2601,8 @@ def _create_enslaver_update_actions(contrib, check_transaction_tags=None):
     current_relations = {int(r['relation_id']): r for r in EnslaverInRelation.objects \
         .filter(enslaver_alias_id__in=current_aliases.keys()) \
         .values('enslaver_alias_id', 'relation_id')}
+    current_sources = {int(s.pk): s for s in EnslaverIdentitySourceConnection.objects \
+        .filter(identity_id__in=[k for k in identities.keys() if _isint(k)])}
     proposed_voyage_conn = {}
     proposed_relations = {}
     for si in saved_identities:
@@ -2649,6 +2655,39 @@ def _create_enslaver_update_actions(contrib, check_transaction_tags=None):
             for r in a['relations']:
                 rid = int(r['pk'])
                 proposed_relations[rid] = {'relation_id': rid, 'enslaver_alias_id': tag}
+        # Now handle source connections (these are directly attached to the
+        # EnslaverIdentity).
+        for source in si.get('sources', {}).items():
+            if not _isint(source['source_id']):
+                # This is a newly created source.
+                actions.append({
+                    'description': u_('Creating a new biographical source'),
+                    'action': 'new',
+                    'model': VoyageSources.__name__,
+                    'data': { k: source[k] for k in ['short_ref', 'full_ref', 'source_type'] },
+                    'tag': f"{VoyageSources.__name__}__{source['source_id']}"
+                })
+            if not source['pk'] in current_sources:
+                # Create new source connection.
+                # Note: we do not support updating a source connection (the
+                # contributor/editor can always delete and create a new one if
+                # needed).
+                actions.append({
+                    'description': u_('Creating an enslaver identity <-> biographical source connection'),
+                    'action': 'new',
+                    'model': EnslaverIdentitySourceConnection.__name__,
+                    'data': source
+                })
+            else:
+                current_sources.pop(source['pk'])
+    # Delete any EnslaverIdentitySourceConnection that still remains.
+    for s in current_sources.values():
+        actions.append({
+            'description': 'Removing enslaver identity <-> bibliographical source connection',
+            'action': 'delete',
+            'model': EnslaverIdentitySourceConnection.__name__,
+            'match': { 'identity_id': s.identity_id, 'text_ref': s.text_ref }
+        })
     # Compute voyage connection delta.
     exact_vconn_matches = set()
     for key, rel in current_voyage_conn.items():

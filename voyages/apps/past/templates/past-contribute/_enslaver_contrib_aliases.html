@@ -36,7 +36,7 @@
         </div>
         <div>
             <select v-model="selectedAlias" id="aliases-select" name="aliases" size="6"
-                class="form-control enslaver_contrib_fullspan_control ">
+                class="form-control enslaver_contrib_fullspan_control">
                 <option v-for="alias in selectedIdentity.aliases" class="list-group-item"
                     v-bind:class="{ bold: alias.name === selectedIdentity.personal_data.principal_alias }"
                     v-bind:value="alias.id">[[ alias.name ]] (id [[ alias.id ]])</option>

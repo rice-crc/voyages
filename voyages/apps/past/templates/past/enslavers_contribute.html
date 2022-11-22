@@ -58,6 +58,9 @@
                 <li class="nav-item">
                     <a class="nav-link" href="#personal" data-toggle="tab" data-target="#personal">{% trans 'Personal information' %}</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#sources" data-toggle="tab" data-target="#sources">{% trans 'Biographical Sources' %}</a>
+                </li>
                 {% endif %}
                 <li class="nav-item">
                     <a 
@@ -90,6 +93,9 @@
                 <div id="personal" class="tab-pane fade">
                     {% include "past-contribute/_enslaver_contrib_personal.html" %}
                 </div>
+                <div id="sources" class="tab-pane fade">
+                    {% include "past-contribute/_enslaver_contrib_sources.html" %}
+                </div>
                 {% endif %}
                 <div
                     {% if mode != 'delete' %}
@@ -99,9 +105,6 @@
                     {% endif %}
                         id="notes">
                     <textarea name="notes" class="form-control enslaver_contrib_fullspan_control" v-model="interim.notes"></textarea>
-                    {% if mode == 'delete' %}
-                        
-                    {% endif %}
                 </div>
                 <div id="review" class="tab-pane fade">
                     <div class="panel panel-danger" v-if="validation.length > 0">
@@ -243,6 +246,7 @@
                     ? interim.identities["merged"]
                     : interim.identities[Object.keys(interim.identities)[0]],
                 selectAliasChildren: [],
+                selectedSource: null,
                 linkVoyageInput: null,
                 linkVoyageRole: null,
                 createAliasInput: null,
@@ -337,6 +341,13 @@
                     delete this.selectedIdentity.aliases[this.selectedAlias];
                     this.selectedAlias = null;
                     this.contribActions = null;
+                },
+                delSourceConn: function(event) {
+                    if (!!this.selectedIdentity && !!this.selectedSource) {
+                        delete this.selectedIdentity.sources[this.selectedSource]
+                        this.selectedSource = null;
+                        this.contribActions = null;
+                    }
                 },
                 moveAlias: function(event) {
                     const target = this.interim.identities[event.target.getAttribute("value")];
