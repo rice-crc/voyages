@@ -73,16 +73,16 @@
         <div v-if="selectedAlias">
             <select v-model="selectAliasChildren" multiple id="voyages-select" name="voyages" size="6"
                 class="form-control enslaver_contrib_fullspan_control">
-                <option disabled v-if="selAlias().voyages?.length === 0">
+                <option disabled v-if="selAlias.voyages?.length === 0">
                     {% trans "No linked voyage" %}
                 </option>
-                <option v-for="voyage in selAlias().voyages" class="list-group-item" v-bind:value="'V' + [[ voyage.pk ]]">
+                <option v-for="voyage in selAlias.voyages" class="list-group-item" v-bind:value="'V' + [[ voyage.pk ]]">
                     {% trans "Voyage" %} [[ voyage.pk ]] - [[ voyage.ship_name ]], [[ voyage.arrival.replaceAll(',', '') ]] [[ voyage.role ? `(${enslaverRoles[voyage.role]})` : "" ]]
                 </option>
-                <option disabled v-if="selAlias().relations?.length === 0">
+                <option disabled v-if="selAlias.relations?.length === 0">
                     {% trans "No enslavement relations" %}
                 </option>
-                <option v-for="relation in selAlias().relations" class="list-group-item" v-bind:value="'R' + [[ relation.pk ]]">
+                <option v-for="relation in selAlias.relations" class="list-group-item" v-bind:value="'R' + [[ relation.pk ]]">
                     {% trans "Relation" %} [[ relation.pk ]] - [[ formatCsvDate(relation.date) ]], 
                     {% trans "with" %} [[ relation.enslaved_count ]] {% trans "enslaved" %}, 
                     [[ relation.enslavers_count ]] {% trans "enslavers" %}.

@@ -1902,7 +1902,8 @@ def _update_source_from_interim(source, interim_source_dict):
     formatted_content = ''
     all_types = {
         x.group_name: x for x in VoyageSourcesType.objects.all()
-    }
+    }    
+    authors = interim_source_dict.get('authors', interim_source_dict.get('author', ''))
     if src_type == 'Primary source':
         formatted_content = '<em>' + \
             interim_source_dict['name_of_library_or_archive'] + \
@@ -1910,7 +1911,7 @@ def _update_source_from_interim(source, interim_source_dict):
             interim_source_dict['location_of_library_or_archive'] + ')'
         source.source_type = all_types['Documentary source']
     elif src_type == 'Article source':
-        formatted_content = interim_source_dict['authors'] + \
+        formatted_content = authors + \
             ' "' + interim_source_dict['article_title'] + '", <em>' + \
             interim_source_dict['journal'] + '</em>, ' + \
             interim_source_dict.get('volume_number', 'vol??') + \
@@ -1919,7 +1920,7 @@ def _update_source_from_interim(source, interim_source_dict):
             interim_source_dict.get('page_end', 'page_end')
         source.source_type = all_types['Published source']
     elif src_type == 'Book source':
-        formatted_content = interim_source_dict['authors'] + ','
+        formatted_content = authors + ','
         if interim_source_dict['source_is_essay_in_book'] == 'true':
             formatted_content += (
                 ' "' + interim_source_dict['essay_title'] + '",'
@@ -1939,12 +1940,12 @@ def _update_source_from_interim(source, interim_source_dict):
             interim_source_dict.get('country', 'country??') + ')'
         source.source_type = all_types['Newspaper']
     elif src_type == 'Private note or collection source':
-        formatted_content = interim_source_dict['authors'] + ', ' + \
+        formatted_content = authors + ', ' + \
             interim_source_dict['title'] + \
             ' (' + interim_source_dict.get('location', 'location??') + ')'
         source.source_type = all_types['Private note or collection']
     elif src_type == 'Unpublished secondary source':
-        formatted_content = interim_source_dict['authors'] + ', ' + \
+        formatted_content = authors + ', ' + \
             interim_source_dict['title'] + \
             ' (' + interim_source_dict.get('location', 'location??') + ')'
         source.source_type = all_types['Unpublished secondary source']
@@ -2702,6 +2703,7 @@ def _create_enslaver_update_actions(contrib, check_transaction_tags=None):
                 source_conn_data = dict(source)
                 source_conn_data['identity_id'] = identity_tag_or_id
                 source_conn_data['source_order'] = source_order
+                source_conn_data.pop('pk', None)
                 source_order += 1
                 actions.append({
                     'description': u_('Creating an enslaver identity <-> biographical source connection'),
