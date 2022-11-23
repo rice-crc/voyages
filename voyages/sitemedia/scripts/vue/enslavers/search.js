@@ -192,7 +192,7 @@ const updateContribState = (state) => {
 const enslaversContributeMenu = {
   extend: 'collection',
   autoClose: true,
-  text: gettext('Contribute data'),
+  text: gettext('Edit Database'),
   titleAttr: gettext('Propose changes or additions to the Enslavers dataset'),
   className: 'btn btn-info buttons-collection dropdown-toggle',
   buttons: [{
