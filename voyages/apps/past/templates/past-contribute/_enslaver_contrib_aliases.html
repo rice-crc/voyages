@@ -139,3 +139,58 @@
         </div>
     </div>
 </div>
+
+<div class="modal fade" id="enslavementRelationView" tabindex="-1" role="dialog" aria-labelledby="linkVoyageModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">{% trans "Enslavement Relation Details" %}</h2>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <table>
+                    <tbody>
+                        <tr>
+                            <td>{% trans "Relation Type" %}:</td><td>[[ enslavementRelationDetails?.type ]]</td>
+                        </tr>
+                        <tr v-if="enslavementRelationDetails?.location">
+                            <td>{% trans "Location" %}:</td><td>[[ enslavementRelationDetails?.location ]]</td>
+                        </tr>
+                        <tr v-if="enslavementRelationDetails?.date">
+                            <td>{% trans "Date" %}:</td><td>[[ enslavementRelationDetails?.date ]]</td>
+                        </tr>
+                        <tr v-if="enslavementRelationDetails?.amount">
+                            <td>{% trans "Amount" %}:</td><td>[[ enslavementRelationDetails?.amount ]]</td>
+                        </tr>
+                        <tr v-if="enslavementRelationDetails?.voyage_id">
+                            <td>{% trans "Voyage ID" %}:</td><td>[[ enslavementRelationDetails?.voyage_id ]]</td>
+                        </tr>
+                        <tr v-if="enslavementRelationDetails?.voyage_id">
+                            <td>{% trans "Voyage Ship Name" %}:</td><td>[[ enslavementRelationDetails?.voyage__voyage_ship__ship_name ]]</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="row">
+                    <div class="col-md-6">
+                        <h3>{% trans "Enslavers in Relation" %}</h3>
+                        <div v-for="enslaver in enslavementRelationDetails?.enslavers">
+                            [[ enslaver.alias ]] ([[ enslaver.role_name ]])
+                        </div>
+                    </div>
+                    <div class="col-md-6" v-if="enslavementRelationDetails?.enslaved.length">
+                        <h3>{% trans "Enslaved in Relation" %}</h3>
+                        <div v-for="enslaved in enslavementRelationDetails?.enslaved">
+                            [[ enslaved.name ]]
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">{% trans "Close" %}</button>
+            </div>
+        </div>
+    </div>
+</div>

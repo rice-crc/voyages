@@ -254,6 +254,7 @@
                 selectAliasChildren: [],
                 selectedSource: null,
                 selectedLinkableSource: null,
+                enslavementRelationDetails: null,
                 linkVoyageInput: null,
                 linkVoyageRole: null,
                 createAliasInput: null,
@@ -422,7 +423,7 @@
                     const complement = $("#textRefComplement").val();
                     const textRef = !!complement ? `${shortRef}, ${complement}` : shortRef;
                     source['text_ref'] = textRef;
-                    $('#textRefModal').modal('hide');        
+                    $('#textRefModal').modal('hide');
                     $("#textRefModal input").val('');
                     this.$forceUpdate();
                 },
@@ -487,7 +488,7 @@
                         this.selectedIdentity.personal_data.principal_alias = alias.name;
                     }
                 },
-                showChildInfo: function() {
+                showChildInfo: async function() {
                     if (this.selectAliasChildren) {
                         let pk = this.selectAliasChildren[0];
                         if (pk[0] === 'V') {
@@ -496,7 +497,9 @@
                                 gettext('Voyage details'),
                                 'location=no,toolbar=no,menubar=no');
                         } else {
-                            alert('view for relations not implemented');
+                            const res = await fetch(`/past/enslavement_relation/${pk.substring(1)}`);
+                            this.enslavementRelationDetails = await res.json();
+                            $('#enslavementRelationView').modal('show');
                         }
                     }
                 },
