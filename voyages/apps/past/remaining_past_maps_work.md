@@ -11,15 +11,19 @@ I am pretty sure this is an issue with the search ui, not with my use of it
 
 need stable m2m relations added to the language_group --> moderncountry
 
-* waiting on philip & david for these
-* & domingos for proper integration of language_group into the search bar
+* ~~waiting on philip & david for these~~
+* waiting on domingos for proper integration of language_group into the search bar
 
 ## 3. handle mapping for overlapping nodes
 
 * some language groups & even ports have the exact same lat/long, out to 7 decimal places
 * I could make marker clustering to differentiate these (and may have to for #2 above...) but I think at base this is a data problem. if we're mapping with that kind of precision, then why do 5-ish Yoruba language groups have the exact same location?
 
-## 4. more interactivity?
+## 4. translation
+
+* need to integrate the terms used in the map into the django po's
+
+## 5. more interactivity?
 
 * zoom to fit
 	* click on a region, it zooms you in to the bounds of the constituent ports

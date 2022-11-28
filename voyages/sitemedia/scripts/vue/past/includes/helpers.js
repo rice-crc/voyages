@@ -1122,8 +1122,8 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 	var currentSearchObj = searchAll(filter, filterData);
 	// I'd like to have this, but once it runs, the filters bar simply won't go away!	
 	// $('#panelCollapse').show();
-		$("#map_container").html('<div id="AO_map" style="width:100%; height:100%; min-height:600px"></div>');
-
+	$("#map_container").html('<div id="AO_map" style="width:100%; height:100%; min-height:400px"></div>');
+	
 	var mappingSpecialists=L.tileLayer(
 	  'https://api.mapbox.com/styles/v1/jcm10/cl5v6xvhf001b14o4tdjxm8vh/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoiamNtMTAiLCJhIjoiY2wyOTcyNjJsMGY5dTNwbjdscnljcGd0byJ9.kZvEfo7ywl2yLbztc_SSjw',
 	  {attribution: '<a href="https://www.mappingspecialists.com/" target="blank">Mapping Specialists</a>'});
@@ -1322,7 +1322,7 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 		}
 		if (animationlayergroup && animationmode){
 			var newanimationroute=L.curve(commands, {
-				color: "#6c757d6b",
+				color: "#6c757dc9",
 				weight: 1,
 				dashArray:"1 10",
 				animate: {'duration':dist*timingscalar,"iterations":Infinity,"direction":'normal'}
@@ -1396,11 +1396,13 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 			div.innerHTML= '<table class=legendtable>\
 				<tr>\
 					<td><div class="circle" style="background-color:rgb(167,224,169);"></div><td>\
-					<td>Origins</td>\
+					<td>' + gettext('Origins') + '\
+					<span id="origins_map_key_pill" data-toggle="tooltip" class="badge badge-pill badge-secondary tooltip-pointer" title="Peoples\' origins are imputed based on their recorded names."> IMP </span>\
+					</td>\
 				</tr>\
 				<tr>\
 					<td><div class="circle" style="background-color:rgb(255,0,0);"></div><td>\
-					<td>Embarkations</td>\
+					<td>'+gettext('Embarkations')+'</td>\
 				</tr>\
 				<tr>\
 					<td><div class="circle" style="background-color:rgb(163,0,255);"></div><td>\
@@ -1408,16 +1410,20 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 				</tr>\
 				<tr>\
 					<td><div class="circle" style="background-color:rgb(0,0,255);"></div><td>\
-					<td>Disembarkations</td>\
+					<td>' + gettext('Disembarkations') + '</td>\
 				</tr>\
 				<tr>\
 					<td><div class="circle" style="background-color:rgb(246,193,60);"></div><td>\
-					<td>Post-Disembark Locations</td>\
+					<td>'+gettext('Post-Disembark Locations')+'</td>\
 				</tr>\
-				</table>'
+				</table>\
+				'
 			return div
 		};
 		legend_div.addTo(map);
+		$(function () {
+			$('[data-toggle="tooltip"]').tooltip()
+		})
 	};
 	
 	//HANDLING HIDDEN ROUTES (ORIGINS->EMBARKATIONS & DISEMBARKATIONS->POST-DISEMBARKATIONS)	
@@ -1555,6 +1561,7 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 	window.setTimeout(function() {
 		AO_map.invalidateSize();
 	}, 1000);
+	
 	AO_map.on('zoomend', function() {
 		var currentzoom=AO_map.getZoom()
 		if (currentzoom>4){
@@ -1577,7 +1584,17 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 			animationmode = true;
 		}
 	});
-		
+	
+	
+	function maximizeMapHeight() {
+		var maxMapHeight=window.innerHeight-221; //ffs
+		$('#AO_map')[0].style['min-height']=maxMapHeight.toString()+'px';
+	}
+	
+	AO_map.invalidateSize();
+	maximizeMapHeight();
+	window.onresize = (event) => {maximizeMapHeight()};
+	
 	//------------>AND HERE IS WHERE WE MAKE THE CALL FOR THE DATA
 	$.ajax({
 		type: "POST",
@@ -1592,6 +1609,7 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 			refreshmapwithnewnetwork(AO_map,allnetworks.region)
 			drawUpdateCount(AO_map,allnetworks.region.total_results_count);
 			drawLegend(AO_map);
+			AO_map.invalidateSize();
 		}
 	});
 	
