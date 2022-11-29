@@ -53,11 +53,13 @@
                 </li>
                 {% if mode != 'delete' %}
                 <li class="nav-item">
-                    <a class="nav-link active" href="#aliases" data-
-toggle="tab" data-target="#aliases">{% trans 'Aliases and Voyages' %}</a>
+                    <a class="nav-link active" href="#aliases" data-toggle="tab" data-target="#aliases">{% trans 'Aliases and Voyages' %}</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="#personal" data-toggle="tab" data-target="#personal">{% trans 'Personal information' %}</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#sources" data-toggle="tab" data-target="#sources">{% trans 'Biographical Sources' %}</a>
                 </li>
                 {% endif %}
                 <li class="nav-item">
@@ -91,6 +93,9 @@ toggle="tab" data-target="#aliases">{% trans 'Aliases and Voyages' %}</a>
                 <div id="personal" class="tab-pane fade">
                     {% include "past-contribute/_enslaver_contrib_personal.html" %}
                 </div>
+                <div id="sources" class="tab-pane fade">
+                    {% include "past-contribute/_enslaver_contrib_sources.html" %}
+                </div>
                 {% endif %}
                 <div
                     {% if mode != 'delete' %}
@@ -99,10 +104,7 @@ toggle="tab" data-target="#aliases">{% trans 'Aliases and Voyages' %}</a>
                         class="tab-pane active show"
                     {% endif %}
                         id="notes">
-                    <textarea name="notes" class="form-control enslaver_contrib_fullspan_control" v-model="interim.notes"></textarea>
-                    {% if mode == 'delete' %}
-                        
-                    {% endif %}
+                    <textarea name="notes" :disabled="editorialMode" class="form-control enslaver_contrib_fullspan_control" v-model="interim.notes"></textarea>
                 </div>
                 <div id="review" class="tab-pane fade">
                     <div class="panel panel-danger" v-if="validation.length > 0">
@@ -145,6 +147,7 @@ toggle="tab" data-target="#aliases">{% trans 'Aliases and Voyages' %}</a>
     </div>
 </div>
 <script src="{{ STATIC_URL }}scripts/library/vue@2.6.7.min.js" type="text/javascript"></script>
+<script src="{{ STATIC_URL }}scripts/contribute/interim.js" type="text/javascript"></script>
 <script>
     const redirectUrl = () => {
         window.location.href = "/past/enslavers"
@@ -201,6 +204,7 @@ toggle="tab" data-target="#aliases">{% trans 'Aliases and Voyages' %}</a>
             fetch("/past/get-enum/enslaver-roles").then(res => res.json())
         ])
         let [places, enslaverRoles] = await tasks;
+        let allSources = null;
         places = places.filter(p => p.type === "port").map(p => ({ id: parseInt(p.value), name: `${p.port} (${p.code})` }));
         places.sort((a, b) => a.name.localeCompare(b.name));
         let newCount = 0;
@@ -232,6 +236,10 @@ toggle="tab" data-target="#aliases">{% trans 'Aliases and Voyages' %}</a>
             }
             return res;
         };
+        const addSource = (identity, key, added) => {
+            identity.sources = Object.assign({ [key]: added }, identity.sources);
+        };
+        const toggledClass = 'bold';
         const viewModel = new Vue({
             el: "#center-content-inner",
             delimiters: ['[[', ']]'],
@@ -244,6 +252,9 @@ toggle="tab" data-target="#aliases">{% trans 'Aliases and Voyages' %}</a>
                     ? interim.identities["merged"]
                     : interim.identities[Object.keys(interim.identities)[0]],
                 selectAliasChildren: [],
+                selectedSource: null,
+                selectedLinkableSource: null,
+                enslavementRelationDetails: null,
                 linkVoyageInput: null,
                 linkVoyageRole: null,
                 createAliasInput: null,
@@ -253,6 +264,18 @@ toggle="tab" data-target="#aliases">{% trans 'Aliases and Voyages' %}</a>
                 isDirty: false
             },
             computed: {
+                selAlias: function() {
+                    if (!this.selectedAlias) {
+                        return null;
+                    }
+                    return this.selectedIdentity.aliases[this.selectedAlias];
+                },
+                selSource: function() {
+                    if (!this.selectedIdentity || !this.selectedSource) {
+                        return null;
+                    }
+                    return this.selectedIdentity.sources[this.selectedSource];
+                },
                 isThreeColumnLayout() {
                     return this.interim.type === 'merge' || this.interim.type === 'split';
                 },
@@ -287,12 +310,6 @@ toggle="tab" data-target="#aliases">{% trans 'Aliases and Voyages' %}</a>
                 }
             },
             methods: {
-                selAlias: function() {
-                    if (!this.selectedAlias) {
-                        return null;
-                    }
-                    return this.selectedIdentity.aliases[this.selectedAlias];
-                },
                 isNewAliasValid: function() {
                     const name = this.createAliasInput;
                     // Simple validation.
@@ -321,11 +338,100 @@ toggle="tab" data-target="#aliases">{% trans 'Aliases and Voyages' %}</a>
                     closeModals();
                     this.contribActions = null;
                 },
+                createLinkToSource: async function() {
+                    if (!allSources) {
+                        allSources = await fetch('/voyage/get-all-sources');
+                        allSources = await allSources.json()
+                        allSources = allSources.data;
+                        const table = $('#sourcesTable').DataTable({
+                            data: allSources,
+                            columns: [
+                                { data: 'short_ref' },
+                                { data: 'full_ref' },
+                                { data: 'type' },
+                                { data: 'pk', visible: false }
+                            ],
+                            scrollY: '50vh',
+                            paginate: true,
+                            info: false,
+                            bFilter: true,
+                            pageLength: 10,
+                            bLengthChange: false
+                        });
+                        const self = this;
+                        $('#sourcesTable').on('click', 'tbody tr', function() {
+                            const data = table.row(this).data();
+                            $('#sourcesTable tbody tr').removeClass(toggledClass);
+                            if (data.pk !== self.selectedLinkableSource?.pk) {
+                                self.selectedLinkableSource = data;
+                                $(this).addClass(toggledClass);
+                            } else {
+                                self.selectedLinkableSource = null;
+                            }
+                        })
+                    }
+                    $('#linkRefModal').modal('show');   
+                },
+                linkSelectedSourceRef: function() {
+                    if (!this.selectedIdentity || !this.selectedLinkableSource) {
+                        return;
+                    }
+                    const src = this.selectedLinkableSource;
+                    const key = `new_src_${newCount++}`;
+                    addSource(this.selectedIdentity, key, {
+                        pk: key,
+                        source_id: src.pk,
+                        short_ref: src.short_ref,
+                        full_ref: src.full_ref,
+                        text_ref: null
+                    });
+                    this.selectedLinkableSource = null;
+                    $('#sourcesTable tbody tr').removeClass(toggledClass);
+                    $('#linkRefModal').modal('hide');  
+                },
+                createSourceConn: function() {
+                    if (!this.selectedIdentity) {
+                        return;
+                    }
+                    const typeName = $("ul#tab_control li > .nav-link.active").parent()[0].dataset.sourcetype;
+                    let sourceModel = createSourceByTypeName(typeName);
+                    sourceModel.bindFromForm();
+                    sourceModel = sourceModel.toModel();
+                    // Delete private fields/functions before serializing.
+                    Object.keys(sourceModel).forEach(x => { if (x.startsWith("_")) { delete sourceModel[x] } })
+                    const key = `new_src_${newCount++}`;
+                    addSource(this.selectedIdentity, key, {
+                        source_id: key,
+                        data: JSON.parse(JSON.stringify(sourceModel))
+                    });
+                    $('#referencesModal').modal('hide');
+                    $("#referencesModal input, #referencesModal textarea").val('');
+                },
+                createSourceRef: function() {
+                    const source = this.selSource;
+                    if (!source || !!source.text_ref) {
+                        return;
+                    }
+                    const shortRef = source.short_ref || $("#shortRefField").val();
+                    if (!shortRef || shortRef.length < 2) {
+                        alert(gettext("Invalid short reference value: too short"));
+                        return;
+                    }
+                    if (!!source.data) {
+                        source.data['short_ref'] = shortRef;
+                    }
+                    const complement = $("#textRefComplement").val();
+                    const textRef = !!complement ? `${shortRef}, ${complement}` : shortRef;
+                    source['text_ref'] = textRef;
+                    $('#textRefModal').modal('hide');
+                    $("#textRefModal input").val('');
+                    this.$forceUpdate();
+                },
                 delSelAlias: function() {
                     if (!this.selectedAlias) {
                         return;
                     }
-                    const current = this.selAlias();
+                    const current = this.selAlias;
                     const alias_val = current.name;
                     const num_voyages = current.voyages.length;
                     // The translated text should preserve "{num}" segments.
@@ -339,9 +445,17 @@ toggle="tab" data-target="#aliases">{% trans 'Aliases and Voyages' %}</a>
                     this.selectedAlias = null;
                     this.contribActions = null;
                 },
+                delSourceConn: function(event) {
+                    const src = this.selSource;
+                    if (!!src && confirm(gettext('Confirm deletion of this source reference?'))) {
+                        delete this.selectedIdentity.sources[this.selectedSource]
+                        this.selectedSource = null;
+                        this.contribActions = null;
+                    }
+                },
                 moveAlias: function(event) {
                     const target = this.interim.identities[event.target.getAttribute("value")];
-                    const alias = this.selAlias();
+                    const alias = this.selAlias;
                     if (!this.selectedAlias || !target) {
                         return;
                     }
@@ -369,12 +483,12 @@ toggle="tab" data-target="#aliases">{% trans 'Aliases and Voyages' %}</a>
                     }
                 },
                 setPrincipal: function() {
-                    const alias = this.selAlias();
+                    const alias = this.selAlias;
                     if (alias && this.selectedIdentity) {
                         this.selectedIdentity.personal_data.principal_alias = alias.name;
                     }
                 },
-                showChildInfo: function() {
+                showChildInfo: async function() {
                     if (this.selectAliasChildren) {
                         let pk = this.selectAliasChildren[0];
                         if (pk[0] === 'V') {
@@ -383,12 +497,14 @@ toggle="tab" data-target="#aliases">{% trans 'Aliases and Voyages' %}</a>
                                 gettext('Voyage details'),
                                 'location=no,toolbar=no,menubar=no');
                         } else {
-                            alert('view for relations not implemented');
+                            const res = await fetch(`/past/enslavement_relation/${pk.substring(1)}`);
+                            this.enslavementRelationDetails = await res.json();
+                            $('#enslavementRelationView').modal('show');
                         }
                     }
                 },
                 unlinkChildren: function(event) {
-                    const source = this.selAlias();
+                    const source = this.selAlias;
                     if (!source) {
                         return null;
                     }
@@ -405,7 +521,7 @@ toggle="tab" data-target="#aliases">{% trans 'Aliases and Voyages' %}</a>
                     return matches;
                 },
                 linkVoyage: async function() {
-                    const alias = this.selAlias();
+                    const alias = this.selAlias;
                     if (alias && this.linkVoyageInput && this.linkVoyageRole) {
                         const res = await fetch(`/contribute/voyage_summary/${this.linkVoyageInput}`);
                         const data = await res.json();

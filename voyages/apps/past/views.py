@@ -168,6 +168,14 @@ def restore_enslaver_permalink(_, link_id):
 def is_valid_name(name):
     return name is not None and name.strip() != ""
 
+_voyage_related_fields_default = [
+    'voyage__voyage_ship__ship_name',
+    'voyage__voyage_dates__first_dis_of_slaves',
+    'voyage__voyage_itinerary__int_first_port_dis__place',
+    'voyage__voyage_itinerary__imp_principal_place_of_slave_purchase__place',
+    'voyage__voyage_itinerary__imp_principal_port_slave_dis__place',
+    'voyage__voyage_name_outcome__vessel_captured_outcome__label'
+]
 
 @require_POST
 @csrf_exempt
@@ -183,14 +191,10 @@ def search_enslaved(request):
             'enslaved_id', 'age', 'gender', 'height', 'skin_color',
             'language_group__name',
             'register_country__name',
-            'voyage_id', 'voyage__voyage_ship__ship_name',
-            'voyage__voyage_dates__first_dis_of_slaves',
-            'voyage__voyage_itinerary__int_first_port_dis__place',
-            'voyage__voyage_itinerary__imp_principal_place_of_slave_purchase__place',
-            'voyage__voyage_itinerary__imp_principal_port_slave_dis__place',
-            'voyage__voyage_name_outcome__vessel_captured_outcome__label',
+            'voyage_id',
             'captive_fate__name', 'post_disembark_location__place'
         ] + _name_fields + _modern_name_fields + \
+        _voyage_related_fields_default + \
         [helper.projected_name for helper in EnslavedSearch.all_helpers]
     query = search.execute(fields)
     output_type = data.get('output', 'resultsTable')
@@ -358,9 +362,12 @@ def store_audio(request, contrib_pk, name_pk, token):
         destination.write(request.body)
     return JsonResponse({'len': len(request.body)})
 
+def _get_login_url(next_url):
+    return f"{reverse('account_login')}?next={next_url}"
+
 def _enslaver_contrib_action(request, data):
     if not request.user.is_authenticated():
-        return HttpResponseRedirect(reverse('account_login'))
+        return HttpResponseRedirect(_get_login_url(request.build_absolute_uri()))
     return render(request, 'past/enslavers_contribute.html', data)
 
 def enslaver_contrib_delete(request, id):
@@ -381,8 +388,9 @@ def enslaver_contrib_new(request):
 def get_enslavement_relation_info(request, relation_pk):
     relation = EnslavementRelation.objects \
         .filter(pk=relation_pk) \
+        .select_related(*_voyage_related_fields_default) \
         .values('id', 'date', 'amount', 'text_ref', 'voyage_id', \
-            location=F('place__place'), type=F('relation_type__name'))
+            location=F('place__place'), type=F('relation_type__name'), *_voyage_related_fields_default)
     relation = list(relation)
     if len(relation) != 1:
         raise Http404
@@ -393,8 +401,9 @@ def get_enslavement_relation_info(request, relation_pk):
         .values(name=F('enslaved__documented_name')))
     return JsonResponse(relation)
 
-@login_required
 def enslaver_contrib_editorial_review(request, pk):
+    if not request.user.is_authenticated():
+        return HttpResponseRedirect(_get_login_url(request.build_absolute_uri()))
     contrib = get_object_or_404(EnslaverContribution, pk=pk)
     if contrib.status == EnslavedContributionStatus.ACCEPTED:
         raise Http404("This contribution has already been accepted")

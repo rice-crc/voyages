@@ -6,8 +6,8 @@ import threading
 import unidecode
 from builtins import range, str
 from functools import reduce
-from django.conf import settings
 
+from datetime import datetime
 from django.contrib.auth.models import User
 from django.db import (connection, models, transaction)
 from django.db.models import (Aggregate, Case, CharField, Count, F, Func, IntegerField, Max, Min, Q, Sum, Value, When)
@@ -135,11 +135,17 @@ def _get_composite_names(name):
         for i in range(0, len(parts) - 1):
             yield parts[i] + parts[i + 1]
 
+def _is_cache_expired(cached_when):
+    NAME_CACHE_TIMEOUT_SEC = 600
+    if cached_when is None:
+        return True
+    delta = datetime.now() - cached_when
+    return delta.total_seconds() > NAME_CACHE_TIMEOUT_SEC
 
 class EnslavedNameSearchCache:
     WORDSET_INDEX = None
 
-    _loaded = False
+    _loaded = None
     _lock = threading.Lock()
     _name_key = {}
     _sound_recordings = {}
@@ -160,6 +166,8 @@ class EnslavedNameSearchCache:
 
     @classmethod
     def search_full(cls, name, max_cost, max_results):
+        if _is_cache_expired(cls._loaded):
+            cls.load(True)
         res = sorted(Levenshtein_search.lookup(cls.WORDSET_INDEX, _strip_accents(name),
                                                max_cost),
                      key=lambda x: x[1])
@@ -203,13 +211,12 @@ class EnslavedNameSearchCache:
                     for index in range(1, 1 + item[3])
                 ]
                 langs.append(lang)
-            cls._loaded = True
-
+            cls._loaded = datetime.now()
 
 class EnslaverNameSearchCache:
     WORDSET_INDEX = None
 
-    _loaded = False
+    _loaded = None
     _lock = threading.Lock()
     _name_key = {}
     
@@ -220,6 +227,9 @@ class EnslaverNameSearchCache:
 
     @classmethod
     def search_full(cls, name, max_cost, max_results):
+        # Check if cache is stale
+        if _is_cache_expired(cls._loaded):
+            cls.load(True)
         res = sorted(Levenshtein_search.lookup(cls.WORDSET_INDEX, _strip_accents(name),
                                                max_cost),
                      key=lambda x: x[1])
@@ -246,7 +256,7 @@ class EnslaverNameSearchCache:
                     ids = cls._name_key.setdefault(name, [])
                     ids.append(item_0)
             cls.WORDSET_INDEX = Levenshtein_search.populate_wordset(-1, list(all_names))
-            cls._loaded = True
+            cls._loaded = datetime.now()
 
         
 class SourceConnectionAbstractBase(models.Model):
