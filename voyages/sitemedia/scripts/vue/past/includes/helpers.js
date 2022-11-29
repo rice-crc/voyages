@@ -1307,10 +1307,11 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 		//then we have to make the time apportioned inversely proportional to the length of the curve
 		//tldr: in order that the dots on longer routes and shorter routes move the same speed, the longer routes need animations of longer duration, and vice versa
 		//increase timingscalar to slow this down, decrease it to speed it up
-		var dist=0
+		var distance=0
 		var timingscalar = 50
 		//the distance traversed has to be measured in *PIXELS* or else the speed increases with zoom level
-		pairs=d3.pairs(newroute.trace([0,.05,.1,.15,.2,.25,.3,.35,.4,.45,.5,.55,.6,.65,.7,.75,.8,.85,.9,.95,1]));
+		var interpolation_steps=[0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]
+		var pairs=d3.pairs(newroute.trace(interpolation_steps));
 		function euclideandistance(p1,p2) {
 			xyone=AO_map.latLngToContainerPoint(p1);
 			xytwo=AO_map.latLngToContainerPoint(p2);
@@ -1318,15 +1319,27 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 			return ed
 		}
 		if (pairs.length>1){
-			pairs.forEach(sp=>dist+=euclideandistance(sp[0],sp[1]))
+			pairs.forEach(sp=>distance+=(euclideandistance(sp[0],sp[1])))
 		}
 		if (animationlayergroup && animationmode){
+			
+			var standard_interval=10
+			
+			var duration=distance*timingscalar;
+			
 			var newanimationroute=L.curve(commands, {
 				color: "#6c757dc9",
-				weight: 1,
-				dashArray:"1 10",
-				animate: {'duration':dist*timingscalar,"iterations":Infinity,"direction":'normal'}
-			}).addTo(animationlayergroup);
+				weight: "1",
+				dashArray:"1 " + (standard_interval-1).toString(),
+				animate: {
+					"duration":duration,
+					"iterations":Infinity,
+					"direction":'normal'
+				}
+			})
+			
+			.addTo(animationlayergroup);
+ 			
 		};
 		
 		//this is some interactivity micro-tuning/crafting
