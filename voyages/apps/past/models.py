@@ -446,9 +446,17 @@ class EnslaverCachedProperties(models.Model):
             .annotate(enslaved_count=Count(related_enslaved_field, distinct=True)) \
             .values_list(identity_field, 'enslaved_count')
         q_captive_count_relations = apply_filter(q_captive_count_relations)
+        unnamed_count_field = 'relation__unnamed_enslaved_count'
+        q_unnamed = EnslaverInRelation.objects \
+            .select_related(identity_field, unnamed_count_field) \
+            .annotate(enslaved_count=Sum(unnamed_count_field)) \
+            .values_list(identity_field, 'enslaved_count')
+        q_unnamed = apply_filter(q_unnamed)
         for row in q_captive_count_voyageconn:
             helper.add_num(int(row[0]), 'enslaved_count', row[1])
         for row in q_captive_count_relations:
+            helper.add_num(int(row[0]), 'enslaved_count', row[1])
+        for row in q_unnamed:
             helper.add_num(int(row[0]), 'enslaved_count', row[1])
         amount_fields = [identity_field, 'relation__amount']
         q_transaction_amount = EnslaverInRelation.objects \
@@ -720,6 +728,7 @@ class EnslavementRelation(models.Model):
     date = models.CharField(max_length=12, null=True,
         help_text="Date in MM,DD,YYYY format with optional fields.")
     amount = models.DecimalField(null=True, decimal_places=2, max_digits=6)
+    unnamed_enslaved_count = models.IntegerField(null=True)
     voyage = models.ForeignKey(Voyage, related_name="+",
                                null=True, on_delete=models.CASCADE)
     source = models.ForeignKey(VoyageSources, related_name="+",
