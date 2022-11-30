@@ -2232,8 +2232,8 @@ def _expand_contrib(c):
                 "entry_pk": cl.pk,
                 "language_group_pk": cl.language_group.id,
                 "language_group_name": cl.language_group.name,
-                "modern_country_pk": cl.modern_country.id,
-                "modern_country_name": cl.modern_country.name,
+                "modern_country_pk": cl.modern_country_id,
+                "modern_country_name": cl.modern_country.name if cl.modern_country else None,
             } for cl in c.contributed_language_groups.all()
         ],
         "notes": c.notes,
@@ -2248,9 +2248,7 @@ def _enslaved_contrib_base_query():
         .prefetch_related('contributed_language_groups')
 
 @login_required()
-@require_POST
-def get_origins_contributions(request):
-    status = request.POST.get('status', [EnslavedContributionStatus.PENDING])
+def get_origins_contributions(request, status=0):
     q = _enslaved_contrib_base_query()
     if status:
         # The caller can explicitly set status to 
@@ -2260,9 +2258,7 @@ def get_origins_contributions(request):
     return JsonResponse({'status': status, 'contributions': contribs })
 
 @login_required()
-@require_POST
-def get_origins_contrib_details(request):
-    contrib_pk = int(request.POST.get('contrib_pk'))
+def get_origins_contrib_details(request, contrib_pk):
     q = _enslaved_contrib_base_query().filter(pk=contrib_pk)
     matches = list(q)
     if len(matches) != 1:
@@ -2940,3 +2936,10 @@ def submit_enslaver_editorial_review(request):
         for prop in EnslaverCachedProperties.compute(all_identities):
             prop.save()
     return JsonResponse({ "result": "OK" })
+
+@login_required
+def review_origins_contrib(request, pk):
+    contrib = get_object_or_404(EnslavedContribution, pk=pk)
+    return render(request, "contribute/review_origins.html", {
+        'contribution': contrib
+    })

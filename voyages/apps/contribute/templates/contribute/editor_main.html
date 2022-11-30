@@ -38,6 +38,7 @@
     <li class="nav-item" role="presentation"><a class="nav-link{% if active_tab == 'pending' %} active{% endif %}" id="tab_pending" href="#pending" aria-controls="voyages" role="tab" data-toggle="tab">{% trans "Voyages" %}</a></li>
     <li class="nav-item" role="presentation"><a class="nav-link{% if active_tab == 'requests' %} active{% endif %}" id="tab_requests" href="#requests" aria-controls="requests" role="tab" data-toggle="tab">{% trans "Requests" %}</a></li>
     <li class="nav-item" role="presentation"><a class="nav-link{% if active_tab == 'enslavers_contrib' %} active{% endif %}" id="tab_enslavers_contrib" href="#enslavers_contrib" aria-controls="requests" role="tab" data-toggle="tab">{% trans "Enslavers" %}</a></li>
+    <li class="nav-item" role="presentation"><a class="nav-link{% if active_tab == 'enslaved_contrib' %} active{% endif %}" id="tab_enslavers_contrib" href="#enslaved_contrib" aria-controls="requests" role="tab" data-toggle="tab">{% trans "Enslaved" %}</a></li>
     <li class="nav-item" role="presentation"><a class="nav-link{% if active_tab == 'users' %} active{% endif %}" href="#users" aria-controls="users" role="tab" data-toggle="tab">{% trans "Users" %}</a></li>
     <li class="nav-item" role="presentation"><a class="nav-link{% if active_tab == 'sources' %} active{% endif %}" href="#sources" aria-controls="sources" role="tab" data-toggle="tab">{% trans "Source Codes" %}</a></li>
     <li class="nav-item" role="presentation"><a class="nav-link{% if active_tab == 'publish' %} active{% endif %}" href="#publish" aria-controls="publish" role="tab" data-toggle="tab">{% trans "Publish New DB Version" %}</a></li>
@@ -104,6 +105,21 @@
                 <th>{% trans "Enslaver" %}</th>
                 <th>{% trans "Contributor" %}</th>
                 <th>{% trans "Date" %}</th>
+            </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+    <div role="tabpanel" class="tab-pane{% if active_tab == 'enslaved_contrib' %} active{% endif %}" id="enslaved_contrib">
+        <table id="enslaved_table" class="table table-striped table-bordered" cellspacing="0" width="100%">
+            <thead>
+            <tr>
+                <th>{% trans "Enslaved" %}</th>
+                <th>{% trans "Contributor" %}</th>
+                <th>{% trans "Date" %}</th>
+                <th>{% trans "Names contributed" %}</th>
+                <th>{% trans "Languages contributed" %}</th>
             </tr>
             </thead>
             <tbody>
@@ -314,6 +330,29 @@
             $('#enslavers_table').data('hasInitialized', true);
         }
     }
+    async function loadEnslavedContribList() {
+        const res = await fetch("/contribute/list_origins_contributions");
+        const data = await res.json();
+        if (!$('#enslaved_table').data('hasInitialized')) {
+            $("#enslaved_table").DataTable({
+                dom: '<"toolbar">',
+                data: data.contributions,
+                columns: [
+                    { data: (d) => `<a href="/contribute/review_origins_contrib/${d.pk}">${d.enslaved.modern_name || d.enslaved.historical_name} (${d.enslaved.id})</a>` },
+                    { data: 'contributor' },
+                    { data: 'date' }, { 
+                        data: (d) => d.contributed_names.map(x => x.name).join(', ')
+                    }, { 
+                        data: (d) => d.contributed_language_groups.map(x => x.language_group_name).join(', ')
+                    }
+                ],
+                paging: false,
+                info: false,
+                bFilter: false
+            });
+            $('#enslaved_table').data('hasInitialized', true);
+        }
+    }
 
     var loadTabData = function(href) {
         if (href == '#requests') {
@@ -322,6 +361,8 @@
             loadPendingList();
         } else if (href == '#enslavers_contrib') {
             loadEnslaversContribList();
+        } else if (href == '#enslaved_contrib') {
+            loadEnslavedContribList();
         }
         history.pushState("", "", `/contribute/editor_main/${href.substring(1)}`);
     };

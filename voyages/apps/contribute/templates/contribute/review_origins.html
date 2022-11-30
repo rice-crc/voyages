@@ -1,0 +1,59 @@
+{% extends "_base.html" %}
+{% load sass_tags %}
+{% load compress %}
+{% load i18n %}
+
+{% block title %}
+	{% trans 'Contribution to the Origins Database' %}
+{% endblock %}
+
+{% block content %}
+
+<div class="trans-container">
+    <div class="col-md-12">
+        <div id="center-content-inner" class="enslaved-content">
+            <h1>{% trans "Origins Contribution Review" %}</h1>
+            <div class="card" style="width: 18rem;">
+                <div class="card-body">
+                  <h3 class="card-title">[[ contrib_data.enslaved.modern_name ]]</h5>
+                  <h4 v-if="contrib_data.enslaved.historical_name" class="card-subtitle mb-2 text-muted">[[ contrib_data.enslaved.historical_name ]] {% trans "(historical)" %}</h6>
+                  <p class="card-text">
+                    [[ genders[contrib_data.enslaved.gender || 0] ]]
+                    {% trans "embarked on " %}
+                    [[ contrib_data.enslaved.region_of_embarkation ]]
+                  </p>
+                </div>
+              </div>
+            <p>TO-DO</p>
+            <ul>
+                <li>List modern name contributions</li>
+                <li>Audio playback</li>
+                <li>Language group</li>
+                <li>Propagation tools</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<script src="{{ STATIC_URL }}scripts/library/vue@2.6.7.min.js" type="text/javascript"></script>
+<script>
+    const genders = [null, '{% trans "male" %}', '{% trans "female" %}'];
+    async function initialize() {
+        const res = await fetch("/contribute/origins_contribution_details/{{ contribution.pk }}")
+        const contrib_data = await res.json();
+        const viewModel = new Vue({
+            el: "#center-content-inner",
+            delimiters: ['[[', ']]'],
+            data: {
+                contrib_data
+            }
+        });
+    }
+    try {
+        initialize();
+    } catch {
+        alert("An error has occurred");
+    }
+</script>
+
+{% endblock %}
