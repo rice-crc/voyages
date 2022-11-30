@@ -129,7 +129,7 @@ def get_modern_countries(_):
 def get_language_groups(_):
     countries_list_key = "countries_list"
     alt_names_key = "alt_names_list"
-    country_helper = MultiValueHelper(countries_list_key, ModernCountry.languages.through, 'languagegroup_id', country_name='moderncountry__name')
+    country_helper = MultiValueHelper(countries_list_key, ModernCountry.languages.through, 'languagegroup_id', modern_country_id='moderncountry__pk', country_name='moderncountry__name')
     alt_names_helper = MultiValueHelper(alt_names_key, AltLanguageGroupName, 'language_group_id', alt_name='name')
     q = LanguageGroup.objects.all()
     q = country_helper.adapt_query(q)
@@ -321,12 +321,19 @@ def enslaved_contribution(request):
             lang_entry.contribution = contrib
             lang_entry.order = i + 1
             lang_group_id = lang.get('lang_group_id', None)
-            if lang_group_id is None:
+            lang_entry.language_group = LanguageGroup.objects.get(
+                pk=lang_group_id) if lang_group_id else None
+            if lang_entry.language_group is None:
                 transaction.rollback()
                 return HttpResponseBadRequest(
                     'Invalid language entry in contribution')
-            lang_entry.language_group = LanguageGroup.objects.get(
-                pk=lang_group_id) if lang_group_id else None
+            modern_country_id = lang.get('modern_country_id', None)
+            lang_entry.modern_country = ModernCountry.objects.get(
+                pk=modern_country_id) if modern_country_id else None
+            if modern_country_id is None:
+                transaction.rollback()
+                return HttpResponseBadRequest(
+                    'Invalid modern country entry in contribution')
             lang_entry.save()
             language_ids.append(lang_entry.pk)
         result['language_ids'] = language_ids

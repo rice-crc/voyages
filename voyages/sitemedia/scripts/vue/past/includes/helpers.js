@@ -852,15 +852,14 @@ var parseLanguageGroups = function(response) {
   var countries = [];
   $.each(response.data, function(id, languageGroup) {
     $.each(languageGroup.countries, (id, country) => {
-      countries.push(country);
+      countries[country.modern_country_id] = country.country_name;
     });
   });
-  countries = [...new Set(countries)].sort()
-
-  $.each(countries, function(key, country) {
+  sorted_countries = Object.entries(countries).sort((a, b) => a[1].localeCompare(b[1]));
+  $.each(sorted_countries, function(key, country) {
     options[0].children.push({
-      id: country,
-      label: country,
+      id: country[0],
+      label: country[1],
       children: [],
       languageGroupIds: []
     });
@@ -887,11 +886,16 @@ var parseLanguageGroups = function(response) {
     }
     $.each(options[0].children, function(key, country) {
       $.each(languageGroup.countries, (index, languageGroupCountry) => {
-        if (languageGroupCountry == country.label) {
+        if (languageGroupCountry.modern_country_id === country.id) {
           if (options[0].children[key].languageGroupIds.indexOf(languageGroupId) === -1) {
             options[0].children[key].languageGroupIds.push(languageGroupId);
           }
-          options[0].children[key].children.push({'id': key+'-'+languageGroupId, 'label' : label, 'isDisabled': false, languageGroupIds: [languageGroupId]});
+          options[0].children[key].children.push({
+            'id': `${country.id}-${languageGroupId}`,
+            'label' : label,
+            'isDisabled': false,
+            languageGroupIds: [languageGroupId]
+          });
         }
       });
     });
