@@ -328,7 +328,6 @@ def search_enslaved(request):
             embarkation_location_counts=dict(Counter(i[1] for i in itineraries))
             disembarkation_location_counts=dict(Counter(i[2] for i in itineraries))
             final_location_counts=dict(Counter(i[3] for i in itineraries))
-    
             language_group_ids_offset=1000000
         
             points_dict={
@@ -412,13 +411,18 @@ def search_enslaved(request):
             itinerary_names=["-".join([str(i) for i in itinerary]) for itinerary in itineraries]
             itinerary_names=[i for i in itinerary_names if i in route_curves]
 #             print(time.time()-st)
-    
+#             print([(l,i) for i in itinerary_names for l in route_curves[i] if '60213' in i or '31399' in i])
+#             print("ITINERARY NAMES",itinerary_names)
             leg_weights=Counter([l for i in itinerary_names for l in route_curves[i]])
             itinerary_weights=Counter(itinerary_names).most_common()
             itinerary_weights.reverse()
+#             print([i for i in itinerary_weights if '60213' in i or '31399' in i])
+#             print("ITINERARY WEIGHTS",itinerary_weights)
             #this trickery ensures that the heaviest route determines which leg's geometry gets used
             leg_data={l:route_curves[i[0]][l] for i in itinerary_weights for l in route_curves[i[0]]}
             
+#             print("LEG DATA",leg_data)
+#             print({i:leg_data[i] for i in leg_data if 60213 in leg_data[i][1]})
             result_routes=[
                 {
                     'geometry':leg_data[l][0],
@@ -427,7 +431,7 @@ def search_enslaved(request):
                     'weight':leg_weights[l],
                     'id':l,
                     'visible':edge_ids_visibility[l]
-                } for l in leg_weights
+                } for l in leg_data
             ]
         
             result={

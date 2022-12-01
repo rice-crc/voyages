@@ -17,6 +17,7 @@ class Command(BaseCommand):
 		from voyages.apps.past.management.commands.ao_individuals_map import routeNodes,links
 		
 		for dataset in ['region','place']:
+# 		for dataset in ['place']:
 			print("--------",dataset,"----------")
 			base_path='voyages/apps/past/static/'
 			print('making a directed network graph of the oceanic waypoints from ao_individuals_map.py')
@@ -40,7 +41,10 @@ class Command(BaseCommand):
 					tags.append("onramp")
 				if n_id in offramp_ids:
 					tags.append("offramp")
-				G.add_node(n_id,coords=latlong,tags=tags,type="oceanic waypoint",name=None)
+				if n_id in G.nodes:
+					G.nodes[n_id]['tags']+=tags
+				else:
+					G.add_node(n_id,coords=latlong,tags=tags,name=None)
 				n+=1
 		
 			print("added",len(routeNodes),"oceanic waypoints to the network")
@@ -95,7 +99,10 @@ class Command(BaseCommand):
 			language_group_ids_offset=1000000
 			for languagegroup_node in languagegroup_nodes:
 				id,latitude,longitude,name=languagegroup_node
-				G.add_node(id+language_group_ids_offset,coords=(float(latitude),float(longitude)),name=name,tags=["origin"],type="african origin",pk=id)
+				if id in G.nodes:
+					G.nodes[id+language_group_ids_offset]['tags'].append('origin')
+				else:
+					G.add_node(id+language_group_ids_offset,coords=(float(latitude),float(longitude)),name=name,tags=["origin"],pk=id)
 			print("added",len(languagegroup_nodes),"african origin nodes")
 	
 			##2b. final destinations
@@ -113,17 +120,22 @@ class Command(BaseCommand):
 				'post_disembark_location__longitude',
 				'post_disembark_location__place'
 			)))
+			
+			
 		
 			for post_disembark_node in post_disembark_nodes:
 				pk,id,latitude,longitude,name=post_disembark_node
-				G.add_node(
-					id,
-					coords=(float(latitude),float(longitude)),
-					tags=["final_destination"],
-					type="final destination",
-					name=name,
-					pk=pk
-				)
+				
+				if id in G.nodes:
+					G.nodes[id]['tags'].append('final_destination')
+				else:
+					G.add_node(
+						id,
+						coords=(float(latitude),float(longitude)),
+						tags=["final_destination"],
+						name=name,
+						pk=pk
+					)
 		
 			print("added",len(post_disembark_nodes),"post-disembark nodes")
 		
@@ -221,7 +233,11 @@ class Command(BaseCommand):
 					pk=node.id
 				
 					#print(id,name)
-					G.add_node(id,name=name,coords=(latitude,longitude),tags=tags,type=','.join(tags),pk=pk)
+					if id in G.nodes:
+						G.nodes[id]['tags']+=tags
+					else:
+						G.add_node(id,name=name,coords=(latitude,longitude),tags=tags,pk=pk)
+					
 					for connect_to_tag in connect_to_tags:
 						tag,as_type,mode,curve=connect_to_tag
 						#print(tag)
@@ -311,7 +327,25 @@ class Command(BaseCommand):
 			print("calculating shortest routes & making bezier curves")
 		
 			routes={}
-		
+			
+			oceanic_subgraph=G.edge_subgraph([(e[0],e[1]) for e in G.edges() if G.edges[e[0],e[1]]['tag'] in ['onramp','offramp','oceanic_leg']])
+			endpoints_subgraph=G.edge_subgraph([(e[0],e[1]) for e in G.edges() if G.edges[e[0],e[1]]['tag'] in ['origin','final_destination']])
+# 			print(G.nodes())
+# 			print(oceanic_subgraph.nodes())
+# 			print([G.edges[e[0],e[1]]['tag'] for e in G.edges()])
+# 			print([oceanic_subgraph.edges[e[0],e[1]]['tag'] for e in oceanic_subgraph.edges()])
+			
+			
+			badnodes=[35199,50399]
+			badnodes=[]
+			
+			for badnode in badnodes:
+				print(badnode,oceanic_subgraph.nodes[badnode])
+				for n in oceanic_subgraph.predecessors(badnode):
+					print('source:',n)
+				for n in oceanic_subgraph.successors(badnode):
+					print('target:',n)
+			
 			for itinerary in all_individual_itineraries:
 				route={}
 				routename="-".join([str(i) for i in itinerary])
@@ -331,47 +365,62 @@ class Command(BaseCommand):
 				####& for every disembarkation to every final destination
 				####so that if we find that we know that a person originated at A, with a disembark of C and final of D, but embark B is unknown, then we just sub in the closest neighbor B
 				####this could affect the displayed stats -- but it's either that or we don't draw a line
-				embark,disembark=offset_itinerary[1:3]
-				if embark==disembark and embark is not None:
-					onramp=None
-					for n in G.neighbors(embark):
-						if 'onramp' in G.nodes[n]['tags']:
-							onramp=n
-					if onramp is not None:
-						offset_itinerary.insert(2,onramp)
-			
-				offset_itinerary=[i for i in offset_itinerary if i is not None]
-				legs=[]
-				#print(offset_itinerary)
-				for i in range(len(offset_itinerary)-1):
-					a=offset_itinerary[i]
-					b=offset_itinerary[i+1]
-	# 				print(a,b,G.has_node(a),G.has_node(b))
-					if a is not None and b is not None and G.has_node(a) and G.has_node(b):
-						legs.append((a,b))
-			
-				shortest_path=[]
-
-				#print(legs)
-				for leg in legs:
-					s_id,t_id=leg
-	# 				print(s_id,t_id)
-	# 				print(G.has_node(s_id),G.has_node(t_id))
+# 				embark,disembark=offset_itinerary[1:3]
+# 				if embark==disembark and embark is not None:
+# 					onramp=None
+# 					for n in G.neighbors(embark):
+# 						if 'onramp' in G.nodes[n]['tags']:
+# 							onramp=n
+# 					if onramp is not None:
+# 						offset_itinerary.insert(2,onramp)
+# 			
+# 				#offset_itinerary=[i for i in offset_itinerary if i is not None]
+# 				legs=[]
+# 				#print(offset_itinerary)
+# 				for i in range(len(offset_itinerary)-1):
+# 					a=offset_itinerary[i]
+# 					b=offset_itinerary[i+1]
+# 	# 				print(a,b,G.has_node(a),G.has_node(b))
+# 					if a is not None and b is not None and G.has_node(a) and G.has_node(b):
+# 						legs.append((a,b))
+								
+				def addlegs(subroute,subgraph,this_shortest_path):
+					s_id,t_id=subroute
 					try:
-						sp=nx.shortest_path(G,s_id,t_id,'weight')
+						sp=nx.shortest_path(subgraph,s_id,t_id,'weight')
+						if this_shortest_path==[]:
+							this_shortest_path+=sp
+						else:
+							this_shortest_path+=sp[1:]
+# 						print(sp)
 					except:
 						print("no path btw",s_id,t_id)
-				
-					if shortest_path==[]:
-						shortest_path+=sp
-					else:
-						shortest_path+=sp[1:]
-			
-			
-			
-			
 					
-	# 			print("path--->",shortest_path)
+					if len(set(badnodes).intersection(subroute))>0:
+						print("-->",subroute,sp)
+					
+					return this_shortest_path
+				
+				shortest_path=[]
+				
+				origin_subroute=offset_itinerary[0:2]
+				oceanic_subroute=offset_itinerary[1:3]
+				final_subroute=offset_itinerary[2:4]
+				
+				for subroute_set in [
+					[origin_subroute,endpoints_subgraph],
+					[oceanic_subroute,oceanic_subgraph],
+					[final_subroute,endpoints_subgraph]
+				]:
+					subroute,graph=subroute_set
+# 					print(subroute)
+					if None not in subroute and graph.has_node(subroute[0]) and graph.has_node(subroute[1]):
+						shortest_path=addlegs(subroute,graph,shortest_path)
+				
+				if len(set(badnodes).intersection(offset_itinerary))>0:
+					print(offset_itinerary,shortest_path)
+				
+# 				print("path--->",shortest_path)
 				route_edge_ids=[]
 				for i in range(len(shortest_path)-1):
 					a=shortest_path[i]
@@ -422,10 +471,8 @@ class Command(BaseCommand):
 						route,prev_controlXY=straightab(B,C,bc_id,route)
 						route[bc_id].append([b_id,c_id])
 						route[bc_id].append(bcdata['tag'])
-						
-				
 				else:
-					print("bad itinerary:",itinerary,offset_itinerary,legs,route_edge_ids,shortest_path)
+					print("bad itinerary:",itinerary)
 			
 				if route!={}:
 					routes[routename]=route
