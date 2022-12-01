@@ -239,7 +239,7 @@ class Command(BaseCommand):
 						G.add_node(id,name=name,coords=(latitude,longitude),tags=tags,pk=pk)
 					
 					for connect_to_tag in connect_to_tags:
-						tag,as_type,mode,curve=connect_to_tag
+						tag,as_type,mode,this_curve=connect_to_tag
 						#print(tag)
 						comp_nodes={comp_node:G.nodes[comp_node]['coords']
 							for comp_node in G.nodes
@@ -247,12 +247,14 @@ class Command(BaseCommand):
 						}
 						if mode=="single":
 							closest_neighbor,distance=getclosestneighbor((latitude,longitude),comp_nodes)
-							if curve==False and distance > threshold_for_straight:
-								curve=True
+							if this_curve==False and distance > threshold_for_straight:
+								this_curve=True
+							if this_curve==True and distance < threshold_for_straight:
+								this_curve=False
 							if as_type=="source":
-								G.add_edge(id,closest_neighbor,distance=distance,id=e,curve=curve,tag=tag)
+								G.add_edge(id,closest_neighbor,distance=distance,id=e,curve=this_curve,tag=tag)
 							else:
-								G.add_edge(closest_neighbor,id,distance=distance,id=e,curve=curve,tag=tag)
+								G.add_edge(closest_neighbor,id,distance=distance,id=e,curve=this_curve,tag=tag)
 							e+=1
 						else:
 							lat,long=G.nodes[id]['coords']
@@ -260,10 +262,12 @@ class Command(BaseCommand):
 							for comp_node in comp_nodes:
 								comp_lat,comp_long=comp_nodes[comp_node]
 								distance=geteuclideandistance(lat,long,comp_lat,comp_long)
-								if curve==False and distance > threshold_for_straight:
+								if this_curve==False and distance > threshold_for_straight:
 									this_curve=True
+								if this_curve==True and distance < threshold_for_straight:
+									this_curve=False
 								else:
-									this_curve=curve
+									this_curve=this_curve
 								if as_type=="source":
 									G.add_edge(id,comp_node,id=e,distance=distance,curve=this_curve,tag=tag)
 								else:
