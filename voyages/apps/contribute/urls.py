@@ -141,5 +141,8 @@ urlpatterns = [
         name='submit_enslaver_editorial_review'),
     url(r'review_origins_contrib/(?P<pk>\d+)$',
         views.review_origins_contrib,
-        name='review_origins_contrib')
+        name='review_origins_contrib'),
+    url(r'language_choices',
+        views.get_language_choices,
+        name='language_choices')
 ]

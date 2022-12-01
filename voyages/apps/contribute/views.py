@@ -2209,6 +2209,11 @@ def retrieve_publication_status(request):
 # PAST / Origins contributions
 
 def _expand_contrib(c):
+    def _get_audio_relative_url(name_pk):
+        filename = _get_audio_filename(c.pk, name_pk, full_path=False, check_exists=True)
+        if filename:
+            filename = settings.MEDIA_URL + filename
+        return filename
     return {
         "pk": c.pk,
         "contributor": c.contributor.username if c.contributor else "(anonymous)",
@@ -2225,7 +2230,7 @@ def _expand_contrib(c):
                 "pk": cn.pk,
                 "name": cn.name,
                 "notes": cn.notes,
-                "audio": _get_audio_filename(c.pk, cn.pk, full_path=False, check_exists=True)
+                "audio": _get_audio_relative_url(cn.pk)
             } for cn in c.contributed_names.all()
         ],
         "contributed_language_groups": [{
@@ -2302,7 +2307,7 @@ def get_origins_contrib_details(request, contrib_pk):
             c.enslaved.voyage.voyage_itinerary.imp_principal_region_of_slave_purchase_id) \
         .filter(name_clauses) \
         .values( \
-            'pk', 'gender', 'modern_name', 'documented_name', \
+            'pk', 'gender', 'modern_name', 'documented_name', 'notes', \
             'name_first', 'name_second', 'name_third', 'language_group__name', \
             'voyage__voyage_itinerary__imp_principal_place_of_slave_purchase__place')
     expanded = _expand_contrib(c)
@@ -2942,4 +2947,12 @@ def review_origins_contrib(request, pk):
     contrib = get_object_or_404(EnslavedContribution, pk=pk)
     return render(request, "contribute/review_origins.html", {
         'contribution': contrib
+    })
+
+@cache_page(3600)
+def get_language_choices(request):
+    return JsonResponse({
+        'modernCountryChoices': list(ModernCountry.objects.values('pk', 'name')),
+        'languageGroupChoices': list(LanguageGroup.objects.values('pk', 'name')),
+        'm2m': list(ModernCountry.languages.through.objects.values())
     })
