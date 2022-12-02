@@ -975,7 +975,8 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
     // Results DataTable
     var pageLength = {
       extend: "pageLength",
-      className: "btn btn-info buttons-collection dropdown-toggle"
+      className: "btn btn-info buttons-collection dropdown-toggle",
+      text: (dt) => gettext("Show %d rows").replace("%d", dt.page.len())
     };
 
     var mainDatatable = $("#results_main_table").DataTable({
@@ -1045,15 +1046,15 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
         "<'row'<'col-sm-12'tr>>" +
         "<'row'<'col-sm-5'><'col-sm-7'p>>",
       lengthMenu: [
-        [15],
-        ["15 rows"]
+        [15, 50, 100, 200],
+        [gettext("15 rows"), gettext("50 rows"), gettext("100 rows"), gettext("200 rows")]
       ],
 
       language: dtLanguage,
 
       buttons: [
         columnToggleMenu,
-        //pageLength,
+        pageLength,
       ],
       //pagingType: "input",
       bFilter: false,
