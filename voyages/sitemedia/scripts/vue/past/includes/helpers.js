@@ -1160,8 +1160,12 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 			var splitnodes=split_nodes_by_class(network.points)
 			var hidden_nodes=splitnodes[0]
 			var main_nodes=splitnodes[1]
-			drawMapNodes(AO_map,hidden_nodes,hidden_nodes_layer_group,nodevaluescale,zoomtofit,hideablenodes=true);
+			console.log(hidden_nodes);
+			if (hidden_nodes.features.length>0) {
+				drawMapNodes(AO_map,hidden_nodes,hidden_nodes_layer_group,nodevaluescale,zoomtofit,hideablenodes=true);
+			}
 			drawMapNodes(AO_map,main_nodes,main_nodes_layer_group,nodevaluescale,zoomtofit);
+			AO_map.invalidateSize();
 	};
 	
 	function refreshhiddennodes(zoomtofit=false) {
