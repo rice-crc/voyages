@@ -528,7 +528,8 @@ class Command(BaseCommand):
 					coords=node['coords']
 					name=node['name']
 					pk=node['pk']
-					geo_points[n]=(coords,name,pk,node_hidden_edges)
+					geo_points[n]=[coords,name,pk,node_hidden_edges]
+					
 		
 			d=open(base_path+dataset+'_routes_points.json','w')
 			d.write(json.dumps(geo_points))

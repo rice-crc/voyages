@@ -1086,8 +1086,9 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 	//A. Those that we refresh when we switch btw region & place zoom levels
 	//A1. hiddenroutes keeps track of the origin & final destination routes that only show on rollover
 	var hiddenroutes = new Object();
-	var geojsonlayerid = new Object();
 	var valueScale = d3.scaleLog();
+	var regionorplace = "region";
+	var nodesarehidden=false;
 	
 	//B. Those that are more frequently reset according to custom functions for interactivity
 	//B1. keep track of the popup (since they're getting created & destroyed so quickly by the nodes)
@@ -1101,22 +1102,80 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 	var allnetworks=new Object;
 	
 	function clearMostGlobals() {
-		geojsonlayerid = new Object();
 		hiddenroutes = new Object();
 		hiddenrouteslayergroup.clearLayers();
 		mainrouteslayergroup.clearLayers();
 		hiddenanimationrouteslayergroup.clearLayers();
 		mainanimationrouteslayergroup.clearLayers();
-		nodeslayergroup.clearLayers();
+		main_nodes_layer_group.clearLayers();
+		hidden_nodes_layer_group.clearLayers();
+	}
+		
+	//here we will split the geojson featurecollection in two:
+	// hidden: origin only or post-disembark only 
+	// main: all others
+	function split_nodes_by_class(featurecollection) {
+		var hidden_featurecollection ={"type":"FeatureCollection","features":[]}
+		var main_featurecollection = {"type":"FeatureCollection","features":[]}
+		
+		featurecollection.features.forEach(function(feature) {
+			var node_classes=feature.properties.node_classes;
+			if (Object.keys(node_classes).length==1 && ["origin","post-disembarkation"].includes(Object.keys(node_classes)[0])) {
+				hidden_featurecollection.features.push(feature)
+			} else {
+				main_featurecollection.features.push(feature)
+			}
+		})
+		return [hidden_featurecollection,main_featurecollection]
 	}
 	
-	function refreshmapwithnewnetwork(map,network,zoomtofit=true,regionorplace="region") {
+	function node_featurecollection_from_point_ids(point_ids,featurecollection) {
+		var filtered_featurecollection = {"type":"FeatureCollection","features":[]}
+		featurecollection.features.forEach(function(feature) {
+			if (points_ids.includes(feature.properties.id)) {
+				filtered_featurecollection.features.push(feature)
+			}
+		})
+		return filtered_featurecollection
+	}
+	
+	function nodelogvaluescale(points) {
+		//scale the nodes sizes logarithmically 
+		var valueMin = d3.min(points.features, function (p) {
+			return p.properties.size;
+		  });
+		  var valueMax = d3.max(points.features, function (p) {
+			return p.properties.size;
+		  });
+		var valueScale = d3.scaleLog().domain([valueMin, valueMax]).range([4, 25]);
+		return valueScale
+	}
+	
+	
+	
+	function refreshmapwithnewnetwork(zoomtofit=true) {
+			var network=allnetworks[regionorplace]
 			clearMostGlobals();
 			makeRoutesDict(network);
-			drawMainRoutes(map,network.routes);
-			drawUpdatePoints(map,network.points,zoomtofit,regionorplace);
+			drawMainRoutes(AO_map,network.routes);
+			var nodevaluescale=nodelogvaluescale(network.points);
+			var splitnodes=split_nodes_by_class(network.points)
+			var hidden_nodes=splitnodes[0]
+			var main_nodes=splitnodes[1]
+			drawMapNodes(AO_map,hidden_nodes,hidden_nodes_layer_group,nodevaluescale,zoomtofit,hideablenodes=true);
+			drawMapNodes(AO_map,main_nodes,main_nodes_layer_group,nodevaluescale,zoomtofit);
 	};
-
+	
+	function restorehiddennodes(zoomtofit=false) {
+			hidden_nodes_layer_group.clearLayers();
+			var network=allnetworks[regionorplace]
+			var nodevaluescale=nodelogvaluescale(network.points);
+			var splitnodes=split_nodes_by_class(network.points)
+			var hidden_nodes=splitnodes[0]
+			drawMapNodes(AO_map,hidden_nodes,hidden_nodes_layer_group,nodevaluescale,zoomtofit,hideablenodes=true);
+			hidden_nodes.features.forEach(n=>AO_map._layers[nodesdict[n.properties.point_id].leaflet_id].bringToBack())
+	};
+	
 	//D. MAP AND DOM GLOBALS
 	
 	var currentSearchObj = searchAll(filter, filterData);
@@ -1144,8 +1203,11 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 	var mainrouteslayergroup = L.layerGroup();
 	mainrouteslayergroup.addTo(AO_map);
 	
-	var nodeslayergroup = L.layerGroup();
-	nodeslayergroup.addTo(AO_map);
+	var main_nodes_layer_group = L.layerGroup();
+	main_nodes_layer_group.addTo(AO_map);
+	
+	var hidden_nodes_layer_group = L.layerGroup();
+	hidden_nodes_layer_group.addTo(AO_map);
 	
 	var mainanimationrouteslayergroup = L.layerGroup();
 	mainanimationrouteslayergroup.addTo(AO_map);
@@ -1348,7 +1410,7 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 		//however, we want *only* that node to come to the front, because you do want to be able to roll your mouse off that node and immediately onto one of the emanating routes, potentially to follow it out to the other, connected nodes -- which, when you hit them, you want to be able to roll off the route onto the node to bring that node to the front and draw the routes emanating from *it* etc. etc.
 		if (['origin','final_destination'].includes(route.leg_type)) {
 			var hovernode_leaflet_id=nodesdict[point_id].leaflet_id;
-			var hovernode_layer = nodeslayergroup.getLayer(geojsonlayerid).getLayer(hovernode_leaflet_id)
+			var hovernode_layer = map._layers[hovernode_leaflet_id]
 			hovernode_layer.bringToFront();
 			newroute.on('mouseover', function () {	
 				if (currently_open_popup_layer.closePopup) {
@@ -1360,13 +1422,17 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 			newroute.on('mouseover', function () {	
 				hiddenrouteslayergroup.clearLayers();
 				hiddenanimationrouteslayergroup.clearLayers();
+				if (nodesarehidden) {
+					restorehiddennodes();
+					nodesarehidden=false;
+				}
 				if (currently_open_popup_layer.closePopup) {
 					currently_open_popup_layer.closePopup();
 				}
 			});
 		};
 	  };
-	
+	  
 	//Main routes are drawn when the map is refreshed. These are the embarkation-->disembarkation routes
 	//Which include connections from the embarkation point into the oceanic network, and from that back out to the disembarkation port
 	//We are for now calling those final-mile connections "onramps" and "offramps"
@@ -1383,6 +1449,7 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 	  	if (route.visible){
 			newroute=addRoute(map,route,mainrouteslayergroup,null,mainanimationrouteslayergroup);
 		} else {
+// 			console.log(route);
 			hiddenroutes[route.id]=route;
 		}
 	})
@@ -1439,17 +1506,58 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 		})
 	};
 	
-	//HANDLING HIDDEN ROUTES (ORIGINS->EMBARKATIONS & DISEMBARKATIONS->POST-DISEMBARKATIONS)	
-	function maybeshowroute(map,route,point_id,animationrouteslayergroup) {
-			if (route) {
-				var leaflet_route_id=addRoute(map,route,hiddenrouteslayergroup,point_id,animationrouteslayergroup);
+	
+	
+	
+	//HANDLING HIDDEN ROUTES (ORIGINS->EMBARKATIONS & DISEMBARKATIONS->POST-DISEMBARKATIONS)
+
+	function remove_unattached_nodes_and_restore_attached_hidden_nodes_pfffffffff(attached_node_ids,active_node){
+	
+		var network=allnetworks[regionorplace]
+		var nodevaluescale=nodelogvaluescale(network.points);
+		var splitnodes=split_nodes_by_class(network.points)
+		var hidden_nodes=splitnodes[0]
+		var filtered_hidden_nodes={
+			"type":"FeatureCollection",
+			"features":[]
+		}
+		
+		var active_node_id=active_node.properties.point_id;
+		var all_hidable_node_leaflet_ids=new Array;
+		Object.keys(nodesdict).forEach(k=>{ if (nodesdict[k]['hideable']&&k!=active_node_id){  all_hidable_node_leaflet_ids.push(nodesdict[k]['leaflet_id'])}})
+		all_hidable_node_leaflet_ids.forEach(i=>{ if (AO_map._layers[i]){AO_map._layers[i].remove()}})
+				
+		hidden_nodes.features.forEach(f=>{
+			if (f.properties.point_id!=active_node_id&&attached_node_ids.includes(f.properties.point_id)) {
+				filtered_hidden_nodes.features.push(f)
 			}
-		};
+		});
+		
+// 		console.log(filtered_hidden_nodes)
+		
+		drawMapNodes(AO_map,filtered_hidden_nodes,hidden_nodes_layer_group,nodevaluescale,zoomtofit=false,hideablenodes=true);
+		filtered_hidden_nodes.features.forEach(n=>AO_map._layers[nodesdict[n.properties.point_id].leaflet_id].bringToBack())
+
+		nodesarehidden=true;
+	}
+	
 	function displayhiddenroutes(map,node) {
 		hiddenrouteslayergroup.clearLayers();
+// 		
 		hiddenanimationrouteslayergroup.clearLayers();
 		var hidden_edge_ids=node.properties.hidden_edges;
-		hidden_edge_ids.forEach(edge_id => maybeshowroute(map,hiddenroutes[edge_id],node.properties.point_id,hiddenanimationrouteslayergroup));
+		
+		var attached_node_ids = new Array;
+		hidden_edge_ids.forEach(edge_id => {
+			var route=hiddenroutes[edge_id];
+			if (route) {
+				addRoute(map,route,hiddenrouteslayergroup,node.properties.point_id,hiddenanimationrouteslayergroup);
+				route.source_target.forEach(p_id=> {if (!attached_node_ids.includes(p_id)) {attached_node_ids.push(p_id)}})
+			}
+		})
+		
+		remove_unattached_nodes_and_restore_attached_hidden_nodes_pfffffffff(attached_node_ids,node);
+		
 	};
 	//CREATING NODE POPUPS
 	function formatNodePopUpListItem(k,v) {
@@ -1485,7 +1593,30 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 		return(popupcontent);
 	};
 	
-	function drawUpdatePoints(map, points,zoomtofit=true,regionorplace="region") {
+	//zoomtofit takes a geojson featurecollection of POINTS ONLY and fits the map's view to the lat/long extremes
+	function zoomtofit_fn(map,points) {
+		var latmin = d3.min(points.features, function (p) {
+		return p.geometry.coordinates[1];
+		});
+
+		var latmax = d3.max(points.features, function (p) {
+		return p.geometry.coordinates[1]
+		});
+
+		var longmin = d3.min(points.features, function (p) {
+		return p.geometry.coordinates[0]
+		});
+
+		var longmax = d3.max(points.features, function (p) {
+		return p.geometry.coordinates[0]
+		});
+
+		var minmax_group = new L.featureGroup([L.marker([latmin,longmin]),L.marker([latmax,longmax])]);
+		map.fitBounds(minmax_group.getBounds());
+
+	}
+	
+	function drawMapNodes(map, points, nodelayergroup,valuescale, zoomtofit=true,hideablenodes=false) {
 		function onEachFeature(feature, layer) {
 			
 			var node_classes=feature.properties.node_classes;
@@ -1501,64 +1632,43 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 			layer.bindPopup(makeNodePopUp(node_classes,node_title),{'className':'leafletAOPopup'});
 			
 			layer.on('mouseover', function() {
-				currently_open_popup_layer=layer.openPopup();
 				displayhiddenroutes(map,feature);
+				currently_open_popup_layer=layer.openPopup();
 			});
 			
 			var l_id=L.stamp(layer);
 			var point_id=feature.properties.point_id
 			nodesdict[point_id]['leaflet_id']=l_id;
+			nodesdict[point_id]['hideable']=hideablenodes;
+			nodesdict[point_id]['geometry']=feature.geometry;
+// 			var yoruba_ids=[1160515,1160516,1160517,1160518,1160519,1160520,1160521,1160522,1160523,1160526,1160527,1160528]
+// 			
+// 			if (yoruba_ids.includes(point_id)) {
+// 				console.log(feature.properties)
+// 				yorubamarkerclustergroup.addLayer(layer)
+// 			}
 			
 		};
 		
-		//scale the nodes sizes logarithmically 
-		var valueMin = d3.min(points.features, function (p) {
-			return p.properties.size;
-		  });
-		  var valueMax = d3.max(points.features, function (p) {
-			return p.properties.size;
-		  });
-	
-		var valueScale = d3.scaleLog().domain([valueMin, valueMax]).range([4, 25]);  
-		
 		//while we're at it, let's make the map zoom & pan to fit our collection of points
 		//but not if that's been disabled
-		  if (zoomtofit){
-			  var latmin = d3.min(points.features, function (p) {
-				return p.geometry.coordinates[1];
-			  });
-		  
-			  var latmax = d3.max(points.features, function (p) {
-				return p.geometry.coordinates[1]
-			  });
-		  
-			  var longmin = d3.min(points.features, function (p) {
-				return p.geometry.coordinates[0]
-			  });
-		  
-			  var longmax = d3.max(points.features, function (p) {
-				return p.geometry.coordinates[0]
-			  });
-		
-			var minmax_group = new L.featureGroup([L.marker([latmin,longmin]),L.marker([latmax,longmax])]);
-			map.fitBounds(minmax_group.getBounds());
+		if (zoomtofit){
+			zoomtofit_fn(map,points)
 		}
-		var geojsonlayer = L.geoJSON(points.features, {
+		
+		L.geoJSON(points.features, {			
 			pointToLayer: function (feature, latlng) {
 				return L.circleMarker(latlng, {
-					radius: valueScale(feature.properties.size),
+					radius: valuescale(feature.properties.size),
 					fillColor: nodeColorPicker(feature.properties.node_classes),
 					color: "#000",
 					weight: 1,
 					opacity: 1,
 					fillOpacity: 0.6
-				});
-				
+				});	
 			},
 			onEachFeature: onEachFeature
-		}).addTo(nodeslayergroup);
-		//we need this to access the nodes via their leaflet id's as it's their parent feature layer group. might be a better way, though
-		geojsonlayerid=geojsonlayer._leaflet_id;
+		}).addTo(nodelayergroup);
 	};
 	
 	function makeRoutesDict(network) {
@@ -1578,9 +1688,11 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 	AO_map.on('zoomend', function() {
 		var currentzoom=AO_map.getZoom()
 		if (currentzoom>4){
-			refreshmapwithnewnetwork(AO_map,allnetworks.place,false,"place");
+			regionorplace="place";
+			refreshmapwithnewnetwork(false);
 		} else {
-			refreshmapwithnewnetwork(AO_map,allnetworks.region,false,"region")
+			regionorplace="region";
+			refreshmapwithnewnetwork(false)
 		}
 	});
 	AO_map.on('overlayremove', function (e){
@@ -1619,7 +1731,7 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 		success: function(d){
 			allnetworks = d;
 // 			console.log(d);
-			refreshmapwithnewnetwork(AO_map,allnetworks.region)
+			refreshmapwithnewnetwork()
 			drawUpdateCount(AO_map,allnetworks.region.total_results_count);
 			drawLegend(AO_map);
 			AO_map.invalidateSize();

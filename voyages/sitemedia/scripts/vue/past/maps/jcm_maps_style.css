@@ -52,16 +52,15 @@
 
 
 .leafletAOPopup .leaflet-popup-tip {
-/* 	display: none; */
+	display: none;
 }
 
 .leafletAOPopup .leaflet-popup-close-button {
-/* 	display: none; */
+	display: none;
 }
 
 .leafletAOPopup .leaflet-popup-content-wrapper {
-/*     background: rgba(167, 224, 169, 0.7); */
-/*     padding: 0px; */
+    background: rgba(255,255,255,0.7);/*     padding: 0px; */
     width: auto;
 }
 
