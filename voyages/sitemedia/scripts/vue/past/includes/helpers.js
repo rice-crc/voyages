@@ -1151,8 +1151,6 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 		return valueScale
 	}
 	
-	
-	
 	function refreshmapwithnewnetwork(zoomtofit=true) {
 			var network=allnetworks[regionorplace]
 			clearMostGlobals();
@@ -1166,7 +1164,7 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 			drawMapNodes(AO_map,main_nodes,main_nodes_layer_group,nodevaluescale,zoomtofit);
 	};
 	
-	function restorehiddennodes(zoomtofit=false) {
+	function refreshhiddennodes(zoomtofit=false) {
 			hidden_nodes_layer_group.clearLayers();
 			var network=allnetworks[regionorplace]
 			var nodevaluescale=nodelogvaluescale(network.points);
@@ -1185,10 +1183,11 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 	
 	var mappingSpecialists=L.tileLayer(
 	  'https://api.mapbox.com/styles/v1/jcm10/cl5v6xvhf001b14o4tdjxm8vh/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoiamNtMTAiLCJhIjoiY2wyOTcyNjJsMGY5dTNwbjdscnljcGd0byJ9.kZvEfo7ywl2yLbztc_SSjw',
-	  {attribution: '<a href="https://www.mappingspecialists.com/" target="blank">Mapping Specialists</a>'});
+	  {attribution: '<a href="https://www.mappingspecialists.com/" target="blank">Mapping Specialists, Ltd.</a>'});
 
 		var basemap = {"Mapping Specialists":mappingSpecialists}
-		
+	
+	
 	var AO_map = L.map('AO_map', {
 		fullscreenControl: false,
 		center:[0,0],
@@ -1423,7 +1422,7 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 				hiddenrouteslayergroup.clearLayers();
 				hiddenanimationrouteslayergroup.clearLayers();
 				if (nodesarehidden) {
-					restorehiddennodes();
+					refreshhiddennodes();
 					nodesarehidden=false;
 				}
 				if (currently_open_popup_layer.closePopup) {
@@ -1681,9 +1680,6 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 	// 	N.B.!!!
 	// 	THE VUE.JS ANIMATIONS INVOKED BY APPLYING THE FADE CLASS TO THE TABS BREAK LEAFLET'S ABILITY TO DETECT THE SIZE OF ITS DIV, WHICH BREAKS ITS ABILITY TO REQUEST MAPTILES PROPERLY AND CENTER THE MAP
 	// 	SO YOU CAN DELAY, AS BELOW, WHICH SUCKS, GRANTED, OR YOU CAN DISABLE THE ANIMATION
-	window.setTimeout(function() {
-		AO_map.invalidateSize();
-	}, 1000);
 	
 	AO_map.on('zoomend', function() {
 		var currentzoom=AO_map.getZoom()
@@ -1732,9 +1728,18 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 			allnetworks = d;
 // 			console.log(d);
 			refreshmapwithnewnetwork()
-			drawUpdateCount(AO_map,allnetworks.region.total_results_count);
+			var total_results_count=allnetworks.region.total_results_count;
+			drawUpdateCount(AO_map,total_results_count);
 			drawLegend(AO_map);
 			AO_map.invalidateSize();
+			//default zoom on landing for a relatively unfiltered query
+			if (total_results_count>80000) {
+				var default_minmax_group = new L.featureGroup([
+					L.marker([15,-23]),
+					L.marker([-10,24])
+				]);
+				AO_map.fitBounds(default_minmax_group.getBounds());
+			}
 		}
 	});
 	
