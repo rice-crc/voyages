@@ -12,41 +12,48 @@
 <div class="trans-container">
     <div id="center-content-inner" class="enslaved-content">
         <center>
-            <h1>{% trans "Origins Contribution Review" %}</h1>
+            <h2>{% trans "Origins Contribution Review" %}</h2>
         </center>
         <div class="container">
             <div class="row">
                 <div class="col-md-4">
                     <div class="card" style="width: 18rem;">
                         <div class="card-body">
-                        <h3 class="card-title">[[ contrib_data.enslaved.modern_name ]]</h5>
-                        <h4 v-if="contrib_data.enslaved.historical_name" class="card-subtitle mb-2 text-muted">[[ contrib_data.enslaved.historical_name ]] {% trans "(historical)" %}</h6>
-                        <p class="card-text">
-                            [[ genders[contrib_data.enslaved.gender || 0] ]]
-                            {% trans "embarked on " %}
-                            [[ contrib_data.enslaved.region_of_embarkation ]]
-                        </p>
-                        <hr />
-                        <h4>Contributed Names</h4>
-                        <ul>
-                            <li v-for="cn in contrib_data.contributed_names">
-                                [[ cn.name ]]
-                                <div v-if="cn.audio" style="display: inline; margin-left: 10px;">
-                                    <i class="fa fa-play" aria-hidden="true" v-bind:data="cn.audio" onclick="audioCommand(this.getAttribute('data'), 'play')"></i>
-                                    <i class="fa fa-pause" aria-hidden="true" v-bind:data="cn.pk" onclick="audioCommand(null, 'pause')"></i>
-                                </div>
-                            </li>
-                        </ul>
-                        <div v-if="contrib_data.prev_name_contributions">
-                            {% trans "Previous contributions" %}: [[ contrib_data.prev_name_contributions.join(';') ]]
-                        </div>
-                        <h4>Contributed Language Groups</h4>
-                        <span v-if="contrib_data.is_multilingual">{% trans "Multilingual" %}</span>
-                        <ul>
-                            <li v-for="cl in contrib_data.contributed_language_groups">
-                                [[ cl.language_group_name ]] ([[ cl.modern_country_name ]])
-                            </li>
-                        </ul>
+                            <h3 class="card-title">[[ contrib_data.enslaved.modern_name ]]</h5>
+                            <h4 v-if="contrib_data.enslaved.historical_name" class="card-subtitle mb-2 text-muted">[[ contrib_data.enslaved.historical_name ]] {% trans "(historical)" %}</h6>
+                            <p class="card-text">
+                                [[ genders[contrib_data.enslaved.gender || 0] ]]
+                                {% trans "embarked on " %}
+                                [[ contrib_data.enslaved.region_of_embarkation ]]
+                            </p>
+                            <hr />
+                            <h4>Contributed Names</h4>
+                            <ul>
+                                <li v-for="cn in contrib_data.contributed_names">
+                                    [[ cn.name ]]
+                                    <div v-if="cn.audio" style="display: inline; margin-left: 10px;">
+                                        <i class="fa fa-play" aria-hidden="true" v-bind:data="cn.audio" onclick="audioCommand(this.getAttribute('data'), 'play')"></i>
+                                        <i class="fa fa-pause" aria-hidden="true" v-bind:data="cn.pk" onclick="audioCommand(null, 'pause')"></i>
+                                    </div>
+                                </li>
+                            </ul>
+                            <div v-if="contrib_data.prev_name_contributions.length > 0">
+                                <em>
+                                    {% trans "Previous contributions" %}: [[ contrib_data.prev_name_contributions.join(';') ]]
+                                </em>
+                            </div>
+                            <h4>Contributed Language Groups</h4>
+                            <span v-if="contrib_data.is_multilingual">{% trans "Multilingual" %}</span>
+                            <ul>
+                                <li v-for="cl in contrib_data.contributed_language_groups">
+                                    [[ cl.language_group_name ]] ([[ cl.modern_country_name ]])
+                                </li>
+                            </ul>
+                            <div v-if="contrib_data.prev_language_group_contributions.length > 0">
+                                <em>
+                                    {% trans "Previous contributions" %}: [[ contrib_data.prev_language_group_contributions.join(';') ]]
+                                </em>
+                            </div>                            
                         </div>
                     </div>
                     <p>TO-DO</p>
@@ -55,7 +62,10 @@
                         <li>✓ Audio playback</li>
                         <li>✓ Language group</li>
                         <li>✓ Previous contributed names</li>
-                        <li>Propagation tools</li>
+                        <li>✓ Propagation table: toggle row propagation</li>
+                        <li>Show contributor comments</li>
+                        <li>Propagation table: editable notes</li>
+                        <li>Submission: on accept popup with summary, on reject confirm</li>
                     </ul>
                 </div>
                 <div class="col-md-8">
@@ -66,7 +76,7 @@
                     <select id="propagatedCountry" class="form-control" v-model="propagatedCountry">
                         <option value="remove">{% trans "Delink Modern Country" %}</option>
                         <option v-if="contrib_data.contributed_language_groups" disabled>--- {% trans "User Contributed" %} ---</option>
-                        <option v-if="cl.modern_country_pk" v-for="cl in contrib_data.contributed_language_groups" v-bind:value="cl.modern_country_pk">[[ cl.modern_country_name ]]</option>
+                        <option v-if="contribCountries" v-for="pair in contribCountries" v-bind:value="pair[0]">[[ pair[1] ]]</option>
                         <option disabled>--- {% trans "Editorial Choices" %} ---</option>
                         <option v-for="country in modernCountryChoices" v-bind:value="country.pk">[[ country.name ]]</option>
                     </select>
@@ -74,14 +84,15 @@
                     <select id="propagatedLang" class="form-control" v-model="propagatedLanguage">
                         <option value="remove">{% trans "Delink Language Group" %}</option>
                         <option v-if="contrib_data.contributed_language_groups" disabled>--- {% trans "User Contributed" %} ---</option>
-                        <option v-for="cl in contrib_data.contributed_language_groups" v-bind:value="cl.pk">[[ cl.language_group_name ]]</option>
+                        <option v-for="cl in contrib_data.contributed_language_groups" v-bind:value="cl.language_group_pk">[[ cl.language_group_name ]]</option>
                         <option v-if="languageGroupChoices.length > 0" disabled>--- {% trans "Editorial Choices" %} ---</option>
                         <option v-for="lang in languageGroupChoices" v-bind:value="lang.pk">[[ lang.name ]]</option>
                     </select>
-                    <table>
+                    <table id="propagationTable" class="table table-striped table-bordered dataTable">
                         <thead>
                             <tr>
                                 <th>{% trans "Name(s)" %}</th>
+                                <th>{% trans "Modern name" %}</th>
                                 <th>{% trans "Gender" %}</th>
                                 <th>{% trans "Embarkation" %}</th>
                                 <th>{% trans "Propagate Name" %}</th>
@@ -92,6 +103,14 @@
                         <tbody>
                         </tbody>
                     </table>
+                    <div class="btn-group" role="group" aria-label="Contribution actions">
+                        <button v-on:click="accept" class="btn btn-primary">
+                            {% trans "Accept" %}
+                        </button>
+                        <button v-on:click="reject" class="btn btn-danger">
+                            {% trans "Reject" %}
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -133,8 +152,60 @@
         for (const l of languageGroupChoices) {
             allLanguages[l.pk] = l;
         }
-        let propagatedCountry = null;
-        let propagatedLanguage = null;
+        let countries = {};
+        contrib_data.contributed_language_groups
+            .forEach(cl => {
+                if (cl.modern_country_pk) {
+                    countries[cl.modern_country_pk] = cl.modern_country_name;
+                }
+            });
+        countries = Object.entries(countries)
+        let propagatedCountry = Object.keys(countries).length === 1 ? parseInt(countries[0][0]) : null;
+        let propagatedLanguage = contrib_data.contributed_language_groups.length === 1
+            ? parseInt(contrib_data.contributed_language_groups[0].language_group_pk)
+            : null;
+        $("#propagationTable").DataTable({
+            data: contrib_data.propagation_candidates,
+            columns: [{
+                    data: row => {
+                        let name = row.documented_name;
+                        const moreNames = [row.name_first, row.name_second, row.name_third].filter(x => !!x).join('');
+                        if (moreNames) {
+                            name = `${name} (${moreNames})`;
+                        }
+                        return name;
+                    }
+                },
+                { data: 'modern_name' },
+                { data: row => genders[row.gender] },
+                { data: 'embarkation' },
+                {
+                    data: 'pk',
+                    render: function(data, type) {
+                        if (type === 'display') {
+                            return `<input type="checkbox" checked="true" value="N_${data}">`;
+                        }
+                        return data;
+                    }
+                },
+                {
+                    data: 'pk',
+                    render: function(data, type) {
+                        if (type === 'display') {
+                            return `<input type="checkbox" checked="true" value="L_${data}">`;
+                        }
+                        return data;
+                    }
+                },
+                { data: 'notes' }
+            ],
+            scrollY: '30vh',
+            paginate: contrib_data.propagation_candidates.length > 10,
+            info: false,
+            bFilter: false,
+            pageLength: 10,
+            bLengthChange: false
+        });
         const viewModel = new Vue({
             el: "#center-content-inner",
             delimiters: ['[[', ']]'],
@@ -142,6 +213,7 @@
                 contrib_data,
                 propagatedName: contrib_data.contributed_names.length === 1 ? contrib_data.contributed_names[0].name : '',
                 modernCountryChoices,
+                contribCountries: countries,
                 propagatedCountry,
                 propagatedLanguage
             },
@@ -153,6 +225,14 @@
                     return m2m
                         .filter(x => x.moderncountry_id === this.propagatedCountry)
                         .map(x => allLanguages[x.languagegroup_id]);
+                }
+            },
+            methods: {
+                accept: async function() {
+                    alert('not implemented');
+                },
+                reject: async function() {
+                    alert('not implemented');
                 }
             }
         });

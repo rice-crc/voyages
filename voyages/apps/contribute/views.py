@@ -2309,7 +2309,7 @@ def get_origins_contrib_details(request, contrib_pk):
         .values( \
             'pk', 'gender', 'modern_name', 'documented_name', 'notes', \
             'name_first', 'name_second', 'name_third', 'language_group__name', \
-            'voyage__voyage_itinerary__imp_principal_place_of_slave_purchase__place')
+            embarkation=F('voyage__voyage_itinerary__imp_principal_place_of_slave_purchase__place'))
     expanded = _expand_contrib(c)
     expanded['prev_name_contributions'] = list(prev_name_contrib)
     expanded['prev_language_group_contributions'] = list(prev_lang_contrib)
