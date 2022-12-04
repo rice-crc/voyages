@@ -1278,7 +1278,7 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 
 
 
-	var activepopup=new Object;
+	var activepopups=new Array;
 	
 	function make_clustermarker(markers,size){
 		size_scaled=nodelogvaluescale(size)-2
@@ -1289,6 +1289,7 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 	var origins_layer_group = L.markerClusterGroup(	
 		{
 			maxClusterRadius: 120,
+			zoomToBoundsOnClick: false,
 			iconCreateFunction: function (cluster) {
 			var markers = cluster.getAllChildMarkers();
 			var n = 0;
@@ -1298,18 +1299,26 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 		}
 	}).on('clustermouseover', function (a) {
 		var clusterchildmarkers=a.layer.getAllChildMarkers();
-		
 		popuphtml=make_languagegroupstable(clusterchildmarkers);
 		//http://jsfiddle.net/3tnjL/59/
-		var pop = new L.popup({'className':'leafletAOPopup'}).
+		var pop = new L.popup({
+				'className':'leafletAOPopup',
+				'closeOnClick':false
+			}).
 			setLatLng(a.latlng).
 			setContent(popuphtml);
 		pop.addTo(AO_map);
-		activepopup=pop;
+		activepopups.push(pop);
 	})
 	.on('clustermouseout', function (a) {
-		activepopup.remove()
-	});;
+		activepopups.forEach(p=>p.remove());
+		activepopups=new Array;
+	});
+	
+	AO_map.on('zoomstart', function(a) {
+		activepopups.forEach(p=>p.remove());
+		activepopups=new Array;
+	});
 	
 	
 	function make_languagegroupstable(markers) {
@@ -1368,7 +1377,6 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 	}
 	
 	
-	var activepopup=new Object;
 	
 	
 	//------------>MAKE THE CALL FOR THE DATA
