@@ -8,7 +8,11 @@
 {% endblock %}
 
 {% block content %}
-
+<style>
+    .overwrite {
+        text-decoration: line-through;
+    }
+</style>
 <div class="trans-container">
     <div id="center-content-inner" class="enslaved-content">
         <center>
@@ -31,6 +35,9 @@
                             <ul>
                                 <li v-for="cn in contrib_data.contributed_names">
                                     [[ cn.name ]]
+                                    <div v-if="cn.notes" style="display: inline; margin-left: 10px;">
+                                        <i class="fa fa-comment" aria-hidden="true" v-bind:title="[[ cn.notes ]]"></i>
+                                    </div>
                                     <div v-if="cn.audio" style="display: inline; margin-left: 10px;">
                                         <i class="fa fa-play" aria-hidden="true" v-bind:data="cn.audio" onclick="audioCommand(this.getAttribute('data'), 'play')"></i>
                                         <i class="fa fa-pause" aria-hidden="true" v-bind:data="cn.pk" onclick="audioCommand(null, 'pause')"></i>
@@ -53,7 +60,13 @@
                                 <em>
                                     {% trans "Previous contributions" %}: [[ contrib_data.prev_language_group_contributions.join(';') ]]
                                 </em>
-                            </div>                            
+                            </div>
+                            <div v-if="contrib_data.notes">
+                                <hr />
+                                <span>
+                                    {% trans "Notes:" %} [[ contrib_data.notes ]]
+                                </span>
+                            </div>
                         </div>
                     </div>
                     <p>TO-DO</p>
@@ -63,7 +76,7 @@
                         <li>✓ Language group</li>
                         <li>✓ Previous contributed names</li>
                         <li>✓ Propagation table: toggle row propagation</li>
-                        <li>Show contributor comments</li>
+                        <li>✓ Show contributor comments</li>
                         <li>Propagation table: editable notes</li>
                         <li>Submission: on accept popup with summary, on reject confirm</li>
                     </ul>
@@ -92,7 +105,6 @@
                         <thead>
                             <tr>
                                 <th>{% trans "Name(s)" %}</th>
-                                <th>{% trans "Modern name" %}</th>
                                 <th>{% trans "Gender" %}</th>
                                 <th>{% trans "Embarkation" %}</th>
                                 <th>{% trans "Propagate Name" %}</th>
@@ -112,6 +124,25 @@
                         </button>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="editNotesModal" tabindex="-1" role="dialog" data-backdrop="static">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">{% trans "Edit Notes for Enslaved" %}</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body" style="height: 300px;">
+                <textarea class="form-control" id="addedNotesInput" style="height: 100%;"></textarea>
+            </div>
+            <div class="modal-footer">
+                <button onclick="updateEnslavedNotes()" type="button" class="btn btn-primary">{% trans "Update" %}</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">{% trans "Cancel" %}</button>
             </div>
         </div>
     </div>
@@ -139,6 +170,17 @@
         } else if (cmd === 'pause' && currentPlay.audio) {
             currentPlay.audio.pause();
         }
+    };
+    let activeNotesEdit = null;
+    const showNotesModal = (src) => {
+        const pk = $(src).data('pk');
+        activeNotesEdit = pk;
+        $("#addedNotesInput").val($("#notes_" + pk).text());
+        $("#editNotesModal").modal('show');
+    };
+    const updateEnslavedNotes = () => {
+        $("#notes_" + activeNotesEdit).text($("#addedNotesInput").val());
+        $("#editNotesModal").modal('hide');
     };
     const fetchGet = async (url) => {
         const res = await fetch(url);
@@ -176,28 +218,35 @@
                         return name;
                     }
                 },
-                { data: 'modern_name' },
                 { data: row => genders[row.gender] },
                 { data: 'embarkation' },
                 {
-                    data: 'pk',
+                    data: row => ({ pk: row.pk, modernName: row.modern_name }),
                     render: function(data, type) {
                         if (type === 'display') {
-                            return `<input type="checkbox" checked="true" value="N_${data}">`;
+                            return `<input type="checkbox" checked="true" value="N${data.pk}"> <span id="cell_N${data.pk}" class="font-weight-light overwrite">${data.modernName}</span>`;
                         }
                         return data;
                     }
-                },
-                {
-                    data: 'pk',
+                }, {
+                    data: row => ({ pk: row.pk, language: row.language_group__name }),
                     render: function(data, type) {
                         if (type === 'display') {
-                            return `<input type="checkbox" checked="true" value="L_${data}">`;
+                            return `<input type="checkbox" checked="true" value="L${data.pk}"> <span id="cell_L${data.pk}" class="font-weight-light overwrite">${data.language}</span>`;
                         }
                         return data;
                     }
-                },
-                { data: 'notes' }
+                }, {
+                    data: row => ({ pk: row.pk, notes: row.notes }),
+                    render: function(data, type) {
+                        if (type === 'display') {
+                            return `<button type="button" onclick="showNotesModal(this)" data-pk="${data.pk}" class="btn btn-primary btn-sm"><i class="fa fa-sticky-note-o" aria-hidden="true"></i>
+                                </button>
+                                <span id="notes_${data.pk}">${data.notes}</span>`;
+                        }
+                        return data;
+                    }
+                }
             ],
             scrollY: '30vh',
             paginate: contrib_data.propagation_candidates.length > 10,
@@ -234,6 +283,14 @@
                 reject: async function() {
                     alert('not implemented');
                 }
+            }
+        });
+        $(":checkbox").change(function() {
+            const target = $("#cell_" + $(this).attr('value'));
+            if (this.checked) {
+                target.addClass("overwrite");
+            } else {
+                target.removeClass("overwrite");
             }
         });
     }
