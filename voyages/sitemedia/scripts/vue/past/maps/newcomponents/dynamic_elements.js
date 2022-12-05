@@ -52,15 +52,15 @@ function make_languagegroupstable(markers) {
 	var cluster_dialects=new Array;
 	
 	var dialect_case=false;
-	dialects.forEach(d=>{if(lg_ids.includes(d.id)){dialect_case=true;cluster_dialects.push(d);displaylimit-=1}});
+	dialects.forEach(d=>{if(lg_ids.includes(d.id)){dialect_case=true;cluster_dialects.push(d);displaylimit-=2}});
 	
 	tablerowdata.slice(0,displaylimit).forEach(r=>{tablehtml+="<tr><td>"+r.lg+"</td><td>"+r.value.toString()+"</td></tr>"});
 	if (displaylimit<tablerowdata.length) {
 		if (dialect_case) {
-			var excluded_other_count={'languages':0,'people':0};
+			var excluded_other_count=new Object;
 			
 			cluster_dialects.forEach(dialect=>{
-			
+				excluded_other_count={'languages':0,'people':0};
 				var excluded_dialect_count={'languages':0,'people':0};
 			
 				tablerowdata.slice(displaylimit,tablerowdata.length-1).forEach(r=>{
