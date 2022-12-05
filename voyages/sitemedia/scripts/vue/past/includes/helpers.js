@@ -1223,7 +1223,33 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 	};
 	
 	
-	
+		//Node color rules:
+	//Priority given to embarkations & disembarkations, and their combination
+	//So my only color "scale" is red<-->blue
+	//Only nodes that have no embark or disembark get colored as yellow (final destination) or green (origin)
+	function nodeColorPicker(nodeclasses) {
+		if ('embarkation' in nodeclasses || 'disembarkation' in nodeclasses) {
+			if ('embarkation' in nodeclasses && 'disembarkation' in nodeclasses) {
+				var embark=nodeclasses.embarkation.count;
+				var disembark=nodeclasses.disembarkation.count;
+				var embarkratio=embark/(embark+disembark)
+				var disembarkratio=disembark/(embark+disembark)
+				var thiscolor=d3.rgb(embarkratio*255,0,disembarkratio*255);
+				return thiscolor
+			} else {
+				if ('embarkation' in nodeclasses) {
+					var thiscolor=d3.rgb(255,0,0);
+				} else if ('disembarkation' in nodeclasses) {
+					var thiscolor=d3.rgb(0,0,255);
+				}
+			}
+		} else if ('post-disembarkation' in nodeclasses) {
+			var thiscolor=d3.rgb(246,193,60);
+		} else if ('origin' in nodeclasses) {
+			var thiscolor=d3.rgb(96,192,171);
+		};
+		return thiscolor
+	}
 	
 	
 	function makeNodePopUp(node_classes,node_title) {
@@ -1249,7 +1275,7 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 					{
 						var marker= L.circleMarker(latlng, {
 							radius: nodesize,
-							fillColor: "#60c0ab",
+							fillColor: nodeColorPicker(feature.properties.node_classes),
 							color: "#000",
 							weight: 1,
 							opacity: 1,
@@ -1257,70 +1283,35 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 						})
 						marker.bindPopup(makeNodePopUp(node_classes,node_title),{'className':'leafletAOPopup'});
 						marker.on('mouseover', function () {
+							displayhiddenroutes(AO_map,[feature]);
 							marker.openPopup();
+							marker.bringToFront();
 						});
 						marker.on('mouseout',function () {
 							marker.closePopup();
+							hiddenrouteslayergroup.clearLayers();
+							hiddenanimationrouteslayergroup.clearLayers();
 						})
 						return marker
 				}
 			},
 		);
+		var l_id=L.stamp(newlayer);
+		var point_id=feature.properties.point_id
+		nodesdict[point_id]['leaflet_id']=l_id;
 		layer_group.addLayer(newlayer);
 	};	
 
 
 
+			
 
 
 
 
-
-
-
-	var activepopups=new Array;
-	
-	function make_clustermarker(markers,size){
-		size_scaled=nodelogvaluescale(size)-2
-		var html = '<div class="cluster_circle"></div>';
-		return html
-	}
-
-	var origins_layer_group = L.markerClusterGroup(	
-		{
-			maxClusterRadius: 120,
-			zoomToBoundsOnClick: false,
-			iconCreateFunction: function (cluster) {
-			var markers = cluster.getAllChildMarkers();
-			var n = 0;
-			markers.forEach(marker=>n+=marker.feature.properties.size);
-			var html = make_clustermarker(markers,n);
-			return L.divIcon({ html: html, iconSize: L.point(nodelogvaluescale(n)*2, nodelogvaluescale(n)*2), className:"transparentmarkerclusterdiv"});
-		}
-	}).on('clustermouseover', function (a) {
-		var clusterchildmarkers=a.layer.getAllChildMarkers();
-		popuphtml=make_languagegroupstable(clusterchildmarkers);
-		//http://jsfiddle.net/3tnjL/59/
-		var pop = new L.popup({
-				'className':'leafletAOPopup',
-				'closeOnClick':false
-			}).
-			setLatLng(a.latlng).
-			setContent(popuphtml);
-		pop.addTo(AO_map);
-		activepopups.push(pop);
-	})
-	.on('clustermouseout', function (a) {
-		activepopups.forEach(p=>p.remove());
-		activepopups=new Array;
-	});
-	
-	AO_map.on('zoomstart', function(a) {
-		activepopups.forEach(p=>p.remove());
-		activepopups=new Array;
-	});
 	
 	
+		
 	function make_languagegroupstable(markers) {
 		
 		var tablehtml="<table class='lgmaptable'><tr><td>Language Group</td><td>Number of people</td></tr>";
@@ -1355,26 +1346,457 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 		
 	}
 
-	origins_layer_group
+	
+	
+
+
+
+
+
+	function legColorPicker(leg_type,alpha=1) {
+		if (leg_type == 'final_destination') {
+			var thiscolor=d3.color("rgba(246,193,60,"+alpha+")");
+		} else if (leg_type == 'origin') {
+			var thiscolor=d3.color("rgba(96,192,171,"+alpha+")");
+		} else {
+			var thiscolor=d3.color("rgba(215,153,250,"+alpha+")");		
+		};
+		return thiscolor;
+	};
+		
+	//Node color rules:
+	//Priority given to embarkations & disembarkations, and their combination
+	//So my only color "scale" is red<-->blue
+	//Only nodes that have no embark or disembark get colored as yellow (final destination) or green (origin)
+	function nodeColorPicker(nodeclasses) {
+		if ('embarkation' in nodeclasses || 'disembarkation' in nodeclasses) {
+			if ('embarkation' in nodeclasses && 'disembarkation' in nodeclasses) {
+				var embark=nodeclasses.embarkation.count;
+				var disembark=nodeclasses.disembarkation.count;
+				var embarkratio=embark/(embark+disembark)
+				var disembarkratio=disembark/(embark+disembark)
+				var thiscolor=d3.rgb(embarkratio*255,0,disembarkratio*255);
+				return thiscolor
+			} else {
+				if ('embarkation' in nodeclasses) {
+					var thiscolor=d3.rgb(255,0,0);
+				} else if ('disembarkation' in nodeclasses) {
+					var thiscolor=d3.rgb(0,0,255);
+				}
+			}
+		} else if ('post-disembarkation' in nodeclasses) {
+			var thiscolor=d3.rgb(246,193,60);
+		} else if ('origin' in nodeclasses) {
+			var thiscolor=d3.rgb(96,192,171);
+		};
+		return thiscolor
+	}
+	
+	//Routes get tooltips. And here is where we make them!
+	  function makeRouteToolTip(r) {
+ 	  	if (r.leg_type=='final_destination') {
+			var routesource=nodesdict[r.source_target[0]]
+			var routetarget=nodesdict[r.source_target[1]]
+ 	  		try {
+				var popuptext = [
+					r.weight,
+					personorpeople(r.weight),
+					"ended up in",
+					routetarget.name,
+					"after landing in",
+					routesource.name
+					].join(" ")
+ 	  		} catch(error) {
+				console.log("BAD SOURCE OR TARGET NODE-->",r);
+				var st=r.source_target;
+				var popuptext=["bad source or target node. source: ",st[0],". target: ",st[1]].join('')
+			}
+ 	  	} else if (r.leg_type=='origin') {
+			var routesource=nodesdict[r.source_target[0]]
+			var routetarget=nodesdict[r.source_target[1]]
+ 	  		try {
+				var popuptext = [
+					r.weight,
+					routesource.name,
+					personorpeople(r.weight),
+					"taken to",
+					routetarget.name
+					].join(" ")
+ 	  		} catch(error) {
+				console.log("BAD SOURCE OR TARGET NODE-->",r);
+				var st=r.source_target;
+				var popuptext=["bad source or target node. source: ",st[0],". target: ",st[1]].join('')
+			}
+ 	  	} else if (r.leg_type=='offramp') {
+			var routetarget=nodesdict[r.source_target[1]]
+			try {
+				var popuptext = [
+					r.weight,
+					personorpeople(r.weight),
+					"transported to",
+					routetarget.name
+					].join(" ")
+			} catch (error) {
+				console.log("BAD TARGET NODE-->",r);
+				var st=r.source_target;
+				var popuptext=["bad target node: ",st[1]].join('')
+			}
+ 	  	} else if (r.leg_type=='onramp') { 	
+			var routesource=nodesdict[r.source_target[0]]
+ 	  		try {
+				var popuptext = [
+					r.weight,
+					personorpeople(r.weight),
+					"taken from",
+					routesource.name
+					].join(" ")
+ 	  		} catch(error) {
+				console.log("BAD SOURCE NODE-->",r);
+				var st=r.source_target;
+				var popuptext=["bad source node: ",st[0]].join('')
+ 	  		}
+ 	  	} else {
+			var popuptext = [r.weight,personorpeople(r.weight),"transported."].join(" ");
+		}
+	  	return popuptext;
+	  };
+	
+	//This function creates a bezier curve
+	//& is used for all curve creation, including animations and interactivity bindings.
+	//note that w 
+	function addRoute(map,route,mainlayergroup,point_id=null,animationlayergroup=null){
+		//parse the geometry, classes, features, and draw a route curve 
+		var commands = [];
+		commands.push("M", route.geometry[0][0]);
+		commands.push("C", route.geometry[1][0], route.geometry[1][1], route.geometry[0][1]);
+// 		var weight=valueScale(route.weight);
+		var distance=0;
+		
+		var timingscalar = 50
+		
+
+				
+		var newroute=L.curve(commands, {
+			color: "#fff0",
+			weight: 1,
+			stroke: true,
+		})
+		.bindTooltip(makeRouteToolTip(route),{'sticky':true})
+		.addTo(mainlayergroup);
+		
+		
+		//then layer on the animation curves
+		//in oder to do which (using basic css) we need to know how long these curves are
+		//because the css animation works on the basis of animation duration (how long it should take to complete a run)
+		//and if what we're animating is the traversal of a small dot along a bezier curve
+		//then we have to make the time apportioned inversely proportional to the length of the curve
+		//tldr: in order that the dots on longer routes and shorter routes move the same speed, the longer routes need animations of longer duration, and vice versa
+		//increase timingscalar to slow this down, decrease it to speed it up
+		var distance=0
+		
+		
+		var interpolation_steps=[0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]
+		var pairs=d3.pairs(newroute.trace(interpolation_steps));
+		function euclideandistance(p1,p2) {
+			xyone=AO_map.latLngToContainerPoint(p1);
+			xytwo=AO_map.latLngToContainerPoint(p2);
+			var ed=Math.sqrt((xyone.x-xytwo.x)**2+(xyone.y-xytwo.y)**2)
+			return ed
+		}
+		if (pairs.length>1){
+			pairs.forEach(sp=>distance+=(euclideandistance(sp[0],sp[1])))
+		}
+		
+// 		newroute.removeFrom(mainlayergroup);
+		
+		var duration=distance*timingscalar;
+		
+		if (animationlayergroup && animationmode){
+			
+			var standard_interval=10
+			
+			var newanimationroute=L.curve(commands, {
+				color: "#6c757dc9",
+				weight: "1",
+				dashArray:"1 " + (standard_interval-1).toString(),
+				animate: {
+					"duration":duration,
+					"iterations":Infinity,
+					"direction":'normal'
+				}
+			});
+		newanimationroute.addTo(animationlayergroup);
+		// the distance traversed has to be measured in *PIXELS* or else the speed increases with zoom level
+			
+	// 		console.log(distance)
+
+
+	// 			newanimationroute.animate.duration=distance*timingscalar;
+			
+	// 			var distance=newanimationroute._path.getTotalLength();
+			
+		};
+		
+		//this is some interactivity micro-tuning/crafting
+		//when you roll over a node with hidden routes (i.e., inland to origination point or final destination)
+		//you want the node you're rolling over to be on top of the routes that are drawn emanating from it -- otherwise, those routes' interactivities make it very likely you'll get rid of your node popup immediately by having these appear directly under your mouse and on top of the node
+		//however, we want *only* that node to come to the front, because you do want to be able to roll your mouse off that node and immediately onto one of the emanating routes, potentially to follow it out to the other, connected nodes -- which, when you hit them, you want to be able to roll off the route onto the node to bring that node to the front and draw the routes emanating from *it* etc. etc.
+		if (['origin','final_destination'].includes(route.leg_type)) {
+			var hovernode_leaflet_id=nodesdict[point_id].leaflet_id;
+			var hovernode_layer = map._layers[hovernode_leaflet_id];
+			if (hovernode_layer) {hovernode_layer.bringToFront()};
+// 			newroute.on('mouseover', function () {	
+// 				if (currently_open_popup_layer.closePopup) {
+// 					currently_open_popup_layer.closePopup();
+// 				}
+// 			});
+		//and this bad boy makes sure that those node popups go away once you hit one of the other non-hidden routes
+		} else if (['onramp','offramp','oceanic_leg'].includes(route.leg_type)) {
+			newroute.on('mouseover', function () {	
+				hiddenrouteslayergroup.clearLayers();
+				hiddenanimationrouteslayergroup.clearLayers();
+				if (nodesarehidden) {
+					refreshhiddennodes();
+					nodesarehidden=false;
+				}
+// 				if (currently_open_popup_layer.closePopup) {
+// 					currently_open_popup_layer.closePopup();
+// 				}
+			});
+		};
+	  };
+	  
+	//Main routes are drawn when the map is refreshed. These are the embarkation-->disembarkation routes
+	//Which include connections from the embarkation point into the oceanic network, and from that back out to the disembarkation port
+	//We are for now calling those final-mile connections "onramps" and "offramps"
+	function drawMainRoutes(map, routes) {
+		var mapRouteValueMin = d3.min(routes, function (r) {
+			return r.weight;
+		});
+		var mapRouteValueMax = d3.max(routes, function (r) {
+			return r.weight;
+		});
+	  valueScale.domain([mapRouteValueMin, mapRouteValueMax]).range([3, 13]);
+	  
+	  routes.map((route) => {
+// 	  	if (route.visible){
+// // 			newroute=addRoute(map,route,mainrouteslayergroup,null,mainanimationrouteslayergroup);
+// 		} else {
+// // 			console.log(route);
+			hiddenroutes[route.id]=route;
+// 		}
+	})
+	};
+
+
+
+
+
+
+
+
+
+
+
+
+	function displayhiddenroutes(map,nodes) {
+		hiddenrouteslayergroup.clearLayers();
+		hiddenanimationrouteslayergroup.clearLayers();
+
+// 		
+		nodes.forEach(node=>{
+	// 		console.log(node.properties)
+			var hidden_edge_ids=node.properties.hidden_edges;
+		
+			var attached_node_ids = new Array;
+			hidden_edge_ids.forEach(edge_id => {
+				var route=hiddenroutes[edge_id];
+				if (route) {
+					addRoute(map,route,hiddenrouteslayergroup,node.properties.point_id,hiddenanimationrouteslayergroup);
+					route.source_target.forEach(p_id=> {if (!attached_node_ids.includes(p_id)) {attached_node_ids.push(p_id)}})
+				}
+			})
+		})
+// 		remove_unattached_nodes_and_restore_attached_hidden_nodes_pfffffffff(attached_node_ids,node);
+		
+	};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
+	
+	
+	
+	
+	
+	
+	
+	function make_clustermarker(markers,size){
+		size_scaled=nodelogvaluescale(size)-2
+		var html = '<div class="cluster_circle"></div>';
+		return html
+	}
+
+	var origins_layer_group = L.markerClusterGroup(	
+		{
+			maxClusterRadius: 120,
+			zoomToBoundsOnClick: false,
+			iconCreateFunction: function (cluster) {
+			var markers = cluster.getAllChildMarkers();
+			var n = 0;
+			markers.forEach(marker=>n+=marker.feature.properties.size);
+			var html = make_clustermarker(markers,n);
+			return L.divIcon({ html: html, iconSize: L.point(nodelogvaluescale(n)*2, nodelogvaluescale(n)*2), className:"transparentmarkerclusterdiv"});
+		}
+	}).on('clustermouseover', function (a) {
+		var clusterchildmarkers=a.layer.getAllChildMarkers();
+		popuphtml=make_languagegroupstable(clusterchildmarkers);
+		//http://jsfiddle.net/3tnjL/59/
+		var pop = new L.popup({
+				'className':'leafletAOPopup',
+				'closeOnClick':false,
+				showCoverageOnHover: false,
+			}).
+			setLatLng(a.latlng).
+			setContent(popuphtml);
+		pop.addTo(AO_map);
+		activepopups.push(pop);
+
+		var child_nodes=new Array;
+		Object.keys(clusterchildmarkers).forEach(marker=>{
+			if (clusterchildmarkers[marker])	{	
+				if (clusterchildmarkers[marker].feature){
+					child_nodes.push(clusterchildmarkers[marker].feature)
+				}
+			}
+		});
+		
+		
+		displayhiddenroutes(AO_map,child_nodes)
+
+
+	})
+	.on('clustermouseout', function (a) {
+		activepopups.forEach(p=>p.remove());
+		activepopups=new Array;
+		hiddenrouteslayergroup.clearLayers();
+		hiddenanimationrouteslayergroup.clearLayers();
+	});
+	
+	AO_map.on('zoomstart', function(a) {
+		activepopups.forEach(p=>p.remove());
+		activepopups=new Array;
+		hiddenrouteslayergroup.clearLayers();
+		hiddenanimationrouteslayergroup.clearLayers();
+	});
+	
+	var ports_layer_group = L.layerGroup();
+	ports_layer_group.addTo(AO_map);
 	
 	origins_layer_group.addTo(AO_map);
 	
+	var activepopups=new Array;
 	
+	var hiddenrouteslayergroup = L.layerGroup();
+	hiddenrouteslayergroup.addTo(AO_map);
+
+	var hiddenroutes = new Object();
+	var valueScale = d3.scaleLog();
+
+	var hiddenanimationrouteslayergroup = L.layerGroup();
+	hiddenanimationrouteslayergroup.addTo(AO_map);
+
+
+	function makeRoutesDict(network) {
+		var features=network.points.features;
+		features.forEach(feature => nodesdict[feature.properties.point_id]=feature.properties);
+	}
+	
+	
+		var animationmode = true;
+	//B3. The nodesdict object allows us to look up nodes by id
+	var nodesdict = new Object;
+
+
+
+
+
+
+
+
+
+
 
 	function initial_map_builder(resp) {
 		['place'].forEach(networkname=>{
 			var network=resp[networkname];
 			var featurecollection=network.points;
+			makeRoutesDict(network);
+			drawMainRoutes(AO_map,network.routes);
 			nodelogvaluescale_fn(featurecollection);
 			featurecollection.features.forEach(function (feature) {
 				var node_classes=feature.properties.node_classes;			
 				if (Object.keys(node_classes)[0]=='origin') {
 					var nodesize=nodelogvaluescale(feature.properties.size);
 					add_point_to_layergroup(feature,origins_layer_group,nodesize,networkname);
+				} else if ('embarkation' in node_classes || 'disembarkation' in node_classes) {
+				
+					var nodesize=5;
+					add_point_to_layergroup(feature,ports_layer_group,nodesize,networkname)
+				
 				}
+				
 			})
 		});		
 	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	
 	
