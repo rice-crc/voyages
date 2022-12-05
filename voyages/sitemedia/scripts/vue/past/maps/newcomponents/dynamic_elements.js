@@ -49,37 +49,42 @@ function make_languagegroupstable(markers) {
 		{'id':1260677,'name':'Igbo'}
 	];
 	
-	var dialect=new Object;
+	var cluster_dialects=new Array;
 	
-	var dialect_case=false;	
-	dialects.forEach(d=>{if(lg_ids.includes(d.id)){dialect_case=true;dialect=d;displaylimit-=1}});
+	var dialect_case=false;
+	dialects.forEach(d=>{if(lg_ids.includes(d.id)){dialect_case=true;cluster_dialects.push(d);displaylimit-=1}});
 	
 	tablerowdata.slice(0,displaylimit).forEach(r=>{tablehtml+="<tr><td>"+r.lg+"</td><td>"+r.value.toString()+"</td></tr>"});
 	if (displaylimit<tablerowdata.length) {
 		if (dialect_case) {
-			var excluded_dialect_count={'languages':0,'people':0};
 			var excluded_other_count={'languages':0,'people':0};
-			tablerowdata.slice(displaylimit,tablerowdata.length-1).forEach(r=>{
-				if (r.lg.includes(dialect.name)) {
-					excluded_dialect_count['languages']+=1
-					excluded_dialect_count['people']+=r.value
-				} else {
-					excluded_other_count['languages']+=1
-					excluded_other_count['people']+=r.value
-				}
+			
+			cluster_dialects.forEach(dialect=>{
+			
+				var excluded_dialect_count={'languages':0,'people':0};
+			
+				tablerowdata.slice(displaylimit,tablerowdata.length-1).forEach(r=>{
+					if (r.lg.includes(dialect.name)) {
+						excluded_dialect_count['languages']+=1
+						excluded_dialect_count['people']+=r.value
+					} else {
+						excluded_other_count['languages']+=1
+						excluded_other_count['people']+=r.value
+					}
+				})
+			
+				tablehtml += "<tr><td>"+excluded_dialect_count.languages.toString()+" more "+dialect.name+" dialects</td><td>"+excluded_dialect_count.people.toString()+"</td></tr>"	
 			})
 			
-			tablehtml += "<tr><td>"+excluded_dialect_count.languages.toString()+" more "+dialect.name+" dialects</td><td>"+excluded_dialect_count.people.toString()+"</td></tr>"	
-			
 			if (excluded_other_count.languages>0) {
-				tablehtml += "<tr><td>"+excluded_other_count.languages.toString()+" more non-" + dialect.name + " language "+pluralorsingular('group',excluded_other_count.languages)+"</td><td>"+excluded_other_count.people.toString()+"</td></tr>"	
+				tablehtml += "<tr><td>"+excluded_other_count.languages.toString()+" other language "+pluralorsingular('group',excluded_other_count.languages)+"</td><td>"+excluded_other_count.people.toString()+"</td></tr>"	
 			}
 			
 		} else {
 			var excluded_lg_count=tablerowdata.length-displaylimit;
 			var excluded_people_count=0
 			tablerowdata.slice(displaylimit,tablerowdata.length-1).forEach(r=>{excluded_people_count+=r.value})
-			tablehtml += "<tr><td>"+excluded_lg_count.toString()+" more language groups</td><td>"+excluded_people_count.toString()+"</td></tr>"	
+			tablehtml += "<tr><td>"+excluded_lg_count.toString()+" other language groups</td><td>"+excluded_people_count.toString()+"</td></tr>"	
 		}
 	}
 	
