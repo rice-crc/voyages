@@ -1,23 +1,23 @@
 # remaining work on maps ui
 
-## 1. fix oddities with the search ui
+~~## 1. fix oddities with the search ui~~
 
-* there are certain ports that aren't rendering properly when we search
-	* rio pongo when region of embarkation is senegambia & offshore atlantic --> why is it even appearing in the results?
+~~* there are certain ports that aren't rendering properly when we search~~
+~~	* rio pongo when region of embarkation is senegambia & offshore atlantic --> why is it even appearing in the results?~~
 
-I am pretty sure this is an issue with the search ui, not with my use of it
+~~I am pretty sure this is an issue with the search ui, not with my use of it~~
 
 ## 2. handle mapping for geographically distributed languages
 
 need stable m2m relations added to the language_group --> moderncountry
 
-* ~~waiting on philip & david for these~~
+~~* waiting on philip & david for these~~
 * waiting on domingos for proper integration of language_group into the search bar
 
-## 3. handle mapping for overlapping nodes
+~~## 3. handle mapping for overlapping nodes~~
 
-* some language groups & even ports have the exact same lat/long, out to 7 decimal places
-* I could make marker clustering to differentiate these (and may have to for #2 above...) but I think at base this is a data problem. if we're mapping with that kind of precision, then why do 5-ish Yoruba language groups have the exact same location?
+~~* some language groups & even ports have the exact same lat/long, out to 7 decimal places~~
+~~* I could make marker clustering to differentiate these (and may have to for #2 above...) but I think at base this is a data problem. if we're mapping with that kind of precision, then why do 5-ish Yoruba language groups have the exact same location?~~
 
 ## 4. translation
 
@@ -33,3 +33,16 @@ need stable m2m relations added to the language_group --> moderncountry
 	* we're now showing routes to origins only when the connected nodes are moused over
 	* but i could see it cleaning the interface up even further if that mouseover event hid the non-relevant origin nodes?
 	* downside is that i'm not sure what subsequent user event would trigger the reappearance of those hidden nodes... we're getting close to functionality that is better handled as a query/search
+
+## 6. manual data changes
+
+* ports
+	* 60699 to 7.9840736,4.5504317
+	* 60502 to ???
+	* 60917 to ???
+	* 60220 to ???
+	* 60501 looks to be way too far inland
+* language_groups
+	* 160219 to -8.0391000,5.1441000
+	* 360605 to ???
+	

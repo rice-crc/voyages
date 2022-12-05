@@ -1122,7 +1122,7 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 	var featurelayers = {
 		"Rivers":mappingSpecialistsRivers,
 		"Modern Countries":mappingSpecialistsCountries,
-// 		"Animation": mainanimationrouteslayergroup,
+		"Animation": mainanimationrouteslayergroup,
 	}
 
 //C. Layer Controls

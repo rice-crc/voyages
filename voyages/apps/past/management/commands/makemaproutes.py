@@ -511,9 +511,10 @@ class Command(BaseCommand):
 						e=G.edges[e_pair]
 						e_tag=e['tag']
 						e_id=e['id']
-# 						if not edgetagvisibilitydict[e_tag]:
-# 							node_hidden_edges.append(e_id)
-						node_hidden_edges.append(e_id)
+# 						print(e_id,e_tag)
+						if not edgetagvisibilitydict[e_tag]:
+# 							print('hidden')
+							node_hidden_edges.append(e_id)
 				
 					for e_pair in node_out_edges:
 						e=G.edges[e_pair]
