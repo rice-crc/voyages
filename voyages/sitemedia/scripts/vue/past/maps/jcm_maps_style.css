@@ -89,7 +89,7 @@ background-color: transparent;
 }
 
 .leafletAOPopup .leaflet-popup-content-wrapper {
-    background: rgba(255,255,255,0.7);/*     padding: 0px; */
+    background: rgba(255,255,255,0.9);/*     padding: 0px; */
     width: auto;
 }
 

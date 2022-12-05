@@ -1174,7 +1174,7 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 	var animationmode = true;
 	var nodesdict = new Object;
 	var regionorplace = "region";
-
+	var activepopups=new Array;
 
 // III. USEFUL FORMATTING FUNCTIONS
 
@@ -1187,8 +1187,6 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 		return result
 	};
 
-	
-	
 // IV. LAYER GROUP FACTORIES
 
 	// A. FACTORIES
@@ -1508,7 +1506,7 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 	
 
 	
-	var activepopups=new Array;
+	
 	
 // 	var hiddenrouteslayergroup = L.layerGroup();
 // 	hiddenrouteslayergroup.addTo(AO_map);
@@ -1566,19 +1564,7 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 	
 	
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
 	//------------>MAKE THE CALL FOR THE DATA
 	$.ajax({
 		type: "POST",
