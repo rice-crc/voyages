@@ -430,7 +430,8 @@ def search_enslaved(request):
                     'leg_type':leg_data[l][2],
                     'weight':leg_weights[l],
                     'id':l,
-                    'visible':edge_ids_visibility[l]
+#                     'visible':edge_ids_visibility[l]
+                    'visible':True
                 } for l in leg_data
             ]
         

@@ -1083,38 +1083,58 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
   } else if (currentTab == "maps") {
 
 
-// MAP AND DOM GLOBALS
+// I. MAP AND DOM GLOBALS
 
-//A. Search & DOM
+	//A. Search & DOM
 	var currentSearchObj = searchAll(filter, filterData);
 	$("#map_container").html('<div id="AO_map" style="width:100%; height:100%; min-height:400px"></div>');
 
-//B. Base Tile Layers
-	var mappingSpecialists=L.tileLayer(
-	  'https://api.mapbox.com/styles/v1/jcm10/cl5v6xvhf001b14o4tdjxm8vh/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoiamNtMTAiLCJhIjoiY2wyOTcyNjJsMGY5dTNwbjdscnljcGd0byJ9.kZvEfo7ywl2yLbztc_SSjw',
-	  {attribution: '<a href="https://www.mappingspecialists.com/" target="blank">Mapping Specialists, Ltd.</a>'});
-
-	var basemap = {"Mapping Specialists":mappingSpecialists}
-	
 	var AO_map = L.map('AO_map', {
 		fullscreenControl: false,
 		center:[0,0],
 		zoom:3.2,
-		minZoom:3.2,
-		layers:	[mappingSpecialists],
-	});	
+		minZoom:3.2
+	}).on('zoomend', function() {
+		var currentzoom=AO_map.getZoom()
+		if (currentzoom>4){
+			regionorplace="place";
+			regionorplace="region";
+			ports_origins_layer_group.addTo(AO_map);
+			ports_layer_group.addTo(AO_map);
+			regions_origins_layer_group.removeFrom(AO_map);
+			regions_layer_group.removeFrom(AO_map);
+		} else {
+			regions_origins_layer_group.addTo(AO_map);
+			regions_layer_group.addTo(AO_map);
+			ports_origins_layer_group.removeFrom(AO_map);
+			ports_layer_group.removeFrom(AO_map);
+		}
+	}).on('zoomstart', function(a) {
+		activepopups.forEach(p=>p.remove());
+		activepopups=new Array;
+// 		hiddenrouteslayergroup.clearLayers();
+// 		hiddenanimationrouteslayergroup.clearLayers();
+	});
 	
-	maximizeMapHeight();
-	AO_map.invalidateSize();
-	var default_minmax_group = new L.featureGroup([
-			L.marker([15,-23]),
-			L.marker([-10,24])
-		]);
-	AO_map.fitBounds(default_minmax_group.getBounds());
-	maximizeMapHeight()
+	window.onresize = (event) => {maximizeMapHeight()};
 	
-	var nodelogvaluescale=new Object;
+	function maximizeMapHeight() {
+		var maxMapHeight=window.innerHeight-221; //ffs
+		$('#AO_map')[0].style['min-height']=maxMapHeight.toString()+'px';
+	}
 	
+	//B. Tile Layers
+	var mappingSpecialists=L.tileLayer(
+	  'https://api.mapbox.com/styles/v1/jcm10/cl5v6xvhf001b14o4tdjxm8vh/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoiamNtMTAiLCJhIjoiY2wyOTcyNjJsMGY5dTNwbjdscnljcGd0byJ9.kZvEfo7ywl2yLbztc_SSjw',
+	  {attribution: '<a href="https://www.mappingspecialists.com/" target="blank">Mapping Specialists, Ltd.</a>'});
+	mappingSpecialists.addTo(AO_map);
+	
+	var origin_nodelogvaluescale=new Object;
+	var embark_disembark_nodelogvaluescale=new Object;
+	
+	var hiddenanimationrouteslayergroup = L.layerGroup();
+	hiddenanimationrouteslayergroup.addTo(AO_map);
+
 	var mappingSpecialistsRivers=L.tileLayer(
 	  'https://api.mapbox.com/styles/v1/jcm10/cl98xvv9r001z14mm17w970no/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoiamNtMTAiLCJhIjoiY2wyOTcyNjJsMGY5dTNwbjdscnljcGd0byJ9.kZvEfo7ywl2yLbztc_SSjw').addTo(AO_map);
 	var mappingSpecialistsCountries=L.tileLayer(
@@ -1122,18 +1142,41 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 	var featurelayers = {
 		"Rivers":mappingSpecialistsRivers,
 		"Modern Countries":mappingSpecialistsCountries,
-		"Animation": mainanimationrouteslayergroup,
+		"Animation": hiddenanimationrouteslayergroup,
 	}
+	add_control_layers_to_map(featurelayers,AO_map);
+	
+	//C. FEATURE LAYERS
+	var ports_origins_layer_group = make_origins_layer_groups();
+	ports_origins_layer_group.addTo(AO_map);
 
-//C. Layer Controls
-	var layerControl = L.control.layers(null,featurelayers).addTo(AO_map);
-	L.control.scale({ position: "bottomright" }).addTo(AO_map);
-	AO_map.invalidateSize();
+	var regions_origins_layer_group = make_origins_layer_groups();
+	regions_origins_layer_group.addTo(AO_map);
+
+
+	var ports_layer_group = L.layerGroup();
+	ports_layer_group.addTo(AO_map);
+	
+	var regions_layer_group = L.layerGroup();
+	regions_layer_group.addTo(AO_map);
+	
+	// Initializations for the above
+
 	maximizeMapHeight();
-	window.onresize = (event) => {maximizeMapHeight()};
+	AO_map.invalidateSize();
+	AO_map.fitBounds(new L.featureGroup([
+			L.marker([15,-23]),
+			L.marker([-10,24])
+		]).getBounds());
+
+// II.  STATE GLOBALS
+
+	var animationmode = true;
+	var nodesdict = new Object;
+	var regionorplace = "region";
 
 
-
+// III. USEFUL FORMATTING FUNCTIONS
 
 	function personorpeople(count){
 		if (count===1) {
@@ -1144,127 +1187,132 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 		return result
 	};
 
-	// MORE OR LESS STABLE MAP ELEMENTS
-	// UPPER-LEFT LEGEND/LINK SHOWING THE TOTAL NUMBER OF PEOPLE IN THE SEARCH RESULT
-	// borrowed from https://codepen.io/haakseth/pen/KQbjdO
-	function drawUpdateCount(map,results_count) {
-		var results_count_div = L.control({ position: "topleft" });
-		results_count_div.onAdd = function(map) {
-			var div = L.DomUtil.create("div", "legend");
-			div.innerHTML += '<p class="legendp"><a href="#results">'+results_count.toString()+' '+personorpeople(results_count)+'.<br/>← Read their names</a></p>';
-			return div
-		};
-		results_count_div.addTo(map);
-	};
-	// LOWER LEFT LEGEND SHOWING THE COLOR CODES FOR THE NODES
-	function drawLegend(map) {
-		var legend_div = L.control({ position: "bottomleft" });
-		legend_div.onAdd = function(map) {
-			var div = L.DomUtil.create("div", "legend");
-			div.innerHTML= '<table class=legendtable>\
-				<tr>\
-					<td><div class="circle" style="background-color:rgb(167,224,169);"></div><td>\
-					<td>' + gettext('Origins') + '\
-					<span id="origins_map_key_pill" data-toggle="tooltip" class="badge badge-pill badge-secondary tooltip-pointer" title="Peoples\' origins are imputed based on their recorded names."> IMP </span>\
-					</td>\
-				</tr>\
-				<tr>\
-					<td><div class="circle" style="background-color:rgb(255,0,0);"></div><td>\
-					<td>'+gettext('Embarkations')+'</td>\
-				</tr>\
-				<tr>\
-					<td><div class="circle" style="background-color:rgb(163,0,255);"></div><td>\
-					<td>Embark & Disembark</td>\
-				</tr>\
-				<tr>\
-					<td><div class="circle" style="background-color:rgb(0,0,255);"></div><td>\
-					<td>' + gettext('Disembarkations') + '</td>\
-				</tr>\
-				<tr>\
-					<td><div class="circle" style="background-color:rgb(246,193,60);"></div><td>\
-					<td>'+gettext('Post-Disembark Locations')+'</td>\
-				</tr>\
-				</table>\
-				'
-			return div
-		};
-		legend_div.addTo(map);
-		$(function () {
-			$('[data-toggle="tooltip"]').tooltip()
-		})
-	};
-
-
-
-
-
-
-//D. Primary Layer Groups
-
-	
-	function formatNodePopUpListItem(k,v) {
-		var nodeclass_labels={
-			'embarkation':'embarked',
-			'disembarkation':'disembarked',
-			'post-disembarkation':'ended up',
-			'origin':'originated'
-		};
-		
-		var label = nodeclass_labels[k];
-		var count = v.count;
-		var key = v.key;
-		var formattedstring=[count.toString(),personorpeople(count),label].join(' ')
-		if (k!='origin') {
-			var text='<a href="#" onclick="linkfilter(' + key.toString() + ',\'' + k + '\'); return false;">' + formattedstring + '</a>'
-		} else {
-			var text = false
-		};
-		return text;
-	};
 	
 	
-		//Node color rules:
-	//Priority given to embarkations & disembarkations, and their combination
-	//So my only color "scale" is red<-->blue
-	//Only nodes that have no embark or disembark get colored as yellow (final destination) or green (origin)
-	function nodeColorPicker(nodeclasses) {
-		if ('embarkation' in nodeclasses || 'disembarkation' in nodeclasses) {
-			if ('embarkation' in nodeclasses && 'disembarkation' in nodeclasses) {
-				var embark=nodeclasses.embarkation.count;
-				var disembark=nodeclasses.disembarkation.count;
-				var embarkratio=embark/(embark+disembark)
-				var disembarkratio=disembark/(embark+disembark)
-				var thiscolor=d3.rgb(embarkratio*255,0,disembarkratio*255);
-				return thiscolor
-			} else {
-				if ('embarkation' in nodeclasses) {
-					var thiscolor=d3.rgb(255,0,0);
-				} else if ('disembarkation' in nodeclasses) {
-					var thiscolor=d3.rgb(0,0,255);
-				}
+// IV. LAYER GROUP FACTORIES
+
+	// A. FACTORIES
+
+		//ROUTE TOOLTIPS
+	  function makeRouteToolTip(r) {
+	  return "<p>not using nodesdict...</p>"
+// 	  
+//  	  	if (r.leg_type=='final_destination') {
+// 			var routesource=nodesdict[r.source_target[0]]
+// 			var routetarget=nodesdict[r.source_target[1]]
+//  	  		try {
+// 				var popuptext = [
+// 					r.weight,
+// 					personorpeople(r.weight),
+// 					"ended up in",
+// 					routetarget.name,
+// 					"after landing in",
+// 					routesource.name
+// 					].join(" ")
+//  	  		} catch(error) {
+// 				console.log("BAD SOURCE OR TARGET NODE-->",r);
+// 				var st=r.source_target;
+// 				var popuptext=["bad source or target node. source: ",st[0],". target: ",st[1]].join('')
+// 			}
+//  	  	} else if (r.leg_type=='origin') {
+// 			var routesource=nodesdict[r.source_target[0]]
+// 			var routetarget=nodesdict[r.source_target[1]]
+//  	  		try {
+// 				var popuptext = [
+// 					r.weight,
+// 					routesource.name,
+// 					personorpeople(r.weight),
+// 					"taken to",
+// 					routetarget.name
+// 					].join(" ")
+//  	  		} catch(error) {
+// 				console.log("BAD SOURCE OR TARGET NODE-->",r);
+// 				var st=r.source_target;
+// 				var popuptext=["bad source or target node. source: ",st[0],". target: ",st[1]].join('')
+// 			}
+//  	  	} else if (r.leg_type=='offramp') {
+// 			var routetarget=nodesdict[r.source_target[1]]
+// 			try {
+// 				var popuptext = [
+// 					r.weight,
+// 					personorpeople(r.weight),
+// 					"transported to",
+// 					routetarget.name
+// 					].join(" ")
+// 			} catch (error) {
+// 				console.log("BAD TARGET NODE-->",r);
+// 				var st=r.source_target;
+// 				var popuptext=["bad target node: ",st[1]].join('')
+// 			}
+//  	  	} else if (r.leg_type=='onramp') { 	
+// 			var routesource=nodesdict[r.source_target[0]]
+//  	  		try {
+// 				var popuptext = [
+// 					r.weight,
+// 					personorpeople(r.weight),
+// 					"taken from",
+// 					routesource.name
+// 					].join(" ")
+//  	  		} catch(error) {
+// 				console.log("BAD SOURCE NODE-->",r);
+// 				var st=r.source_target;
+// 				var popuptext=["bad source node: ",st[0]].join('')
+//  	  		}
+//  	  	} else {
+// 			var popuptext = [r.weight,personorpeople(r.weight),"transported."].join(" ");
+// 		}
+// 	  	return popuptext;
+	  };
+	
+		//WE USE THIS TO MAKE OUR MARKER CLUSTER LAYER GROUPS
+	function make_origins_layer_groups () {
+		var layergroup = L.markerClusterGroup(	
+			{
+				maxClusterRadius: 120,
+				zoomToBoundsOnClick: false,
+				iconCreateFunction: function (cluster) {
+				var markers = cluster.getAllChildMarkers();
+				var n = 0;
+				markers.forEach(marker=>n+=marker.feature.properties.size);
+				return L.divIcon({ html: '<div class="cluster_circle"></div>', iconSize: L.point(origin_nodelogvaluescale(n)*2, origin_nodelogvaluescale(n)*2), className:"transparentmarkerclusterdiv"});
 			}
-		} else if ('post-disembarkation' in nodeclasses) {
-			var thiscolor=d3.rgb(246,193,60);
-		} else if ('origin' in nodeclasses) {
-			var thiscolor=d3.rgb(96,192,171);
-		};
-		return thiscolor
+		}).on('clustermouseover', function (a) {
+			var clusterchildmarkers=a.layer.getAllChildMarkers();
+			popuphtml=make_languagegroupstable(clusterchildmarkers);
+			//http://jsfiddle.net/3tnjL/59/
+			var pop = new L.popup({
+					'className':'leafletAOPopup',
+					'closeOnClick':false,
+					showCoverageOnHover: false,
+				}).
+				setLatLng(a.latlng).
+				setContent(popuphtml);
+			pop.addTo(AO_map);
+			activepopups.push(pop);
+
+			var child_nodes=new Array;
+			Object.keys(clusterchildmarkers).forEach(marker=>{
+				if (clusterchildmarkers[marker])	{	
+					if (clusterchildmarkers[marker].feature){
+						child_nodes.push(clusterchildmarkers[marker].feature)
+					}
+				}
+			});
+	// 		displayhiddenroutes(AO_map,child_nodes)
+		})
+		.on('clustermouseout', function (a) {
+			activepopups.forEach(p=>p.remove());
+			activepopups=new Array;
+	// 		hiddenrouteslayergroup.clearLayers();
+	// 		hiddenanimationrouteslayergroup.clearLayers();
+		});
+		
+		return layergroup
 	}
 	
+	// B. ADDTO FUNCTIONS	
 	
-	function makeNodePopUp(node_classes,node_title) {
-		var popupsubheads=[];
-		//a node can have multiple classes (mostly this is for sierra leone)
-		Object.entries(node_classes).forEach(([k,v]) => popupsubheads.push(formatNodePopUpListItem (k,v)));
-		if (!popupsubheads.includes(false)){
-			var popupcontent=popupsubheads.join(' and ') + " in " + node_title;
-		} else {
-			var count=node_classes['origin']['count'];
-			var popupcontent=[count,personorpeople(count),"with",node_title,"origins."].join(" ")
-		}
-		return(popupcontent);
-	};
-	
+		// GEOJSON POINTS
 	function add_point_to_layergroup(feature,layer_group,nodesize,networkname) {
 		var point_id=feature.properties.point_id;
 		var node_classes=feature.properties.node_classes;
@@ -1283,187 +1331,29 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 						})
 						marker.bindPopup(makeNodePopUp(node_classes,node_title),{'className':'leafletAOPopup'});
 						marker.on('mouseover', function () {
-							displayhiddenroutes(AO_map,[feature]);
+// 							displayhiddenroutes(AO_map,[feature]);
 							marker.openPopup();
 							marker.bringToFront();
 						});
 						marker.on('mouseout',function () {
 							marker.closePopup();
-							hiddenrouteslayergroup.clearLayers();
-							hiddenanimationrouteslayergroup.clearLayers();
+// 							hiddenrouteslayergroup.clearLayers();
+// 							hiddenanimationrouteslayergroup.clearLayers();
 						})
 						return marker
 				}
 			},
 		);
-		var l_id=L.stamp(newlayer);
+		
+// 		var l_id=L.stamp(newlayer);
 		var point_id=feature.properties.point_id
-		nodesdict[point_id]['leaflet_id']=l_id;
+		
+// 		nodesdict[point_id]['leaflet_id']=l_id;
 		layer_group.addLayer(newlayer);
+		nodesdict[point_id]=newlayer
 	};	
-
-
-
-			
-
-
-
-
 	
-	
-		
-	function make_languagegroupstable(markers) {
-		
-		var tablehtml="<table class='lgmaptable'><tr><td>Language Group</td><td>Number of people</td></tr>";
-		
-		//markerclusters contain lots of different kinds of "markers" -- to get at our geojson ones, we have to filter
-		//there's likely a smarter way to do this
-		
-		var tablerowdata=new Array;
-		Object.keys(markers).forEach(marker=>{
-			if (markers[marker])	{	
-				if (markers[marker].feature){
-					tablerowdata.push({"lg":markers[marker].feature.properties.name,"value":markers[marker].feature.properties.size})
-				}
-			}
-		})
-		tablerowdata.sort((a,b)=>a.value-b.value);
-		tablerowdata.reverse()
-		
-		displaylimit=5;
-		
-		tablerowdata.slice(0,displaylimit).forEach(r=>{tablehtml+="<tr><td>"+r.lg+"</td><td>"+r.value.toString()+"</td></tr>"});
-		if (displaylimit<tablerowdata.length) {
-			var excluded_lg_count=tablerowdata.length-displaylimit;
-			var excluded_people_count=0
-			tablerowdata.slice(displaylimit,tablerowdata.length-1).forEach(r=>{excluded_people_count+=r.value})
-			tablehtml += "<tr><td>"+excluded_lg_count.toString()+" more language groups</td><td>"+excluded_people_count.toString()+"</td></tr>"	
-		}
-		
-		tablehtml+="</table>"
-		
-		return tablehtml
-		
-	}
-
-	
-	
-
-
-
-
-
-	function legColorPicker(leg_type,alpha=1) {
-		if (leg_type == 'final_destination') {
-			var thiscolor=d3.color("rgba(246,193,60,"+alpha+")");
-		} else if (leg_type == 'origin') {
-			var thiscolor=d3.color("rgba(96,192,171,"+alpha+")");
-		} else {
-			var thiscolor=d3.color("rgba(215,153,250,"+alpha+")");		
-		};
-		return thiscolor;
-	};
-		
-	//Node color rules:
-	//Priority given to embarkations & disembarkations, and their combination
-	//So my only color "scale" is red<-->blue
-	//Only nodes that have no embark or disembark get colored as yellow (final destination) or green (origin)
-	function nodeColorPicker(nodeclasses) {
-		if ('embarkation' in nodeclasses || 'disembarkation' in nodeclasses) {
-			if ('embarkation' in nodeclasses && 'disembarkation' in nodeclasses) {
-				var embark=nodeclasses.embarkation.count;
-				var disembark=nodeclasses.disembarkation.count;
-				var embarkratio=embark/(embark+disembark)
-				var disembarkratio=disembark/(embark+disembark)
-				var thiscolor=d3.rgb(embarkratio*255,0,disembarkratio*255);
-				return thiscolor
-			} else {
-				if ('embarkation' in nodeclasses) {
-					var thiscolor=d3.rgb(255,0,0);
-				} else if ('disembarkation' in nodeclasses) {
-					var thiscolor=d3.rgb(0,0,255);
-				}
-			}
-		} else if ('post-disembarkation' in nodeclasses) {
-			var thiscolor=d3.rgb(246,193,60);
-		} else if ('origin' in nodeclasses) {
-			var thiscolor=d3.rgb(96,192,171);
-		};
-		return thiscolor
-	}
-	
-	//Routes get tooltips. And here is where we make them!
-	  function makeRouteToolTip(r) {
- 	  	if (r.leg_type=='final_destination') {
-			var routesource=nodesdict[r.source_target[0]]
-			var routetarget=nodesdict[r.source_target[1]]
- 	  		try {
-				var popuptext = [
-					r.weight,
-					personorpeople(r.weight),
-					"ended up in",
-					routetarget.name,
-					"after landing in",
-					routesource.name
-					].join(" ")
- 	  		} catch(error) {
-				console.log("BAD SOURCE OR TARGET NODE-->",r);
-				var st=r.source_target;
-				var popuptext=["bad source or target node. source: ",st[0],". target: ",st[1]].join('')
-			}
- 	  	} else if (r.leg_type=='origin') {
-			var routesource=nodesdict[r.source_target[0]]
-			var routetarget=nodesdict[r.source_target[1]]
- 	  		try {
-				var popuptext = [
-					r.weight,
-					routesource.name,
-					personorpeople(r.weight),
-					"taken to",
-					routetarget.name
-					].join(" ")
- 	  		} catch(error) {
-				console.log("BAD SOURCE OR TARGET NODE-->",r);
-				var st=r.source_target;
-				var popuptext=["bad source or target node. source: ",st[0],". target: ",st[1]].join('')
-			}
- 	  	} else if (r.leg_type=='offramp') {
-			var routetarget=nodesdict[r.source_target[1]]
-			try {
-				var popuptext = [
-					r.weight,
-					personorpeople(r.weight),
-					"transported to",
-					routetarget.name
-					].join(" ")
-			} catch (error) {
-				console.log("BAD TARGET NODE-->",r);
-				var st=r.source_target;
-				var popuptext=["bad target node: ",st[1]].join('')
-			}
- 	  	} else if (r.leg_type=='onramp') { 	
-			var routesource=nodesdict[r.source_target[0]]
- 	  		try {
-				var popuptext = [
-					r.weight,
-					personorpeople(r.weight),
-					"taken from",
-					routesource.name
-					].join(" ")
- 	  		} catch(error) {
-				console.log("BAD SOURCE NODE-->",r);
-				var st=r.source_target;
-				var popuptext=["bad source node: ",st[0]].join('')
- 	  		}
- 	  	} else {
-			var popuptext = [r.weight,personorpeople(r.weight),"transported."].join(" ");
-		}
-	  	return popuptext;
-	  };
-	
-	//This function creates a bezier curve
-	//& is used for all curve creation, including animations and interactivity bindings.
-	//note that w 
+		// BEZIER CURVES
 	function addRoute(map,route,mainlayergroup,point_id=null,animationlayergroup=null){
 		//parse the geometry, classes, features, and draw a route curve 
 		var commands = [];
@@ -1471,19 +1361,14 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 		commands.push("C", route.geometry[1][0], route.geometry[1][1], route.geometry[0][1]);
 // 		var weight=valueScale(route.weight);
 		var distance=0;
-		
 		var timingscalar = 50
-		
-
-				
 		var newroute=L.curve(commands, {
-			color: "#fff0",
+			color: "#60c0ab",
 			weight: 1,
 			stroke: true,
 		})
 		.bindTooltip(makeRouteToolTip(route),{'sticky':true})
 		.addTo(mainlayergroup);
-		
 		
 		//then layer on the animation curves
 		//in oder to do which (using basic css) we need to know how long these curves are
@@ -1493,7 +1378,6 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 		//tldr: in order that the dots on longer routes and shorter routes move the same speed, the longer routes need animations of longer duration, and vice versa
 		//increase timingscalar to slow this down, decrease it to speed it up
 		var distance=0
-		
 		
 		var interpolation_steps=[0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]
 		var pairs=d3.pairs(newroute.trace(interpolation_steps));
@@ -1542,9 +1426,9 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 		//you want the node you're rolling over to be on top of the routes that are drawn emanating from it -- otherwise, those routes' interactivities make it very likely you'll get rid of your node popup immediately by having these appear directly under your mouse and on top of the node
 		//however, we want *only* that node to come to the front, because you do want to be able to roll your mouse off that node and immediately onto one of the emanating routes, potentially to follow it out to the other, connected nodes -- which, when you hit them, you want to be able to roll off the route onto the node to bring that node to the front and draw the routes emanating from *it* etc. etc.
 		if (['origin','final_destination'].includes(route.leg_type)) {
-			var hovernode_leaflet_id=nodesdict[point_id].leaflet_id;
-			var hovernode_layer = map._layers[hovernode_leaflet_id];
-			if (hovernode_layer) {hovernode_layer.bringToFront()};
+// 			var hovernode_leaflet_id=nodesdict[point_id].leaflet_id;
+// 			var hovernode_layer = map._layers[hovernode_leaflet_id];
+// 			if (hovernode_layer) {hovernode_layer.bringToFront()};
 // 			newroute.on('mouseover', function () {	
 // 				if (currently_open_popup_layer.closePopup) {
 // 					currently_open_popup_layer.closePopup();
@@ -1565,28 +1449,6 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 			});
 		};
 	  };
-	  
-	//Main routes are drawn when the map is refreshed. These are the embarkation-->disembarkation routes
-	//Which include connections from the embarkation point into the oceanic network, and from that back out to the disembarkation port
-	//We are for now calling those final-mile connections "onramps" and "offramps"
-	function drawMainRoutes(map, routes) {
-		var mapRouteValueMin = d3.min(routes, function (r) {
-			return r.weight;
-		});
-		var mapRouteValueMax = d3.max(routes, function (r) {
-			return r.weight;
-		});
-	  valueScale.domain([mapRouteValueMin, mapRouteValueMax]).range([3, 13]);
-	  
-	  routes.map((route) => {
-// 	  	if (route.visible){
-// // 			newroute=addRoute(map,route,mainrouteslayergroup,null,mainanimationrouteslayergroup);
-// 		} else {
-// // 			console.log(route);
-			hiddenroutes[route.id]=route;
-// 		}
-	})
-	};
 
 
 
@@ -1594,32 +1456,6 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 
 
 
-
-
-
-
-
-	function displayhiddenroutes(map,nodes) {
-		hiddenrouteslayergroup.clearLayers();
-		hiddenanimationrouteslayergroup.clearLayers();
-
-// 		
-		nodes.forEach(node=>{
-	// 		console.log(node.properties)
-			var hidden_edge_ids=node.properties.hidden_edges;
-		
-			var attached_node_ids = new Array;
-			hidden_edge_ids.forEach(edge_id => {
-				var route=hiddenroutes[edge_id];
-				if (route) {
-					addRoute(map,route,hiddenrouteslayergroup,node.properties.point_id,hiddenanimationrouteslayergroup);
-					route.source_target.forEach(p_id=> {if (!attached_node_ids.includes(p_id)) {attached_node_ids.push(p_id)}})
-				}
-			})
-		})
-// 		remove_unattached_nodes_and_restore_attached_hidden_nodes_pfffffffff(attached_node_ids,node);
-		
-	};
 
 
 
@@ -1667,123 +1503,65 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 	
 	
 	
-	function make_clustermarker(markers,size){
-		size_scaled=nodelogvaluescale(size)-2
-		var html = '<div class="cluster_circle"></div>';
-		return html
-	}
-
-	var origins_layer_group = L.markerClusterGroup(	
-		{
-			maxClusterRadius: 120,
-			zoomToBoundsOnClick: false,
-			iconCreateFunction: function (cluster) {
-			var markers = cluster.getAllChildMarkers();
-			var n = 0;
-			markers.forEach(marker=>n+=marker.feature.properties.size);
-			var html = make_clustermarker(markers,n);
-			return L.divIcon({ html: html, iconSize: L.point(nodelogvaluescale(n)*2, nodelogvaluescale(n)*2), className:"transparentmarkerclusterdiv"});
-		}
-	}).on('clustermouseover', function (a) {
-		var clusterchildmarkers=a.layer.getAllChildMarkers();
-		popuphtml=make_languagegroupstable(clusterchildmarkers);
-		//http://jsfiddle.net/3tnjL/59/
-		var pop = new L.popup({
-				'className':'leafletAOPopup',
-				'closeOnClick':false,
-				showCoverageOnHover: false,
-			}).
-			setLatLng(a.latlng).
-			setContent(popuphtml);
-		pop.addTo(AO_map);
-		activepopups.push(pop);
-
-		var child_nodes=new Array;
-		Object.keys(clusterchildmarkers).forEach(marker=>{
-			if (clusterchildmarkers[marker])	{	
-				if (clusterchildmarkers[marker].feature){
-					child_nodes.push(clusterchildmarkers[marker].feature)
-				}
-			}
-		});
-		
-		
-		displayhiddenroutes(AO_map,child_nodes)
 
 
-	})
-	.on('clustermouseout', function (a) {
-		activepopups.forEach(p=>p.remove());
-		activepopups=new Array;
-		hiddenrouteslayergroup.clearLayers();
-		hiddenanimationrouteslayergroup.clearLayers();
-	});
 	
-	AO_map.on('zoomstart', function(a) {
-		activepopups.forEach(p=>p.remove());
-		activepopups=new Array;
-		hiddenrouteslayergroup.clearLayers();
-		hiddenanimationrouteslayergroup.clearLayers();
-	});
-	
-	var ports_layer_group = L.layerGroup();
-	ports_layer_group.addTo(AO_map);
-	
-	origins_layer_group.addTo(AO_map);
+
 	
 	var activepopups=new Array;
 	
-	var hiddenrouteslayergroup = L.layerGroup();
-	hiddenrouteslayergroup.addTo(AO_map);
-
-	var hiddenroutes = new Object();
-	var valueScale = d3.scaleLog();
-
-	var hiddenanimationrouteslayergroup = L.layerGroup();
-	hiddenanimationrouteslayergroup.addTo(AO_map);
+// 	var hiddenrouteslayergroup = L.layerGroup();
+// 	hiddenrouteslayergroup.addTo(AO_map);
+// 
+// 	var hiddenroutes = new Object();
+// 	var routesValueScale = d3.scaleLog();
 
 
-	function makeRoutesDict(network) {
-		var features=network.points.features;
-		features.forEach(feature => nodesdict[feature.properties.point_id]=feature.properties);
-	}
+
+
 	
-	
-		var animationmode = true;
-	//B3. The nodesdict object allows us to look up nodes by id
-	var nodesdict = new Object;
-
-
-
-
-
-
-
-
-
-
+	var region_vs_place_vars = {
+		'place':{
+			'origins_layer_group':ports_origins_layer_group,
+			'embark_disembark_layers_group':ports_layer_group,
+		},
+		'region':{
+			'origins_layer_group':regions_origins_layer_group,
+			'embark_disembark_layers_group':regions_layer_group
+		}
+	};
 
 	function initial_map_builder(resp) {
-		['place'].forEach(networkname=>{
+		//we only need to make the origins layer group once, despite it existing in both place & region zoom levels
+		
+		Object.keys(region_vs_place_vars).forEach(networkname=>{
 			var network=resp[networkname];
+			var origins_layer_group = region_vs_place_vars[networkname]['origins_layer_group'];
+			var embark_disembark_layers_group = region_vs_place_vars[networkname]['embark_disembark_layers_group'];
 			var featurecollection=network.points;
-			makeRoutesDict(network);
-			drawMainRoutes(AO_map,network.routes);
-			nodelogvaluescale_fn(featurecollection);
+			console.log(network);
+// 			makeNodesDict(network)
+// 			makeRoutesDict(network);
+// 			drawMainRoutes(AO_map,network.routes);
+			origin_nodelogvaluescale=nodelogvaluescale_fn(featurecollection,4,26);
+			embark_disembark_nodelogvaluescale=nodelogvaluescale_fn(featurecollection,3,20);
 			featurecollection.features.forEach(function (feature) {
 				var node_classes=feature.properties.node_classes;			
 				if (Object.keys(node_classes)[0]=='origin') {
-					var nodesize=nodelogvaluescale(feature.properties.size);
+					var nodesize=origin_nodelogvaluescale(feature.properties.size);
 					add_point_to_layergroup(feature,origins_layer_group,nodesize,networkname);
 				} else if ('embarkation' in node_classes || 'disembarkation' in node_classes) {
-				
-					var nodesize=5;
-					add_point_to_layergroup(feature,ports_layer_group,nodesize,networkname)
-				
+					if (networkname=='region') {
+						var nodesize=embark_disembark_nodelogvaluescale(feature.properties.size);
+					} else {
+						var nodesize=5
+					}
+					add_point_to_layergroup(feature,embark_disembark_layers_group,nodesize,networkname)
 				}
-				
 			})
 		});		
+		console.log(ports_origins_layer_group);
+		console.log(regions_origins_layer_group);
 	}
 	
 	
@@ -1825,28 +1603,6 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 			}
 		}
 	});
-	
-	
-
-	
-	
-//E. Styling globals
-//E1. scale the nodes sizes logarithmically 
-		function nodelogvaluescale_fn(points) {
-
-		var valueMin = d3.min(points.features, function (p) {
-			return p.properties.size;
-		  });
-		  var valueMax = d3.max(points.features, function (p) {
-			return p.properties.size;
-		  });
-		nodelogvaluescale = d3.scaleLog().domain([valueMin, valueMax]).range([4, 25]);
-	}
-
-	function maximizeMapHeight() {
-		var maxMapHeight=window.innerHeight-221; //ffs
-		$('#AO_map')[0].style['min-height']=maxMapHeight.toString()+'px';
-	}
 
 
 	
