@@ -480,54 +480,35 @@ class Command(BaseCommand):
 			
 				if route!={}:
 					routes[routename]=route
-		
+			
 			d=open(base_path+dataset+'_routes_curves.py','w')
 			d.write(dataset+"_route_curves="+str(routes))
 			d.close()
-			
-			edgetagvisibilitydict={
-				"oceanic_leg":True,
-				"offramp":True,
-				"onramp":True,
-				"origin":False,
-				"final_destination":False
-			}
-					
-			d=open(base_path+dataset+'_edge_ids.json','w')
-			edge_dict={str(G.edges[id]['id']):edgetagvisibilitydict[G.edges[id]['tag']] for id in G.edges}
-			d.write(json.dumps(edge_dict))
-			d.close()
+## IF YOU ABSOLUTELY POSITIVELY HAVE TO LOOK AT ALL THE EDGE DATA, YOU CAN DUMP IT WITH THIS:
+# 			all_edges={e[2]['id']:e for e in G.edges(data=True)}
+# 			d=open(base_path+dataset+'_edges.py','w')
+# 			d.write(dataset+"_edges="+str(all_edges))
+# 			d.close()
 				
 			geo_points={}
 			for n in G.nodes:
 				node=G.nodes[n]
-				if 'oceanic_waypoint' not in node['tags']:				
+				node_hidden_edges=[]
+				if 'oceanic_waypoint' not in node['tags']:
 					node_in_edges=G.in_edges(n)
 					node_out_edges=G.out_edges(n)
-				
-					node_hidden_edges=[]
-				
-					for e_pair in node_in_edges:
-						e=G.edges[e_pair]
-						e_tag=e['tag']
-						e_id=e['id']
-# 						print(e_id,e_tag)
-						if not edgetagvisibilitydict[e_tag]:
-# 							print('hidden')
-							node_hidden_edges.append(e_id)
-				
-					for e_pair in node_out_edges:
-						e=G.edges[e_pair]
-						e_tag=e['tag']
-						e_id=e['id']
-						if not edgetagvisibilitydict[e_tag]:
-							node_hidden_edges.append(e_id)
-					
-# 					print(node_hidden_edges)
-					
+					for edges in [node_in_edges,node_out_edges]:
+						for edgepair in edges:
+							e=G.edges[edgepair]
+							e_tag=e['tag']
+							e_id=e['id']
+							if e['tag'] in ['origin','final_destination']:
+								node_hidden_edges.append(e_id)
 					coords=node['coords']
 					name=node['name']
 					pk=node['pk']
+# 					edgetags=list(set([e[2]['tag'] for e in G.edges(data=True) if e[2]['id'] in node_hidden_edges]))
+# 					print(edgetags)
 					geo_points[n]=[coords,name,pk,node_hidden_edges]
 					
 		

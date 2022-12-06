@@ -183,18 +183,6 @@ try:
     region_routes_points={int(i):j[i] for i in j}
     d.close()
     
-    d=open("voyages/apps/past/static/place_edge_ids.json","r")
-    t=d.read()
-    j=json.loads(t)
-    place_edge_ids={int(i):j[i] for i in j}
-    d.close()
-    
-    d=open("voyages/apps/past/static/region_edge_ids.json","r")
-    t=d.read()
-    j=json.loads(t)
-    region_edge_ids={int(i):j[i] for i in j}
-    d.close()
-    
     from voyages.apps.past.static.place_routes_curves import *
     from voyages.apps.past.static.region_routes_curves import *
     from voyages.apps.past.static.region_vals_to_port_ids import *
@@ -318,12 +306,12 @@ def search_enslaved(request):
         final_result={}
         
         itinerary_groups=[
-            ['region',region_itineraries,region_routes_points,region_route_curves,region_edge_ids],
-            ['place',place_itineraries,place_routes_points,place_route_curves,place_edge_ids],        
+            ['region',region_itineraries,region_routes_points,region_route_curves],
+            ['place',place_itineraries,place_routes_points,place_route_curves],        
         ]
         
         for itinerary_group in itinerary_groups:
-            itinerary_group_name,itineraries,routes_points,route_curves,edge_ids_visibility=itinerary_group
+            itinerary_group_name,itineraries,routes_points,route_curves=itinerary_group
             language_group_counts=dict(Counter(i[0] for i in itineraries))
             embarkation_location_counts=dict(Counter(i[1] for i in itineraries))
             disembarkation_location_counts=dict(Counter(i[2] for i in itineraries))
@@ -385,7 +373,7 @@ def search_enslaved(request):
                         "size":nodesize,
                         "node_classes":pointtags,
                         "point_id":point_id,
-                        "hidden_edges":points_dict[point_id]['hidden_edges']
+                        "hidden_edges":hidden_edges
                     }
             
                     feature={
@@ -396,16 +384,16 @@ def search_enslaved(request):
                             "coordinates":coords
                         }
                     }
-            
+                    
+                    if point_id==60500:
+                    	sfo_he=hidden_edges
+                    	print(json.dumps(feature,indent=2))
                     featurecollection.append(feature)
             
             result_points={
                 "type": "FeatureCollection",
-                "features": []
+                "features": [feature for feature in featurecollection]
             }
-        
-            for feature in featurecollection:
-                result_points['features'].append(feature)
 #             print("point map time:",time.time()-st)
     
             itinerary_names=["-".join([str(i) for i in itinerary]) for itinerary in itineraries]
@@ -429,11 +417,14 @@ def search_enslaved(request):
                     'source_target':leg_data[l][1],
                     'leg_type':leg_data[l][2],
                     'weight':leg_weights[l],
-                    'id':l,
-#                     'visible':edge_ids_visibility[l]
-                    'visible':True
+                    'id':l
                 } for l in leg_data
             ]
+            
+            for r in result_routes:
+                if r['id']==3502:
+#                 if 60500 in r['source_target'] and r['id'] in sfo_he:
+                    print(json.dumps(r,indent=2))
         
             result={
                 'routes':result_routes,
