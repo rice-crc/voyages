@@ -144,21 +144,26 @@ class Command(BaseCommand):
 				african_origins_individuals.select_related(
 					'voyage__voyage_itinerary__imp_principal_region_of_slave_purchase',
 					'voyage__voyage_itinerary__imp_principal_region_slave_dis',
+					'post_disembark_location__region__value'
 				)
 				voyage_itineraries=list(set(african_origins_individuals.values_list(
 					'voyage__voyage_itinerary__imp_principal_region_of_slave_purchase__value',
 					'voyage__voyage_itinerary__imp_principal_region_slave_dis__value',
+					'post_disembark_location__region__value'
 				)))
 				regions=Region.objects.all()
 				embarkation_regions=regions.filter(value__in=[ei[0] for ei in voyage_itineraries],latitude__isnull=False,longitude__isnull=False)
 		
 				disembarkation_regions=regions.filter(value__in=[ei[1] for ei in voyage_itineraries],latitude__isnull=False,longitude__isnull=False)
+				
+				post_disembark=regions.filter(value__in=[ei[2] for ei in voyage_itineraries],latitude__isnull=False,longitude__isnull=False)
+				
 				node_sets = [
 					{
 						"geo_data":disembarkation_regions,
 						"namefield":"region",
 						"tags":["disembarkation_region"],
-						"connect_to_tags":[("final_destination","source","all",False),("offramp","target","single",True)]
+						"connect_to_tags":[("offramp","target","single",True)]
 					},
 					{
 						"geo_data":embarkation_regions,
@@ -172,10 +177,12 @@ class Command(BaseCommand):
 				african_origins_individuals.select_related(
 					'voyage__voyage_itinerary__imp_principal_place_of_slave_purchase',
 					'voyage__voyage_itinerary__imp_principal_port_slave_dis',
+					'post_disembark_location__value'
 				)
 				voyage_itineraries=list(set(african_origins_individuals.values_list(
 					'voyage__voyage_itinerary__imp_principal_place_of_slave_purchase__value',
 					'voyage__voyage_itinerary__imp_principal_port_slave_dis__value',
+					'post_disembark_location__value'
 				)))		
 				places=Place.objects.all()
 		
@@ -183,12 +190,14 @@ class Command(BaseCommand):
 			
 				disembarkation_ports=places.filter(value__in=[ei[1] for ei in voyage_itineraries],latitude__isnull=False,longitude__isnull=False)
 				
+				post_disembark=places.filter(value__in=[ei[2] for ei in voyage_itineraries],latitude__isnull=False,longitude__isnull=False)
+				
 				node_sets = [
 					{
 						"geo_data":disembarkation_ports,
 						"namefield":"place",
 						"tags":["disembarkation_port"],
-						"connect_to_tags":[("final_destination","source","all",False),("offramp","target","single",True)]
+						"connect_to_tags":[("offramp","target","single",True)]
 					},
 					{
 						"geo_data":embarkation_ports,
@@ -200,6 +209,9 @@ class Command(BaseCommand):
 	
 			#throwing in a conditional on the straight lines -- if the hop is too far, disallow the straightening
 			threshold_for_straight=5
+			
+			
+			
 
 			def geteuclideandistance(Ay,Ax,By,Bx):
 				distance=sqrt(
@@ -219,8 +231,27 @@ class Command(BaseCommand):
 				closest_neighbor=sorted(distances, key=lambda tup: tup[0])[0][1]
 				distance=min([i[0] for i in distances])
 				return closest_neighbor,distance
-		
+			
+			#this block here creates the network of needed nodes & connections
+			##typically, for origin-->embark-->disembark
+			##the settings in "node_sets" allow us to dictate
+				## which other node classes we're making connections to
+				## whether the node we're connecting will be a source or target to those node classes
+				## whether we'll be making connections to all possible members of those node classes, or just the closest
+				## and we'll add a euclidean distance scalar and a curve tag to the edge in that network for our later routing work
+			## Dec. 6 -- I realized it doesn't make sense to not treat post-disembark locations like their embark & disembark counterparts, and to layer them in either regions or ports
+
 			for node_set in node_sets:
+				for node in post_disembark:
+					latitude=float(node.latitude)
+					longitude=float(node.longitude)
+					namefield=node_set['namefield']
+					name=node.__dict__[namefield]
+					id=node.value
+					pk=node.id
+					if id not in G.nodes:
+						G.add_node(id,name=name,coords=(latitude,longitude),tags=['final_destination'],pk=pk)
+				
 				tags=node_set['tags']
 				connect_to_tags=node_set['connect_to_tags']
 				namefield=node_set['namefield']
@@ -237,6 +268,8 @@ class Command(BaseCommand):
 						G.nodes[id]['tags']+=tags
 					else:
 						G.add_node(id,name=name,coords=(latitude,longitude),tags=tags,pk=pk)
+					
+
 					
 					for connect_to_tag in connect_to_tags:
 						tag,as_type,mode,this_curve=connect_to_tag
@@ -273,9 +306,16 @@ class Command(BaseCommand):
 								else:
 									G.add_edge(comp_node,id,id=e,distance=distance,curve=this_curve,tag=tag)
 								e+=1
-	# 							if connect_to_tag[0]=="origin":
-	# 								print(id,G.nodes[id],comp_node,G.nodes[comp_node],as_type,distance,e,mode)
-								
+					
+					for vi in voyage_itineraries:
+						disembark_id,post_disembark_id=vi[1:3]
+						if G.has_node(disembark_id) and G.has_node(post_disembark_id):
+# 							print(disembark_id,"-->",post_disembark_id)
+							G.add_edge(disembark_id,post_disembark_id,id=e,curve=False,tag="final_destination")
+							e+=1
+						
+						
+					
 			print("finished building graph")
 		
 			#NOTE: 4 IS KIND OF A MAGIC NUMBER HERE -- BEYOND THAT WE HAVE TO DO SOME FUNKY HANDLING ON DISCONTINUOUS ROUTES
@@ -285,7 +325,8 @@ class Command(BaseCommand):
 					'language_group__id',
 					'voyage__voyage_itinerary__imp_principal_region_of_slave_purchase__value',
 					'voyage__voyage_itinerary__imp_principal_region_slave_dis__value',
-					'post_disembark_location__value'
+# 					'post_disembark_location__value'
+					'post_disembark_location__region__value'
 				)))
 			elif dataset=='place':
 				all_individual_itineraries=list(set(african_origins_individuals.values_list(

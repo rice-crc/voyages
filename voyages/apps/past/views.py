@@ -221,7 +221,8 @@ def search_enslaved(request):
             'voyage__voyage_itinerary__imp_principal_port_slave_dis__value',
             'voyage__voyage_itinerary__imp_principal_region_of_slave_purchase__value',
             'voyage__voyage_itinerary__imp_principal_region_slave_dis__value',
-            'post_disembark_location__value'
+            'post_disembark_location__value',
+            'post_disembark_location__region__value'
         ]
 #         fields = [
 #             'language_group__moderncountry__id',
@@ -310,7 +311,7 @@ def search_enslaved(request):
             ['language_group__id',
             'voyage__voyage_itinerary__imp_principal_region_of_slave_purchase__value',
             'voyage__voyage_itinerary__imp_principal_region_slave_dis__value',
-            'post_disembark_location__value'
+            'post_disembark_location__region__value'
             ]]
             for i in page
         ]
@@ -372,7 +373,7 @@ def search_enslaved(request):
                     popuplines=[]
                     live_tags=['origin','embarkation','disembarkation','post-disembarkation']
                     if itinerary_group_name=='region':
-                        pointtags={tag:{"count":point[tag],"key": int(pk) if tag in ('post-disembarkation','origin') else int(point_id)}
+                        pointtags={tag:{"count":point[tag],"key": int(pk) if tag in ('origin') else int(point_id)}
                             for tag in live_tags if tag in point
                         }
                     elif itinerary_group_name=='place':
