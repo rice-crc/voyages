@@ -1114,6 +1114,7 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 			ports_embdisemb_layer_group.removeFrom(AO_map);
 		}
 	}).on('zoomstart', function(a) {
+		main_edges_layer_group.clearLayers();
 		activepopups.forEach(p=>p.remove());
 		activepopups=new Array;
 // 		hiddenrouteslayergroup.clearLayers();
@@ -1355,6 +1356,7 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 												
 						marker.bindPopup(makeNodePopUp(node_classes,node_title),{'className':'leafletAOPopup'});
 						marker.on('mouseover', function () {
+							main_edges_layer_group.clearLayers();
 							hidden_edges.forEach(e=>{
 								if (edgesdict[networkname][e]) {
 										edgesdict[networkname][e].addTo(main_edges_layer_group)
@@ -1366,11 +1368,12 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 						});
 						marker.on('mouseout',function () {
 							marker.closePopup();
-							hidden_edges.forEach(e=>{
-								if (edgesdict[networkname][e]) {
-										edgesdict[networkname][e].remove()
-								}
-							})
+							
+// 							hidden_edges.forEach(e=>{
+// 								if (edgesdict[networkname][e]) {
+// 										edgesdict[networkname][e].remove()
+// 								}
+// 							})
 
 // 							hiddenrouteslayergroup.clearLayers();
 // 							hiddenanimationrouteslayergroup.clearLayers();
