@@ -23,17 +23,17 @@
                 <div class="col-md-4">
                     <div class="card" style="width: 18rem;">
                         <div class="card-body">
-                            <h3 class="card-title">[[ contrib_data.enslaved.modern_name ]]</h5>
-                            <h4 v-if="contrib_data.enslaved.historical_name" class="card-subtitle mb-2 text-muted">[[ contrib_data.enslaved.historical_name ]] {% trans "(historical)" %}</h6>
+                            <h3 class="card-title">[[ contribData.enslaved.modern_name ]]</h5>
+                            <h4 v-if="contribData.enslaved.historical_name" class="card-subtitle mb-2 text-muted">[[ contribData.enslaved.historical_name ]] {% trans "(historical)" %}</h6>
                             <p class="card-text">
-                                [[ genders[contrib_data.enslaved.gender || 0] ]]
+                                [[ genders[contribData.enslaved.gender || 0] ]]
                                 {% trans "embarked on " %}
-                                [[ contrib_data.enslaved.region_of_embarkation ]]
+                                [[ contribData.enslaved.region_of_embarkation ]]
                             </p>
                             <hr />
                             <h4>Contributed Names</h4>
                             <ul>
-                                <li v-for="cn in contrib_data.contributed_names">
+                                <li v-for="cn in contribData.contributed_names">
                                     [[ cn.name ]]
                                     <div v-if="cn.notes" style="display: inline; margin-left: 10px;">
                                         <i class="fa fa-comment" aria-hidden="true" v-bind:title="[[ cn.notes ]]"></i>
@@ -44,27 +44,27 @@
                                     </div>
                                 </li>
                             </ul>
-                            <div v-if="contrib_data.prev_name_contributions.length > 0">
+                            <div v-if="contribData.prev_name_contributions.length > 0">
                                 <em>
-                                    {% trans "Previous contributions" %}: [[ contrib_data.prev_name_contributions.join(';') ]]
+                                    {% trans "Previous contributions" %}: [[ contribData.prev_name_contributions.join(';') ]]
                                 </em>
                             </div>
                             <h4>Contributed Language Groups</h4>
-                            <span v-if="contrib_data.is_multilingual">{% trans "Multilingual" %}</span>
+                            <span v-if="contribData.is_multilingual">{% trans "Multilingual" %}</span>
                             <ul>
-                                <li v-for="cl in contrib_data.contributed_language_groups">
+                                <li v-for="cl in contribData.contributed_language_groups">
                                     [[ cl.language_group_name ]] ([[ cl.modern_country_name ]])
                                 </li>
                             </ul>
-                            <div v-if="contrib_data.prev_language_group_contributions.length > 0">
+                            <div v-if="contribData.prev_language_group_contributions.length > 0">
                                 <em>
-                                    {% trans "Previous contributions" %}: [[ contrib_data.prev_language_group_contributions.join(';') ]]
+                                    {% trans "Previous contributions" %}: [[ contribData.prev_language_group_contributions.join(';') ]]
                                 </em>
                             </div>
-                            <div v-if="contrib_data.notes">
+                            <div v-if="contribData.notes">
                                 <hr />
                                 <span>
-                                    {% trans "Notes:" %} [[ contrib_data.notes ]]
+                                    {% trans "Notes:" %} [[ contribData.notes ]]
                                 </span>
                             </div>
                         </div>
@@ -77,8 +77,9 @@
                         <li>✓ Previous contributed names</li>
                         <li>✓ Propagation table: toggle row propagation</li>
                         <li>✓ Show contributor comments</li>
-                        <li>Propagation table: editable notes</li>
-                        <li>Submission: on accept popup with summary, on reject confirm</li>
+                        <li>✓ Propagation table: editable notes</li>
+                        <li>✓ Submission: on accept popup with summary, on reject confirm</li>
+                        <li>Acceptance updates/error handling</li>
                     </ul>
                 </div>
                 <div class="col-md-8">
@@ -87,28 +88,36 @@
                     <input class="form-control" name="propagatedName" type="text" v-model="propagatedName" />
                     <label for="propagatedCountry">{% trans "Propagated Modern Country" %}:</label>
                     <select id="propagatedCountry" class="form-control" v-model="propagatedCountry">
+                        <option value=""></option>
                         <option value="remove">{% trans "Delink Modern Country" %}</option>
-                        <option v-if="contrib_data.contributed_language_groups" disabled>--- {% trans "User Contributed" %} ---</option>
+                        <option v-if="contribData.contributed_language_groups" disabled>--- {% trans "User Contributed" %} ---</option>
                         <option v-if="contribCountries" v-for="pair in contribCountries" v-bind:value="pair[0]">[[ pair[1] ]]</option>
                         <option disabled>--- {% trans "Editorial Choices" %} ---</option>
                         <option v-for="country in modernCountryChoices" v-bind:value="country.pk">[[ country.name ]]</option>
                     </select>
                     <label for="propagatedLang">{% trans "Propagated Language Group" %}:</label>
                     <select id="propagatedLang" class="form-control" v-model="propagatedLanguage">
+                        <option value=""></option>
                         <option value="remove">{% trans "Delink Language Group" %}</option>
-                        <option v-if="contrib_data.contributed_language_groups" disabled>--- {% trans "User Contributed" %} ---</option>
-                        <option v-for="cl in contrib_data.contributed_language_groups" v-bind:value="cl.language_group_pk">[[ cl.language_group_name ]]</option>
+                        <option v-if="contribData.contributed_language_groups" disabled>--- {% trans "User Contributed" %} ---</option>
+                        <option v-for="cl in contribData.contributed_language_groups" v-bind:value="cl.language_group_pk">[[ cl.language_group_name ]]</option>
                         <option v-if="languageGroupChoices.length > 0" disabled>--- {% trans "Editorial Choices" %} ---</option>
                         <option v-for="lang in languageGroupChoices" v-bind:value="lang.pk">[[ lang.name ]]</option>
                     </select>
                     <table id="propagationTable" class="table table-striped table-bordered dataTable">
                         <thead>
                             <tr>
+                                <th colspan="4">{% trans "Enslaved Details" %}</th>
+                                <th colspan="4">{% trans "Propagation" %}</th>
+                            </tr>
+                            <tr>
+                                <th>{% trans "ID" %}</th>
                                 <th>{% trans "Name(s)" %}</th>
                                 <th>{% trans "Gender" %}</th>
                                 <th>{% trans "Embarkation" %}</th>
-                                <th>{% trans "Propagate Name" %}</th>
-                                <th>{% trans "Propagate Language Group" %}</th>
+                                <th>{% trans "Name" %}</th>
+                                <th>{% trans "Language Group" %}</th>
+                                <th>{% trans "Country" %}</th>
                                 <th>{% trans "Notes" %}</th>
                             </tr>
                         </thead>
@@ -116,7 +125,7 @@
                         </tbody>
                     </table>
                     <div class="btn-group" role="group" aria-label="Contribution actions">
-                        <button v-on:click="accept" class="btn btn-primary">
+                        <button v-on:click="acceptConfirmModal" class="btn btn-primary">
                             {% trans "Accept" %}
                         </button>
                         <button v-on:click="reject" class="btn btn-danger">
@@ -125,24 +134,42 @@
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
-</div>
+        </div>        
 
-<div class="modal fade" id="editNotesModal" tabindex="-1" role="dialog" data-backdrop="static">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title">{% trans "Edit Notes for Enslaved" %}</h4>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                        aria-hidden="true">&times;</span></button>
+        <div class="modal fade" id="editNotesModal" tabindex="-1" role="dialog" data-backdrop="static">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">{% trans "Edit Notes for Enslaved" %}</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                aria-hidden="true">&times;</span></button>
+                    </div>
+                    <div class="modal-body" style="height: 300px;">
+                        <textarea class="form-control" id="addedNotesInput" style="height: 100%;"></textarea>
+                    </div>
+                    <div class="modal-footer">
+                        <button onclick="updateEnslavedNotes()" type="button" class="btn btn-primary">{% trans "Apply" %}</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">{% trans "Cancel" %}</button>
+                    </div>
+                </div>
             </div>
-            <div class="modal-body" style="height: 300px;">
-                <textarea class="form-control" id="addedNotesInput" style="height: 100%;"></textarea>
-            </div>
-            <div class="modal-footer">
-                <button onclick="updateEnslavedNotes()" type="button" class="btn btn-primary">{% trans "Update" %}</button>
-                <button type="button" class="btn btn-default" data-dismiss="modal">{% trans "Cancel" %}</button>
+        </div>
+
+        <div class="modal fade" id="acceptConfirmModal" tabindex="-1" role="dialog" data-backdrop="static">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">{% trans "Review Summary" %}</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                aria-hidden="true">&times;</span></button>
+                    </div>
+                    <div class="modal-body" style="overflow-y: scroll; height: 450px;" id="confirmContent">
+                    </div>
+                    <div class="modal-footer">
+                        <button v-on:click="accept" type="button" class="btn btn-primary">{% trans "Confirm" %}</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">{% trans "Cancel" %}</button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -171,6 +198,7 @@
             currentPlay.audio.pause();
         }
     };
+    let contribData = {};
     let activeNotesEdit = null;
     const showNotesModal = (src) => {
         const pk = $(src).data('pk');
@@ -187,7 +215,7 @@
         return await res.json();
     };
     async function initialize() {
-        const contrib_data = await fetchGet("/contribute/origins_contribution_details/{{ contribution.pk }}")
+        contribData = await fetchGet("/contribute/origins_contribution_details/{{ contribution.pk }}")
         const { modernCountryChoices, languageGroupChoices, m2m } = await fetchGet('/contribute/language_choices');
         modernCountryChoices.sort((a, b) => a.name.localeCompare(b.name));
         const allLanguages = {};
@@ -195,20 +223,22 @@
             allLanguages[l.pk] = l;
         }
         let countries = {};
-        contrib_data.contributed_language_groups
+        contribData.contributed_language_groups
             .forEach(cl => {
                 if (cl.modern_country_pk) {
                     countries[cl.modern_country_pk] = cl.modern_country_name;
                 }
             });
+        const allCountries = countries;
         countries = Object.entries(countries)
         let propagatedCountry = Object.keys(countries).length === 1 ? parseInt(countries[0][0]) : null;
-        let propagatedLanguage = contrib_data.contributed_language_groups.length === 1
-            ? parseInt(contrib_data.contributed_language_groups[0].language_group_pk)
+        let propagatedLanguage = contribData.contributed_language_groups.length === 1
+            ? parseInt(contribData.contributed_language_groups[0].language_group_pk)
             : null;
         $("#propagationTable").DataTable({
-            data: contrib_data.propagation_candidates,
-            columns: [{
+            data: contribData.propagation_candidates,
+            columns: [
+                {data: 'pk' }, {
                     data: row => {
                         let name = row.documented_name;
                         const moreNames = [row.name_first, row.name_second, row.name_third].filter(x => !!x).join('');
@@ -224,7 +254,7 @@
                     data: row => ({ pk: row.pk, modernName: row.modern_name }),
                     render: function(data, type) {
                         if (type === 'display') {
-                            return `<input type="checkbox" checked="true" value="N${data.pk}"> <span id="cell_N${data.pk}" class="font-weight-light overwrite">${data.modernName}</span>`;
+                            return `<input type="checkbox" checked="true" id="check_N${data.pk}" value="N${data.pk}"> <span id="cell_N${data.pk}" class="font-weight-light overwrite">${data.modernName}</span>`;
                         }
                         return data;
                     }
@@ -232,7 +262,15 @@
                     data: row => ({ pk: row.pk, language: row.language_group__name }),
                     render: function(data, type) {
                         if (type === 'display') {
-                            return `<input type="checkbox" checked="true" value="L${data.pk}"> <span id="cell_L${data.pk}" class="font-weight-light overwrite">${data.language}</span>`;
+                            return `<input type="checkbox" checked="true" v-bind:disabled="!propagatedLanguage" id="check_L${data.pk}" value="L${data.pk}"> <span id="cell_L${data.pk}" class="font-weight-light overwrite">${data.language}</span>`;
+                        }
+                        return data;
+                    }
+                }, {
+                    data: row => ({ pk: row.pk, country: row.modern_country__name }),
+                    render: function(data, type) {
+                        if (type === 'display') {
+                            return `<input type="checkbox" checked="true" v-bind:disabled="!propagatedCountry" id="check_C${data.pk}" value="C${data.pk}"> <span id="cell_C${data.pk}" class="font-weight-light overwrite">${data.country}</span>`;
                         }
                         return data;
                     }
@@ -249,18 +287,75 @@
                 }
             ],
             scrollY: '30vh',
-            paginate: contrib_data.propagation_candidates.length > 10,
+            paginate: contribData.propagation_candidates.length > 10,
             info: false,
             bFilter: false,
             pageLength: 10,
             bLengthChange: false
         });
+        const getActionText = (a) => {
+            let { field, current, next } = a;
+            if (field === 'language_group_id') {
+                field = 'language_group';
+                if (!!current) {
+                    current = allLanguages[current].name;
+                }
+                if (!!next) {
+                    next = allLanguages[next].name;
+                }
+            }
+            if (field === 'modern_country_id') {
+                field = 'modern_country';
+                if (!!current) {
+                    current = allCountries[current];
+                }
+                if (!!next) {
+                    next = allCountries[next];
+                }
+            }
+            return `${a.record.documented_name} (${a.record.pk}) ` +
+                (a.action === 'update'
+                    ? `updates ${field} from '${current}' to '${next}'`
+                    : `preserves ${field} with value '${current}'`);
+        }
+        const makeAction = (propagate, candidate, field, next) => {
+            const current = candidate[field];
+            return propagate && current !== next
+                ? { action: 'update', record: candidate, field, current, next: next || '' }
+                : { action: 'preserve', record: candidate, field, current };
+        };
+        const getSelectionId = (sel) => sel === 'removed' ? null : parseInt(sel);
+        const buildActions = (vmodel) => {
+            const actions = [];
+            for (const candidate of contribData.propagation_candidates) {
+                const propName = $(`#check_N${candidate.pk}`).prop('checked');
+                const propLang = $(`#check_L${candidate.pk}`).prop('checked');
+                const propCountry = $(`#check_C${candidate.pk}`).prop('checked');
+                // Create an action (update or preserve for each propagation field).
+                actions.push(makeAction(propName, candidate, 'modern_name', vmodel.propagatedName));
+                actions.push(makeAction(
+                    propLang && !!vmodel.propagatedLanguage,
+                    candidate,
+                    'language_group_id',
+                    getSelectionId(vmodel.propagatedLanguage)));
+                actions.push(makeAction(
+                    propCountry && !!vmodel.propagatedCountry,
+                    candidate,
+                    'modern_country_id',
+                    getSelectionId(vmodel.propagatedCountry)));
+                const notes = $("#notes_" + candidate.pk).text();
+                if (!!notes || !!candidate.notes) {
+                    actions.push(makeAction(true, candidate, 'notes', notes));
+                }
+            }
+            return actions;
+        };
         const viewModel = new Vue({
             el: "#center-content-inner",
             delimiters: ['[[', ']]'],
             data: {
-                contrib_data,
-                propagatedName: contrib_data.contributed_names.length === 1 ? contrib_data.contributed_names[0].name : '',
+                contribData,
+                propagatedName: contribData.contributed_names.length === 1 ? contribData.contributed_names[0].name : '',
                 modernCountryChoices,
                 contribCountries: countries,
                 propagatedCountry,
@@ -271,17 +366,39 @@
                     if (!this.propagatedCountry) {
                         return [];
                     }
+                    const countryId = parseInt(this.propagatedCountry);
                     return m2m
-                        .filter(x => x.moderncountry_id === this.propagatedCountry)
+                        .filter(x => x.moderncountry_id === countryId)
                         .map(x => allLanguages[x.languagegroup_id]);
                 }
             },
             methods: {
+                acceptConfirmModal: function() {
+                    // Compute the action changes.
+                    const actions = buildActions(this)
+                        .filter(x => x.action !== 'preserve')
+                        .map(x => `<li>${getActionText(x)}</li>`);
+                    const html = `<ul>${actions.join('')}</ul>`;
+                    $("#confirmContent").html(html);
+                    $("#acceptConfirmModal").modal('show');
+                },
                 accept: async function() {
                     alert('not implemented');
                 },
                 reject: async function() {
-                    alert('not implemented');
+                    if (confirm(gettext('Reject this Origins Contribution?'))) {
+                        let res = await fetch('/contribute/reject_origins_contribution', {
+                            body: JSON.stringify({ contrib_pk: {{ contribution.pk }} }),
+                            method: 'POST'
+                        });
+                        res = await res.json();
+                        const succeded = res.result === 'OK';
+                        if (succeded) {
+                            window.location.href = '/contribute/editor_main/enslaved_contrib';
+                        } else {
+                            alert(`Error: ${res.message}`);
+                        }
+                    }
                 }
             }
         });

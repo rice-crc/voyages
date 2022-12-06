@@ -2309,6 +2309,7 @@ def get_origins_contrib_details(request, contrib_pk):
         .values( \
             'pk', 'gender', 'modern_name', 'documented_name', 'notes', \
             'name_first', 'name_second', 'name_third', \
+            'language_group_id', 'modern_country_id', \
             'language_group__name', 'modern_country__name', \
             embarkation=F('voyage__voyage_itinerary__imp_principal_place_of_slave_purchase__place'))
     expanded = _expand_contrib(c)
@@ -2319,17 +2320,24 @@ def get_origins_contrib_details(request, contrib_pk):
 
 @login_required()
 @require_POST
+@csrf_exempt
 def reject_origins_contribution(request):
     """
     Mark the contribution as rejected.
     """
-    contrib = get_object_or_404(EnslavedContribution, request.POST.get('contrib_pk'))
-    contrib.status = EnslavedContributionStatus.REJECTED
-    contrib.save()
-    return JsonResponse({'result': 'ok'})
+    try:
+        data = json.loads(request.body)
+        contrib_pk = data.get('contrib_pk')
+        contrib = list(EnslavedContribution.objects.filter(pk=contrib_pk))[0]
+        contrib.status = EnslavedContributionStatus.REJECTED
+        contrib.save()
+        return JsonResponse({'result': 'OK'})
+    except Exception as e:
+        return JsonResponse({ 'result': 'FAILED', 'message': str(e) })
 
 @login_required()
 @require_POST
+@csrf_exempt
 def publish_origins_editorial_review(request):
     """
     Publish the editor changes to the propagated Enslaved records.
@@ -2340,8 +2348,8 @@ def publish_origins_editorial_review(request):
     language_group = data.get('language_group')
     if modern_name is None and language_group is None:
         return JsonResponse({ 'error': 'At least one of modern_name or language_group should be non-null' })
-    # Note: we accept a value of -1 for language group to indicate that 
-    # the language group should be cleared.
+    # Note: we accept a value of -1 for language group to indicate that the
+    # language group should be cleared.
     clear_lang_group = False
     modern_country = None
     if language_group is not None:
