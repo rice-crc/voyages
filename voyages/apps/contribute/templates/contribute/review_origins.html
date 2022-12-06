@@ -69,18 +69,6 @@
                             </div>
                         </div>
                     </div>
-                    <p>TO-DO</p>
-                    <ul>
-                        <li>✓ List modern name contributions</li>
-                        <li>✓ Audio playback</li>
-                        <li>✓ Language group</li>
-                        <li>✓ Previous contributed names</li>
-                        <li>✓ Propagation table: toggle row propagation</li>
-                        <li>✓ Show contributor comments</li>
-                        <li>✓ Propagation table: editable notes</li>
-                        <li>✓ Submission: on accept popup with summary, on reject confirm</li>
-                        <li>Acceptance updates/error handling</li>
-                    </ul>
                 </div>
                 <div class="col-md-8">
                     <h3>Propagation</h3>                    
@@ -214,8 +202,9 @@
         const res = await fetch(url);
         return await res.json();
     };
+    const contrib_pk = {{ contribution.pk }};
     async function initialize() {
-        contribData = await fetchGet("/contribute/origins_contribution_details/{{ contribution.pk }}")
+        contribData = await fetchGet(`/contribute/origins_contribution_details/${contrib_pk}`)
         const { modernCountryChoices, languageGroupChoices, m2m } = await fetchGet('/contribute/language_choices');
         modernCountryChoices.sort((a, b) => a.name.localeCompare(b.name));
         const allLanguages = {};
@@ -350,6 +339,15 @@
             }
             return actions;
         };
+        const handleResponse = async (res) => {
+            res = await res.json();
+            const succeded = res.result === 'OK';
+            if (succeded) {
+                window.location.href = '/contribute/editor_main/enslaved_contrib';
+            } else {
+                alert(`Error: ${res.message}`);
+            }
+        };
         const viewModel = new Vue({
             el: "#center-content-inner",
             delimiters: ['[[', ']]'],
@@ -383,21 +381,20 @@
                     $("#acceptConfirmModal").modal('show');
                 },
                 accept: async function() {
-                    alert('not implemented');
+                    const actions = buildActions(this);
+                    let res = await fetch('/contribute/publish_origins_editorial_review', {
+                        body: JSON.stringify({ actions, contrib_pk }),
+                        method: 'POST'
+                    });
+                    await handleResponse(res);
                 },
                 reject: async function() {
                     if (confirm(gettext('Reject this Origins Contribution?'))) {
                         let res = await fetch('/contribute/reject_origins_contribution', {
-                            body: JSON.stringify({ contrib_pk: {{ contribution.pk }} }),
+                            body: JSON.stringify({ contrib_pk }),
                             method: 'POST'
                         });
-                        res = await res.json();
-                        const succeded = res.result === 'OK';
-                        if (succeded) {
-                            window.location.href = '/contribute/editor_main/enslaved_contrib';
-                        } else {
-                            alert(`Error: ${res.message}`);
-                        }
+                        await handleResponse(res);
                     }
                 }
             }

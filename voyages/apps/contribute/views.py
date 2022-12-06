@@ -2335,6 +2335,8 @@ def reject_origins_contribution(request):
     except Exception as e:
         return JsonResponse({ 'result': 'FAILED', 'message': str(e) })
 
+ORIGINS_DATASET = 0
+
 @login_required()
 @require_POST
 @csrf_exempt
@@ -2342,53 +2344,39 @@ def publish_origins_editorial_review(request):
     """
     Publish the editor changes to the propagated Enslaved records.
     """
-    data = json.loads(request.body)
-    contrib = get_object_or_404(EnslavedContribution, data['contrib_pk'])
-    modern_name = data.get('modern_name')
-    language_group = data.get('language_group')
-    if modern_name is None and language_group is None:
-        return JsonResponse({ 'error': 'At least one of modern_name or language_group should be non-null' })
-    # Note: we accept a value of -1 for language group to indicate that the
-    # language group should be cleared.
-    clear_lang_group = False
-    modern_country = None
-    if language_group is not None:
-        language_group = int(language_group)
-        clear_lang_group = language_group == -1
-        if not clear_lang_group:
-            lgpk = language_group
-            language_group = LanguageGroup.get(pk=lgpk)
-            if language_group is None:
-                return JsonResponse({ 'error': f'Language group with key={lgpk} was not found' }, status=404)
-            modern_country = ModernCountry.get(pk=data.get('modern_country', -1))
-            if modern_country is None:
-                return JsonResponse({ 'error': 'Modern country not found' }, status=404)
-    # propagation should be a dict with keys: "pk", "notes" (optional)
-    propagation = data['propagation']
-    if len(propagation) == 0:
-        return JsonResponse({ 'error': 'At least one record should be selected for propagation' }, status=400)
-    items = { e.pk: e for e in Enslaved.objects.filter(pk__in=[p["pk"] for p in propagation]) }
-    for p in propagation:
-        if p.pk not in items:
-            return JsonResponse({ 'error': f"The Enslaved entry with key {p['pk']} was not found" }, status=404)
-    with transaction.atomic():
-        for p in propagation:
-            e = items[p["pk"]]
-            if modern_name is not None:
-                e.modern_name = modern_name
-            if clear_lang_group:
-                e.language_group = None
-                e.modern_country = None
-            elif language_group is not None:
-                e.language_group = language_group
-                e.modern_country = modern_country
-            notes = p.get('notes')
-            if notes is not None:
-                e.notes = notes
-            e.save()
-        contrib.status = EnslavedContributionStatus.ACCEPTED
-        contrib.save()
-    return JsonResponse({ 'result': f"Contribution propagated to {len(propagation)} records." })
+    try:
+        data = json.loads(request.body)
+        contrib = list(EnslavedContribution.objects.filter(pk=data['contrib_pk']))[0]
+        actions = data['actions']
+        enslaved_pks = {a['record']['pk'] for a in actions}
+        propagation = {pk: list(Enslaved.objects \
+                            .filter(pk=pk, dataset=ORIGINS_DATASET) \
+                            .select_related())[0] for pk in enslaved_pks}
+        with transaction.atomic():
+            for action in actions:
+                mode = action['action']
+                if mode != 'update':
+                    continue
+                field = action['field']
+                enslaved = propagation[action['record']['pk']]
+                setattr(enslaved, field, action['next'])
+            for action in actions:
+                mode = action['action']
+                if mode != 'preserve':
+                    continue
+                # Check that the value is the same as expected.
+                enslaved = propagation[action['record']['pk']]
+                field = action['field']
+                current = getattr(enslaved, field)
+                if current != action['current']:
+                    raise Exception(f"For enslaved {enslaved.pk} expected {field} == {action['current']} got {current} instead")
+            for enslaved in propagation.values():
+                enslaved.save()
+            contrib.status = EnslavedContributionStatus.ACCEPTED
+            contrib.save()
+        return JsonResponse({ 'result': 'OK', 'message': f"Contribution propagated to {len(propagation)} records." })
+    except Exception as e:
+        return JsonResponse({ 'result': 'FAILED', 'message': str(e) })
 
 def _voyage_summary_fields(query, prefix=None):
     kwargs = {
