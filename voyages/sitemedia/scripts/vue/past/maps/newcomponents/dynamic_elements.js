@@ -1,18 +1,3 @@
-function pluralorsingular(singular,val) {
-	
-	var pluralize={
-		'group':'groups',
-		'person':'people'
-	}
-	
-	if (val>1){
-		return pluralize[singular]
-	} else {
-		return singular
-	}
-	
-}
-
 function make_languagegroupstable(markers) {
 	
 	var tablehtml="<table class='lgmaptable'><tr><td>Language Group</td><td>Number of people</td></tr>";
@@ -101,8 +86,12 @@ function makeNodePopUp(node_classes,node_title) {
 	if (!popupsubheads.includes(false)){
 		var popupcontent=popupsubheads.join(' and ') + " in " + node_title;
 	} else {
-		var count=node_classes['origin']['count'];
-		var popupcontent=[count,personorpeople(count),"with",node_title,"origins."].join(" ")
+		if (node_classes['origin']){
+			var count=node_classes['origin']['count'];
+			var popupcontent=[count,pluralorsingular("person",count),"with",node_title,"origins."].join(" ")
+		} else {
+			popupcontent=false
+		}
 	}
 	return(popupcontent);
 };

@@ -542,6 +542,7 @@ class Command(BaseCommand):
 			geo_points={}
 			for n in G.nodes:
 				node=G.nodes[n]
+				coords=node['coords']
 				if 'oceanic_waypoint' not in node['tags']:				
 					node_in_edges=G.in_edges(n)
 					node_out_edges=G.out_edges(n)
@@ -566,10 +567,13 @@ class Command(BaseCommand):
 					
 # 					print(node_hidden_edges)
 					
-					coords=node['coords']
+					
 					name=node['name']
 					pk=node['pk']
 					geo_points[n]=[coords,name,pk,node_hidden_edges]
+				else:
+				
+					geo_points[n]=[coords,'oceanic_waypoint',None,None]
 					
 		
 			d=open(base_path+dataset+'_routes_points.json','w')

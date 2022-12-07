@@ -346,12 +346,12 @@ def search_enslaved(request):
                     [language_group_counts,'origin',language_group_ids_offset],
                     [embarkation_location_counts,'embarkation',0],
                     [disembarkation_location_counts,'disembarkation',0],
-                    [final_location_counts,'post-disembarkation',0]
+                    [final_location_counts,'post-disembarkation',0],
                 ]:
                     this_dict,tag,offset=triple
                     if p_id-offset in this_dict:
                         weight=this_dict[p_id-offset]
-                        if tag in points_dict:
+                        if tag in points_dict[p_id]:
                             points_dict[p_id][tag]+=weight
                         else:
                             points_dict[p_id][tag]=weight
@@ -362,33 +362,48 @@ def search_enslaved(request):
             nodes_hidden_edges={}
             
             for point_id in points_dict:
+                
                 point=points_dict[point_id]
-                nodesize=point['nodesize']
                 coords=point['coords']
                 name=point['name']
-                pk=point['pk']
-                hidden_edges=point['hidden_edges']
-                if nodesize > 0:
-                    
-                    popuplines=[]
-                    live_tags=['origin','embarkation','disembarkation','post-disembarkation']
-                    if itinerary_group_name=='region':
-                        pointtags={tag:{"count":point[tag],"key": int(pk) if tag in ('origin') else int(point_id)}
-                            for tag in live_tags if tag in point
-                        }
-                    elif itinerary_group_name=='place':
-                        pointtags={tag:{"count":point[tag],"key": int(pk)}
-                            for tag in live_tags if tag in point
-                        }
-
+                
+                addfeature=False
+                
+                if name=="oceanic_waypoint":
                     feature_properties={
-                        "name":name,
-                        "size":nodesize,
-                        "node_classes":pointtags,
-                        "point_id":point_id,
-                        "hidden_edges":points_dict[point_id]['hidden_edges']
-                    }
-            
+                            "name":name,
+                            "size":0,
+                            "node_classes":{"oceanic_waypoint":0},
+                            "point_id":point_id,
+                            "hidden_edges":points_dict[point_id]['hidden_edges']
+                        }
+                    addfeature=True
+                else:
+                    nodesize=point['nodesize']
+                    pk=point['pk']
+                    hidden_edges=point['hidden_edges']
+                    if nodesize > 0:
+                        addfeature=True
+                        popuplines=[]
+                        live_tags=['origin','embarkation','disembarkation','post-disembarkation']
+                        if itinerary_group_name=='region':
+                            pointtags={tag:{"count":point[tag],"key": int(pk) if tag in ('origin') else int(point_id)}
+                                for tag in live_tags if tag in point
+                            }
+                        elif itinerary_group_name=='place':
+                            pointtags={tag:{"count":point[tag],"key": int(pk)}
+                                for tag in live_tags if tag in point
+                            }
+                        feature_properties={
+                            "name":name,
+                            "size":nodesize,
+                            "node_classes":pointtags,
+                            "point_id":point_id,
+                            "hidden_edges":points_dict[point_id]['hidden_edges']
+                        }
+                
+                if addfeature:
+                
                     feature={
                         "type":"Feature",
                         "properties":feature_properties,
@@ -397,16 +412,12 @@ def search_enslaved(request):
                             "coordinates":coords
                         }
                     }
-            
                     featurecollection.append(feature)
             
             result_points={
                 "type": "FeatureCollection",
-                "features": []
+                "features": featurecollection
             }
-        
-            for feature in featurecollection:
-                result_points['features'].append(feature)
 #             print("point map time:",time.time()-st)
     
             itinerary_names=["-".join([str(i) for i in itinerary]) for itinerary in itineraries]

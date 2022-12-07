@@ -1,18 +1,9 @@
-function personorpeople(count){
-	if (count===1) {
-		var result="person"
-	} else {
-		var result="people"
-	}
-	return result
-};
-
 function nodelogvaluescale_fn(points,min,max) {
 	var valueMin = d3.min(points.features, function (p) {
-		return p.properties.size;
+		return p.properties.size||1;
 	  });
 	  var valueMax = d3.max(points.features, function (p) {
-		return p.properties.size;
+		return p.properties.size||1;
 	  });
 	return d3.scaleLog().domain([valueMin, valueMax]).range([min, max]);
 }
@@ -20,10 +11,10 @@ function nodelogvaluescale_fn(points,min,max) {
 
 function routeslogvaluescale_fn(routes,min,max) {
 	var mapRouteValueMin = d3.min(routes, function (r) {
-		return r.weight;
+		return r.weight||1;
 	});
 	var mapRouteValueMax = d3.max(routes, function (r) {
-		return r.weight;
+		return r.weight||1;
 	});
   return d3.scaleLog().domain([mapRouteValueMin, mapRouteValueMax]).range([min,max]);
 }
@@ -78,10 +69,10 @@ function formatNodePopUpListItem(k,v) {
 	};
 	
 	var label = nodeclass_labels[k];
-	var count = v.count;
-	var key = v.key;
-	var formattedstring=[count.toString(),personorpeople(count),label].join(' ')
-	if (k!='origin') {
+	var count = v.count||0;
+	var key = v.key||null;
+	var formattedstring=[count.toString(),pluralorsingular("person",count),label].join(' ')
+	if (key && k!='origin') {
 		var text='<a href="#" onclick="linkfilter(' + key.toString() + ',\'' + k + '\'); return false;">' + formattedstring + '</a>'
 	} else {
 		var text = false
