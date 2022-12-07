@@ -57,8 +57,9 @@ function make_languagegroupstable(markers) {
 						excluded_other_count['people']+=r.value
 					}
 				})
-			
-				tablehtml += "<tr><td>"+excluded_dialect_count.languages.toString()+" more "+dialect.name+" dialects</td><td>"+excluded_dialect_count.people.toString()+"</td></tr>"	
+				if (excluded_dialect_count.people<0){
+					tablehtml += "<tr><td>"+excluded_dialect_count.languages.toString()+" more "+dialect.name+" dialects</td><td>"+excluded_dialect_count.people.toString()+"</td></tr>"
+				}
 			})
 			
 			if (excluded_other_count.languages>0) {

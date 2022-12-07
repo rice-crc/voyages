@@ -1195,10 +1195,10 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 	oceanic_animation_edges_layer_group.addTo(oceanic_edges_holding_layer_group);
 	
 	var endpoint_main_edges_layer_group = L.layerGroup();
-	endpoint_main_edges_layer_group.addTo(oceanic_edges_holding_layer_group);
+	endpoint_main_edges_layer_group.addTo(AO_map);
 		
 	var endpoint_animation_edges_layer_group = L.layerGroup();
-	endpoint_animation_edges_layer_group.addTo(oceanic_edges_holding_layer_group);
+	endpoint_animation_edges_layer_group.addTo(AO_map);
 	
 	// Initializations for the above
 
@@ -1227,26 +1227,21 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 
 		//ROUTE TOOLTIPS
 	  function makeRouteToolTip(r,networkname) {
-// 		console.log(r)
-
+		
+		
+		
 //  	  	if (r.leg_type=='final_destination') {
 // 			var routesourcelayer=nodesdict[networkname][r.source_target[0]]
 // 			var routetargetlayer=nodesdict[networkname][r.source_target[1]]
 // 			
-// 			console.log(routesourcelayer)
-// 			console.log(routetargetlayer)
-			
 // 			var routesource=routesourcelayer[Object.keys(routesourcelayer)[0]].feature.properties;
 // 			var routetarget=routetargetlayer[Object.keys(routetargetlayer)[0]].feature.properties;
-			
-// 			console.log(routesource)
-// 			console.log(routetarget)
-				  return "<p>not using nodesdict...</p>"
-			
+// 			
+// 			console.log(routesource,routetarget)
 //  	  		try {
 // 				var popuptext = [
 // 					r.weight,
-// 					personorpeople(r.weight),
+// 					pluralorsingular('person',r.weight),
 // 					"ended up in",
 // 					routetarget.name,
 // 					"after landing in",
@@ -1257,54 +1252,60 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 // 				var st=r.source_target;
 // 				var popuptext=["bad source or target node. source: ",st[0],". target: ",st[1]].join('')
 // 			}
-//  	  	} else if (r.leg_type=='origin') {
-// 			var routesource=nodesdict[networkname][r.source_target[0]]
-// 			var routetarget=nodesdict[networkname][r.source_target[1]]
-//  	  		try {
-// 				var popuptext = [
-// 					r.weight,
-// 					routesource.name,
-// 					personorpeople(r.weight),
-// 					"taken to",
-// 					routetarget.name
-// 					].join(" ")
-//  	  		} catch(error) {
-// 				console.log("BAD SOURCE OR TARGET NODE-->",r);
-// 				var st=r.source_target;
-// 				var popuptext=["bad source or target node. source: ",st[0],". target: ",st[1]].join('')
-// 			}
-//  	  	} else if (r.leg_type=='offramp') {
-// 			var routetarget=nodesdict[networkname][r.source_target[1]]
-// 			try {
-// 				var popuptext = [
-// 					r.weight,
-// 					personorpeople(r.weight),
-// 					"transported to",
-// 					routetarget.name
-// 					].join(" ")
-// 			} catch (error) {
-// 				console.log("BAD TARGET NODE-->",r);
-// 				var st=r.source_target;
-// 				var popuptext=["bad target node: ",st[1]].join('')
-// 			}
-//  	  	} else if (r.leg_type=='onramp') { 	
-// 			var routesource=nodesdict[networkname][r.source_target[0]]
-//  	  		try {
-// 				var popuptext = [
-// 					r.weight,
-// 					personorpeople(r.weight),
-// 					"taken from",
-// 					routesource.name
-// 					].join(" ")
-//  	  		} catch(error) {
-// 				console.log("BAD SOURCE NODE-->",r);
-// 				var st=r.source_target;
-// 				var popuptext=["bad source node: ",st[0]].join('')
-//  	  		}
-//  	  	} else {
-// 			var popuptext = [r.weight,personorpeople(r.weight),"transported."].join(" ");
-// 		}
-// 	  	return popuptext;
+//  	  	} else 
+ 	  	
+ 	  	if (r.leg_type=='origin') {
+			var routesource=nodesdict[networkname][r.source_target[0]]._layers
+			routesource=routesource[Object.keys(routesource)[0]].feature.properties
+			var routetarget=nodesdict[networkname][r.source_target[1]]._layers
+			routetarget=routetarget[Object.keys(routetarget)[0]].feature.properties
+ 	  		try {
+				var popuptext = [
+					r.weight,
+					routesource.name,
+					pluralorsingular('person',r.weight),
+					"taken to",
+					routetarget.name
+					].join(" ")
+ 	  		} catch(error) {
+				console.log("BAD SOURCE OR TARGET NODE-->",r);
+				var st=r.source_target;
+				var popuptext=["bad source or target node. source: ",st[0],". target: ",st[1]].join('')
+			}
+ 	  	} else if (r.leg_type=='offramp') {
+			var routetarget=nodesdict[networkname][r.source_target[1]]._layers
+			routetarget=routetarget[Object.keys(routetarget)[0]].feature.properties
+			try {
+				var popuptext = [
+					r.weight,
+					pluralorsingular('person',r.weight),
+					"transported to",
+					routetarget.name
+					].join(" ")
+			} catch (error) {
+				console.log("BAD TARGET NODE-->",r);
+				var st=r.source_target;
+				var popuptext=["bad target node: ",st[1]].join('')
+			}
+ 	  	} else if (r.leg_type=='onramp') { 	
+			var routesource=nodesdict[networkname][r.source_target[0]]._layers
+			routesource=routesource[Object.keys(routesource)[0]].feature.properties
+ 	  		try {
+				var popuptext = [
+					r.weight,
+					pluralorsingular('person',r.weight),
+					"taken from",
+					routesource.name
+					].join(" ")
+ 	  		} catch(error) {
+				console.log("BAD SOURCE NODE-->",r);
+				var st=r.source_target;
+				var popuptext=["bad source node: ",st[0]].join('')
+ 	  		}
+ 	  	} else if (r.leg_type=='oceanic_leg'){
+			var popuptext = [r.weight,pluralorsingular('person',r.weight),"transported."].join(" ");
+		}
+	  	return popuptext;
 	  };
 	
 		//WE USE THIS TO MAKE OUR MARKER CLUSTER LAYER GROUPS
@@ -1313,6 +1314,7 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 			{
 				maxClusterRadius: 120,
 				zoomToBoundsOnClick: false,
+				showCoverageOnHover: false,
 				iconCreateFunction: function (cluster) {
 				var markers = cluster.getAllChildMarkers();
 				var n = 0;
@@ -1320,56 +1322,36 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 				return L.divIcon({ html: '<div class="cluster_circle"></div>', iconSize: L.point(origin_nodelogvaluescale(n)*2, origin_nodelogvaluescale(n)*2), className:"transparentmarkerclusterdiv"});
 			}
 		}).on('clustermouseover', function (a) {
+			activepopups.forEach(p=>p.remove());
+			activepopups=new Array;
+
 			var clusterchildmarkers=a.layer.getAllChildMarkers();
 			popuphtml=make_languagegroupstable(clusterchildmarkers);
 			//http://jsfiddle.net/3tnjL/59/
 			var pop = new L.popup({
 					'className':'leafletAOPopup',
 					'closeOnClick':false,
-// 					'showCoverageOnHover': false,
+					'showCoverageOnHover': false,
 				}).
 				setLatLng(a.latlng).
 				setContent(popuphtml);
 			pop.addTo(AO_map);
 			activepopups.push(pop);
+			
+			
 
-			var child_nodes=new Array;
+			var child_hidden_edges=new Array;
 			Object.keys(clusterchildmarkers).forEach(marker=>{
 				if (clusterchildmarkers[marker])	{	
 					if (clusterchildmarkers[marker].feature){
-						child_nodes.push(clusterchildmarkers[marker].feature)
+						clusterchildmarkers[marker].feature.properties.hidden_edges.forEach(e_id=>{child_hidden_edges.push(e_id)})
 					}
 				}
 			});
 			
-			
-			
-// 			console.log(nodesdict[child_nodes[0].properties.point_id])
-			
-// 			var hidden_edges=new Array;
-// 			child_nodes.forEach(n=>{
-// 				n.properties.hidden_edges.forEach(e=>{
-// 					if (edgesdict[regionorplace][e]) {
-// 						hidden_edges.push(edgesdict[regionorplace][e])
-// 					}
-// 				})
-// 			})
-// 			var hidden_edge_ids=new Array;
-// 			child_nodes.forEach(n=>{n.properties.hidden_edges.forEach(e_id=>{hidden_edge_ids.push(e_id)})})
-// 			refreshedges(hidden_edge_ids,edgesdict,regionorplace,AO_map);
-			
-			
-			
-			
-// 			console.log(hidden_edge_ids)
+			refreshedges(child_hidden_edges,regionorplace,AO_map,endpoint_main_edges_layer_group,endpoint_animation_edges_layer_group);							
 		})
-		
-		.on('clustermouseout', function (a) {
-			activepopups.forEach(p=>p.remove());
-			activepopups=new Array;
-// 			console.log(a)
-		});
-// 		console.log(layergroup)
+
 		return layergroup
 	}
 	
@@ -1383,7 +1365,7 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 
 
 	
-		// GEOJSON POINTS
+	// GEOJSON POINTS
 	function add_point_to_layergroup(feature,layer_group,nodesize,networkname,edges_main_layer_group,edges_animation_layer_group) {
 		var point_id=feature.properties.point_id;
 		var node_classes=feature.properties.node_classes;
@@ -1401,38 +1383,25 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 							opacity: 1,
 							fillOpacity: 0.6
 						})
-		
-// 	function make_edge(map,edge,networkname,bezier=true){
-// 		var commands = [];
-// 		var edge_type=edge.leg_type;
-// 		var weight=routesValueScale(edge.weight);
-// 		var color=legColorPicker(edge_type);
-// 		
-// 		if (!bezier) {
-// 			var latlong=edge.latlong;
-// 			var sourcetarget=edge.sourcetarget;
-// 			var edge_id=sourcetarget[0].toString()+'_'+sourcetarget[1].toString();
-// 			var newline = L.polyline(
-// 				latlong,
-					
-						marker.bindPopup(makeNodePopUp(node_classes,node_title),{'className':'leafletAOPopup'});
-						marker.on('mouseover', function () {
+						marker.on('mouseover', function (a) {
+							activepopups.forEach(p=>p.remove());
+							activepopups=new Array;
+							var pop = new L.popup({
+									'className':'leafletAOPopup',
+									'closeOnClick':false,
+									'showCoverageOnHover': false,
+								}).
+								setLatLng(a.latlng).
+								setContent(makeNodePopUp(node_classes,node_title));
+							pop.addTo(AO_map);
+							activepopups.push(pop);
+							
+
+
 							refreshedges(hidden_edges,regionorplace,AO_map,edges_main_layer_group,edges_animation_layer_group);							
 							marker.openPopup();
 							marker.bringToFront();
 						});
-						marker.on('mouseout',function () {
-							marker.closePopup();
-							
-// 							hidden_edges.forEach(e=>{
-// 								if (edgesdict[networkname][e]) {
-// 										edgesdict[networkname][e].remove()
-// 								}
-// 							})
-
-// 							hiddenrouteslayergroup.clearLayers();
-// 							hiddenanimationrouteslayergroup.clearLayers();
-						})
 						return marker
 				}
 			},
@@ -1442,10 +1411,8 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 		layer_group.addLayer(newlayer);
 		nodesdict[networkname][point_id]=newlayer
 	};	
-		// BEZIER CURVES
-		
-
-
+	
+	// BEZIER CURVES
 	function refreshedges(edge_id_list,networkname,map,main_layer_group,animation_layer_group){
 		main_layer_group.clearLayers();
 		animation_layer_group.clearLayers();
@@ -1462,48 +1429,17 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 					var lg=ports_origins_layer_group
 				}
 				//clusters aren't registered in the nodesdict.
-				//can be used to switch over to another handler for them.
+				//but that fact can be used to switch over to another handler for them.
 				var source=nodesdict[networkname][source_id]
 				var target=nodesdict[networkname][target_id]
 				if (source&&target){
-// 					console.log(lg)
-// 					var fglayers=new Array()
-// 					var allchildmarkers=new Array();
-// 					Object.keys(lg._featureGroup._layers).forEach(l=>{
-// 						var thislayer=lg._featureGroup._layers[l];
-// 						fglayers.push(thislayer)
-// 						
-// // 						console.log(lg._featureGroup._layers[l]);
-// 						if (thislayer._childCount){
-// 							
-// 							
-// 							var childmarkers=thislayer.getAllChildMarkers()
-// 							
-// 							childmarkers.forEach(c=>{
-// // 								console.log(c)
-// 								allchildmarkers.push(c._leaflet_id)
-// 							})
-// 							
-// 						}
-// 					})
-// // 					console.log(allchildmarkers)
-// 					var lgmarkers=lg.getAllChildMarkers();
-// 					
-// 					lgmarkers.forEach(m=>{console.log(lg)})
 					
 					source_node_classes=Object.keys(source._layers[Object.keys(source._layers)[0]].feature.properties.node_classes)
 					target_node_classes=Object.keys(target._layers[Object.keys(target._layers)[0]].feature.properties.node_classes)
 					if (source_node_classes.includes('origin')) {
-// 						console.log(allchildmarkers.includes(source._leaflet_id))
 						
 						var vp=lg.getVisibleParent(source._layers[Object.keys(source._layers)[0]])
 						
-						
-						
-						
-						
-// 						console.log(fglayers.forEach(l=>l.getVisibleParent(source._layers[Object.keys(source._layers)[0]])))
-// 						console.log(source._layers[Object.keys(source._layers)[0]])
 						if (vp) {
 							var coords=vp._latlng
 						} else {
@@ -1529,24 +1465,9 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 					
 				} else {
 					
-// 					console.log(source,target)
+					console.log(source,target)
 				
 				}
-	// 			
-// 				
-// 				
-// 				this sucks but here it is!
-// 				[source,target].forEach(n_id=>{console.log(lg.getVisibleParent(nodesdict[n_id]._layers[Object.keys(nodesdict[n_id]._layers)[0]]))})
-// 				
-// 				
-// 				
-// 				
-// 				var basepath=edge['main'];
-// 				basepath.addTo(main_edges_layer_group);
-// 				var animationpath=edge['animation'];
-// 				animationpathoptions=make_animationrouteoptions(basepath,AO_map);
-// 				animationpath.options.animate.duration=animationpathoptions.animate.duration;
-// 				animationpath.addTo(animation_edges_layer_group);
 			}
 		})
 		bringpointlayerstofront()
@@ -1605,6 +1526,10 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 	}
 	
 	function update_oceanic_edges() {
+		endpoint_main_edges_layer_group.clearLayers();
+		endpoint_animation_edges_layer_group.clearLayers();
+		oceanic_main_edges_layer_group.clearLayers();
+		oceanic_animation_edges_layer_group.clearLayers();
 		
 		var all_network_edges=edgesdict[regionorplace];
 		var oceanic_edges=get_edgedict_edges_by_types(all_network_edges,['onramp','offramp','oceanic_leg']);
@@ -1657,8 +1582,12 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 				weight: weight,
 				stroke: true,
 			})
-// 			.bindTooltip(makeRouteToolTip(edge,networkname),{'sticky':true})
-
+			.bindTooltip(makeRouteToolTip(edge,networkname),{'sticky':true})
+			.on('mouseover', function () {
+				activepopups.forEach(p=>p.remove());
+				activepopups=new Array;
+			})
+			
 			newroute.addTo(main_layer_group);
 		
 			//then layer on the animation curves
@@ -1680,10 +1609,10 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 			st=edge.source_target
 			st_e[st[0],st[1]]
 			
-			if(autoremove){
-				newroute.remove()
-				newanimationroute.remove()
-			}
+// 			if(autoremove){
+// 				newroute.remove()
+// 				newanimationroute.remove()
+// 			}
 		}
 	};
 
@@ -1717,15 +1646,7 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 			
 			var featurecollection=network.points;
 			console.log(network);
-			var edges=network.routes;
-			routesValueScale=routeslogvaluescale_fn(edges,3,3);
-			
-			var hiddenedges=get_featurecollection_edges_by_types(edges,['origin','final_destination']);
-			var oceanicedges=get_featurecollection_edges_by_types(edges,['onramp','offramp','oceanic_leg']);
-			
-			Object.keys(oceanicedges).forEach(e_id=>{make_edge(AO_map,oceanicedges[e_id],networkname,oceanic_main_edges_layer_group,oceanic_animation_edges_layer_group,bezier=true,autoremove=false)});
-			Object.keys(hiddenedges).forEach(e_id=>{make_edge(AO_map,hiddenedges[e_id],networkname,endpoint_main_edges_layer_group,endpoint_animation_edges_layer_group,bezier=true,autoremove=true)});
-			
+						
 // 			console.log(edgesdict)
 			origin_nodelogvaluescale=nodelogvaluescale_fn(featurecollection,4,28);
 			embark_disembark_nodelogvaluescale=nodelogvaluescale_fn(featurecollection,3,10);
@@ -1752,6 +1673,18 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 					oceanic_waypoints_layer_group.remove()
 				}
 			})
+			
+			var edges=network.routes;
+			routesValueScale=routeslogvaluescale_fn(edges,3,3);
+			var hiddenedges=get_featurecollection_edges_by_types(edges,['origin','final_destination']);
+			var oceanicedges=get_featurecollection_edges_by_types(edges,['onramp','offramp','oceanic_leg']);
+			
+			Object.keys(hiddenedges).forEach(e_id=>{make_edge(AO_map,hiddenedges[e_id],networkname,endpoint_main_edges_layer_group,endpoint_animation_edges_layer_group,bezier=true,autoremove=true)});
+			Object.keys(oceanicedges).forEach(e_id=>{make_edge(AO_map,oceanicedges[e_id],networkname,oceanic_main_edges_layer_group,oceanic_animation_edges_layer_group,bezier=true,autoremove=false)});
+			
+
+			update_oceanic_edges();
+			
 		});		
 // 		console.log(ports_origins_layer_group);
 // 		console.log(regions_origins_layer_group);
