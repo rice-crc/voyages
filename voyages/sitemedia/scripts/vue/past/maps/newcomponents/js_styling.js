@@ -18,6 +18,17 @@ function nodelogvaluescale_fn(points,min,max) {
 }
 
 
+function routeslogvaluescale_fn(routes,min,max) {
+	var mapRouteValueMin = d3.min(routes, function (r) {
+		return r.weight;
+	});
+	var mapRouteValueMax = d3.max(routes, function (r) {
+		return r.weight;
+	});
+  return d3.scaleLog().domain([mapRouteValueMin, mapRouteValueMax]).range([min,max]);
+}
+
+
 
 function legColorPicker(leg_type,alpha=1) {
 	if (leg_type == 'final_destination') {

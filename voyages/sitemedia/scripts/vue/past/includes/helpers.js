@@ -1098,23 +1098,32 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 		var currentzoom=AO_map.getZoom()
 		if (currentzoom>4){
 			regionorplace="place";
-			regionorplace="region";
+			ports_oceanic_main_edges_layer_group.addTo(AO_map);
+			ports_oceanic_animation_edges_layer_group.addTo(AO_map);
 			ports_origins_layer_group.addTo(AO_map);
 			ports_embdisemb_layer_group.addTo(AO_map);
 			ports_dest_layer_group.addTo(AO_map);
+			regions_oceanic_animation_edges_layer_group.removeFrom(AO_map);
+			regions_oceanic_main_edges_layer_group.removeFrom(AO_map);
 			regions_dest_layer_group.removeFrom(AO_map);
 			regions_origins_layer_group.removeFrom(AO_map);
 			regions_embdisemb_layer_group.removeFrom(AO_map);
 		} else {
+			regionorplace="region";
+			regions_oceanic_main_edges_layer_group.addTo(AO_map);
+			regions_oceanic_animation_edges_layer_group.addTo(AO_map);
 			regions_origins_layer_group.addTo(AO_map);
 			regions_embdisemb_layer_group.addTo(AO_map);
 			regions_dest_layer_group.addTo(AO_map);
+			ports_oceanic_animation_edges_layer_group.removeFrom(AO_map);
+			ports_oceanic_main_edges_layer_group.removeFrom(AO_map);
 			ports_dest_layer_group.removeFrom(AO_map);
 			ports_origins_layer_group.removeFrom(AO_map);
 			ports_embdisemb_layer_group.removeFrom(AO_map);
 		}
 	}).on('zoomstart', function(a) {
 		main_edges_layer_group.clearLayers();
+		animation_edges_layer_group.clearLayers();
 		activepopups.forEach(p=>p.remove());
 		activepopups=new Array;
 // 		hiddenrouteslayergroup.clearLayers();
@@ -1147,7 +1156,7 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 	var featurelayers = {
 		"Rivers":mappingSpecialistsRivers,
 		"Modern Countries":mappingSpecialistsCountries,
-		"Animation": hiddenanimationrouteslayergroup,
+// 		"Animation": hiddenanimationrouteslayergroup,
 	}
 	add_control_layers_to_map(featurelayers,AO_map);
 	
@@ -1158,6 +1167,7 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 
 	var regions_origins_layer_group = make_origins_layer_groups();
 	regions_origins_layer_group.addTo(AO_map);
+// 	console.log(regions_origins_layer_group)
 	
 	var ports_embdisemb_layer_group = L.layerGroup();
 	ports_embdisemb_layer_group.addTo(AO_map);
@@ -1173,10 +1183,19 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 	
 	
 	
+	var ports_oceanic_animation_edges_layer_group= L.layerGroup();
+	ports_oceanic_animation_edges_layer_group.addTo(AO_map);
 	
+	var regions_oceanic_animation_edges_layer_group= L.layerGroup();
+	regions_oceanic_animation_edges_layer_group.addTo(AO_map);
 	
+	var ports_oceanic_main_edges_layer_group= L.layerGroup();
+	ports_oceanic_main_edges_layer_group.addTo(AO_map);
 	
+	var regions_oceanic_main_edges_layer_group= L.layerGroup();
+	regions_oceanic_main_edges_layer_group.addTo(AO_map);
 	
+		
 	
 	var main_edges_layer_group = L.layerGroup();
 	main_edges_layer_group.addTo(AO_map);
@@ -1196,10 +1215,11 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 // II.  STATE GLOBALS
 
 	var animationmode = true;
-	var nodesdict = new Object;
+	var nodesdict = {'region':{},'place':{}}
 	var regionorplace = "region";
 	var activepopups=new Array;
 	var edgesdict = new Object;
+	var st_e=new Object;
 
 // III. USEFUL FORMATTING FUNCTIONS
 
@@ -1217,12 +1237,23 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 	// A. FACTORIES
 
 		//ROUTE TOOLTIPS
-	  function makeRouteToolTip(r) {
-	  return "<p>not using nodesdict...</p>"
-// 	  
+	  function makeRouteToolTip(r,networkname) {
+// 		console.log(r)
+
 //  	  	if (r.leg_type=='final_destination') {
-// 			var routesource=nodesdict[r.source_target[0]]
-// 			var routetarget=nodesdict[r.source_target[1]]
+// 			var routesourcelayer=nodesdict[networkname][r.source_target[0]]
+// 			var routetargetlayer=nodesdict[networkname][r.source_target[1]]
+// 			
+// 			console.log(routesourcelayer)
+// 			console.log(routetargetlayer)
+			
+// 			var routesource=routesourcelayer[Object.keys(routesourcelayer)[0]].feature.properties;
+// 			var routetarget=routetargetlayer[Object.keys(routetargetlayer)[0]].feature.properties;
+			
+// 			console.log(routesource)
+// 			console.log(routetarget)
+				  return "<p>not using nodesdict...</p>"
+			
 //  	  		try {
 // 				var popuptext = [
 // 					r.weight,
@@ -1238,8 +1269,8 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 // 				var popuptext=["bad source or target node. source: ",st[0],". target: ",st[1]].join('')
 // 			}
 //  	  	} else if (r.leg_type=='origin') {
-// 			var routesource=nodesdict[r.source_target[0]]
-// 			var routetarget=nodesdict[r.source_target[1]]
+// 			var routesource=nodesdict[networkname][r.source_target[0]]
+// 			var routetarget=nodesdict[networkname][r.source_target[1]]
 //  	  		try {
 // 				var popuptext = [
 // 					r.weight,
@@ -1254,7 +1285,7 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 // 				var popuptext=["bad source or target node. source: ",st[0],". target: ",st[1]].join('')
 // 			}
 //  	  	} else if (r.leg_type=='offramp') {
-// 			var routetarget=nodesdict[r.source_target[1]]
+// 			var routetarget=nodesdict[networkname][r.source_target[1]]
 // 			try {
 // 				var popuptext = [
 // 					r.weight,
@@ -1268,7 +1299,7 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 // 				var popuptext=["bad target node: ",st[1]].join('')
 // 			}
 //  	  	} else if (r.leg_type=='onramp') { 	
-// 			var routesource=nodesdict[r.source_target[0]]
+// 			var routesource=nodesdict[networkname][r.source_target[0]]
 //  	  		try {
 // 				var popuptext = [
 // 					r.weight,
@@ -1306,7 +1337,7 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 			var pop = new L.popup({
 					'className':'leafletAOPopup',
 					'closeOnClick':false,
-					showCoverageOnHover: false,
+// 					'showCoverageOnHover': false,
 				}).
 				setLatLng(a.latlng).
 				setContent(popuphtml);
@@ -1321,19 +1352,47 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 					}
 				}
 			});
-	// 		displayhiddenroutes(AO_map,child_nodes)
+			
+			
+			
+// 			console.log(nodesdict[child_nodes[0].properties.point_id])
+			
+// 			var hidden_edges=new Array;
+// 			child_nodes.forEach(n=>{
+// 				n.properties.hidden_edges.forEach(e=>{
+// 					if (edgesdict[regionorplace][e]) {
+// 						hidden_edges.push(edgesdict[regionorplace][e])
+// 					}
+// 				})
+// 			})
+// 			var hidden_edge_ids=new Array;
+// 			child_nodes.forEach(n=>{n.properties.hidden_edges.forEach(e_id=>{hidden_edge_ids.push(e_id)})})
+// 			refreshedges(hidden_edge_ids,edgesdict,regionorplace,AO_map);
+			
+			
+			
+			
+// 			console.log(hidden_edge_ids)
 		})
+		
 		.on('clustermouseout', function (a) {
 			activepopups.forEach(p=>p.remove());
 			activepopups=new Array;
-	// 		hiddenrouteslayergroup.clearLayers();
-	// 		hiddenanimationrouteslayergroup.clearLayers();
+// 			console.log(a)
 		});
-		
+// 		console.log(layergroup)
 		return layergroup
 	}
 	
 	// B. ADDTO FUNCTIONS	
+	
+	
+	
+
+
+
+
+
 	
 		// GEOJSON POINTS
 	function add_point_to_layergroup(feature,layer_group,nodesize,networkname) {
@@ -1353,16 +1412,26 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 							opacity: 1,
 							fillOpacity: 0.6
 						})
-												
+
+
+
+		
+// 	function make_edge(map,edge,networkname,bezier=true){
+// 		var commands = [];
+// 		var edge_type=edge.leg_type;
+// 		var weight=routesValueScale(edge.weight);
+// 		var color=legColorPicker(edge_type);
+// 		
+// 		if (!bezier) {
+// 			var latlong=edge.latlong;
+// 			var sourcetarget=edge.sourcetarget;
+// 			var edge_id=sourcetarget[0].toString()+'_'+sourcetarget[1].toString();
+// 			var newline = L.polyline(
+// 				latlong,
+					
 						marker.bindPopup(makeNodePopUp(node_classes,node_title),{'className':'leafletAOPopup'});
 						marker.on('mouseover', function () {
-							main_edges_layer_group.clearLayers();
-							hidden_edges.forEach(e=>{
-								if (edgesdict[networkname][e]) {
-										edgesdict[networkname][e].addTo(main_edges_layer_group)
-								}
-							})
-// 							displayhiddenroutes(AO_map,[feature]);
+							refreshedges(hidden_edges,edgesdict,regionorplace,AO_map);							
 							marker.openPopup();
 							marker.bringToFront();
 						});
@@ -1382,144 +1451,207 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 				}
 			},
 		);
-		
 // 		var l_id=L.stamp(newlayer);
 		var point_id=feature.properties.point_id
-		
-// 		nodesdict[point_id]['leaflet_id']=l_id;
 		layer_group.addLayer(newlayer);
-		nodesdict[point_id]=newlayer
+		nodesdict[networkname][point_id]=newlayer
 	};	
-	
 		// BEZIER CURVES
 		
-	function make_edge(map,edge,networkname){
-		var commands = [];
-		var edge_type=edge.leg_type;
-		
-// 		if (sfo_he.includes(edge.id)) {
-// 			console.log(edge)
-// 		}
-// 		if (edge.id==3461) {
-// 			console.log(edge)
-// 		}
-		
-		commands.push("M", edge.geometry[0][0]);
-		commands.push("C", edge.geometry[1][0], edge.geometry[1][1], edge.geometry[0][1]);
-// 		var weight=valueScale(route.weight);
+
+
+	function refreshedges(edge_id_list,edges_dictionary,networkname,map){
+		main_edges_layer_group.clearLayers();
+		animation_edges_layer_group.clearLayers();
+		edge_id_list.forEach(e=>{
+		if (edgesdict[networkname][e]) {
+				edge=edgesdict[networkname][e]
+				st=edge.source_target;
+				source_id=st[0];
+				target_id=st[1];
+				var lg= new Object;
+				if (regionorplace=='region') {
+					var lg=regions_origins_layer_group
+				} else {
+					var lg=ports_origins_layer_group
+				}
+				//clusters aren't registered in the nodesdict.
+				//can be used to switch over to another handler for them.
+				var source=nodesdict[networkname][source_id]
+				var target=nodesdict[networkname][target_id]
+				
+				if (source&&target){
+// 					console.log(source)
+// 					console.log(target)
+// 					console.log(lg)
+// 					var fglayers=new Array()
+// 					var allchildmarkers=new Array();
+// 					Object.keys(lg._featureGroup._layers).forEach(l=>{
+// 						var thislayer=lg._featureGroup._layers[l];
+// 						fglayers.push(thislayer)
+// 						
+// // 						console.log(lg._featureGroup._layers[l]);
+// 						if (thislayer._childCount){
+// 							
+// 							
+// 							var childmarkers=thislayer.getAllChildMarkers()
+// 							
+// 							childmarkers.forEach(c=>{
+// // 								console.log(c)
+// 								allchildmarkers.push(c._leaflet_id)
+// 							})
+// 							
+// 						}
+// 					})
+// // 					console.log(allchildmarkers)
+// 					var lgmarkers=lg.getAllChildMarkers();
+// 					
+// 					lgmarkers.forEach(m=>{console.log(lg)})
+					
+					source_node_classes=Object.keys(source._layers[Object.keys(source._layers)[0]].feature.properties.node_classes)
+					if (source_node_classes.includes('origin')) {
+// 						console.log(allchildmarkers.includes(source._leaflet_id))
+						
+						var vp=lg.getVisibleParent(source._layers[Object.keys(source._layers)[0]])
+						
+						
+						
+						
+						
+// 						console.log(fglayers.forEach(l=>l.getVisibleParent(source._layers[Object.keys(source._layers)[0]])))
+// 						console.log(source._layers[Object.keys(source._layers)[0]])
+						if (vp) {
+							var coords=vp._latlng
+						} else {
+							var latlng=source._layers[Object.keys(source._layers)[0]].feature.geometry.coordinates
+							var coords={'lat':latlng[1],'lng':latlng[0]}
+// 							console.log(coords)
+						}
+							edge.main._coords[1]=[coords.lat,coords.lng]
+							edge.main.redraw()
+							edge.main.addTo(main_edges_layer_group)
+							edge.animation._coords[1]=[coords.lat,coords.lng]
+							edge.animation.options.animate.duration=make_animationrouteoptions(edge.main,AO_map).animate.duration
+							edge.animation.redraw()
+							edge.animation.addTo(animation_edges_layer_group)
+						}
+					
+					target_node_classes=Object.keys(target._layers[Object.keys(target._layers)[0]].feature.properties.node_classes)
+					
+				}
+	// 			
+// 				
+// 				
+// 				this sucks but here it is!
+// 				[source,target].forEach(n_id=>{console.log(lg.getVisibleParent(nodesdict[n_id]._layers[Object.keys(nodesdict[n_id]._layers)[0]]))})
+// 				
+// 				
+// 				
+// 				
+// 				var basepath=edge['main'];
+// 				basepath.addTo(main_edges_layer_group);
+// 				var animationpath=edge['animation'];
+// 				animationpathoptions=make_animationrouteoptions(basepath,AO_map);
+// 				animationpath.options.animate.duration=animationpathoptions.animate.duration;
+// 				animationpath.addTo(animation_edges_layer_group);
+			}
+		})
+	}
+
+	function make_animationrouteoptions(basepath,map){
+		var distance=0
 		var distance=0;
 		var timingscalar = 50
-		var newroute=L.curve(commands, {
-// 			color: "#60c0ab",
-			color: legColorPicker(edge_type),
-			weight: routesValueScale(edge.weight),
-			stroke: true,
-		})
-// 		.bindTooltip(makeRouteToolTip(edge),{'sticky':true})
-		
-// 		if (["onramp","offramp","oceanic_leg"].includes(edge_type)) {
-// 			layergroup=oceanic_edges_layer_group
-// 		} else if (edge_type=='final_destination') {
-// 			layergroup=destination_edges_layer_group
-// 		} else if (edge_type=='origin') {
-// 			layergroup=origin_edges_layer_group
-// 		};
-		
-		newroute.addTo(main_edges_layer_group);
-		
-		//then layer on the animation curves
-		//in oder to do which (using basic css) we need to know how long these curves are
-		//because the css animation works on the basis of animation duration (how long it should take to complete a run)
-		//and if what we're animating is the traversal of a small dot along a bezier curve
-		//then we have to make the time apportioned inversely proportional to the length of the curve
-		//tldr: in order that the dots on longer routes and shorter routes move the same speed, the longer routes need animations of longer duration, and vice versa
-		//increase timingscalar to slow this down, decrease it to speed it up
-		var distance=0
 		var interpolation_steps=[0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]
-		var pairs=d3.pairs(newroute.trace(interpolation_steps));
+		var pairs=d3.pairs(basepath.trace(interpolation_steps));
 		function euclideandistance(p1,p2) {
-			xyone=AO_map.latLngToContainerPoint(p1);
-			xytwo=AO_map.latLngToContainerPoint(p2);
+			xyone=map.latLngToContainerPoint(p1);
+			xytwo=map.latLngToContainerPoint(p2);
 			var ed=Math.sqrt((xyone.x-xytwo.x)**2+(xyone.y-xytwo.y)**2)
 			return ed
 		}
 		if (pairs.length>1){
 			pairs.forEach(sp=>distance+=(euclideandistance(sp[0],sp[1])))
 		}
+		var duration=distance*timingscalar;
+		var standard_interval=10
+		return {
+			color: "#6c757dc9",
+			weight: "1",
+			dashArray:"1 " + (standard_interval-1).toString(),
+			animate: {
+				"duration":duration,
+				"iterations":Infinity,
+				"direction":'normal'
+			}
+		}
+	}
+
+
+
+
+
+	function make_edge(map,edge,networkname,main_layer_group,animation_layer_group,bezier=true,autoremove=true){
+// 		console.log(edge)
 		
-// 		newroute.removeFrom(mainlayergroup);
+		var commands = [];
+		var edge_type=edge.leg_type;
+		var weight=routesValueScale(edge.weight);
+		var color=legColorPicker(edge_type);
 		
-// 		var duration=distance*timingscalar;
-		
-// 		if (animationlayergroup && animationmode){
+		if (!bezier) {
+			var latlong=edge.latlong;
+			var sourcetarget=edge.sourcetarget;
+			var edge_id=sourcetarget[0].toString()+'_'+sourcetarget[1].toString();
+			var newline = L.polyline(
+				latlong,
+				{
+					color: color,
+					weight: weight,
+					stroke: true,
+				}
+			);
+			newline.addTo(main_edges_layer_group);
+			edgesdict[edge_id]=newline;
 			
-// 		var standard_interval=10
+		} else {
 		
-// 		var newanimationroute=L.curve(commands, {
-// 			color: "#6c757dc9",
-// 			weight: "1",
-// 			dashArray:"1 " + (standard_interval-1).toString(),
-// 			animate: {
-// 				"duration":duration,
-// 				"iterations":Infinity,
-// 				"direction":'normal'
-// 			}
-// 		});
-// 		newanimationroute.addTo(animation_edges_layer_group);
+			commands.push("M", edge.geometry[0][0]);
+			commands.push("C", edge.geometry[1][0], edge.geometry[1][1], edge.geometry[0][1]);
+
+			var newroute=L.curve(commands, {
+				color: color,
+				weight: weight,
+				stroke: true,
+			})
+// 			.bindTooltip(makeRouteToolTip(edge,networkname),{'sticky':true})
+
+			newroute.addTo(main_layer_group);
 		
-		edgesdict[networkname][edge.id]=newroute;
-		
-		newroute.remove()
-		
-		// the distance traversed has to be measured in *PIXELS* or else the speed increases with zoom level
+			//then layer on the animation curves
+			//in oder to do which (using basic css) we need to know how long these curves are
+			//because the css animation works on the basis of animation duration (how long it should take to complete a run)
+			//and if what we're animating is the traversal of a small dot along a bezier curve
+			//then we have to make the time apportioned inversely proportional to the length of the curve
+			//tldr: in order that the dots on longer routes and shorter routes move the same speed, the longer routes need animations of longer duration, and vice versa
+			//increase timingscalar to slow this down, decrease it to speed it up
+			var animationrouteoptions=make_animationrouteoptions(newroute,map)
+			var newanimationroute=L.curve(commands, animationrouteoptions);
+			newanimationroute.addTo(animation_layer_group);
+			edgesdict[networkname][edge.id]={
+				'main':newroute,
+				'animation':newanimationroute,
+				'source_target':edge.source_target
+			};
+			st=edge.source_target
+			st_e[st[0],st[1]]
 			
-	// 		console.log(distance)
-
-
-	// 			newanimationroute.animate.duration=distance*timingscalar;
-			
-	// 			var distance=newanimationroute._path.getTotalLength();
-			
-// 		};
-		
-		//this is some interactivity micro-tuning/crafting
-		//when you roll over a node with hidden routes (i.e., inland to origination point or final destination)
-		//you want the node you're rolling over to be on top of the routes that are drawn emanating from it -- otherwise, those routes' interactivities make it very likely you'll get rid of your node popup immediately by having these appear directly under your mouse and on top of the node
-		//however, we want *only* that node to come to the front, because you do want to be able to roll your mouse off that node and immediately onto one of the emanating routes, potentially to follow it out to the other, connected nodes -- which, when you hit them, you want to be able to roll off the route onto the node to bring that node to the front and draw the routes emanating from *it* etc. etc.
-// 		if (['origin','final_destination'].includes(edge_type)) {
-// // 			var hovernode_leaflet_id=nodesdict[point_id].leaflet_id;
-// // 			var hovernode_layer = map._layers[hovernode_leaflet_id];
-// // 			if (hovernode_layer) {hovernode_layer.bringToFront()};
-// // 			newroute.on('mouseover', function () {	
-// // 				if (currently_open_popup_layer.closePopup) {
-// // 					currently_open_popup_layer.closePopup();
-// // 				}
-// // 			});
-// 		//and this bad boy makes sure that those node popups go away once you hit one of the other non-hidden routes
-// 		} else if (['onramp','offramp','oceanic_leg'].includes(edge_type)) {
-// 			newroute.on('mouseover', function () {	
-// 				animation_edges_layer_group.clearLayers();
-// 				if (nodesarehidden) {
-// 					refreshhiddennodes();
-// 					nodesarehidden=false;
-// 				}
-// // 				if (currently_open_popup_layer.closePopup) {
-// // 					currently_open_popup_layer.closePopup();
-// // 				}
-// 			});
-// 		};
-	  };
-
-
-
-	
-	
-// 	var hiddenrouteslayergroup = L.layerGroup();
-// 	hiddenrouteslayergroup.addTo(AO_map);
-// 
-// 	var hiddenroutes = new Object();
-// 	var routesValueScale = d3.scaleLog();
-
+			if(autoremove){
+				newroute.remove()
+				newanimationroute.remove()
+			}
+		}
+	};
 
 
 
@@ -1528,12 +1660,21 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 		'place':{
 			'origins_layer_group':ports_origins_layer_group,
 			'embark_disembark_layers_group':ports_embdisemb_layer_group,
-			'dest_layer_group':ports_dest_layer_group
+			'dest_layer_group':ports_dest_layer_group,
+			'edges_main_group':main_edges_layer_group,
+			'edges_animation_group':animation_edges_layer_group,
+			'oceanic_edges_main_group':ports_oceanic_main_edges_layer_group,
+			'oceanic_edges_animation_group':ports_oceanic_animation_edges_layer_group
 		},
 		'region':{
 			'origins_layer_group':regions_origins_layer_group,
 			'embark_disembark_layers_group':regions_embdisemb_layer_group,
-			'dest_layer_group':regions_dest_layer_group
+			'dest_layer_group':regions_dest_layer_group,
+			'edges_main_group':main_edges_layer_group,
+			'edges_animation_group':animation_edges_layer_group,
+			'oceanic_edges_main_group':regions_oceanic_main_edges_layer_group,
+			'oceanic_edges_animation_group':regions_oceanic_animation_edges_layer_group
+			
 		}
 	};
 
@@ -1549,12 +1690,34 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 			
 			var edges_main_layer_group = region_vs_place_vars[networkname]['edges_main_group'];
 			var edges_animation_layer_group = region_vs_place_vars[networkname]['edges_animation_group'];
+			
+			var oceanic_edges_main_layer_group = region_vs_place_vars[networkname]['oceanic_edges_main_group'];
+			var oceanic_edges_animation_layer_group = region_vs_place_vars[networkname]['oceanic_edges_animation_group'];
+			
+
+			
 			var featurecollection=network.points;
-			console.log(network);
+// 			console.log(network);
 			var edges=network.routes;
 			routesValueScale=routeslogvaluescale_fn(edges,3,3);
 			edgesdict[networkname]=new Object;
-			edges.forEach(edge=>{make_edge(AO_map,edge,networkname)});
+			
+						
+			
+			var hiddenedges=new Array();
+			var oceanicedges=new Array();
+			edges.forEach(edge=>{
+				if(['onramp','offramp','oceanic_leg'].includes(edge.leg_type)){
+					oceanicedges.push(edge)
+				} else {
+					hiddenedges.push(edge)
+				}
+			
+			})
+			
+			oceanicedges.forEach(edge=>{make_edge(AO_map,edge,networkname,oceanic_edges_main_layer_group,oceanic_edges_animation_layer_group,bezier=true,autoremove=false)});
+			hiddenedges.forEach(edge=>{make_edge(AO_map,edge,networkname,edges_main_layer_group,edges_animation_layer_group,bezier=true,autoremove=true)});
+			
 // 			console.log(edgesdict)
 			origin_nodelogvaluescale=nodelogvaluescale_fn(featurecollection,4,28);
 			embark_disembark_nodelogvaluescale=nodelogvaluescale_fn(featurecollection,3,10);
