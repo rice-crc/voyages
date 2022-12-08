@@ -1326,7 +1326,7 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 			activepopups=new Array;
 
 			var clusterchildmarkers=a.layer.getAllChildMarkers();
-			popuphtml=make_languagegroupstable(clusterchildmarkers);
+			popuphtml=make_origin_nodes_languagegroupstable(clusterchildmarkers);
 			//http://jsfiddle.net/3tnjL/59/
 			var pop = new L.popup({
 					'className':'leafletAOPopup',
@@ -1392,7 +1392,7 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 									'showCoverageOnHover': false,
 								}).
 								setLatLng(a.latlng).
-								setContent(makeNodePopUp(node_classes,node_title));
+								setContent(makeNodePopUp(feature,nodesdict[networkname],edgesdict[networkname]));
 							pop.addTo(AO_map);
 							activepopups.push(pop);
 							
@@ -1604,7 +1604,8 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 				'main':newroute,
 				'animation':newanimationroute,
 				'source_target':edge.source_target,
-				'leg_type':edge.leg_type
+				'leg_type':edge.leg_type,
+				'weight':edge.weight
 			};
 			st=edge.source_target
 			st_e[st[0],st[1]]

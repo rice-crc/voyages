@@ -1,11 +1,71 @@
-function make_languagegroupstable(markers) {
+function tablemaker(tablerowdata,displaylimit) {
+	var tablehtml="<center><table class='lgmaptable'><tr><td>Language Group</td><td>Number of people</td></tr>";	
+		
+	function maketablerow(name,count){
+		return "<tr><td>"+name+"</td><td>"+count.toString()+"</tr>"
+	}
 	
-	var tablehtml="<table class='lgmaptable'><tr><td>Language Group</td><td>Number of people</td></tr>";
+	var rowcount=1
 	
+	var excluded_clustered_dialect_lg_rows={}
+	
+	Object.keys(clustered_dialects).forEach(c=>{excluded_clustered_dialect_lg_rows[clustered_dialects[c]]={'lgcount':0,'peoplecount':0}})
+	
+	var excluded_nonclustered_lg_rows={'lgcount':0,'peoplecount':0}
+	
+	tablerowdata.forEach(r=>{
+		
+		var languagegroup=r.lg
+		var languagegrouppeoplecount=r.value
+		
+		if (rowcount<displaylimit) {
+			
+			tablehtml+=maketablerow(languagegroup,languagegrouppeoplecount)
+		
+		} else {
+			
+			if (Object.keys(clustered_dialects).includes(languagegroup)){
+				var lgcluster=clustered_dialects[languagegroup]
+				excluded_clustered_dialect_lg_rows[lgcluster].lgcount+=1
+				excluded_clustered_dialect_lg_rows[lgcluster].peoplecount+=languagegrouppeoplecount
+			} else {
+				excluded_nonclustered_lg_rows.lgcount+=1
+				excluded_nonclustered_lg_rows.peoplecount+=languagegrouppeoplecount
+			}
+		}
+		rowcount+=1
+	})
+	
+	Object.keys(excluded_clustered_dialect_lg_rows).forEach(c=>{
+		
+		var clusterdata=excluded_clustered_dialect_lg_rows[c]
+		
+		if (clusterdata.peoplecount>0) {
+			
+			var namecell=clusterdata.lgcount.toString() +" more "+c+" dialects"
+			
+			tablehtml+=maketablerow(namecell,clusterdata.peoplecount)
+			
+			
+		}
+		
+	})
+	
+	
+	
+	if (excluded_nonclustered_lg_rows.lgcount>0) {
+		var namecell=excluded_nonclustered_lg_rows.lgcount.toString()+" other language "+pluralorsingular('group',excluded_nonclustered_lg_rows.lgcount)
+		tablehtml+=maketablerow(namecell,excluded_nonclustered_lg_rows.peoplecount)
+	}
+	
+	
+	tablehtml+="</table></center>"
+	return tablehtml
+}
+
+function make_origin_nodes_languagegroupstable(markers) {	
 	//markerclusters contain lots of different kinds of "markers" -- to get at our geojson ones, we have to filter
 	//there's likely a smarter way to do this
-	
-	var lg_ids = new Array;
 	
 	var tablerowdata=new Array;
 	Object.keys(markers).forEach(marker_id=>{
@@ -16,72 +76,24 @@ function make_languagegroupstable(markers) {
 					"lg":markerprops.name,
 					"value":markerprops.size
 				})
-				lg_ids.push(markerprops.point_id)
 			}
 		}
 	})
-	
-	
-	
 	tablerowdata.sort((a,b)=>a.value-b.value);
 	tablerowdata.reverse()
-	
-	displaylimit=5;
-	//special handlers for Yoruba and Igbo (ffs)
-	
-	var dialects=[
-		{'id':1160515,'name':'Yoruba'},
-		{'id':1260677,'name':'Igbo'}
-	];
-	
-	var cluster_dialects=new Array;
-	
-	var dialect_case=false;
-	dialects.forEach(d=>{if(lg_ids.includes(d.id)){dialect_case=true;cluster_dialects.push(d);displaylimit-=2}});
-	
-	tablerowdata.slice(0,displaylimit).forEach(r=>{tablehtml+="<tr><td>"+r.lg+"</td><td>"+r.value.toString()+"</td></tr>"});
-	if (displaylimit<tablerowdata.length) {
-		if (dialect_case) {
-			var excluded_other_count=new Object;
-			
-			cluster_dialects.forEach(dialect=>{
-				excluded_other_count={'languages':0,'people':0};
-				var excluded_dialect_count={'languages':0,'people':0};
-			
-				tablerowdata.slice(displaylimit,tablerowdata.length-1).forEach(r=>{
-					if (r.lg.includes(dialect.name)) {
-						excluded_dialect_count['languages']+=1
-						excluded_dialect_count['people']+=r.value
-					} else {
-						excluded_other_count['languages']+=1
-						excluded_other_count['people']+=r.value
-					}
-				})
-				if (excluded_dialect_count.people<0){
-					tablehtml += "<tr><td>"+excluded_dialect_count.languages.toString()+" more "+dialect.name+" dialects</td><td>"+excluded_dialect_count.people.toString()+"</td></tr>"
-				}
-			})
-			
-			if (excluded_other_count.languages>0) {
-				tablehtml += "<tr><td>"+excluded_other_count.languages.toString()+" other language "+pluralorsingular('group',excluded_other_count.languages)+"</td><td>"+excluded_other_count.people.toString()+"</td></tr>"	
-			}
-			
-		} else {
-			var excluded_lg_count=tablerowdata.length-displaylimit;
-			var excluded_people_count=0
-			tablerowdata.slice(displaylimit,tablerowdata.length-1).forEach(r=>{excluded_people_count+=r.value})
-			tablehtml += "<tr><td>"+excluded_lg_count.toString()+" other language groups</td><td>"+excluded_people_count.toString()+"</td></tr>"	
-		}
-	}
-	
-	tablehtml+="</table>"
+	var tablehtml=tablemaker(tablerowdata,5)
 	
 	return tablehtml
-	
 }
 
-function makeNodePopUp(node_classes,node_title) {
+
+
+
+
+function makeNodePopUp(feature,nodesdict,edgesdict) {
 	var popupsubheads=[];
+	var node_classes=feature.properties.node_classes;
+	var node_title=feature.properties.name;
 	//a node can have multiple classes (mostly this is for sierra leone)
 	Object.entries(node_classes).forEach(([k,v]) => popupsubheads.push(formatNodePopUpListItem (k,v)));
 	if (!popupsubheads.includes(false)){
@@ -93,6 +105,51 @@ function makeNodePopUp(node_classes,node_title) {
 		} else {
 			popupcontent=false
 		}
+	}
+	
+	//don't make a table for certain nodes, e.g., "other africa"
+	var bad_aggregation_nodes=[60900]
+	
+	if (Object.keys(node_classes).includes('embarkation') && !bad_aggregation_nodes.includes(feature.properties.point_id)) {
+
+		var tablerowdata=new Array;
+		var tablerowdatakeys=new Object;
+		var excludedpeoplecount=0;
+		feature.properties.hidden_edges.forEach(e_id=>{
+			if (edgesdict[e_id]){
+				
+				var edge=edgesdict[e_id]
+				var st=edge.source_target
+				var s_id=st[0]
+				if (nodesdict[s_id]) {
+					var source=nodesdict[s_id]
+					var sourcedata=source._layers[Object.keys(source._layers)[0]].feature.properties
+					
+					if (Object.keys(sourcedata.node_classes).includes('origin')){
+					
+						var language_group=sourcedata.name
+						var weight=edge.weight
+					
+						if (language_group in Object.keys(tablerowdatakeys)) {
+							tablerowdatakeys[language_group]+=weight
+						} else {
+							tablerowdatakeys[language_group]=weight
+						}
+						}
+						
+				}
+			}
+		})
+		
+		if (Object.keys(tablerowdatakeys).length>0) {
+			Object.keys(tablerowdatakeys).forEach(lg=>{tablerowdata.push({'lg':lg,'value':tablerowdatakeys[lg]})})
+			tablerowdata.sort((a,b)=>a.value-b.value);
+			tablerowdata.reverse()
+			var tablehtml=tablemaker(tablerowdata,5)
+			popupcontent+="<hr/>" +tablehtml
+		}
+	
+	
 	}
 	return(popupcontent);
 };
