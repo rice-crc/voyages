@@ -4,7 +4,7 @@ function drawUpdateCount(map,results_count) {
 	var results_count_div = L.control({ position: "topleft" });
 	results_count_div.onAdd = function(map) {
 		var div = L.DomUtil.create("div", "legend");
-		div.innerHTML += '<p class="legendp"><a href="#results">'+results_count.toString()+' '+pluralorsingular("liberated African",results_count)+'.<br/>← Read their names</a></p>';
+		div.innerHTML += '<p class="legendp"><a href="#results">'+results_count.toString()+' '+pluralorsingular("Liberated African",results_count)+'.<br/>← Read their names</a></p>';
 		return div
 	};
 	results_count_div.addTo(map);

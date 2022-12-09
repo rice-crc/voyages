@@ -3,7 +3,7 @@ function pluralorsingular(singular,val) {
 		'group':'groups',
 		'person':'people',
 		'dialect':'dialects',
-		'liberated African':'liberated Africans'
+		'Liberated African':'Liberated Africans'
 	}
 	if (val!=1){
 		return pluralize[singular]
@@ -85,7 +85,7 @@ function formatNodePopUpListItem(k,v) {
 	var label = nodeclass_labels[k];
 	var count = v.count||0;
 	var key = v.key||null;
-	var formattedstring=[count.toString(),pluralorsingular("liberated African",count),label].join(' ')
+	var formattedstring=[count.toString(),pluralorsingular("Liberated African",count),label].join(' ')
 	if (key && k!='origin') {
 		var text='<a href="#" onclick="linkfilter(' + key.toString() + ',\'' + k + '\'); return false;">' + formattedstring + '</a>'
 	} else {

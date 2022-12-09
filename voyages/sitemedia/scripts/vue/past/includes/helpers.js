@@ -1228,31 +1228,9 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 		//ROUTE TOOLTIPS
 	  function makeRouteToolTip(r,networkname) {
 		
+// 		return r.id.toString()
 		
-		
-//  	  	if (r.leg_type=='final_destination') {
-// 			var routesourcelayer=nodesdict[networkname][r.source_target[0]]
-// 			var routetargetlayer=nodesdict[networkname][r.source_target[1]]
-// 			
-// 			var routesource=routesourcelayer[Object.keys(routesourcelayer)[0]].feature.properties;
-// 			var routetarget=routetargetlayer[Object.keys(routetargetlayer)[0]].feature.properties;
-// 			
-// 			console.log(routesource,routetarget)
-//  	  		try {
-// 				var popuptext = [
-// 					r.weight,
-// 					pluralorsingular('liberated African',r.weight),
-// 					"ended up in",
-// 					routetarget.name,
-// 					"after landing in",
-// 					routesource.name
-// 					].join(" ")
-//  	  		} catch(error) {
-// 				console.log("BAD SOURCE OR TARGET NODE-->",r);
-// 				var st=r.source_target;
-// 				var popuptext=["bad source or target node. source: ",st[0],". target: ",st[1]].join('')
-// 			}
-//  	  	} else 
+// 		console.log(r)
  	  	
  	  	if (r.leg_type=='origin') {
 			var routesource=nodesdict[networkname][r.source_target[0]]._layers
@@ -1263,7 +1241,7 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 				var popuptext = [
 					r.weight,
 					routesource.name,
-					pluralorsingular('liberated African',r.weight),
+					pluralorsingular('Liberated African',r.weight),
 					"taken to",
 					routetarget.name
 					].join(" ")
@@ -1278,7 +1256,7 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 			try {
 				var popuptext = [
 					r.weight,
-					pluralorsingular('liberated African',r.weight),
+					pluralorsingular('Liberated African',r.weight),
 					"transported to",
 					routetarget.name
 					].join(" ")
@@ -1293,7 +1271,7 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
  	  		try {
 				var popuptext = [
 					r.weight,
-					pluralorsingular('liberated African',r.weight),
+					pluralorsingular('Liberated African',r.weight),
 					"taken from",
 					routesource.name
 					].join(" ")
@@ -1303,7 +1281,7 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 				var popuptext=["bad source node: ",st[0]].join('')
  	  		}
  	  	} else if (r.leg_type=='oceanic_leg'){
-			var popuptext = [r.weight,pluralorsingular('liberated African',r.weight),"transported."].join(" ");
+			var popuptext = [r.weight,pluralorsingular('Liberated African',r.weight),"transported."].join(" ");
 		}
 	  	return popuptext;
 	  };
@@ -1312,13 +1290,25 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 	function make_origins_layer_groups () {
 		var layergroup = L.markerClusterGroup(	
 			{
-				maxClusterRadius: 120,
+// 				maxClusterRadius: 50,
 				zoomToBoundsOnClick: false,
 				showCoverageOnHover: false,
 				iconCreateFunction: function (cluster) {
 				var markers = cluster.getAllChildMarkers();
-				var n = 0;
-				markers.forEach(marker=>n+=marker.feature.properties.size);
+				var n = 1;
+				markers.forEach(marker=>{
+					
+// 				if (marker.feature.properties.node_id==1160437) {
+// 					console.log(marker)
+// 				}
+					
+					
+					n+=marker.feature.properties.size
+					
+				});
+				
+				
+				
 				return L.divIcon({ html: '<div class="cluster_circle"></div>', iconSize: L.point(origin_nodelogvaluescale(n)*2, origin_nodelogvaluescale(n)*2), className:"transparentmarkerclusterdiv"});
 			}
 		}).on('clustermouseover', function (a) {
@@ -1402,14 +1392,17 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 							marker.openPopup();
 							marker.bringToFront();
 						});
+						
 						return marker
 				}
 			},
 		);
 // 		var l_id=L.stamp(newlayer);
-		var point_id=feature.properties.point_id
 		layer_group.addLayer(newlayer);
+
 		nodesdict[networkname][point_id]=newlayer
+		
+		
 	};	
 	
 	// BEZIER CURVES
@@ -1657,7 +1650,7 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 			
 			featurecollection.features.forEach(function (feature) {
 			
-// 				if(feature.properties.point_id==60515){
+// 				if(feature.properties.point_id==1160437){
 // // 					test_region_hidden_edges=feature.properties.hidden_edges
 // 					console.log(feature)
 // 				}
@@ -1691,12 +1684,27 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 			Object.keys(hiddenedges).forEach(e_id=>{make_edge(AO_map,hiddenedges[e_id],networkname,endpoint_main_edges_layer_group,endpoint_animation_edges_layer_group,bezier=true,autoremove=true)});
 			Object.keys(oceanicedges).forEach(e_id=>{make_edge(AO_map,oceanicedges[e_id],networkname,oceanic_main_edges_layer_group,oceanic_animation_edges_layer_group,bezier=true,autoremove=false)});
 			
-
+// 			console.log("--->",nodesdict[networkname][1160437])
+// 			
+// 			console.log(nodesdict[networkname][1160437]._layers[Object.keys(nodesdict[networkname][1160437]._layers)[0]].__parent)
+// 			origins_layer_group.refreshClusters()
+// 			nodesdict[networkname][1160437]._layers[Object.keys(nodesdict[networkname][1160437]._layers)[0]].addTo(origins_layer_group)
+			
+// 			console.log(origins_layer_group)
+// 			
+// 			console.log(origins_layer_group.getVisibleParent(nodesdict[networkname][1160437]._layers[Object.keys(nodesdict[networkname][1160437]._layers)[0]]))
+// 
 			update_oceanic_edges();
+			
 			
 		});
 		
+		
+// 		console.log(edgesdict)
+				
 // 		
+
+
 // 		console.log(test_region_hidden_edges)
 // 		test_region_hidden_edges.forEach(e_id=>{
 // 		
