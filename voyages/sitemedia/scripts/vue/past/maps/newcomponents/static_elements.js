@@ -1,25 +1,10 @@
-function pluralorsingular(singular,val) {
-	
-	var pluralize={
-		'group':'groups',
-		'person':'people'
-	}
-	
-	if (val>1){
-		return pluralize[singular]
-	} else {
-		return singular
-	}
-	
-}
-
 // UPPER-LEFT LEGEND/LINK SHOWING THE TOTAL NUMBER OF PEOPLE IN THE SEARCH RESULT
 // borrowed from https://codepen.io/haakseth/pen/KQbjdO
 function drawUpdateCount(map,results_count) {
 	var results_count_div = L.control({ position: "topleft" });
 	results_count_div.onAdd = function(map) {
 		var div = L.DomUtil.create("div", "legend");
-		div.innerHTML += '<p class="legendp"><a href="#results">'+results_count.toString()+' '+pluralorsingular("person",results_count)+'.<br/>← Read their names</a></p>';
+		div.innerHTML += '<p class="legendp"><a href="#results">'+results_count.toString()+' '+pluralorsingular("liberated African",results_count)+'.<br/>← Read their names</a></p>';
 		return div
 	};
 	results_count_div.addTo(map);

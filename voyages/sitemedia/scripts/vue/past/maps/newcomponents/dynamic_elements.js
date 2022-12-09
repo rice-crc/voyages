@@ -1,5 +1,5 @@
 function tablemaker(tablerowdata,displaylimit) {
-	var tablehtml="<center><table class='lgmaptable'><tr><td>Language Group</td><td>Number of people</td></tr>";	
+	var tablehtml="<center><table class='lgmaptable'><tr><td>Language Group</td><td>Number of liberated Africans</td></tr>";	
 		
 	function maketablerow(name,count){
 		return "<tr><td>"+name+"</td><td>"+count.toString()+"</tr>"
@@ -42,7 +42,7 @@ function tablemaker(tablerowdata,displaylimit) {
 		
 		if (clusterdata.peoplecount>0) {
 			
-			var namecell=clusterdata.lgcount.toString() +" more "+c+" dialects"
+			var namecell=clusterdata.lgcount.toString() +" more "+c+" "+pluralorsingular('dialect',clusterdata.lgcount)
 			
 			tablehtml+=maketablerow(namecell,clusterdata.peoplecount)
 			
@@ -101,7 +101,7 @@ function makeNodePopUp(feature,nodesdict,edgesdict) {
 	} else {
 		if (node_classes['origin']){
 			var count=node_classes['origin']['count'];
-			var popupcontent=[count,pluralorsingular("person",count),"with",node_title,"origins."].join(" ")
+			var popupcontent=[count,pluralorsingular("liberated African",count),"with",node_title,"origins."].join(" ")
 		} else {
 			popupcontent=false
 		}

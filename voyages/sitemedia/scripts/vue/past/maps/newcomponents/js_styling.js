@@ -1,3 +1,17 @@
+function pluralorsingular(singular,val) {
+	var pluralize={
+		'group':'groups',
+		'person':'people',
+		'dialect':'dialects',
+		'liberated African':'liberated Africans'
+	}
+	if (val!=1){
+		return pluralize[singular]
+	} else {
+		return singular
+	}
+}
+
 function nodelogvaluescale_fn(points,min,max) {
 	var valueMin = d3.min(points.features, function (p) {
 		return p.properties.size||1;
@@ -71,7 +85,7 @@ function formatNodePopUpListItem(k,v) {
 	var label = nodeclass_labels[k];
 	var count = v.count||0;
 	var key = v.key||null;
-	var formattedstring=[count.toString(),pluralorsingular("person",count),label].join(' ')
+	var formattedstring=[count.toString(),pluralorsingular("liberated African",count),label].join(' ')
 	if (key && k!='origin') {
 		var text='<a href="#" onclick="linkfilter(' + key.toString() + ',\'' + k + '\'); return false;">' + formattedstring + '</a>'
 	} else {

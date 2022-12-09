@@ -1144,7 +1144,7 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 	oceanic_edges_holding_layer_group.addTo(AO_map);
 	
 	var mappingSpecialistsRivers=L.tileLayer(
-	  'https://api.mapbox.com/styles/v1/jcm10/cl98xvv9r001z14mm17w970no/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoiamNtMTAiLCJhIjoiY2wyOTcyNjJsMGY5dTNwbjdscnljcGd0byJ9.kZvEfo7ywl2yLbztc_SSjw').addTo(AO_map);
+	  'https://api.mapbox.com/styles/v1/jcm10/cl98xvv9r001z14mm17w970no/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoiamNtMTAiLCJhIjoiY2wyOTcyNjJsMGY5dTNwbjdscnljcGd0byJ9.kZvEfo7ywl2yLbztc_SSjw');
 	var mappingSpecialistsCountries=L.tileLayer(
 	  'https://api.mapbox.com/styles/v1/jcm10/cl98yryw3003t14o66r6fx4m9/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoiamNtMTAiLCJhIjoiY2wyOTcyNjJsMGY5dTNwbjdscnljcGd0byJ9.kZvEfo7ywl2yLbztc_SSjw').addTo(AO_map);
 	var featurelayers = {
@@ -1241,7 +1241,7 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 //  	  		try {
 // 				var popuptext = [
 // 					r.weight,
-// 					pluralorsingular('person',r.weight),
+// 					pluralorsingular('liberated African',r.weight),
 // 					"ended up in",
 // 					routetarget.name,
 // 					"after landing in",
@@ -1263,7 +1263,7 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 				var popuptext = [
 					r.weight,
 					routesource.name,
-					pluralorsingular('person',r.weight),
+					pluralorsingular('liberated African',r.weight),
 					"taken to",
 					routetarget.name
 					].join(" ")
@@ -1278,7 +1278,7 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 			try {
 				var popuptext = [
 					r.weight,
-					pluralorsingular('person',r.weight),
+					pluralorsingular('liberated African',r.weight),
 					"transported to",
 					routetarget.name
 					].join(" ")
@@ -1293,7 +1293,7 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
  	  		try {
 				var popuptext = [
 					r.weight,
-					pluralorsingular('person',r.weight),
+					pluralorsingular('liberated African',r.weight),
 					"taken from",
 					routesource.name
 					].join(" ")
@@ -1303,7 +1303,7 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 				var popuptext=["bad source node: ",st[0]].join('')
  	  		}
  	  	} else if (r.leg_type=='oceanic_leg'){
-			var popuptext = [r.weight,pluralorsingular('person',r.weight),"transported."].join(" ");
+			var popuptext = [r.weight,pluralorsingular('liberated African',r.weight),"transported."].join(" ");
 		}
 	  	return popuptext;
 	  };
@@ -1465,7 +1465,7 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 					
 				} else {
 					
-					console.log(source,target)
+// 					console.log(source,target)
 				
 				}
 			}
@@ -1636,7 +1636,7 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 
 	function initial_map_builder(resp) {
 		//we only need to make the origins layer group once, despite it existing in both place & region zoom levels
-		
+		var test_region_hidden_edges=new Array
 		Object.keys(region_vs_place_vars).forEach(networkname=>{
 			var network=resp[networkname];
 			var origins_layer_group = region_vs_place_vars[networkname]['origins_layer_group'];
@@ -1653,7 +1653,15 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 			embark_disembark_nodelogvaluescale=nodelogvaluescale_fn(featurecollection,3,10);
 			dest_nodelogvaluescale=nodelogvaluescale_fn(featurecollection,4,15);
 			
+			
+			
 			featurecollection.features.forEach(function (feature) {
+			
+// 				if(feature.properties.point_id==60515){
+// // 					test_region_hidden_edges=feature.properties.hidden_edges
+// 					console.log(feature)
+// 				}
+			
 				var node_classes=Object.keys(feature.properties.node_classes);
 				if (node_classes.includes('origin')) {
 					var nodesize=origin_nodelogvaluescale(feature.properties.size);
@@ -1686,7 +1694,18 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 
 			update_oceanic_edges();
 			
-		});		
+		});
+		
+// 		
+// 		console.log(test_region_hidden_edges)
+// 		test_region_hidden_edges.forEach(e_id=>{
+// 		
+// 			var edge=edgesdict['region'][e_id]
+// 			console.log(e_id,edge)
+		
+// 		})
+		
+		
 // 		console.log(ports_origins_layer_group);
 // 		console.log(regions_origins_layer_group);
 	}

@@ -314,7 +314,12 @@ class Command(BaseCommand):
 							G.add_edge(disembark_id,post_disembark_id,id=e,curve=False,tag="final_destination")
 							e+=1
 						
-						
+			##AND FINALLY, WE HAVE TO CREATE SELF-LOOPS FOR EVERY NODE, OR THE ROUTING GETS WONKY
+			
+			for id in G.nodes:
+				G.add_edge(id,id,id=e,distance=0,curve=False,tag='self_loop')
+				e+=1
+				
 					
 			print("finished building graph")
 		
@@ -373,8 +378,8 @@ class Command(BaseCommand):
 		
 			routes={}
 			
-			oceanic_subgraph=G.edge_subgraph([(e[0],e[1]) for e in G.edges() if G.edges[e[0],e[1]]['tag'] in ['onramp','offramp','oceanic_leg']])
-			endpoints_subgraph=G.edge_subgraph([(e[0],e[1]) for e in G.edges() if G.edges[e[0],e[1]]['tag'] in ['origin','final_destination']])
+			oceanic_subgraph=G.edge_subgraph([(e[0],e[1]) for e in G.edges() if G.edges[e[0],e[1]]['tag'] in ['onramp','offramp','oceanic_leg','self_loop']])
+			endpoints_subgraph=G.edge_subgraph([(e[0],e[1]) for e in G.edges() if G.edges[e[0],e[1]]['tag'] in ['origin','final_destination','self_loop']])
 # 			print(G.nodes())
 # 			print(oceanic_subgraph.nodes())
 # 			print([G.edges[e[0],e[1]]['tag'] for e in G.edges()])
@@ -410,16 +415,18 @@ class Command(BaseCommand):
 				####& for every disembarkation to every final destination
 				####so that if we find that we know that a person originated at A, with a disembark of C and final of D, but embark B is unknown, then we just sub in the closest neighbor B
 				####this could affect the displayed stats -- but it's either that or we don't draw a line
-# 				embark,disembark=offset_itinerary[1:3]
-# 				if embark==disembark and embark is not None:
-# 					onramp=None
-# 					for n in G.neighbors(embark):
-# 						if 'onramp' in G.nodes[n]['tags']:
-# 							onramp=n
-# 					if onramp is not None:
-# 						offset_itinerary.insert(2,onramp)
-# 			
-# 				#offset_itinerary=[i for i in offset_itinerary if i is not None]
+				embark,disembark=offset_itinerary[1:3]
+				onramp_inserted=False
+				if embark==disembark and embark is not None:
+					onramp=None
+					for n in G.neighbors(embark):
+						if 'onramp' in G.nodes[n]['tags']:
+							onramp=n
+					if onramp is not None:
+						offset_itinerary.insert(2,onramp)
+						onramp_inserted=True
+			
+				#offset_itinerary=[i for i in offset_itinerary if i is not None]
 # 				legs=[]
 # 				#print(offset_itinerary)
 # 				for i in range(len(offset_itinerary)-1):
@@ -431,39 +438,53 @@ class Command(BaseCommand):
 								
 				def addlegs(subroute,subgraph,this_shortest_path):
 					s_id,t_id=subroute
-					try:
-						sp=nx.shortest_path(subgraph,s_id,t_id,'weight')
-						if this_shortest_path==[]:
-							this_shortest_path+=sp
-						else:
-							this_shortest_path+=sp[1:]
-# 						print(sp)
-					except:
-						print("no path btw",s_id,t_id)
+					if s_id!=t_id:
+						try:
+							sp=nx.shortest_path(subgraph,s_id,t_id,'weight')
+							if this_shortest_path==[]:
+								this_shortest_path+=sp
+							else:
+								this_shortest_path+=sp[1:]
+	# 						print(sp)
+						except:
+							print("no path btw",s_id,t_id)
 					
-					if len(set(badnodes).intersection(subroute))>0:
-						print("-->",subroute,sp)
+						if len(set(badnodes).intersection(subroute))>0:
+							print("-->",subroute,sp)
 					
 					return this_shortest_path
 				
 				shortest_path=[]
-				
-				origin_subroute=offset_itinerary[0:2]
-				oceanic_subroute=offset_itinerary[1:3]
-				final_subroute=offset_itinerary[2:4]
-				
-				for subroute_set in [
-					[origin_subroute,endpoints_subgraph],
-					[oceanic_subroute,oceanic_subgraph],
-					[final_subroute,endpoints_subgraph]
-				]:
-					subroute,graph=subroute_set
-# 					print(subroute)
-					if None not in subroute and graph.has_node(subroute[0]) and graph.has_node(subroute[1]):
-						shortest_path=addlegs(subroute,graph,shortest_path)
-				
-				if len(set(badnodes).intersection(offset_itinerary))>0:
-					print(offset_itinerary,shortest_path)
+				##TRULY GRIM CODE HERE. THE SUBGRAPHS IDEA IS FANTASTIC BUT I NEED TO FULLY PARAMETERIZE MY USE OF IT OR I'LL END UP WITH THIS SORT OF STUFF.
+				if not onramp_inserted:
+					origin_subroute=offset_itinerary[0:2]
+					oceanic_subroute=offset_itinerary[1:3]
+					final_subroute=offset_itinerary[2:4]
+					for subroute_set in [
+						[origin_subroute,endpoints_subgraph],
+						[oceanic_subroute,oceanic_subgraph],
+						[final_subroute,endpoints_subgraph]
+					]:
+						subroute,graph=subroute_set
+						if None not in subroute and graph.has_node(subroute[0]) and graph.has_node(subroute[1]):
+							shortest_path=addlegs(subroute,graph,shortest_path)
+				else:
+					origin_subroute=offset_itinerary[0:2]
+					oceanic_subroute_a=offset_itinerary[1:3]
+					oceanic_subroute_b=offset_itinerary[2:4]
+					final_subroute=offset_itinerary[3:5]
+					for subroute_set in [
+						[origin_subroute,endpoints_subgraph],
+						[oceanic_subroute_a,oceanic_subgraph],
+						[oceanic_subroute_b,oceanic_subgraph],
+						[final_subroute,endpoints_subgraph]
+					]:
+						subroute,graph=subroute_set
+						if None not in subroute and graph.has_node(subroute[0]) and graph.has_node(subroute[1]):
+							shortest_path=addlegs(subroute,graph,shortest_path)
+# 				
+# 				if len(set(badnodes).intersection(offset_itinerary))>0:
+# 					print(offset_itinerary,shortest_path)
 				
 # 				print("path--->",shortest_path)
 				route_edge_ids=[]
@@ -472,6 +493,7 @@ class Command(BaseCommand):
 					b=shortest_path[i+1]
 	# 				print(a,b)
 					e_id=G.edges[a,b]['id']
+					
 					route_edge_ids.append(e_id)
 			
 				if len(route_edge_ids)==1:
@@ -531,7 +553,8 @@ class Command(BaseCommand):
 				"offramp":True,
 				"onramp":True,
 				"origin":False,
-				"final_destination":False
+				"final_destination":False,
+				"self_loop":False
 			}
 					
 			d=open(base_path+dataset+'_edge_ids.json','w')
