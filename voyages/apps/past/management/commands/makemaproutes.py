@@ -163,13 +163,13 @@ class Command(BaseCommand):
 						"geo_data":disembarkation_regions,
 						"namefield":"region",
 						"tags":["disembarkation_region"],
-						"connect_to_tags":[("offramp","target","single",True)]
+						"connect_to_tags":[("offramp","target","single")]
 					},
 					{
 						"geo_data":embarkation_regions,
 						"namefield":"region",
 						"tags":["embarkation_region"],
-						"connect_to_tags":[("origin","target","all",True),("onramp","source","single",True)]
+						"connect_to_tags":[("origin","target","all"),("onramp","source","single")]
 					},
 				]
 
@@ -197,18 +197,18 @@ class Command(BaseCommand):
 						"geo_data":disembarkation_ports,
 						"namefield":"place",
 						"tags":["disembarkation_port"],
-						"connect_to_tags":[("offramp","target","single",True)]
+						"connect_to_tags":[("offramp","target","single")]
 					},
 					{
 						"geo_data":embarkation_ports,
 						"namefield":"place",
 						"tags":["embarkation_port"],
-						"connect_to_tags":[("origin","target","all",True),("onramp","source","single",True)]
+						"connect_to_tags":[("origin","target","all"),("onramp","source","single")]
 					},
 				]
 	
 			#throwing in a conditional on the straight lines -- if the hop is too far, disallow the straightening
-			threshold_for_straight=5
+			threshold_for_straight=3
 			
 			
 			
@@ -270,19 +270,22 @@ class Command(BaseCommand):
 						G.add_node(id,name=name,coords=(latitude,longitude),tags=tags,pk=pk)
 					
 
-					
+# 					print(connect_to_tags)
 					for connect_to_tag in connect_to_tags:
-						tag,as_type,mode,this_curve=connect_to_tag
+						tag,as_type,mode=connect_to_tag
 						#print(tag)
 						comp_nodes={comp_node:G.nodes[comp_node]['coords']
 							for comp_node in G.nodes
 							if tag in G.nodes[comp_node]['tags']
 						}
+						
+						
 						if mode=="single":
+							
 							closest_neighbor,distance=getclosestneighbor((latitude,longitude),comp_nodes)
-							if this_curve==False and distance > threshold_for_straight:
+							if distance > threshold_for_straight:
 								this_curve=True
-							if this_curve==True and distance < threshold_for_straight:
+							if distance < threshold_for_straight:
 								this_curve=False
 							if as_type=="source":
 								G.add_edge(id,closest_neighbor,distance=distance,id=e,curve=this_curve,tag=tag)
@@ -295,12 +298,10 @@ class Command(BaseCommand):
 							for comp_node in comp_nodes:
 								comp_lat,comp_long=comp_nodes[comp_node]
 								distance=geteuclideandistance(lat,long,comp_lat,comp_long)
-								if this_curve==False and distance > threshold_for_straight:
+								if distance > threshold_for_straight:
 									this_curve=True
-								if this_curve==True and distance < threshold_for_straight:
+								if distance < threshold_for_straight:
 									this_curve=False
-								else:
-									this_curve=this_curve
 								if as_type=="source":
 									G.add_edge(id,comp_node,id=e,distance=distance,curve=this_curve,tag=tag)
 								else:
@@ -315,10 +316,10 @@ class Command(BaseCommand):
 							e+=1
 						
 			##AND FINALLY, WE HAVE TO CREATE SELF-LOOPS FOR EVERY NODE, OR THE ROUTING GETS WONKY
-			
-			for id in G.nodes:
-				G.add_edge(id,id,id=e,distance=0,curve=False,tag='self_loop')
-				e+=1
+# 			
+# 			for id in G.nodes:
+# 				G.add_edge(id,id,id=e,distance=0,curve=False,tag='self_loop')
+# 				e+=1
 				
 					
 			print("finished building graph")
@@ -343,7 +344,7 @@ class Command(BaseCommand):
 		
 			print("fetched",len(all_individual_itineraries),"itineraries")
 			missing=[]
-			def curvedab(A,B,C,ab_id,prev_controlXY,prev_wasstraight,result,smoothing=0.15):
+			def curvedab(A,B,C,ab_id,prev_controlXY,result,smoothing=0.15):
 				if prev_controlXY is None:
 					#first edge
 					ControlX = B[0] + smoothing*(A[0]-C[0])
@@ -357,10 +358,10 @@ class Command(BaseCommand):
 						C=B
 					#all tother edges
 					prev_ControlX,prev_ControlY=prev_controlXY
-					if prev_wasstraight:
-						A=prev_controlXY
 					ControlX = A[0]*2 - prev_ControlX
 					ControlY = A[1]*2 - prev_ControlY
+# 					ControlX = A[0]*2 - prev_ControlX
+# 					ControlY = A[1]*2 - prev_ControlY
 					next_ControlX = B[0] + smoothing*(A[0]-C[0])
 					next_ControlY = B[1] + smoothing*(A[1]-C[1])
 					result[ab_id]=[[[A, B],[[ControlX,ControlY],[next_ControlX,next_ControlY]]]]
@@ -385,16 +386,16 @@ class Command(BaseCommand):
 # 			print([G.edges[e[0],e[1]]['tag'] for e in G.edges()])
 # 			print([oceanic_subgraph.edges[e[0],e[1]]['tag'] for e in oceanic_subgraph.edges()])
 			
-			
-			badnodes=[35199,50399]
+# 			
+# 			badnodes=[35199,50399]
 			badnodes=[]
-			
-			for badnode in badnodes:
-				print(badnode,oceanic_subgraph.nodes[badnode])
-				for n in oceanic_subgraph.predecessors(badnode):
-					print('source:',n)
-				for n in oceanic_subgraph.successors(badnode):
-					print('target:',n)
+# 			
+# 			for badnode in badnodes:
+# 				print(badnode,oceanic_subgraph.nodes[badnode])
+# 				for n in oceanic_subgraph.predecessors(badnode):
+# 					print('source:',n)
+# 				for n in oceanic_subgraph.successors(badnode):
+# 					print('target:',n)
 			
 			for itinerary in all_individual_itineraries:
 				route={}
@@ -466,7 +467,7 @@ class Command(BaseCommand):
 						[final_subroute,endpoints_subgraph]
 					]:
 						subroute,graph=subroute_set
-						if None not in subroute and graph.has_node(subroute[0]) and graph.has_node(subroute[1]):
+						if None not in subroute and graph.has_node(subroute[0]) and graph.has_node(subroute[1]) and subroute[0]!=subroute[1]:
 							shortest_path=addlegs(subroute,graph,shortest_path)
 				else:
 					origin_subroute=offset_itinerary[0:2]
@@ -493,12 +494,11 @@ class Command(BaseCommand):
 					b=shortest_path[i+1]
 	# 				print(a,b)
 					e_id=G.edges[a,b]['id']
-					
 					route_edge_ids.append(e_id)
 			
 				if len(route_edge_ids)==1:
 					edge_id=route_edge_ids[0]
-					this_edge=[edge for edge in G.edges(data=True) if edge_id in route_edge_ids][0]
+					this_edge=[edge for edge in G.edges(data=True) if edge[2]['id']==edge_id][0]
 					a_id,b_id,data=this_edge
 					a_coords=G.nodes[a_id]['coords']
 					b_coords=G.nodes[b_id]['coords']
@@ -508,7 +508,6 @@ class Command(BaseCommand):
 				elif len(route_edge_ids)>1:
 					edgepairs=[(route_edge_ids[i],route_edge_ids[i+1]) for i in range(len(route_edge_ids)-1)]
 					prev_controlXY=None
-					prev_wasstraight=False
 					for edgepair in edgepairs:
 						ab_id,bc_id=edgepair
 						AB=[edge for edge in G.edges(data=True) if edge[2]['id']==ab_id][0]
@@ -520,18 +519,18 @@ class Command(BaseCommand):
 						C=G.nodes[c_id]['coords']
 						ab_iscurved=abdata['curve']
 						bc_iscurved=bcdata['curve']
+						
 						if ab_iscurved:
-							route,prev_controlXY=curvedab(A,B,C,ab_id,prev_controlXY,prev_wasstraight,route)
+							route,prev_controlXY=curvedab(A,B,C,ab_id,prev_controlXY,route)
 							route[ab_id].append([a_id,b_id])
 							route[ab_id].append(abdata['tag'])
-							prev_wasstraight=False
 						else:
 							route,prev_controlXY=straightab(A,B,ab_id,route)
 							route[ab_id].append([a_id,b_id])
 							route[ab_id].append(abdata['tag'])
-							prev_wasstraight=True
+						
 					if bc_iscurved:
-						route,prev_controlXY=curvedab(B,C,None,bc_id,prev_controlXY,prev_wasstraight,route)
+						route,prev_controlXY=curvedab(B,C,None,bc_id,prev_controlXY,route)
 						route[bc_id].append([b_id,c_id])
 						route[bc_id].append(bcdata['tag'])
 					else:

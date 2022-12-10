@@ -1,5 +1,5 @@
-function tablemaker(tablerowdata,displaylimit) {
-	var tablehtml="<center><table class='lgmaptable'><tr><td>Language Group</td><td>Number of Liberated Africans</td></tr>";	
+function tablemaker(tablerowdata,displaylimit,tablenameheader) {
+	var tablehtml="<center><table class='lgmaptable'><tr><td>"+tablenameheader+"</td><td>Number of Liberated Africans</td></tr>";	
 		
 	function maketablerow(name,count){
 		return "<tr><td>"+name+"</td><td>"+count.toString()+"</tr>"
@@ -51,10 +51,8 @@ function tablemaker(tablerowdata,displaylimit) {
 		
 	})
 	
-	
-	
 	if (excluded_nonclustered_lg_rows.lgcount>0) {
-		var namecell=excluded_nonclustered_lg_rows.lgcount.toString()+" other language "+pluralorsingular('group',excluded_nonclustered_lg_rows.lgcount)
+		var namecell=excluded_nonclustered_lg_rows.lgcount.toString()+" other "+pluralorsingular(tablenameheader,excluded_nonclustered_lg_rows.lgcount).toLowerCase()
 		tablehtml+=maketablerow(namecell,excluded_nonclustered_lg_rows.peoplecount)
 	}
 	
@@ -63,7 +61,7 @@ function tablemaker(tablerowdata,displaylimit) {
 	return tablehtml
 }
 
-function make_origin_nodes_languagegroupstable(markers) {	
+function make_origin_nodes_languagegroupstable(markers,tablenameheader) {	
 	//markerclusters contain lots of different kinds of "markers" -- to get at our geojson ones, we have to filter
 	//there's likely a smarter way to do this
 	
@@ -81,7 +79,7 @@ function make_origin_nodes_languagegroupstable(markers) {
 	})
 	tablerowdata.sort((a,b)=>a.value-b.value);
 	tablerowdata.reverse()
-	var tablehtml=tablemaker(tablerowdata,5)
+	var tablehtml=tablemaker(tablerowdata,5,tablenameheader)
 	
 	return tablehtml
 }

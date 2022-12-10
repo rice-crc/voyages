@@ -1101,8 +1101,6 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 			update_oceanic_edges();
 			ports_origins_layer_group.addTo(AO_map);
 			ports_embdisemb_layer_group.addTo(AO_map);
-			ports_dest_layer_group.addTo(AO_map);
-			regions_dest_layer_group.removeFrom(AO_map);
 			regions_origins_layer_group.removeFrom(AO_map);
 			regions_embdisemb_layer_group.removeFrom(AO_map);
 		} else {
@@ -1110,8 +1108,6 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 			update_oceanic_edges();
 			regions_origins_layer_group.addTo(AO_map);
 			regions_embdisemb_layer_group.addTo(AO_map);
-			regions_dest_layer_group.addTo(AO_map);
-			ports_dest_layer_group.removeFrom(AO_map);
 			ports_origins_layer_group.removeFrom(AO_map);
 			ports_embdisemb_layer_group.removeFrom(AO_map);
 		}
@@ -1156,10 +1152,10 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 	
 	//C. FEATURE LAYERS
 	
-	var ports_origins_layer_group = make_origins_layer_groups();
+	var ports_origins_layer_group = make_cluster_layer_groups('origin');
 	ports_origins_layer_group.addTo(AO_map);
 
-	var regions_origins_layer_group = make_origins_layer_groups();
+	var regions_origins_layer_group = make_cluster_layer_groups('origin');
 	regions_origins_layer_group.addTo(AO_map);
 // 	console.log(regions_origins_layer_group)
 	
@@ -1168,12 +1164,15 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 	
 	var regions_embdisemb_layer_group = L.layerGroup();
 	regions_embdisemb_layer_group.addTo(AO_map);
-	
-	var regions_dest_layer_group = L.layerGroup();
-	regions_dest_layer_group.addTo(AO_map);
-	
-	var ports_dest_layer_group = L.layerGroup();
+
+	var ports_dest_layer_group = make_cluster_layer_groups('final_destination');
 	ports_dest_layer_group.addTo(AO_map);
+
+// 	var regions_dest_layer_group = L.layerGroup();
+// 	regions_dest_layer_group.addTo(AO_map);
+// 	
+// 	var ports_dest_layer_group = L.layerGroup();
+// 	ports_dest_layer_group.addTo(AO_map);
 	
 	var oceanic_waypoints_layer_group = L.layerGroup();
 	
@@ -1287,36 +1286,41 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 	  };
 	
 		//WE USE THIS TO MAKE OUR MARKER CLUSTER LAYER GROUPS
-	function make_origins_layer_groups () {
+	function make_cluster_layer_groups(cluster_class) {
+		
 		var layergroup = L.markerClusterGroup(	
 			{
-// 				maxClusterRadius: 50,
 				zoomToBoundsOnClick: false,
 				showCoverageOnHover: false,
 				iconCreateFunction: function (cluster) {
 				var markers = cluster.getAllChildMarkers();
 				var n = 1;
 				markers.forEach(marker=>{
-					
-// 				if (marker.feature.properties.node_id==1160437) {
-// 					console.log(marker)
-// 				}
-					
-					
 					n+=marker.feature.properties.size
-					
 				});
 				
+				if (cluster_class=='origin') {
+					var html='<div class="origin_cluster_circle"></div>';
+					var nodesize=origin_nodelogvaluescale(n)*2
+				} else if (cluster_class=='final_destination') {
+					var html='<div class="dest_cluster_circle"></div>';
+					var nodesize=dest_nodelogvaluescale(n)*2
+				}
 				
-				
-				return L.divIcon({ html: '<div class="cluster_circle"></div>', iconSize: L.point(origin_nodelogvaluescale(n)*2, origin_nodelogvaluescale(n)*2), className:"transparentmarkerclusterdiv"});
+				return L.divIcon({ html: html, iconSize: L.point(nodesize, nodesize), className:"transparentmarkerclusterdiv"});
 			}
 		}).on('clustermouseover', function (a) {
 			activepopups.forEach(p=>p.remove());
 			activepopups=new Array;
-
 			var clusterchildmarkers=a.layer.getAllChildMarkers();
-			popuphtml=make_origin_nodes_languagegroupstable(clusterchildmarkers);
+			
+			if (cluster_class=='origin') {
+				var tablenameheader='Language Group'
+			} else if (cluster_class=='final_destination') {
+				var tablenameheader='Last Known Location'
+			}
+			
+			popuphtml=make_origin_nodes_languagegroupstable(clusterchildmarkers,tablenameheader);
 			//http://jsfiddle.net/3tnjL/59/
 			var pop = new L.popup({
 					'className':'leafletAOPopup',
@@ -1327,9 +1331,6 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 				setContent(popuphtml);
 			pop.addTo(AO_map);
 			activepopups.push(pop);
-			
-			
-
 			var child_hidden_edges=new Array;
 			Object.keys(clusterchildmarkers).forEach(marker=>{
 				if (clusterchildmarkers[marker])	{	
@@ -1338,10 +1339,8 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 					}
 				}
 			});
-			
 			refreshedges(child_hidden_edges,regionorplace,AO_map,endpoint_main_edges_layer_group,endpoint_animation_edges_layer_group);							
 		})
-
 		return layergroup
 	}
 	
@@ -1385,24 +1384,17 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 								setContent(makeNodePopUp(feature,nodesdict[networkname],edgesdict[networkname]));
 							pop.addTo(AO_map);
 							activepopups.push(pop);
-							
-
-
 							refreshedges(hidden_edges,regionorplace,AO_map,edges_main_layer_group,edges_animation_layer_group);							
 							marker.openPopup();
 							marker.bringToFront();
 						});
-						
 						return marker
 				}
 			},
 		);
 // 		var l_id=L.stamp(newlayer);
 		layer_group.addLayer(newlayer);
-
-		nodesdict[networkname][point_id]=newlayer
-		
-		
+		return newlayer
 	};	
 	
 	// BEZIER CURVES
@@ -1540,6 +1532,11 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 		
 	}
 
+			function rev(a){
+			
+// 				console.log(a)
+				return([a[1],a[0]])
+			}
 
 
 	function make_edge(map,edge,networkname,main_layer_group,animation_layer_group,bezier=true,autoremove=true){
@@ -1549,6 +1546,8 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 		var edge_type=edge.leg_type;
 		var weight=routesValueScale(edge.weight);
 		var color=legColorPicker(edge_type);
+		
+
 		
 		if (!bezier) {
 			var latlong=edge.latlong;
@@ -1622,7 +1621,7 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 		'region':{
 			'origins_layer_group':regions_origins_layer_group,
 			'embark_disembark_layers_group':regions_embdisemb_layer_group,
-			'dest_layer_group':regions_dest_layer_group,
+			'dest_layer_group':ports_dest_layer_group,
 			
 		}
 	};
@@ -1654,24 +1653,28 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 // // 					test_region_hidden_edges=feature.properties.hidden_edges
 // 					console.log(feature)
 // 				}
-			
+				var point_id=feature.properties.point_id
 				var node_classes=Object.keys(feature.properties.node_classes);
 				if (node_classes.includes('origin')) {
 					var nodesize=origin_nodelogvaluescale(feature.properties.size);
-					add_point_to_layergroup(feature,origins_layer_group,nodesize,networkname,endpoint_main_edges_layer_group,endpoint_animation_edges_layer_group);
+					var newlayer = add_point_to_layergroup(feature,origins_layer_group,nodesize,networkname,endpoint_main_edges_layer_group,endpoint_animation_edges_layer_group);
+					nodesdict[networkname][point_id]=newlayer
 				} else if (node_classes.includes('embarkation') || node_classes.includes('disembarkation')) {
 					if (networkname=='region') {
 						var nodesize=embark_disembark_nodelogvaluescale(feature.properties.size);
 					} else {
 						var nodesize=5
 					}
-					add_point_to_layergroup(feature,embark_disembark_layer_group,nodesize,networkname,endpoint_main_edges_layer_group,endpoint_animation_edges_layer_group)
+					var newlayer = add_point_to_layergroup(feature,embark_disembark_layer_group,nodesize,networkname,endpoint_main_edges_layer_group,endpoint_animation_edges_layer_group)
+					nodesdict[networkname][point_id]=newlayer
 				} else if (node_classes.includes('post-disembarkation')) {
 					var nodesize=dest_nodelogvaluescale(feature.properties.size);
-					add_point_to_layergroup(feature,dest_layer_group,nodesize,networkname,endpoint_main_edges_layer_group,endpoint_animation_edges_layer_group,bezier=true,autoremove=true);
+					var newlayer = add_point_to_layergroup(feature,dest_layer_group,nodesize,networkname,endpoint_main_edges_layer_group,endpoint_animation_edges_layer_group);
+					nodesdict[networkname][point_id]=newlayer
 				} else {
 					oceanic_waypoints_layer_group.addTo(AO_map)
-					add_point_to_layergroup(feature,oceanic_waypoints_layer_group,1,networkname,oceanic_main_edges_layer_group,oceanic_animation_edges_layer_group,bezier=true,autoremove=true);
+					var newlayer=add_point_to_layergroup(feature,oceanic_waypoints_layer_group,1,networkname,oceanic_main_edges_layer_group,oceanic_animation_edges_layer_group,bezier=true,autoremove=true);
+					nodesdict[networkname][point_id]=newlayer
 					oceanic_waypoints_layer_group.remove()
 				}
 			})
@@ -1684,38 +1687,12 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 			Object.keys(hiddenedges).forEach(e_id=>{make_edge(AO_map,hiddenedges[e_id],networkname,endpoint_main_edges_layer_group,endpoint_animation_edges_layer_group,bezier=true,autoremove=true)});
 			Object.keys(oceanicedges).forEach(e_id=>{make_edge(AO_map,oceanicedges[e_id],networkname,oceanic_main_edges_layer_group,oceanic_animation_edges_layer_group,bezier=true,autoremove=false)});
 			
-// 			console.log("--->",nodesdict[networkname][1160437])
-// 			
-// 			console.log(nodesdict[networkname][1160437]._layers[Object.keys(nodesdict[networkname][1160437]._layers)[0]].__parent)
-// 			origins_layer_group.refreshClusters()
-// 			nodesdict[networkname][1160437]._layers[Object.keys(nodesdict[networkname][1160437]._layers)[0]].addTo(origins_layer_group)
-			
-// 			console.log(origins_layer_group)
-// 			
-// 			console.log(origins_layer_group.getVisibleParent(nodesdict[networkname][1160437]._layers[Object.keys(nodesdict[networkname][1160437]._layers)[0]]))
-// 
 			update_oceanic_edges();
 			
 			
 		});
 		
-		
-// 		console.log(edgesdict)
-				
-// 		
 
-
-// 		console.log(test_region_hidden_edges)
-// 		test_region_hidden_edges.forEach(e_id=>{
-// 		
-// 			var edge=edgesdict['region'][e_id]
-// 			console.log(e_id,edge)
-		
-// 		})
-		
-		
-// 		console.log(ports_origins_layer_group);
-// 		console.log(regions_origins_layer_group);
 	}
 
 	//------------>MAKE THE CALL FOR THE DATA

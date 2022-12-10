@@ -3,7 +3,10 @@ function pluralorsingular(singular,val) {
 		'group':'groups',
 		'person':'people',
 		'dialect':'dialects',
-		'Liberated African':'Liberated Africans'
+		'Liberated African':'Liberated Africans',
+		'Language Group':'Language Groups',
+		'language group':'language groups',
+		'Last Known Location':'last known locations'
 	}
 	if (val!=1){
 		return pluralize[singular]
