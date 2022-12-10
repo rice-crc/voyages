@@ -52,7 +52,9 @@ function tablemaker(tablerowdata,displaylimit,tablenameheader) {
 	})
 	
 	if (excluded_nonclustered_lg_rows.lgcount>0) {
-		var namecell=excluded_nonclustered_lg_rows.lgcount.toString()+" other "+pluralorsingular(tablenameheader,excluded_nonclustered_lg_rows.lgcount).toLowerCase()
+// 		console.log(pluralorsingular(tablenameheader,excluded_nonclustered_lg_rows.lgcount))
+		var formatted_tablenameheader=pluralorsingular(tablenameheader,excluded_nonclustered_lg_rows.lgcount)
+		var namecell=excluded_nonclustered_lg_rows.lgcount.toString()+" other "+formatted_tablenameheader
 		tablehtml+=maketablerow(namecell,excluded_nonclustered_lg_rows.peoplecount)
 	}
 	
@@ -143,7 +145,7 @@ function makeNodePopUp(feature,nodesdict,edgesdict) {
 			Object.keys(tablerowdatakeys).forEach(lg=>{tablerowdata.push({'lg':lg,'value':tablerowdatakeys[lg]})})
 			tablerowdata.sort((a,b)=>a.value-b.value);
 			tablerowdata.reverse()
-			var tablehtml=tablemaker(tablerowdata,5)
+			var tablehtml=tablemaker(tablerowdata,5,"Language Group")
 			popupcontent+="<hr/>" +tablehtml
 		}
 	
