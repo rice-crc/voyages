@@ -1704,6 +1704,7 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 				output: "maps"
 			}),
 		success: function(d){
+			document.getElementById("past-maps-loader").hidden=true
 			AO_map.invalidateSize();
 			var total_results_count=d.region.total_results_count;
 			drawUpdateCount(AO_map,total_results_count);
