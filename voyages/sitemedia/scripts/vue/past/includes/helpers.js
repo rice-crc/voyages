@@ -1093,7 +1093,8 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 		fullscreenControl: false,
 		center:[0,0],
 		zoom:3.2,
-		minZoom:3.2
+		minZoom:3.2,
+		maxZoom:15
 	}).on('zoomend', function() {
 		var currentzoom=AO_map.getZoom()
 		if (currentzoom>4){
@@ -1133,7 +1134,6 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 	var mappingSpecialists=L.tileLayer(
 	  'https://api.mapbox.com/styles/v1/jcm10/cl5v6xvhf001b14o4tdjxm8vh/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoiamNtMTAiLCJhIjoiY2wyOTcyNjJsMGY5dTNwbjdscnljcGd0byJ9.kZvEfo7ywl2yLbztc_SSjw',
 	  {attribution: '<a href="https://www.mappingspecialists.com/" target="blank">Mapping Specialists, Ltd.</a>'});
-	mappingSpecialists.addTo(AO_map);
 	
 	var origin_nodelogvaluescale=new Object;
 	var embark_disembark_nodelogvaluescale=new Object;
@@ -1144,31 +1144,27 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 	var mappingSpecialistsRivers=L.tileLayer(
 	  'https://api.mapbox.com/styles/v1/jcm10/cl98xvv9r001z14mm17w970no/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoiamNtMTAiLCJhIjoiY2wyOTcyNjJsMGY5dTNwbjdscnljcGd0byJ9.kZvEfo7ywl2yLbztc_SSjw');
 	var mappingSpecialistsCountries=L.tileLayer(
-	  'https://api.mapbox.com/styles/v1/jcm10/cl98yryw3003t14o66r6fx4m9/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoiamNtMTAiLCJhIjoiY2wyOTcyNjJsMGY5dTNwbjdscnljcGd0byJ9.kZvEfo7ywl2yLbztc_SSjw').addTo(AO_map);
+	  'https://api.mapbox.com/styles/v1/jcm10/cl98yryw3003t14o66r6fx4m9/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoiamNtMTAiLCJhIjoiY2wyOTcyNjJsMGY5dTNwbjdscnljcGd0byJ9.kZvEfo7ywl2yLbztc_SSjw')
 	var featurelayers = {
 		"Rivers":mappingSpecialistsRivers,
 		"Modern Countries":mappingSpecialistsCountries,
 		"Voyages":oceanic_edges_holding_layer_group
 	}
-	add_control_layers_to_map(featurelayers,AO_map);
+
 	
 	//C. FEATURE LAYERS
 	
 	var ports_origins_layer_group = make_cluster_layer_groups('origin');
-	ports_origins_layer_group.addTo(AO_map);
-
+	
 	var regions_origins_layer_group = make_cluster_layer_groups('origin');
-	regions_origins_layer_group.addTo(AO_map);
+
 // 	console.log(regions_origins_layer_group)
 	
 	var ports_embdisemb_layer_group = L.layerGroup();
-	ports_embdisemb_layer_group.addTo(AO_map);
 	
 	var regions_embdisemb_layer_group = L.layerGroup();
-	regions_embdisemb_layer_group.addTo(AO_map);
 
 	var ports_dest_layer_group = make_cluster_layer_groups('final_destination');
-	ports_dest_layer_group.addTo(AO_map);
 
 // 	var regions_dest_layer_group = L.layerGroup();
 // 	regions_dest_layer_group.addTo(AO_map);
@@ -1202,13 +1198,6 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 	endpoint_animation_edges_layer_group.addTo(AO_map);
 	
 	// Initializations for the above
-
-	maximizeMapHeight();
-	AO_map.invalidateSize();
-	AO_map.fitBounds(new L.featureGroup([
-			L.marker([15,-23]),
-			L.marker([-10,24])
-		]).getBounds());
 
 // II.  STATE GLOBALS
 
@@ -1696,7 +1685,9 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 		
 
 	}
-
+	maximizeMapHeight();
+	AO_map.invalidateSize();
+	
 	//------------>MAKE THE CALL FOR THE DATA
 	$.ajax({
 		type: "POST",
@@ -1706,20 +1697,35 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 				output: "maps"
 			}),
 		success: function(d){
+			maximizeMapHeight();
 			AO_map.invalidateSize();
-			var total_results_count=d.region.total_results_count;
+			add_control_layers_to_map(featurelayers,AO_map);
+			regions_origins_layer_group.addTo(AO_map);
+			ports_embdisemb_layer_group.addTo(AO_map);
+			regions_embdisemb_layer_group.addTo(AO_map);
+			ports_dest_layer_group.addTo(AO_map);
+			ports_origins_layer_group.addTo(AO_map);
+			mappingSpecialistsCountries.addTo(AO_map);
+			mappingSpecialists.addTo(AO_map);
+			var total_results_count=d.region.total_results_count;			
 			drawUpdateCount(AO_map,total_results_count);
 			drawLegend(AO_map);
 			initial_map_builder(d);
+			AO_map.invalidateSize();
+			maximizeMapHeight();
+			AO_map.invalidateSize();
+			var default_minmax_group = new L.featureGroup([
+				L.marker([12,-20]),
+				L.marker([-8,20])
+			]);
+			AO_map.fitBounds(default_minmax_group.getBounds());
+			AO_map.invalidateSize();
+			maximizeMapHeight();
+			AO_map.invalidateSize();
 			document.getElementById("past-maps-loader").hidden=true;
 			AO_map.invalidateSize();
-			if (total_results_count>80000) {
-				var default_minmax_group = new L.featureGroup([
-					L.marker([15,-23]),
-					L.marker([-10,24])
-				]);
-				AO_map.fitBounds(default_minmax_group.getBounds());
-			}
+			maximizeMapHeight();
+			AO_map.invalidateSize();
 		}
 	});
 } 
