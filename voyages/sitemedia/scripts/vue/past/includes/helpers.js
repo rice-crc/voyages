@@ -1124,7 +1124,9 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 	
 	function maximizeMapHeight() {
 		var maxMapHeight=window.innerHeight-221; //ffs
-		$('#AO_map')[0].style['min-height']=maxMapHeight.toString()+'px';
+		if (maxMapHeight>400){
+			$('#AO_map')[0].style['min-height']=maxMapHeight.toString()+'px';
+		}
 	}
 	
 	//B. Tile Layers
@@ -1704,12 +1706,12 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 				output: "maps"
 			}),
 		success: function(d){
-			document.getElementById("past-maps-loader").hidden=true
 			AO_map.invalidateSize();
 			var total_results_count=d.region.total_results_count;
 			drawUpdateCount(AO_map,total_results_count);
 			drawLegend(AO_map);
 			initial_map_builder(d);
+			document.getElementById("past-maps-loader").hidden=true;
 			AO_map.invalidateSize();
 			if (total_results_count>80000) {
 				var default_minmax_group = new L.featureGroup([
