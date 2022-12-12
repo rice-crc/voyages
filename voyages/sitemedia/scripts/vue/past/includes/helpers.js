@@ -1137,6 +1137,8 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 	
 	var origin_nodelogvaluescale=new Object;
 	var embark_disembark_nodelogvaluescale=new Object;
+	var hiddenedgesvaluescale=new Object;
+	var oceanicedgesvaluescale=new Object;
 	
 	var oceanic_edges_holding_layer_group= L.layerGroup();
 	oceanic_edges_holding_layer_group.addTo(AO_map);
@@ -1223,17 +1225,11 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 // 		console.log(r)
  	  	
  	  	if (r.leg_type=='origin') {
-			var routesource=nodesdict[networkname][r.source_target[0]]._layers
-			routesource=routesource[Object.keys(routesource)[0]].feature.properties
-			var routetarget=nodesdict[networkname][r.source_target[1]]._layers
-			routetarget=routetarget[Object.keys(routetarget)[0]].feature.properties
  	  		try {
+ 	  			
 				var popuptext = [
 					r.weight,
-					routesource.name,
-					pluralorsingular('Liberated African',r.weight),
-					"taken to",
-					routetarget.name
+					pluralorsingular('Liberated African',r.weight)
 					].join(" ")
  	  		} catch(error) {
 				console.log("BAD SOURCE OR TARGET NODE-->",r);
@@ -1330,7 +1326,7 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 					}
 				}
 			});
-			refreshedges(child_hidden_edges,regionorplace,AO_map,endpoint_main_edges_layer_group,endpoint_animation_edges_layer_group);							
+			refresh_hidden_edges(child_hidden_edges,regionorplace,AO_map,endpoint_main_edges_layer_group,endpoint_animation_edges_layer_group);							
 		})
 		return layergroup
 	}
@@ -1375,7 +1371,7 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 								setContent(makeNodePopUp(feature,nodesdict[networkname],edgesdict[networkname]));
 							pop.addTo(AO_map);
 							activepopups.push(pop);
-							refreshedges(hidden_edges,regionorplace,AO_map,edges_main_layer_group,edges_animation_layer_group);							
+							refresh_hidden_edges(hidden_edges,regionorplace,AO_map,edges_main_layer_group,edges_animation_layer_group);							
 							marker.openPopup();
 							marker.bringToFront();
 						});
@@ -1387,9 +1383,141 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 		layer_group.addLayer(newlayer);
 		return newlayer
 	};	
+
+
+	function straightlinebezier(a,b){
+		var midx=(a['lat']+b['lat'])/2
+		var midy=(a['lng']+b['lng'])/2
+		var control=[midx,midy]
+		var straightline=[[[a['lat'],a['lng']],[b['lat'],b['lng']]],[control,control]]
+		return straightline
+	}
+
+	function refresh_hidden_edges(edge_id_list,networkname,map,main_layer_group,animation_layer_group){
+		main_layer_group.clearLayers();
+		animation_layer_group.clearLayers();
+		//first, radically clean up the edge list
+		var live_edge_list = new Array();
+		edge_id_list.forEach(e=>{
+			if (edgesdict[networkname][e]) {live_edge_list.push(edgesdict[networkname][e])}	
+		})
+// 		console.log(live_edge_list)
+		var tmp_edge_dict=new Object();
+		//now roll them up into a dictionary
+		live_edge_list.forEach(edge=>{
+			var st=edge.source_target
+			var source_id=st[0]
+			var target_id=st[1]
+			var source=nodesdict[networkname][source_id]
+			var target=nodesdict[networkname][target_id]
+			var target_leaflet_id=target._leaflet_id
+			var target_latlng=target._layers[Object.keys(target._layers)[0]].feature.geometry.coordinates
+			var target_coords={'lat':target_latlng[1],'lng':target_latlng[0]}
+			if (regionorplace=='region') {
+				var lg=regions_origins_layer_group
+			} else {
+				var lg=ports_origins_layer_group
+			}
+			var vp=lg.getVisibleParent(source._layers[Object.keys(source._layers)[0]])
+			if (vp) {
+				var source_coords=vp._latlng
+				var source_leaflet_id=vp._leaflet_id
+			} else {
+				var source_latlng=source._layers[Object.keys(source._layers)[0]].feature.geometry.coordinates
+				var source_coords={'lat':source_latlng[1],'lng':source_latlng[0]}
+				var source_leaflet_id=source._leaflet_id
+			}
+			if (tmp_edge_dict[source_leaflet_id]) {
+				if (tmp_edge_dict[source_leaflet_id][target_leaflet_id]) {
+					tmp_edge_dict[source_leaflet_id][target_leaflet_id].weight+=edge.weight
+				} else {
+					tmp_edge_dict[source_leaflet_id][target_leaflet_id]={'weight':edge.weight,'source_latlng':source_coords,'target_latlng':target_coords,'geometry':straightlinebezier(source_coords,target_coords),'leg_type':'origin'}
+				}
+			} else {
+				tmp_edge_dict[source_leaflet_id]={}
+				tmp_edge_dict[source_leaflet_id][target_leaflet_id]={'weight':edge.weight,'source_latlng':source_coords,'target_latlng':target_coords,'geometry':straightlinebezier(source_coords,target_coords),'leg_type':'origin'}
+			}
+		})
+		
+		
+		Object.keys(tmp_edge_dict).forEach(s=>{
+			
+			Object.keys(tmp_edge_dict[s]).forEach(t=>{
+			
+				var edge=tmp_edge_dict[s][t]
+				
+				make_edge(map,edge,networkname,main_layer_group,animation_layer_group,recordtodict=false,hiddenedgesvaluescale)
+			
+			})
+			
+		
+		})
+		
+		
+		
+	}
 	
-	// BEZIER CURVES
-	function refreshedges(edge_id_list,networkname,map,main_layer_group,animation_layer_group){
+
+		//then get the source and target nodes
+		
+		
+// 		edge_id_list.forEach(e=>{
+// 		if (edgesdict[networkname][e]) {
+// 				edge=edgesdict[networkname][e]
+// 				st=edge.source_target;
+// 				source_id=st[0];
+// 				target_id=st[1];
+// 				var lg= new Object;
+// 				if (regionorplace=='region') {
+// 					var lg=regions_origins_layer_group
+// 				} else {
+// 					var lg=ports_origins_layer_group
+// 				}
+// 				//clusters aren't registered in the nodesdict.
+// 				//but that fact can be used to switch over to another handler for them.
+// 				var source=nodesdict[networkname][source_id]
+// 				var target=nodesdict[networkname][target_id]
+// 				if (source&&target){
+// 					
+// 					source_node_classes=Object.keys(source._layers[Object.keys(source._layers)[0]].feature.properties.node_classes)
+// 					target_node_classes=Object.keys(target._layers[Object.keys(target._layers)[0]].feature.properties.node_classes)
+// 					if (source_node_classes.includes('origin')) {
+// 						
+// 						var vp=lg.getVisibleParent(source._layers[Object.keys(source._layers)[0]])
+// 						
+// 						if (vp) {
+// 							var coords=vp._latlng
+// 						} else {
+// 							var latlng=source._layers[Object.keys(source._layers)[0]].feature.geometry.coordinates
+// 							var coords={'lat':latlng[1],'lng':latlng[0]}
+// 							
+// 						}
+// 							edge.main._coords[1]=[coords.lat,coords.lng]
+// 							edge.main.redraw()
+// 							edge.main.addTo(main_layer_group)
+// 							edge.animation._coords[1]=[coords.lat,coords.lng]
+// 							edge.animation.options.animate.duration=make_animationrouteoptions(edge.main,AO_map).animate.duration
+// 							edge.animation.redraw()
+// 							edge.animation.addTo(animation_layer_group)
+// 						} else if (source_node_classes.includes('oceanic_waypoint')||target_node_classes.includes('oceanic_waypoint')) {
+// 							
+// 							edge.main.redraw()
+// 							edge.main.addTo(main_layer_group)
+// 							edge.animation.options.animate.duration=make_animationrouteoptions(edge.main,AO_map).animate.duration
+// 							edge.animation.redraw()
+// 							edge.animation.addTo(animation_layer_group)
+// 						}
+// 					
+// 				}
+// 			}
+// 		})
+// 		bringpointlayerstofront()
+
+
+
+
+//the behavior of these different edge classes (clustered vs non-clustered) makes it reasonable to handle them differently
+	function refresh_oceanic_edges(edge_id_list,networkname,map,main_layer_group,animation_layer_group){
 		main_layer_group.clearLayers();
 		animation_layer_group.clearLayers();
 		edge_id_list.forEach(e=>{
@@ -1404,50 +1532,24 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 				} else {
 					var lg=ports_origins_layer_group
 				}
-				//clusters aren't registered in the nodesdict.
-				//but that fact can be used to switch over to another handler for them.
 				var source=nodesdict[networkname][source_id]
 				var target=nodesdict[networkname][target_id]
 				if (source&&target){
-					
-					source_node_classes=Object.keys(source._layers[Object.keys(source._layers)[0]].feature.properties.node_classes)
-					target_node_classes=Object.keys(target._layers[Object.keys(target._layers)[0]].feature.properties.node_classes)
-					if (source_node_classes.includes('origin')) {
-						
-						var vp=lg.getVisibleParent(source._layers[Object.keys(source._layers)[0]])
-						
-						if (vp) {
-							var coords=vp._latlng
-						} else {
-							var latlng=source._layers[Object.keys(source._layers)[0]].feature.geometry.coordinates
-							var coords={'lat':latlng[1],'lng':latlng[0]}
-							
-						}
-							edge.main._coords[1]=[coords.lat,coords.lng]
-							edge.main.redraw()
-							edge.main.addTo(main_layer_group)
-							edge.animation._coords[1]=[coords.lat,coords.lng]
-							edge.animation.options.animate.duration=make_animationrouteoptions(edge.main,AO_map).animate.duration
-							edge.animation.redraw()
-							edge.animation.addTo(animation_layer_group)
-						} else if (source_node_classes.includes('oceanic_waypoint')||target_node_classes.includes('oceanic_waypoint')) {
-							
-							edge.main.redraw()
-							edge.main.addTo(main_layer_group)
-							edge.animation.options.animate.duration=make_animationrouteoptions(edge.main,AO_map).animate.duration
-							edge.animation.redraw()
-							edge.animation.addTo(animation_layer_group)
-						}
-					
-				} else {
-					
-// 					console.log(source,target)
-				
+					edge.main.redraw()
+					edge.main.addTo(main_layer_group)
+					edge.animation.options.animate.duration=make_animationrouteoptions(edge.main,AO_map).animate.duration
+					edge.animation.redraw()
+					edge.animation.addTo(animation_layer_group)
 				}
 			}
 		})
 		bringpointlayerstofront()
 	}
+
+
+
+
+
 
 	function make_animationrouteoptions(basepath,map){
 		var distance=0
@@ -1510,7 +1612,7 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 		var all_network_edges=edgesdict[regionorplace];
 		var oceanic_edges=get_edgedict_edges_by_types(all_network_edges,['onramp','offramp','oceanic_leg']);
 		
-		refreshedges(Object.keys(oceanic_edges),regionorplace,AO_map,oceanic_main_edges_layer_group,oceanic_animation_edges_layer_group)
+		refresh_oceanic_edges(Object.keys(oceanic_edges),regionorplace,AO_map,oceanic_main_edges_layer_group,oceanic_animation_edges_layer_group)
 		
 		oceanic_edges=get_edgedict_edges_by_types(all_network_edges,['onramp','offramp','oceanic_leg']);
 		
@@ -1530,59 +1632,41 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 			}
 
 
-	function make_edge(map,edge,networkname,main_layer_group,animation_layer_group,bezier=true,autoremove=true){
+	function make_edge(map,edge,networkname,main_layer_group,animation_layer_group,recordtodict=true,edgeweightvaluescale){
 // 		console.log(edge)
 		
 		var commands = [];
 		var edge_type=edge.leg_type;
-		var weight=routesValueScale(edge.weight);
+		var weight=edgeweightvaluescale(edge.weight);
 		var color=legColorPicker(edge_type);
+		commands.push("M", edge.geometry[0][0]);
+		commands.push("C", edge.geometry[1][0], edge.geometry[1][1], edge.geometry[0][1]);
 		
-
+		var newroute=L.curve(commands, {
+			color: color,
+			weight: weight,
+			stroke: true,
+		})
+		.bindTooltip(makeRouteToolTip(edge,networkname),{'sticky':true})
+		.on('mouseover', function () {
+			activepopups.forEach(p=>p.remove());
+			activepopups=new Array;
+		})
 		
-		if (!bezier) {
-			var latlong=edge.latlong;
-			var sourcetarget=edge.sourcetarget;
-			var edge_id=sourcetarget[0].toString()+'_'+sourcetarget[1].toString();
-			var newline = L.polyline(
-				latlong,
-				{
-					color: color,
-					weight: weight,
-					stroke: true,
-				}
-			);
-			newline.addTo(main_layer_group);
-			edgesdict[networkname][edge_id]=newline;
-			
-		} else {
+		newroute.addTo(main_layer_group);
+	
+		//then layer on the animation curves
+		//in oder to do which (using basic css) we need to know how long these curves are
+		//because the css animation works on the basis of animation duration (how long it should take to complete a run)
+		//and if what we're animating is the traversal of a small dot along a bezier curve
+		//then we have to make the time apportioned inversely proportional to the length of the curve
+		//tldr: in order that the dots on longer routes and shorter routes move the same speed, the longer routes need animations of longer duration, and vice versa
+		//increase timingscalar to slow this down, decrease it to speed it up
+		var animationrouteoptions=make_animationrouteoptions(newroute,map)
+		var newanimationroute=L.curve(commands, animationrouteoptions);
+		newanimationroute.addTo(animation_layer_group);
 		
-			commands.push("M", edge.geometry[0][0]);
-			commands.push("C", edge.geometry[1][0], edge.geometry[1][1], edge.geometry[0][1]);
-
-			var newroute=L.curve(commands, {
-				color: color,
-				weight: weight,
-				stroke: true,
-			})
-			.bindTooltip(makeRouteToolTip(edge,networkname),{'sticky':true})
-			.on('mouseover', function () {
-				activepopups.forEach(p=>p.remove());
-				activepopups=new Array;
-			})
-			
-			newroute.addTo(main_layer_group);
-		
-			//then layer on the animation curves
-			//in oder to do which (using basic css) we need to know how long these curves are
-			//because the css animation works on the basis of animation duration (how long it should take to complete a run)
-			//and if what we're animating is the traversal of a small dot along a bezier curve
-			//then we have to make the time apportioned inversely proportional to the length of the curve
-			//tldr: in order that the dots on longer routes and shorter routes move the same speed, the longer routes need animations of longer duration, and vice versa
-			//increase timingscalar to slow this down, decrease it to speed it up
-			var animationrouteoptions=make_animationrouteoptions(newroute,map)
-			var newanimationroute=L.curve(commands, animationrouteoptions);
-			newanimationroute.addTo(animation_layer_group);
+		if (recordtodict) {
 			edgesdict[networkname][edge.id]={
 				'main':newroute,
 				'animation':newanimationroute,
@@ -1590,14 +1674,8 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 				'leg_type':edge.leg_type,
 				'weight':edge.weight
 			};
-			st=edge.source_target
-			st_e[st[0],st[1]]
-			
-// 			if(autoremove){
-// 				newroute.remove()
-// 				newanimationroute.remove()
-// 			}
 		}
+		
 	};
 
 
@@ -1636,14 +1714,8 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 			embark_disembark_nodelogvaluescale=nodelogvaluescale_fn(featurecollection,3,10);
 			dest_nodelogvaluescale=nodelogvaluescale_fn(featurecollection,4,15);
 			
-			
-			
 			featurecollection.features.forEach(function (feature) {
 			
-// 				if(feature.properties.point_id==1160437){
-// // 					test_region_hidden_edges=feature.properties.hidden_edges
-// 					console.log(feature)
-// 				}
 				var point_id=feature.properties.point_id
 				var node_classes=Object.keys(feature.properties.node_classes);
 				if (node_classes.includes('origin')) {
@@ -1664,19 +1736,20 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 					nodesdict[networkname][point_id]=newlayer
 				} else {
 					oceanic_waypoints_layer_group.addTo(AO_map)
-					var newlayer=add_point_to_layergroup(feature,oceanic_waypoints_layer_group,1,networkname,oceanic_main_edges_layer_group,oceanic_animation_edges_layer_group,bezier=true,autoremove=true);
+					var newlayer=add_point_to_layergroup(feature,oceanic_waypoints_layer_group,1,networkname,oceanic_main_edges_layer_group,oceanic_animation_edges_layer_group);
 					nodesdict[networkname][point_id]=newlayer
 					oceanic_waypoints_layer_group.remove()
 				}
 			})
 			
 			var edges=network.routes;
-			routesValueScale=routeslogvaluescale_fn(edges,3,3);
+			hiddenedgesvaluescale=routeslogvaluescale_fn(edges,1,11);
+			oceanicedgesvaluescale=routeslogvaluescale_fn(edges,1,3);
 			var hiddenedges=get_featurecollection_edges_by_types(edges,['origin','final_destination']);
 			var oceanicedges=get_featurecollection_edges_by_types(edges,['onramp','offramp','oceanic_leg']);
 			
-			Object.keys(hiddenedges).forEach(e_id=>{make_edge(AO_map,hiddenedges[e_id],networkname,endpoint_main_edges_layer_group,endpoint_animation_edges_layer_group,bezier=true,autoremove=true)});
-			Object.keys(oceanicedges).forEach(e_id=>{make_edge(AO_map,oceanicedges[e_id],networkname,oceanic_main_edges_layer_group,oceanic_animation_edges_layer_group,bezier=true,autoremove=false)});
+			Object.keys(hiddenedges).forEach(e_id=>{make_edge(AO_map,hiddenedges[e_id],networkname,endpoint_main_edges_layer_group,endpoint_animation_edges_layer_group,recordtodict=true,hiddenedgesvaluescale)});
+			Object.keys(oceanicedges).forEach(e_id=>{make_edge(AO_map,oceanicedges[e_id],networkname,oceanic_main_edges_layer_group,oceanic_animation_edges_layer_group,recordtodict=true,oceanicedgesvaluescale)});
 			
 			update_oceanic_edges();
 			

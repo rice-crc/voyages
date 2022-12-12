@@ -9,7 +9,7 @@ if (selected_tab.length>1) {
 	var currentTab = "results"
 };
 
-console.log(location.toString().split("#"));
+// console.log(location.toString().split("#"));
 
 // main app
 var searchBar = new Vue({
