@@ -1094,7 +1094,7 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 		center:[0,0],
 		zoom:3.2,
 		minZoom:3.2,
-		maxZoom:15
+		maxZoom:8
 	}).on('zoomend', function() {
 		var currentzoom=AO_map.getZoom()
 		if (currentzoom>4){
@@ -1131,9 +1131,9 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 	}
 	
 	//B. Tile Layers
-	var mappingSpecialists=L.tileLayer(
-	  'https://api.mapbox.com/styles/v1/jcm10/cl5v6xvhf001b14o4tdjxm8vh/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoiamNtMTAiLCJhIjoiY2wyOTcyNjJsMGY5dTNwbjdscnljcGd0byJ9.kZvEfo7ywl2yLbztc_SSjw',
-	  {attribution: '<a href="https://www.mappingspecialists.com/" target="blank">Mapping Specialists, Ltd.</a>'});
+// 	var mappingSpecialists=L.tileLayer(
+// 	  'https://api.mapbox.com/styles/v1/jcm10/cl5v6xvhf001b14o4tdjxm8vh/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoiamNtMTAiLCJhIjoiY2wyOTcyNjJsMGY5dTNwbjdscnljcGd0byJ9.kZvEfo7ywl2yLbztc_SSjw',
+// 	  {attribution: '<a href="https://www.mappingspecialists.com/" target="blank">Mapping Specialists, Ltd.</a>'});
 	
 	var origin_nodelogvaluescale=new Object;
 	var embark_disembark_nodelogvaluescale=new Object;
@@ -1142,14 +1142,9 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 	
 	var oceanic_edges_holding_layer_group= L.layerGroup();
 	oceanic_edges_holding_layer_group.addTo(AO_map);
-	
-	var mappingSpecialistsRivers=L.tileLayer(
-	  'https://api.mapbox.com/styles/v1/jcm10/cl98xvv9r001z14mm17w970no/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoiamNtMTAiLCJhIjoiY2wyOTcyNjJsMGY5dTNwbjdscnljcGd0byJ9.kZvEfo7ywl2yLbztc_SSjw');
-	var mappingSpecialistsCountries=L.tileLayer(
-	  'https://api.mapbox.com/styles/v1/jcm10/cl98yryw3003t14o66r6fx4m9/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoiamNtMTAiLCJhIjoiY2wyOTcyNjJsMGY5dTNwbjdscnljcGd0byJ9.kZvEfo7ywl2yLbztc_SSjw')
+		
+	var mappingspecialists=L.tileLayer('https://www.slavevoyages.org/static/maps/img/map_all/{z}/{x}/{y}.png');
 	var featurelayers = {
-		"Rivers":mappingSpecialistsRivers,
-		"Modern Countries":mappingSpecialistsCountries,
 		"Voyages":oceanic_edges_holding_layer_group
 	}
 
@@ -1159,20 +1154,12 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 	var ports_origins_layer_group = make_cluster_layer_groups('origin');
 	
 	var regions_origins_layer_group = make_cluster_layer_groups('origin');
-
-// 	console.log(regions_origins_layer_group)
 	
 	var ports_embdisemb_layer_group = L.layerGroup();
 	
 	var regions_embdisemb_layer_group = L.layerGroup();
 
 	var ports_dest_layer_group = make_cluster_layer_groups('final_destination');
-
-// 	var regions_dest_layer_group = L.layerGroup();
-// 	regions_dest_layer_group.addTo(AO_map);
-// 	
-// 	var ports_dest_layer_group = L.layerGroup();
-// 	ports_dest_layer_group.addTo(AO_map);
 	
 	var oceanic_waypoints_layer_group = L.layerGroup();
 	
@@ -1219,10 +1206,6 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 
 		//ROUTE TOOLTIPS
 	  function makeRouteToolTip(r,networkname) {
-		
-// 		return r.id.toString()
-		
-// 		console.log(r)
  	  	
  	  	if (r.leg_type=='origin') {
  	  		try {
@@ -1456,64 +1439,6 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 		
 		
 	}
-	
-
-		//then get the source and target nodes
-		
-		
-// 		edge_id_list.forEach(e=>{
-// 		if (edgesdict[networkname][e]) {
-// 				edge=edgesdict[networkname][e]
-// 				st=edge.source_target;
-// 				source_id=st[0];
-// 				target_id=st[1];
-// 				var lg= new Object;
-// 				if (regionorplace=='region') {
-// 					var lg=regions_origins_layer_group
-// 				} else {
-// 					var lg=ports_origins_layer_group
-// 				}
-// 				//clusters aren't registered in the nodesdict.
-// 				//but that fact can be used to switch over to another handler for them.
-// 				var source=nodesdict[networkname][source_id]
-// 				var target=nodesdict[networkname][target_id]
-// 				if (source&&target){
-// 					
-// 					source_node_classes=Object.keys(source._layers[Object.keys(source._layers)[0]].feature.properties.node_classes)
-// 					target_node_classes=Object.keys(target._layers[Object.keys(target._layers)[0]].feature.properties.node_classes)
-// 					if (source_node_classes.includes('origin')) {
-// 						
-// 						var vp=lg.getVisibleParent(source._layers[Object.keys(source._layers)[0]])
-// 						
-// 						if (vp) {
-// 							var coords=vp._latlng
-// 						} else {
-// 							var latlng=source._layers[Object.keys(source._layers)[0]].feature.geometry.coordinates
-// 							var coords={'lat':latlng[1],'lng':latlng[0]}
-// 							
-// 						}
-// 							edge.main._coords[1]=[coords.lat,coords.lng]
-// 							edge.main.redraw()
-// 							edge.main.addTo(main_layer_group)
-// 							edge.animation._coords[1]=[coords.lat,coords.lng]
-// 							edge.animation.options.animate.duration=make_animationrouteoptions(edge.main,AO_map).animate.duration
-// 							edge.animation.redraw()
-// 							edge.animation.addTo(animation_layer_group)
-// 						} else if (source_node_classes.includes('oceanic_waypoint')||target_node_classes.includes('oceanic_waypoint')) {
-// 							
-// 							edge.main.redraw()
-// 							edge.main.addTo(main_layer_group)
-// 							edge.animation.options.animate.duration=make_animationrouteoptions(edge.main,AO_map).animate.duration
-// 							edge.animation.redraw()
-// 							edge.animation.addTo(animation_layer_group)
-// 						}
-// 					
-// 				}
-// 			}
-// 		})
-// 		bringpointlayerstofront()
-
-
 
 
 //the behavior of these different edge classes (clustered vs non-clustered) makes it reasonable to handle them differently
@@ -1778,8 +1703,8 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 			regions_embdisemb_layer_group.addTo(AO_map);
 			ports_dest_layer_group.addTo(AO_map);
 			ports_origins_layer_group.addTo(AO_map);
-			mappingSpecialistsCountries.addTo(AO_map);
-			mappingSpecialists.addTo(AO_map);
+// 			mappingSpecialistsCountries.addTo(AO_map);
+			mappingspecialists.addTo(AO_map);
 			var total_results_count=d.region.total_results_count;			
 			drawUpdateCount(AO_map,total_results_count);
 			drawLegend(AO_map);
