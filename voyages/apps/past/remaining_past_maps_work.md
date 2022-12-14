@@ -51,7 +51,8 @@ need stable m2m relations added to the language_group --> moderncountry
 	* 160273 to 160272
 	* 160524 to 160523
 	* 160525 to 160523
+* Link
+	* Mandinka to 6012, 6013, 6014, 6021, 6022
+	* Arabic/Islamic to 6012, 6013, 6014, 6021, 6022, 6031, 6032, 6041, 6042, 6051, 6052, 6061, 6064, 6065, 6082
 
-
-
-
+ 

@@ -16,8 +16,8 @@ class Command(BaseCommand):
 	def handle(self, *args, **options):
 		from voyages.apps.past.management.commands.ao_individuals_map import routeNodes,links
 		
-		for dataset in ['region','place']:
-# 		for dataset in ['place']:
+# 		for dataset in ['region','place']:
+		for dataset in ['place']:
 			print("--------",dataset,"----------")
 			base_path='voyages/apps/past/static/'
 			print('making a directed network graph of the oceanic waypoints from ao_individuals_map.py')
@@ -83,11 +83,11 @@ class Command(BaseCommand):
 			
 			african_origins_individuals.select_related('language_group')
 			individuals_with_languagegroup=african_origins_individuals.filter(language_group__isnull=False)
-			individuals_with_languagegroup=individuals_with_languagegroup.filter(language_group__latitude__isnull=False)
-			individuals_with_languagegroup=individuals_with_languagegroup.filter(language_group__longitude__isnull=False)
-
-
-			print("...",len(individuals_with_languagegroup),"have a valid language group")
+			#HAVE TO ADJUST THIS TO ACCOMMODATE WIDELY-DISTRIBUTED LANGUAGE GROUPS (MANDINKA AND ARABIC)
+# 			individuals_with_languagegroup=individuals_with_languagegroup.filter(language_group__latitude__isnull=False)
+# 			individuals_with_languagegroup=individuals_with_languagegroup.filter(language_group__longitude__isnull=False)
+			individuals_with_valid_languagegroup=0
+			
 		
 			languagegroup_nodes=list(set(individuals_with_languagegroup.values_list(
 				'language_group__id',
@@ -99,11 +99,25 @@ class Command(BaseCommand):
 			language_group_ids_offset=1000000
 			for languagegroup_node in languagegroup_nodes:
 				id,latitude,longitude,name=languagegroup_node
-				if id in G.nodes:
-					G.nodes[id+language_group_ids_offset]['tags'].append('origin')
+
+				##This is a complex problem. I'm going to get these past the filter here, then have hard-coded geojson polygons on the other end that I deal with some way or another....
+				if name in ["Arabic/Islamic","Islamic"]:
+# 					6012, 6013, 6014, 6021, 6022, 6031, 6032, 6041, 6042, 6051, 6052, 6061, 6064, 6065, 6082
+					coords=[0,0]
+				elif name == "Mandinka":
+# 					6012, 6013, 6014, 6021, 6022
+					coords=[0,0]
+				elif latitude is None or longitude is None:
+					coords=None
 				else:
-					G.add_node(id+language_group_ids_offset,coords=(float(latitude),float(longitude)),name=name,tags=["origin"],pk=id)
-			print("added",len(languagegroup_nodes),"african origin nodes")
+					coords=[float(latitude),float(longitude)]
+				
+				if coords is not None:
+					individuals_with_valid_languagegroup+=1
+# 				if id in G.nodes:
+# 					G.nodes[id+language_group_ids_offset]['tags'].append('origin')
+# 				else:
+					G.add_node(id+language_group_ids_offset,coords=coords,name=name,tags=["origin"],pk=id)
 	
 			##2b. final destinations
 			african_origins_individuals.select_related('post_disembark_location')
@@ -379,7 +393,7 @@ class Command(BaseCommand):
 		
 			routes={}
 			
-			oceanic_subgraph=G.edge_subgraph([(e[0],e[1]) for e in G.edges() if G.edges[e[0],e[1]]['tag'] in ['onramp','offramp','oceanic_leg','self_loop']])
+			oceanic_subgraph=G.edge_subgraph([(e[0],e[1]) for e in G.edges() if G.edges[e[0],e[1]]['tag'] in ['onramp','offramp','oceanic_leg']])
 			endpoints_subgraph=G.edge_subgraph([(e[0],e[1]) for e in G.edges() if G.edges[e[0],e[1]]['tag'] in ['origin','final_destination','self_loop']])
 # 			print(G.nodes())
 # 			print(oceanic_subgraph.nodes())
@@ -439,20 +453,17 @@ class Command(BaseCommand):
 								
 				def addlegs(subroute,subgraph,this_shortest_path):
 					s_id,t_id=subroute
-					if s_id!=t_id:
-						try:
-							sp=nx.shortest_path(subgraph,s_id,t_id,'weight')
-							if this_shortest_path==[]:
-								this_shortest_path+=sp
-							else:
-								this_shortest_path+=sp[1:]
-	# 						print(sp)
-						except:
-							print("no path btw",s_id,t_id)
-					
-						if len(set(badnodes).intersection(subroute))>0:
-							print("-->",subroute,sp)
-					
+					if s_id==t_id:
+						this_shortest_path+=[s_id,t_id]
+					try:
+						sp=nx.shortest_path(subgraph,s_id,t_id,'weight')
+						if this_shortest_path==[]:
+							this_shortest_path+=sp
+						else:
+							this_shortest_path+=sp[1:]
+					except:
+						print("no path btw",s_id,t_id)
+
 					return this_shortest_path
 				
 				shortest_path=[]
@@ -467,7 +478,7 @@ class Command(BaseCommand):
 						[final_subroute,endpoints_subgraph]
 					]:
 						subroute,graph=subroute_set
-						if None not in subroute and graph.has_node(subroute[0]) and graph.has_node(subroute[1]) and subroute[0]!=subroute[1]:
+						if None not in subroute and graph.has_node(subroute[0]) and graph.has_node(subroute[1]):
 							shortest_path=addlegs(subroute,graph,shortest_path)
 				else:
 					origin_subroute=offset_itinerary[0:2]
@@ -481,12 +492,14 @@ class Command(BaseCommand):
 						[final_subroute,endpoints_subgraph]
 					]:
 						subroute,graph=subroute_set
+
 						if None not in subroute and graph.has_node(subroute[0]) and graph.has_node(subroute[1]):
 							shortest_path=addlegs(subroute,graph,shortest_path)
 # 				
 # 				if len(set(badnodes).intersection(offset_itinerary))>0:
-# 					print(offset_itinerary,shortest_path)
-				
+# 					print(offset_itinerary,shortest_path)# 
+# 				if final_subroute[0]==final_subroute[1]:
+# 					print(offset_itinerary,shortest_path,graph.has_node(subroute[0]),graph.has_node(subroute[1]))
 # 				print("path--->",shortest_path)
 				route_edge_ids=[]
 				for i in range(len(shortest_path)-1):
@@ -537,8 +550,15 @@ class Command(BaseCommand):
 						route,prev_controlXY=straightab(B,C,bc_id,route)
 						route[bc_id].append([b_id,c_id])
 						route[bc_id].append(bcdata['tag'])
+# 				elif itinerary[-1]==itinerary[-2]:
+# 					#awful. i have to catch cases here where the final dest=disembarkation port
+# 					e+=1
+# 					G.add_edge(disembark_id,post_disembark_id,id=e,curve=False,tag="final_destination")
+# 					
+# 					route[e].
+# 					
 				else:
-					print("bad itinerary:",itinerary)
+					print("bad itinerary:",offset_itinerary,route_edge_ids)
 			
 				if route!={}:
 					routes[routename]=route
