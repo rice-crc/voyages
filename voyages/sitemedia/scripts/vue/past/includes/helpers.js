@@ -1146,11 +1146,11 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 	
 	var mappingSpecialistsRivers=L.tileLayer(
 	  'https://api.mapbox.com/styles/v1/jcm10/cl98xvv9r001z14mm17w970no/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoiamNtMTAiLCJhIjoiY2wyOTcyNjJsMGY5dTNwbjdscnljcGd0byJ9.kZvEfo7ywl2yLbztc_SSjw');
-// 	var mappingSpecialistsCountries=L.tileLayer(
-// 	  'https://api.mapbox.com/styles/v1/jcm10/cl98yryw3003t14o66r6fx4m9/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoiamNtMTAiLCJhIjoiY2wyOTcyNjJsMGY5dTNwbjdscnljcGd0byJ9.kZvEfo7ywl2yLbztc_SSjw')
+	var mappingSpecialistsCountries=L.tileLayer(
+	  'https://api.mapbox.com/styles/v1/jcm10/cl98yryw3003t14o66r6fx4m9/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoiamNtMTAiLCJhIjoiY2wyOTcyNjJsMGY5dTNwbjdscnljcGd0byJ9.kZvEfo7ywl2yLbztc_SSjw')
 	var featurelayers = {
 		"Rivers":mappingSpecialistsRivers,
-// 		"Modern Countries":mappingSpecialistsCountries,
+		"Modern Countries":mappingSpecialistsCountries,
 		"Voyages":oceanic_edges_holding_layer_group
 	}
 
