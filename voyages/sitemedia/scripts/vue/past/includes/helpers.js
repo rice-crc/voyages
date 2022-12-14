@@ -1093,8 +1093,8 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 		fullscreenControl: false,
 		center:[0,0],
 		zoom:3.2,
-		minZoom:3.2,
-		maxZoom:15
+		minZoom:2,
+		maxZoom:18
 	}).on('zoomend', function() {
 		var currentzoom=AO_map.getZoom()
 		if (currentzoom>4){
@@ -1574,7 +1574,10 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 				if (source&&target){
 					edge.main.redraw()
 					edge.main.addTo(main_layer_group)
-					edge.animation.options.animate.duration=make_animationrouteoptions(edge.main,AO_map).animate.duration
+// 					console.log(edge.animation)
+					var updatedanimation=make_animationrouteoptions(edge.main,AO_map)
+					edge.animation.options.animate.duration=updatedanimation.animate.duration
+					edge.animation.options.dashArray=updatedanimation.dashArray
 					edge.animation.redraw()
 					edge.animation.addTo(animation_layer_group)
 				}
@@ -1589,28 +1592,38 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 
 
 	function make_animationrouteoptions(basepath,map){
-		var distance=0
-		var distance=0;
-		var timingscalar = 50
-		var interpolation_steps=[0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]
-		var pairs=d3.pairs(basepath.trace(interpolation_steps));
-		function euclideandistance(p1,p2) {
-			xyone=map.latLngToContainerPoint(p1);
-			xytwo=map.latLngToContainerPoint(p2);
-			var ed=Math.sqrt((xyone.x-xytwo.x)**2+(xyone.y-xytwo.y)**2)
-			return ed
-		}
-		if (pairs.length>1){
-			pairs.forEach(sp=>distance+=(euclideandistance(sp[0],sp[1])))
-		}
-		var duration=distance*timingscalar;
-		var standard_interval=10
+// 		var distance=0
+// 		var timingscalar = 500
+// 		var interpolation_steps=[0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]
+// 		var pairs=d3.pairs(basepath.trace(interpolation_steps));
+// 		function euclideandistance(p1,p2) {
+// 			xyone=map.latLngToContainerPoint(p1);
+// 			xytwo=map.latLngToContainerPoint(p2);
+// 			var ed=Math.sqrt((xyone.x-xytwo.x)**2+(xyone.y-xytwo.y)**2)
+// 			return ed
+// 		}
+// 		if (pairs.length>1){
+// 			pairs.forEach(sp=>distance+=(euclideandistance(sp[0],sp[1])))
+// 		}
+// 		
+// 		
+		var standard_interval=20
+// 		
+// 		distance=distance/standard_interval
+// 		
+// 		var duration=distance*timingscalar;
+// 		
+// 		
+// 		
+// 		
+// 		
+//  		console.log("-->",distance,duration)
 		return {
 			color: "#6c757dc9",
 			weight: "1",
 			dashArray:"1 " + (standard_interval-1).toString(),
 			animate: {
-				"duration":duration,
+				"duration":1000,
 				"iterations":Infinity,
 				"direction":'normal'
 			}

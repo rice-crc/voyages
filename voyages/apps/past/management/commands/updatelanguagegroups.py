@@ -39,23 +39,24 @@ class Command(BaseCommand):
 			
 				newlanguage.save()
 			
-				countrycode=row['COUNTRYCODE']
-			
-				#if a modern country doesn't exist, create a blank entry and raise a warning
-				try:
-					country=ModernCountry.objects.get(pk=countrycode)
-				except:
-					country=ModernCountry.objects.create(id=countrycode,name='',latitude=0.0,longitude=0.0)
-					print("--->created new blank modern country with id=",countrycode)
+				countrycodes=row['COUNTRYCODE'].split(',')
 				
-				country.languages.add(newlanguage)
+				for countrycode in countrycodes:
+					#if a modern country doesn't exist, create a blank entry and raise a warning
+					try:
+						country=ModernCountry.objects.get(pk=countrycode)
+					except:
+						country=ModernCountry.objects.create(id=countrycode,name='',latitude=0.0,longitude=0.0)
+						print("--->created new blank modern country with id=",countrycode)
+				
+					country.languages.add(newlanguage)
 			
-				country.save()
+					country.save()
 	
 		#then we attach the individuals who have languagegroup id's to those, as created above
 	
 		#substituting merged language groups
-		languagegroupmap={160273:160272,160524:160523,160525:160523}
+		languagegroupmap={160273:160272,160524:160523,160525:160523,560601:160499}
 	
 		with open('voyages/apps/past/management/commands/languagegroups/people_to_languagegroups.tsv', newline='\n', encoding='utf-8') as csvfile:
 			reader = csv.DictReader(csvfile,delimiter='\t')

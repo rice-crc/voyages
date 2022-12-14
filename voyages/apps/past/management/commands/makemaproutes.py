@@ -9,6 +9,7 @@ from math import sqrt
 from voyages.apps.past.models import Enslaved,LanguageGroup,ModernCountry
 from voyages.apps.voyage.models import Place,Region,Voyage
 import networkx as nx
+from voyages.localsettings import STATICFILES_DIRS,STATIC_ROOT
 
 class Command(BaseCommand):
 
@@ -16,8 +17,8 @@ class Command(BaseCommand):
 	def handle(self, *args, **options):
 		from voyages.apps.past.management.commands.ao_individuals_map import routeNodes,links
 		
-# 		for dataset in ['region','place']:
-		for dataset in ['place']:
+		for dataset in ['region','place']:
+# 		for dataset in ['place']:
 			print("--------",dataset,"----------")
 			base_path='voyages/apps/past/static/'
 			print('making a directed network graph of the oceanic waypoints from ao_individuals_map.py')
@@ -88,25 +89,51 @@ class Command(BaseCommand):
 # 			individuals_with_languagegroup=individuals_with_languagegroup.filter(language_group__longitude__isnull=False)
 			individuals_with_valid_languagegroup=0
 			
-		
+			
+			
+			
+			
 			languagegroup_nodes=list(set(individuals_with_languagegroup.values_list(
 				'language_group__id',
 				'language_group__latitude',
 				'language_group__longitude',
 				'language_group__name'
 			)))
-		
+			distributedlanguagegroups={}
 			language_group_ids_offset=1000000
+			language_groups=LanguageGroup.objects.all()
 			for languagegroup_node in languagegroup_nodes:
 				id,latitude,longitude,name=languagegroup_node
 
 				##This is a complex problem. I'm going to get these past the filter here, then have hard-coded geojson polygons on the other end that I deal with some way or another....
-				if name in ["Arabic/Islamic","Islamic"]:
+				if name in ["Arabic/Islamic","Islamic","Mandinka"]:
 # 					6012, 6013, 6014, 6021, 6022, 6031, 6032, 6041, 6042, 6051, 6052, 6061, 6064, 6065, 6082
-					coords=[0,0]
-				elif name == "Mandinka":
 # 					6012, 6013, 6014, 6021, 6022
 					coords=[0,0]
+					
+					
+					dist_lg=language_groups.filter(id=id)
+					dist_lg_countries=dist_lg.values_list(
+						'moderncountry__id',
+						'moderncountry__name',
+						'moderncountry__longitude',
+						'moderncountry__latitude'
+					)
+					
+					for dist_lg_country in dist_lg_countries:
+						
+						countrydata={
+							'id':dist_lg_country[0],
+							'name':dist_lg_country[1],
+							'lng':float(dist_lg_country[2]),
+							'lat':float(dist_lg_country[3])
+						}
+					
+					if id in distributedlanguagegroups:
+						distributedlanguagegroups[id].append(countrydata)
+					else:
+						distributedlanguagegroups[id]=[countrydata]
+					
 				elif latitude is None or longitude is None:
 					coords=None
 				else:
@@ -616,10 +643,15 @@ class Command(BaseCommand):
 				else:
 				
 					geo_points[n]=[coords,'oceanic_waypoint',None,None]
-					
-		
+			
 			d=open(base_path+dataset+'_routes_points.json','w')
 			d.write(json.dumps(geo_points))
 			d.close()
+			
+# 			STATICFILES_DIRS,STATIC_ROOT
+			for dest in [i for i in STATICFILES_DIRS] + [STATIC_ROOT]:
+				d=open(os.path.join(dest,'scripts/vue/past/maps/',dataset+'_dist_lang_groups.json'),'w')
+				d.write(json.dumps(distributedlanguagegroups))
+				d.close()
 								
 			
