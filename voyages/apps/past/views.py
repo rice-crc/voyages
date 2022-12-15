@@ -4,7 +4,8 @@ import json
 import uuid
 from builtins import str
 from datetime import date
-
+import time
+import copy
 from django.conf import settings
 from django.core.paginator import Paginator
 from django.core.urlresolvers import reverse
@@ -26,6 +27,8 @@ from .models import (AltLanguageGroupName, Enslaved,
                      EnslavedContributionNameEntry, EnslavedContributionStatus, EnslavedInRelation, EnslavedSearch, EnslavementRelation, EnslaverContribution, EnslaverInRelation, EnslaverSearch, EnslaverVoyageConnection,
                      LanguageGroup, MultiValueHelper, ModernCountry, EnslavedNameSearchCache,
                      _modern_name_fields, _name_fields)
+from voyages.apps.voyage.models import Place,Region
+from collections import Counter
 
 ENSLAVED_DATASETS = ['african-origins', 'oceans-of-kinfolk']
 
@@ -177,27 +180,90 @@ _voyage_related_fields_default = [
     'voyage__voyage_name_outcome__vessel_captured_outcome__label'
 ]
 
+
+try:
+    d=open("voyages/apps/past/static/place_routes_points.json","r")
+    t=d.read()
+    j=json.loads(t)
+    place_routes_points={int(i):j[i] for i in j}
+    d.close()
+    
+    d=open("voyages/apps/past/static/region_routes_points.json","r")
+    t=d.read()
+    j=json.loads(t)
+    region_routes_points={int(i):j[i] for i in j}
+    d.close()
+    
+    d=open("voyages/apps/past/static/place_edge_ids.json","r")
+    t=d.read()
+    j=json.loads(t)
+    place_edge_ids={int(i):j[i] for i in j}
+    d.close()
+    
+    d=open("voyages/apps/past/static/region_edge_ids.json","r")
+    t=d.read()
+    j=json.loads(t)
+    region_edge_ids={int(i):j[i] for i in j}
+    d.close()
+    
+    from voyages.apps.past.static.place_routes_curves import *
+    from voyages.apps.past.static.region_routes_curves import *
+    from voyages.apps.past.static.region_vals_to_port_ids import *
+except:
+    print("------>  warning. missing essential mapping static files. individual enslaved itinerary maps will not run")
+
+
 @require_POST
 @csrf_exempt
 def search_enslaved(request):
+    st=time.time()
     # A little bit of Python magic where we pass the dictionary
     # decoded from the JSON body as arguments to the EnslavedSearch
     # constructor.
     data = json.loads(request.body)
     search = EnslavedSearch(**data['search_query'])
-    fields = data.get('fields')
+    fields=data.get('fields',None)
+    output_type = data.get('output', 'resultsTable')
+    
+    if output_type == 'maps':
+        fields = [
+            'language_group__id',
+            'voyage__voyage_itinerary__imp_principal_place_of_slave_purchase__value',
+            'voyage__voyage_itinerary__imp_principal_port_slave_dis__value',
+            'voyage__voyage_itinerary__imp_principal_region_of_slave_purchase__value',
+            'voyage__voyage_itinerary__imp_principal_region_slave_dis__value',
+            'post_disembark_location__value',
+            'post_disembark_location__region__value'
+        ]
+#         fields = [
+#             'language_group__moderncountry__id',
+#             'voyage__voyage_itinerary__imp_principal_region_of_slave_purchase__value',
+#             'voyage__voyage_itinerary__imp_principal_region_slave_dis__value',
+#             'post_disembark_location__value'
+#         ]
+
     if fields is None:
         fields = [
-            'enslaved_id', 'age', 'gender', 'height', 'skin_color',
+            'enslaved_id',
+            'age',
+            'gender',
+            'height',
+            'skin_color',
             'language_group__name',
             'register_country__name',
             'voyage_id',
+            'voyage__voyage_ship__ship_name',
+            'voyage__voyage_dates__first_dis_of_slaves',
+            'voyage__voyage_itinerary__int_first_port_dis__place',
+            'voyage__voyage_itinerary__imp_principal_place_of_slave_purchase__place',
+            'voyage__voyage_itinerary__imp_principal_port_slave_dis__place',
+            'voyage__voyage_name_outcome__vessel_captured_outcome__label',
             'captive_fate__name', 'post_disembark_location__place'
         ] + _name_fields + _modern_name_fields + \
-        _voyage_related_fields_default + \
         [helper.projected_name for helper in EnslavedSearch.all_helpers]
+        
     query = search.execute(fields)
-    output_type = data.get('output', 'resultsTable')
+    
     # For now we only support outputing the results to DataTables.
     if output_type == 'resultsTable':
 
@@ -234,7 +300,200 @@ def search_enslaved(request):
         for entry in page:
             entry['recordings'] = EnslavedNameSearchCache.get_recordings(
                 [entry[f] for f in _name_fields if f in entry])
+        print("TABLE enslavedsearch response time:",time.time()-st)
         return JsonResponse(table)
+    elif output_type=='maps':
+        
+        mapmode=data.get('mapmode', 'points')
+        paginator = Paginator(query, len(query))
+        page = paginator.page(1)
+        
+        place_itineraries=[
+            [i[k] for k in 
+            ['language_group__id',
+            'voyage__voyage_itinerary__imp_principal_place_of_slave_purchase__value',
+            'voyage__voyage_itinerary__imp_principal_port_slave_dis__value',
+            'post_disembark_location__value'
+            ]]
+            for i in page
+        ]
+        region_itineraries=[
+            [i[k] for k in 
+            ['language_group__id',
+            'voyage__voyage_itinerary__imp_principal_region_of_slave_purchase__value',
+            'voyage__voyage_itinerary__imp_principal_region_slave_dis__value',
+            'post_disembark_location__region__value'
+            ]]
+            for i in page
+        ]
+        
+        final_result={}
+        
+        itinerary_groups=[
+            ['region',region_itineraries,region_routes_points,region_route_curves,region_edge_ids],
+            ['place',place_itineraries,place_routes_points,place_route_curves,place_edge_ids],        
+        ]
+        
+        for itinerary_group in itinerary_groups:
+            itinerary_group_name,itineraries,routes_points,route_curves,edge_ids_visibility=itinerary_group
+            language_group_counts=dict(Counter(i[0] for i in itineraries))
+            embarkation_location_counts=dict(Counter(i[1] for i in itineraries))
+            disembarkation_location_counts=dict(Counter(i[2] for i in itineraries))
+            final_location_counts=dict(Counter(i[3] for i in itineraries))
+            language_group_ids_offset=1000000
+        
+#             for itinerary in itineraries:
+#                 if itinerary[1]==60200 and itinerary[0] is not None:
+#                     print(itinerary)
+#         
+            points_dict={
+                p_id:{
+                    'name':routes_points[p_id][1],
+                    'coords':[routes_points[p_id][0][1],routes_points[p_id][0][0]],
+                    'pk':routes_points[p_id][2],
+                    'hidden_edges':routes_points[p_id][3],
+                    'nodesize':0
+                } for p_id in routes_points
+            }
+        
+            for p_id in routes_points:
+                for triple in [
+                    [language_group_counts,'origin',language_group_ids_offset],
+                    [embarkation_location_counts,'embarkation',0],
+                    [disembarkation_location_counts,'disembarkation',0],
+                    [final_location_counts,'post-disembarkation',0],
+                ]:
+                    this_dict,tag,offset=triple
+                    if p_id-offset in this_dict:
+                        weight=this_dict[p_id-offset]
+                        if tag in points_dict[p_id]:
+                            points_dict[p_id][tag]+=weight
+                        else:
+                            points_dict[p_id][tag]=weight
+                        points_dict[p_id]['nodesize']+=weight
+            
+            featurecollection=[]
+            
+            nodes_hidden_edges={}
+            
+            for point_id in points_dict:
+                
+                point=points_dict[point_id]
+                coords=point['coords']
+                name=point['name']
+                
+                addfeature=False
+                
+                if name=="oceanic_waypoint":
+                    feature_properties={
+                            "name":name,
+                            "size":0,
+                            "node_classes":{"oceanic_waypoint":0},
+                            "point_id":point_id,
+                            "hidden_edges":points_dict[point_id]['hidden_edges']
+                        }
+                    addfeature=True
+                else:
+                    nodesize=point['nodesize']
+                    pk=point['pk']
+                    hidden_edges=point['hidden_edges']
+                    if nodesize > 0:
+                        addfeature=True
+                        popuplines=[]
+                        live_tags=['origin','embarkation','disembarkation','post-disembarkation']
+                        if itinerary_group_name=='region':
+                            pointtags={tag:{"count":point[tag],"key": int(pk) if tag in ('origin') else int(point_id)}
+                                for tag in live_tags if tag in point
+                            }
+                        elif itinerary_group_name=='place':
+                            pointtags={tag:{"count":point[tag],"key": int(pk)}
+                                for tag in live_tags if tag in point
+                            }
+                        feature_properties={
+                            "name":name,
+                            "size":nodesize,
+                            "node_classes":pointtags,
+                            "point_id":point_id,
+                            "hidden_edges":points_dict[point_id]['hidden_edges']
+                        }
+#                         
+#                     if point_id==60200:
+#                         slhe=hidden_edges
+#                         print(hidden_edges)
+#                         
+#                         print(feature_properties)
+                
+                if addfeature:
+                
+                    feature={
+                        "type":"Feature",
+                        "properties":feature_properties,
+                        "geometry":{
+                            "type":"Point",
+                            "coordinates":coords
+                        }
+                    }
+                    featurecollection.append(feature)
+            
+            result_points={
+                "type": "FeatureCollection",
+                "features": featurecollection
+            }
+#             print("point map time:",time.time()-st)
+    
+            itinerary_names=["-".join([str(i) for i in itinerary]) for itinerary in itineraries]
+#             for i in itinerary_names:
+#                 if not i.startswith("None"):
+#                     print(i)
+#             print("----------------")
+            itinerary_names=[i for i in itinerary_names if i in route_curves]
+#             for i in itinerary_names:
+#                 if not i.startswith("None"):
+#                     print(i)
+#             print(time.time()-st)
+#             print([(l,i) for i in itinerary_names for l in route_curves[i] if '60213' in i or '31399' in i])
+#             print("ITINERARY NAMES",itinerary_names)
+            leg_weights=Counter([l for i in itinerary_names for l in route_curves[i]])
+#             print(leg_weights)
+            itinerary_weights=Counter(itinerary_names).most_common()
+            itinerary_weights.reverse()
+#             print([i for i in itinerary_weights if '60213' in i or '31399' in i])
+#             print("ITINERARY WEIGHTS",itinerary_weights)
+            #this trickery ensures that the heaviest route determines which leg's geometry gets used
+#SIERRA LEONE IS MISSING THE FOLLOWING EDGES FROM LEG DATA
+#DESPITE HAVING THEM IN ITS HIDDEN EDGES LIST
+            leg_data={l:route_curves[i[0]][l] for i in itinerary_weights for l in route_curves[i[0]]}
+#             print(leg_data)
+#             print([leg_data[l] for l in slhe])
+#             print("LEG DATA",leg_data)
+#             print({i:leg_data[i] for i in leg_data if 60213 in leg_data[i][1]})
+#             for e in slhe:
+#                 if e not in leg_data:
+#                     print("---->",e)
+#                 else:
+#                     print(leg_data[e])
+            result_routes=[
+                {
+                    'geometry':leg_data[l][0],
+                    'source_target':leg_data[l][1],
+                    'leg_type':leg_data[l][2],
+                    'weight':leg_weights[l],
+                    'id':l,
+                    'visible':edge_ids_visibility[l]
+                } for l in leg_data
+            ]
+        
+            result={
+                'routes':result_routes,
+                'points':result_points,
+                'region_vals_to_port_ids':region_vals_to_port_ids,
+                'total_results_count':len(query)
+            }
+            
+            final_result[itinerary_group_name]=result
+        print("MAP enslavedsearch response time:",time.time()-st)    
+        return JsonResponse(final_result,safe=False)
+    
     return JsonResponse({'error': 'Unsupported'})
 
 
