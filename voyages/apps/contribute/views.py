@@ -14,7 +14,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
 from django.core.urlresolvers import reverse
 from django.db import connection, transaction
-from django.db.models import Q
+from django.db.models import F, Q, Count
 from django.db.models.fields import Field
 from django.http import (Http404, HttpResponse, HttpResponseBadRequest,
                          HttpResponseForbidden, HttpResponseRedirect,
@@ -53,7 +53,7 @@ from voyages.apps.contribute.publication import (
     export_contributions, export_from_voyages, full_contribution_id,
     get_csv_writer, get_filtered_contributions, get_header_csv_text,
     publish_accepted_contributions, safe_writerow)
-from voyages.apps.past.models import Enslaved, EnslavedContribution, EnslavedContributionLanguageEntry, EnslavedContributionNameEntry, EnslavedContributionStatus, EnslaverAlias, EnslaverIdentity, EnslaverVoyageConnection, LanguageGroup, ModernCountry
+from voyages.apps.past.models import Enslaved, EnslavedContribution, EnslavedContributionLanguageEntry, EnslavedContributionNameEntry, EnslavedContributionStatus, EnslavementRelation, EnslaverAlias, EnslaverCachedProperties, EnslaverContribution, EnslaverIdentity, EnslaverInRelation, EnslaverVoyageConnection, LanguageGroup, ModernCountry, EnslaverIdentitySourceConnection
 from voyages.apps.past.views import _get_audio_filename
 from voyages.apps.voyage.cache import VoyageCache
 from voyages.apps.voyage.forms import VoyagesSourcesAdminForm
@@ -972,10 +972,10 @@ def voyage_to_dict(voyage):
 
 
 @login_required()
-def editor_main(request):
+def editor_main(request, active_tab=None):
     if not request.user.is_superuser:
         return HttpResponseForbidden()
-    return render(request, 'contribute/editor_main.html')
+    return render(request, 'contribute/editor_main.html', { "active_tab": active_tab or "requests" })
 
 
 def get_reviews_by_status(statuses, display_interim_data=False):
@@ -1897,6 +1897,59 @@ def impute_contribution(request, editor_contribution_id):
         }
     return JsonResponse(res)
 
+def _update_source_from_interim(source, interim_source_dict):
+    src_type = interim_source_dict['type']
+    formatted_content = ''
+    all_types = {
+        x.group_name: x for x in VoyageSourcesType.objects.all()
+    }    
+    authors = interim_source_dict.get('authors', interim_source_dict.get('author', ''))
+    if src_type == 'Primary source':
+        formatted_content = '<em>' + \
+            interim_source_dict['name_of_library_or_archive'] + \
+            '</em> (' + \
+            interim_source_dict['location_of_library_or_archive'] + ')'
+        source.source_type = all_types['Documentary source']
+    elif src_type == 'Article source':
+        formatted_content = authors + \
+            ' "' + interim_source_dict['article_title'] + '", <em>' + \
+            interim_source_dict['journal'] + '</em>, ' + \
+            interim_source_dict.get('volume_number', 'vol??') + \
+            ' (' + interim_source_dict.get('year', 'year??') + '): ' + \
+            interim_source_dict.get('page_start', 'page_start') + '-' + \
+            interim_source_dict.get('page_end', 'page_end')
+        source.source_type = all_types['Published source']
+    elif src_type == 'Book source':
+        formatted_content = authors + ','
+        if interim_source_dict['source_is_essay_in_book'] == 'true':
+            formatted_content += (
+                ' "' + interim_source_dict['essay_title'] + '",'
+                ' ' + interim_source_dict['editors'] + ' (ed.)')
+        place = interim_source_dict.get('place_of_publication', 'place??')
+        year = interim_source_dict.get('year', 'year??')
+        formatted_content += (
+            ' <em>' + interim_source_dict['book_title'] + '</em> '
+            '(' + place + ', ' + year + ')')
+        source.source_type = all_types['Published source']
+    elif src_type == 'Newspaper source':
+        alt_name = interim_source_dict.get('alternative_name')
+        formatted_content = \
+            '<em>' + interim_source_dict['name'] + '</em>' + \
+            ((' (later, ' + alt_name + ')') if alt_name else '') + \
+            ', (' + interim_source_dict.get('city', 'city??') + ', ' + \
+            interim_source_dict.get('country', 'country??') + ')'
+        source.source_type = all_types['Newspaper']
+    elif src_type == 'Private note or collection source':
+        formatted_content = authors + ', ' + \
+            interim_source_dict['title'] + \
+            ' (' + interim_source_dict.get('location', 'location??') + ')'
+        source.source_type = all_types['Private note or collection']
+    elif src_type == 'Unpublished secondary source':
+        formatted_content = authors + ', ' + \
+            interim_source_dict['title'] + \
+            ' (' + interim_source_dict.get('location', 'location??') + ')'
+        source.source_type = all_types['Unpublished secondary source']
+    source.full_ref = formatted_content
 
 @login_required()
 @require_POST
@@ -1969,57 +2022,7 @@ def editorial_sources(request):
                 'interim_source_id': interim_source_id
             })
     if mode == 'new':
-        src_type = interim_source_dict['type']
-        formatted_content = ''
-        all_types = {
-            x.group_name: x for x in VoyageSourcesType.objects.all()
-        }
-        if src_type == 'Primary source':
-            formatted_content = '<em>' + \
-                interim_source_dict['name_of_library_or_archive'] + \
-                '</em> (' + \
-                interim_source_dict['location_of_library_or_archive'] + ')'
-            source.source_type = all_types['Documentary source']
-        elif src_type == 'Article source':
-            formatted_content = interim_source_dict['authors'] + \
-                ' "' + interim_source_dict['article_title'] + '", <em>' + \
-                interim_source_dict['journal'] + '</em>, ' + \
-                interim_source_dict.get('volume_number', 'vol??') + \
-                ' (' + interim_source_dict.get('year', 'year??') + '): ' + \
-                interim_source_dict.get('page_start', 'page_start') + '-' + \
-                interim_source_dict.get('page_end', 'page_end')
-            source.source_type = all_types['Published source']
-        elif src_type == 'Book source':
-            formatted_content = interim_source_dict['authors'] + ','
-            if interim_source_dict['source_is_essay_in_book'] == 'true':
-                formatted_content += (
-                    ' "' + interim_source_dict['essay_title'] + '",'
-                    ' ' + interim_source_dict['editors'] + ' (ed.)')
-            place = interim_source_dict.get('place_of_publication', 'place??')
-            year = interim_source_dict.get('year', 'year??')
-            formatted_content += (
-                ' <em>' + interim_source_dict['book_title'] + '</em> '
-                '(' + place + ', ' + year + ')')
-            source.source_type = all_types['Published source']
-        elif src_type == 'Newspaper source':
-            alt_name = interim_source_dict.get('alternative_name')
-            formatted_content = \
-                '<em>' + interim_source_dict['name'] + '</em>' + \
-                ((' (later, ' + alt_name + ')') if alt_name else '') + \
-                ', (' + interim_source_dict.get('city', 'city??') + ', ' + \
-                interim_source_dict.get('country', 'country??') + ')'
-            source.source_type = all_types['Newspaper']
-        elif src_type == 'Private note or collection source':
-            formatted_content = interim_source_dict['authors'] + ', ' + \
-                interim_source_dict['title'] + \
-                ' (' + interim_source_dict.get('location', 'location??') + ')'
-            source.source_type = all_types['Private note or collection']
-        elif src_type == 'Unpublished secondary source':
-            formatted_content = interim_source_dict['authors'] + ', ' + \
-                interim_source_dict['title'] + \
-                ' (' + interim_source_dict.get('location', 'location??') + ')'
-            source.source_type = all_types['Unpublished secondary source']
-        source.full_ref = formatted_content
+        _update_source_from_interim(source, interim_source_dict)
     form = VoyagesSourcesAdminForm(instance=source)
     return render(request, 'contribute/sources_form.html', {
         'form': form,
@@ -2206,6 +2209,11 @@ def retrieve_publication_status(request):
 # PAST / Origins contributions
 
 def _expand_contrib(c):
+    def _get_audio_relative_url(name_pk):
+        filename = _get_audio_filename(c.pk, name_pk, full_path=False, check_exists=True)
+        if filename:
+            filename = settings.MEDIA_URL + filename
+        return filename
     return {
         "pk": c.pk,
         "contributor": c.contributor.username if c.contributor else "(anonymous)",
@@ -2222,15 +2230,15 @@ def _expand_contrib(c):
                 "pk": cn.pk,
                 "name": cn.name,
                 "notes": cn.notes,
-                "audio": _get_audio_filename(c.pk, cn.pk, full_path=False, check_exists=True)
+                "audio": _get_audio_relative_url(cn.pk)
             } for cn in c.contributed_names.all()
         ],
         "contributed_language_groups": [{
                 "entry_pk": cl.pk,
                 "language_group_pk": cl.language_group.id,
                 "language_group_name": cl.language_group.name,
-                "modern_country_pk": cl.modern_country.id,
-                "modern_country_name": cl.modern_country.name,
+                "modern_country_pk": cl.modern_country_id,
+                "modern_country_name": cl.modern_country.name if cl.modern_country else None
             } for cl in c.contributed_language_groups.all()
         ],
         "notes": c.notes,
@@ -2245,9 +2253,7 @@ def _enslaved_contrib_base_query():
         .prefetch_related('contributed_language_groups')
 
 @login_required()
-@require_POST
-def get_origins_contributions(request):
-    status = request.POST.get('status', [EnslavedContributionStatus.PENDING])
+def get_origins_contributions(request, status=0):
     q = _enslaved_contrib_base_query()
     if status:
         # The caller can explicitly set status to 
@@ -2257,9 +2263,7 @@ def get_origins_contributions(request):
     return JsonResponse({'status': status, 'contributions': contribs })
 
 @login_required()
-@require_POST
-def get_origins_contrib_details(request):
-    contrib_pk = int(request.POST.get('contrib_pk'))
+def get_origins_contrib_details(request, contrib_pk):
     q = _enslaved_contrib_base_query().filter(pk=contrib_pk)
     matches = list(q)
     if len(matches) != 1:
@@ -2303,9 +2307,11 @@ def get_origins_contrib_details(request):
             c.enslaved.voyage.voyage_itinerary.imp_principal_region_of_slave_purchase_id) \
         .filter(name_clauses) \
         .values( \
-            'pk', 'gender', 'modern_name', 'documented_name', \
-            'name_first', 'name_second', 'name_third', 'language_group__name', \
-            'voyage__voyage_itinerary__imp_principal_place_of_slave_purchase__place')
+            'pk', 'gender', 'modern_name', 'documented_name', 'notes', \
+            'name_first', 'name_second', 'name_third', \
+            'language_group_id', 'modern_country_id', \
+            'language_group__name', 'modern_country__name', \
+            embarkation=F('voyage__voyage_itinerary__imp_principal_place_of_slave_purchase__place'))
     expanded = _expand_contrib(c)
     expanded['prev_name_contributions'] = list(prev_name_contrib)
     expanded['prev_language_group_contributions'] = list(prev_lang_contrib)
@@ -2314,75 +2320,85 @@ def get_origins_contrib_details(request):
 
 @login_required()
 @require_POST
+@csrf_exempt
 def reject_origins_contribution(request):
     """
     Mark the contribution as rejected.
     """
-    contrib = get_object_or_404(EnslavedContribution, request.POST.get('contrib_pk'))
-    contrib.status = EnslavedContributionStatus.REJECTED
-    contrib.save()
-    return JsonResponse({'result': 'ok'})
+    try:
+        data = json.loads(request.body)
+        contrib_pk = data.get('contrib_pk')
+        contrib = list(EnslavedContribution.objects.filter(pk=contrib_pk))[0]
+        contrib.status = EnslavedContributionStatus.REJECTED
+        contrib.save()
+        return JsonResponse({'result': 'OK'})
+    except Exception as e:
+        return JsonResponse({ 'result': 'FAILED', 'message': str(e) })
+
+ORIGINS_DATASET = 0
 
 @login_required()
 @require_POST
+@csrf_exempt
 def publish_origins_editorial_review(request):
     """
     Publish the editor changes to the propagated Enslaved records.
     """
-    data = json.loads(request.body)
-    contrib = get_object_or_404(EnslavedContribution, data['contrib_pk'])
-    modern_name = data.get('modern_name')
-    language_group = data.get('language_group')
-    if modern_name is None and language_group is None:
-        return JsonResponse({ 'error': 'At least one of modern_name or language_group should be non-null' })
-    # Note: we accept a value of -1 for language group to indicate that 
-    # the language group should be cleared.
-    clear_lang_group = False
-    modern_country = None
-    if language_group is not None:
-        language_group = int(language_group)
-        clear_lang_group = language_group == -1
-        if not clear_lang_group:
-            lgpk = language_group
-            language_group = LanguageGroup.get(pk=lgpk)
-            if language_group is None:
-                return JsonResponse({ 'error': f'Language group with key={lgpk} was not found' }, status=404)
-            modern_country = ModernCountry.get(pk=data.get('modern_country', -1))
-            if modern_country is None:
-                return JsonResponse({ 'error': 'Modern country not found' }, status=404)
-    # propagation should be a dict with keys: "pk", "notes" (optional)
-    propagation = data['propagation']
-    if len(propagation) == 0:
-        return JsonResponse({ 'error': 'At least one record should be selected for propagation' }, status=400)
-    items = { e.pk: e for e in Enslaved.objects.filter(pk__in=[p["pk"] for p in propagation]) }
-    for p in propagation:
-        if p.pk not in items:
-            return JsonResponse({ 'error': f"The Enslaved entry with key {p['pk']} was not found" }, status=404)
-    with transaction.atomic():
-        for p in propagation:
-            e = items[p["pk"]]
-            if modern_name is not None:
-                e.modern_name = modern_name
-            if clear_lang_group:
-                e.language_group = None
-                e.modern_country = None
-            elif language_group is not None:
-                e.language_group = language_group
-                e.modern_country = modern_country
-            notes = p.get('notes')
-            if notes is not None:
-                e.notes = notes
-            e.save()
-        contrib.status = EnslavedContributionStatus.ACCEPTED
-        contrib.save()
-    return JsonResponse({ 'result': f"Contribution propagated to {len(propagation)} records." })
+    try:
+        data = json.loads(request.body)
+        contrib = list(EnslavedContribution.objects.filter(pk=data['contrib_pk']))[0]
+        actions = data['actions']
+        enslaved_pks = {a['record']['pk'] for a in actions}
+        propagation = {pk: list(Enslaved.objects \
+                            .filter(pk=pk, dataset=ORIGINS_DATASET) \
+                            .select_related())[0] for pk in enslaved_pks}
+        with transaction.atomic():
+            for action in actions:
+                mode = action['action']
+                if mode != 'update':
+                    continue
+                field = action['field']
+                enslaved = propagation[action['record']['pk']]
+                setattr(enslaved, field, action['next'])
+            for action in actions:
+                mode = action['action']
+                if mode != 'preserve':
+                    continue
+                # Check that the value is the same as expected.
+                enslaved = propagation[action['record']['pk']]
+                field = action['field']
+                current = getattr(enslaved, field)
+                if current != action['current']:
+                    raise Exception(f"For enslaved {enslaved.pk} expected {field} == {action['current']} got {current} instead")
+            for enslaved in propagation.values():
+                enslaved.save()
+            contrib.status = EnslavedContributionStatus.ACCEPTED
+            contrib.save()
+        return JsonResponse({ 'result': 'OK', 'message': f"Contribution propagated to {len(propagation)} records." })
+    except Exception as e:
+        return JsonResponse({ 'result': 'FAILED', 'message': str(e) })
+
+def _voyage_summary_fields(query, prefix=None):
+    kwargs = {
+        'pk': 'voyage_id',
+        'ship_name': 'voyage_ship__ship_name',
+        'arrival': 'voyage_dates__imp_arrival_at_port_of_dis'
+    }
+    kwargs = {k: F((prefix or '') + f) for k, f in kwargs.items()}
+    return query.values(**kwargs) if prefix is None else query.values('order', 'role', **kwargs)
+
+def get_voyage_summary(request, pk):
+    matches = list(_voyage_summary_fields(Voyage.all_dataset_objects.filter(pk=pk)))
+    if len(matches) != 1:
+        return JsonResponse({ "error": "Not found" })
+    return JsonResponse(matches[0])
 
 @csrf_exempt
 @require_POST
 def init_enslaver_interim(request):
     """
     The output is described as follows
-    type: "merge" | "edit" | "split"
+    type: "new" | "merge" | "edit" | "split" | "delete
     identities: {pk: <Enslaver original data>}, must contain two for "merge" and 1 otherwise.
     <Enslaver original data>: { personal_data: { ... }, aliases: { alias: [ { voyage_id, basic_voyage_fields } ] } }.
 
@@ -2392,31 +2408,63 @@ def init_enslaver_interim(request):
     """
     data = json.loads(request.body)
     mode = data.get('type')
-    if mode not in ["merge", "edit", "split"]:
-        return JsonResponse({ 'error': 'Type must be set to one of merge|edit|split' }, status=400)
+    if mode not in ["new", "merge", "edit", "split", "delete"]:
+        return JsonResponse({ 'error': 'Type must be set to one of new|merge|edit|split|delete' }, status=400)
     enslavers = data.get('enslavers')
-    expected = 2 if mode == 'merge' else 1
+    if mode == 'new':
+        expected = 0
+    else:
+        expected = 2 if mode == 'merge' else 1
     if len(enslavers) != expected:
         return JsonResponse({ 'error': f'Expected {expected} enslaver(s).' }, status=400)
-    originals = [EnslaverIdentity.objects.filter(pk=eid).values()[0] for eid in enslavers]
+    identities = {}
+    if mode == 'new':
+        personal_fields = ['principal_alias', 'birth_year', 'birth_month', 
+            'birth_day', 'birth_place', 'death_year', 'death_month', 'death_day',
+            'death_place', 'father_name', 'father_occupation', 'mother_name',
+            'probate_date', 'will_value_pounds', 'will_value_dollars', 
+            'will_court', 'principal_location', 'notes']
+        identities[mode] = {
+            'id': mode,
+            'aliases': {},
+            'personal_data': {f: None for f in personal_fields}
+        }
+        return JsonResponse({ 'type': mode, 'identities': identities })
+    try:
+        originals = [EnslaverIdentity.objects.filter(pk=eid).values()[0] for eid in enslavers]
+    except:
+        return JsonResponse({ "error": "not found" })
 
     # This is not very efficient, but we do not expect this to be called too
     # much and the number of objects should be quite small.
     def _get_alias_data(alias):
+        # Fetch Enslavers' relations with this alias
+        relations = list(EnslaverInRelation.objects.filter(enslaver_alias=alias).values('relation__id', role_name=F('role__name')))
+        for r in relations:
+            info = EnslavementRelation.objects \
+                .annotate(enslaved_count=Count('enslaved', distinct=True)) \
+                .annotate(enslavers_count=Count('enslavers', distinct=True)) \
+                .select_related('role__name', 'relation_type__name') \
+                .filter(pk=r['relation__id']) \
+                .values('enslaved_count', 'enslavers_count', 'date', pk=F('id'), type=F('relation_type__name'))
+            r.update(list(info)[0])
+            r.pop('relation__id')
         return {
             "id": alias.id,
             "name": alias.alias,
-            "voyages": list(EnslaverVoyageConnection.objects.filter(enslaver_alias=alias). \
-                values('voyage__voyage_id', 'voyage__voyage_id', 'voyage__voyage_ship__ship_name', \
-                    'voyage__voyage_dates__imp_arrival_at_port_of_dis',
-                    'voyage__voyage_itinerary__imp_principal_place_of_slave_purchase_id',
-                    'voyage__voyage_itinerary__imp_principal_port_slave_dis_id'))
+            "voyages": list(_voyage_summary_fields(
+                EnslaverVoyageConnection.objects.filter(enslaver_alias=alias), 'voyage__')),
+            "relations": relations
         }
 
     def _get_enslaver_data(enslaver):
         eid = enslaver.pop('id')
         edata = { 'id': eid, 'personal_data': enslaver }
         edata['aliases'] = { a.id: _get_alias_data(a) for a in EnslaverAlias.objects.filter(identity=eid) }
+        edata['sources'] = { s['pk']: s for s in EnslaverIdentitySourceConnection.objects \
+            .filter(identity_id=eid) \
+            .values('pk', 'source_id', 'source_order', 'text_ref', full_ref=F('source__full_ref'))
+        }
         return edata
 
     identities = { e['id']: e for e in [_get_enslaver_data(enslaver) for enslaver in originals] }
@@ -2432,21 +2480,382 @@ def init_enslaver_interim(request):
                 merged[k] = v[0]
             else:
                 merged[k] = "conflict"
-        identities['merged'] = { 'personal_data': merged, 'aliases': { k: v for identity in identities.values() for k, v in identity['aliases'].items() } }
+        identities['merged'] = { 'id': 'merged', 'personal_data': merged, 'aliases': { k: v for identity in identities.values() for k, v in identity['aliases'].items() } }
         for k in identities.keys():
             if k != 'merged':
                 # Clear the aliases from the original.
                 identities[k]['aliases'] = {}
     if mode == 'split':
-        identities['split_left'] = { 'personal_data': dict(identities[0]), 'aliases': [] }
-        identities['split_right'] = { 'personal_data': dict(identities[0]), 'aliases': [] }
-    output = {
-        'type': mode,
-        'identities': identities
-    }
-    return JsonResponse(output)
+        d = dict(list(identities.values())[0]['personal_data'])
+        split_key = "split"
+        d['principal_alias'] = split_key
+        identities['split'] = { 'id': split_key, 'personal_data': d, 'aliases': {} }
+    return JsonResponse({ 'type': mode, 'identities': identities, 'notes': None })
 
-@login_required()
+def _isint(x):
+    try:
+        _ = int(x)
+        return True
+    except:
+        return False
+
+def _compare_data(left, right):
+    delta = {}
+    for k, v in left.items():
+        right_val = right.get(k)
+        changed = v != right_val
+        if changed and _isint(v) and _isint(right_val):
+            # Sometimes we may get a string vs number and we need to
+            # cast for the correct comparison.
+            v = int(v)
+            right_val = int(right_val)
+            changed = v != right_val
+        if changed:
+            delta[k] = (v, right_val)
+    return None if len(delta) == 0 else delta
+
+def _get_single_entity(model, pk, fields):
+    matches = list(EnslaverIdentity.objects.filter(pk=pk).values(*fields)[:2])
+    return matches[0] if len(matches) == 1 else None
+
+def _get_tag_replaced_data(data, tags):
+    if tags is None:
+        return data
+    return { k: tags[v] if k.endswith('_id') and v in tags else v for k, v in data.items() }
+
+def _create_enslaver_update_actions(contrib, check_transaction_tags=None):
+    """
+    Describe all the actions that would be performed in a
+    db transaction if the contribution is accepted.
+    """
+    actions = []
+    type = contrib['type']
+    identities = contrib['identities']
+    saved_identities = []
+    if type in ['merge', 'new', 'split']:
+        # Create a new identity.
+        key = 'merged' if type == 'merge' else type
+        source = identities[key]
+        tag = f"{EnslaverIdentity.__name__}_{key}"
+        if not check_transaction_tags or not tag in check_transaction_tags:
+            actions.append({
+                'description': u_('Creating a new enslaver identity'),
+                'action': 'new',
+                'model': EnslaverIdentity.__name__,
+                'data': source['personal_data'],
+                'tag': tag
+            })
+        else:
+            data = source['personal_data']
+            key = check_transaction_tags[tag]
+            created = _get_single_entity(EnslaverIdentity, key, data.keys())
+            # Match against expected data.
+            delta = _compare_data(data, created)
+            if delta is not None:
+                actions.append({
+                    'description': u_('Transactional check warning: Enslaver identity data mismatch!'),
+                    'action': 'noop',
+                    'data': delta,
+                    'match': { 'pk': int(key) }
+                })
+        saved_identities.append(source)
+    if type in ['edit', 'split']:
+        # Update the original identity.
+        key = [k for k in identities.keys() if _isint(k)]
+        if len(key) != 1:
+            raise Exception("Original identity not found in contribution")
+        key = key[0]
+        source = identities[key]
+        data = source['personal_data']
+        current = _get_single_entity(EnslaverIdentity, int(key), data.keys())
+        if current is None:
+            actions.append({
+                'description': u_('Warning: Enslaver identity not found!'),
+                'action': 'noop',
+                'match': { 'pk': int(key) }
+            })
+        else:
+            changed = _compare_data(data, current)
+            if changed is not None:
+                actions.append({
+                    'description': u_('Updating existing enslaver identity'),
+                    'action': 'update',
+                    'model': EnslaverIdentity.__name__,
+                    'data': data,
+                    'match': { 'pk': int(key), 'principal_alias': current['principal_alias'] }
+                })
+        saved_identities.append(source)
+    # Update/create enslaver aliases to make sure they align with identities.
+    aliases_keys = [aid for si in saved_identities for aid in si['aliases'].keys()]
+    if check_transaction_tags:
+        # Remap tags to ids when checking.
+        aliases_keys = [check_transaction_tags.get(x, x) if not _isint(x) else int(x) for x in aliases_keys]
+    current_aliases = {int(a['pk']): a for a in EnslaverAlias.objects \
+        .filter(pk__in=[aid for aid in aliases_keys if _isint(aid)]) \
+        .values('pk', 'identity_id', 'alias')}
+    current_voyage_conn = {
+        (int(c['enslaver_alias_id']), int(c['voyage_id'])): c \
+        for c in EnslaverVoyageConnection.objects \
+            .filter(enslaver_alias_id__in=current_aliases.keys()) \
+            .values('enslaver_alias_id', 'voyage_id', 'role_id', 'order')
+    }
+    current_relations = {int(r['relation_id']): r for r in EnslaverInRelation.objects \
+        .filter(enslaver_alias_id__in=current_aliases.keys()) \
+        .values('enslaver_alias_id', 'relation_id')}
+    current_sources = {int(s.pk): s for s in EnslaverIdentitySourceConnection.objects \
+        .filter(identity_id__in=[k for k in identities.keys() if _isint(k)])}
+    proposed_voyage_conn = {}
+    proposed_relations = {}
+    for si in saved_identities:
+        for aid, a in si['aliases'].items():
+            current = None
+            tag = None
+            if check_transaction_tags and not _isint(aid) and aid in check_transaction_tags:
+                aid = check_transaction_tags.get(aid)
+            if _isint(aid):
+                current = current_aliases.get(int(aid))
+                if current is not None:
+                    tag = int(aid)
+                else:
+                    # Perhaps the alias was deleted between the time the
+                    # contribution was submitted and the editorial evaluation?
+                    actions.append({
+                        'description': u_('Warning: alias was not found'),
+                        'action': 'noop',
+                        'match': { 'pk': aid, 'alias': a['name']  }
+                    })
+            identity_id = si['id']
+            identity_tag_or_id = int(identity_id) if _isint(identity_id) else f"{EnslaverIdentity.__name__}_{identity_id}"
+            if check_transaction_tags is not None and not _isint(identity_id):
+                identity_id = check_transaction_tags.get(f"{EnslaverIdentity.__name__}_{identity_id}", identity_id)
+            if tag is not None:
+                if current is None or not _isint(identity_id) or int(current['identity_id']) != int(identity_id) or current['alias'] != a['name']:
+                    actions.append({
+                        'description': u_('Updating existing enslaver alias'),
+                        'action': 'update',
+                        'model': EnslaverAlias.__name__,
+                        'data': { 'identity_id': identity_tag_or_id },
+                        'match': { 'pk': tag, 'alias': a['name'] }
+                    })
+            else:
+                tag = f"{EnslaverAlias.__name__}_{aid}"
+                actions.append({
+                    'description': u_('Creating a new enslaver alias'),
+                    'action': 'new',
+                    'model': EnslaverAlias.__name__,
+                    'data': { 'identity_id': si['id'], 'alias': a['name'] },
+                    'tag': tag
+                })
+            for vc in a['voyages']:
+                vid = int(vc['pk'])
+                proposed_voyage_conn[(tag, vid)] = {
+                    'enslaver_alias_id': tag,
+                    'voyage_id': vid,
+                    'role_id': vc.get('role'),
+			        'order': vc.get('order')
+                }
+            for r in a['relations']:
+                rid = int(r['pk'])
+                proposed_relations[rid] = {'relation_id': rid, 'enslaver_alias_id': tag}
+        # Now handle source connections (these are directly attached to the
+        # EnslaverIdentity).
+        source_order = 1
+        for src in current_sources.values():
+            if src.identity_id == si['id'] and src.source_order >= source_order:
+                source_order = src.source_order + 1
+        for source_conn_pk, source in si.get('sources', {}).items():
+            if "data" in source:
+                # This is a newly created source.
+                source_data = source['data']
+                if not source.get('text_ref') or not source_data.get('short_ref'):
+                    actions.append({
+                        'description': u_("An editor (reviewer) must create a new source"),
+                        'action': 'noop',
+                        'model': VoyageSources.__name__,
+                        'data': source_data
+                    })
+                else:
+                    source.pop('data')
+                    s = VoyageSources()
+                    s.short_ref = source_data.get('short_ref', '')
+                    _update_source_from_interim(s, source_data)
+                    actions.append({
+                        'description': u_('Creating a new biographical source'),
+                        'action': 'new',
+                        'model': VoyageSources.__name__,
+                        'data': {
+                            'short_ref': s.short_ref,
+                            'full_ref': s.full_ref,
+                            'source_type_id': s.source_type_id
+                        },
+                        'tag': source_conn_pk
+                    })
+            source_conn_tag = f"conn_{source['source_id']}"
+            if check_transaction_tags is not None and source_conn_tag in check_transaction_tags:
+                source_conn_pk = check_transaction_tags[source_conn_tag]
+            if not _isint(source_conn_pk) or not int(source_conn_pk) in current_sources:
+                # Create new source connection.
+                # Note: we do not support updating a source connection (the
+                # contributor/editor can always delete and create a new one if
+                # needed).
+                source_conn_data = dict(source)
+                source_conn_data['identity_id'] = identity_tag_or_id
+                source_conn_data['source_order'] = source_order
+                source_conn_data.pop('pk', None)
+                source_order += 1
+                actions.append({
+                    'description': u_('Creating an enslaver identity <-> biographical source connection'),
+                    'action': 'new',
+                    'model': EnslaverIdentitySourceConnection.__name__,
+                    'data': source_conn_data,
+                    'tag': source_conn_tag
+                })
+            else:
+                # Keep the source conn alive by removing it from the
+                # current_sources dict (any remaining connection will be marked
+                # for deletion).
+                current_sources.pop(int(source_conn_pk))
+    # Delete any EnslaverIdentitySourceConnection that still remains.
+    for s in current_sources.values():
+        actions.append({
+            'description': 'Removing enslaver identity <-> bibliographical source connection',
+            'action': 'delete',
+            'model': EnslaverIdentitySourceConnection.__name__,
+            'match': { 'identity_id': s.identity_id, 'text_ref': s.text_ref }
+        })
+    # Compute voyage connection delta.
+    exact_vconn_matches = set()
+    for key, rel in current_voyage_conn.items():
+        match = proposed_voyage_conn.get(key)
+        if match is not None and match['role_id'] == rel['role_id'] and match['order'] == rel['order']:
+            exact_vconn_matches.add(key)
+    for key in exact_vconn_matches:
+        current_voyage_conn.pop(key)
+        proposed_voyage_conn.pop(key)
+    # We only have deltas to worry now.
+    for rel in current_voyage_conn.values():
+        actions.append({
+            'description': u_('Deleting voyage connection for existing alias'),
+            'action': 'delete',
+            'model': EnslaverVoyageConnection.__name__,
+            'match': { 'enslaver_alias_id': rel['enslaver_alias_id'], 'voyage_id': rel['voyage_id'] }
+        })
+    for rel in proposed_voyage_conn.values():
+        actions.append({
+            'description': u_('Creating an enslaver alias <-> voyage connection'),
+            'action': 'new',
+            'model': EnslaverVoyageConnection.__name__,
+            'data': rel
+        })
+    for key, rel in current_relations.items():
+        if key not in proposed_relations:
+            actions.append({
+                'description': 'Removing enslaver alias from enslavement relation',
+                'action': 'delete',
+                'model': EnslaverInRelation.__name__,
+                'match': rel
+            })
+    for key, rel in proposed_relations.items():
+        # We are not allowing creating new relations, so they must exist for an
+        # update to happen.
+        if key not in current_relations:
+            raise Exception(f"Enslavement relation {key} not found")
+        if rel['enslaver_alias_id'] != current_relations[key]['enslaver_alias_id']:
+            actions.append({
+                'description': 'Updating the enslavement relation to use a different alias',
+                'action': 'update',
+                'model': EnslaverInRelation.__name__,
+                'data': rel,
+                'match': current_relations[key]
+            })
+    existing_aliases = {pair[0]: pair[1] for pair in EnslaverAlias.objects \
+        .filter(identity_id__in=[k for k in identities.keys() if _isint(k)]).values_list('pk', 'alias')}
+    for key, alias in existing_aliases.items():
+        if key not in current_aliases:
+            # Delete existing alias.
+            actions.append({
+                'description': u_('Delete existing enslaver alias and all its voyages/relations'),
+                'action': 'delete',
+                'model': EnslaverAlias.__name__,
+                'match': { 'pk': key, 'alias': alias }
+            })
+    if type == 'merge' or type == 'delete':
+        # Delete previous identities.
+        for k, v in identities.items():
+            if _isint(k):
+                if len(EnslaverIdentity.objects.filter(pk=int(k))) != 0:
+                    actions.append({
+                        'description': u_('Deleting identity'),
+                        'action': 'delete',
+                        'model': EnslaverIdentity.__name__,
+                        'match': { 'pk': int(k), 'principal_alias': v['personal_data']['principal_alias'] }
+                    })
+    return actions
+
+@csrf_exempt
+@require_POST
+def get_enslaver_update_actions(request):
+    contrib = json.loads(request.body)
+    actions = _create_enslaver_update_actions(contrib)
+    return JsonResponse({ 'contrib': contrib, 'actions': actions })
+
+_empty_action_warning = u_('The contribution does not modify the current data')
+
+@login_required
+@csrf_exempt
+@require_POST
+def submit_enslaver_contribution(request):
+    """
+    Submit a user contribution to an enslaver.
+    """
+    try:
+        data = json.loads(request.body)
+        actions = _create_enslaver_update_actions(data)
+        if len(actions) == 0:
+            return JsonResponse({ 'error': _empty_action_warning })
+    except:
+        return JsonResponse({ 'error': 'Invalid JSON in request body' })
+    contrib = EnslaverContribution()
+    if data['type'] in ['edit', 'split', 'delete']:
+        try:
+            contrib.enslaver = EnslaverIdentity.objects \
+                .get(pk=[int(x) for x in data['identities'].keys() if _isint(x)][0])
+        except:
+            return JsonResponse({ 'error': u_('Enslaver not found!') })
+    contrib.data = json.dumps(data)
+    contrib.contributor = request.user
+    contrib.status = EnslavedContributionStatus.PENDING
+    contrib.save()
+    return JsonResponse({ 'result': 'OK' })
+
+@login_required
+@csrf_exempt
+@require_POST
+def get_enslaver_contribution_list(request):
+    data = json.loads(request.body) if request.body else {}
+    statuses = data.get('statuses', [EnslavedContributionStatus.PENDING])
+    q = EnslaverContribution.objects.filter(status__in=statuses) \
+        .values('pk', 'created', 'status', 'data', \
+            enslaver_identity=F('enslaver__principal_alias'), \
+            contributor_name=F('contributor__username'))
+    count = len(q)
+    start = data.get('startOffset', 0)
+    end = data.get('endOffset', 10000)
+    q = q[start:end]
+    results = list(q)
+    for item in results:
+        data = json.loads(item.pop('data'))
+        item['type'] = data['type']
+        if item['type'] == 'merge':
+            item['enslaver_identity'] = ' ··· '.join(EnslaverIdentity.objects \
+                .filter(pk__in=[pk for pk in data['identities'].keys() if _isint(pk)]) \
+                .values_list('principal_alias', flat=True))
+        if item['type'] == 'new':
+            item['enslaver_identity'] =  next(iter(data['identities'].values()))['personal_data']['principal_alias']
+    return JsonResponse({ 'count': count, 'results': results })
+
+@login_required
+@csrf_exempt
 @require_POST
 def submit_enslaver_editorial_review(request):
     """
@@ -2455,6 +2864,92 @@ def submit_enslaver_editorial_review(request):
     - an edit of a single EnslaverIdentity
     - a split of an EnslaverIdentity
     The data format follows the return value of
-    `init_enslaver_editorial_review` 
+    `init_enslaver_editorial_review`
     """
-    raise Exception("TODO")
+    if not request.user.is_staff:
+        return JsonResponse({ "error": "Only staff can submit editorial reviews" })
+    actions = None
+    try:
+        data = json.loads(request.body)
+        status = EnslavedContributionStatus.ACCEPTED if data['decision'] == 'ACCEPT' \
+            else EnslavedContributionStatus.REJECTED
+        if status == EnslavedContributionStatus.ACCEPTED:
+            actions = _create_enslaver_update_actions(data['interim'])
+    except Exception as ex:
+        return JsonResponse({ 'error': 'Invalid JSON in request body', 'details': str(ex) })
+    if actions is not None and len(actions) == 0:
+        return JsonResponse({ 'error': _empty_action_warning })
+    warnings = [w for w in actions if w['action'] == 'noop'] if actions else []
+    if status == EnslavedContributionStatus.ACCEPTED and len(warnings) > 0:
+        return JsonResponse({ 'error': "Cannot accept contribution with warnings", "warnings": warnings })
+    models = [EnslaverIdentity, EnslaverAlias, EnslaverInRelation,
+        EnslaverVoyageConnection, EnslaverIdentitySourceConnection, VoyageSources]
+    tags = {}
+    with transaction.atomic():
+        contrib = EnslaverContribution.objects.get(pk=data['contrib_pk'])
+        contrib.status = status
+        contrib.save()
+        all_identities = []
+        for idx, a in enumerate(actions or []):
+            action_type = a['action']
+            if action_type not in ['new', 'update', 'delete']:
+                continue
+            model = [m for m in models if m.__name__ == a['model']][0]
+            target = None
+            if action_type != 'new':
+                q = model.objects.filter(**a['match'])
+                target = list(q)
+                if len(target) != 1:
+                    transaction.set_rollback(True)
+                    return JsonResponse({ "error": "Failed to find matching record", "action_index": idx })
+                target = target[0]
+            else:
+                target = model()
+            if action_type == 'delete':
+                try:
+                    target.delete()
+                except Exception as ex:
+                    transaction.set_rollback(True)
+                    return JsonResponse({ "error": "Failed to delete record", "action_index": idx, 'details': str(ex) })
+            else:
+                # Set/update model fields.
+                for k, v in _get_tag_replaced_data(a['data'], tags).items():
+                    setattr(target, k, v)
+                try:
+                    target.save()
+                except Exception as ex:
+                    transaction.set_rollback(True)
+                    return JsonResponse({
+                        "error": f"Failed to {'insert' if action_type == 'new' else action_type} record", "action_index": idx,
+                        'details': str(ex)
+                    })
+                if action_type == 'new' and 'tag' in a:
+                    # Include newly saved pk in the tagged dict.
+                    tags[a['tag']] = target.pk
+            if model == EnslaverIdentity and action_type != 'delete':
+                all_identities.append(target.pk)
+        if actions is not None:
+            # At this point we *should* be in perfect sync with the contribution.
+            missing_actions = _create_enslaver_update_actions(data['interim'], tags)
+            if len(missing_actions) > 0:
+                transaction.set_rollback(True)
+                return JsonResponse({ "error": "Contribution not in sync with transactional update", "details": missing_actions })
+        # Update Cached properties for the identities in this contribution.
+        for prop in EnslaverCachedProperties.compute(all_identities):
+            prop.save()
+    return JsonResponse({ "result": "OK" })
+
+@login_required
+def review_origins_contrib(request, pk):
+    contrib = get_object_or_404(EnslavedContribution, pk=pk)
+    return render(request, "contribute/review_origins.html", {
+        'contribution': contrib
+    })
+
+@cache_page(3600)
+def get_language_choices(request):
+    return JsonResponse({
+        'modernCountryChoices': list(ModernCountry.objects.values('pk', 'name')),
+        'languageGroupChoices': list(LanguageGroup.objects.values('pk', 'name')),
+        'm2m': list(ModernCountry.languages.through.objects.values())
+    })
