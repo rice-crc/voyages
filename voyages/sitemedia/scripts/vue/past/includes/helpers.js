@@ -1102,15 +1102,19 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 			update_oceanic_edges();
 			ports_origins_layer_group.addTo(AO_map);
 			ports_embdisemb_layer_group.addTo(AO_map);
+			ports_distributed_languages_layer_group.addTo(AO_map)
 			regions_origins_layer_group.removeFrom(AO_map);
 			regions_embdisemb_layer_group.removeFrom(AO_map);
+			regions_distributed_languages_layer_group.removeFrom(AO_map);
 		} else {
 			regionorplace="region";
 			update_oceanic_edges();
 			regions_origins_layer_group.addTo(AO_map);
 			regions_embdisemb_layer_group.addTo(AO_map);
+			regions_distributed_languages_layer_group.addTo(AO_map);
 			ports_origins_layer_group.removeFrom(AO_map);
 			ports_embdisemb_layer_group.removeFrom(AO_map);
+			ports_distributed_languages_layer_group.removeFrom(AO_map);
 		}
 		
 		var maxanimationzoom=12
@@ -1188,8 +1192,12 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 	
 	var regions_embdisemb_layer_group = L.layerGroup();
 
-	var distributed_languages_layer_group = L.layerGroup();
-	distributed_languages_layer_group.addTo(AO_map);
+	var regions_distributed_languages_layer_group = L.layerGroup();
+	
+	var ports_distributed_languages_layer_group = L.layerGroup();
+	
+	var distributedlanguagegroups_hidden_nodes_layer_group = L.layerGroup();
+	distributedlanguagegroups_hidden_nodes_layer_group.addTo(AO_map);
 	
 	var oceanic_waypoints_layer_group = L.layerGroup();
 	
@@ -1343,6 +1351,32 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 
 	
 	// GEOJSON POINTS
+	
+	
+	
+	function add_distributednodes(distributednodes,nodesize) {
+		
+		distributednodes.forEach(n=> {
+			
+			var coords=[n.lat,n.lng]
+			
+			L.circleMarker(coords, {
+				radius: nodesize,
+				fillColor: d3.rgb(96,192,171),
+// 				color: "#000",
+				weight: 1,
+// 				opacity: .6,
+				fillOpacity: 0.2
+			}).addTo(distributedlanguagegroups_hidden_nodes_layer_group)
+			
+		})
+	
+	}
+	
+	
+	
+	
+	
 	function add_point_to_layergroup(feature,layer_group,nodesize,networkname,edges_main_layer_group,edges_animation_layer_group) {
 		var point_id=feature.properties.point_id;
 		var node_classes=feature.properties.node_classes;
@@ -1360,22 +1394,80 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 							opacity: 1,
 							fillOpacity: 0.6
 						})
+// 						
+// 						if (Object.keys(distributedlanguagegroups[networkname]).includes(point_id.toString())) {
+// 							console.log(feature)
+// 						}
+// 						
+// 						
+						
 						marker.on('mouseover', function (a) {
 							activepopups.forEach(p=>p.remove());
 							activepopups=new Array;
-							var pop = new L.popup({
+							
+							if (Object.keys(distributedlanguagegroups[networkname]).includes(point_id.toString())) {
+								
+								var popuptext=[
+									feature.properties.size,
+									pluralorsingular('Liberated African',feature.properties.size),
+									"with",
+									feature.properties.name,
+									"origins.*<br/><i>*Note: this marker stands in for a language with wide geographic distribution,<br/>represented by the other green circles now visible.</i>"
+								].join(" ")
+								
+								marker.bindTooltip(popuptext,{'sticky':true}).openTooltip();
+								
+								var hidethis={"region":regions_origins_layer_group,"place":ports_origins_layer_group}[regionorplace]	
+								hidethis.remove()
+								
+								Object.keys(distributedlanguagegroups[networkname]).forEach(
+									languagegroupid=>{
+										if (languagegroupid!=point_id.toString()){
+											nodesdict[networkname][languagegroupid].remove()
+										}
+									}
+								)
+								
+								add_distributednodes(distributedlanguagegroups[networkname][point_id.toString()],nodesize)
+								
+								
+								
+							} else {
+								var pop = new L.popup({
 									'className':'leafletAOPopup',
 									'closeOnClick':false,
 									'showCoverageOnHover': false,
 								}).
 								setLatLng(a.latlng).
 								setContent(makeNodePopUp(feature,nodesdict[networkname],edgesdict[networkname]));
-							pop.addTo(AO_map);
-							activepopups.push(pop);
+								pop.addTo(AO_map);
+								activepopups.push(pop);
+								marker.openPopup();
+								
+							}
+							
+							
 							refresh_hidden_edges(hidden_edges,regionorplace,AO_map,edges_main_layer_group,edges_animation_layer_group);							
-							marker.openPopup();
 							marker.bringToFront();
 						});
+						
+						if (Object.keys(distributedlanguagegroups[networkname]).includes(point_id.toString())) {
+							
+							marker.on('mouseout', function (a) {
+								distributedlanguagegroups_hidden_nodes_layer_group.clearLayers()
+								var hidethis={"region":regions_origins_layer_group,"place":ports_origins_layer_group}[regionorplace]	
+								hidethis.addTo(AO_map)
+								Object.keys(distributedlanguagegroups[networkname]).forEach(
+									languagegroupid=>{
+										if (languagegroupid!=point_id.toString()){
+											nodesdict[networkname][languagegroupid].addTo(layer_group)
+										}
+									}
+								)
+							})
+						}
+						
+						
 						return marker
 				}
 			},
@@ -1649,11 +1741,13 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 	var region_vs_place_vars = {
 		'place':{
 			'origins_layer_group':ports_origins_layer_group,
+			'distributed_languages_layer_group':ports_distributed_languages_layer_group,
 			'embark_disembark_layers_group':ports_embdisemb_layer_group,
 			'dest_layer_group':ports_dest_layer_group,
 		},
 		'region':{
 			'origins_layer_group':regions_origins_layer_group,
+			'distributed_languages_layer_group':regions_distributed_languages_layer_group,
 			'embark_disembark_layers_group':regions_embdisemb_layer_group,
 			'dest_layer_group':ports_dest_layer_group,
 			
@@ -1669,23 +1763,56 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 			var embark_disembark_layer_group = region_vs_place_vars[networkname]['embark_disembark_layers_group'];
 			var dest_layer_group = region_vs_place_vars[networkname]['dest_layer_group'];
 			var featurecollection=network.points;
-			//console.log(network);
+			var distributed_languages_layer_group = region_vs_place_vars[networkname]['distributed_languages_layer_group'];
 			origin_nodelogvaluescale=nodelogvaluescale_fn(featurecollection,4,28);
 			embark_disembark_nodelogvaluescale=nodelogvaluescale_fn(featurecollection,3,10);
 			dest_nodelogvaluescale=nodelogvaluescale_fn(featurecollection,4,15);
-			
 			featurecollection.features.forEach(function (feature) {
 			
 				var point_id=feature.properties.point_id
 				var node_classes=Object.keys(feature.properties.node_classes);
 				if (node_classes.includes('origin')) {
+// 					
+// 					if (Object.keys(distributedlanguagegroups[networkname]).includes(point_id.toString())) {
+// 						var lg_countries=distributedlanguagegroups[networkname][point_id.toString()]
+// 						console.log(lg_countries)
+// 						console.log(feature)
+// 						
+// 						
+// 						lg_countries.forEach(lgc=>{
+// 							var newfeature={
+// 							  "type": "Feature",
+// 							  "properties": {
+// 							  	"name":lgc.name,
+// // 							  	"hidden_edges":feature.properties.hidden_edges,
+// 							  	"node_classes":feature.properties.node_classes,
+// 							  	"size":feature.properties.size
+// 							  },
+// 							  "geometry": {
+// 								"coordinates": [
+// 									lgc.lng,
+// 									lgc.lat
+// 								],
+// 								"type": "Point"
+// 							  }
+// 							}
+// 						
+// 							console.log(newfeature)
+// 							
+// 							distributed_languages_layer_group
+// 							
+// 						})
+// 					
 					
-// 					region_dist_lang_groups.js
-					
-					
+					if (Object.keys(distributedlanguagegroups[networkname]).includes(point_id.toString())) {
+						var thislayergroup=distributed_languages_layer_group
+					} else {
+						var thislayergroup=origins_layer_group
+					} 
 					var nodesize=origin_nodelogvaluescale(feature.properties.size);
-					var newlayer = add_point_to_layergroup(feature,origins_layer_group,nodesize,networkname,endpoint_main_edges_layer_group,endpoint_animation_edges_layer_group);
+					var newlayer = add_point_to_layergroup(feature,thislayergroup,nodesize,networkname,endpoint_main_edges_layer_group,endpoint_animation_edges_layer_group);
 					nodesdict[networkname][point_id]=newlayer
+						
 				} else if (node_classes.includes('embarkation') || node_classes.includes('disembarkation')) {
 					if (networkname=='region') {
 						var nodesize=embark_disembark_nodelogvaluescale(feature.properties.size);
@@ -1711,13 +1838,9 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 			oceanicedgesvaluescale=routeslogvaluescale_fn(edges,1,3);
 			var hiddenedges=get_featurecollection_edges_by_types(edges,['origin','final_destination']);
 			var oceanicedges=get_featurecollection_edges_by_types(edges,['onramp','offramp','oceanic_leg']);
-			
 			Object.keys(hiddenedges).forEach(e_id=>{make_edge(AO_map,hiddenedges[e_id],networkname,endpoint_main_edges_layer_group,endpoint_animation_edges_layer_group,recordtodict=true,hiddenedgesvaluescale)});
 			Object.keys(oceanicedges).forEach(e_id=>{make_edge(AO_map,oceanicedges[e_id],networkname,oceanic_main_edges_layer_group,oceanic_animation_edges_layer_group,recordtodict=true,oceanicedgesvaluescale)});
-			
 			update_oceanic_edges();
-			
-			
 		});
 		
 
@@ -1778,6 +1901,8 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 			regions_embdisemb_layer_group.addTo(AO_map);
 			ports_dest_layer_group.addTo(AO_map);
 			ports_origins_layer_group.addTo(AO_map);
+			ports_distributed_languages_layer_group.addTo(AO_map);
+			regions_distributed_languages_layer_group.addTo(AO_map);
 // 			mappingSpecialistsCountries.addTo(AO_map);
 			mappingSpecialists.addTo(AO_map);
 			

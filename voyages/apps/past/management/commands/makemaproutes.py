@@ -128,10 +128,10 @@ class Command(BaseCommand):
 							'lat':float(dist_lg_country[3])
 						}
 					
-						if id in distributedlanguagegroups[dataset]:
-							distributedlanguagegroups[dataset][id].append(countrydata)
+						if id+language_group_ids_offset in distributedlanguagegroups[dataset]:
+							distributedlanguagegroups[dataset][id+language_group_ids_offset].append(countrydata)
 						else:
-							distributedlanguagegroups[dataset][id]=[countrydata]
+							distributedlanguagegroups[dataset][id+language_group_ids_offset]=[countrydata]
 					
 				if latitude is None or longitude is None:
 					coords=None
