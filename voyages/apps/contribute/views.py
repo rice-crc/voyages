@@ -2209,6 +2209,11 @@ def retrieve_publication_status(request):
 # PAST / Origins contributions
 
 def _expand_contrib(c):
+    def _get_audio_relative_url(name_pk):
+        filename = _get_audio_filename(c.pk, name_pk, full_path=False, check_exists=True)
+        if filename:
+            filename = settings.MEDIA_URL + filename
+        return filename
     return {
         "pk": c.pk,
         "contributor": c.contributor.username if c.contributor else "(anonymous)",
@@ -2225,15 +2230,15 @@ def _expand_contrib(c):
                 "pk": cn.pk,
                 "name": cn.name,
                 "notes": cn.notes,
-                "audio": _get_audio_filename(c.pk, cn.pk, full_path=False, check_exists=True)
+                "audio": _get_audio_relative_url(cn.pk)
             } for cn in c.contributed_names.all()
         ],
         "contributed_language_groups": [{
                 "entry_pk": cl.pk,
                 "language_group_pk": cl.language_group.id,
                 "language_group_name": cl.language_group.name,
-                "modern_country_pk": cl.modern_country.id,
-                "modern_country_name": cl.modern_country.name,
+                "modern_country_pk": cl.modern_country_id,
+                "modern_country_name": cl.modern_country.name if cl.modern_country else None
             } for cl in c.contributed_language_groups.all()
         ],
         "notes": c.notes,
@@ -2248,9 +2253,7 @@ def _enslaved_contrib_base_query():
         .prefetch_related('contributed_language_groups')
 
 @login_required()
-@require_POST
-def get_origins_contributions(request):
-    status = request.POST.get('status', [EnslavedContributionStatus.PENDING])
+def get_origins_contributions(request, status=0):
     q = _enslaved_contrib_base_query()
     if status:
         # The caller can explicitly set status to 
@@ -2260,9 +2263,7 @@ def get_origins_contributions(request):
     return JsonResponse({'status': status, 'contributions': contribs })
 
 @login_required()
-@require_POST
-def get_origins_contrib_details(request):
-    contrib_pk = int(request.POST.get('contrib_pk'))
+def get_origins_contrib_details(request, contrib_pk):
     q = _enslaved_contrib_base_query().filter(pk=contrib_pk)
     matches = list(q)
     if len(matches) != 1:
@@ -2306,9 +2307,11 @@ def get_origins_contrib_details(request):
             c.enslaved.voyage.voyage_itinerary.imp_principal_region_of_slave_purchase_id) \
         .filter(name_clauses) \
         .values( \
-            'pk', 'gender', 'modern_name', 'documented_name', \
-            'name_first', 'name_second', 'name_third', 'language_group__name', \
-            'voyage__voyage_itinerary__imp_principal_place_of_slave_purchase__place')
+            'pk', 'gender', 'modern_name', 'documented_name', 'notes', \
+            'name_first', 'name_second', 'name_third', \
+            'language_group_id', 'modern_country_id', \
+            'language_group__name', 'modern_country__name', \
+            embarkation=F('voyage__voyage_itinerary__imp_principal_place_of_slave_purchase__place'))
     expanded = _expand_contrib(c)
     expanded['prev_name_contributions'] = list(prev_name_contrib)
     expanded['prev_language_group_contributions'] = list(prev_lang_contrib)
@@ -2317,68 +2320,63 @@ def get_origins_contrib_details(request):
 
 @login_required()
 @require_POST
+@csrf_exempt
 def reject_origins_contribution(request):
     """
     Mark the contribution as rejected.
     """
-    contrib = get_object_or_404(EnslavedContribution, request.POST.get('contrib_pk'))
-    contrib.status = EnslavedContributionStatus.REJECTED
-    contrib.save()
-    return JsonResponse({'result': 'ok'})
+    try:
+        data = json.loads(request.body)
+        contrib_pk = data.get('contrib_pk')
+        contrib = list(EnslavedContribution.objects.filter(pk=contrib_pk))[0]
+        contrib.status = EnslavedContributionStatus.REJECTED
+        contrib.save()
+        return JsonResponse({'result': 'OK'})
+    except Exception as e:
+        return JsonResponse({ 'result': 'FAILED', 'message': str(e) })
+
+ORIGINS_DATASET = 0
 
 @login_required()
 @require_POST
+@csrf_exempt
 def publish_origins_editorial_review(request):
     """
     Publish the editor changes to the propagated Enslaved records.
     """
-    data = json.loads(request.body)
-    contrib = get_object_or_404(EnslavedContribution, data['contrib_pk'])
-    modern_name = data.get('modern_name')
-    language_group = data.get('language_group')
-    if modern_name is None and language_group is None:
-        return JsonResponse({ 'error': 'At least one of modern_name or language_group should be non-null' })
-    # Note: we accept a value of -1 for language group to indicate that 
-    # the language group should be cleared.
-    clear_lang_group = False
-    modern_country = None
-    if language_group is not None:
-        language_group = int(language_group)
-        clear_lang_group = language_group == -1
-        if not clear_lang_group:
-            lgpk = language_group
-            language_group = LanguageGroup.get(pk=lgpk)
-            if language_group is None:
-                return JsonResponse({ 'error': f'Language group with key={lgpk} was not found' }, status=404)
-            modern_country = ModernCountry.get(pk=data.get('modern_country', -1))
-            if modern_country is None:
-                return JsonResponse({ 'error': 'Modern country not found' }, status=404)
-    # propagation should be a dict with keys: "pk", "notes" (optional)
-    propagation = data['propagation']
-    if len(propagation) == 0:
-        return JsonResponse({ 'error': 'At least one record should be selected for propagation' }, status=400)
-    items = { e.pk: e for e in Enslaved.objects.filter(pk__in=[p["pk"] for p in propagation]) }
-    for p in propagation:
-        if p.pk not in items:
-            return JsonResponse({ 'error': f"The Enslaved entry with key {p['pk']} was not found" }, status=404)
-    with transaction.atomic():
-        for p in propagation:
-            e = items[p["pk"]]
-            if modern_name is not None:
-                e.modern_name = modern_name
-            if clear_lang_group:
-                e.language_group = None
-                e.modern_country = None
-            elif language_group is not None:
-                e.language_group = language_group
-                e.modern_country = modern_country
-            notes = p.get('notes')
-            if notes is not None:
-                e.notes = notes
-            e.save()
-        contrib.status = EnslavedContributionStatus.ACCEPTED
-        contrib.save()
-    return JsonResponse({ 'result': f"Contribution propagated to {len(propagation)} records." })
+    try:
+        data = json.loads(request.body)
+        contrib = list(EnslavedContribution.objects.filter(pk=data['contrib_pk']))[0]
+        actions = data['actions']
+        enslaved_pks = {a['record']['pk'] for a in actions}
+        propagation = {pk: list(Enslaved.objects \
+                            .filter(pk=pk, dataset=ORIGINS_DATASET) \
+                            .select_related())[0] for pk in enslaved_pks}
+        with transaction.atomic():
+            for action in actions:
+                mode = action['action']
+                if mode != 'update':
+                    continue
+                field = action['field']
+                enslaved = propagation[action['record']['pk']]
+                setattr(enslaved, field, action['next'])
+            for action in actions:
+                mode = action['action']
+                if mode != 'preserve':
+                    continue
+                # Check that the value is the same as expected.
+                enslaved = propagation[action['record']['pk']]
+                field = action['field']
+                current = getattr(enslaved, field)
+                if current != action['current']:
+                    raise Exception(f"For enslaved {enslaved.pk} expected {field} == {action['current']} got {current} instead")
+            for enslaved in propagation.values():
+                enslaved.save()
+            contrib.status = EnslavedContributionStatus.ACCEPTED
+            contrib.save()
+        return JsonResponse({ 'result': 'OK', 'message': f"Contribution propagated to {len(propagation)} records." })
+    except Exception as e:
+        return JsonResponse({ 'result': 'FAILED', 'message': str(e) })
 
 def _voyage_summary_fields(query, prefix=None):
     kwargs = {
@@ -2940,3 +2938,18 @@ def submit_enslaver_editorial_review(request):
         for prop in EnslaverCachedProperties.compute(all_identities):
             prop.save()
     return JsonResponse({ "result": "OK" })
+
+@login_required
+def review_origins_contrib(request, pk):
+    contrib = get_object_or_404(EnslavedContribution, pk=pk)
+    return render(request, "contribute/review_origins.html", {
+        'contribution': contrib
+    })
+
+@cache_page(3600)
+def get_language_choices(request):
+    return JsonResponse({
+        'modernCountryChoices': list(ModernCountry.objects.values('pk', 'name')),
+        'languageGroupChoices': list(LanguageGroup.objects.values('pk', 'name')),
+        'm2m': list(ModernCountry.languages.through.objects.values())
+    })

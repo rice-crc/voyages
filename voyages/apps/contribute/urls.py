@@ -112,7 +112,7 @@ urlpatterns = [
     url(r'list_origins_contributions',
         views.get_origins_contributions,
         name='list_origins_contributions'),
-    url(r'origins_contribution_details',
+    url(r'origins_contribution_details/(?P<contrib_pk>\d+)$',
         views.get_origins_contrib_details,
         name='origins_contribution_details'),
     url(r'reject_origins_contribution',
@@ -138,5 +138,11 @@ urlpatterns = [
         name='get_enslaver_contribution_list'),
     url(r'submit_enslaver_editorial_review',
         views.submit_enslaver_editorial_review,
-        name='submit_enslaver_editorial_review')
+        name='submit_enslaver_editorial_review'),
+    url(r'review_origins_contrib/(?P<pk>\d+)$',
+        views.review_origins_contrib,
+        name='review_origins_contrib'),
+    url(r'language_choices',
+        views.get_language_choices,
+        name='language_choices')
 ]
