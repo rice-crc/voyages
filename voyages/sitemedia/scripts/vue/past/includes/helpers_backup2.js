@@ -1093,8 +1093,8 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 		fullscreenControl: false,
 		center:[0,0],
 		zoom:3.2,
-		minZoom:2,
-		maxZoom:18
+		minZoom:3.2,
+		maxZoom:8
 	}).on('zoomend', function() {
 		var currentzoom=AO_map.getZoom()
 		if (currentzoom>4){
@@ -1131,10 +1131,9 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 	}
 	
 	//B. Tile Layers
-	
-	var mappingSpecialists=L.tileLayer(
-	  'https://api.mapbox.com/styles/v1/jcm10/clbmdqh2q000114o328k5yjpf/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoiamNtMTAiLCJhIjoiY2wyOTcyNjJsMGY5dTNwbjdscnljcGd0byJ9.kZvEfo7ywl2yLbztc_SSjw',
-	  {attribution: '<a href="https://www.mappingspecialists.com/" target="blank">Mapping Specialists, Ltd.</a>'});
+// 	var mappingSpecialists=L.tileLayer(
+// 	  'https://api.mapbox.com/styles/v1/jcm10/cl5v6xvhf001b14o4tdjxm8vh/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoiamNtMTAiLCJhIjoiY2wyOTcyNjJsMGY5dTNwbjdscnljcGd0byJ9.kZvEfo7ywl2yLbztc_SSjw',
+// 	  {attribution: '<a href="https://www.mappingspecialists.com/" target="blank">Mapping Specialists, Ltd.</a>'});
 	
 	var origin_nodelogvaluescale=new Object;
 	var embark_disembark_nodelogvaluescale=new Object;
@@ -1143,14 +1142,9 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 	
 	var oceanic_edges_holding_layer_group= L.layerGroup();
 	oceanic_edges_holding_layer_group.addTo(AO_map);
-	
-	var mappingSpecialistsRivers=L.tileLayer(
-	  'https://api.mapbox.com/styles/v1/jcm10/cl98xvv9r001z14mm17w970no/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoiamNtMTAiLCJhIjoiY2wyOTcyNjJsMGY5dTNwbjdscnljcGd0byJ9.kZvEfo7ywl2yLbztc_SSjw');
-	var mappingSpecialistsCountries=L.tileLayer(
-	  'https://api.mapbox.com/styles/v1/jcm10/cl98yryw3003t14o66r6fx4m9/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoiamNtMTAiLCJhIjoiY2wyOTcyNjJsMGY5dTNwbjdscnljcGd0byJ9.kZvEfo7ywl2yLbztc_SSjw')
+		
+	var mappingspecialists=L.tileLayer('https://www.slavevoyages.org/static/maps/img/map_all/{z}/{x}/{y}.png');
 	var featurelayers = {
-		"Rivers":mappingSpecialistsRivers,
-		"Modern Countries":mappingSpecialistsCountries,
 		"Voyages":oceanic_edges_holding_layer_group
 	}
 
@@ -1160,20 +1154,12 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 	var ports_origins_layer_group = make_cluster_layer_groups('origin');
 	
 	var regions_origins_layer_group = make_cluster_layer_groups('origin');
-
-// 	console.log(regions_origins_layer_group)
 	
 	var ports_embdisemb_layer_group = L.layerGroup();
 	
 	var regions_embdisemb_layer_group = L.layerGroup();
 
 	var ports_dest_layer_group = make_cluster_layer_groups('final_destination');
-
-// 	var regions_dest_layer_group = L.layerGroup();
-// 	regions_dest_layer_group.addTo(AO_map);
-// 	
-// 	var ports_dest_layer_group = L.layerGroup();
-// 	ports_dest_layer_group.addTo(AO_map);
 	
 	var oceanic_waypoints_layer_group = L.layerGroup();
 	
@@ -1199,6 +1185,8 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 		
 	var endpoint_animation_edges_layer_group = L.layerGroup();
 	endpoint_animation_edges_layer_group.addTo(AO_map);
+	
+	// Initializations for the above
 
 // II.  STATE GLOBALS
 
@@ -1219,7 +1207,7 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 		//ROUTE TOOLTIPS
 	  function makeRouteToolTip(r,networkname) {
  	  	
- 	  	if (['origin','final_destination'].includes(r.leg_type)) {
+ 	  	if (r.leg_type=='origin') {
  	  		try {
  	  			
 				var popuptext = [
@@ -1267,7 +1255,7 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 	  	return popuptext;
 	  };
 	
-	//WE USE THIS TO MAKE OUR MARKER CLUSTER LAYER GROUPS
+		//WE USE THIS TO MAKE OUR MARKER CLUSTER LAYER GROUPS
 	function make_cluster_layer_groups(cluster_class) {
 		
 		var layergroup = L.markerClusterGroup(	
@@ -1374,6 +1362,7 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 				}
 			},
 		);
+// 		var l_id=L.stamp(newlayer);
 		layer_group.addLayer(newlayer);
 		return newlayer
 	};	
@@ -1395,107 +1384,64 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 		edge_id_list.forEach(e=>{
 			if (edgesdict[networkname][e]) {live_edge_list.push(edgesdict[networkname][e])}	
 		})
-		//console.log(live_edge_list)
+// 		console.log(live_edge_list)
 		var tmp_edge_dict=new Object();
 		//now roll them up into a dictionary
-		
-		
-		
 		live_edge_list.forEach(edge=>{
-// 			console.log(edge.main._coords)
-			var ctrl=edge.main._coords[3]
 			var st=edge.source_target
-			if (edge.leg_type=='origin'){
-				var source_id=st[0]
-				var target_id=st[1]
-				var source=nodesdict[networkname][source_id]
-				var target=nodesdict[networkname][target_id]
-				var target_leaflet_id=target._leaflet_id
-				var target_latlng=target._layers[Object.keys(target._layers)[0]].feature.geometry.coordinates
-				var target_coords={'lat':target_latlng[1],'lng':target_latlng[0]}
-				if (regionorplace=='region') {
-					var lg=regions_origins_layer_group
-				} else {
-					var lg=ports_origins_layer_group
-				}
-				var vp=lg.getVisibleParent(source._layers[Object.keys(source._layers)[0]])
-				if (vp) {
-					var source_coords=vp._latlng
-					var source_leaflet_id=vp._leaflet_id
-				} else {
-					var source_latlng=source._layers[Object.keys(source._layers)[0]].feature.geometry.coordinates
-					var source_coords={'lat':source_latlng[1],'lng':source_latlng[0]}
-					var source_leaflet_id=source._leaflet_id
-				}
-			} else if (edge.leg_type=='final_destination') {
-				var source_id=st[0]
-				var target_id=st[1]
-				var source=nodesdict[networkname][source_id]
-				var target=nodesdict[networkname][target_id]
-				var source_leaflet_id=source._leaflet_id
+			var source_id=st[0]
+			var target_id=st[1]
+			var source=nodesdict[networkname][source_id]
+			var target=nodesdict[networkname][target_id]
+			var target_leaflet_id=target._leaflet_id
+			var target_latlng=target._layers[Object.keys(target._layers)[0]].feature.geometry.coordinates
+			var target_coords={'lat':target_latlng[1],'lng':target_latlng[0]}
+			if (regionorplace=='region') {
+				var lg=regions_origins_layer_group
+			} else {
+				var lg=ports_origins_layer_group
+			}
+			var vp=lg.getVisibleParent(source._layers[Object.keys(source._layers)[0]])
+			if (vp) {
+				var source_coords=vp._latlng
+				var source_leaflet_id=vp._leaflet_id
+			} else {
 				var source_latlng=source._layers[Object.keys(source._layers)[0]].feature.geometry.coordinates
 				var source_coords={'lat':source_latlng[1],'lng':source_latlng[0]}
-				if (regionorplace=='region') {
-					var lg=regions_origins_layer_group
+				var source_leaflet_id=source._leaflet_id
+			}
+			if (tmp_edge_dict[source_leaflet_id]) {
+				if (tmp_edge_dict[source_leaflet_id][target_leaflet_id]) {
+					tmp_edge_dict[source_leaflet_id][target_leaflet_id].weight+=edge.weight
 				} else {
-					var lg=ports_origins_layer_group
+					tmp_edge_dict[source_leaflet_id][target_leaflet_id]={'weight':edge.weight,'source_latlng':source_coords,'target_latlng':target_coords,'geometry':straightlinebezier(source_coords,target_coords),'leg_type':'origin'}
 				}
-				var vp=lg.getVisibleParent(target._layers[Object.keys(target._layers)[0]])
-				if (vp) {
-					var target_coords=vp._latlng
-					var target_leaflet_id=vp._leaflet_id
-				} else {
-					var target_latlng=target._layers[Object.keys(target._layers)[0]].feature.geometry.coordinates
-					var target_coords={'lat':target_latlng[1],'lng':target_latlng[0]}
-					var target_leaflet_id=target._leaflet_id
-				}
-			};
-			//console.log(edge.leg_type)
-// 			console.log("ST-->",source_coords,target_coords)
-// 			console.log("CTRL-->",ctrl)
-			
-// 			var geometry=[[[source_coords['lat'],source_coords['lng']],[target_coords['lat'],target_coords['lng']]],[ctrl,ctrl]]
-// 			console.log(geometry)
-			
-				if (tmp_edge_dict[source_leaflet_id]) {
-					if (tmp_edge_dict[source_leaflet_id][target_leaflet_id]) {
-						tmp_edge_dict[source_leaflet_id][target_leaflet_id].weight+=edge.weight
-						tmp_edge_dict[source_leaflet_id][target_leaflet_id].ctrls.push(ctrl)
-					} else {
-						tmp_edge_dict[source_leaflet_id][target_leaflet_id]={'weight':edge.weight,'source_latlng':source_coords,'target_latlng':target_coords,'ctrls':[ctrl],'leg_type':edge.leg_type}
-					}
-				} else {
-					tmp_edge_dict[source_leaflet_id]={}
-					tmp_edge_dict[source_leaflet_id][target_leaflet_id]={'weight':edge.weight,'source_latlng':source_coords,'target_latlng':target_coords,'ctrls':[ctrl],'leg_type':edge.leg_type}
-				}
+			} else {
+				tmp_edge_dict[source_leaflet_id]={}
+				tmp_edge_dict[source_leaflet_id][target_leaflet_id]={'weight':edge.weight,'source_latlng':source_coords,'target_latlng':target_coords,'geometry':straightlinebezier(source_coords,target_coords),'leg_type':'origin'}
+			}
 		})
 		
+		
 		Object.keys(tmp_edge_dict).forEach(s=>{
+			
 			Object.keys(tmp_edge_dict[s]).forEach(t=>{
+			
 				var edge=tmp_edge_dict[s][t]
 				
-				var ctrl_lngs=0;
-				var ctrl_lats=0;
-// 				console.log(edge)
-				edge.ctrls.forEach(ctrl=>{
-// 					console.log(ctrl)
-					ctrl_lngs+=ctrl[1];
-					ctrl_lats+=ctrl[0];
-				})
-				
-				var ctrl=[ctrl_lats/edge.ctrls.length,ctrl_lngs/edge.ctrls.length]
-				
-				var geometry=[[[edge.source_latlng['lat'],edge.source_latlng['lng']],[edge.target_latlng['lat'],edge.target_latlng['lng']]],[ctrl,ctrl]]
-				
-				var updatededge=edge
-				updatededge['geometry']=geometry
-				make_edge(map,updatededge,networkname,main_layer_group,animation_layer_group,recordtodict=false,hiddenedgesvaluescale)
+				make_edge(map,edge,networkname,main_layer_group,animation_layer_group,recordtodict=false,hiddenedgesvaluescale)
+			
 			})
-		})	
+			
+		
+		})
+		
+		
+		
 	}
 
 
-	//the behavior of these different edge classes (clustered vs non-clustered) makes it reasonable to handle them differently
+//the behavior of these different edge classes (clustered vs non-clustered) makes it reasonable to handle them differently
 	function refresh_oceanic_edges(edge_id_list,networkname,map,main_layer_group,animation_layer_group){
 		main_layer_group.clearLayers();
 		animation_layer_group.clearLayers();
@@ -1516,9 +1462,7 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 				if (source&&target){
 					edge.main.redraw()
 					edge.main.addTo(main_layer_group)
-					var updatedanimation=make_animationrouteoptions(edge.main,AO_map)
-					edge.animation.options.animate.duration=updatedanimation.animate.duration
-					edge.animation.options.dashArray=updatedanimation.dashArray
+					edge.animation.options.animate.duration=make_animationrouteoptions(edge.main,AO_map).animate.duration
 					edge.animation.redraw()
 					edge.animation.addTo(animation_layer_group)
 				}
@@ -1526,16 +1470,35 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 		})
 		bringpointlayerstofront()
 	}
-	
+
+
+
+
+
+
 	function make_animationrouteoptions(basepath,map){
-		var off=20
-		var on=1
+		var distance=0
+		var distance=0;
+		var timingscalar = 50
+		var interpolation_steps=[0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]
+		var pairs=d3.pairs(basepath.trace(interpolation_steps));
+		function euclideandistance(p1,p2) {
+			xyone=map.latLngToContainerPoint(p1);
+			xytwo=map.latLngToContainerPoint(p2);
+			var ed=Math.sqrt((xyone.x-xytwo.x)**2+(xyone.y-xytwo.y)**2)
+			return ed
+		}
+		if (pairs.length>1){
+			pairs.forEach(sp=>distance+=(euclideandistance(sp[0],sp[1])))
+		}
+		var duration=distance*timingscalar;
+		var standard_interval=10
 		return {
 			color: "#6c757dc9",
 			weight: "1",
-			dashArray:on.toString() + " " + (off-on).toString(),
+			dashArray:"1 " + (standard_interval-1).toString(),
 			animate: {
-				"duration":1000,
+				"duration":duration,
 				"iterations":Infinity,
 				"direction":'normal'
 			}
@@ -1582,12 +1545,21 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 			var edge=oceanic_edges[e_id];
 			edge.main.addTo(oceanic_main_edges_layer_group);
 			edge.animation.addTo(oceanic_animation_edges_layer_group);
+			
 		})
 		
 	}
 
+			function rev(a){
+			
+// 				console.log(a)
+				return([a[1],a[0]])
+			}
+
+
 	function make_edge(map,edge,networkname,main_layer_group,animation_layer_group,recordtodict=true,edgeweightvaluescale){
 // 		console.log(edge)
+		
 		var commands = [];
 		var edge_type=edge.leg_type;
 		var weight=edgeweightvaluescale(edge.weight);
@@ -1631,6 +1603,9 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 		
 	};
 
+
+
+	
 	var region_vs_place_vars = {
 		'place':{
 			'origins_layer_group':ports_origins_layer_group,
@@ -1653,8 +1628,13 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 			var origins_layer_group = region_vs_place_vars[networkname]['origins_layer_group'];
 			var embark_disembark_layer_group = region_vs_place_vars[networkname]['embark_disembark_layers_group'];
 			var dest_layer_group = region_vs_place_vars[networkname]['dest_layer_group'];
+// 			var voyage_edges_main_layers_group = region_vs_place_vars[networkname]['embark_disembark_layers_group'];	
+
+			
 			var featurecollection=network.points;
-			//console.log(network);
+			console.log(network);
+						
+// 			console.log(edgesdict)
 			origin_nodelogvaluescale=nodelogvaluescale_fn(featurecollection,4,28);
 			embark_disembark_nodelogvaluescale=nodelogvaluescale_fn(featurecollection,3,10);
 			dest_nodelogvaluescale=nodelogvaluescale_fn(featurecollection,4,15);
@@ -1724,7 +1704,7 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 			ports_dest_layer_group.addTo(AO_map);
 			ports_origins_layer_group.addTo(AO_map);
 // 			mappingSpecialistsCountries.addTo(AO_map);
-			mappingSpecialists.addTo(AO_map);
+			mappingspecialists.addTo(AO_map);
 			var total_results_count=d.region.total_results_count;			
 			drawUpdateCount(AO_map,total_results_count);
 			drawLegend(AO_map);
