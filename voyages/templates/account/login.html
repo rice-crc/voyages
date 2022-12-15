@@ -91,6 +91,7 @@
     if (params.next) {
         $('input[name={{ redirect_field_name }}]').remove();
         $('form').append('<input type="hidden" name="{{ redirect_field_name }}" value="' + params.next + '" />');
+		sessionStorage.setItem('loginRedirectUrl', params.next);
     }
 </script>
 

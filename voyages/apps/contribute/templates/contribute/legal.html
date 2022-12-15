@@ -2,7 +2,19 @@
 {% load i18n %}
 
 {% block center-content %}
+<script>
+const accept = () => {
+    const key = 'loginRedirectUrl';
+    let redirectUrl = sessionStorage.getItem(key);
+    if (redirectUrl) {
+        sessionStorage.removeItem(key);
+    } else {
+        redirectUrl = '/contribute/';
+    }
+    window.location.href = redirectUrl;
+}
+</script>
 <div class="page-title-1">{{ title }}</div>
 <p class="legal_paragraph">{{ paragraph }}</p>
-<button class="btn btn-solid" onclick="window.location.href='/contribute/'">{% trans 'Accept' %}</button>
+<button class="btn btn-solid" onclick="accept()">{% trans 'Accept' %}</button>
 {% endblock %}

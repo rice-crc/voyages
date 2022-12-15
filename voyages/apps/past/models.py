@@ -6,8 +6,8 @@ import threading
 import unidecode
 from builtins import range, str
 from functools import reduce
-from django.conf import settings
 
+from datetime import datetime
 from django.contrib.auth.models import User
 from django.db import (connection, models, transaction)
 from django.db.models import (Aggregate, Case, CharField, Count, F, Func, IntegerField, Max, Min, Q, Sum, Value, When)
@@ -135,11 +135,17 @@ def _get_composite_names(name):
         for i in range(0, len(parts) - 1):
             yield parts[i] + parts[i + 1]
 
+def _is_cache_expired(cached_when):
+    NAME_CACHE_TIMEOUT_SEC = 600
+    if cached_when is None:
+        return True
+    delta = datetime.now() - cached_when
+    return delta.total_seconds() > NAME_CACHE_TIMEOUT_SEC
 
 class EnslavedNameSearchCache:
     WORDSET_INDEX = None
 
-    _loaded = False
+    _loaded = None
     _lock = threading.Lock()
     _name_key = {}
     _sound_recordings = {}
@@ -160,6 +166,8 @@ class EnslavedNameSearchCache:
 
     @classmethod
     def search_full(cls, name, max_cost, max_results):
+        if _is_cache_expired(cls._loaded):
+            cls.load(True)
         res = sorted(Levenshtein_search.lookup(cls.WORDSET_INDEX, _strip_accents(name),
                                                max_cost),
                      key=lambda x: x[1])
@@ -203,13 +211,12 @@ class EnslavedNameSearchCache:
                     for index in range(1, 1 + item[3])
                 ]
                 langs.append(lang)
-            cls._loaded = True
-
+            cls._loaded = datetime.now()
 
 class EnslaverNameSearchCache:
     WORDSET_INDEX = None
 
-    _loaded = False
+    _loaded = None
     _lock = threading.Lock()
     _name_key = {}
     
@@ -220,6 +227,9 @@ class EnslaverNameSearchCache:
 
     @classmethod
     def search_full(cls, name, max_cost, max_results):
+        # Check if cache is stale
+        if _is_cache_expired(cls._loaded):
+            cls.load(True)
         res = sorted(Levenshtein_search.lookup(cls.WORDSET_INDEX, _strip_accents(name),
                                                max_cost),
                      key=lambda x: x[1])
@@ -246,7 +256,7 @@ class EnslaverNameSearchCache:
                     ids = cls._name_key.setdefault(name, [])
                     ids.append(item_0)
             cls.WORDSET_INDEX = Levenshtein_search.populate_wordset(-1, list(all_names))
-            cls._loaded = True
+            cls._loaded = datetime.now()
 
         
 class SourceConnectionAbstractBase(models.Model):
@@ -375,12 +385,15 @@ class EnslaverCachedProperties(models.Model):
     voyage_datasets = models.IntegerField(db_index=True, null=True)
 
     @staticmethod
-    def compute():
+    def compute(identities=None):
         """
         Compute cached properties for the Enslaver. This method seeds the
         EnslaverCachedProperties table which can be used to search and sort
         enslavers based on aggregated values.
         """
+        def apply_filter(q):
+            return q.filter(**{f"{identity_field}__in": identities}) if identities is not None else q
+
         helper = PropHelper()
         identity_field = 'enslaver_alias__identity__id'
         voyage_year_field = 'voyage__voyage_dates__imp_arrival_at_port_of_dis'
@@ -390,6 +403,7 @@ class EnslaverCachedProperties(models.Model):
             .annotate(min_year=Min(voyage_year_field)) \
             .annotate(max_year=Max(voyage_year_field)) \
             .values_list(identity_field, 'min_year', 'max_year')
+        q_years = apply_filter(q_years)
 
         def get_year(s):
             if s is None or len(s) < 4:
@@ -408,6 +422,7 @@ class EnslaverCachedProperties(models.Model):
             .values(identity_field) \
             .annotate(datasets=BitOrAgg(PowerFunc(Value(2), F('voyage__dataset')))) \
             .values_list(identity_field, 'datasets')
+        q_datasets = apply_filter(q_datasets)
         for row in q_datasets:
             helper.set(int(row[0]), 'datasets', int(row[1]))
 
@@ -422,6 +437,7 @@ class EnslaverCachedProperties(models.Model):
             .values(identity_field) \
             .annotate(enslaved_count=Sum(enslaved_count_field)) \
             .values_list(identity_field, 'enslaved_count')
+        q_captive_count_voyageconn = apply_filter(q_captive_count_voyageconn)
         related_enslaved_field = 'relation__enslaved__enslaved_id'
         relation_fields = [identity_field, related_enslaved_field]
         q_captive_count_relations = EnslaverInRelation.objects \
@@ -429,9 +445,18 @@ class EnslaverCachedProperties(models.Model):
             .values(identity_field) \
             .annotate(enslaved_count=Count(related_enslaved_field, distinct=True)) \
             .values_list(identity_field, 'enslaved_count')
+        q_captive_count_relations = apply_filter(q_captive_count_relations)
+        unnamed_count_field = 'relation__unnamed_enslaved_count'
+        q_unnamed = EnslaverInRelation.objects \
+            .select_related(identity_field, unnamed_count_field) \
+            .annotate(enslaved_count=Sum(unnamed_count_field)) \
+            .values_list(identity_field, 'enslaved_count')
+        q_unnamed = apply_filter(q_unnamed)
         for row in q_captive_count_voyageconn:
             helper.add_num(int(row[0]), 'enslaved_count', row[1])
         for row in q_captive_count_relations:
+            helper.add_num(int(row[0]), 'enslaved_count', row[1])
+        for row in q_unnamed:
             helper.add_num(int(row[0]), 'enslaved_count', row[1])
         amount_fields = [identity_field, 'relation__amount']
         q_transaction_amount = EnslaverInRelation.objects \
@@ -439,12 +464,15 @@ class EnslaverCachedProperties(models.Model):
             .values(identity_field) \
             .annotate(amount_sum=Sum(amount_fields[1])) \
             .values_list(identity_field, 'amount_sum')
+        q_transaction_amount = apply_filter(q_transaction_amount)
         for row in q_transaction_amount:
             helper.add_num(int(row[0]), 'tot_amount', row[1])
         q_roles = EnslaverInRelation.objects.values_list(identity_field, 'role')
+        q_roles = apply_filter(q_roles)
         for row in q_roles:
             helper.add_to_set(int(row[0]), 'roles', row[1])
         q_roles = EnslaverVoyageConnection.objects.values_list(identity_field, 'role')
+        q_roles = apply_filter(q_roles)
         for row in q_roles:
             helper.add_to_set(int(row[0]), 'roles', row[1])
         for id, item in helper.data.items():
@@ -700,6 +728,7 @@ class EnslavementRelation(models.Model):
     date = models.CharField(max_length=12, null=True,
         help_text="Date in MM,DD,YYYY format with optional fields.")
     amount = models.DecimalField(null=True, decimal_places=2, max_digits=6)
+    unnamed_enslaved_count = models.IntegerField(null=True)
     voyage = models.ForeignKey(Voyage, related_name="+",
                                null=True, on_delete=models.CASCADE)
     source = models.ForeignKey(VoyageSources, related_name="+",
@@ -1458,3 +1487,14 @@ class EnslaverSearch:
         for helper in cls.all_helpers:
             row = helper.patch_row(row)
         return row
+
+
+class EnslaverContribution(models.Model):
+    # We allow NULLs because the enslaver may be deleted and we still want to
+    # keep the contribution (it might even be the reason the identity was
+    # deleted, say in the case of a merge).
+    enslaver = models.ForeignKey(EnslaverIdentity, null=True, on_delete=models.SET_NULL)
+    contributor = models.ForeignKey(User)
+    created = models.DateTimeField(auto_now_add=True)
+    status = models.IntegerField(null=False)
+    data = models.TextField(null=False)

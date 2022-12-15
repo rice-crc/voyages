@@ -7,20 +7,23 @@ from datetime import date
 
 from django.conf import settings
 from django.core.paginator import Paginator
+from django.core.urlresolvers import reverse
 from django.db import transaction
-from django.http import JsonResponse, FileResponse
+from django.db.models import F
+from django.http import JsonResponse, Http404
 from django.http.response import HttpResponseBadRequest
-from django.shortcuts import redirect, render
+from django.shortcuts import HttpResponseRedirect, get_object_or_404, redirect, render
 from django.views.decorators.cache import cache_page
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
+from django.contrib.auth.decorators import login_required
 from past.utils import old_div
 from voyages.apps.common.models import SavedQuery
 
 from voyages.apps.common.views import get_filtered_results
 from .models import (AltLanguageGroupName, Enslaved,
                      EnslavedContribution, EnslavedContributionLanguageEntry,
-                     EnslavedContributionNameEntry, EnslavedSearch, EnslaverSearch, EnslaverVoyageConnection,
+                     EnslavedContributionNameEntry, EnslavedContributionStatus, EnslavedInRelation, EnslavedSearch, EnslavementRelation, EnslaverContribution, EnslaverInRelation, EnslaverSearch, EnslaverVoyageConnection,
                      LanguageGroup, MultiValueHelper, ModernCountry, EnslavedNameSearchCache,
                      _modern_name_fields, _name_fields)
 
@@ -126,7 +129,7 @@ def get_modern_countries(_):
 def get_language_groups(_):
     countries_list_key = "countries_list"
     alt_names_key = "alt_names_list"
-    country_helper = MultiValueHelper(countries_list_key, ModernCountry.languages.through, 'languagegroup_id', country_name='moderncountry__name')
+    country_helper = MultiValueHelper(countries_list_key, ModernCountry.languages.through, 'languagegroup_id', modern_country_id='moderncountry__pk', country_name='moderncountry__name')
     alt_names_helper = MultiValueHelper(alt_names_key, AltLanguageGroupName, 'language_group_id', alt_name='name')
     q = LanguageGroup.objects.all()
     q = country_helper.adapt_query(q)
@@ -141,7 +144,7 @@ def get_language_groups(_):
 def get_enumeration(_, model_name):
     from django.apps import apps
     model = apps.get_model(app_label="past", model_name=model_name.replace('-', ''))
-    return JsonResponse({x.pk: x.name for x in model.objects.all()})
+    return JsonResponse({int(x.pk): x.name for x in model.objects.all()})
 
 
 def restore_enslaved_permalink(_, link_id):
@@ -165,6 +168,14 @@ def restore_enslaver_permalink(_, link_id):
 def is_valid_name(name):
     return name is not None and name.strip() != ""
 
+_voyage_related_fields_default = [
+    'voyage__voyage_ship__ship_name',
+    'voyage__voyage_dates__first_dis_of_slaves',
+    'voyage__voyage_itinerary__int_first_port_dis__place',
+    'voyage__voyage_itinerary__imp_principal_place_of_slave_purchase__place',
+    'voyage__voyage_itinerary__imp_principal_port_slave_dis__place',
+    'voyage__voyage_name_outcome__vessel_captured_outcome__label'
+]
 
 @require_POST
 @csrf_exempt
@@ -180,14 +191,10 @@ def search_enslaved(request):
             'enslaved_id', 'age', 'gender', 'height', 'skin_color',
             'language_group__name',
             'register_country__name',
-            'voyage_id', 'voyage__voyage_ship__ship_name',
-            'voyage__voyage_dates__first_dis_of_slaves',
-            'voyage__voyage_itinerary__int_first_port_dis__place',
-            'voyage__voyage_itinerary__imp_principal_place_of_slave_purchase__place',
-            'voyage__voyage_itinerary__imp_principal_port_slave_dis__place',
-            'voyage__voyage_name_outcome__vessel_captured_outcome__label',
+            'voyage_id',
             'captive_fate__name', 'post_disembark_location__place'
         ] + _name_fields + _modern_name_fields + \
+        _voyage_related_fields_default + \
         [helper.projected_name for helper in EnslavedSearch.all_helpers]
     query = search.execute(fields)
     output_type = data.get('output', 'resultsTable')
@@ -314,12 +321,19 @@ def enslaved_contribution(request):
             lang_entry.contribution = contrib
             lang_entry.order = i + 1
             lang_group_id = lang.get('lang_group_id', None)
-            if lang_group_id is None:
+            lang_entry.language_group = LanguageGroup.objects.get(
+                pk=lang_group_id) if lang_group_id else None
+            if lang_entry.language_group is None:
                 transaction.rollback()
                 return HttpResponseBadRequest(
                     'Invalid language entry in contribution')
-            lang_entry.language_group = LanguageGroup.objects.get(
-                pk=lang_group_id) if lang_group_id else None
+            modern_country_id = lang.get('modern_country_id', None)
+            lang_entry.modern_country = ModernCountry.objects.get(
+                pk=modern_country_id) if modern_country_id else None
+            if modern_country_id is None:
+                transaction.rollback()
+                return HttpResponseBadRequest(
+                    'Invalid modern country entry in contribution')
             lang_entry.save()
             language_ids.append(lang_entry.pk)
         result['language_ids'] = language_ids
@@ -354,3 +368,57 @@ def store_audio(request, contrib_pk, name_pk, token):
     with open(file_name, 'wb+') as destination:
         destination.write(request.body)
     return JsonResponse({'len': len(request.body)})
+
+def _get_login_url(next_url):
+    return f"{reverse('account_login')}?next={next_url}"
+
+def _enslaver_contrib_action(request, data):
+    if not request.user.is_authenticated():
+        return HttpResponseRedirect(_get_login_url(request.build_absolute_uri()))
+    return render(request, 'past/enslavers_contribute.html', data)
+
+def enslaver_contrib_delete(request, id):
+    return _enslaver_contrib_action(request, { "mode": "delete", "id": id })
+
+def enslaver_contrib_edit(request, id):
+    return _enslaver_contrib_action(request, { "mode": "edit", "id": id })
+
+def enslaver_contrib_merge(request, merge_a, merge_b):
+    return _enslaver_contrib_action(request, { "mode": "merge", "id": f"{merge_a},{merge_b}" })
+
+def enslaver_contrib_split(request, id):
+    return _enslaver_contrib_action(request, { "mode": "split", "id": id })
+
+def enslaver_contrib_new(request):
+    return _enslaver_contrib_action(request, { "mode": "new", "id": "" })
+
+def get_enslavement_relation_info(request, relation_pk):
+    relation = EnslavementRelation.objects \
+        .filter(pk=relation_pk) \
+        .select_related(*_voyage_related_fields_default) \
+        .values('id', 'date', 'amount', 'text_ref', 'voyage_id', \
+            location=F('place__place'), type=F('relation_type__name'), *_voyage_related_fields_default)
+    relation = list(relation)
+    if len(relation) != 1:
+        raise Http404
+    relation = relation[0]
+    relation['enslavers'] = list(EnslaverInRelation.objects.filter(relation_id=relation_pk) \
+        .values(alias=F('enslaver_alias__alias'), role_name=F('role__name')))
+    relation['enslaved'] = list(EnslavedInRelation.objects.filter(relation_id=relation_pk) \
+        .values(name=F('enslaved__documented_name')))
+    return JsonResponse(relation)
+
+def enslaver_contrib_editorial_review(request, pk):
+    if not request.user.is_authenticated():
+        return HttpResponseRedirect(_get_login_url(request.build_absolute_uri()))
+    contrib = get_object_or_404(EnslaverContribution, pk=pk)
+    if contrib.status == EnslavedContributionStatus.ACCEPTED:
+        raise Http404("This contribution has already been accepted")
+    # Parsing makes sure that we have valid JSON data.
+    interim = json.loads(contrib.data)
+    return render(request, 'past/enslavers_contribute.html', {
+        'mode': interim['type'],
+        'interim': contrib.data,
+        'editorialMode': True,
+        'contrib_pk': pk
+    })

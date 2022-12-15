@@ -10,6 +10,7 @@ from builtins import str
 
 from django.conf import settings
 from django.core.cache import cache
+from django.db.models import F
 from django.http import HttpResponse, HttpResponseBadRequest, JsonResponse
 from django.shortcuts import render
 from django.utils.translation import ugettext as _
@@ -822,34 +823,10 @@ def get_filtered_places(request):
     return JsonResponse(filtered)
 
 
-@csrf_exempt
-@require_POST
 def get_all_sources(request):
-    data = json.loads(request.body)
-    order_by = None
-    results = SearchQuerySet().models(VoyageSources)
-    try:
-        # Process data table filter.
-        table_params = data['tableParams']
-        search = table_params['search']['value']
-        results = results.filter(text__contains=search)
-    except Exception:
-        pass
-    try:
-        # Process data table sorting.
-        table_params = data['tableParams']
-        order_info = table_params['order'][0]
-        order_by = table_params['columns'][int(order_info['column'])]['data']
-        if order_info['dir'] == 'desc':
-            order_by = '-' + order_by
-        results = results.order_by(order_by)
-    except Exception:
-        pass
-    output_fields = ['group_name', 'short_ref', 'full_ref']
-    return get_results_table(results,
-                             data,
-                             field_filter=lambda f: f in output_fields)
-
+    return JsonResponse({
+        'data': list(VoyageSources.objects.values('pk', 'short_ref', 'full_ref', type=F('source_type__group_name')))
+    })
 
 @csrf_exempt
 @require_POST
