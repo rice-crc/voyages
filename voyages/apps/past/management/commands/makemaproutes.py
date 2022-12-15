@@ -16,9 +16,10 @@ class Command(BaseCommand):
 
 	def handle(self, *args, **options):
 		from voyages.apps.past.management.commands.ao_individuals_map import routeNodes,links
-		
+		distributedlanguagegroups={}
 		for dataset in ['region','place']:
 # 		for dataset in ['place']:
+			distributedlanguagegroups[dataset]={}
 			print("--------",dataset,"----------")
 			base_path='voyages/apps/past/static/'
 			print('making a directed network graph of the oceanic waypoints from ao_individuals_map.py')
@@ -99,7 +100,6 @@ class Command(BaseCommand):
 				'language_group__longitude',
 				'language_group__name'
 			)))
-			distributedlanguagegroups={}
 			language_group_ids_offset=1000000
 			language_groups=LanguageGroup.objects.all()
 			for languagegroup_node in languagegroup_nodes:
@@ -107,10 +107,9 @@ class Command(BaseCommand):
 
 				##This is a complex problem. I'm going to get these past the filter here, then have hard-coded geojson polygons on the other end that I deal with some way or another....
 				if name in ["Arabic/Islamic","Islamic","Mandinka"]:
+# 					print(languagegroup_node)
 # 					6012, 6013, 6014, 6021, 6022, 6031, 6032, 6041, 6042, 6051, 6052, 6061, 6064, 6065, 6082
 # 					6012, 6013, 6014, 6021, 6022
-					coords=[0,0]
-					
 					
 					dist_lg=language_groups.filter(id=id)
 					dist_lg_countries=dist_lg.values_list(
@@ -129,15 +128,18 @@ class Command(BaseCommand):
 							'lat':float(dist_lg_country[3])
 						}
 					
-					if id in distributedlanguagegroups:
-						distributedlanguagegroups[id].append(countrydata)
-					else:
-						distributedlanguagegroups[id]=[countrydata]
+						if id in distributedlanguagegroups[dataset]:
+							distributedlanguagegroups[dataset][id].append(countrydata)
+						else:
+							distributedlanguagegroups[dataset][id]=[countrydata]
 					
-				elif latitude is None or longitude is None:
+				if latitude is None or longitude is None:
 					coords=None
 				else:
 					coords=[float(latitude),float(longitude)]
+# 				
+# 				if name in ["Arabic/Islamic","Islamic","Mandinka"]:
+# 					print(coords)
 				
 				if coords is not None:
 					individuals_with_valid_languagegroup+=1
@@ -145,7 +147,12 @@ class Command(BaseCommand):
 # 					G.nodes[id+language_group_ids_offset]['tags'].append('origin')
 # 				else:
 					G.add_node(id+language_group_ids_offset,coords=coords,name=name,tags=["origin"],pk=id)
-	
+# 					if name in ["Arabic/Islamic","Islamic","Mandinka"]:
+# 						print(G.nodes[id+language_group_ids_offset])
+			
+			
+# 			print(distributedlanguagegroups)
+			
 			##2b. final destinations
 			african_origins_individuals.select_related('post_disembark_location')
 			individuals_with_post_disembark_locations=african_origins_individuals.filter(post_disembark_location__isnull=False)
@@ -649,9 +656,9 @@ class Command(BaseCommand):
 			d.close()
 			
 # 			STATICFILES_DIRS,STATIC_ROOT
-			for dest in [i for i in STATICFILES_DIRS] + [STATIC_ROOT]:
-				d=open(os.path.join(dest,'scripts/vue/past/maps/',dataset+'_dist_lang_groups.json'),'w')
-				d.write(json.dumps(distributedlanguagegroups))
-				d.close()
-								
+		for dest in [i for i in STATICFILES_DIRS] + [STATIC_ROOT]:
+			d=open(os.path.join(dest,'scripts/vue/past/maps/','dist_lang_groups.js'),'w')
+			d.write("var distributedlanguagegroups="+json.dumps(distributedlanguagegroups))
+			d.close()
+							
 			

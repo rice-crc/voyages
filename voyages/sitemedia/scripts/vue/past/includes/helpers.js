@@ -1112,6 +1112,19 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 			ports_origins_layer_group.removeFrom(AO_map);
 			ports_embdisemb_layer_group.removeFrom(AO_map);
 		}
+		
+		var maxanimationzoom=12
+		
+		if (currentzoom > maxanimationzoom && animation_active) {
+			toggle_animation()
+			animationtoggledbyzoom=true
+		}
+		
+		if (currentzoom <= maxanimationzoom && animationtoggledbyzoom) {
+			toggle_animation()
+			animationtoggledbyzoom=false
+		}
+		
 	}).on('zoomstart', function(a) {
 		oceanic_main_edges_layer_group.clearLayers();
 		oceanic_animation_edges_layer_group.clearLayers();
@@ -1157,35 +1170,28 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 	
 	//C. FEATURE LAYERS
 	
+	//C1. Cluster groups
+	
+	//C1a. Origins need to be managed at Port and Region levels (at least for now -- it's making the cluster / individual markers touchy and I'd like to consolidate this into a single layer as I have with final destinations)
+	
 	var ports_origins_layer_group = make_cluster_layer_groups('origin');
 	
 	var regions_origins_layer_group = make_cluster_layer_groups('origin');
+	
+	//C1b. Final destinations -- single layer group
+	
+	var ports_dest_layer_group = make_cluster_layer_groups('final_destination');
 
-// 	console.log(regions_origins_layer_group)
+	//D. Non-clustered points groups
 	
 	var ports_embdisemb_layer_group = L.layerGroup();
 	
 	var regions_embdisemb_layer_group = L.layerGroup();
 
-	var ports_dest_layer_group = make_cluster_layer_groups('final_destination');
-
-// 	var regions_dest_layer_group = L.layerGroup();
-// 	regions_dest_layer_group.addTo(AO_map);
-// 	
-// 	var ports_dest_layer_group = L.layerGroup();
-// 	ports_dest_layer_group.addTo(AO_map);
+	var distributed_languages_layer_group = L.layerGroup();
+	distributed_languages_layer_group.addTo(AO_map);
 	
 	var oceanic_waypoints_layer_group = L.layerGroup();
-	
-	
-	function bringpointlayerstofront() {
-		[	
-			ports_embdisemb_layer_group,
-			regions_embdisemb_layer_group
-		].forEach(lg=>{
-			lg.eachLayer(function(layer){layer.bringToFront()})
-		})
-	}
 	
 	
 	var oceanic_main_edges_layer_group= L.layerGroup();
@@ -1493,7 +1499,16 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 			})
 		})	
 	}
-
+	
+	//only used by refresh_oceanic_edges, but it's easy to see this might be needed elsewhere.
+	function bringpointlayerstofront() {
+		[	
+			ports_embdisemb_layer_group,
+			regions_embdisemb_layer_group
+		].forEach(lg=>{
+			lg.eachLayer(function(layer){layer.bringToFront()})
+		})
+	}
 
 	//the behavior of these different edge classes (clustered vs non-clustered) makes it reasonable to handle them differently
 	function refresh_oceanic_edges(edge_id_list,networkname,map,main_layer_group,animation_layer_group){
@@ -1664,6 +1679,10 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 				var point_id=feature.properties.point_id
 				var node_classes=Object.keys(feature.properties.node_classes);
 				if (node_classes.includes('origin')) {
+					
+// 					region_dist_lang_groups.js
+					
+					
 					var nodesize=origin_nodelogvaluescale(feature.properties.size);
 					var newlayer = add_point_to_layergroup(feature,origins_layer_group,nodesize,networkname,endpoint_main_edges_layer_group,endpoint_animation_edges_layer_group);
 					nodesdict[networkname][point_id]=newlayer
@@ -1705,6 +1724,42 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 	}
 	maximizeMapHeight();
 	AO_map.invalidateSize();
+	var animationtoggledbyzoom=false;
+	
+	function toggle_animation() {
+	
+		if (animation_active) {
+			animation_active=false
+			endpoint_animation_edges_layer_group.remove()
+			oceanic_animation_edges_layer_group.remove()
+		} else {
+			animation_active=true
+			endpoint_animation_edges_layer_group.addTo(AO_map)
+			oceanic_animation_edges_layer_group.addTo(AO_map)
+			update_oceanic_edges()
+		}
+		
+		animationtoggle_div.remove();
+		animationtoggle_div.addTo(AO_map);
+		$('#animationtogglebutton').click(function(e) {toggle_animation()});
+	}
+	
+	
+	var animation_active=true;
+	var animationtoggle_div = L.control({ position: "topleft" });
+	animationtoggle_div.onAdd = function(map) {
+			if (animation_active) {
+				var isactivetext="Running"
+				var divclass="animationtoggle_active"
+			} else {
+				var isactivetext="Stopped"
+				var divclass="animationtoggle_inactive"
+			}
+			var div = L.DomUtil.create("div", divclass);
+			div.innerHTML += '<a href="javascript:void(0)" id="animationtogglebutton">Animation '+isactivetext+'</a>';
+			return div
+		};
+	
 	
 	//------------>MAKE THE CALL FOR THE DATA
 	$.ajax({
@@ -1725,9 +1780,12 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 			ports_origins_layer_group.addTo(AO_map);
 // 			mappingSpecialistsCountries.addTo(AO_map);
 			mappingSpecialists.addTo(AO_map);
+			
 			var total_results_count=d.region.total_results_count;			
 			drawUpdateCount(AO_map,total_results_count);
 			drawLegend(AO_map);
+			animationtoggle_div.addTo(AO_map);
+			$('#animationtogglebutton').click(function(e) {toggle_animation()});
 			initial_map_builder(d);
 			AO_map.invalidateSize();
 			maximizeMapHeight();
