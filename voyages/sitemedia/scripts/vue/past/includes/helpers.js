@@ -852,14 +852,15 @@ var parseLanguageGroups = function(response) {
   var countries = [];
   $.each(response.data, function(id, languageGroup) {
     $.each(languageGroup.countries, (id, country) => {
-      countries[country.modern_country_id] = country.country_name;
+      countries.push(country);
     });
   });
-  sorted_countries = Object.entries(countries).sort((a, b) => a[1].localeCompare(b[1]));
-  $.each(sorted_countries, function(key, country) {
+  countries = [...new Set(countries)].sort()
+
+  $.each(countries, function(key, country) {
     options[0].children.push({
-      id: country[0],
-      label: country[1],
+      id: country,
+      label: country,
       children: [],
       languageGroupIds: []
     });
@@ -886,16 +887,11 @@ var parseLanguageGroups = function(response) {
     }
     $.each(options[0].children, function(key, country) {
       $.each(languageGroup.countries, (index, languageGroupCountry) => {
-        if (languageGroupCountry.modern_country_id === country.id) {
+        if (languageGroupCountry == country.label) {
           if (options[0].children[key].languageGroupIds.indexOf(languageGroupId) === -1) {
             options[0].children[key].languageGroupIds.push(languageGroupId);
           }
-          options[0].children[key].children.push({
-            'id': `${country.id}-${languageGroupId}`,
-            'label' : label,
-            'isDisabled': false,
-            languageGroupIds: [languageGroupId]
-          });
+          options[0].children[key].children.push({'id': key+'-'+languageGroupId, 'label' : label, 'isDisabled': false, languageGroupIds: [languageGroupId]});
         }
       });
     });
@@ -975,8 +971,7 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
     // Results DataTable
     var pageLength = {
       extend: "pageLength",
-      className: "btn btn-info buttons-collection dropdown-toggle",
-      text: (dt) => gettext("Show %d rows").replace("%d", dt.page.len())
+      className: "btn btn-info buttons-collection dropdown-toggle"
     };
 
     var mainDatatable = $("#results_main_table").DataTable({
@@ -1049,7 +1044,7 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
         [15, 50, 100, 200],
         [gettext("15 rows"), gettext("50 rows"), gettext("100 rows"), gettext("200 rows")]
       ],
-
+      
       language: dtLanguage,
 
       buttons: [
@@ -1360,27 +1355,47 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 	
 	
 	function add_distributednodes(distributednodes,nodesize) {
-		
 		distributednodes.forEach(n=> {
-			
-			var coords=[n.lat,n.lng]
-			
-			L.circleMarker(coords, {
-				radius: nodesize,
-				fillColor: d3.rgb(96,192,171),
-// 				color: "#000",
-				weight: 1,
-// 				opacity: .6,
-				fillOpacity: 0.2
-			}).addTo(distributedlanguagegroups_hidden_nodes_layer_group)
-			
+			var targetlayer=geojson.getLayer(n.name)
+			targetlayer.addTo(distributedlanguagegroups_hidden_nodes_layer_group)
 		})
-	
 	}
 	
 	
+// 	
+// 	var geojsonurl='http://127.0.0.1:8100/static/maps/js/past/africa-hig.geo.json'
+// 	console.log(geojsonurl)
+// 	
+// 	var africaCountriesData = (function() {
+// 		var json = null;
+// 		$.ajax({
+// 			'async': false,
+// 			'global': false,
+// 			'url': geojsonurl,
+// 			'dataType': "json",
+// 			'success': function(data) {
+// 				json = data;
+// 			}
+// 		});
+// 		return json;
+// 	})();
+
+	
+	var acnames=new Array;
 	
 	
+	console.log(africaCountriesData)
+	
+	
+	
+	
+    geojson = L.geoJson(africaCountriesData, {
+        onEachFeature: function (feature, layer) {
+			layer._leaflet_id = feature.properties.name;
+			layer.addTo(distributedlanguagegroups_hidden_nodes_layer_group)
+		}
+    })
+	distributedlanguagegroups_hidden_nodes_layer_group.clearLayers()
 	
 	function add_point_to_layergroup(feature,layer_group,nodesize,networkname,edges_main_layer_group,edges_animation_layer_group) {
 		var point_id=feature.properties.point_id;
