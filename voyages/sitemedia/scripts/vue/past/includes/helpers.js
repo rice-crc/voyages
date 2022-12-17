@@ -1384,7 +1384,7 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 	var acnames=new Array;
 	
 	
-	console.log(africaCountriesData)
+// 	console.log(africaCountriesData)
 	
 	
 	
@@ -1392,8 +1392,24 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
     geojson = L.geoJson(africaCountriesData, {
         onEachFeature: function (feature, layer) {
 			layer._leaflet_id = feature.properties.name;
-			layer.addTo(distributedlanguagegroups_hidden_nodes_layer_group)
+			layer.options.weight=0;
+			layer.options.fillOpacity=.5;
+			layer.options.color="#60c0ab"
+			layer.options.weight=1;
+			layer.options.opacity=.2;
+
+			
+			
+// 			layer.options={
+// 				"color": "#ffffff",
+// 				"weight": 5,
+// 				"opacity": 1
+// 			};
+			layer.addTo(distributedlanguagegroups_hidden_nodes_layer_group);
+			
+// 			console.log(layer)
 		}
+		
     })
 	distributedlanguagegroups_hidden_nodes_layer_group.clearLayers()
 	
@@ -1432,7 +1448,7 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 									pluralorsingular('Liberated African',feature.properties.size),
 									"with",
 									feature.properties.name,
-									"origins.*<br/><i>*Note: this marker stands in for a language with wide geographic distribution,<br/>represented by the other green circles now visible.</i>"
+									"origins.*<br/><i>*Note: this marker stands in for a language<br/>with wide geographic distribution, now visible.</i>"
 								].join(" ")
 								
 								marker.bindTooltip(popuptext,{'sticky':true}).openTooltip();
