@@ -1117,16 +1117,16 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 			ports_distributed_languages_layer_group.removeFrom(AO_map);
 		}
 		
-		var maxanimationzoom=12
+		var maxanimationzoom=7
 		
 		if (currentzoom > maxanimationzoom && animation_active) {
 			toggle_animation()
-			animationtoggledbyzoom=true
+// 			animationtoggledbyzoom=true
 		}
 		
-		if (currentzoom <= maxanimationzoom && animationtoggledbyzoom) {
+		if (currentzoom <= maxanimationzoom && !animation_active) {
 			toggle_animation()
-			animationtoggledbyzoom=false
+// 			animationtoggledbyzoom=false
 		}
 		
 	}).on('zoomstart', function(a) {
@@ -1451,7 +1451,7 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 									"origins.*<br/><i>*Note: this marker stands in for a language<br/>with wide geographic distribution, now visible.</i>"
 								].join(" ")
 								
-								marker.bindTooltip(popuptext,{'sticky':true}).openTooltip();
+								marker.bindTooltip(popuptext,{'sticky':false}).openTooltip();
 								
 								var hidethis={"region":regions_origins_layer_group,"place":ports_origins_layer_group}[regionorplace]	
 								hidethis.remove()
@@ -1915,7 +1915,8 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 				var divclass="animationtoggle_inactive"
 			}
 			var div = L.DomUtil.create("div", divclass);
-			div.innerHTML += '<a href="javascript:void(0)" id="animationtogglebutton">Animation '+isactivetext+'</a>';
+// 			div.innerHTML += '<a href="javascript:void(0)" id="animationtogglebutton">Animation '+isactivetext+'</a>';
+			div.innerHTML += 'Animation '+isactivetext;
 			return div
 		};
 	
@@ -1946,7 +1947,7 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 			drawUpdateCount(AO_map,total_results_count);
 			drawLegend(AO_map);
 			animationtoggle_div.addTo(AO_map);
-			$('#animationtogglebutton').click(function(e) {toggle_animation()});
+// 			$('#animationtogglebutton').click(function(e) {toggle_animation()});
 			initial_map_builder(d);
 			AO_map.invalidateSize();
 			maximizeMapHeight();
