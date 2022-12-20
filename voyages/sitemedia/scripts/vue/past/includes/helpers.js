@@ -1240,48 +1240,79 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 		//ROUTE TOOLTIPS
 	  function makeRouteToolTip(r,networkname) {
  	  	
- 	  	if (['origin','final_destination'].includes(r.leg_type)) {
- 	  		try {
+ 	  	var source_id=r.source_target[0]
+		if (nodesdict[networkname][source_id]){
+			var routesource=nodesdict[networkname][source_id]._layers
+			var routesourcename=routesource[Object.keys(routesource)[0]].feature.properties.name
+		}
+		var target_id=r.source_target[1]
+		if (nodesdict[networkname][target_id]){
+			var routetarget=nodesdict[networkname][target_id]._layers
+			var routetargetname=routetarget[Object.keys(routetarget)[0]].feature.properties.name
+		}
+		
+		
+ 	  	if (r.leg_type=='origin') { 	  		
+ 	  		
+ 	  		var toandorfrom=''
+ 	  		
+ 	  		if (!routesourcename|!routetargetname){
+				if (!routesourcename) {
+					var toandorfrom='taken to '+routetargetname
+				}
+				if (!routetargetname) {
+					var toandorfrom='with '+routesourcename+' origins'
+				}
+ 	  		} else {
  	  			
-				var popuptext = [
-					r.weight,
-					pluralorsingular('Liberated African',r.weight)
-					].join(" ")
- 	  		} catch(error) {
-				console.log("BAD SOURCE OR TARGET NODE-->",r);
-				var st=r.source_target;
-				var popuptext=["bad source or target node. source: ",st[0],". target: ",st[1]].join('')
-			}
- 	  	} else if (r.leg_type=='offramp') {
-			var routetarget=nodesdict[networkname][r.source_target[1]]._layers
-			routetarget=routetarget[Object.keys(routetarget)[0]].feature.properties
-			try {
-				var popuptext = [
-					r.weight,
-					pluralorsingular('Liberated African',r.weight),
-					"transported to",
-					routetarget.name
-					].join(" ")
-			} catch (error) {
-				console.log("BAD TARGET NODE-->",r);
-				var st=r.source_target;
-				var popuptext=["bad target node: ",st[1]].join('')
-			}
- 	  	} else if (r.leg_type=='onramp') { 	
-			var routesource=nodesdict[networkname][r.source_target[0]]._layers
-			routesource=routesource[Object.keys(routesource)[0]].feature.properties
- 	  		try {
-				var popuptext = [
-					r.weight,
-					pluralorsingular('Liberated African',r.weight),
-					"taken from",
-					routesource.name
-					].join(" ")
- 	  		} catch(error) {
-				console.log("BAD SOURCE NODE-->",r);
-				var st=r.source_target;
-				var popuptext=["bad source node: ",st[0]].join('')
+ 	  			var toandorfrom='with '+routesourcename+' origins taken to '+routetargetname
+ 	  			
  	  		}
+ 	  		
+			var popuptext = [
+					r.weight,
+					pluralorsingular('Liberated African',r.weight),
+					toandorfrom
+					].join(" ")
+		
+		
+		} else if (r.leg_type=='final_destination') {
+		
+			var toandorfrom=''
+ 	  		
+ 	  		if (!routesourcename|!routetargetname){
+				if (!routesourcename) {
+					var toandorfrom='ended up in '+routetargetname
+				}
+				if (!routetargetname) {
+					var toandorfrom='who disembarked in '+routesourcename
+				}
+ 	  		} else {
+ 	  			
+ 	  			var toandorfrom='who disembarked in '+routesourcename+' ended up in '+routetargetname
+ 	  			
+ 	  		}
+ 	  		
+			var popuptext = [
+					r.weight,
+					pluralorsingular('Liberated African',r.weight),
+					toandorfrom
+					].join(" ")
+		
+ 	  	} else if (r.leg_type=='offramp') {
+			var popuptext = [
+				r.weight,
+				pluralorsingular('Liberated African',r.weight),
+				"transported to",
+				routetargetname
+				].join(" ")
+ 	  	} else if (r.leg_type=='onramp') { 	
+			var popuptext = [
+				r.weight,
+				pluralorsingular('Liberated African',r.weight),
+				"taken from",
+				routesourcename
+				].join(" ")
  	  	} else if (r.leg_type=='oceanic_leg'){
 			var popuptext = [r.weight,pluralorsingular('Liberated African',r.weight),"transported."].join(" ");
 		}
@@ -1602,12 +1633,22 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 					if (tmp_edge_dict[source_leaflet_id][target_leaflet_id]) {
 						tmp_edge_dict[source_leaflet_id][target_leaflet_id].weight+=edge.weight
 						tmp_edge_dict[source_leaflet_id][target_leaflet_id].ctrls.push(ctrl)
+						existing_st=tmp_edge_dict[source_leaflet_id][target_leaflet_id]['source_target']
+						
+						if (source_id!=existing_st[0]) {
+							tmp_edge_dict[source_leaflet_id][target_leaflet_id]['source_target']=[null,existing_st[1]]
+						}
+						
+						if (target_id!=existing_st[1]) {
+							tmp_edge_dict[source_leaflet_id][target_leaflet_id]['source_target']=[existing_st[0],null]
+						}
+						
 					} else {
-						tmp_edge_dict[source_leaflet_id][target_leaflet_id]={'weight':edge.weight,'source_latlng':source_coords,'target_latlng':target_coords,'ctrls':[ctrl],'leg_type':edge.leg_type}
+						tmp_edge_dict[source_leaflet_id][target_leaflet_id]={'weight':edge.weight,'source_latlng':source_coords,'target_latlng':target_coords,'ctrls':[ctrl],'leg_type':edge.leg_type,'source_target':st}
 					}
 				} else {
 					tmp_edge_dict[source_leaflet_id]={}
-					tmp_edge_dict[source_leaflet_id][target_leaflet_id]={'weight':edge.weight,'source_latlng':source_coords,'target_latlng':target_coords,'ctrls':[ctrl],'leg_type':edge.leg_type}
+					tmp_edge_dict[source_leaflet_id][target_leaflet_id]={'weight':edge.weight,'source_latlng':source_coords,'target_latlng':target_coords,'ctrls':[ctrl],'leg_type':edge.leg_type,'source_target':st}
 				}
 		})
 		
