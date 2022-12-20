@@ -1101,18 +1101,22 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 			regionorplace="place";
 			update_oceanic_edges();
 			ports_origins_layer_group.addTo(AO_map);
+			ports_dest_layer_group.addTo(AO_map);
 			ports_embdisemb_layer_group.addTo(AO_map);
 			ports_distributed_languages_layer_group.addTo(AO_map)
 			regions_origins_layer_group.removeFrom(AO_map);
+			regions_dest_layer_group.removeFrom(AO_map);
 			regions_embdisemb_layer_group.removeFrom(AO_map);
 			regions_distributed_languages_layer_group.removeFrom(AO_map);
 		} else {
 			regionorplace="region";
 			update_oceanic_edges();
 			regions_origins_layer_group.addTo(AO_map);
+			regions_dest_layer_group.addTo(AO_map);
 			regions_embdisemb_layer_group.addTo(AO_map);
 			regions_distributed_languages_layer_group.addTo(AO_map);
 			ports_origins_layer_group.removeFrom(AO_map);
+			ports_dest_layer_group.removeFrom(AO_map);
 			ports_embdisemb_layer_group.removeFrom(AO_map);
 			ports_distributed_languages_layer_group.removeFrom(AO_map);
 		}
@@ -1573,9 +1577,9 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 				var source_latlng=source._layers[Object.keys(source._layers)[0]].feature.geometry.coordinates
 				var source_coords={'lat':source_latlng[1],'lng':source_latlng[0]}
 				if (regionorplace=='region') {
-					var lg=regions_origins_layer_group
+					var lg=regions_dest_layer_group
 				} else {
-					var lg=ports_origins_layer_group
+					var lg=ports_dest_layer_group
 				}
 				var vp=lg.getVisibleParent(target._layers[Object.keys(target._layers)[0]])
 				if (vp) {
