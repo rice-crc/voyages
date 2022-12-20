@@ -1101,32 +1101,36 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 			regionorplace="place";
 			update_oceanic_edges();
 			ports_origins_layer_group.addTo(AO_map);
+			ports_dest_layer_group.addTo(AO_map);
 			ports_embdisemb_layer_group.addTo(AO_map);
 			ports_distributed_languages_layer_group.addTo(AO_map)
 			regions_origins_layer_group.removeFrom(AO_map);
+			regions_dest_layer_group.removeFrom(AO_map);
 			regions_embdisemb_layer_group.removeFrom(AO_map);
 			regions_distributed_languages_layer_group.removeFrom(AO_map);
 		} else {
 			regionorplace="region";
 			update_oceanic_edges();
 			regions_origins_layer_group.addTo(AO_map);
+			regions_dest_layer_group.addTo(AO_map);
 			regions_embdisemb_layer_group.addTo(AO_map);
 			regions_distributed_languages_layer_group.addTo(AO_map);
 			ports_origins_layer_group.removeFrom(AO_map);
+			ports_dest_layer_group.removeFrom(AO_map);
 			ports_embdisemb_layer_group.removeFrom(AO_map);
 			ports_distributed_languages_layer_group.removeFrom(AO_map);
 		}
 		
-		var maxanimationzoom=12
+		var maxanimationzoom=7
 		
 		if (currentzoom > maxanimationzoom && animation_active) {
 			toggle_animation()
-			animationtoggledbyzoom=true
+// 			animationtoggledbyzoom=true
 		}
 		
-		if (currentzoom <= maxanimationzoom && animationtoggledbyzoom) {
+		if (currentzoom <= maxanimationzoom && !animation_active) {
 			toggle_animation()
-			animationtoggledbyzoom=false
+// 			animationtoggledbyzoom=false
 		}
 		
 	}).on('zoomstart', function(a) {
@@ -1150,9 +1154,8 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 	//B. Tile Layers
 	
 	var mappingSpecialists=L.tileLayer(
-	  'https://api.mapbox.com/styles/v1/jcm10/clbmdqh2q000114o328k5yjpf/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoiamNtMTAiLCJhIjoiY2wyOTcyNjJsMGY5dTNwbjdscnljcGd0byJ9.kZvEfo7ywl2yLbztc_SSjw',
-	  {attribution: '<a href="https://www.mappingspecialists.com/" target="blank">Mapping Specialists, Ltd.</a>'});
-	
+		'https://api.mapbox.com/styles/v1/jcm10/clbmdqh2q000114o328k5yjpf/tiles/{z}/{x}/{y}?access_token='+mbaccesstoken,
+		{attribution: '<a href="https://www.mappingspecialists.com/" target="blank">Mapping Specialists, Ltd.</a>'});
 	var origin_nodelogvaluescale=new Object;
 	var embark_disembark_nodelogvaluescale=new Object;
 	var hiddenedgesvaluescale=new Object;
@@ -1162,9 +1165,9 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 	oceanic_edges_holding_layer_group.addTo(AO_map);
 	
 	var mappingSpecialistsRivers=L.tileLayer(
-	  'https://api.mapbox.com/styles/v1/jcm10/cl98xvv9r001z14mm17w970no/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoiamNtMTAiLCJhIjoiY2wyOTcyNjJsMGY5dTNwbjdscnljcGd0byJ9.kZvEfo7ywl2yLbztc_SSjw');
+	  'https://api.mapbox.com/styles/v1/jcm10/cl98xvv9r001z14mm17w970no/tiles/{z}/{x}/{y}?access_token='+mbaccesstoken)
 	var mappingSpecialistsCountries=L.tileLayer(
-	  'https://api.mapbox.com/styles/v1/jcm10/cl98yryw3003t14o66r6fx4m9/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoiamNtMTAiLCJhIjoiY2wyOTcyNjJsMGY5dTNwbjdscnljcGd0byJ9.kZvEfo7ywl2yLbztc_SSjw')
+	  'https://api.mapbox.com/styles/v1/jcm10/cl98yryw3003t14o66r6fx4m9/tiles/{z}/{x}/{y}?access_token='+mbaccesstoken)
 	var featurelayers = {
 		"Rivers":mappingSpecialistsRivers,
 		"Modern Countries":mappingSpecialistsCountries,
@@ -1185,6 +1188,9 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 	//C1b. Final destinations -- single layer group
 	
 	var ports_dest_layer_group = make_cluster_layer_groups('final_destination');
+	
+	var regions_dest_layer_group = make_cluster_layer_groups('final_destination');
+
 
 	//D. Non-clustered points groups
 	
@@ -1230,51 +1236,81 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 
 	// A. FACTORIES
 
-		//ROUTE TOOLTIPS
 	  function makeRouteToolTip(r,networkname) {
  	  	
- 	  	if (['origin','final_destination'].includes(r.leg_type)) {
- 	  		try {
+ 	  	var source_id=r.source_target[0]
+		if (nodesdict[networkname][source_id]){
+			var routesource=nodesdict[networkname][source_id]._layers
+			var routesourcename=routesource[Object.keys(routesource)[0]].feature.properties.name
+		}
+		var target_id=r.source_target[1]
+		if (nodesdict[networkname][target_id]){
+			var routetarget=nodesdict[networkname][target_id]._layers
+			var routetargetname=routetarget[Object.keys(routetarget)[0]].feature.properties.name
+		}
+		
+		
+ 	  	if (r.leg_type=='origin') { 	  		
+ 	  		
+ 	  		var toandorfrom=''
+ 	  		
+ 	  		if (!routesourcename|!routetargetname){
+				if (!routesourcename) {
+					var toandorfrom='taken to '+routetargetname
+				}
+				if (!routetargetname) {
+					var toandorfrom='with '+routesourcename+' origins'
+				}
+ 	  		} else {
  	  			
-				var popuptext = [
-					r.weight,
-					pluralorsingular('Liberated African',r.weight)
-					].join(" ")
- 	  		} catch(error) {
-				console.log("BAD SOURCE OR TARGET NODE-->",r);
-				var st=r.source_target;
-				var popuptext=["bad source or target node. source: ",st[0],". target: ",st[1]].join('')
-			}
- 	  	} else if (r.leg_type=='offramp') {
-			var routetarget=nodesdict[networkname][r.source_target[1]]._layers
-			routetarget=routetarget[Object.keys(routetarget)[0]].feature.properties
-			try {
-				var popuptext = [
-					r.weight,
-					pluralorsingular('Liberated African',r.weight),
-					"transported to",
-					routetarget.name
-					].join(" ")
-			} catch (error) {
-				console.log("BAD TARGET NODE-->",r);
-				var st=r.source_target;
-				var popuptext=["bad target node: ",st[1]].join('')
-			}
- 	  	} else if (r.leg_type=='onramp') { 	
-			var routesource=nodesdict[networkname][r.source_target[0]]._layers
-			routesource=routesource[Object.keys(routesource)[0]].feature.properties
- 	  		try {
-				var popuptext = [
-					r.weight,
-					pluralorsingular('Liberated African',r.weight),
-					"taken from",
-					routesource.name
-					].join(" ")
- 	  		} catch(error) {
-				console.log("BAD SOURCE NODE-->",r);
-				var st=r.source_target;
-				var popuptext=["bad source node: ",st[0]].join('')
+ 	  			var toandorfrom='with '+routesourcename+' origins taken to '+routetargetname
+ 	  			
  	  		}
+ 	  		
+			var popuptext = [
+					r.weight,
+					pluralorsingular('Liberated African',r.weight),
+					toandorfrom
+					].join(" ")
+		
+		
+		} else if (r.leg_type=='final_destination') {
+		
+			var toandorfrom=''
+ 	  		
+ 	  		if (!routesourcename|!routetargetname){
+				if (!routesourcename) {
+					var toandorfrom='ended up in '+routetargetname
+				}
+				if (!routetargetname) {
+					var toandorfrom='who disembarked in '+routesourcename
+				}
+ 	  		} else {
+ 	  			
+ 	  			var toandorfrom='who disembarked in '+routesourcename+' ended up in '+routetargetname
+ 	  			
+ 	  		}
+ 	  		
+			var popuptext = [
+					r.weight,
+					pluralorsingular('Liberated African',r.weight),
+					toandorfrom
+					].join(" ")
+		
+ 	  	} else if (r.leg_type=='offramp') {
+			var popuptext = [
+				r.weight,
+				pluralorsingular('Liberated African',r.weight),
+				"transported to",
+				routetargetname
+				].join(" ")
+ 	  	} else if (r.leg_type=='onramp') { 	
+			var popuptext = [
+				r.weight,
+				pluralorsingular('Liberated African',r.weight),
+				"taken from",
+				routesourcename
+				].join(" ")
  	  	} else if (r.leg_type=='oceanic_leg'){
 			var popuptext = [r.weight,pluralorsingular('Liberated African',r.weight),"transported."].join(" ");
 		}
@@ -1288,6 +1324,7 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 			{
 				zoomToBoundsOnClick: false,
 				showCoverageOnHover: false,
+				spiderfyOnMaxZoom: false,
 				iconCreateFunction: function (cluster) {
 				var markers = cluster.getAllChildMarkers();
 				var n = 1;
@@ -1451,7 +1488,7 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 									"origins.*<br/><i>*Note: this marker stands in for a language<br/>with wide geographic distribution, now visible.</i>"
 								].join(" ")
 								
-								marker.bindTooltip(popuptext,{'sticky':true}).openTooltip();
+								marker.bindTooltip(popuptext,{'sticky':false}).openTooltip();
 								
 								var hidethis={"region":regions_origins_layer_group,"place":ports_origins_layer_group}[regionorplace]	
 								hidethis.remove()
@@ -1570,9 +1607,9 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 				var source_latlng=source._layers[Object.keys(source._layers)[0]].feature.geometry.coordinates
 				var source_coords={'lat':source_latlng[1],'lng':source_latlng[0]}
 				if (regionorplace=='region') {
-					var lg=regions_origins_layer_group
+					var lg=regions_dest_layer_group
 				} else {
-					var lg=ports_origins_layer_group
+					var lg=ports_dest_layer_group
 				}
 				var vp=lg.getVisibleParent(target._layers[Object.keys(target._layers)[0]])
 				if (vp) {
@@ -1595,12 +1632,22 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 					if (tmp_edge_dict[source_leaflet_id][target_leaflet_id]) {
 						tmp_edge_dict[source_leaflet_id][target_leaflet_id].weight+=edge.weight
 						tmp_edge_dict[source_leaflet_id][target_leaflet_id].ctrls.push(ctrl)
+						existing_st=tmp_edge_dict[source_leaflet_id][target_leaflet_id]['source_target']
+						
+						if (source_id!=existing_st[0]) {
+							tmp_edge_dict[source_leaflet_id][target_leaflet_id]['source_target']=[null,existing_st[1]]
+						}
+						
+						if (target_id!=existing_st[1]) {
+							tmp_edge_dict[source_leaflet_id][target_leaflet_id]['source_target']=[existing_st[0],null]
+						}
+						
 					} else {
-						tmp_edge_dict[source_leaflet_id][target_leaflet_id]={'weight':edge.weight,'source_latlng':source_coords,'target_latlng':target_coords,'ctrls':[ctrl],'leg_type':edge.leg_type}
+						tmp_edge_dict[source_leaflet_id][target_leaflet_id]={'weight':edge.weight,'source_latlng':source_coords,'target_latlng':target_coords,'ctrls':[ctrl],'leg_type':edge.leg_type,'source_target':st}
 					}
 				} else {
 					tmp_edge_dict[source_leaflet_id]={}
-					tmp_edge_dict[source_leaflet_id][target_leaflet_id]={'weight':edge.weight,'source_latlng':source_coords,'target_latlng':target_coords,'ctrls':[ctrl],'leg_type':edge.leg_type}
+					tmp_edge_dict[source_leaflet_id][target_leaflet_id]={'weight':edge.weight,'source_latlng':source_coords,'target_latlng':target_coords,'ctrls':[ctrl],'leg_type':edge.leg_type,'source_target':st}
 				}
 		})
 		
@@ -1648,12 +1695,12 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 				st=edge.source_target;
 				source_id=st[0];
 				target_id=st[1];
-				var lg= new Object;
-				if (regionorplace=='region') {
-					var lg=regions_origins_layer_group
-				} else {
-					var lg=ports_origins_layer_group
-				}
+// 				var lg= new Object;
+// 				if (regionorplace=='region') {
+// 					var lg=regions_origins_layer_group
+// 				} else {
+// 					var lg=ports_origins_layer_group
+// 				}
 				var source=nodesdict[networkname][source_id]
 				var target=nodesdict[networkname][target_id]
 				if (source&&target){
@@ -1785,7 +1832,7 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 			'origins_layer_group':regions_origins_layer_group,
 			'distributed_languages_layer_group':regions_distributed_languages_layer_group,
 			'embark_disembark_layers_group':regions_embdisemb_layer_group,
-			'dest_layer_group':ports_dest_layer_group,
+			'dest_layer_group':regions_dest_layer_group,
 			
 		}
 	};
@@ -1915,7 +1962,8 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 				var divclass="animationtoggle_inactive"
 			}
 			var div = L.DomUtil.create("div", divclass);
-			div.innerHTML += '<a href="javascript:void(0)" id="animationtogglebutton">Animation '+isactivetext+'</a>';
+// 			div.innerHTML += '<a href="javascript:void(0)" id="animationtogglebutton">Animation '+isactivetext+'</a>';
+			div.innerHTML += 'Animation '+isactivetext;
 			return div
 		};
 	
@@ -1946,7 +1994,7 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 			drawUpdateCount(AO_map,total_results_count);
 			drawLegend(AO_map);
 			animationtoggle_div.addTo(AO_map);
-			$('#animationtogglebutton').click(function(e) {toggle_animation()});
+// 			$('#animationtogglebutton').click(function(e) {toggle_animation()});
 			initial_map_builder(d);
 			AO_map.invalidateSize();
 			maximizeMapHeight();

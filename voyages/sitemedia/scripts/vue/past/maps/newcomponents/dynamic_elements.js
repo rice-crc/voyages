@@ -97,7 +97,14 @@ function makeNodePopUp(feature,nodesdict,edgesdict) {
 	//a node can have multiple classes (mostly this is for sierra leone)
 	Object.entries(node_classes).forEach(([k,v]) => popupsubheads.push(formatNodePopUpListItem (k,v)));
 	if (!popupsubheads.includes(false)){
-		var popupcontent=popupsubheads.join(' and ') + " in " + node_title;
+		if (popupsubheads.length>2) {
+			
+			popupcontent=popupsubheads.slice(0,-1).join(", ")
+			popupcontent+=", and " + popupsubheads.slice(-1) + " in " + node_title;
+			
+		} else {
+			var popupcontent=popupsubheads.join(' and ') + " in " + node_title;
+		}
 	} else {
 		if (node_classes['origin']){
 			var count=node_classes['origin']['count'];
