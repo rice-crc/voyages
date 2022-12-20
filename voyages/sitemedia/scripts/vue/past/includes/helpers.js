@@ -1154,9 +1154,8 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 	//B. Tile Layers
 	
 	var mappingSpecialists=L.tileLayer(
-	  'https://api.mapbox.com/styles/v1/jcm10/clbmdqh2q000114o328k5yjpf/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoiamNtMTAiLCJhIjoiY2wyOTcyNjJsMGY5dTNwbjdscnljcGd0byJ9.kZvEfo7ywl2yLbztc_SSjw',
-	  {attribution: '<a href="https://www.mappingspecialists.com/" target="blank">Mapping Specialists, Ltd.</a>'});
-	
+		'https://api.mapbox.com/styles/v1/jcm10/clbmdqh2q000114o328k5yjpf/tiles/{z}/{x}/{y}?access_token='+mbaccesstoken,
+		{attribution: '<a href="https://www.mappingspecialists.com/" target="blank">Mapping Specialists, Ltd.</a>'});
 	var origin_nodelogvaluescale=new Object;
 	var embark_disembark_nodelogvaluescale=new Object;
 	var hiddenedgesvaluescale=new Object;
@@ -1166,9 +1165,9 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 	oceanic_edges_holding_layer_group.addTo(AO_map);
 	
 	var mappingSpecialistsRivers=L.tileLayer(
-	  'https://api.mapbox.com/styles/v1/jcm10/cl98xvv9r001z14mm17w970no/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoiamNtMTAiLCJhIjoiY2wyOTcyNjJsMGY5dTNwbjdscnljcGd0byJ9.kZvEfo7ywl2yLbztc_SSjw');
+	  'https://api.mapbox.com/styles/v1/jcm10/cl98xvv9r001z14mm17w970no/tiles/{z}/{x}/{y}?access_token='+mbaccesstoken)
 	var mappingSpecialistsCountries=L.tileLayer(
-	  'https://api.mapbox.com/styles/v1/jcm10/cl98yryw3003t14o66r6fx4m9/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoiamNtMTAiLCJhIjoiY2wyOTcyNjJsMGY5dTNwbjdscnljcGd0byJ9.kZvEfo7ywl2yLbztc_SSjw')
+	  'https://api.mapbox.com/styles/v1/jcm10/cl98yryw3003t14o66r6fx4m9/tiles/{z}/{x}/{y}?access_token='+mbaccesstoken)
 	var featurelayers = {
 		"Rivers":mappingSpecialistsRivers,
 		"Modern Countries":mappingSpecialistsCountries,
