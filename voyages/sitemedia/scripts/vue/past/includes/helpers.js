@@ -1236,7 +1236,6 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 
 	// A. FACTORIES
 
-		//ROUTE TOOLTIPS
 	  function makeRouteToolTip(r,networkname) {
  	  	
  	  	var source_id=r.source_target[0]
@@ -1325,6 +1324,7 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 			{
 				zoomToBoundsOnClick: false,
 				showCoverageOnHover: false,
+				spiderfyOnMaxZoom: false,
 				iconCreateFunction: function (cluster) {
 				var markers = cluster.getAllChildMarkers();
 				var n = 1;
