@@ -1185,6 +1185,9 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 	//C1b. Final destinations -- single layer group
 	
 	var ports_dest_layer_group = make_cluster_layer_groups('final_destination');
+	
+	var regions_dest_layer_group = make_cluster_layer_groups('final_destination');
+
 
 	//D. Non-clustered points groups
 	
@@ -1648,12 +1651,12 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 				st=edge.source_target;
 				source_id=st[0];
 				target_id=st[1];
-				var lg= new Object;
-				if (regionorplace=='region') {
-					var lg=regions_origins_layer_group
-				} else {
-					var lg=ports_origins_layer_group
-				}
+// 				var lg= new Object;
+// 				if (regionorplace=='region') {
+// 					var lg=regions_origins_layer_group
+// 				} else {
+// 					var lg=ports_origins_layer_group
+// 				}
 				var source=nodesdict[networkname][source_id]
 				var target=nodesdict[networkname][target_id]
 				if (source&&target){
@@ -1785,7 +1788,7 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 			'origins_layer_group':regions_origins_layer_group,
 			'distributed_languages_layer_group':regions_distributed_languages_layer_group,
 			'embark_disembark_layers_group':regions_embdisemb_layer_group,
-			'dest_layer_group':ports_dest_layer_group,
+			'dest_layer_group':regions_dest_layer_group,
 			
 		}
 	};
