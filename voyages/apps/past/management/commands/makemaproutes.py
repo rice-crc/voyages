@@ -21,7 +21,8 @@ class Command(BaseCommand):
 # 		for dataset in ['place']:
 			distributedlanguagegroups[dataset]={}
 			print("--------",dataset,"----------")
-			base_path='voyages/apps/past/static/'
+# 			base_path='voyages/apps/past/static/'
+			base_path=os.path.join(STATIC_ROOT,'pastmaps/')
 			print('making a directed network graph of the oceanic waypoints from ao_individuals_map.py')
 		
 			#1. oceanic network
@@ -360,7 +361,16 @@ class Command(BaseCommand):
 						disembark_id,post_disembark_id=vi[1:3]
 						if G.has_node(disembark_id) and G.has_node(post_disembark_id):
 # 							print(disembark_id,"-->",post_disembark_id)
-							G.add_edge(disembark_id,post_disembark_id,id=e,curve=False,tag="final_destination")
+							s_lat,s_lng=G.nodes[disembark_id]['coords']
+							t_lat,t_lng=G.nodes[post_disembark_id]['coords']
+							
+							distance=geteuclideandistance(s_lat,s_lng,t_lat,t_lng)
+							if distance > threshold_for_straight:
+								this_curve=True
+							if distance < threshold_for_straight:
+								this_curve=False
+
+							G.add_edge(disembark_id,post_disembark_id,id=e,distance=distance,curve=this_curve,tag="final_destination")
 							e+=1
 						
 			##AND FINALLY, WE HAVE TO CREATE SELF-LOOPS FOR EVERY NODE, OR THE ROUTING GETS WONKY
@@ -654,11 +664,9 @@ class Command(BaseCommand):
 			d=open(base_path+dataset+'_routes_points.json','w')
 			d.write(json.dumps(geo_points))
 			d.close()
-			
-# 			STATICFILES_DIRS,STATIC_ROOT
-		for dest in [i for i in STATICFILES_DIRS] + [STATIC_ROOT]:
-			d=open(os.path.join(dest,'scripts/vue/past/maps/','dist_lang_groups.js'),'w')
-			d.write("var distributedlanguagegroups="+json.dumps(distributedlanguagegroups))
-			d.close()
+		
+		d=open(base_path+dataset+'dist_lang_groups.js','w')
+		d.write("var distributedlanguagegroups="+json.dumps(distributedlanguagegroups))
+		d.close()
 							
 			
