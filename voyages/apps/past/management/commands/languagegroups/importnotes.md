@@ -18,5 +18,12 @@ the language groups were all changed by hand and so the data is going to have to
 
 ## the below fix two bad countries after the fact
 
-	update past_moderncountry set name="Other" where id=9999
-	update past_moderncountry_languages set moderncountry_id=GAMBIA_I_THINK????? where moderncountry_id=6087
+	update past_moderncountry set name="Other" where id=9999;
+	update past_moderncountry_languages set moderncountry_id=6021 where moderncountry_id=6087;
+	
+	
+
+
+ascension island
+mccarthy island
+charlotte
