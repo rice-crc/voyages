@@ -30,6 +30,8 @@ from .models import (AltLanguageGroupName, Enslaved,
 from voyages.apps.voyage.models import Place,Region
 from collections import Counter
 
+
+
 ENSLAVED_DATASETS = ['african-origins', 'oceans-of-kinfolk']
 
 def _generate_table(query, table_params, data_adapter=None):
@@ -192,37 +194,41 @@ region_vals_to_port_ids={}
 
 def refresh_maps_cache(request):
     try:
-        d=open("voyages/static/pastmaps/place_routes_points.json","r")
+        from voyages.localsettings import STATIC_ROOT
+        import os
+        d=open(os.path.join(STATIC_ROOT,"pastmaps/place_routes_points.json"),"r")
         t=d.read()
         j=json.loads(t)
         global place_routes_points
         place_routes_points={int(i):j[i] for i in j}
         d.close()
-        
-        d=open("voyages/static/pastmaps/region_routes_points.json","r")
+    
+        d=open(os.path.join(STATIC_ROOT,"pastmaps/region_routes_points.json"),"r")
         t=d.read()
         j=json.loads(t)
         global region_routes_points
         region_routes_points={int(i):j[i] for i in j}
         d.close()
-        
-        d=open("voyages/static/pastmaps/place_edge_ids.json","r")
+    
+        d=open(os.path.join(STATIC_ROOT,"pastmaps/place_edge_ids.json"),"r")
         t=d.read()
         j=json.loads(t)
         global place_edge_ids
         place_edge_ids={int(i):j[i] for i in j}
         d.close()
-        
-        d=open("voyages/static/pastmaps/region_edge_ids.json","r")
+    
+        d=open(os.path.join(STATIC_ROOT,"pastmaps/region_edge_ids.json"),"r")
         t=d.read()
         j=json.loads(t)
         global region_edge_ids
         region_edge_ids={int(i):j[i] for i in j}
         d.close()
-        
-        from voyages.static.pastmaps.place_routes_curves import place_route_curves as prc
-        from voyages.static.pastmaps.region_routes_curves import region_route_curves as rrc
-        from voyages.static.pastmaps.region_vals_to_port_ids import region_vals_to_port_ids as rvpi
+    
+        import sys
+        sys.path.insert(1,os.path.join(STATIC_ROOT,"pastmaps/"))
+        from place_routes_curves import place_route_curves as prc
+        from region_routes_curves import region_route_curves as rrc
+        from region_vals_to_port_ids import region_vals_to_port_ids as rvpi
         global place_route_curves
         place_route_curves=prc
         global region_route_curves
