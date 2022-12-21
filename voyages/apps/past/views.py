@@ -261,12 +261,6 @@ def search_enslaved(request):
             'post_disembark_location__value',
             'post_disembark_location__region__value'
         ]
-#         fields = [
-#             'language_group__moderncountry__id',
-#             'voyage__voyage_itinerary__imp_principal_region_of_slave_purchase__value',
-#             'voyage__voyage_itinerary__imp_principal_region_slave_dis__value',
-#             'post_disembark_location__value'
-#         ]
 
     if fields is None:
         fields = [
@@ -368,10 +362,6 @@ def search_enslaved(request):
             final_location_counts=dict(Counter(i[3] for i in itineraries))
             language_group_ids_offset=1000000
         
-#             for itinerary in itineraries:
-#                 if itinerary[1]==60200 and itinerary[0] is not None:
-#                     print(itinerary)
-#         
             points_dict={
                 p_id:{
                     'name':routes_points[p_id][1],
