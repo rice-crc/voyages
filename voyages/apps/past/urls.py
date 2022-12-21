@@ -25,6 +25,9 @@ urlpatterns = [
     url(r'^enslavement_relation/(?P<relation_pk>[\w\-]+)$',
         voyages.apps.past.views.get_enslavement_relation_info,
         name='enslavement_relation'),
+    url(r'refresh_maps_cache',
+        voyages.apps.past.views.refresh_maps_cache
+        ),
     url(r'^enslavers_contribute/new$',
         voyages.apps.past.views.enslaver_contrib_new,
         name='enslaver_contribute_new'),

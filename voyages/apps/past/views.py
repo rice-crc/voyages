@@ -13,7 +13,7 @@ from django.db import transaction
 from django.db.models import F
 from django.http import JsonResponse, Http404
 from django.http.response import HttpResponseBadRequest
-from django.shortcuts import HttpResponseRedirect, get_object_or_404, redirect, render
+from django.shortcuts import HttpResponseRedirect, get_object_or_404, redirect, render,HttpResponse
 from django.views.decorators.cache import cache_page
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
@@ -181,37 +181,63 @@ _voyage_related_fields_default = [
 ]
 
 
-try:
-    d=open("voyages/apps/past/static/place_routes_points.json","r")
-    t=d.read()
-    j=json.loads(t)
-    place_routes_points={int(i):j[i] for i in j}
-    d.close()
-    
-    d=open("voyages/apps/past/static/region_routes_points.json","r")
-    t=d.read()
-    j=json.loads(t)
-    region_routes_points={int(i):j[i] for i in j}
-    d.close()
-    
-    d=open("voyages/apps/past/static/place_edge_ids.json","r")
-    t=d.read()
-    j=json.loads(t)
-    place_edge_ids={int(i):j[i] for i in j}
-    d.close()
-    
-    d=open("voyages/apps/past/static/region_edge_ids.json","r")
-    t=d.read()
-    j=json.loads(t)
-    region_edge_ids={int(i):j[i] for i in j}
-    d.close()
-    
-    from voyages.apps.past.static.place_routes_curves import *
-    from voyages.apps.past.static.region_routes_curves import *
-    from voyages.apps.past.static.region_vals_to_port_ids import *
-except:
-    print("------>  warning. missing essential mapping static files. individual enslaved itinerary maps will not run")
 
+place_routes_points={}
+region_routes_points={}
+place_edge_ids={}
+region_edge_ids={}
+place_route_curves={}
+region_route_curves={}
+region_vals_to_port_ids={}
+
+def refresh_maps_cache(request):
+    try:
+        d=open("voyages/static/pastmaps/place_routes_points.json","r")
+        t=d.read()
+        j=json.loads(t)
+        global place_routes_points
+        place_routes_points={int(i):j[i] for i in j}
+        d.close()
+        
+        d=open("voyages/static/pastmaps/region_routes_points.json","r")
+        t=d.read()
+        j=json.loads(t)
+        global region_routes_points
+        region_routes_points={int(i):j[i] for i in j}
+        d.close()
+        
+        d=open("voyages/static/pastmaps/place_edge_ids.json","r")
+        t=d.read()
+        j=json.loads(t)
+        global place_edge_ids
+        place_edge_ids={int(i):j[i] for i in j}
+        d.close()
+        
+        d=open("voyages/static/pastmaps/region_edge_ids.json","r")
+        t=d.read()
+        j=json.loads(t)
+        global region_edge_ids
+        region_edge_ids={int(i):j[i] for i in j}
+        d.close()
+        
+        from voyages.static.pastmaps.place_routes_curves import place_route_curves as prc
+        from voyages.static.pastmaps.region_routes_curves import region_route_curves as rrc
+        from voyages.static.pastmaps.region_vals_to_port_ids import region_vals_to_port_ids as rvpi
+        global place_route_curves
+        place_route_curves=prc
+        global region_route_curves
+        region_route_curves=rrc
+        global region_vals_to_port_ids
+        region_vals_to_port_ids=rvpi
+        msg="successfully loaded maps cache data"
+    except:
+        msg="------>  warning. missing essential mapping static files. individual enslaved itinerary maps will not run"
+    
+    print(msg)
+    return HttpResponse("<html><body>"+msg+"</body></html>")
+
+
+refresh_maps_cache(None)
 
 @require_POST
 @csrf_exempt
