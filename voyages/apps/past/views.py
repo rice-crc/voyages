@@ -432,13 +432,6 @@ def search_enslaved(request):
                             "point_id":point_id,
                             "hidden_edges":points_dict[point_id]['hidden_edges']
                         }
-#                         
-#                     if point_id==60200:
-#                         slhe=hidden_edges
-#                         print(hidden_edges)
-#                         
-#                         print(feature_properties)
-                
                 if addfeature:
                 
                     feature={
@@ -455,39 +448,12 @@ def search_enslaved(request):
                 "type": "FeatureCollection",
                 "features": featurecollection
             }
-#             print("point map time:",time.time()-st)
-    
             itinerary_names=["-".join([str(i) for i in itinerary]) for itinerary in itineraries]
-#             for i in itinerary_names:
-#                 if not i.startswith("None"):
-#                     print(i)
-#             print("----------------")
             itinerary_names=[i for i in itinerary_names if i in route_curves]
-#             for i in itinerary_names:
-#                 if not i.startswith("None"):
-#                     print(i)
-#             print(time.time()-st)
-#             print([(l,i) for i in itinerary_names for l in route_curves[i] if '60213' in i or '31399' in i])
-#             print("ITINERARY NAMES",itinerary_names)
             leg_weights=Counter([l for i in itinerary_names for l in route_curves[i]])
-#             print(leg_weights)
             itinerary_weights=Counter(itinerary_names).most_common()
             itinerary_weights.reverse()
-#             print([i for i in itinerary_weights if '60213' in i or '31399' in i])
-#             print("ITINERARY WEIGHTS",itinerary_weights)
-            #this trickery ensures that the heaviest route determines which leg's geometry gets used
-#SIERRA LEONE IS MISSING THE FOLLOWING EDGES FROM LEG DATA
-#DESPITE HAVING THEM IN ITS HIDDEN EDGES LIST
             leg_data={l:route_curves[i[0]][l] for i in itinerary_weights for l in route_curves[i[0]]}
-#             print(leg_data)
-#             print([leg_data[l] for l in slhe])
-#             print("LEG DATA",leg_data)
-#             print({i:leg_data[i] for i in leg_data if 60213 in leg_data[i][1]})
-#             for e in slhe:
-#                 if e not in leg_data:
-#                     print("---->",e)
-#                 else:
-#                     print(leg_data[e])
             result_routes=[
                 {
                     'geometry':leg_data[l][0],

@@ -107,11 +107,7 @@ class Command(BaseCommand):
 				id,latitude,longitude,name=languagegroup_node
 
 				##This is a complex problem. I'm going to get these past the filter here, then have hard-coded geojson polygons on the other end that I deal with some way or another....
-				if id in ["Arabic/Islamic","Islamic","Mandinka"]:
-# 					print(languagegroup_node)
-# 					6012, 6013, 6014, 6021, 6022, 6031, 6032, 6041, 6042, 6051, 6052, 6061, 6064, 6065, 6082
-# 					6012, 6013, 6014, 6021, 6022
-					
+				if name in ["Arabic/Islamic","Islamic","Mandinka"]:
 					dist_lg=language_groups.filter(id=id)
 					dist_lg_countries=dist_lg.values_list(
 						'moderncountry__id',
@@ -138,25 +134,10 @@ class Command(BaseCommand):
 					coords=None
 				else:
 					coords=[float(latitude),float(longitude)]
-# 				
-# 				if name in ["Arabic/Islamic","Islamic","Mandinka"]:
-# 					print(coords)
 				
 				if coords is not None:
 					individuals_with_valid_languagegroup+=1
-# 				if id in G.nodes:
-# 					G.nodes[id+language_group_ids_offset]['tags'].append('origin')
-# 				else:
 					G.add_node(id+language_group_ids_offset,coords=coords,name=name,tags=["origin"],pk=id)
-					
-					
-					
-					
-# 					if name in ["Arabic/Islamic","Islamic","Mandinka"]:
-# 						print(G.nodes[id+language_group_ids_offset])
-			
-			
-# 			print(distributedlanguagegroups)
 			
 			##2b. final destinations
 			african_origins_individuals.select_related('post_disembark_location')
