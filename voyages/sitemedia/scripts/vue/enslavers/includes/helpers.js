@@ -1056,6 +1056,8 @@ function formatRelations ( d ) {
   return relationsTable;
 }
 
+var mainDatatable = null;
+
 function refreshUi(filter, filterData, currentTab, tabData, options) {
   if (currentTab == "results") {
     var currentSearchObj = searchAll(filter, filterData);
@@ -1067,10 +1069,11 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
     // Results DataTable
     var pageLength = {
       extend: "pageLength",
-      className: "btn btn-info buttons-collection dropdown-toggle"
+      className: "btn btn-info buttons-collection dropdown-toggle",
+      text: (dt) => gettext("Show %d rows").replace("%d", dt.page.len())
     };
 
-    var mainDatatable = $("#results_main_table").DataTable({
+    mainDatatable = $("#results_main_table").DataTable({
       ajax: {
         url: SEARCH_URL,
         type: "POST",
@@ -1088,9 +1091,10 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
             }
 
             currentSearchObj.order_by = $.map(d.order, function(item) {
-              var columnIndex = mainDatatable
+              // TODO [colReorder disabled]
+              var columnIndex = /* mainDatatable
                 ? mainDatatable.colReorder.order()[item.column]
-                : item.column;
+                :*/ item.column;
               return {
                 columnName: allColumns[columnIndex].data,
                 direction: item.dir
@@ -1123,7 +1127,10 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 
       scrollX: true,
 
-      colReorder: true,
+      // TODO [colReorder disabled]: mainDatatable.colReorder.order() is
+      // throwing and the reason is not clear yet (maybe a bug in the library).
+      
+      //colReorder: true,
 
       order: [[4, "desc"]],
       destroy: true,
@@ -1137,15 +1144,16 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
         "<'row'<'col-sm-12'tr>>" +
         "<'row'<'col-sm-5'><'col-sm-7'p>>",
       lengthMenu: [
-        [15],
-        ["15 rows"]
+        [15, 50, 100, 200],
+        [gettext("15 rows"), gettext("50 rows"), gettext("100 rows"), gettext("200 rows")]
       ],
 
       language: dtLanguage,
 
       buttons: [
+        enslaversContributeMenu,
         columnToggleMenu,
-        //pageLength,
+        pageLength,
       ],
       //pagingType: "input",
       bFilter: false,
@@ -1157,7 +1165,8 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
       initComplete: function() {
         $('[data-toggle="tooltip"]').tooltip();
         initAudioActions();
-      },
+        updateContribState(JSON.parse(sessionStorage.getItem(contribStateStorageKey) || "{}"));
+      }
     });
 
     mainDatatable.on("column-reorder", function(e, settings, details) {

@@ -5,15 +5,21 @@
   <li class="nav-item">
     <a class="nav-link active" @click="setActive('results')" href="#results" data-toggle="tab" data-target="#results">{% trans 'Results' %}</a>
   </li>
+  <li class="nav-item" v-if="enslavedDataset==0">
+    <a class="nav-link" @click="setActive('maps')" href="#maps" data-toggle="tab" data-target="#maps">{% trans 'Maps' %}</a>
+  </li>
 </ul>
 <!-- End of Tabs -->
 
 <!-- TabContainers -->
-<div id="tabsJustifiedContent" class="tab-content">
-  <div id="results" class="tab-pane fade active show">
+<div id="tabsJustifiedContent" class="tab-content" height=500>
+  <div id="results" class="tab-pane active show" height=500>
     <table id="results_main_table" class="table table-striped table-bordered"></table>
 
 	{% include "database/_full_details_modal.html" %}
+  </div>
+  <div id="maps" class="tab-pane" v-if="enslavedDataset==0" height=500>
+    {% include "past/database/tabs/maps.html" %}
   </div>
 </div>
 <!-- End of TabContainers -->

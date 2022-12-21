@@ -49,8 +49,7 @@ urlpatterns = [
         name='restore_enslaved_permalink'),
     url(r'^enslaver/(?P<link_id>\w+)',
         voyages.apps.past.views.restore_enslaver_permalink,
-        name='restore_enslaver_permalink') \
-            if is_feature_enabled('ENSLAVERS') else None,
+        name='restore_enslaver_permalink'),
 
     # Include url handlers of each section
     url(r'^voyage/', include('voyages.apps.voyage.urls', namespace='voyage')),

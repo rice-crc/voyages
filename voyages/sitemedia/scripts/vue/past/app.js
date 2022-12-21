@@ -2,6 +2,15 @@ function resetPagination(datatable) {
   datatable.page('first').draw(false);
 }
 
+var selected_tab=location.toString().split("#");
+if (selected_tab.length>1) {
+	var currentTab = selected_tab[selected_tab.length-1]
+} else {
+	var currentTab = "results"
+};
+
+// console.log(location.toString().split("#"));
+
 // main app
 var searchBar = new Vue({
   el: "#search-bar",
@@ -65,7 +74,7 @@ var searchBar = new Vue({
     hasCurrentQuery: false,
     rowModalShow: false,
     enslavedDatasetModalShow: false,
-    currentTab: "results", // currently active tab
+    currentTab: currentTab,// currently active tab
     timelapse: {
       ui: {},
       options: {},
@@ -359,7 +368,9 @@ var searchBar = new Vue({
       this.currentTab = tab;
       if (location.href != location.origin + location.pathname + "#" + tab) {
         location.href = location.origin + location.pathname + "#" + tab;
-      }
+//         console.log(location)
+      };
+//       console.log(tab)
     },
 
     // update tab options
@@ -370,7 +381,7 @@ var searchBar = new Vue({
         currentObjState = currentObjState[levels[i]];
       }
       currentObjState.value = value;
-      var refreshTabs = ["tables", "visualization", "timeline"];
+      var refreshTabs = ["tables", "visualization", "timeline","maps"];
       if (refreshTabs.indexOf(this.currentTab) >= 0) {
         this.refresh();
       }
@@ -417,14 +428,23 @@ var searchBar = new Vue({
       // alert(JSON.stringify(searchTerms));
       // search(this.searchFilter, searchTerms);
       this.refresh();
-      resetPagination($("#results_main_table").DataTable());
+      //the below presupposes that the results_main_table element has a datatable element
+      //but outside of the results tab, it's just a placeholder element
+      //and so resetting the pagination fails
+      if (this.currentTab=='results'){
+		  resetPagination($("#results_main_table").DataTable());
+      }
     },
 
     // reset inputs, filters, and counts back to default state
     reset(group, subGroup) {
       resetFilter(this.filter, group, subGroup);
-      this.refresh();
-      resetPagination($("#results_main_table").DataTable());
+// unfortunately, the way the vue treeselects are being generated, they don't reset.
+// so we've got to force not a refresh item but a refresh page event.
+//       this.refresh();
+//       resetPagination($("#results_main_table").DataTable());
+      searchBar.refreshPage();
+
     },
 
     clearFilter(filter) {
@@ -436,7 +456,7 @@ var searchBar = new Vue({
             }
           }
         }
-      }
+      };
     },
 
     resetAll() {
@@ -678,8 +698,9 @@ var readURL = function() {
     var activeTab = url.substring(url.indexOf("#") + 1);
     var presetTabs = [
       "results",
+      "maps"
     ];
-
+    
     if (presetTabs.includes(activeTab)) {
       $('.nav-tabs a[href="#' + activeTab + '"]').tab("show"); // Activate a Bootstrap 4 tab
       searchBar.setActive(activeTab);
@@ -705,3 +726,31 @@ jQuery(document).on("shown.bs.tab", 'a[data-toggle="tab"]', function(e) {
     .columns.adjust()
     .responsive.recalc();
 });
+
+// for maps: passes map node clicks into filter
+function linkfilter(id,tag) {
+	
+	switch (tag) {
+		case 'embarkation':
+			var this_search_var = searchBar.filter.itinerary.itinerary.var_embarkation_ports;
+			break;
+		case 'disembarkation':
+			var this_search_var = searchBar.filter.itinerary.itinerary.var_disembarkation_ports;
+			break;
+		case 'post-disembarkation':
+			var this_search_var = searchBar.filter.fate.fate.var_post_disembark_location;
+			break;
+		default:
+			console.log(tag);
+	};
+	
+	if (!this_search_var.value.searchTerm.includes(id)) {
+		this_search_var.value.searchTerm.push(id);
+		this_search_var.activated = true;
+		this_search_var.changed = true;
+		searchBar.refresh();
+	} else {
+		console.log('you already selected this filter!')
+	}
+	
+};

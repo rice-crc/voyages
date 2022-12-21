@@ -162,7 +162,10 @@
   height: 100%;
   z-index: 100;
   width:100%;
-  background: rgba(0,0,0,0.05) url('../images/site/rudder.gif') no-repeat center center;
+  background: rgba(0,0,0,0.05) url('../images/site/sv-logo_v2_notext.svg') no-repeat center center;
+  background-position-x: center;
+  background-position-y:center;
+  background-size:25%;
 }
 
 .vdp-datepicker {

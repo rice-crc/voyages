@@ -284,7 +284,7 @@ function activateFilter(filter, group, subGroup, filterValues) {
 // reset filter
 function resetFilter(filter, group, subGroup) {
   for (key in filter[group][subGroup]) {
-    if (key !== "count") {
+    if (key !== "count") {	
       if (filter[group][subGroup][key].value["searchTerm0"] === undefined) {
         // has only one search term
         filter[group][subGroup][key].value["searchTerm"] =
@@ -403,7 +403,7 @@ function searchAll(filter, filterData) {
                       var sortedSelections = filter[key1][key2][key3].value["searchTerm"].sort(sortNumber);
                       var searchTerm = [];
 
-                      console.log(sortedSelections);
+//                       console.log(sortedSelections);
                       if (sortedSelections.includes("0")) {
                         // select all
                         filterData.treeselectOptions[varName][0].children.forEach(
@@ -1041,15 +1041,15 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
         "<'row'<'col-sm-12'tr>>" +
         "<'row'<'col-sm-5'><'col-sm-7'p>>",
       lengthMenu: [
-        [15],
-        ["15 rows"]
+        [15, 50, 100, 200],
+        [gettext("15 rows"), gettext("50 rows"), gettext("100 rows"), gettext("200 rows")]
       ],
-
+      
       language: dtLanguage,
 
       buttons: [
         columnToggleMenu,
-        //pageLength,
+        pageLength,
       ],
       //pagingType: "input",
       bFilter: false,
@@ -1080,7 +1080,911 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
       $('[data-toggle="tooltip"]').tooltip();
       initAudioActions();
     });
-  }
+  } else if (currentTab == "maps") {
+
+
+// I. MAP AND DOM GLOBALS
+
+	//A. Search & DOM
+	var currentSearchObj = searchAll(filter, filterData);
+	$("#map_container").html('<div id="AO_map" style="width:100%; height:100%; min-height:400px"></div>');
+
+	var AO_map = L.map('AO_map', {
+		fullscreenControl: false,
+		center:[0,0],
+		zoom:3.2,
+		minZoom:2,
+		maxZoom:18
+	}).on('zoomend', function() {
+		var currentzoom=AO_map.getZoom()
+		if (currentzoom>4){
+			regionorplace="place";
+			update_oceanic_edges();
+			ports_origins_layer_group.addTo(AO_map);
+			ports_dest_layer_group.addTo(AO_map);
+			ports_embdisemb_layer_group.addTo(AO_map);
+			ports_distributed_languages_layer_group.addTo(AO_map)
+			regions_origins_layer_group.removeFrom(AO_map);
+			regions_dest_layer_group.removeFrom(AO_map);
+			regions_embdisemb_layer_group.removeFrom(AO_map);
+			regions_distributed_languages_layer_group.removeFrom(AO_map);
+		} else {
+			regionorplace="region";
+			update_oceanic_edges();
+			regions_origins_layer_group.addTo(AO_map);
+			regions_dest_layer_group.addTo(AO_map);
+			regions_embdisemb_layer_group.addTo(AO_map);
+			regions_distributed_languages_layer_group.addTo(AO_map);
+			ports_origins_layer_group.removeFrom(AO_map);
+			ports_dest_layer_group.removeFrom(AO_map);
+			ports_embdisemb_layer_group.removeFrom(AO_map);
+			ports_distributed_languages_layer_group.removeFrom(AO_map);
+		}
+		
+		var maxanimationzoom=7
+		
+		if (currentzoom > maxanimationzoom && animation_active) {
+			toggle_animation()
+// 			animationtoggledbyzoom=true
+		}
+		
+		if (currentzoom <= maxanimationzoom && !animation_active) {
+			toggle_animation()
+// 			animationtoggledbyzoom=false
+		}
+		
+	}).on('zoomstart', function(a) {
+		oceanic_main_edges_layer_group.clearLayers();
+		oceanic_animation_edges_layer_group.clearLayers();
+		endpoint_main_edges_layer_group.clearLayers();
+		endpoint_animation_edges_layer_group.clearLayers();
+		activepopups.forEach(p=>p.remove());
+		activepopups=new Array;
+	});
+	
+	window.onresize = (event) => {maximizeMapHeight()};
+	
+	function maximizeMapHeight() {
+		var maxMapHeight=window.innerHeight-221; //ffs
+		if (maxMapHeight>400){
+			$('#AO_map')[0].style['min-height']=maxMapHeight.toString()+'px';
+		}
+	}
+	
+	//B. Tile Layers
+	
+	var mappingSpecialists=L.tileLayer(
+		'https://api.mapbox.com/styles/v1/jcm10/clbmdqh2q000114o328k5yjpf/tiles/{z}/{x}/{y}?access_token='+mbaccesstoken,
+		{attribution: '<a href="https://www.mappingspecialists.com/" target="blank">Mapping Specialists, Ltd.</a>'});
+	var origin_nodelogvaluescale=new Object;
+	var embark_disembark_nodelogvaluescale=new Object;
+	var hiddenedgesvaluescale=new Object;
+	var oceanicedgesvaluescale=new Object;
+	
+	var oceanic_edges_holding_layer_group= L.layerGroup();
+	oceanic_edges_holding_layer_group.addTo(AO_map);
+	
+	var mappingSpecialistsRivers=L.tileLayer(
+	  'https://api.mapbox.com/styles/v1/jcm10/cl98xvv9r001z14mm17w970no/tiles/{z}/{x}/{y}?access_token='+mbaccesstoken)
+	var mappingSpecialistsCountries=L.tileLayer(
+	  'https://api.mapbox.com/styles/v1/jcm10/cl98yryw3003t14o66r6fx4m9/tiles/{z}/{x}/{y}?access_token='+mbaccesstoken)
+	var featurelayers = {
+		"Rivers":mappingSpecialistsRivers,
+		"Modern Countries":mappingSpecialistsCountries,
+		"Voyages":oceanic_edges_holding_layer_group
+	}
+
+	
+	//C. FEATURE LAYERS
+	
+	//C1. Cluster groups
+	
+	//C1a. Origins need to be managed at Port and Region levels (at least for now -- it's making the cluster / individual markers touchy and I'd like to consolidate this into a single layer as I have with final destinations)
+	
+	var ports_origins_layer_group = make_cluster_layer_groups('origin');
+	
+	var regions_origins_layer_group = make_cluster_layer_groups('origin');
+	
+	//C1b. Final destinations -- single layer group
+	
+	var ports_dest_layer_group = make_cluster_layer_groups('final_destination');
+	
+	var regions_dest_layer_group = make_cluster_layer_groups('final_destination');
+
+
+	//D. Non-clustered points groups
+	
+	var ports_embdisemb_layer_group = L.layerGroup();
+	
+	var regions_embdisemb_layer_group = L.layerGroup();
+
+	var regions_distributed_languages_layer_group = L.layerGroup();
+	
+	var ports_distributed_languages_layer_group = L.layerGroup();
+	
+	var distributedlanguagegroups_hidden_nodes_layer_group = L.layerGroup();
+	distributedlanguagegroups_hidden_nodes_layer_group.addTo(AO_map);
+	
+	var oceanic_waypoints_layer_group = L.layerGroup();
+	
+	
+	var oceanic_main_edges_layer_group= L.layerGroup();
+	oceanic_main_edges_layer_group.addTo(oceanic_edges_holding_layer_group);
+	
+	var oceanic_animation_edges_layer_group= L.layerGroup();
+	oceanic_animation_edges_layer_group.addTo(oceanic_edges_holding_layer_group);
+	
+	var endpoint_main_edges_layer_group = L.layerGroup();
+	endpoint_main_edges_layer_group.addTo(AO_map);
+		
+	var endpoint_animation_edges_layer_group = L.layerGroup();
+	endpoint_animation_edges_layer_group.addTo(AO_map);
+
+// II.  STATE GLOBALS
+
+	var animationmode = true;
+	var nodesdict = {'region':{},'place':{}};
+	var regionorplace = "region";
+	var activepopups=new Array;
+	var edgesdict = {'region':{},'place':{}};
+	var st_e=new Object;
+
+// III. USEFUL FORMATTING FUNCTIONS
+
+
+// IV. LAYER GROUP FACTORIES
+
+	// A. FACTORIES
+
+	  function makeRouteToolTip(r,networkname) {
+ 	  	
+ 	  	var source_id=r.source_target[0]
+		if (nodesdict[networkname][source_id]){
+			var routesource=nodesdict[networkname][source_id]._layers
+			var routesourcename=routesource[Object.keys(routesource)[0]].feature.properties.name
+		}
+		var target_id=r.source_target[1]
+		if (nodesdict[networkname][target_id]){
+			var routetarget=nodesdict[networkname][target_id]._layers
+			var routetargetname=routetarget[Object.keys(routetarget)[0]].feature.properties.name
+		}
+		
+		
+ 	  	if (r.leg_type=='origin') { 	  		
+ 	  		
+ 	  		var toandorfrom=''
+ 	  		
+ 	  		if (!routesourcename|!routetargetname){
+				if (!routesourcename) {
+					var toandorfrom='taken to '+routetargetname
+				}
+				if (!routetargetname) {
+					var toandorfrom='with '+routesourcename+' origins'
+				}
+ 	  		} else {
+ 	  			
+ 	  			var toandorfrom='with '+routesourcename+' origins taken to '+routetargetname
+ 	  			
+ 	  		}
+ 	  		
+			var popuptext = [
+					r.weight,
+					pluralorsingular('Liberated African',r.weight),
+					toandorfrom
+					].join(" ")
+		
+		
+		} else if (r.leg_type=='final_destination') {
+		
+			var toandorfrom=''
+ 	  		
+ 	  		if (!routesourcename|!routetargetname){
+				if (!routesourcename) {
+					var toandorfrom='ended up in '+routetargetname
+				}
+				if (!routetargetname) {
+					var toandorfrom='who disembarked in '+routesourcename
+				}
+ 	  		} else {
+ 	  			
+ 	  			var toandorfrom='who disembarked in '+routesourcename+' ended up in '+routetargetname
+ 	  			
+ 	  		}
+ 	  		
+			var popuptext = [
+					r.weight,
+					pluralorsingular('Liberated African',r.weight),
+					toandorfrom
+					].join(" ")
+		
+ 	  	} else if (r.leg_type=='offramp') {
+			var popuptext = [
+				r.weight,
+				pluralorsingular('Liberated African',r.weight),
+				"transported to",
+				routetargetname
+				].join(" ")
+ 	  	} else if (r.leg_type=='onramp') { 	
+			var popuptext = [
+				r.weight,
+				pluralorsingular('Liberated African',r.weight),
+				"taken from",
+				routesourcename
+				].join(" ")
+ 	  	} else if (r.leg_type=='oceanic_leg'){
+			var popuptext = [r.weight,pluralorsingular('Liberated African',r.weight),"transported."].join(" ");
+		}
+	  	return popuptext;
+	  };
+	
+	//WE USE THIS TO MAKE OUR MARKER CLUSTER LAYER GROUPS
+	function make_cluster_layer_groups(cluster_class) {
+		
+		var layergroup = L.markerClusterGroup(	
+			{
+				zoomToBoundsOnClick: false,
+				showCoverageOnHover: false,
+				spiderfyOnMaxZoom: false,
+				iconCreateFunction: function (cluster) {
+				var markers = cluster.getAllChildMarkers();
+				var n = 1;
+				markers.forEach(marker=>{
+					n+=marker.feature.properties.size
+				});
+				
+				if (cluster_class=='origin') {
+					var html='<div class="origin_cluster_circle"></div>';
+					var nodesize=origin_nodelogvaluescale(n)*2
+				} else if (cluster_class=='final_destination') {
+					var html='<div class="dest_cluster_circle"></div>';
+					var nodesize=dest_nodelogvaluescale(n)*2
+				}
+				
+				return L.divIcon({ html: html, iconSize: L.point(nodesize, nodesize), className:"transparentmarkerclusterdiv"});
+			}
+		}).on('clustermouseover', function (a) {
+			activepopups.forEach(p=>p.remove());
+			activepopups=new Array;
+			var clusterchildmarkers=a.layer.getAllChildMarkers();
+			
+			if (cluster_class=='origin') {
+				var tablenameheader='Language Group'
+			} else if (cluster_class=='final_destination') {
+				var tablenameheader='Last Known Location'
+			}
+			
+			popuphtml=make_origin_nodes_languagegroupstable(clusterchildmarkers,tablenameheader);
+			//http://jsfiddle.net/3tnjL/59/
+			var pop = new L.popup({
+					'className':'leafletAOPopup',
+					'closeOnClick':false,
+					'showCoverageOnHover': false,
+				}).
+				setLatLng(a.latlng).
+				setContent(popuphtml);
+			pop.addTo(AO_map);
+			activepopups.push(pop);
+			var child_hidden_edges=new Array;
+			Object.keys(clusterchildmarkers).forEach(marker=>{
+				if (clusterchildmarkers[marker])	{	
+					if (clusterchildmarkers[marker].feature){
+						clusterchildmarkers[marker].feature.properties.hidden_edges.forEach(e_id=>{child_hidden_edges.push(e_id)})
+					}
+				}
+			});
+			refresh_hidden_edges(child_hidden_edges,regionorplace,AO_map,endpoint_main_edges_layer_group,endpoint_animation_edges_layer_group);							
+		})
+		return layergroup
+	}
+	
+	// B. ADDTO FUNCTIONS	
+	
+	
+	
+
+
+
+
+
+	
+	// GEOJSON POINTS
+	
+	
+	
+	function add_distributednodes(distributednodes,nodesize) {
+		distributednodes.forEach(n=> {
+			var targetlayer=geojson.getLayer(n.name)
+			targetlayer.addTo(distributedlanguagegroups_hidden_nodes_layer_group)
+		})
+	}
+	
+	
+// 	
+// 	var geojsonurl='http://127.0.0.1:8100/static/maps/js/past/africa-hig.geo.json'
+// 	console.log(geojsonurl)
+// 	
+// 	var africaCountriesData = (function() {
+// 		var json = null;
+// 		$.ajax({
+// 			'async': false,
+// 			'global': false,
+// 			'url': geojsonurl,
+// 			'dataType': "json",
+// 			'success': function(data) {
+// 				json = data;
+// 			}
+// 		});
+// 		return json;
+// 	})();
+
+	
+	var acnames=new Array;
+	
+	
+// 	console.log(africaCountriesData)
+	
+	
+	
+	
+    geojson = L.geoJson(africaCountriesData, {
+        onEachFeature: function (feature, layer) {
+			layer._leaflet_id = feature.properties.name;
+			layer.options.weight=0;
+			layer.options.fillOpacity=.5;
+			layer.options.color="#60c0ab"
+			layer.options.weight=1;
+			layer.options.opacity=.2;
+
+			
+			
+// 			layer.options={
+// 				"color": "#ffffff",
+// 				"weight": 5,
+// 				"opacity": 1
+// 			};
+			layer.addTo(distributedlanguagegroups_hidden_nodes_layer_group);
+			
+// 			console.log(layer)
+		}
+		
+    })
+	distributedlanguagegroups_hidden_nodes_layer_group.clearLayers()
+	
+	function add_point_to_layergroup(feature,layer_group,nodesize,networkname,edges_main_layer_group,edges_animation_layer_group) {
+		var point_id=feature.properties.point_id;
+		var node_classes=feature.properties.node_classes;
+		var node_title=feature.properties.name;
+		var hidden_edges=feature.properties.hidden_edges;
+		var newlayer=L.geoJSON(feature, 
+			{
+				pointToLayer: function (feature, latlng)
+					{
+						var marker= L.circleMarker(latlng, {
+							radius: nodesize,
+							fillColor: nodeColorPicker(feature.properties.node_classes),
+							color: "#000",
+							weight: 1,
+							opacity: 1,
+							fillOpacity: 0.6
+						})
+// 						
+// 						if (Object.keys(distributedlanguagegroups[networkname]).includes(point_id.toString())) {
+// 							console.log(feature)
+// 						}
+// 						
+// 						
+						
+						marker.on('mouseover', function (a) {
+							activepopups.forEach(p=>p.remove());
+							activepopups=new Array;
+							
+							if (Object.keys(distributedlanguagegroups[networkname]).includes(point_id.toString())) {
+								
+								var popuptext=[
+									feature.properties.size,
+									pluralorsingular('Liberated African',feature.properties.size),
+									"with",
+									feature.properties.name,
+									"origins.*<br/><i>*Note: this marker stands in for a language<br/>with wide geographic distribution, now visible.</i>"
+								].join(" ")
+								
+								marker.bindTooltip(popuptext,{'sticky':false}).openTooltip();
+								
+								var hidethis={"region":regions_origins_layer_group,"place":ports_origins_layer_group}[regionorplace]	
+								hidethis.remove()
+								
+								Object.keys(distributedlanguagegroups[networkname]).forEach(
+									languagegroupid=>{
+										
+										if (languagegroupid!=point_id.toString() && nodesdict[networkname][languagegroupid]){
+											nodesdict[networkname][languagegroupid].remove()
+										}
+									}
+								)
+								
+								add_distributednodes(distributedlanguagegroups[networkname][point_id.toString()],nodesize)
+								
+								
+								
+							} else {
+								var pop = new L.popup({
+									'className':'leafletAOPopup',
+									'closeOnClick':false,
+									'showCoverageOnHover': false,
+								}).
+								setLatLng(a.latlng).
+								setContent(makeNodePopUp(feature,nodesdict[networkname],edgesdict[networkname]));
+								pop.addTo(AO_map);
+								activepopups.push(pop);
+								marker.openPopup();
+								
+							}
+							
+							
+							refresh_hidden_edges(hidden_edges,regionorplace,AO_map,edges_main_layer_group,edges_animation_layer_group);							
+							marker.bringToFront();
+						});
+						
+						if (Object.keys(distributedlanguagegroups[networkname]).includes(point_id.toString())) {
+							
+							marker.on('mouseout', function (a) {
+								distributedlanguagegroups_hidden_nodes_layer_group.clearLayers()
+								var hidethis={"region":regions_origins_layer_group,"place":ports_origins_layer_group}[regionorplace]	
+								hidethis.addTo(AO_map)
+								Object.keys(distributedlanguagegroups[networkname]).forEach(
+									languagegroupid=>{
+										if (languagegroupid!=point_id.toString() && nodesdict[networkname][languagegroupid]){
+											nodesdict[networkname][languagegroupid].addTo(layer_group)
+										}
+									}
+								)
+							})
+						}
+						
+						
+						return marker
+				}
+			},
+		);
+		layer_group.addLayer(newlayer);
+		return newlayer
+	};	
+
+
+	function straightlinebezier(a,b){
+		var midx=(a['lat']+b['lat'])/2
+		var midy=(a['lng']+b['lng'])/2
+		var control=[midx,midy]
+		var straightline=[[[a['lat'],a['lng']],[b['lat'],b['lng']]],[control,control]]
+		return straightline
+	}
+
+	function refresh_hidden_edges(edge_id_list,networkname,map,main_layer_group,animation_layer_group){
+		main_layer_group.clearLayers();
+		animation_layer_group.clearLayers();
+		//first, radically clean up the edge list
+		var live_edge_list = new Array();
+		edge_id_list.forEach(e=>{
+			if (edgesdict[networkname][e]) {live_edge_list.push(edgesdict[networkname][e])}	
+		})
+		//console.log(live_edge_list)
+		var tmp_edge_dict=new Object();
+		//now roll them up into a dictionary
+		
+		
+		
+		live_edge_list.forEach(edge=>{
+// 			console.log(edge.main._coords)
+			var ctrl=edge.main._coords[3]
+			var st=edge.source_target
+			if (edge.leg_type=='origin'){
+				var source_id=st[0]
+				var target_id=st[1]
+				var source=nodesdict[networkname][source_id]
+				var target=nodesdict[networkname][target_id]
+				var target_leaflet_id=target._leaflet_id
+				var target_latlng=target._layers[Object.keys(target._layers)[0]].feature.geometry.coordinates
+				var target_coords={'lat':target_latlng[1],'lng':target_latlng[0]}
+				if (regionorplace=='region') {
+					var lg=regions_origins_layer_group
+				} else {
+					var lg=ports_origins_layer_group
+				}
+				var vp=lg.getVisibleParent(source._layers[Object.keys(source._layers)[0]])
+				if (vp) {
+					var source_coords=vp._latlng
+					var source_leaflet_id=vp._leaflet_id
+				} else {
+					var source_latlng=source._layers[Object.keys(source._layers)[0]].feature.geometry.coordinates
+					var source_coords={'lat':source_latlng[1],'lng':source_latlng[0]}
+					var source_leaflet_id=source._leaflet_id
+				}
+			} else if (edge.leg_type=='final_destination') {
+				var source_id=st[0]
+				var target_id=st[1]
+				var source=nodesdict[networkname][source_id]
+				var target=nodesdict[networkname][target_id]
+				var source_leaflet_id=source._leaflet_id
+				var source_latlng=source._layers[Object.keys(source._layers)[0]].feature.geometry.coordinates
+				var source_coords={'lat':source_latlng[1],'lng':source_latlng[0]}
+				if (regionorplace=='region') {
+					var lg=regions_dest_layer_group
+				} else {
+					var lg=ports_dest_layer_group
+				}
+				var vp=lg.getVisibleParent(target._layers[Object.keys(target._layers)[0]])
+				if (vp) {
+					var target_coords=vp._latlng
+					var target_leaflet_id=vp._leaflet_id
+				} else {
+					var target_latlng=target._layers[Object.keys(target._layers)[0]].feature.geometry.coordinates
+					var target_coords={'lat':target_latlng[1],'lng':target_latlng[0]}
+					var target_leaflet_id=target._leaflet_id
+				}
+			};
+			//console.log(edge.leg_type)
+// 			console.log("ST-->",source_coords,target_coords)
+// 			console.log("CTRL-->",ctrl)
+			
+// 			var geometry=[[[source_coords['lat'],source_coords['lng']],[target_coords['lat'],target_coords['lng']]],[ctrl,ctrl]]
+// 			console.log(geometry)
+			
+				if (tmp_edge_dict[source_leaflet_id]) {
+					if (tmp_edge_dict[source_leaflet_id][target_leaflet_id]) {
+						tmp_edge_dict[source_leaflet_id][target_leaflet_id].weight+=edge.weight
+						tmp_edge_dict[source_leaflet_id][target_leaflet_id].ctrls.push(ctrl)
+						existing_st=tmp_edge_dict[source_leaflet_id][target_leaflet_id]['source_target']
+						
+						if (source_id!=existing_st[0]) {
+							tmp_edge_dict[source_leaflet_id][target_leaflet_id]['source_target']=[null,existing_st[1]]
+						}
+						
+						if (target_id!=existing_st[1]) {
+							tmp_edge_dict[source_leaflet_id][target_leaflet_id]['source_target']=[existing_st[0],null]
+						}
+						
+					} else {
+						tmp_edge_dict[source_leaflet_id][target_leaflet_id]={'weight':edge.weight,'source_latlng':source_coords,'target_latlng':target_coords,'ctrls':[ctrl],'leg_type':edge.leg_type,'source_target':st}
+					}
+				} else {
+					tmp_edge_dict[source_leaflet_id]={}
+					tmp_edge_dict[source_leaflet_id][target_leaflet_id]={'weight':edge.weight,'source_latlng':source_coords,'target_latlng':target_coords,'ctrls':[ctrl],'leg_type':edge.leg_type,'source_target':st}
+				}
+		})
+		
+		Object.keys(tmp_edge_dict).forEach(s=>{
+			Object.keys(tmp_edge_dict[s]).forEach(t=>{
+				var edge=tmp_edge_dict[s][t]
+				
+				var ctrl_lngs=0;
+				var ctrl_lats=0;
+// 				console.log(edge)
+				edge.ctrls.forEach(ctrl=>{
+// 					console.log(ctrl)
+					ctrl_lngs+=ctrl[1];
+					ctrl_lats+=ctrl[0];
+				})
+				
+				var ctrl=[ctrl_lats/edge.ctrls.length,ctrl_lngs/edge.ctrls.length]
+				
+				var geometry=[[[edge.source_latlng['lat'],edge.source_latlng['lng']],[edge.target_latlng['lat'],edge.target_latlng['lng']]],[ctrl,ctrl]]
+				
+				var updatededge=edge
+				updatededge['geometry']=geometry
+				make_edge(map,updatededge,networkname,main_layer_group,animation_layer_group,recordtodict=false,hiddenedgesvaluescale)
+			})
+		})	
+	}
+	
+	//only used by refresh_oceanic_edges, but it's easy to see this might be needed elsewhere.
+	function bringpointlayerstofront() {
+		[	
+			ports_embdisemb_layer_group,
+			regions_embdisemb_layer_group
+		].forEach(lg=>{
+			lg.eachLayer(function(layer){layer.bringToFront()})
+		})
+	}
+
+	//the behavior of these different edge classes (clustered vs non-clustered) makes it reasonable to handle them differently
+	function refresh_oceanic_edges(edge_id_list,networkname,map,main_layer_group,animation_layer_group){
+		main_layer_group.clearLayers();
+		animation_layer_group.clearLayers();
+		edge_id_list.forEach(e=>{
+		if (edgesdict[networkname][e]) {
+				edge=edgesdict[networkname][e]
+				st=edge.source_target;
+				source_id=st[0];
+				target_id=st[1];
+// 				var lg= new Object;
+// 				if (regionorplace=='region') {
+// 					var lg=regions_origins_layer_group
+// 				} else {
+// 					var lg=ports_origins_layer_group
+// 				}
+				var source=nodesdict[networkname][source_id]
+				var target=nodesdict[networkname][target_id]
+				if (source&&target){
+					edge.main.redraw()
+					edge.main.addTo(main_layer_group)
+					var updatedanimation=make_animationrouteoptions(edge.main,AO_map)
+					edge.animation.options.animate.duration=updatedanimation.animate.duration
+					edge.animation.options.dashArray=updatedanimation.dashArray
+					edge.animation.redraw()
+					edge.animation.addTo(animation_layer_group)
+				}
+			}
+		})
+		bringpointlayerstofront()
+	}
+	
+	function make_animationrouteoptions(basepath,map){
+		var off=20
+		var on=1
+		return {
+			color: "#6c757dc9",
+			weight: "1",
+			dashArray:on.toString() + " " + (off-on).toString(),
+			animate: {
+				"duration":1000,
+				"iterations":Infinity,
+				"direction":'normal'
+			}
+		}
+	}
+
+	function get_featurecollection_edges_by_types(all_network_edges,tags) {
+	
+		filtered_edges=new Object;
+		Object.keys(all_network_edges).forEach(e_id=>{
+			var edge=all_network_edges[e_id];
+			if(tags.includes(edge.leg_type)){
+				filtered_edges[e_id]=edge;
+			}
+		})
+		return filtered_edges;
+	}
+	
+	function get_edgedict_edges_by_types(all_network_edges,tags) {
+		filtered_edges=new Object;
+		Object.keys(all_network_edges).forEach(e_id=>{
+			var edge=all_network_edges[e_id];
+			if(tags.includes(edge.leg_type)){
+				filtered_edges[e_id]=edge;
+			}
+		})
+		return filtered_edges;
+	}
+	
+	function update_oceanic_edges() {
+		endpoint_main_edges_layer_group.clearLayers();
+		endpoint_animation_edges_layer_group.clearLayers();
+		oceanic_main_edges_layer_group.clearLayers();
+		oceanic_animation_edges_layer_group.clearLayers();
+		
+		var all_network_edges=edgesdict[regionorplace];
+		var oceanic_edges=get_edgedict_edges_by_types(all_network_edges,['onramp','offramp','oceanic_leg']);
+		
+		refresh_oceanic_edges(Object.keys(oceanic_edges),regionorplace,AO_map,oceanic_main_edges_layer_group,oceanic_animation_edges_layer_group)
+		
+		oceanic_edges=get_edgedict_edges_by_types(all_network_edges,['onramp','offramp','oceanic_leg']);
+		
+		Object.keys(oceanic_edges).forEach(e_id=>{
+			var edge=oceanic_edges[e_id];
+			edge.main.addTo(oceanic_main_edges_layer_group);
+			edge.animation.addTo(oceanic_animation_edges_layer_group);
+		})
+		
+	}
+
+	function make_edge(map,edge,networkname,main_layer_group,animation_layer_group,recordtodict=true,edgeweightvaluescale){
+// 		console.log(edge)
+		var commands = [];
+		var edge_type=edge.leg_type;
+		var weight=edgeweightvaluescale(edge.weight);
+		var color=legColorPicker(edge_type);
+		commands.push("M", edge.geometry[0][0]);
+		commands.push("C", edge.geometry[1][0], edge.geometry[1][1], edge.geometry[0][1]);
+		
+		var newroute=L.curve(commands, {
+			color: color,
+			weight: weight,
+			stroke: true,
+		})
+		.bindTooltip(makeRouteToolTip(edge,networkname),{'sticky':true})
+		.on('mouseover', function () {
+			activepopups.forEach(p=>p.remove());
+			activepopups=new Array;
+		})
+		
+		newroute.addTo(main_layer_group);
+	
+		//then layer on the animation curves
+		//in oder to do which (using basic css) we need to know how long these curves are
+		//because the css animation works on the basis of animation duration (how long it should take to complete a run)
+		//and if what we're animating is the traversal of a small dot along a bezier curve
+		//then we have to make the time apportioned inversely proportional to the length of the curve
+		//tldr: in order that the dots on longer routes and shorter routes move the same speed, the longer routes need animations of longer duration, and vice versa
+		//increase timingscalar to slow this down, decrease it to speed it up
+		var animationrouteoptions=make_animationrouteoptions(newroute,map)
+		var newanimationroute=L.curve(commands, animationrouteoptions);
+		newanimationroute.addTo(animation_layer_group);
+		
+		if (recordtodict) {
+			edgesdict[networkname][edge.id]={
+				'main':newroute,
+				'animation':newanimationroute,
+				'source_target':edge.source_target,
+				'leg_type':edge.leg_type,
+				'weight':edge.weight
+			};
+		}
+		
+	};
+
+	var region_vs_place_vars = {
+		'place':{
+			'origins_layer_group':ports_origins_layer_group,
+			'distributed_languages_layer_group':ports_distributed_languages_layer_group,
+			'embark_disembark_layers_group':ports_embdisemb_layer_group,
+			'dest_layer_group':ports_dest_layer_group,
+		},
+		'region':{
+			'origins_layer_group':regions_origins_layer_group,
+			'distributed_languages_layer_group':regions_distributed_languages_layer_group,
+			'embark_disembark_layers_group':regions_embdisemb_layer_group,
+			'dest_layer_group':regions_dest_layer_group,
+			
+		}
+	};
+
+	function initial_map_builder(resp) {
+		//we only need to make the origins layer group once, despite it existing in both place & region zoom levels
+		var test_region_hidden_edges=new Array
+		Object.keys(region_vs_place_vars).forEach(networkname=>{
+			var network=resp[networkname];
+			var origins_layer_group = region_vs_place_vars[networkname]['origins_layer_group'];
+			var embark_disembark_layer_group = region_vs_place_vars[networkname]['embark_disembark_layers_group'];
+			var dest_layer_group = region_vs_place_vars[networkname]['dest_layer_group'];
+			var featurecollection=network.points;
+			var distributed_languages_layer_group = region_vs_place_vars[networkname]['distributed_languages_layer_group'];
+			origin_nodelogvaluescale=nodelogvaluescale_fn(featurecollection,4,28);
+			embark_disembark_nodelogvaluescale=nodelogvaluescale_fn(featurecollection,3,10);
+			dest_nodelogvaluescale=nodelogvaluescale_fn(featurecollection,4,15);
+			featurecollection.features.forEach(function (feature) {
+			
+				var point_id=feature.properties.point_id
+				var node_classes=Object.keys(feature.properties.node_classes);
+				if (node_classes.includes('origin')) {
+					if (Object.keys(distributedlanguagegroups[networkname]).includes(point_id.toString())) {
+						var thislayergroup=distributed_languages_layer_group
+					} else {
+						var thislayergroup=origins_layer_group
+					} 
+					
+					var nodesize=origin_nodelogvaluescale(feature.properties.size);
+					var newlayer = add_point_to_layergroup(feature,thislayergroup,nodesize,networkname,endpoint_main_edges_layer_group,endpoint_animation_edges_layer_group);
+					
+					nodesdict[networkname][point_id]=newlayer
+						
+				} else if (node_classes.includes('embarkation') || node_classes.includes('disembarkation')) {
+					if (networkname=='region') {
+						var nodesize=embark_disembark_nodelogvaluescale(feature.properties.size);
+					} else {
+						var nodesize=5
+					}
+					var newlayer = add_point_to_layergroup(feature,embark_disembark_layer_group,nodesize,networkname,endpoint_main_edges_layer_group,endpoint_animation_edges_layer_group)
+					nodesdict[networkname][point_id]=newlayer
+				} else if (node_classes.includes('post-disembarkation')) {
+					var nodesize=dest_nodelogvaluescale(feature.properties.size);
+					var newlayer = add_point_to_layergroup(feature,dest_layer_group,nodesize,networkname,endpoint_main_edges_layer_group,endpoint_animation_edges_layer_group);
+					nodesdict[networkname][point_id]=newlayer
+				} else {
+					oceanic_waypoints_layer_group.addTo(AO_map)
+					var newlayer=add_point_to_layergroup(feature,oceanic_waypoints_layer_group,1,networkname,oceanic_main_edges_layer_group,oceanic_animation_edges_layer_group);
+					nodesdict[networkname][point_id]=newlayer
+					oceanic_waypoints_layer_group.remove()
+				}
+			})
+			
+			var edges=network.routes;
+			hiddenedgesvaluescale=routeslogvaluescale_fn(edges,1,11);
+			oceanicedgesvaluescale=routeslogvaluescale_fn(edges,1,3);
+			var hiddenedges=get_featurecollection_edges_by_types(edges,['origin','final_destination']);
+			var oceanicedges=get_featurecollection_edges_by_types(edges,['onramp','offramp','oceanic_leg']);
+			Object.keys(hiddenedges).forEach(e_id=>{make_edge(AO_map,hiddenedges[e_id],networkname,endpoint_main_edges_layer_group,endpoint_animation_edges_layer_group,recordtodict=true,hiddenedgesvaluescale)});
+			Object.keys(oceanicedges).forEach(e_id=>{make_edge(AO_map,oceanicedges[e_id],networkname,oceanic_main_edges_layer_group,oceanic_animation_edges_layer_group,recordtodict=true,oceanicedgesvaluescale)});
+			update_oceanic_edges();
+		});
+		
+
+	}
+	maximizeMapHeight();
+	AO_map.invalidateSize();
+	var animationtoggledbyzoom=false;
+	
+	function toggle_animation() {
+	
+		if (animation_active) {
+			animation_active=false
+			endpoint_animation_edges_layer_group.remove()
+			oceanic_animation_edges_layer_group.remove()
+		} else {
+			animation_active=true
+			endpoint_animation_edges_layer_group.addTo(AO_map)
+			oceanic_animation_edges_layer_group.addTo(AO_map)
+			update_oceanic_edges()
+		}
+		
+		animationtoggle_div.remove();
+		animationtoggle_div.addTo(AO_map);
+		$('#animationtogglebutton').click(function(e) {toggle_animation()});
+	}
+	
+	
+	var animation_active=true;
+	var animationtoggle_div = L.control({ position: "topleft" });
+	animationtoggle_div.onAdd = function(map) {
+			if (animation_active) {
+				var isactivetext="Running"
+				var divclass="animationtoggle_active"
+			} else {
+				var isactivetext="Stopped"
+				var divclass="animationtoggle_inactive"
+			}
+			var div = L.DomUtil.create("div", divclass);
+// 			div.innerHTML += '<a href="javascript:void(0)" id="animationtogglebutton">Animation '+isactivetext+'</a>';
+			div.innerHTML += 'Animation '+isactivetext;
+			return div
+		};
+	
+	
+	//------------>MAKE THE CALL FOR THE DATA
+	$.ajax({
+		type: "POST",
+		url: SEARCH_URL,
+		data: JSON.stringify({
+				search_query: currentSearchObj,
+				output: "maps"
+			}),
+		success: function(d){
+			maximizeMapHeight();
+			AO_map.invalidateSize();
+			add_control_layers_to_map(featurelayers,AO_map);
+			regions_origins_layer_group.addTo(AO_map);
+			ports_embdisemb_layer_group.addTo(AO_map);
+			regions_embdisemb_layer_group.addTo(AO_map);
+			ports_dest_layer_group.addTo(AO_map);
+			ports_origins_layer_group.addTo(AO_map);
+			ports_distributed_languages_layer_group.addTo(AO_map);
+			regions_distributed_languages_layer_group.addTo(AO_map);
+// 			mappingSpecialistsCountries.addTo(AO_map);
+			mappingSpecialists.addTo(AO_map);
+			
+			var total_results_count=d.region.total_results_count;			
+			drawUpdateCount(AO_map,total_results_count);
+			drawLegend(AO_map);
+			animationtoggle_div.addTo(AO_map);
+// 			$('#animationtogglebutton').click(function(e) {toggle_animation()});
+			initial_map_builder(d);
+			AO_map.invalidateSize();
+			maximizeMapHeight();
+			AO_map.invalidateSize();
+			var default_minmax_group = new L.featureGroup([
+				L.marker([12,-20]),
+				L.marker([-8,20])
+			]);
+			AO_map.fitBounds(default_minmax_group.getBounds());
+			AO_map.invalidateSize();
+			maximizeMapHeight();
+			AO_map.invalidateSize();
+			document.getElementById("past-maps-loader").hidden=true;
+			AO_map.invalidateSize();
+			maximizeMapHeight();
+			AO_map.invalidateSize();
+		}
+	});
+} 
 }
 
 function initAudioActions() {

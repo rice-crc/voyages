@@ -1,0 +1,8 @@
+The following language group codes were swapped from a-->b
+In the people_to_languagegroups.tsv map
+Before importing the data
+
+a	b
+160273	160272
+160524	160523
+160525	160523

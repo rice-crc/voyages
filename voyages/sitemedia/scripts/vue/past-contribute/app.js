@@ -1,3 +1,8 @@
+const get_lang_contrib_item = (value) => {
+    const [modern_country_id, lang_group_id] = value.split('-').map(x => parseInt(x));
+    return { modern_country_id, lang_group_id };
+};
+
 // main app
 var pastContribute = new Vue({
     el: "#past-contribute",
@@ -111,18 +116,12 @@ var pastContribute = new Vue({
             var contrib_languages = [];
             if (Array.isArray(this.language_groups.value.searchTerm)) {
                 $.each(this.language_groups.value.searchTerm, function(key, value){
-                    contrib_languages.push({
-                        ethnicity_id: "1",
-                        lang_group_id: value.slice(value.indexOf('-') + 1),
-                    });
+                    contrib_languages.push(get_lang_contrib_item(value));
                 });
             } else {
                 var value = this.language_groups.value.searchTerm;
                 value = value.slice(value.indexOf('-') + 1);
-                contrib_languages.push({
-                    ethnicity_id: "1",
-                    lang_group_id: value,
-                });
+                contrib_languages.push(get_lang_contrib_item(value));
             }
 
             var params = {
@@ -270,6 +269,9 @@ function highlightFeature(e) {
 }
 
 function highlightLayer(layer) {
+    if (!layer) {
+        return;
+    }
     layer.setStyle({
         weight: 5,
         color: '#666',
@@ -287,7 +289,9 @@ function resetHighlight(e) {
 }
 
 function resetLayer(layer) {
-    geojson.resetStyle(layer);
+    if (layer) {
+        geojson.resetStyle(layer);
+    }
 }
 
 function zoomToFeature(e) {

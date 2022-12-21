@@ -1,0 +1,103 @@
+{% load i18n %}
+
+<div style="max-height: calc(100vh - 150px); overflow-x: clip; overflow-y: none;">
+    <!-- For split contributions, the user needs to pick the identity to manage
+    source references. -->
+    <div class="row" v-if="interim.type === 'split'">
+        <div class="col-md-6 form-inline">
+            <label for="identities">{% trans "Identity:" %}</label>
+            <select v-model="selectedIdentity" name="identities" class="form-control">
+                <option v-for="identity in interim.identities" v-bind:value="identity">
+                    [[identity.personal_data.principal_alias]]
+                </option>
+            </select>
+        </div>
+    </div>
+    <div class="btn-group" role="group" aria-label="Sources actions">
+        <button type="button" v-on:click="createLinkToSource" v-bind:class="{ disabled: !selectedIdentity }"
+            class="btn btn-primary">{% trans "Link to Source" %}
+        </button>
+        <button type="button" data-toggle="modal" data-target="#referencesModal" v-bind:class="{ disabled: !selectedIdentity }"
+            class="btn btn-secondary">{% trans "Create New Source" %}
+        </button>
+        <button type="button" data-toggle="modal" data-target="#textRefModal" v-if="editorialMode" v-bind:class="{ disabled: !selSource || !!selSource.text_ref }"
+            class="btn btn-success">{% trans "Connect Reference" %}
+        </button>
+        <button type="button" v-on:click="delSourceConn" v-bind:class="{ disabled: !selectedSource }"
+            class="btn btn-danger">{% trans "Delete Source Reference" %}
+        </button>
+    </div>
+    <select size="6" class="form-control enslaver_contrib_fullspan_control" multiple="false" id="sources-select" name="sources" v-model="selectedSource">
+        <option class="list-group-item" v-for="source in selectedIdentity.sources" v-bind:value="[[ source.pk || source.source_id ]]" style="white-space:pre-wrap;">
+            [[ !!source.full_ref ? `${source.text_ref || "Linked source"}: ${source.full_ref}` : `${source.text_ref || gettext("New Source")}: ${JSON.stringify(source.data)}` ]]
+        </option>
+    </select>
+</div>
+
+<div class="modal fade" id="linkRefModal" tabindex="-1" role="dialog" data-backdrop="static">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="referencesModalLabel">{% trans "Create Source Reference" %}</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body" style="height: 600px;">
+                <table id="sourcesTable" class="table table-striped" style="width: 100%;">
+                    <thead>
+                        <tr>
+                            <th>{% trans "Short Reference" %}</th>
+                            <th>{% trans "Full Reference" %}</th>
+                            <th>{% trans "Source Type" %}</th>
+                            <th>id</th>
+                        </tr>
+                    </thead>
+                    <tbody>                        
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button id="link_sourceref_btn" v-bind:class="{ disabled: !selectedLinkableSource }" v-on:click="linkSelectedSourceRef" type="button" class="btn btn-primary">{% trans "Link" %}</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">{% trans "Cancel" %}</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="textRefModal" tabindex="-1" role="dialog" data-backdrop="static">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="referencesModalLabel">{% trans "Create Source Reference" %}</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body" style="height: 300px;">
+                <span>
+                {% trans "The text reference linking the enslaver to the source must contain the short reference of the source as a prefix. Use the suffix to complement the link, e.g. by specifying page numbers. If the suffix is left blank, the short reference will be used as the text reference." %}
+                </span>
+                <div class="input-group mb-2 mr-sm-2">
+                    <div class="input-group-prepend">
+                        <input type="text" style="border-top-right-radius: 0; border-bottom-right-radius: 0;"
+                            v-if="selSource && !selSource.short_ref"
+                            class="form-control" id="shortRefField" placeholder="Source short reference">
+                        <input type="text" disabled style="border-top-right-radius: 0; border-bottom-right-radius: 0;"
+                            v-if="selSource && !!selSource.short_ref" v-bind:value="selSource?.short_ref">
+                        <div class="input-group-text">,</div>
+                    </div>
+                    <input type="text" class="form-control" id="textRefComplement" placeholder="complement">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="create_sourceref_btn" v-on:click="createSourceRef" type="button" class="btn btn-primary">{% trans "Create" %}</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">{% trans "Cancel" %}</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% include "contribute/_new_source_dialog.html" %}
+
+<script>
+    $("#add_source_btn").attr("v-on:click", "createSourceConn");
+</script>
