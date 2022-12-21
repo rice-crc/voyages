@@ -1495,7 +1495,8 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 								
 								Object.keys(distributedlanguagegroups[networkname]).forEach(
 									languagegroupid=>{
-										if (languagegroupid!=point_id.toString()){
+										
+										if (languagegroupid!=point_id.toString() && nodesdict[networkname][languagegroupid]){
 											nodesdict[networkname][languagegroupid].remove()
 										}
 									}
@@ -1532,7 +1533,7 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 								hidethis.addTo(AO_map)
 								Object.keys(distributedlanguagegroups[networkname]).forEach(
 									languagegroupid=>{
-										if (languagegroupid!=point_id.toString()){
+										if (languagegroupid!=point_id.toString() && nodesdict[networkname][languagegroupid]){
 											nodesdict[networkname][languagegroupid].addTo(layer_group)
 										}
 									}
@@ -1855,45 +1856,15 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 				var point_id=feature.properties.point_id
 				var node_classes=Object.keys(feature.properties.node_classes);
 				if (node_classes.includes('origin')) {
-// 					
-// 					if (Object.keys(distributedlanguagegroups[networkname]).includes(point_id.toString())) {
-// 						var lg_countries=distributedlanguagegroups[networkname][point_id.toString()]
-// 						console.log(lg_countries)
-// 						console.log(feature)
-// 						
-// 						
-// 						lg_countries.forEach(lgc=>{
-// 							var newfeature={
-// 							  "type": "Feature",
-// 							  "properties": {
-// 							  	"name":lgc.name,
-// // 							  	"hidden_edges":feature.properties.hidden_edges,
-// 							  	"node_classes":feature.properties.node_classes,
-// 							  	"size":feature.properties.size
-// 							  },
-// 							  "geometry": {
-// 								"coordinates": [
-// 									lgc.lng,
-// 									lgc.lat
-// 								],
-// 								"type": "Point"
-// 							  }
-// 							}
-// 						
-// 							console.log(newfeature)
-// 							
-// 							distributed_languages_layer_group
-// 							
-// 						})
-// 					
-					
 					if (Object.keys(distributedlanguagegroups[networkname]).includes(point_id.toString())) {
 						var thislayergroup=distributed_languages_layer_group
 					} else {
 						var thislayergroup=origins_layer_group
 					} 
+					
 					var nodesize=origin_nodelogvaluescale(feature.properties.size);
 					var newlayer = add_point_to_layergroup(feature,thislayergroup,nodesize,networkname,endpoint_main_edges_layer_group,endpoint_animation_edges_layer_group);
+					
 					nodesdict[networkname][point_id]=newlayer
 						
 				} else if (node_classes.includes('embarkation') || node_classes.includes('disembarkation')) {
