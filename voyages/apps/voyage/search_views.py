@@ -822,10 +822,11 @@ def get_filtered_places(request):
     filtered['filtered_var_name'] = var_name if var_name != blank else 'None'
     return JsonResponse(filtered)
 
-
+@csrf_exempt
+@require_POST
 def get_all_sources(request):
     return JsonResponse({
-        'data': list(VoyageSources.objects.values('pk', 'short_ref', 'full_ref', type=F('source_type__group_name')))
+        'data': list(VoyageSources.objects.values('pk', 'short_ref', 'full_ref', group_name=F('source_type__group_name')))
     })
 
 @csrf_exempt
