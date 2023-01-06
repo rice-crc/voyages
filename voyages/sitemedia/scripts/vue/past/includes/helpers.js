@@ -718,7 +718,7 @@ function loadTreeselectOptions(vm, vTreeselect, filter, callback) {
               var options = parseVesselFate(response);
               break;
           }
-
+          
           vm.filterData.treeselectOptions[varName] = options;
           vTreeselect.treeselectOptions = vm.filterData.treeselectOptions[varName];
 
@@ -849,24 +849,68 @@ var parseLanguageGroups = function(response) {
   ];
 
   // fill countries
-  var countries = [];
+  var unique_countries = new Object;
+  var multi_country_language_groups = new Object;
   $.each(response.data, function(id, languageGroup) {
+  	var thislanguagegroup={'id':languageGroup.id,'name':languageGroup.name,'count':0}
     $.each(languageGroup.countries, (id, country) => {
-      countries.push(country);
+      unique_countries[country.modern_country_id]=country.country_name
+      thislanguagegroup['count']+=1
     });
+    
+    if (thislanguagegroup['count']>1) {
+    	multi_country_language_groups[languageGroup.id]=thislanguagegroup
+    }
+    
   });
-  countries = [...new Set(countries)].sort()
-
-  $.each(countries, function(key, country) {
+  
+  $.each(unique_countries, function(key, country) {
     options[0].children.push({
-      id: country,
+      id: key,
       label: country,
       children: [],
       languageGroupIds: []
     });
   });
 
-  // fill languageGroups
+  //fill multi-country languageGroups
+  
+  
+  
+  options[0].children.sort(function (a,b){
+  	      if ( a.label < b.label ){
+        return -1;
+      }
+      if ( a.label > b.label ){
+        return 1;
+      }
+      return 0;
+    });
+  
+  if (Object.keys(multi_country_language_groups).length>0) {
+  	var multicountry={
+      id: 1234567,
+      label: 'Multi-Country',
+      children: [],
+      languageGroupIds: []
+    };
+    
+	  Object.keys(multi_country_language_groups).forEach(k=>{
+	  	
+	  	var lg=multi_country_language_groups[k]
+	  	
+		multicountry.children.push({
+			'id':lg.id,
+			'label':lg.name,
+			'isDisabled':false,
+			'languageGroupIds':[lg.id]
+		});
+		multicountry.languageGroupIds.push(lg.id)
+	  })
+	  options[0].children.splice(0,0,multicountry)
+  }
+	
+  // fill single-country languageGroups
   $.each(response.data, function(id, languageGroup) {
     var label = languageGroup.name;
     var languageGroupId = languageGroup.id;
@@ -887,16 +931,29 @@ var parseLanguageGroups = function(response) {
     }
     $.each(options[0].children, function(key, country) {
       $.each(languageGroup.countries, (index, languageGroupCountry) => {
-        if (languageGroupCountry == country.label) {
-          if (options[0].children[key].languageGroupIds.indexOf(languageGroupId) === -1) {
+        if (languageGroupCountry.country_name == country.label && !multi_country_language_groups[languageGroupId]) {
+//           if (options[0].children[key].languageGroupIds.indexOf(languageGroupId) === -1) {
             options[0].children[key].languageGroupIds.push(languageGroupId);
-          }
-          options[0].children[key].children.push({'id': key+'-'+languageGroupId, 'label' : label, 'isDisabled': false, languageGroupIds: [languageGroupId]});
-        }
+//           }
+          options[0].children[key].children.push({'id': languageGroupId, 'label' : label, 'isDisabled': false, languageGroupIds: [languageGroupId]});
+        } 
       });
+       
     });
   });
+  
+  //clear out empty entries
+  var childrenplaceholder=new Array;
   $.each(options[0].children, function(key, country) {
+  	if (options[0].children[key].children.length>0) {
+  		childrenplaceholder.push(options[0].children[key])
+  	}
+  })
+  options[0].children=[]
+  childrenplaceholder.forEach(c=>{options[0].children.push(c)})
+  
+  
+    $.each(options[0].children, function(key, country) {
     country.children.sort(function (a, b) {
       if ( a.label < b.label ){
         return -1;
@@ -907,6 +964,7 @@ var parseLanguageGroups = function(response) {
       return 0;
     })
   });
+
 
   return options;
 }
@@ -1466,13 +1524,7 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 							weight: 1,
 							opacity: 1,
 							fillOpacity: 0.6
-						})
-// 						
-// 						if (Object.keys(distributedlanguagegroups[networkname]).includes(point_id.toString())) {
-// 							console.log(feature)
-// 						}
-// 						
-// 						
+						})		
 						
 						marker.on('mouseover', function (a) {
 							activepopups.forEach(p=>p.remove());
