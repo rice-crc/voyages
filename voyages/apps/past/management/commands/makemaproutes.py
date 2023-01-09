@@ -107,7 +107,7 @@ class Command(BaseCommand):
 				id,latitude,longitude,name=languagegroup_node
 
 				##This is a complex problem. I'm going to get these past the filter here, then have hard-coded geojson polygons on the other end that I deal with some way or another....
-				if name in ["Arabic/Islamic","Islamic","Mandinka"]:
+				if name in ["Arabic/Islamic","Islamic","Mandinka","Fula (Upper Guinea)"]:
 					dist_lg=language_groups.filter(id=id)
 					dist_lg_countries=dist_lg.values_list(
 						'moderncountry__id',
