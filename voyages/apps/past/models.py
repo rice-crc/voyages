@@ -200,8 +200,9 @@ class EnslavedNameSearchCache:
             cls.WORDSET_INDEX = Levenshtein_search.populate_wordset(-1, list(all_names))
             q = EnslavedName.objects.values_list('id', 'name', 'language',
                                                  'recordings_count')
+            sound_recordings = {}
             for item in q:
-                current = cls._sound_recordings.setdefault(item[1], {})
+                current = sound_recordings.setdefault(item[1], {})
                 langs = current.setdefault('langs', [])
                 lang = {}
                 lang['lang'] = item[2]
@@ -211,6 +212,7 @@ class EnslavedNameSearchCache:
                     for index in range(1, 1 + item[3])
                 ]
                 langs.append(lang)
+            cls._sound_recordings = sound_recordings
             cls._loaded = datetime.now()
 
 class EnslaverNameSearchCache:
