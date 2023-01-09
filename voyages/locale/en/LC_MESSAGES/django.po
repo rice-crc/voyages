@@ -2076,8 +2076,7 @@ msgstr ""
 #: voyages/apps/contribute/templates/contribute/interim.html:1649
 #: voyages/apps/contribute/templates/contribute/interim.html:1676
 msgid ""
-"URLs or digitized image of the source to be submitted wherever possible "
-"about source"
+"URLs of the source to be submitted wherever possible."
 msgstr ""
 
 #: voyages/apps/contribute/templates/contribute/interim.html:1463

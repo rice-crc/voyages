@@ -13817,11 +13817,9 @@ msgstr ""
 #~ msgstr "Sem informações sobre escravos"
 
 #~ msgid ""
-#~ "URLs or digitized image of the source to be submitted wherever possible "
-#~ "about source"
+#~ "URLs of the source to be submitted wherever possible."
 #~ msgstr ""
-#~ "URLs ou imagem digitalizada da fonte a ser submetida sempre que possível "
-#~ "sobre a fonte"
+#~ "URLs da fonte a ser submetida sempre que possível."
 
 #~ msgid "Author"
 #~ msgstr "Autor"

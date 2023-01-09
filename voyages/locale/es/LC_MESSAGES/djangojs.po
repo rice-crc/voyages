@@ -26093,11 +26093,9 @@ msgstr ""
 #~ msgstr "Información sobre la fuente"
 
 #~ msgid ""
-#~ "URLs or digitized image of the source to be submitted wherever possible "
-#~ "about source"
+#~ "URLs of the source to be submitted wherever possible."
 #~ msgstr ""
-#~ "URL o imagen digital de la fuente para ser remitida cuando sea posible "
-#~ "sobre la fuente"
+#~ "URL de la fuente para ser remitida cuando sea posible."
 
 #~ msgid "Author"
 #~ msgstr "Autor"
