@@ -77,22 +77,3 @@ function nodeColorPicker(nodeclasses) {
 	return thiscolor
 }
 
-function formatNodePopUpListItem(k,v) {
-	var nodeclass_labels={
-		'embarkation':'embarked',
-		'disembarkation':'disembarked',
-		'post-disembarkation':'ended up',
-		'origin':'originated'
-	};
-	
-	var label = nodeclass_labels[k];
-	var count = v.count||0;
-	var key = v.key||null;
-	var formattedstring=[count.toString(),pluralorsingular("Liberated African",count),label].join(' ')
-	if (key && k!='origin') {
-		var text='<a href="#" onclick="linkfilter(' + key.toString() + ',\'' + k + '\'); return false;">' + formattedstring + '</a>'
-	} else {
-		var text = false
-	};
-	return text;
-};
