@@ -690,6 +690,9 @@ function loadTreeselectOptions(vm, vTreeselect, filter, callback) {
         case 'language_groups':
           var apiUrl = '/past/api/language-groups';
           break;
+        case 'used_language_groups':
+          var apiUrl = '/past/api/used-language-groups';
+          break;
         case 'vessel_fate':
           var apiUrl = '/voyage/var-options';
           payload.var_name = 'var_outcome_ship_captured';
@@ -712,6 +715,9 @@ function loadTreeselectOptions(vm, vTreeselect, filter, callback) {
               var options = parseEthnicities(response);
               break;
             case 'language_groups':
+              var options = parseLanguageGroups(response);
+              break;
+			case 'used_language_groups':
               var options = parseLanguageGroups(response);
               break;
             case 'vessel_fate':

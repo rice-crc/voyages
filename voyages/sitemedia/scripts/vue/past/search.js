@@ -3,7 +3,7 @@ var categoryNames = [
     gettext("African Name"),
     gettext("Personal Data"),
     gettext("Itinerary"),
-    // gettext("Cultural Association"),
+    gettext("Cultural Association"),
     gettext("Fate"),
     gettext("Sources"),
     gettext("Recordings"),
@@ -26,7 +26,7 @@ var allColumns = [
     { data: "modern_names", category: 0, header: gettext("Modern Name"), isImputed: false },
 
     // cultural association
-    // { data: "language_group__modern_country__name", category: 3, header: gettext("Modern Country"), isImputed: false, visible: false },
+//     { data: "language_group__modern_country__name", category: 3, header: gettext("Modern Country"), isImputed: false, visible: true },
     { data: "language_group__name", category: 3, header: gettext("Language Group"), isImputed: false },
 
     // personal data
