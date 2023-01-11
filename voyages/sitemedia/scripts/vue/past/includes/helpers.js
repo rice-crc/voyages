@@ -1411,13 +1411,8 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 			activepopups=new Array;
 			var clusterchildmarkers=a.layer.getAllChildMarkers();
 			
-			if (cluster_class=='origin') {
-				var tablenameheader='Language Group'
-			} else if (cluster_class=='final_destination') {
-				var tablenameheader='Last Known Location'
-			}
 			
-			popuphtml=make_origin_nodes_languagegroupstable(clusterchildmarkers,tablenameheader);
+			popuphtml=make_origin_and_final_nodes_table(clusterchildmarkers,cluster_class);
 			//http://jsfiddle.net/3tnjL/59/
 			var pop = new L.popup({
 					'className':'leafletAOPopup',
