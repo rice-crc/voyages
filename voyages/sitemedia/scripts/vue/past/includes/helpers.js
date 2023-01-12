@@ -639,6 +639,7 @@ function getTreeselectLabel(currentVariable, searchTerms, treeselectOptions) {
 // load treeselect options
 function loadTreeselectOptions(vm, vTreeselect, filter, callback) {
   var varName = filter.varName;
+//   console.log("-->",filter.varName,filter);
   var loadType = filter.type;
   var payload = {};
 
@@ -689,9 +690,10 @@ function loadTreeselectOptions(vm, vTreeselect, filter, callback) {
           break;
         case 'language_groups':
           var apiUrl = '/past/api/language-groups';
-          break;
-        case 'used_language_groups':
-          var apiUrl = '/past/api/used-language-groups';
+          //we need a switch between used and unused language groups (search should only have used, contribute should have all)
+          if (filter.options.isUsed) {
+          	payload.active_only = true
+          }
           break;
         case 'vessel_fate':
           var apiUrl = '/voyage/var-options';
@@ -715,9 +717,6 @@ function loadTreeselectOptions(vm, vTreeselect, filter, callback) {
               var options = parseEthnicities(response);
               break;
             case 'language_groups':
-              var options = parseLanguageGroups(response);
-              break;
-			case 'used_language_groups':
               var options = parseLanguageGroups(response);
               break;
             case 'vessel_fate':

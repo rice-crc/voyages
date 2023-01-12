@@ -26,7 +26,7 @@ var allColumns = [
     { data: "modern_names", category: 0, header: gettext("Modern Name"), isImputed: false },
 
     // cultural association
-    { data: "language_group__modern_country__name", category: 3, header: gettext("Modern Country"), isImputed: false, visible: true },
+//     { data: "language_group__modern_country__name", category: 3, header: gettext("Modern Country"), isImputed: false, visible: true },
     { data: "language_group__name", category: 3, header: gettext("Language Group"), isImputed: false },
 
     // personal data

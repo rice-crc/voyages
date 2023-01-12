@@ -23,16 +23,17 @@ var_ethnicity = new TreeselectVariable({
   });
 
 
-var_used_language_groups = new LanguageGroupVariable({
-    varName: "used_language_groups",
-    label: gettext("Language Group"),
+var_language_groups = new LanguageGroupVariable({
+    varName: "language_groups",
+    label: gettext("Language Group2"),
     description: "",
   },{
     op: "is one of",
     searchTerm: [],
   },{
     isImputed: false,
-    isadvanced: false
+    isadvanced: false,
+    isUsed: true
   });
 
 // all
@@ -40,7 +41,7 @@ culturalAssociation = {
   culturalAssociation: {
     var_register_country: var_register_country,
     var_ethnicity: var_ethnicity,
-    var_used_language_groups: var_used_language_groups,
+    var_language_groups: var_language_groups,
 
     count: {
       changed: 0,
