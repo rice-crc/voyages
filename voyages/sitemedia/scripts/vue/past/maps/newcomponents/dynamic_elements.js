@@ -176,77 +176,33 @@ function makeNodePopUp(feature,nodesdict,edgesdict) {
 	var node_classes=feature.properties.node_classes;
 	var node_title=feature.properties.name;
 	//a node can have multiple classes (mostly this is for sierra leone)
-// 	Object.entries(node_classes).forEach(([k,v]) => popupsubheads[k]=formatNodePopUpListItem (k,v));
 	
-	var popupcontent=''
-	
-	if (node_classes['origin']) {
-		var thisnode=node_classes['origin']
-// 		var count=node_classes['origin']['count'];
-// 		var jcmtest = formatNodePopUpListItem('origin',node_classes['origin'])
-// 		console.log(jcmtest)
-		popupcontent='<a href="#" onclick="linkfilter(' + thisnode.key.toString() + ',\'origin\'); return false;">' + thisnode.count.toString() + ' ' + pluralorsingular("Liberated African",thisnode.count) +' with ' + node_title + ' origins.' + '</a>'
-// 		popupcontent=[count,pluralorsingular("Liberated African",count),"with",node_title,"origins."].join(" ")
-	} else {
-		if (node_classes['embarkation'] || node_classes ['disembarkation']) {
-			var popupsubheads=new Array;
-			var emb_disemb_classes=['embarkation','disembarkation']
-			emb_disemb_classes.forEach(k=>{
-				if (node_classes[k]) {
-					popupsubheads.push(formatNodePopUpListItem(k,node_classes[k]))
-				}
-			})
-			popupcontent+=popupsubheads.join(' and ') + " in " + node_title + ". ";
-		}
-		
-		if (node_classes['post-disembarkation']) {
-			//if only post-disembark
-			if (Object.keys(node_classes).length==1) {
-				
-				popupcontent=node_title + " is the final known location for " + formatNodePopUpListItem('post-disembarkation',node_classes['post-disembarkation']) + '.'
-				
-			} else{
-			
-				popupcontent+="This is the final known location for " + formatNodePopUpListItem('post-disembarkation',node_classes['post-disembarkation']) + '.'
-			
-			}
-		}
-	
-	}
-	
-	var bad_aggregation_nodes=[60900]
-	
+	var bad_aggregation_nodes=[]
+	var tablehtml = new String;
 	if (Object.keys(node_classes).includes('embarkation') && !bad_aggregation_nodes.includes(feature.properties.point_id)) {
-
 		var tablerowdata=new Array;
 		var tablerowdatakeys=new Object;
 		var excludedpeoplecount=0;
 		feature.properties.hidden_edges.forEach(e_id=>{
 			if (edgesdict[e_id]){
-				
 				var edge=edgesdict[e_id]
 				var st=edge.source_target
 				var s_id=st[0]
 				if (nodesdict[s_id]) {
 					var source=nodesdict[s_id]
 					var sourcedata=source._layers[Object.keys(source._layers)[0]].feature.properties
-					
 					if (Object.keys(sourcedata.node_classes).includes('origin')){
-					
 						var language_group=sourcedata.name
 						var weight=edge.weight
-					
 						if (language_group in Object.keys(tablerowdatakeys)) {
 							tablerowdatakeys[language_group]+=weight
 						} else {
 							tablerowdatakeys[language_group]=weight
 						}
 						}
-						
 				}
 			}
 		})
-		
 		if (Object.keys(tablerowdatakeys).length>0) {
 			Object.keys(tablerowdatakeys).forEach(lg=>{tablerowdata.push({'lg':lg,'value':tablerowdatakeys[lg]})})
 			tablerowdata.sort((a,b)=>a.value-b.value);
@@ -255,13 +211,64 @@ function makeNodePopUp(feature,nodesdict,edgesdict) {
 				"Language Group  <span id=\"origins_map_key_pill\" data-toggle=\"tooltip\" class=\"badge badge-pill badge-secondary tooltip-pointer\" title=\"Origins are derived from user contributions.\"> IMP </span>",
 				"Number of Liberated Africans with Identified Languages"			
 			]
-			var tablehtml=tablemaker(tablerowdata,5,"Language Group",tableheaderrow)
-			popupcontent+="<hr/>" +tablehtml
-			
+			tablehtml=tablemaker(tablerowdata,5,"Language Group",tableheaderrow)
+		}
+		var total_enslaved_with_identified_languages=0
+		tablerowdata.forEach(r=>{total_enslaved_with_identified_languages+=r.value})
+	}
+	
 
+	
+	var headerhtml=new String;
+	
+	if (node_classes['origin']) {
+		var thisnode=node_classes['origin'];
+		headerhtml='<a href="#" onclick="linkfilter('  + thisnode.key.toString()  + ',\'origin\'); return false;">'  + thisnode.count.toString()  + ' '  + pluralorsingular("Liberated African",thisnode.count)  +' with ' + node_title + ' origins.' + '</a>';
+	} else {
+		
+		var headerhtmlslots=new Array;
+	
+		if (node_classes['embarkation']) {
+			headerhtmlslots.push(formatNodePopUpListItem('embarkation',node_classes['embarkation']) + " in " + node_title + ", of whom " + total_enslaved_with_identified_languages.toString()+ " have an identified language group")
+		}
+		
+		if (node_classes['disembarkation']) {
+			var dis_string=formatNodePopUpListItem('embarkation',node_classes['disembarkation'])
+			if (!node_classes['embarkation']) {
+				dis_string+=" in " + node_title	
+			} else {
+				dis_string+=" here"
+			}
+			headerhtmlslots.push(dis_string)
+		}
+		
+		if (node_classes['post-disembarkation']) {
+			//if only post-disembark
+			if (Object.keys(node_classes).length==1) {
+				headerhtmlslots.push(node_title + " is the final known location for " + formatNodePopUpListItem('post-disembarkation',node_classes['post-disembarkation']))
+			} else{
+				headerhtmlslots.push("This is the final known location for " + formatNodePopUpListItem('post-disembarkation',node_classes['post-disembarkation']))
+			}
+		}
+		
+		if (headerhtmlslots.length==1) {
+			headerhtml=headerhtmlslots[0]+'.'
+		} else if (headerhtmlslots.length>1) {
+			headerhtml=headerhtmlslots.join('. ')
 		}
 	
 	}
+	
+	
+	var popupelements=new Array;
+	
+	[headerhtml,tablehtml].forEach(element=>{
+		if (element.length!=0) {
+			popupelements.push(element)
+		}
+	})
+	
+	var popupcontent=popupelements.join('<hr/>')
 	
 	$(function () {
 		$('[data-toggle="tooltip"]').tooltip()
