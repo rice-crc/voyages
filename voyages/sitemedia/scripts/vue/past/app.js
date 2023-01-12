@@ -740,6 +740,9 @@ function linkfilter(id,tag) {
 		case 'post-disembarkation':
 			var this_search_var = searchBar.filter.fate.fate.var_post_disembark_location;
 			break;
+		case 'origin':
+			var this_search_var = searchBar.filter.culturalAssociation.culturalAssociation.var_language_groups;
+			break;
 		default:
 			console.log(tag);
 	};
