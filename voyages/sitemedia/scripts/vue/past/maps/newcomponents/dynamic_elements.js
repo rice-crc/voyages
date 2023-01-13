@@ -177,9 +177,11 @@ function makeNodePopUp(feature,nodesdict,edgesdict) {
 	var node_title=feature.properties.name;
 	//a node can have multiple classes (mostly this is for sierra leone)
 	
+	//"other africa" was breaking in the past. identify by the region or port spss code
 	var bad_aggregation_nodes=[]
 	var tablehtml = new String;
 	if (Object.keys(node_classes).includes('embarkation') && !bad_aggregation_nodes.includes(feature.properties.point_id)) {
+		var enumeratedlanguagegroups=new Array;
 		var tablerowdata=new Array;
 		var tablerowdatakeys=new Object;
 		var excludedpeoplecount=0;
@@ -191,6 +193,12 @@ function makeNodePopUp(feature,nodesdict,edgesdict) {
 				if (nodesdict[s_id]) {
 					var source=nodesdict[s_id]
 					var sourcedata=source._layers[Object.keys(source._layers)[0]].feature.properties
+					var pointid=feature.properties.point_id
+					
+					if (!enumeratedlanguagegroups.includes(s_id-1000000)){
+						enumeratedlanguagegroups.push(s_id-1000000)
+					}
+					
 					if (Object.keys(sourcedata.node_classes).includes('origin')){
 						var language_group=sourcedata.name
 						var weight=edge.weight
@@ -214,7 +222,10 @@ function makeNodePopUp(feature,nodesdict,edgesdict) {
 			tablehtml=tablemaker(tablerowdata,5,"Language Group",tableheaderrow)
 		}
 		var total_enslaved_with_identified_languages=0
-		tablerowdata.forEach(r=>{total_enslaved_with_identified_languages+=r.value})
+		tablerowdata.forEach(r=>{
+			total_enslaved_with_identified_languages+=r.value
+		})
+		
 	}
 	
 
@@ -229,11 +240,11 @@ function makeNodePopUp(feature,nodesdict,edgesdict) {
 		var headerhtmlslots=new Array;
 	
 		if (node_classes['embarkation']) {
-			headerhtmlslots.push(formatNodePopUpListItem('embarkation',node_classes['embarkation']) + " in " + node_title + ", of whom " + total_enslaved_with_identified_languages.toString()+ " have an identified language group")
+			headerhtmlslots.push(formatNodePopUpListItem('embarkation',node_classes['embarkation']) + " in " + node_title + ", of whom "+   total_enslaved_with_identified_languages.toString()+ " have been identified as belonging to <a href=\"#\" onclick=\"linkfilter(\'" + enumeratedlanguagegroups.join('-') + '\',\'origin\'); return false;">'+enumeratedlanguagegroups.length.toString()+' ' +pluralorsingular('language group')+'</a>')
 		}
 		
 		if (node_classes['disembarkation']) {
-			var dis_string=formatNodePopUpListItem('embarkation',node_classes['disembarkation'])
+			var dis_string=formatNodePopUpListItem('disembarkation',node_classes['disembarkation'])
 			if (!node_classes['embarkation']) {
 				dis_string+=" in " + node_title	
 			} else {
@@ -254,7 +265,7 @@ function makeNodePopUp(feature,nodesdict,edgesdict) {
 		if (headerhtmlslots.length==1) {
 			headerhtml=headerhtmlslots[0]+'.'
 		} else if (headerhtmlslots.length>1) {
-			headerhtml=headerhtmlslots.join('. ')
+			headerhtml=headerhtmlslots.join('. ')+'.'
 		}
 	
 	}
