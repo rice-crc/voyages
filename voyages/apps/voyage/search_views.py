@@ -823,7 +823,6 @@ def get_filtered_places(request):
     return JsonResponse(filtered)
 
 @csrf_exempt
-@require_POST
 def get_all_sources(request):
     return JsonResponse({
         'data': list(VoyageSources.objects.values('pk', 'short_ref', 'full_ref', group_name=F('source_type__group_name')))
