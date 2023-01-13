@@ -142,6 +142,10 @@ function make_origin_and_final_nodes_table(markers,cluster_class) {
 
 	var tablehtml=tablemaker(tablerowdata,5,tablenameheader,tableheaderrow,linknames)
 	
+	$(function () {
+		$('[data-toggle="tooltip"]').tooltip()
+	})
+	
 	return tablehtml
 }
 
@@ -185,6 +189,7 @@ function makeNodePopUp(feature,nodesdict,edgesdict) {
 		var tablerowdata=new Array;
 		var tablerowdatakeys=new Object;
 		var excludedpeoplecount=0;
+		
 		feature.properties.hidden_edges.forEach(e_id=>{
 			if (edgesdict[e_id]){
 				var edge=edgesdict[e_id]
@@ -194,39 +199,47 @@ function makeNodePopUp(feature,nodesdict,edgesdict) {
 					var source=nodesdict[s_id]
 					var sourcedata=source._layers[Object.keys(source._layers)[0]].feature.properties
 					var pointid=feature.properties.point_id
-					
-					
-					
-
-					
 					if (Object.keys(sourcedata.node_classes).includes('origin')){
-						if (!enumeratedlanguagegroups.includes(s_id-1000000)){
-							enumeratedlanguagegroups.push(s_id-1000000)
+						var true_s_id=s_id-1000000
+						if (!enumeratedlanguagegroups.includes(true_s_id)){
+							enumeratedlanguagegroups.push(true_s_id)
 						}
 						var language_group=sourcedata.name
 						var weight=edge.weight
 						if (language_group in Object.keys(tablerowdatakeys)) {
-							tablerowdatakeys[language_group]+=weight
+							tablerowdatakeys[language_group].value+=weight
 						} else {
-							tablerowdatakeys[language_group]=weight
+							tablerowdatakeys[language_group]={
+								'lg':language_group,
+								'value':weight,
+								'key':true_s_id,
+								'tag':'origin'
+							}
 						}
 						}
 				}
 			}
 		})
 		if (Object.keys(tablerowdatakeys).length>0) {
-			Object.keys(tablerowdatakeys).forEach(lg=>{tablerowdata.push({'lg':lg,'value':tablerowdatakeys[lg]})})
+			Object.keys(tablerowdatakeys).forEach(lg=>{tablerowdata.push(tablerowdatakeys[lg])})
+			
+			
+			
 			tablerowdata.sort((a,b)=>a.value-b.value);
 			tablerowdata.reverse()
 			var tableheaderrow=[
 				"Language Group  <span id=\"origins_map_key_pill\" data-toggle=\"tooltip\" class=\"badge badge-pill badge-secondary tooltip-pointer\" title=\"Origins are derived from user contributions.\"> IMP </span>",
 				"Number of Liberated Africans with Identified Languages"			
 			]
-			tablehtml=tablemaker(tablerowdata,5,"Language Group",tableheaderrow)
+			tablehtml=tablemaker(tablerowdata,5,"Language Group",tableheaderrow,true)
 		}
 		var total_enslaved_with_identified_languages=0
 		tablerowdata.forEach(r=>{
 			total_enslaved_with_identified_languages+=r.value
+		})
+		
+		$(function () {
+			$('[data-toggle="tooltip"]').tooltip()
 		})
 		
 	}
@@ -243,7 +256,16 @@ function makeNodePopUp(feature,nodesdict,edgesdict) {
 		var headerhtmlslots=new Array;
 	
 		if (node_classes['embarkation']) {
-			headerhtmlslots.push(formatNodePopUpListItem('embarkation',node_classes['embarkation']) + " in " + node_title + ", of whom "+   total_enslaved_with_identified_languages.toString()+ " have been identified as belonging to <a href=\"#\" onclick=\"linkfilter(\'" + enumeratedlanguagegroups.join('-') + '\',\'origin\'); return false;">'+enumeratedlanguagegroups.length.toString()+' ' +pluralorsingular('language group')+'</a>')
+			var pushstring=formatNodePopUpListItem('embarkation',node_classes['embarkation']) + " in " + node_title
+			
+			if (total_enslaved_with_identified_languages>0){
+				pushstring+=", of whom "+   total_enslaved_with_identified_languages.toString()+ " have been identified as belonging to <a href=\"#\" onclick=\"linkfilter(\'" + enumeratedlanguagegroups.join('-') + '\',\'origin\'); return false;">'+enumeratedlanguagegroups.length.toString()+' ' +pluralorsingular('language group')+'</a>'
+			} else {
+				pushstring+=", none of whose language groups have been identified"
+			}
+			
+			headerhtmlslots.push(pushstring)
+			
 		}
 		
 		if (node_classes['disembarkation']) {
@@ -284,9 +306,9 @@ function makeNodePopUp(feature,nodesdict,edgesdict) {
 	
 	var popupcontent=popupelements.join('<hr/>')
 	
-	$(function () {
-		$('[data-toggle="tooltip"]').tooltip()
-	})
+// 	$(function () {
+// 		$('[data-toggle="tooltip"]').tooltip()
+// 	})
 	
 	return(popupcontent);
 };
