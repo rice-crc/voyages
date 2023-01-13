@@ -195,11 +195,14 @@ function makeNodePopUp(feature,nodesdict,edgesdict) {
 					var sourcedata=source._layers[Object.keys(source._layers)[0]].feature.properties
 					var pointid=feature.properties.point_id
 					
-					if (!enumeratedlanguagegroups.includes(s_id-1000000)){
-						enumeratedlanguagegroups.push(s_id-1000000)
-					}
+					
+					
+
 					
 					if (Object.keys(sourcedata.node_classes).includes('origin')){
+						if (!enumeratedlanguagegroups.includes(s_id-1000000)){
+							enumeratedlanguagegroups.push(s_id-1000000)
+						}
 						var language_group=sourcedata.name
 						var weight=edge.weight
 						if (language_group in Object.keys(tablerowdatakeys)) {
