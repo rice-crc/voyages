@@ -748,7 +748,7 @@ function linkfilter(ids,tag) {
 	};
 	var goodtogo=false;
 	ids.toString().split('-').forEach(id=>{
-		if (!this_search_var.value.searchTerm.includes(eval(id))) {
+		if (typeof(eval(id))=="number" && !this_search_var.value.searchTerm.includes(eval(id))) {
 			this_search_var.value.searchTerm.push(eval(id));
 			goodtogo=true
 		}
