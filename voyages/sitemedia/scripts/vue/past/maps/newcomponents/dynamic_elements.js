@@ -30,10 +30,6 @@ function tablemaker(tablerowdata,displaylimit,tablenameheader,tableheaderrow,lin
 		var languagegroup=r.lg
 		var languagegrouppeoplecount=r.value
 		
-		if (languagegrouppeoplecount<least_included_value) {
-			least_included_value=languagegrouppeoplecount
-		}
-		
 		totalscount+=languagegrouppeoplecount
 		
 		if (rowcount<displaylimit) {
@@ -43,6 +39,11 @@ function tablemaker(tablerowdata,displaylimit,tablenameheader,tableheaderrow,lin
 			} else {
 				tablehtml+=maketablerow(languagegroup,languagegrouppeoplecount)
 			}
+			
+			if (languagegrouppeoplecount<least_included_value) {
+				least_included_value=languagegrouppeoplecount
+			}
+			
 		} else {
 			
 			if (Object.keys(clustered_dialects).includes(languagegroup)){
@@ -72,7 +73,8 @@ function tablemaker(tablerowdata,displaylimit,tablenameheader,tableheaderrow,lin
 			tablehtml+=maketablerow(namecell,clusterdata.peoplecount)
 			
 		} else {
-			excluded_nonclustered_lg_rows.lgcount+=1
+			
+			if (clusterdata.peoplecount>0) {excluded_nonclustered_lg_rows.lgcount+=clusterdata.lgcount}
 			excluded_nonclustered_lg_rows.peoplecount+=peoplecount
 		}
 		
