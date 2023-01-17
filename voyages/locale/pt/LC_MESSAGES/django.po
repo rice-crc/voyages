@@ -9221,9 +9221,8 @@ msgstr ""
 
 #: voyages/apps/past/templates/past/_cultural-association.html:4
 #: voyages/apps/past/templates/past/_cultural-association.html:9
-#, fuzzy
 msgid "Cultural Association"
-msgstr "Abolição"
+msgstr "Associação Cultural"
 
 #: voyages/apps/past/templates/past/_cultural-association.html:6
 #: voyages/apps/past/templates/past/_personal-data.html:4
@@ -9314,6 +9313,7 @@ msgid "Names & Pronunciation"
 msgstr ""
 
 #: voyages/apps/past/templates/past/contribute.html:65
+#: voyages/apps/past/templates/past/_cultural_association.html:25
 #, fuzzy
 msgid "Language Groups"
 msgstr "Idioma"

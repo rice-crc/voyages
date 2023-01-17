@@ -2836,6 +2836,7 @@ msgid "Names & Pronunciation"
 msgstr ""
 
 #: voyages/apps/past/templates/past/contribute.html:65
+#: voyages/apps/past/templates/past/_cultural_association.html:25
 msgid "Language Groups"
 msgstr ""
 

@@ -24136,11 +24136,14 @@ msgstr "Embarcado"
 msgid "disembarked"
 msgstr "Desembarcado"
 
+#: voyages/sitemedia/scripts/vue/variables/past/cultural-association.js:29
+msgid "Languages appear under a single modern country or under multi-country if they are geographically dispersed. Begin typing in the box below."
+msgstr "Los idiomas aparecen en un solo país moderno o en varios países si están dispersos geográficamente. Comience a escribir en el cuadro a continuación."
+
 #: voyages/sitemedia/scripts/vue/past-contribute/app.js:17
 #: voyages/sitemedia/scripts/vue/past-contribute/app.js:106
 #: voyages/sitemedia/scripts/vue/variables/past/cultural-association.js:28
-#, fuzzy
-msgid "Language Group"
+msgid "Language Groups"
 msgstr "Idioma"
 
 #: voyages/sitemedia/scripts/vue/past-contribute/app.js:104
