@@ -23,6 +23,7 @@ from voyages.apps.contribute.models import (ContributionStatus,
                                             NewVoyageContribution,
                                             ReviewRequest,
                                             ReviewRequestDecision)
+from voyages.apps.past.models import VoyageCaptainOwnerHelper
 from voyages.apps.voyage.models import (Voyage, VoyageCaptain,
                                         VoyageCaptainConnection, VoyageCargoConnection, VoyageCrew,
                                         VoyageDataset, VoyageDates,
@@ -396,6 +397,7 @@ def _get_label_value(x):
 def _get_region_value(place):
     return place.region.value if place else None
 
+_captain_owner_helper = VoyageCaptainOwnerHelper()
 
 def _map_voyage_to_spss(voyage):
     data = {'STATUS': 'PUBLISHED'}
@@ -465,18 +467,20 @@ def _map_voyage_to_spss(voyage):
     data['REGISREG'] = _get_label_value(ship.registered_region)
 
     aux = list(get_multi_valued_column_suffix(16))
-    for i, owner in enumerate(voyage.voyage_ship_owner.all()):
+    all_owners = _captain_owner_helper.get_owners(voyage)
+    for i, owner in enumerate(all_owners):
         if i >= len(aux):
             break
-        data['OWNER' + aux[i]] = owner.name
+        data['OWNER' + aux[i]] = owner
     data['NATINIMP'] = _get_label_value(ship.imputed_nationality)
     data['TONMOD'] = ship.tonnage_mod
 
     aux = list(get_multi_valued_column_suffix(3))
-    for i, captain in enumerate(voyage.voyage_captain.all()):
+    all_captains = _captain_owner_helper.get_captains(voyage)
+    for i, captain in enumerate(all_captains):
         if i >= len(aux):
             break
-        data['CAPTAIN' + aux[i]] = captain.name
+        data['CAPTAIN' + aux[i]] = captain
 
     # Cargo
     aux = list(get_multi_valued_column_suffix(CARGO_COLUMN_COUNT))
@@ -949,14 +953,19 @@ def _save_editorial_version(review_request,
 
     # Voyage Ship Owners
     def create_ship_owner(owner_name, order):
-        owner = VoyageShipOwner()
-        owner.name = owner_name
-        owner.save()
-        conn = VoyageShipOwnerConnection()
-        conn.owner = owner
-        conn.owner_order = order
-        conn.voyage = voyage
-        conn.save()
+        if settings.VOYAGE_ENSLAVERS_MIGRATION_STAGE <= 2:
+            owner = VoyageShipOwner()
+            owner.name = owner_name
+            owner.save()
+            conn = VoyageShipOwnerConnection()
+            conn.owner = owner
+            conn.owner_order = order
+            conn.voyage = voyage
+            conn.save()
+        if settings.VOYAGE_ENSLAVERS_MIGRATION_STAGE <= 2:
+            # TODO detect existing alias/identity and create connection or
+            # create new identity/alias if needed.
+            pass
 
     if interim.first_ship_owner:
         create_ship_owner(interim.first_ship_owner, 1)
@@ -968,14 +977,19 @@ def _save_editorial_version(review_request,
 
     # Voyage Ship Captains
     def create_captain(name, order):
-        captain = VoyageCaptain()
-        captain.name = name
-        captain.save()
-        conn = VoyageCaptainConnection()
-        conn.captain = captain
-        conn.captain_order = order
-        conn.voyage = voyage
-        conn.save()
+        if settings.VOYAGE_ENSLAVERS_MIGRATION_STAGE <= 2:
+            captain = VoyageCaptain()
+            captain.name = name
+            captain.save()
+            conn = VoyageCaptainConnection()
+            conn.captain = captain
+            conn.captain_order = order
+            conn.voyage = voyage
+            conn.save()
+        if settings.VOYAGE_ENSLAVERS_MIGRATION_STAGE <= 2:
+            # TODO detect existing alias/identity and create connection or
+            # create new identity/alias if needed.
+            pass
 
     if interim.first_captain:
         create_captain(interim.first_captain, 1)

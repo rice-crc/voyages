@@ -9,6 +9,8 @@ from voyages.apps.common.models import NamedModelAbstractBase
 
 from voyages.apps.common.validators import date_csv_field_validator
 
+from django.conf import settings
+
 class AfricanInfo(NamedModelAbstractBase):
     """
     Used to capture information about the ethnicity or background of the
@@ -1812,6 +1814,8 @@ class LinkedVoyages(models.Model):
     def __unicode__(self):
         return str(self.first) + " => " + str(self.second)
 
+    UNSPECIFIED = 0
+
     # In this mode the first voyage is the IntraAmerican voyage
     # and the second is a transatlantic voyage.
     INTRA_AMERICAN_LINK_MODE = 1
@@ -1872,15 +1876,16 @@ class Voyage(models.Model):
         related_name='voyage_slaves_numbers',
         on_delete=models.CASCADE)
 
-    voyage_captain = models.ManyToManyField("VoyageCaptain",
-                                            through='VoyageCaptainConnection',
-                                            help_text="Voyage Captain",
-                                            blank=True)
-    voyage_ship_owner = models.ManyToManyField(
-        "VoyageShipOwner",
-        through='VoyageShipOwnerConnection',
-        help_text="Voyage Ship Owner",
-        blank=True)
+    if settings.VOYAGE_ENSLAVERS_MIGRATION_STAGE <= 2:
+        voyage_captain = models.ManyToManyField("VoyageCaptain",
+                                                through='VoyageCaptainConnection',
+                                                help_text="Voyage Captain",
+                                                blank=True)
+        voyage_ship_owner = models.ManyToManyField(
+            "VoyageShipOwner",
+            through='VoyageShipOwnerConnection',
+            help_text="Voyage Ship Owner",
+            blank=True)
 
     # One Voyage can contain multiple sources and one source can refer
     # to multiple voyages
@@ -1969,9 +1974,6 @@ class VoyagesFullQueryHelper:
         ]
 
         self.prefetch_fields = [
-            Prefetch('voyage_captain',
-                     queryset=VoyageCaptain.objects.order_by(
-                         'captain_name__captain_order')),
             Prefetch('voyage_ship__nationality_ship'),
             Prefetch('voyage_ship__imputed_nationality'),
             Prefetch('voyage_ship__ton_type'),
@@ -1980,9 +1982,6 @@ class VoyagesFullQueryHelper:
             Prefetch('voyage_ship__vessel_construction_region'),
             Prefetch('voyage_ship__registered_place'),
             Prefetch('voyage_ship__registered_region'),
-            Prefetch('voyage_ship_owner',
-                     queryset=VoyageShipOwner.objects.order_by(
-                         'owner_name__owner_order')),
             Prefetch('african_info'),
             Prefetch('cargo',
                      queryset=VoyageCargoConnection.objects.prefetch_related('cargo').prefetch_related('unit')),
@@ -2005,7 +2004,20 @@ class VoyagesFullQueryHelper:
                 queryset=LinkedVoyages.objects.select_related('first').only(
                     'first_id', 'second_id', 'first__voyage_id'))
         ]
-
+        if settings.VOYAGE_ENSLAVERS_MIGRATION_STAGE <= 2:
+            self.prefetch_fields += [
+                Prefetch('voyage_captain',
+                    queryset=VoyageCaptain.objects.order_by(
+                        'captain_name__captain_order')),
+                Prefetch('voyage_ship_owner',
+                    queryset=VoyageShipOwner.objects.order_by(
+                        'owner_name__owner_order'))]
+        if settings.VOYAGE_ENSLAVERS_MIGRATION_STAGE >= 2:
+            from voyages.apps.past.models import EnslaverVoyageConnection
+            self.prefetch_fields.append(
+                Prefetch('enslavervoyageconnection_set',
+                    queryset=EnslaverVoyageConnection.objects.prefetch_related('enslaver_alias', 'role'),
+                    to_attr='enslavers'))
         for k, v in list(self.related_models.items()):
             self.prefetch_fields += [
                 Prefetch(k + '__' + f.name,

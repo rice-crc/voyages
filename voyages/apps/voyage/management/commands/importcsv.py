@@ -8,7 +8,6 @@ from django.db import transaction
 from django.utils.encoding import smart_str
 from voyages.apps.contribute.publication import CARGO_COLUMN_COUNT
 
-from voyages.apps.resources.models import AfricanName, Image
 from voyages.apps.voyage.models import (AfricanInfo, BroadRegion, CargoType, CargoUnit, LinkedVoyages,
                                         Nationality, OwnerOutcome,
                                         ParticularOutcome, Place, Region,
@@ -23,6 +22,8 @@ from voyages.apps.voyage.models import (AfricanInfo, BroadRegion, CargoType, Car
                                         VoyageSlavesNumbers, VoyageSources,
                                         VoyageSourcesConnection)
 from voyages.apps.common.utils import *
+
+import re
 
 class Command(BaseCommand):
     help = ('Imports a CSV file with the full Voyages dataset and converts the data '
@@ -67,10 +68,6 @@ class Command(BaseCommand):
         ships = []
         voyage_dates = []
         voyage_numbers = []
-
-        # Prefetch data: Miscellaneous
-        africans = list(AfricanName.objects.all())
-        images = list(Image.objects.all())
 
         def check_hierarchy(voyage_id, field, place, region, broad_region):
             """
@@ -593,10 +590,11 @@ class Command(BaseCommand):
                     outcome.voyage = voyage
                     outcomes.append(outcome)
                     # Links
-                    if intra_american and 'voyageid2' in rh.row:
-                        voyage_links.append(
-                            (voyage_id, rh.cint('voyageid2'),
-                             LinkedVoyages.INTRA_AMERICAN_LINK_MODE))
+                    if 'voyageid2' in rh.row:
+                        link_mode = LinkedVoyages.INTRA_AMERICAN_LINK_MODE if intra_american else LinkedVoyages.UNSPECIFIED
+                        for entry in re.split(',|;|/', rh.get('voyageid2')):
+                            voyage_links.append(
+                                (voyage_id, int(entry), link_mode))
 
         print('Constructed ' + str(len(voyages)) + ' voyages from CSV')
         for k, v in counts.items():
@@ -648,8 +646,6 @@ class Command(BaseCommand):
                 helper.delete_all(cursor, VoyageSlavesNumbers)
                 helper.delete_all(cursor, Voyage.african_info.through)
                 helper.delete_all(cursor, VoyageCargoConnection)
-                helper.delete_all(cursor, AfricanName)
-                helper.delete_all(cursor, Image)
                 helper.delete_all(cursor, Voyage)
 
                 print('Inserting new records...')
@@ -703,8 +699,6 @@ class Command(BaseCommand):
                 bulk_insert(VoyageCrew, crews)
                 bulk_insert(VoyageSlavesNumbers, voyage_numbers)
                 bulk_insert(VoyageOutcome, outcomes)
-                bulk_insert(AfricanName, africans)
-                bulk_insert(Image, images)
 
                 # Now insert the many-to-many connections
                 set_voyages_fk(captain_connections)

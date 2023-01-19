@@ -8,6 +8,7 @@ from builtins import range, str
 from functools import reduce
 
 from datetime import datetime
+from django.conf import settings
 from django.contrib.auth.models import User
 from django.db import (connection, models, transaction)
 from django.db.models import (Aggregate, Case, CharField, Count, F, Func, IntegerField, Max, Min, Q, Sum, Value, When)
@@ -550,6 +551,44 @@ class EnslaverVoyageConnection(models.Model):
     order = models.IntegerField(null=True)
     # NOTE: we will have to substitute VoyageShipOwner and VoyageCaptain
     # models/tables by this entity.
+
+
+class VoyageCaptainOwnerHelper:
+    """
+    A simple helper class to fetch enslavers associated with a voyage based on
+    their role.
+    """
+
+    def __init__(self):
+        self._owner_role_ids = list( \
+            EnslaverRole.objects.filter(name__icontains='owner').values_list('pk', flat=True))
+        self._captain_role_ids = [EnslaverRole.objects.get(name__iexact='captain').pk]
+
+    def get_captains(self, voyage):
+        all = []
+        if settings.VOYAGE_ENSLAVERS_MIGRATION_STAGE <= 2:
+            # Fetch from the LEGACY table.
+            all += [c.name for c in voyage.voyage_captain.all()]
+        if settings.VOYAGE_ENSLAVERS_MIGRATION_STAGE >= 2:
+            # Fetch from EnslaversVoyageConnection.
+            all += list(self.__class__.get_all_with_roles(voyage, self._captain_role_ids))
+        return all
+
+    def get_owners(self, voyage):
+        all = []
+        if settings.VOYAGE_ENSLAVERS_MIGRATION_STAGE <= 2:
+            # Fetch from the LEGACY table.
+            all += [c.name for c in voyage.voyage_ship_owner.all()]
+        if settings.VOYAGE_ENSLAVERS_MIGRATION_STAGE >= 2:
+            # Fetch from EnslaversVoyageConnection.
+            all += list(self.__class__.get_all_with_roles(voyage, self._owner_role_ids))
+        return all
+
+    @staticmethod
+    def get_all_with_roles(voyage, roles):
+        for ens in voyage.enslavers:
+            if ens.role_id in roles:
+                yield ens.enslaver_alias.alias
 
 
 class LanguageGroup(NamedModelAbstractBase):
