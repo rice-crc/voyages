@@ -23,30 +23,6 @@ var_ship_name = new TextVariable({
     isAdvanced: false
   });
 
-var_embarkation_ports = new PlaceVariable({
-    varName: "embarkation_ports",
-    label: gettext("Embarkation Port"),
-    description: "",
-  },{
-    op: "is one of",
-    searchTerm: [],
-  },{
-    isImputed: false,
-    isAdvanced: false
-  });
-
-var_disembarkation_ports = new PlaceVariable({
-    varName: "disembarkation_ports",
-    label: gettext("Disembarkation Port"),
-    description: "",
-  },{
-    op: "is one of",
-    searchTerm: [],
-  },{
-    isImputed: false,
-    isAdvanced: false
-  });
-
 var_year_range = new NumberVariable({
     varName: "year_range",
     label: gettext("Arrival Year"),
@@ -90,8 +66,6 @@ itinerary = {
   itinerary: {
     var_voyage_id: var_voyage_id,
     var_ship_name: var_ship_name,
-    var_embarkation_ports: var_embarkation_ports,
-    var_disembarkation_ports: var_disembarkation_ports,
     var_year_range: var_year_range,
     var_enslaved_count: var_enslaved_count,
     var_voyage_datasets: var_voyage_datasets,

@@ -1,0 +1,32 @@
+{% load i18n %}
+
+<li class="nav-item dropdown">
+  <v-menu-title :count="filter.places.count" title="{% trans 'Places' %}"></v-menu-title>
+
+  <v-panel-singular @apply="apply" @reset="reset" group="places" title="{% trans 'Places' %}" sub-group="places"
+    :filters="filter.places.places" align="left">
+    <div slot="v-panel-header">
+      <v-panel-header title="{% trans 'Places' %}" description="{% trans '' context 'Enslaver Places search panel description' %}">
+        <div slot="v-modal-content"></div>
+      </v-panel-header>
+    </div>
+
+    <div slot="v-panel-content" slot-scope="scope">
+      <v-treeselect
+        :filter="scope.filters.var_embarkation_ports"
+        @change="changed">
+      </v-treeselect>
+
+      <v-treeselect
+        :filter="scope.filters.var_disembarkation_ports"
+        @change="changed">
+      </v-treeselect>
+
+      <v-treeselect
+        :filter="scope.filters.var_departure_ports"
+        @change="changed">
+      </v-treeselect>
+
+    </div>
+  </v-panel-singular>
+</li>
