@@ -560,10 +560,11 @@ class VoyageCaptainOwnerHelper:
     """
 
     def __init__(self):
-        self._owner_role_ids = list( \
+        self.owner_role_ids = list( \
             EnslaverRole.objects.filter(name__icontains='owner').values_list('pk', flat=True))
-        self._captain_role_ids = [EnslaverRole.objects.get(name__iexact='captain').pk]
-
+        self.captain_role_ids = list( \
+            EnslaverRole.objects.filter(name__icontains='captain').values_list('pk', flat=True))
+            
     def get_captains(self, voyage):
         all = []
         if settings.VOYAGE_ENSLAVERS_MIGRATION_STAGE <= 2:
@@ -571,8 +572,9 @@ class VoyageCaptainOwnerHelper:
             all += [c.name for c in voyage.voyage_captain.all()]
         if settings.VOYAGE_ENSLAVERS_MIGRATION_STAGE >= 2:
             # Fetch from EnslaversVoyageConnection.
-            all += list(self.__class__.get_all_with_roles(voyage, self._captain_role_ids))
-        return all
+            all += list(self.__class__.get_all_with_roles(voyage, self.captain_role_ids))
+        # Dedupe names.
+        return list(set(all))
 
     def get_owners(self, voyage):
         all = []
@@ -581,8 +583,9 @@ class VoyageCaptainOwnerHelper:
             all += [c.name for c in voyage.voyage_ship_owner.all()]
         if settings.VOYAGE_ENSLAVERS_MIGRATION_STAGE >= 2:
             # Fetch from EnslaversVoyageConnection.
-            all += list(self.__class__.get_all_with_roles(voyage, self._owner_role_ids))
-        return all
+            all += list(self.__class__.get_all_with_roles(voyage, self.owner_role_ids))
+        # Dedupe names.
+        return list(set(all))
 
     @staticmethod
     def get_all_with_roles(voyage, roles):

@@ -25,6 +25,102 @@ from voyages.apps.common.utils import *
 
 import re
 
+def _migrate_enslavers_from_legacy():
+    from django.conf import settings
+    if settings.VOYAGE_ENSLAVERS_MIGRATION_STAGE <= 1:
+        # Not really necessary but it is convenient to reference the stage
+        # settings variable so that we can later remove dead code paths once the
+        # migration is finalized.
+        return []
+    # Try to match each Captain/Owner with an existing EnslaverAlias. If none
+    # are found, we create the alias and the identity for it. In case of
+    # duplicate identities with same alias already exist, check if one of them
+    # is already associated with the existing voyage.
+    from voyages.apps.past.models import EnslaverAlias, EnslaverIdentity, EnslaverVoyageConnection, VoyageCaptainOwnerHelper
+    from unidecode import unidecode
+    aliases = {}
+    for alias in EnslaverAlias.objects.all():
+        aliases.setdefault(unidecode(alias.alias), []).append((alias.id, alias.identity_id))
+    connections = {}
+    for conn in EnslaverVoyageConnection.objects.all():
+        connections.setdefault(conn.enslaver_alias_id, []).append((conn.voyage_id, conn.role_id))
+
+    def get_actions(name_and_voyages, role_ids):
+        migration_actions = []
+        for name, voyage_id in name_and_voyages:
+            matches = aliases.get(unidecode(name))
+            item = {
+                'voyage_id': voyage_id,
+                'name': name,
+                'reason': '',
+                'steps': []
+            }
+            found = False
+            if matches:
+                for alias_id, _ in matches:
+                    if voyage_id in [x[0] for x in connections.get(alias_id, []) if x[1] in role_ids]:
+                        # Happy path!
+                        # The appropriate voyage connection already exists.
+                        found = True
+                        item['reason'] = 'Exact match for voyage, name, and role in ' + EnslaverVoyageConnection.__name__
+                        break
+                if not found:
+                    if len({x[1] for x in matches}) > 1:
+                        # Not so good path.
+                        # There are multiple identities maching this name so we
+                        # cannot determine for sure which is the right one.
+                        item['reason'] = 'Multiple identities containing the same alias'
+                    else:
+                        # OK path
+                        # We only need to create the connection for the existing alias.
+                        item['reason'] = 'Found a single matching identity with the alias'
+                        item['steps'].append({
+                            'type': EnslaverVoyageConnection.__name__,
+                            'values': {
+                                'enslaver_alias_id': matches[0][0],
+                                'voyage_id': voyage_id,
+                            }
+                        })
+                        # Treat this as a found alias.
+                        found = True
+            else:
+                item['reason'] = 'No match found for enslaver alias'
+            if not found:
+                item['steps'].append({
+                    'type': EnslaverIdentity.__name__,
+                    'values': {
+                        'principal_alias': name
+                    }
+                })
+                item['steps'].append({
+                    'type': EnslaverAlias.__name__,
+                    'values': {
+                        'alias': name
+                    }
+                })
+            migration_actions.append(item)
+        return migration_actions
+
+    helper = VoyageCaptainOwnerHelper()
+    actions = get_actions(
+        [[cc.captain.name, cc.voyage_id] for cc in \
+            VoyageCaptainConnection.objects.select_related('captain').all()],
+        helper.captain_role_ids
+    )
+    actions += get_actions(
+        [[oc.owner.name, oc.voyage_id] for oc in \
+            VoyageShipOwnerConnection.objects.select_related('owner').all()],
+        helper.owner_role_ids
+    )
+    # Usage in django shell
+    # from voyages.apps.voyage.management.commands import importcsv
+    # actions = importcsv._migrate_enslavers_from_legacy()
+    # for a in actual:
+    #     by_reason.setdefault(a['reason'], []).append(a)
+    # [(k, len(v)) for k, v in by_reason.items()]
+    return actions
+
+
 class Command(BaseCommand):
     help = ('Imports a CSV file with the full Voyages dataset and converts the data '
             'to the Django models.')
@@ -599,6 +695,15 @@ class Command(BaseCommand):
         print('Constructed ' + str(len(voyages)) + ' voyages from CSV')
         for k, v in counts.items():
             print('Dataset ' + str(k) + ': ' + str(v))
+
+        previous_ids = set(Voyage.all_dataset_objects.values_list('voyage_id', flat=True))
+        next_ids = set(voyages.keys())
+        missing = previous_ids - next_ids
+        if len(missing) > 0:
+            self.errors += 1
+            error_reporting.report(f"There are {len(missing)} existing voyages without replacement!!")
+            print("Missing voyage ids:")
+            print(missing)
         if self.errors > 0:
             print(
                 str(self.errors) + ' errors occurred, '
