@@ -64,6 +64,7 @@ var allColumns = [
     { data: "skin_color", category: 0, header: gettext("Racial Descriptor"), isImputed: false },
 
     // Itinerary
+    { data: "voyage_id", category: 2, header: gettext("Voyage ID"), isImputed: false },
     { data: "voyage__voyage_ship__ship_name", category: 1, header: gettext("Ship Name"), isImputed: false },
     { data: "voyage__voyage_dates__first_dis_of_slaves", category: 1, header: gettext("Arrival Year"), isImputed: false },
     { data: "voyage__voyage_itinerary__imp_principal_place_of_slave_purchase__place", category: 1, header: gettext("Embarkation Port"), isImputed: false },

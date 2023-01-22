@@ -124,6 +124,24 @@ function getColumnIndex(column) {
   return index;
 }
 
+const processCsvDate = date => {  
+  var dateArr = (date || '').split(',');
+  var result = '';
+  if (dateArr.length == 3) {
+    result = dateArr[2];
+    for (let i = 0; i < 2; ++i) {
+      if (!!dateArr[i]) {
+        result += `-${dateArr[i]}`;
+      } else {
+        break;
+      }
+    }
+  } else if (dateArr.length == 1) {
+    result = dateArr[0];
+  }
+  return result;
+}
+
 // process search data returned from the API
 function processResponse(json, mainDatatable, fuzzySearch) {
   var data = [];
@@ -132,15 +150,7 @@ function processResponse(json, mainDatatable, fuzzySearch) {
   json.data.forEach(function(row) {
     row.names = $.map(row.names, function(s) { return s.replace(' ', '&nbsp;'); }).join('<br>');
 
-    var arrivalDateArray = row.voyage__voyage_dates__first_dis_of_slaves ? row.voyage__voyage_dates__first_dis_of_slaves.split([',']) : '';
-    var arrivalDate = '';
-
-    if (arrivalDateArray.length == 3) {
-      arrivalDate = arrivalDateArray[2];
-    } else if (arrivalDateArray.length == 1) {
-      arrivalDate = arrivalDateArray[0];
-    }
-    row.voyage__voyage_dates__first_dis_of_slaves = arrivalDate;
+    row.voyage__voyage_dates__first_dis_of_slaves = processCsvDate(row.voyage__voyage_dates__first_dis_of_slaves);
 
     var gender = '';
     if (row.gender == 1) {
@@ -1090,7 +1100,9 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
 
       scrollX: true,
 
-      colReorder: true,
+      colReorder: {
+        order: [0, 1, 2, 3, 18, 19, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17]
+      },
 
       order: [[0, "asc"]],
       destroy: true,
