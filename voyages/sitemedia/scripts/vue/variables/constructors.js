@@ -48,7 +48,7 @@ function NumberVariable(varInfo, searchTerms, options) {
     isAdvanced: options["isAdvanced"],
   };
   this.changed = false;
-  this.activated = false;
+  this.activated = !!varInfo.activated;
 }
 
 function PercentageVariable(varInfo, searchTerms, options) {

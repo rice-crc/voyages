@@ -62,6 +62,7 @@ var_geocode = new TextVariable({
 var_year_range = new NumberVariable({
     varName: "year_range",
     label: gettext("Arrival Year"),
+    activated: true,
     description: "",
   },{
     op: "is between",
@@ -110,12 +111,12 @@ itinerary = {
 
     count: {
       changed: 0,
-      activated: 0,
+      activated: 1,
     }
   },
 
   count: {
     changed: 0,
-    activated: 0,
+    activated: 1,
   },
 }

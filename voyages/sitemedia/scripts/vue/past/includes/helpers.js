@@ -150,7 +150,11 @@ function processResponse(json, mainDatatable, fuzzySearch) {
   json.data.forEach(function(row) {
     row.names = $.map(row.names, function(s) { return s.replace(' ', '&nbsp;'); }).join('<br>');
 
-    row.voyage__voyage_dates__first_dis_of_slaves = processCsvDate(row.voyage__voyage_dates__first_dis_of_slaves);
+    for (const [key, val] of Object.entries(row)) {
+      if (key.includes('voyage_dates__')) {
+        row[key] = processCsvDate(val);
+      }
+    }
 
     var gender = '';
     if (row.gender == 1) {

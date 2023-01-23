@@ -39,7 +39,7 @@ var allColumns = [
     { data: "voyage__voyage_ship__ship_name", category: 2, header: gettext("Ship Name"), isImputed: false },
     { data: "voyage__voyage_itinerary__imp_principal_place_of_slave_purchase__place", category: 2, header: gettext("Embarkation Port"), isImputed: false },
     { data: "voyage__voyage_itinerary__imp_principal_port_slave_dis__place", category: 2, header: gettext("Disembarkation Port"), isImputed: false },
-    { data: "voyage__voyage_dates__first_dis_of_slaves", category: 2, header: gettext("Arrival Year"), isImputed: false },
+    { data: "voyage__voyage_dates__first_dis_of_slaves", category: 2, header: gettext("Arrival"), isImputed: false },
     { data: "voyage__voyage_itinerary__int_first_port_dis__place", category: 2, header: gettext("Intended Disembarkation Port"), isImputed: false },
 
     //fate
@@ -66,7 +66,8 @@ var allColumns = [
     // Itinerary
     { data: "voyage_id", category: 2, header: gettext("Voyage ID"), isImputed: false },
     { data: "voyage__voyage_ship__ship_name", category: 1, header: gettext("Ship Name"), isImputed: false },
-    { data: "voyage__voyage_dates__first_dis_of_slaves", category: 1, header: gettext("Arrival Year"), isImputed: false },
+    { data: "voyage__voyage_dates__date_departed_africa", category: 1, header: gettext("Departure"), isImputed: false },
+    { data: "voyage__voyage_dates__first_dis_of_slaves", category: 1, header: gettext("Arrival"), isImputed: false },
     { data: "voyage__voyage_itinerary__imp_principal_place_of_slave_purchase__place", category: 1, header: gettext("Embarkation Port"), isImputed: false },
     { data: "voyage__voyage_itinerary__imp_principal_port_slave_dis__place", category: 1, header: gettext("Disembarkation Port"), isImputed: false },
 
