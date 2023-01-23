@@ -288,6 +288,7 @@ def search_enslaved(request):
             'voyage_id',
             'voyage__voyage_ship__ship_name',
             'voyage__voyage_dates__first_dis_of_slaves',
+            'voyage__voyage_dates__date_departed_africa',
             'voyage__voyage_itinerary__int_first_port_dis__place',
             'voyage__voyage_itinerary__imp_principal_place_of_slave_purchase__place',
             'voyage__voyage_itinerary__imp_principal_port_slave_dis__place',

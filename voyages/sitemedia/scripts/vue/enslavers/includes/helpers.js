@@ -696,6 +696,7 @@ function loadTreeselectOptions(vm, vTreeselect, filter, callback) {
       var modelVarName = {
         embarkation_ports: "imp_principal_place_of_slave_purchase_id",
         disembarkation_ports: "imp_principal_port_slave_dis_id",
+        departure_ports: "imp_port_voyage_begin_id",
         // intended_disembarkation_port: "imp_principal_port_slave_dis_id",
         post_disembark_location: "post_disembark_location_id",
       };

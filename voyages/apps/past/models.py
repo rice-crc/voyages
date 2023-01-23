@@ -1316,6 +1316,7 @@ class EnslaverSearch:
                  year_range=None,
                  embarkation_ports=None,
                  disembarkation_ports=None,
+                 departure_ports=None,
                  ship_name=None,
                  voyage_id=None,
                  source=None,
@@ -1335,6 +1336,8 @@ class EnslaverSearch:
                 embarked
         @param: disembarkation_ports A list of port ids where the enslaved
                 disembarked
+        @param: departure_ports A list of port ids where the voyage
+                begin
         @param: ship_name The ship name that the enslaved embarked
         @param: voyage_id A pair (a, b) where the a <= voyage_id <= b
         @param: source A text fragment that should match Source's text_ref or
@@ -1351,6 +1354,7 @@ class EnslaverSearch:
         self.year_range = year_range
         self.embarkation_ports = embarkation_ports
         self.disembarkation_ports = disembarkation_ports
+        self.departure_ports = departure_ports
         self.ship_name = ship_name
         self.voyage_id = voyage_id
         self.source = source
@@ -1405,6 +1409,9 @@ class EnslaverSearch:
         if self.disembarkation_ports:
             # Search on MJSLPTIMP field.
             q = add_voyage_field(q, 'voyage_itinerary__imp_principal_port_slave_dis__pk', 'in', self.disembarkation_ports)
+        if self.departure_ports:
+            # Search on PORTDEP field.
+            q = add_voyage_field(q, 'voyage_itinerary__imp_port_voyage_begin__pk', 'in', self.departure_ports)
         if self.year_range:
             # Search on YEARAM field. Note that we have a 'MM,DD,YYYY' format
             # even though the only year should be present.
