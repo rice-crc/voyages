@@ -25,14 +25,15 @@ var_ethnicity = new TreeselectVariable({
 
 var_language_groups = new LanguageGroupVariable({
     varName: "language_groups",
-    label: gettext("Language Group"),
-    description: "",
+    label: gettext("Language Groups"),
+    description: gettext("Languages appear under a single modern country or under multi-country if they are geographically dispersed. Begin typing in the box below."),
   },{
     op: "is one of",
     searchTerm: [],
   },{
     isImputed: false,
-    isadvanced: false
+    isadvanced: false,
+    isUsed: true
   });
 
 // all

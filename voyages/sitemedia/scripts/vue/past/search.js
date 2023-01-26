@@ -3,7 +3,7 @@ var categoryNames = [
     gettext("African Name"),
     gettext("Personal Data"),
     gettext("Itinerary"),
-    // gettext("Cultural Association"),
+    gettext("Cultural Association"),
     gettext("Fate"),
     gettext("Sources"),
     gettext("Recordings"),
@@ -26,7 +26,7 @@ var allColumns = [
     { data: "modern_names", category: 0, header: gettext("Modern Name"), isImputed: false },
 
     // cultural association
-    // { data: "language_group__modern_country__name", category: 3, header: gettext("Modern Country"), isImputed: false, visible: false },
+//     { data: "language_group__modern_country__name", category: 3, header: gettext("Modern Country"), isImputed: false, visible: true },
     { data: "language_group__name", category: 3, header: gettext("Language Group"), isImputed: false },
 
     // personal data
@@ -39,7 +39,7 @@ var allColumns = [
     { data: "voyage__voyage_ship__ship_name", category: 2, header: gettext("Ship Name"), isImputed: false },
     { data: "voyage__voyage_itinerary__imp_principal_place_of_slave_purchase__place", category: 2, header: gettext("Embarkation Port"), isImputed: false },
     { data: "voyage__voyage_itinerary__imp_principal_port_slave_dis__place", category: 2, header: gettext("Disembarkation Port"), isImputed: false },
-    { data: "voyage__voyage_dates__first_dis_of_slaves", category: 2, header: gettext("Arrival Year"), isImputed: false },
+    { data: "voyage__voyage_dates__first_dis_of_slaves", category: 2, header: gettext("Arrival"), isImputed: false },
     { data: "voyage__voyage_itinerary__int_first_port_dis__place", category: 2, header: gettext("Intended Disembarkation Port"), isImputed: false },
 
     //fate
@@ -64,8 +64,10 @@ var allColumns = [
     { data: "skin_color", category: 0, header: gettext("Racial Descriptor"), isImputed: false },
 
     // Itinerary
+    { data: "voyage_id", category: 2, header: gettext("Voyage ID"), isImputed: false },
     { data: "voyage__voyage_ship__ship_name", category: 1, header: gettext("Ship Name"), isImputed: false },
-    { data: "voyage__voyage_dates__first_dis_of_slaves", category: 1, header: gettext("Arrival Year"), isImputed: false },
+    { data: "voyage__voyage_dates__date_departed_africa", category: 1, header: gettext("Departure"), isImputed: false },
+    { data: "voyage__voyage_dates__first_dis_of_slaves", category: 1, header: gettext("Arrival"), isImputed: false },
     { data: "voyage__voyage_itinerary__imp_principal_place_of_slave_purchase__place", category: 1, header: gettext("Embarkation Port"), isImputed: false },
     { data: "voyage__voyage_itinerary__imp_principal_port_slave_dis__place", category: 1, header: gettext("Disembarkation Port"), isImputed: false },
 

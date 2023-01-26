@@ -130,8 +130,10 @@ def get_modern_countries(_):
 
 
 @csrf_exempt
-@cache_page(3600)
-def get_language_groups(_):
+@cache_page(0)
+def get_language_groups(request):
+    #we need a switch between used and unused language groups (search should only have used, contribute should have all)
+    active_only=json.loads(request.body).get('active_only')
     countries_list_key = "countries_list"
     alt_names_key = "alt_names_list"
     country_helper = MultiValueHelper(countries_list_key, ModernCountry.languages.through, 'languagegroup_id', modern_country_id='moderncountry__pk', country_name='moderncountry__name')
@@ -140,9 +142,15 @@ def get_language_groups(_):
     q = country_helper.adapt_query(q)
     q = alt_names_helper.adapt_query(q)
     items = [country_helper.patch_row(alt_names_helper.patch_row(row)) for row in q.values()]
-    return JsonResponse([{ "id": item["id"], "name": item["name"], "lat": item["latitude"], "lng": item["longitude"], "alts": item[alt_names_key], "countries": item[countries_list_key] }
-        for item in items], safe=False)
-
+    if active_only:
+        enslaved=Enslaved.objects.all().filter(enslaved_id__lte=500000)
+        used_lgids=list(set([i[0] for i in list(enslaved.values_list('language_group_id')) if i[0] is not None]))
+    
+        return JsonResponse([{ "id": item["id"], "name": item["name"], "lat": item["latitude"], "lng": item["longitude"], "alts": item[alt_names_key], "countries": item[countries_list_key] }
+            for item in items if item["id"] in used_lgids], safe=False)
+    else:
+        return JsonResponse([{ "id": item["id"], "name": item["name"], "lat": item["latitude"], "lng": item["longitude"], "alts": item[alt_names_key], "countries": item[countries_list_key] }
+            for item in items], safe=False)
 
 @csrf_exempt
 @cache_page(3600)
@@ -280,6 +288,7 @@ def search_enslaved(request):
             'voyage_id',
             'voyage__voyage_ship__ship_name',
             'voyage__voyage_dates__first_dis_of_slaves',
+            'voyage__voyage_dates__date_departed_africa',
             'voyage__voyage_itinerary__int_first_port_dis__place',
             'voyage__voyage_itinerary__imp_principal_place_of_slave_purchase__place',
             'voyage__voyage_itinerary__imp_principal_port_slave_dis__place',

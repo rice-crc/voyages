@@ -19,7 +19,7 @@ function drawLegend(map) {
 			<tr>\
 				<td><div class="circle" style="background-color:rgb(167,224,169);"></div><td>\
 				<td>' + gettext('Origins') + '\
-				<span id="origins_map_key_pill" data-toggle="tooltip" class="badge badge-pill badge-secondary tooltip-pointer" title="Peoples\' origins are imputed based on their recorded names."> IMP </span>\
+				<span id="origins_map_key_pill" data-toggle="tooltip" class="badge badge-pill badge-secondary tooltip-pointer" title="Origins are derived from user contributions."> IMP </span>\
 				</td>\
 			</tr>\
 			<tr>\

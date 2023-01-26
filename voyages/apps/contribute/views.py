@@ -2253,7 +2253,7 @@ def _enslaved_contrib_base_query():
         .prefetch_related('contributed_language_groups')
 
 @login_required()
-def get_origins_contributions(request, status=0):
+def get_origins_contributions(request, status=[0]):
     q = _enslaved_contrib_base_query()
     if status:
         # The caller can explicitly set status to 
@@ -2302,16 +2302,19 @@ def get_origins_contrib_details(request, contrib_pk):
         c.enslaved.name_second,
         c.enslaved.name_third
     ])
-    propagation_candidates = Enslaved.objects \
-        .filter(voyage__voyage_itinerary__imp_principal_region_of_slave_purchase_id= \
-            c.enslaved.voyage.voyage_itinerary.imp_principal_region_of_slave_purchase_id) \
-        .filter(name_clauses) \
-        .values( \
-            'pk', 'gender', 'modern_name', 'documented_name', 'notes', \
-            'name_first', 'name_second', 'name_third', \
-            'language_group_id', 'modern_country_id', \
-            'language_group__name', 'modern_country__name', \
-            embarkation=F('voyage__voyage_itinerary__imp_principal_place_of_slave_purchase__place'))
+    if name_clauses:
+        propagation_candidates = Enslaved.objects \
+            .filter(voyage__voyage_itinerary__imp_principal_region_of_slave_purchase_id= \
+                c.enslaved.voyage.voyage_itinerary.imp_principal_region_of_slave_purchase_id) \
+            .filter(name_clauses) \
+            .values( \
+                'pk', 'gender', 'modern_name', 'documented_name', 'notes', \
+                'name_first', 'name_second', 'name_third', \
+                'language_group_id', 'modern_country_id', \
+                'language_group__name', 'modern_country__name', \
+                embarkation=F('voyage__voyage_itinerary__imp_principal_place_of_slave_purchase__place'))
+    else:
+        propagation_candidates = []
     expanded = _expand_contrib(c)
     expanded['prev_name_contributions'] = list(prev_name_contrib)
     expanded['prev_language_group_contributions'] = list(prev_lang_contrib)

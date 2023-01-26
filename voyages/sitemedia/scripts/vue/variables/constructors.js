@@ -48,7 +48,7 @@ function NumberVariable(varInfo, searchTerms, options) {
     isAdvanced: options["isAdvanced"],
   };
   this.changed = false;
-  this.activated = false;
+  this.activated = !!varInfo.activated;
 }
 
 function PercentageVariable(varInfo, searchTerms, options) {
@@ -206,6 +206,7 @@ function LanguageGroupVariable(varInfo, searchTerms, options) {
   this.options = {
     isImputed: options["isImputed"],
     isAdvanced: options["isAdvanced"],
+    isUsed: options["isUsed"],
     isMultiple: typeof options["isMultiple"] !== 'undefined' ? options["isMultiple"] : true,
     disableBranchNodes: typeof options["disableBranchNodes"] !== 'undefined' ? options["disableBranchNodes"] : false,
     maxLength: typeof options["maxLength"] !== 'undefined' ? options["maxLength"] : 0,

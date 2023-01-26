@@ -11792,11 +11792,16 @@ msgstr "Embarcados"
 msgid "disembarked"
 msgstr "Desembarcados"
 
+#: voyages/sitemedia/scripts/vue/variables/past/cultural-association.js:29
+msgid "Languages appear under a single modern country or under multi-country if they are geographically dispersed. Begin typing in the box below."
+msgstr "Os idiomas aparecem em um único país moderno ou em vários países, se estiverem geograficamente dispersos. Comece a digitar na caixa abaixo."
+
+
 #: voyages/sitemedia/scripts/vue/past-contribute/app.js:17
 #: voyages/sitemedia/scripts/vue/past-contribute/app.js:106
 #: voyages/sitemedia/scripts/vue/variables/past/cultural-association.js:28
 #, fuzzy
-msgid "Language Group"
+msgid "Language Groups"
 msgstr "Idioma"
 
 #: voyages/sitemedia/scripts/vue/past-contribute/app.js:104
@@ -13817,11 +13822,9 @@ msgstr ""
 #~ msgstr "Sem informações sobre escravos"
 
 #~ msgid ""
-#~ "URLs or digitized image of the source to be submitted wherever possible "
-#~ "about source"
+#~ "URLs of the source to be submitted wherever possible."
 #~ msgstr ""
-#~ "URLs ou imagem digitalizada da fonte a ser submetida sempre que possível "
-#~ "sobre a fonte"
+#~ "URLs da fonte a ser submetida sempre que possível."
 
 #~ msgid "Author"
 #~ msgstr "Autor"

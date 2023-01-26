@@ -44,6 +44,7 @@
 				<ul class="navbar-nav">
 					{% include "past-enslavers/_enslaver-name.html" %}
 					{% include "past-enslavers/_itinerary.html" %}
+					{% include "past-enslavers/_places.html" %}
 					{% include "past-enslavers/_sources.html" %}
 					{% comment %}
 					{% include "past/_identity.html" %}
@@ -95,7 +96,7 @@
 
 <script>
 	const SV_MODE = "past";
-	const minVoyageYear = 1808;
+	const minVoyageYear = 1806;
 </script>
 
 {% compress js %}
@@ -128,6 +129,7 @@
 <!-- <script src="{{ STATIC_URL }}scripts/vue/variables/past/identity.js"></script> -->
 <!-- <script src="{{ STATIC_URL }}scripts/vue/variables/past/personal-data.js"></script> -->
 <script src="{{ STATIC_URL }}scripts/vue/variables/past-enslavers/itinerary.js"></script>
+<script src="{{ STATIC_URL }}scripts/vue/variables/past-enslavers/places.js"></script>
 <!-- <script src="{{ STATIC_URL }}scripts/vue/variables/past/cultural-association.js"></script> -->
 <!-- <script src="{{ STATIC_URL }}scripts/vue/variables/past/fate.js"></script> -->
 <script src="{{ STATIC_URL }}scripts/vue/variables/past-enslavers/sources.js"></script>

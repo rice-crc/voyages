@@ -6230,11 +6230,9 @@ msgstr "Sem informações sobre escravos"
 #: voyages/apps/contribute/templates/contribute/interim.html:1649
 #: voyages/apps/contribute/templates/contribute/interim.html:1676
 msgid ""
-"URLs or digitized image of the source to be submitted wherever possible "
-"about source"
+"URLs of the source to be submitted wherever possible."
 msgstr ""
-"URLs ou imagem digitalizada da fonte a ser submetida sempre que possível "
-"sobre a fonte"
+"URLs da fonte a ser submetida sempre que possível."
 
 #: voyages/apps/contribute/templates/contribute/interim.html:1463
 #: voyages/apps/contribute/templates/contribute/interim.html:1514
@@ -9223,9 +9221,8 @@ msgstr ""
 
 #: voyages/apps/past/templates/past/_cultural-association.html:4
 #: voyages/apps/past/templates/past/_cultural-association.html:9
-#, fuzzy
 msgid "Cultural Association"
-msgstr "Abolição"
+msgstr "Associação Cultural"
 
 #: voyages/apps/past/templates/past/_cultural-association.html:6
 #: voyages/apps/past/templates/past/_personal-data.html:4
@@ -9316,6 +9313,7 @@ msgid "Names & Pronunciation"
 msgstr ""
 
 #: voyages/apps/past/templates/past/contribute.html:65
+#: voyages/apps/past/templates/past/_cultural_association.html:25
 #, fuzzy
 msgid "Language Groups"
 msgstr "Idioma"

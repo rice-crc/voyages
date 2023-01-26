@@ -18,6 +18,7 @@ var searchBar = new Vue({
       // identity: identity,
       // personalData: personalData,
       itinerary: itinerary,
+      places: places,
       // culturalAssociation: culturalAssociation,
       // fate: fate,
       sources: sources,

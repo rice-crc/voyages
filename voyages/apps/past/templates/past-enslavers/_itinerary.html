@@ -1,12 +1,12 @@
 {% load i18n %}
 
 <li class="nav-item dropdown">
-  <v-menu-title :count="filter.itinerary.count" title="{% trans 'Itinerary' %}"></v-menu-title>
+  <v-menu-title :count="filter.itinerary.count" title="{% trans 'Voyage' %}"></v-menu-title>
 
-  <v-panel-singular @apply="apply" @reset="reset" group="itinerary" title="{% trans 'Itinerary' %}" sub-group="itinerary"
+  <v-panel-singular @apply="apply" @reset="reset" group="itinerary" title="{% trans 'Voyage' %}" sub-group="itinerary"
     :filters="filter.itinerary.itinerary" align="left">
     <div slot="v-panel-header">
-      <v-panel-header title="{% trans 'Itinerary' %}" description="{% trans '' context 'Enslaver Itinerary search panel description' %}">
+      <v-panel-header title="{% trans 'Voyage' %}" description="{% trans '' context 'Enslaver Voyage search panel description' %}">
         <div slot="v-modal-content"></div>
       </v-panel-header>
     </div>
@@ -19,16 +19,6 @@
       <v-text @change="changed"
         :filter="scope.filters.var_ship_name"
       ></v-text>
-
-      <v-treeselect
-        :filter="scope.filters.var_embarkation_ports"
-        @change="changed">
-      </v-treeselect>
-
-      <v-treeselect
-        :filter="scope.filters.var_disembarkation_ports"
-        @change="changed">
-      </v-treeselect>
 
       <v-number
         :filter="scope.filters.var_year_range"

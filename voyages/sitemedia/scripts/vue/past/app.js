@@ -728,7 +728,7 @@ jQuery(document).on("shown.bs.tab", 'a[data-toggle="tab"]', function(e) {
 });
 
 // for maps: passes map node clicks into filter
-function linkfilter(id,tag) {
+function linkfilter(ids,tag) {
 	
 	switch (tag) {
 		case 'embarkation':
@@ -740,17 +740,23 @@ function linkfilter(id,tag) {
 		case 'post-disembarkation':
 			var this_search_var = searchBar.filter.fate.fate.var_post_disembark_location;
 			break;
+		case 'origin':
+			var this_search_var = searchBar.filter.culturalAssociation.culturalAssociation.var_language_groups;
+			break;
 		default:
 			console.log(tag);
 	};
+	var goodtogo=false;
+	ids.toString().split('-').forEach(id=>{
+		if (typeof(eval(id))=="number" && !this_search_var.value.searchTerm.includes(eval(id))) {
+			this_search_var.value.searchTerm.push(eval(id));
+			goodtogo=true
+		}
+	})
 	
-	if (!this_search_var.value.searchTerm.includes(id)) {
-		this_search_var.value.searchTerm.push(id);
+	if (goodtogo) {
 		this_search_var.activated = true;
 		this_search_var.changed = true;
 		searchBar.refresh();
-	} else {
-		console.log('you already selected this filter!')
 	}
-	
 };

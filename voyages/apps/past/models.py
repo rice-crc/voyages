@@ -200,8 +200,9 @@ class EnslavedNameSearchCache:
             cls.WORDSET_INDEX = Levenshtein_search.populate_wordset(-1, list(all_names))
             q = EnslavedName.objects.values_list('id', 'name', 'language',
                                                  'recordings_count')
+            sound_recordings = {}
             for item in q:
-                current = cls._sound_recordings.setdefault(item[1], {})
+                current = sound_recordings.setdefault(item[1], {})
                 langs = current.setdefault('langs', [])
                 lang = {}
                 lang['lang'] = item[2]
@@ -211,6 +212,7 @@ class EnslavedNameSearchCache:
                     for index in range(1, 1 + item[3])
                 ]
                 langs.append(lang)
+            cls._sound_recordings = sound_recordings
             cls._loaded = datetime.now()
 
 class EnslaverNameSearchCache:
@@ -1176,7 +1178,8 @@ class EnslavedSearch:
             else:
                 q = q.order_by('enslaved_id')
 
-        # Save annotations to circumvent a Django bug (see below).
+        # Save annotations to circumvent Django bug 28811 (see below).
+        # https://code.djangoproject.com/ticket/28811
         aux_annotations = q.query.annotation_select.copy()
         MultiValueHelper.set_group_concat_limit()
         if is_fuzzy:
@@ -1188,7 +1191,8 @@ class EnslavedSearch:
         for helper in self.all_helpers:
             main_query = helper.adapt_query(main_query)
         main_query = main_query.values(*fields)
-
+            # The next line is again due to Django bug 28811.
+        main_query.query.annotation_select.update(aux_annotations)
         if is_fuzzy:
             # Convert the QuerySet to a concrete list and include the ranking
             # as a member of each object in that list.
@@ -1202,11 +1206,8 @@ class EnslavedSearch:
         else:
             (count_query_str, count_params) = q.order_by().distinct().query.sql_with_params()
             q = q.distinct()
-            # These two lines are due to a bug in Django (fixed in newer
-            # versions).
-            # https://code.djangoproject.com/ticket/28811
+            # The next line is again due to Django bug 28811.
             q.query.annotation_select.update(aux_annotations)
-            main_query.query.annotation_select.update(aux_annotations)
             (match_query_str, match_params) = q.query.sql_with_params()
             (main_query_str, main_params) = main_query.query.sql_with_params()
             full_query_str = f"{main_query_str} INNER JOIN ({match_query_str} LIMIT 0,0) AS matches ON matches.pk=past_enslaved.enslaved_id"
@@ -1315,6 +1316,7 @@ class EnslaverSearch:
                  year_range=None,
                  embarkation_ports=None,
                  disembarkation_ports=None,
+                 departure_ports=None,
                  ship_name=None,
                  voyage_id=None,
                  source=None,
@@ -1334,6 +1336,8 @@ class EnslaverSearch:
                 embarked
         @param: disembarkation_ports A list of port ids where the enslaved
                 disembarked
+        @param: departure_ports A list of port ids where the voyage
+                begin
         @param: ship_name The ship name that the enslaved embarked
         @param: voyage_id A pair (a, b) where the a <= voyage_id <= b
         @param: source A text fragment that should match Source's text_ref or
@@ -1350,6 +1354,7 @@ class EnslaverSearch:
         self.year_range = year_range
         self.embarkation_ports = embarkation_ports
         self.disembarkation_ports = disembarkation_ports
+        self.departure_ports = departure_ports
         self.ship_name = ship_name
         self.voyage_id = voyage_id
         self.source = source
@@ -1404,6 +1409,9 @@ class EnslaverSearch:
         if self.disembarkation_ports:
             # Search on MJSLPTIMP field.
             q = add_voyage_field(q, 'voyage_itinerary__imp_principal_port_slave_dis__pk', 'in', self.disembarkation_ports)
+        if self.departure_ports:
+            # Search on PORTDEP field.
+            q = add_voyage_field(q, 'voyage_itinerary__imp_port_voyage_begin__pk', 'in', self.departure_ports)
         if self.year_range:
             # Search on YEARAM field. Note that we have a 'MM,DD,YYYY' format
             # even though the only year should be present.
