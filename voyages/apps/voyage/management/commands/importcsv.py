@@ -303,6 +303,10 @@ class Command(BaseCommand):
                 Place, 'arrport')
             itinerary.int_second_port_dis = row.get_by_value(
                 Place, 'arrport2')
+            itinerary.int_third_port_dis = row.get_by_value(
+                Place, 'arrport3')
+            itinerary.int_fourth_port_dis = row.get_by_value(
+                Place, 'arrport4')
             itinerary.int_first_region_slave_landing = row.get_by_value(
                 Region, 'regarr')
             itinerary.int_second_place_region_slave_landing = (

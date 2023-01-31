@@ -8,17 +8,18 @@ import unicodecsv
 
 empty = re.compile(r"^\s*\.?$")
 
-def get_multi_valued_column_suffix(max_columns):
-    ALPHABET = 26
-    if max_columns > 2 * ALPHABET: raise Exception("Too many columns!")
-    first_char = ord('a')
-    single_char_limit = min(max_columns, ALPHABET)
+def get_multi_valued_column_suffix(max_columns, upper_case=False):
+    ALPHABET_LEN = 26
+    if max_columns > 2 * ALPHABET_LEN: raise Exception("Too many columns!")
+    start_char = 'A' if upper_case else 'a'
+    first_char = ord(start_char)
+    single_char_limit = min(max_columns, ALPHABET_LEN)
     for i in range(0, single_char_limit):
         yield chr(first_char + i)
-    max_columns -= ALPHABET
+    max_columns -= ALPHABET_LEN
     if max_columns > 0:
         for i in range(0, max_columns):
-            yield 'a' + chr(first_char + i)
+            yield start_char + chr(first_char + i)
             
 class RowHelper:
     """

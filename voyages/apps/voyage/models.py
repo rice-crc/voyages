@@ -555,6 +555,20 @@ class VoyageItinerary(models.Model):
         null=True,
         blank=True,
         on_delete=models.CASCADE)
+    int_third_port_dis = models.ForeignKey(
+        'Place',
+        related_name="int_third_port_dis",
+        verbose_name="Third intended port of disembarkation (ARRPORT3)",
+        null=True,
+        blank=True,
+        on_delete=models.CASCADE)
+    int_fourth_port_dis = models.ForeignKey(
+        'Place',
+        related_name="int_fourth_port_dis",
+        verbose_name="Fourth intended port of disembarkation (ARRPORT4)",
+        null=True,
+        blank=True,
+        on_delete=models.CASCADE)
     int_first_region_slave_landing = models.ForeignKey(
         'Region',
         related_name="int_first_region_slave_landing",
@@ -566,6 +580,20 @@ class VoyageItinerary(models.Model):
         'Region',
         related_name="int_second_region_slave_landing",
         verbose_name="Second intended region of slave landing (REGARR2)",
+        null=True,
+        blank=True,
+        on_delete=models.CASCADE)
+    int_third_place_region_slave_landing = models.ForeignKey(
+        'Region',
+        related_name="int_third_region_slave_landing",
+        verbose_name="Third intended region of slave landing (REGARR3)",
+        null=True,
+        blank=True,
+        on_delete=models.CASCADE)
+    int_fourth_place_region_slave_landing = models.ForeignKey(
+        'Region',
+        related_name="int_fourth_region_slave_landing",
+        verbose_name="Fourth intended region of slave landing (REGARR4)",
         null=True,
         blank=True,
         on_delete=models.CASCADE)
@@ -1959,10 +1987,14 @@ class VoyagesFullQueryHelper:
             'imp_principal_port_slave_dis__region__broad_region',
             'imp_principal_region_of_slave_purchase',
             'imp_principal_region_slave_dis', 'imp_region_voyage_begin',
-            'int_first_port_dis', 'int_first_port_emb',
+            'int_first_port_dis', 'int_second_port_dis',
+            'int_third_port_dis', 'int_fourth_port_dis',
+            'int_first_port_emb',
             'int_first_region_purchase_slaves',
             'int_first_region_slave_landing',
-            'int_second_place_region_slave_landing', 'int_second_port_dis',
+            'int_second_place_region_slave_landing',
+            'int_third_place_region_slave_landing',
+            'int_fourth_place_region_slave_landing',
             'int_second_port_emb', 'int_second_region_purchase_slaves',
             'place_voyage_ended', 'port_of_call_before_atl_crossing',
             'port_of_departure', 'principal_place_of_slave_purchase',
