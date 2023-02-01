@@ -243,7 +243,19 @@ def is_feature_enabled(feature_name):
     return FEATURE_FLAGS.get(feature_name, False)
 
 
+# The migration path for Voyage Captains and Owners will go through 4 stages:
 
+# 1 - Legacy and Enslaver tables coexist but only Legacy shows up in the Voyages
+# end and are imported/exported in CSV format.
+# 2 - Both tables coexist and the records are combined in the front-end and
+# import/exports. Duplication in the db is expected but we will dedupe the Solr
+# index and CSV export.
+# 3 - The legacy tables are kept but their results are no longer visible in the
+# UI and are no longer imported/exported in CSV format.
+# 4 - After enough testing on stage 3, the legacy tables will be removed from
+# the db.
+
+VOYAGE_ENSLAVERS_MIGRATION_STAGE = 1
 
 
 # Modify HAYSTACK config for fixture loading durring tests
@@ -268,4 +280,3 @@ except Exception as e:
         file=sys.stderr)
 
 del sys
-

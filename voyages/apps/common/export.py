@@ -2,8 +2,11 @@ from __future__ import unicode_literals
 
 from builtins import str
 
+import json
 import xlwt
+from collections.abc import Iterable
 from django.http import HttpResponse
+
 
 
 def download_xls(header_rows, data_set, row_header_columns=None):
@@ -52,7 +55,8 @@ def download_xls(header_rows, data_set, row_header_columns=None):
     # Write tabular data.
     for row in data_set:
         # TODO: use XLSX format that allows more rows!
-        if row_index == 65536:
+        if row_index == 65535:
+            ws.write(row_index, 0, 'Output is truncated!')
             break
         col_index = 0
         for rhd in row_header_data:
@@ -64,6 +68,8 @@ def download_xls(header_rows, data_set, row_header_columns=None):
                              col_index)
             col_index += 1
         for cell in row:
+            if not isinstance(cell, str) and isinstance(cell, Iterable):
+                cell = json.dumps(cell)
             ws.write(row_index, col_index, cell, number_style)
             col_index += 1
         row_index += 1
