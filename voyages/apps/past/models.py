@@ -551,6 +551,8 @@ class EnslaverVoyageConnection(models.Model):
     order = models.IntegerField(null=True)
     # NOTE: we will have to substitute VoyageShipOwner and VoyageCaptain
     # models/tables by this entity.
+    # leaving this line below for later cleanup when the migration is finished.
+    # settings.VOYAGE_ENSLAVERS_MIGRATION_STAGE
 
 
 class VoyageCaptainOwnerHelper:
@@ -559,33 +561,56 @@ class VoyageCaptainOwnerHelper:
     their role.
     """
 
+    _captain_through_table = Voyage.voyage_captain.through._meta.db_table
+    _owner_through_table = Voyage.voyage_ship_owner.through._meta.db_table
+
     def __init__(self):
         self.owner_role_ids = list( \
             EnslaverRole.objects.filter(name__icontains='owner').values_list('pk', flat=True))
         self.captain_role_ids = list( \
             EnslaverRole.objects.filter(name__icontains='captain').values_list('pk', flat=True))
+
+
+    class UniqueHelper:
+        """
+        A little helper that allows appending to a list only if the items
+        (names) are unique while maintaining the insertion order.
+        """
+
+        def __init__(self):
+            self.all = []
+            self.unique = set()
+        
+        def append(self, iterable):
+            for x in iterable:
+                if x not in self.unique:
+                    self.unique.add(x)
+                    self.all.append(x)
+    
             
     def get_captains(self, voyage):
-        all = []
+        h = self.UniqueHelper()
         if settings.VOYAGE_ENSLAVERS_MIGRATION_STAGE <= 2:
             # Fetch from the LEGACY table.
-            all += [c.name for c in voyage.voyage_captain.all()]
+            h.append(c.name for c in \
+                voyage.voyage_captain.order_by(f"{self.__class__._captain_through_table}.captain_order"))
         if settings.VOYAGE_ENSLAVERS_MIGRATION_STAGE >= 2:
             # Fetch from EnslaversVoyageConnection.
-            all += list(self.__class__.get_all_with_roles(voyage, self.captain_role_ids))
+            h.append(self.__class__.get_all_with_roles(voyage, self.captain_role_ids))
         # Dedupe names.
-        return list(set(all))
+        return h.all
 
     def get_owners(self, voyage):
-        all = []
+        h = self.UniqueHelper()
         if settings.VOYAGE_ENSLAVERS_MIGRATION_STAGE <= 2:
             # Fetch from the LEGACY table.
-            all += [c.name for c in voyage.voyage_ship_owner.all()]
+            h.append(c.name for c in \
+                voyage.voyage_ship_owner.order_by(f"{self.__class__._owner_through_table}.owner_order"))
         if settings.VOYAGE_ENSLAVERS_MIGRATION_STAGE >= 2:
             # Fetch from EnslaversVoyageConnection.
-            all += list(self.__class__.get_all_with_roles(voyage, self.owner_role_ids))
+            h.append(self.__class__.get_all_with_roles(voyage, self.owner_role_ids))
         # Dedupe names.
-        return list(set(all))
+        return h.all
 
     @staticmethod
     def get_all_with_roles(voyage, roles):

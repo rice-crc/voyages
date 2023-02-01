@@ -405,15 +405,18 @@ def _map_voyage_to_spss(voyage):
     data['DATASET'] = voyage.dataset
 
     # Dates
+    def sanitize_date(csv_date):
+        return csv_date if csv_date != ',,' else ''
+
     dates = voyage.voyage_dates
-    data['DATEDEP'] = dates.voyage_began if dates else None
-    data['DATEEND'] = dates.voyage_completed if dates else None
-    data['DATEBUY'] = dates.slave_purchase_began if dates else None
-    data['DATELEFTAFR'] = dates.date_departed_africa if dates else None
-    data['DATELAND1'] = dates.first_dis_of_slaves if dates else None
-    data['DATELAND2'] = dates.arrival_at_second_place_landing if dates else None
-    data['DATELAND3'] = dates.third_dis_of_slaves if dates else None
-    data['DATEDEPAM'] = dates.departure_last_place_of_landing if dates else None
+    data['DATEDEP'] = sanitize_date(dates.voyage_began) if dates else None
+    data['DATEEND'] = sanitize_date(dates.voyage_completed) if dates else None
+    data['DATEBUY'] = sanitize_date(dates.slave_purchase_began) if dates else None
+    data['DATELEFTAFR'] = sanitize_date(dates.date_departed_africa) if dates else None
+    data['DATELAND1'] = sanitize_date(dates.first_dis_of_slaves) if dates else None
+    data['DATELAND2'] = sanitize_date(dates.arrival_at_second_place_landing) if dates else None
+    data['DATELAND3'] = sanitize_date(dates.third_dis_of_slaves) if dates else None
+    data['DATEDEPAM'] = sanitize_date(dates.departure_last_place_of_landing) if dates else None
     _map_csv_date(data, 'DATEDEP', dates.voyage_began if dates else None)
     _map_csv_date(data, 'D1SLATR', dates.slave_purchase_began if dates else None)
     _map_csv_date(data, 'DLSLATR', dates.vessel_left_port if dates else None)

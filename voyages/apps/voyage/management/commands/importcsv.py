@@ -211,9 +211,10 @@ class Command(BaseCommand):
                 return component
             if suffixes is None:
                 suffixes = ['a', 'b', 'c']
-            return get_component(suffixes[1], 2) + ',' + \
-                get_component(suffixes[0], 2) + ',' + \
-                get_component(suffixes[2], 4)
+            month = get_component(suffixes[1], 2)
+            day = get_component(suffixes[0], 2) 
+            year = get_component(suffixes[2], 4)
+            return f"{month},{day},{year}" if month or day or year else ''
 
         def date_from_sep_values(value):
             """
@@ -255,7 +256,7 @@ class Command(BaseCommand):
                 day = get_component_val(components[coords[2]], 1, 31, False)
                 month = get_component_val(components[coords[1]], 1, 12, bool(day))
                 year = get_component_val(components[coords[0]], 999, 1900, bool(month))
-                return f'{month},{day},{year}'
+                return f'{month},{day},{year}' if month or day or year else ''
             except Exception as e:
                 self.errors += 1
                 error_reporting.report('Invalid date "' + value + '" ' + str(e))
@@ -592,7 +593,7 @@ class Command(BaseCommand):
                     voyage.voyage_in_cd_rom = in_cd_room == '1'
                     voyage.voyage_groupings = rh.get_by_value(VoyageGroupings, 'xmimpflag')
                     voyage.dataset = rh.cint('dataset', allow_null=False)
-                    voyage.comments = rh.get('COMMENTS')
+                    voyage.comments = rh.get('comments')
                     intra_american = voyage.dataset == 1
                     counts[voyage.dataset] = counts.get(voyage.dataset, 0) + 1
                     ships.append(row_to_ship(rh, voyage))
@@ -601,8 +602,7 @@ class Command(BaseCommand):
                     crews.append(row_to_crew(rh, voyage))
                     voyage_numbers.append(row_to_numbers(rh, voyage))
                     # Captains
-                    order = 1
-                    for key in get_multi_valued_column_suffix(3):
+                    for order, key in enumerate(get_multi_valued_column_suffix(3)):
                         captain_name = rh.get('captain' + key)
                         if captain_name is None or empty.match(captain_name):
                             continue
@@ -613,13 +613,11 @@ class Command(BaseCommand):
                             captains[captain_name] = captain_model
                         captain_connection = VoyageCaptainConnection()
                         captain_connection.captain = captain_model
-                        captain_connection.captain_order = order
+                        captain_connection.captain_order = order + 1
                         captain_connection.voyage = voyage
                         captain_connections.append(captain_connection)
-                        order += 1
                     # Ship owners
-                    order = 1
-                    for key in get_multi_valued_column_suffix(45):
+                    for order, key in enumerate(get_multi_valued_column_suffix(45)):
                         owner_name = rh.get('owner' + key)
                         if owner_name is None or empty.match(owner_name):
                             continue
@@ -630,13 +628,11 @@ class Command(BaseCommand):
                             ship_owners[owner_name] = owner_model
                         owner_connection = VoyageShipOwnerConnection()
                         owner_connection.owner = owner_model
-                        owner_connection.owner_order = order
+                        owner_connection.owner_order = order + 1
                         owner_connection.voyage = voyage
                         ship_owner_connections.append(owner_connection)
-                        order += 1
                     # Sources
-                    order = 1
-                    for key in get_multi_valued_column_suffix(18):
+                    for order, key in enumerate(get_multi_valued_column_suffix(18)):
                         source_ref = rh.get('source' + key)
                         if source_ref is None or empty.match(source_ref):
                             break
@@ -654,10 +650,9 @@ class Command(BaseCommand):
                         source_connection = VoyageSourcesConnection()
                         source_connection.group = voyage
                         source_connection.source = source
-                        source_connection.source_order = order
+                        source_connection.source_order = order + 1
                         source_connection.text_ref = source_ref
                         source_connections.append(source_connection)
-                        order += 1
                     # African info
                     for key in get_multi_valued_column_suffix(3):
                         afrinfoval = rh.get_by_value(AfricanInfo, 'afrinfo' + key, key_name='id')
@@ -693,8 +688,13 @@ class Command(BaseCommand):
                     if 'voyageid2' in rh.row:
                         link_mode = LinkedVoyages.INTRA_AMERICAN_LINK_MODE if intra_american else LinkedVoyages.UNSPECIFIED
                         for entry in re.split(',|;|/', rh.get('voyageid2')):
-                            voyage_links.append(
-                                (voyage_id, int(entry), link_mode))
+                            if not entry:
+                                continue
+                            try:
+                                voyage_links.append(
+                                    (voyage_id, int(entry), link_mode))
+                            except:
+                                print(f"Bad link value {entry}")
 
         print('Constructed ' + str(len(voyages)) + ' voyages from CSV')
         for k, v in counts.items():

@@ -2048,7 +2048,7 @@ class VoyagesFullQueryHelper:
             from voyages.apps.past.models import EnslaverVoyageConnection
             self.prefetch_fields.append(
                 Prefetch('enslavervoyageconnection_set',
-                    queryset=EnslaverVoyageConnection.objects.prefetch_related('enslaver_alias', 'role'),
+                    queryset=EnslaverVoyageConnection.objects.order_by('order').prefetch_related('enslaver_alias', 'role'),
                     to_attr='enslavers'))
         for k, v in list(self.related_models.items()):
             self.prefetch_fields += [
