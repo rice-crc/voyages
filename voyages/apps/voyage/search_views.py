@@ -646,6 +646,7 @@ download_header_map = {
         "Voyage ID",
     "var_year_of_construction":
         "Year constructed",
+    "var_voyage_links": pgettext_lazy("datatable column header", "VOYAGEID2"),
 }
 
 
