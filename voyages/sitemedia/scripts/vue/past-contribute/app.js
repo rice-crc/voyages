@@ -116,12 +116,12 @@ var pastContribute = new Vue({
             var contrib_languages = [];
             if (Array.isArray(this.language_groups.value.searchTerm)) {
                 $.each(this.language_groups.value.searchTerm, function(key, value){
-                    contrib_languages.push(get_lang_contrib_item(value));
+                    contrib_languages.push(value);
                 });
             } else {
                 var value = this.language_groups.value.searchTerm;
                 value = value.slice(value.indexOf('-') + 1);
-                contrib_languages.push(get_lang_contrib_item(value));
+                contrib_languages.push(value);
             }
 
             var params = {
