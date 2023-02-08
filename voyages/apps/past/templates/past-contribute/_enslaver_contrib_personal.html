@@ -227,4 +227,15 @@
                 v-bind:disabled="interim.type === 'merge' && identity.id !== 'merged'">
         </div>
     </div>
+    <div class="row odd_row">
+        <div class="col-md-3">
+            {% trans "Natural Person" %}
+        </div>
+        <div 
+            v-for="identity in interim.identities" 
+            v-bind:class="[[ isThreeColumnLayout ? 'col-md-3' : 'col-md-9' ]]">
+            <input class="form-control" type="checkbox" v-model="identity.personal_data.is_natural_person"
+                v-bind:disabled="interim.type === 'merge' && identity.id !== 'merged'">
+        </div>
+    </div>
 </div>

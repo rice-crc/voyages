@@ -2436,7 +2436,7 @@ def init_enslaver_interim(request):
             'birth_day', 'birth_place', 'death_year', 'death_month', 'death_day',
             'death_place', 'father_name', 'father_occupation', 'mother_name',
             'probate_date', 'will_value_pounds', 'will_value_dollars', 
-            'will_court', 'principal_location', 'notes']
+            'will_court', 'principal_location', 'notes', 'is_natural_person']
         identities[mode] = {
             'id': mode,
             'aliases': {},

@@ -299,7 +299,6 @@ def search_enslaved(request):
         
     query = search.execute(fields)
     
-    # For now we only support outputing the results to DataTables.
     if output_type == 'resultsTable':
 
         def adapter(page):
