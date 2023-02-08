@@ -127,6 +127,18 @@ class InterimVoyage(models.Model):
         null=True,
         blank=True,
         on_delete=models.CASCADE)
+    third_port_intended_disembarkation = models.ForeignKey(
+        voyage.models.Place,
+        related_name='+',
+        null=True,
+        blank=True,
+        on_delete=models.CASCADE)
+    fourth_port_intended_disembarkation = models.ForeignKey(
+        voyage.models.Place,
+        related_name='+',
+        null=True,
+        blank=True,
+        on_delete=models.CASCADE)
     port_of_departure = models.ForeignKey(
         voyage.models.Place,
         related_name='+',

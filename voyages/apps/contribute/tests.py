@@ -287,6 +287,10 @@ class TestImputedDataCalculation(TestCase):
             dikt['arrport'])
         interim.second_port_intended_disembarkation = place_from_value(
             dikt['arrport2'])
+        interim.third_port_intended_disembarkation = place_from_value(
+            dikt['arrport3'])
+        interim.fourth_port_intended_disembarkation = place_from_value(
+            dikt['arrport4'])
         interim.port_of_departure = place_from_value(dikt['portdep'])
         interim.number_of_ports_called_prior_to_slave_purchase = dikt[
             'nppretra']

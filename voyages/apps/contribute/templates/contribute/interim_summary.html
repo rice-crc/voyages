@@ -176,6 +176,20 @@
             <span id="{{ f.html_name }}">{{ f|selected_choice|default_if_none:blank_text }}</span>
         </div>
     {% endwith %}
+    {% with form.third_port_intended_disembarkation as f %}
+        <div class="row{% if f.value == None or f.value == '' %} blank{% endif%}">
+            {{ f.label_tag }}
+            <div class="old_values" id="old_{{ f.html_name }}_name"></div>
+            <span id="{{ f.html_name }}">{{ f|selected_choice|default_if_none:blank_text }}</span>
+        </div>
+    {% endwith %}
+    {% with form.fourth_port_intended_disembarkation as f %}
+        <div class="row{% if f.value == None or f.value == '' %} blank{% endif%}">
+            {{ f.label_tag }}
+            <div class="old_values" id="old_{{ f.html_name }}_name"></div>
+            <span id="{{ f.html_name }}">{{ f|selected_choice|default_if_none:blank_text }}</span>
+        </div>
+    {% endwith %}
     {% with form.number_of_ports_called_prior_to_slave_purchase as f %}
         <div class="row{% if f.value == None or f.value == '' %} blank{% endif%}">
             {{ f.label_tag }}

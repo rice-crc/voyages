@@ -210,6 +210,10 @@ class InterimVoyageForm(forms.ModelForm):
             _('First port of intended disembarkation'),
             'second_port_intended_disembarkation':
             _('Second port of intended disembarkation'),
+            'third_port_intended_disembarkation':
+            _('Third port of intended disembarkation'),
+            'fourth_port_intended_disembarkation':
+            _('Fourth port of intended disembarkation'),
             'port_of_departure': _('Port of departure'),
             'number_of_ports_called_prior_to_slave_purchase':
             _('Number of ports called prior to slave purchase'),

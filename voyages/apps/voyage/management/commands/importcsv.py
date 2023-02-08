@@ -8,7 +8,6 @@ from django.db import transaction
 from django.utils.encoding import smart_str
 from voyages.apps.contribute.publication import CARGO_COLUMN_COUNT
 
-from voyages.apps.resources.models import AfricanName, Image
 from voyages.apps.voyage.models import (AfricanInfo, BroadRegion, CargoType, CargoUnit, LinkedVoyages,
                                         Nationality, OwnerOutcome,
                                         ParticularOutcome, Place, Region,
@@ -23,6 +22,104 @@ from voyages.apps.voyage.models import (AfricanInfo, BroadRegion, CargoType, Car
                                         VoyageSlavesNumbers, VoyageSources,
                                         VoyageSourcesConnection)
 from voyages.apps.common.utils import *
+
+import re
+
+def _migrate_enslavers_from_legacy():
+    from django.conf import settings
+    if settings.VOYAGE_ENSLAVERS_MIGRATION_STAGE <= 1:
+        # Not really necessary but it is convenient to reference the stage
+        # settings variable so that we can later remove dead code paths once the
+        # migration is finalized.
+        return []
+    # Try to match each Captain/Owner with an existing EnslaverAlias. If none
+    # are found, we create the alias and the identity for it. In case of
+    # duplicate identities with same alias already exist, check if one of them
+    # is already associated with the existing voyage.
+    from voyages.apps.past.models import EnslaverAlias, EnslaverIdentity, EnslaverVoyageConnection, VoyageCaptainOwnerHelper
+    from unidecode import unidecode
+    aliases = {}
+    for alias in EnslaverAlias.objects.all():
+        aliases.setdefault(unidecode(alias.alias), []).append((alias.id, alias.identity_id))
+    connections = {}
+    for conn in EnslaverVoyageConnection.objects.all():
+        connections.setdefault(conn.enslaver_alias_id, []).append((conn.voyage_id, conn.role_id))
+
+    def get_actions(name_and_voyages, role_ids):
+        migration_actions = []
+        for name, voyage_id in name_and_voyages:
+            matches = aliases.get(unidecode(name))
+            item = {
+                'voyage_id': voyage_id,
+                'name': name,
+                'reason': '',
+                'steps': []
+            }
+            found = False
+            if matches:
+                for alias_id, _ in matches:
+                    if voyage_id in [x[0] for x in connections.get(alias_id, []) if x[1] in role_ids]:
+                        # Happy path!
+                        # The appropriate voyage connection already exists.
+                        found = True
+                        item['reason'] = 'Exact match for voyage, name, and role in ' + EnslaverVoyageConnection.__name__
+                        break
+                if not found:
+                    if len({x[1] for x in matches}) > 1:
+                        # Not so good path.
+                        # There are multiple identities maching this name so we
+                        # cannot determine for sure which is the right one.
+                        item['reason'] = 'Multiple identities containing the same alias'
+                    else:
+                        # OK path
+                        # We only need to create the connection for the existing alias.
+                        item['reason'] = 'Found a single matching identity with the alias'
+                        item['steps'].append({
+                            'type': EnslaverVoyageConnection.__name__,
+                            'values': {
+                                'enslaver_alias_id': matches[0][0],
+                                'voyage_id': voyage_id,
+                            }
+                        })
+                        # Treat this as a found alias.
+                        found = True
+            else:
+                item['reason'] = 'No match found for enslaver alias'
+            if not found:
+                item['steps'].append({
+                    'type': EnslaverIdentity.__name__,
+                    'values': {
+                        'principal_alias': name
+                    }
+                })
+                item['steps'].append({
+                    'type': EnslaverAlias.__name__,
+                    'values': {
+                        'alias': name
+                    }
+                })
+            migration_actions.append(item)
+        return migration_actions
+
+    helper = VoyageCaptainOwnerHelper()
+    actions = get_actions(
+        [[cc.captain.name, cc.voyage_id] for cc in \
+            VoyageCaptainConnection.objects.select_related('captain').all()],
+        helper.captain_role_ids
+    )
+    actions += get_actions(
+        [[oc.owner.name, oc.voyage_id] for oc in \
+            VoyageShipOwnerConnection.objects.select_related('owner').all()],
+        helper.owner_role_ids
+    )
+    # Usage in django shell
+    # from voyages.apps.voyage.management.commands import importcsv
+    # actions = importcsv._migrate_enslavers_from_legacy()
+    # for a in actual:
+    #     by_reason.setdefault(a['reason'], []).append(a)
+    # [(k, len(v)) for k, v in by_reason.items()]
+    return actions
+
 
 class Command(BaseCommand):
     help = ('Imports a CSV file with the full Voyages dataset and converts the data '
@@ -67,10 +164,6 @@ class Command(BaseCommand):
         ships = []
         voyage_dates = []
         voyage_numbers = []
-
-        # Prefetch data: Miscellaneous
-        africans = list(AfricanName.objects.all())
-        images = list(Image.objects.all())
 
         def check_hierarchy(voyage_id, field, place, region, broad_region):
             """
@@ -118,9 +211,10 @@ class Command(BaseCommand):
                 return component
             if suffixes is None:
                 suffixes = ['a', 'b', 'c']
-            return get_component(suffixes[1], 2) + ',' + \
-                get_component(suffixes[0], 2) + ',' + \
-                get_component(suffixes[2], 4)
+            month = get_component(suffixes[1], 2)
+            day = get_component(suffixes[0], 2) 
+            year = get_component(suffixes[2], 4)
+            return f"{month},{day},{year}" if month or day or year else ''
 
         def date_from_sep_values(value):
             """
@@ -162,7 +256,7 @@ class Command(BaseCommand):
                 day = get_component_val(components[coords[2]], 1, 31, False)
                 month = get_component_val(components[coords[1]], 1, 12, bool(day))
                 year = get_component_val(components[coords[0]], 999, 1900, bool(month))
-                return f'{month},{day},{year}'
+                return f'{month},{day},{year}' if month or day or year else ''
             except Exception as e:
                 self.errors += 1
                 error_reporting.report('Invalid date "' + value + '" ' + str(e))
@@ -210,6 +304,10 @@ class Command(BaseCommand):
                 Place, 'arrport')
             itinerary.int_second_port_dis = row.get_by_value(
                 Place, 'arrport2')
+            itinerary.int_third_port_dis = row.get_by_value(
+                Place, 'arrport3')
+            itinerary.int_fourth_port_dis = row.get_by_value(
+                Place, 'arrport4')
             itinerary.int_first_region_slave_landing = row.get_by_value(
                 Region, 'regarr')
             itinerary.int_second_place_region_slave_landing = (
@@ -495,7 +593,7 @@ class Command(BaseCommand):
                     voyage.voyage_in_cd_rom = in_cd_room == '1'
                     voyage.voyage_groupings = rh.get_by_value(VoyageGroupings, 'xmimpflag')
                     voyage.dataset = rh.cint('dataset', allow_null=False)
-                    voyage.comments = rh.get('COMMENTS')
+                    voyage.comments = rh.get('comments')
                     intra_american = voyage.dataset == 1
                     counts[voyage.dataset] = counts.get(voyage.dataset, 0) + 1
                     ships.append(row_to_ship(rh, voyage))
@@ -504,8 +602,7 @@ class Command(BaseCommand):
                     crews.append(row_to_crew(rh, voyage))
                     voyage_numbers.append(row_to_numbers(rh, voyage))
                     # Captains
-                    order = 1
-                    for key in get_multi_valued_column_suffix(3):
+                    for order, key in enumerate(get_multi_valued_column_suffix(3)):
                         captain_name = rh.get('captain' + key)
                         if captain_name is None or empty.match(captain_name):
                             continue
@@ -516,13 +613,11 @@ class Command(BaseCommand):
                             captains[captain_name] = captain_model
                         captain_connection = VoyageCaptainConnection()
                         captain_connection.captain = captain_model
-                        captain_connection.captain_order = order
+                        captain_connection.captain_order = order + 1
                         captain_connection.voyage = voyage
                         captain_connections.append(captain_connection)
-                        order += 1
                     # Ship owners
-                    order = 1
-                    for key in get_multi_valued_column_suffix(45):
+                    for order, key in enumerate(get_multi_valued_column_suffix(45)):
                         owner_name = rh.get('owner' + key)
                         if owner_name is None or empty.match(owner_name):
                             continue
@@ -533,13 +628,11 @@ class Command(BaseCommand):
                             ship_owners[owner_name] = owner_model
                         owner_connection = VoyageShipOwnerConnection()
                         owner_connection.owner = owner_model
-                        owner_connection.owner_order = order
+                        owner_connection.owner_order = order + 1
                         owner_connection.voyage = voyage
                         ship_owner_connections.append(owner_connection)
-                        order += 1
                     # Sources
-                    order = 1
-                    for key in get_multi_valued_column_suffix(18):
+                    for order, key in enumerate(get_multi_valued_column_suffix(18)):
                         source_ref = rh.get('source' + key)
                         if source_ref is None or empty.match(source_ref):
                             break
@@ -557,10 +650,9 @@ class Command(BaseCommand):
                         source_connection = VoyageSourcesConnection()
                         source_connection.group = voyage
                         source_connection.source = source
-                        source_connection.source_order = order
+                        source_connection.source_order = order + 1
                         source_connection.text_ref = source_ref
                         source_connections.append(source_connection)
-                        order += 1
                     # African info
                     for key in get_multi_valued_column_suffix(3):
                         afrinfoval = rh.get_by_value(AfricanInfo, 'afrinfo' + key, key_name='id')
@@ -593,14 +685,29 @@ class Command(BaseCommand):
                     outcome.voyage = voyage
                     outcomes.append(outcome)
                     # Links
-                    if intra_american and 'voyageid2' in rh.row:
-                        voyage_links.append(
-                            (voyage_id, rh.cint('voyageid2'),
-                             LinkedVoyages.INTRA_AMERICAN_LINK_MODE))
+                    if 'voyageid2' in rh.row:
+                        link_mode = LinkedVoyages.INTRA_AMERICAN_LINK_MODE if intra_american else LinkedVoyages.UNSPECIFIED
+                        for entry in re.split(',|;|/', rh.get('voyageid2')):
+                            if not entry:
+                                continue
+                            try:
+                                voyage_links.append(
+                                    (voyage_id, int(entry), link_mode))
+                            except:
+                                print(f"Bad link value {entry}")
 
         print('Constructed ' + str(len(voyages)) + ' voyages from CSV')
         for k, v in counts.items():
             print('Dataset ' + str(k) + ': ' + str(v))
+
+        previous_ids = set(Voyage.all_dataset_objects.values_list('voyage_id', flat=True))
+        next_ids = set(voyages.keys())
+        missing = previous_ids - next_ids
+        if len(missing) > 0:
+            self.errors += 1
+            error_reporting.report(f"There are {len(missing)} existing voyages without replacement!!")
+            print("Missing voyage ids:")
+            print(missing)
         if self.errors > 0:
             print(
                 str(self.errors) + ' errors occurred, '
@@ -648,8 +755,6 @@ class Command(BaseCommand):
                 helper.delete_all(cursor, VoyageSlavesNumbers)
                 helper.delete_all(cursor, Voyage.african_info.through)
                 helper.delete_all(cursor, VoyageCargoConnection)
-                helper.delete_all(cursor, AfricanName)
-                helper.delete_all(cursor, Image)
                 helper.delete_all(cursor, Voyage)
 
                 print('Inserting new records...')
@@ -703,8 +808,6 @@ class Command(BaseCommand):
                 bulk_insert(VoyageCrew, crews)
                 bulk_insert(VoyageSlavesNumbers, voyage_numbers)
                 bulk_insert(VoyageOutcome, outcomes)
-                bulk_insert(AfricanName, africans)
-                bulk_insert(Image, images)
 
                 # Now insert the many-to-many connections
                 set_voyages_fk(captain_connections)

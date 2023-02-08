@@ -857,6 +857,12 @@ def voyage_to_dict(voyage):
         dikt[
             'second_port_intended_disembarkation'
         ] = itin.int_second_port_dis_id
+        dikt[
+            'third_port_intended_disembarkation'
+        ] = itin.int_third_port_dis_id
+        dikt[
+            'fourth_port_intended_disembarkation'
+        ] = itin.int_fourth_port_dis_id
         dikt['port_of_departure'] = itin.port_of_departure_id
         dikt[
             'number_of_ports_called_prior_to_slave_purchase'
@@ -895,6 +901,10 @@ def voyage_to_dict(voyage):
             VoyageCache.ports.get(itin.int_first_port_dis_id))
         dikt['second_port_intended_disembarkation_name'] = get_label(
             VoyageCache.ports.get(itin.int_second_port_dis_id))
+        dikt['third_port_intended_disembarkation_name'] = get_label(
+            VoyageCache.ports.get(itin.int_third_port_dis_id))
+        dikt['fourth_port_intended_disembarkation_name'] = get_label(
+            VoyageCache.ports.get(itin.int_fourth_port_dis_id))
         dikt['port_of_departure_name'] = get_label(
             VoyageCache.ports.get(itin.port_of_departure_id))
         dikt['first_place_of_slave_purchase_name'] = get_label(

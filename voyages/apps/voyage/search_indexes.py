@@ -16,6 +16,8 @@ from .cache import CachedGeo
 from .globals import no_mangle, search_mangle_methods
 from .models import Voyage, VoyagesFullQueryHelper, VoyageSources
 
+from voyages.apps.past.models import VoyageCaptainOwnerHelper
+
 
 def split_date(value):
     if value is None:
@@ -71,6 +73,8 @@ def mkdate(year, month, day):
               "Day: " + day + " Month: " + month + " Year: " + year)
         return date(year, month, day)
 
+
+_captain_owner_helper = VoyageCaptainOwnerHelper()
 
 # Index for Sources
 
@@ -739,6 +743,11 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
 
     def index_queryset(self, using=None):
         """Used when the entire index for model is updated."""
+        # Note: it is very important to use this helper for several reasons. The
+        # main one is performance since the helper ensures that lots of data are
+        # prefetched and joined, saving a huge number of calls to the database.
+        # The other reason is that it maps some relations with aliases and
+        # indexing methods may rely on these aliases to get the relational data.
         helper = VoyagesFullQueryHelper()
         return helper.get_query()
 
@@ -750,7 +759,7 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
 
     def prepare_var_owner(self, obj):
         try:
-            return '<br/> '.join([o.name for o in obj.voyage_ship_owner.all()])
+            return '<br/> '.join(_captain_owner_helper.get_owners(obj))
         except AttributeError:
             return None
 
@@ -887,8 +896,7 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
 
     # Voyage crew
     def prepare_var_captain(self, obj):
-        return '<br/> '.join(
-            [captain.name for captain in obj.voyage_captain.all()])
+        return '<br/> '.join(_captain_owner_helper.get_captains(obj))
 
     def prepare_var_captain_plaintext(self, obj):
         return self.prepare_var_captain(obj)

@@ -442,6 +442,24 @@
             {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
         </div>
         <div class="form-group">
+            {% with form.third_port_intended_disembarkation as f %}
+                {{ f.errors }}
+                {{ f.label_tag }}
+                <div class="input-group col-sm-12">
+                    <input class="select_port" id="id_{{ f.html_name }}" name="{{ f.html_name }}" value="{{ f.value }}">
+                </div>
+            {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
+        </div>
+        <div class="form-group">
+            {% with form.fourth_port_intended_disembarkation as f %}
+                {{ f.errors }}
+                {{ f.label_tag }}
+                <div class="input-group col-sm-12">
+                    <input class="select_port" id="id_{{ f.html_name }}" name="{{ f.html_name }}" value="{{ f.value }}">
+                </div>
+            {% if f.help_text %}<p class="form_help_text">{{ f.help_text }}</p>{% endif %}{% endwith %}
+        </div>
+        <div class="form-group">
             {% with form.port_of_departure as f %}
                 {{ f.errors }}
                 {{ f.label_tag }}

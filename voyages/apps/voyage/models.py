@@ -9,6 +9,8 @@ from voyages.apps.common.models import NamedModelAbstractBase
 
 from voyages.apps.common.validators import date_csv_field_validator
 
+from django.conf import settings
+
 class AfricanInfo(NamedModelAbstractBase):
     """
     Used to capture information about the ethnicity or background of the
@@ -553,6 +555,20 @@ class VoyageItinerary(models.Model):
         null=True,
         blank=True,
         on_delete=models.CASCADE)
+    int_third_port_dis = models.ForeignKey(
+        'Place',
+        related_name="int_third_port_dis",
+        verbose_name="Third intended port of disembarkation (ARRPORT3)",
+        null=True,
+        blank=True,
+        on_delete=models.CASCADE)
+    int_fourth_port_dis = models.ForeignKey(
+        'Place',
+        related_name="int_fourth_port_dis",
+        verbose_name="Fourth intended port of disembarkation (ARRPORT4)",
+        null=True,
+        blank=True,
+        on_delete=models.CASCADE)
     int_first_region_slave_landing = models.ForeignKey(
         'Region',
         related_name="int_first_region_slave_landing",
@@ -564,6 +580,20 @@ class VoyageItinerary(models.Model):
         'Region',
         related_name="int_second_region_slave_landing",
         verbose_name="Second intended region of slave landing (REGARR2)",
+        null=True,
+        blank=True,
+        on_delete=models.CASCADE)
+    int_third_place_region_slave_landing = models.ForeignKey(
+        'Region',
+        related_name="int_third_region_slave_landing",
+        verbose_name="Third intended region of slave landing (REGARR3)",
+        null=True,
+        blank=True,
+        on_delete=models.CASCADE)
+    int_fourth_place_region_slave_landing = models.ForeignKey(
+        'Region',
+        related_name="int_fourth_region_slave_landing",
+        verbose_name="Fourth intended region of slave landing (REGARR4)",
         null=True,
         blank=True,
         on_delete=models.CASCADE)
@@ -1812,6 +1842,8 @@ class LinkedVoyages(models.Model):
     def __unicode__(self):
         return str(self.first) + " => " + str(self.second)
 
+    UNSPECIFIED = 0
+
     # In this mode the first voyage is the IntraAmerican voyage
     # and the second is a transatlantic voyage.
     INTRA_AMERICAN_LINK_MODE = 1
@@ -1872,15 +1904,16 @@ class Voyage(models.Model):
         related_name='voyage_slaves_numbers',
         on_delete=models.CASCADE)
 
-    voyage_captain = models.ManyToManyField("VoyageCaptain",
-                                            through='VoyageCaptainConnection',
-                                            help_text="Voyage Captain",
-                                            blank=True)
-    voyage_ship_owner = models.ManyToManyField(
-        "VoyageShipOwner",
-        through='VoyageShipOwnerConnection',
-        help_text="Voyage Ship Owner",
-        blank=True)
+    if settings.VOYAGE_ENSLAVERS_MIGRATION_STAGE <= 2:
+        voyage_captain = models.ManyToManyField("VoyageCaptain",
+                                                through='VoyageCaptainConnection',
+                                                help_text="Voyage Captain",
+                                                blank=True)
+        voyage_ship_owner = models.ManyToManyField(
+            "VoyageShipOwner",
+            through='VoyageShipOwnerConnection',
+            help_text="Voyage Ship Owner",
+            blank=True)
 
     # One Voyage can contain multiple sources and one source can refer
     # to multiple voyages
@@ -1954,10 +1987,14 @@ class VoyagesFullQueryHelper:
             'imp_principal_port_slave_dis__region__broad_region',
             'imp_principal_region_of_slave_purchase',
             'imp_principal_region_slave_dis', 'imp_region_voyage_begin',
-            'int_first_port_dis', 'int_first_port_emb',
+            'int_first_port_dis', 'int_second_port_dis',
+            'int_third_port_dis', 'int_fourth_port_dis',
+            'int_first_port_emb',
             'int_first_region_purchase_slaves',
             'int_first_region_slave_landing',
-            'int_second_place_region_slave_landing', 'int_second_port_dis',
+            'int_second_place_region_slave_landing',
+            'int_third_place_region_slave_landing',
+            'int_fourth_place_region_slave_landing',
             'int_second_port_emb', 'int_second_region_purchase_slaves',
             'place_voyage_ended', 'port_of_call_before_atl_crossing',
             'port_of_departure', 'principal_place_of_slave_purchase',
@@ -1969,9 +2006,6 @@ class VoyagesFullQueryHelper:
         ]
 
         self.prefetch_fields = [
-            Prefetch('voyage_captain',
-                     queryset=VoyageCaptain.objects.order_by(
-                         'captain_name__captain_order')),
             Prefetch('voyage_ship__nationality_ship'),
             Prefetch('voyage_ship__imputed_nationality'),
             Prefetch('voyage_ship__ton_type'),
@@ -1980,9 +2014,6 @@ class VoyagesFullQueryHelper:
             Prefetch('voyage_ship__vessel_construction_region'),
             Prefetch('voyage_ship__registered_place'),
             Prefetch('voyage_ship__registered_region'),
-            Prefetch('voyage_ship_owner',
-                     queryset=VoyageShipOwner.objects.order_by(
-                         'owner_name__owner_order')),
             Prefetch('african_info'),
             Prefetch('cargo',
                      queryset=VoyageCargoConnection.objects.prefetch_related('cargo').prefetch_related('unit')),
@@ -2005,7 +2036,20 @@ class VoyagesFullQueryHelper:
                 queryset=LinkedVoyages.objects.select_related('first').only(
                     'first_id', 'second_id', 'first__voyage_id'))
         ]
-
+        if settings.VOYAGE_ENSLAVERS_MIGRATION_STAGE <= 2:
+            self.prefetch_fields += [
+                Prefetch('voyage_captain',
+                    queryset=VoyageCaptain.objects.order_by(
+                        'captain_name__captain_order')),
+                Prefetch('voyage_ship_owner',
+                    queryset=VoyageShipOwner.objects.order_by(
+                        'owner_name__owner_order'))]
+        if settings.VOYAGE_ENSLAVERS_MIGRATION_STAGE >= 2:
+            from voyages.apps.past.models import EnslaverVoyageConnection
+            self.prefetch_fields.append(
+                Prefetch('enslavervoyageconnection_set',
+                    queryset=EnslaverVoyageConnection.objects.order_by('order').prefetch_related('enslaver_alias', 'role'),
+                    to_attr='enslavers'))
         for k, v in list(self.related_models.items()):
             self.prefetch_fields += [
                 Prefetch(k + '__' + f.name,
