@@ -38,17 +38,29 @@ def _migrate_enslavers_from_legacy():
     # is already associated with the existing voyage.
     from voyages.apps.past.models import EnslaverAlias, EnslaverIdentity, EnslaverVoyageConnection, VoyageCaptainOwnerHelper
     from unidecode import unidecode
-    aliases = {}
+
+    def clean_name(name):
+        # Remove diacritics to increase the number of positive matches.
+        name = unidecode(name)
+        # Remove anything that is not a letter or space
+        return re.sub(r'[^\w]', '', name)
+
+    alias_to_identities = {} # Maps an alias (name) to the set of all identity ids
+    identities_to_aliases = {} # Maps an identity id to all its aliases.
+    connections = {} # Map an identity with all the voyages connected to one of its aliases.
     for alias in EnslaverAlias.objects.all():
-        aliases.setdefault(unidecode(alias.alias), []).append((alias.id, alias.identity_id))
-    connections = {}
-    for conn in EnslaverVoyageConnection.objects.all():
-        connections.setdefault(conn.enslaver_alias_id, []).append((conn.voyage_id, conn.role_id))
+        name = clean_name(alias.alias)
+        alias_to_identities.setdefault(name, set()).add(alias.identity_id)
+        identities_to_aliases.setdefault(alias.identity_id, []).append((name, alias.pk))
+        connections.setdefault(alias.identity_id, set())
+    for conn in EnslaverVoyageConnection.objects.select_related().all():
+        connections.setdefault(conn.enslaver_alias.identity_id, set()).add((conn.voyage_id, conn.role_id))
 
     def get_actions(name_and_voyages, role_ids):
         migration_actions = []
         for name, voyage_id in name_and_voyages:
-            matches = aliases.get(unidecode(name))
+            decodedname = clean_name(name)
+            matches = alias_to_identities.get(decodedname)
             item = {
                 'voyage_id': voyage_id,
                 'name': name,
@@ -57,34 +69,58 @@ def _migrate_enslavers_from_legacy():
             }
             found = False
             if matches:
-                for alias_id, _ in matches:
-                    if voyage_id in [x[0] for x in connections.get(alias_id, []) if x[1] in role_ids]:
-                        # Happy path!
-                        # The appropriate voyage connection already exists.
+                good_match = None
+                for identity_id in matches:
+                    matching_with_voyage = [x for x in connections.get(identity_id, set()) if x[0] == voyage_id]
+                    if any(True for x in matching_with_voyage if x[1] in role_ids):
+                        # Happy path! The appropriate voyage connection already
+                        # exists for one of the identities with the given alias.
                         found = True
-                        item['reason'] = 'Exact match for voyage, name, and role in ' + EnslaverVoyageConnection.__name__
+                        item['category'] = 1
+                        item['reason'] = 'Exact match for voyage, enslaver alias, and role in ' + EnslaverVoyageConnection.__name__
                         break
+                    if matching_with_voyage:
+                        # A connection to the voyage already exists for this
+                        # identity, but not with the same role, if we cannot
+                        # find any better match (in another identity), then this
+                        # is assumed to be the proper identity for the
+                        # connection.
+                        good_match = identity_id
                 if not found:
-                    if len({x[1] for x in matches}) > 1:
-                        # Not so good path.
-                        # There are multiple identities maching this name so we
-                        # cannot determine for sure which is the right one.
-                        item['reason'] = 'Multiple identities containing the same alias'
-                    else:
+                    if len(matches) == 1 or good_match:
                         # OK path
-                        # We only need to create the connection for the existing alias.
+                        # We only need to create the connection for an existing alias.
+                        match_alias_id = None
+                        match_enslaver_id = good_match or next(matches.__iter__())
+                        for alias_name, alias_id in identities_to_aliases[match_enslaver_id]:
+                            if alias_name == decodedname:
+                                match_alias_id = alias_id
+                                break
+                        if not match_alias_id:
+                            raise Exception(f"Expected to find matching alias id: {identities_to_aliases[match_enslaver_id]} for '{decodedname}'")
                         item['reason'] = 'Found a single matching identity with the alias'
                         item['steps'].append({
                             'type': EnslaverVoyageConnection.__name__,
                             'values': {
-                                'enslaver_alias_id': matches[0][0],
+                                'enslaver_alias_id': match_alias_id,
                                 'voyage_id': voyage_id,
+                                'role_id': role_ids[0]
                             }
                         })
+                        # Store this in connections for future matches.
+                        connections[match_enslaver_id].add((voyage_id, role_ids[0]))
                         # Treat this as a found alias.
                         found = True
+                        item['category'] = 2
+                    else:
+                        # Not so good path.
+                        # There are multiple identities maching this name so we
+                        # cannot determine for sure which is the right one.
+                        item['category'] = 3
+                        item['reason'] = 'Multiple identities containing the same alias'
             else:
                 item['reason'] = 'No match found for enslaver alias'
+                item['category'] = 4
             if not found:
                 item['steps'].append({
                     'type': EnslaverIdentity.__name__,
@@ -96,6 +132,18 @@ def _migrate_enslavers_from_legacy():
                     'type': EnslaverAlias.__name__,
                     'values': {
                         'alias': name
+                    }
+                })
+                next_id = -len(identities_to_aliases)
+                alias_to_identities.setdefault(decodedname, set()).add(next_id)
+                identities_to_aliases[next_id] = [(decodedname, next_id)]
+                connections[next_id] = {(voyage_id, role_ids[0])}
+                item['steps'].append({
+                    'type': EnslaverVoyageConnection.__name__,
+                    'values': {
+                        'enslaver_alias_id': next_id,
+                        'voyage_id': voyage_id,
+                        'role_id': role_ids[0]
                     }
                 })
             migration_actions.append(item)

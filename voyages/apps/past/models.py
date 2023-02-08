@@ -566,9 +566,9 @@ class VoyageCaptainOwnerHelper:
 
     def __init__(self):
         self.owner_role_ids = list( \
-            EnslaverRole.objects.filter(name__icontains='owner').values_list('pk', flat=True))
+            EnslaverRole.objects.filter(name__icontains='owner').order_by('id').values_list('pk', flat=True))
         self.captain_role_ids = list( \
-            EnslaverRole.objects.filter(name__icontains='captain').values_list('pk', flat=True))
+            EnslaverRole.objects.filter(name__icontains='captain').order_by('id').values_list('pk', flat=True))
 
 
     class UniqueHelper:
