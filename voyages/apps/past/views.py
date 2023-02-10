@@ -24,7 +24,7 @@ from voyages.apps.common.models import SavedQuery
 from voyages.apps.common.views import get_filtered_results
 from .models import (AltLanguageGroupName, Enslaved,
                      EnslavedContribution, EnslavedContributionLanguageEntry,
-                     EnslavedContributionNameEntry, EnslavedContributionStatus, EnslavedInRelation, EnslavedSearch, EnslavementRelation, EnslaverContribution, EnslaverInRelation, EnslaverSearch, EnslaverVoyageConnection,
+                     EnslavedContributionNameEntry, EnslavedContributionStatus, EnslavedInRelation, EnslavedSearch, EnslavementRelation, EnslaverContribution, EnslaverInRelation, EnslaverRole, EnslaverSearch, EnslaverVoyageConnection,
                      LanguageGroup, MultiValueHelper, ModernCountry, EnslavedNameSearchCache,
                      _modern_name_fields, _name_fields)
 from voyages.apps.voyage.models import Place,Region
@@ -151,6 +151,12 @@ def get_language_groups(request):
     else:
         return JsonResponse([{ "id": item["id"], "name": item["name"], "lat": item["latitude"], "lng": item["longitude"], "alts": item[alt_names_key], "countries": item[countries_list_key] }
             for item in items], safe=False)
+
+
+@csrf_exempt
+@cache_page(3600)
+def get_enslaver_roles(request):
+    return JsonResponse([{"id": r.id, "label": r.name} for r in EnslaverRole.objects.all()], safe=False)
 
 @csrf_exempt
 @cache_page(3600)

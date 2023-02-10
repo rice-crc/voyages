@@ -49,6 +49,18 @@ var_enslaved_count = new NumberVariable({
     isAdvanced: false
   });
 
+var_roles = new TreeselectVariable({
+    varName: "roles",
+    label: gettext("Enslaver Roles"),
+    description: "",
+  },{
+    op: "is one of",
+    searchTerm: [],
+  },{
+    isImputed: false,
+    isAdvanced: false,
+  });
+
 var_voyage_datasets = new TreeselectVariable({
     varName: "voyage_datasets",
     label: gettext("Voyages Dataset"),
@@ -69,6 +81,7 @@ itinerary = {
     var_year_range: var_year_range,
     var_enslaved_count: var_enslaved_count,
     var_voyage_datasets: var_voyage_datasets,
+    var_roles: var_roles,
 
     count: {
       changed: 0,

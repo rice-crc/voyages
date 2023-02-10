@@ -53,15 +53,6 @@ var searchBar = new Vue({
         }]
       }
     },
-    enslaverRoles: {
-      1: "Captain",
-      2: "Investor",
-      3: "Buyer",
-      4: "Seller",
-      5: "Owner",
-      6: "Shipper",
-      7: "Consignor",
-    },
     activated: false,
     saved: [],
     options: {

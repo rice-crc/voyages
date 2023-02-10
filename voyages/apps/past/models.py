@@ -482,7 +482,11 @@ class EnslaverCachedProperties(models.Model):
             props = EnslaverCachedProperties()
             props.identity_id = id
             props.enslaved_count = item.get('enslaved_count', 0)
-            props.roles = ','.join([str(role) for role in item.get('roles', [])])
+            # Note: we leave a comma after each number *on purpose*. This is so
+            # we can search for roles by querying for contains "{role_id},".
+            # Without the comma in the end, we could get false positives for ids
+            # with multiple digits.
+            props.roles = ''.join(sorted(f"{role}," for role in item.get('roles', [])))
             props.transactions_amount = item.get('tot_amount', 0)
             props.first_year = item.get('min_year', None)
             props.last_year = item.get('max_year', None)
@@ -1388,6 +1392,7 @@ class EnslaverSearch:
                  voyage_id=None,
                  source=None,
                  enslaved_count=None,
+                 roles=None,
                  voyage_datasets=None,
                  order_by=None):
         """
@@ -1411,6 +1416,8 @@ class EnslaverSearch:
                 full_ref
         @param: enslaved_count A pair (a, b) such that the enslaver has an
                 associated enslaved count between a and b.
+        @param: roles a list of role pks that should be matched (an enslaver may
+                appear in multiple roles).
         @param: order_by An array of dicts {
                 'columnName': 'NAME', 'direction': 'ASC or DESC' }.
                 Note that if the search is fuzzy, then the fallback value of
@@ -1426,6 +1433,7 @@ class EnslaverSearch:
         self.voyage_id = voyage_id
         self.source = source
         self.enslaved_count = enslaved_count
+        self.roles = roles
         self.voyage_datasets = voyage_datasets
         self.order_by = order_by or [{'columnName': 'pk', 'direction': 'asc'}]
 
@@ -1485,6 +1493,12 @@ class EnslaverSearch:
             q = add_voyage_field(q, 'voyage_dates__imp_arrival_at_port_of_dis', 'range', _year_range_conv(self.year_range))
         if self.enslaved_count:
             q = q.filter(cached_properties__enslaved_count__range=self.enslaved_count)
+        if self.roles:
+            terms = None
+            for pk in self.roles:
+                term = Q(cached_properties__roles__contains=f"{pk},")
+                terms = (term | terms) if terms else term
+            q = q.filter(terms)
         if self.voyage_datasets is not None:
             bitvec = 0
             for x in self.voyage_datasets:

@@ -30,6 +30,11 @@
       </v-number>
 
       <v-treeselect
+        :filter="scope.filters.var_roles"
+        @change="changed">
+      </v-treeselect>
+
+      <v-treeselect
         :filter="scope.filters.var_voyage_datasets"
         @change="changed">
       </v-treeselect>

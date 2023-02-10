@@ -157,18 +157,6 @@ function processResponse(json, mainDatatable, fuzzySearch) {
       row.ranking++;
     }
 
-    if (row.enslavers_list) {
-      var enslaversList = {};
-      row.enslavers_list.forEach((value, index) => {
-        if (enslaversList[value.enslaver_name] === undefined) {
-          enslaversList[value.enslaver_name] = [];
-        }
-
-        enslaversList[value.enslaver_name].push(gettext(searchBar.enslaverRoles[value.enslaver_role]));
-      });
-      row.enslavers_list = enslaversList;
-    }
-
     if (row.alias_list) {
       var aliasList = {};
       aliasList = row.alias_list.filter((element) => {
@@ -732,11 +720,11 @@ function loadTreeselectOptions(vm, vTreeselect, filter, callback) {
         case 'modern_country':
           var apiUrl = '/past/api/modern-countries';
           break;
-        case 'ethnicity':
-          var apiUrl = '/past/api/ethnicities';
-          break;
         case 'language_groups':
           var apiUrl = '/past/api/language-groups';
+          break;
+        case 'roles':
+          var apiUrl = '/past/api/enslaver-roles';
           break;
         default:
           callback("Error: varName " + varName + " is not acceptable");
@@ -750,14 +738,16 @@ function loadTreeselectOptions(vm, vTreeselect, filter, callback) {
           switch (varName) {
             case 'register_country':
             case 'modern_country':
-              var options = parseCountries(response);
+              options = parseCountries(response);
               break;
             case 'ethnicity':
-              var options = parseEthnicities(response);
+              options = parseEthnicities(response);
               break;
             case 'language_groups':
-              var options = parseLanguageGroups(response);
+              options = parseLanguageGroups(response);
               break;
+            default:
+              options = response.data;
           }
 
           vm.filterData.treeselectOptions[varName] = options;
