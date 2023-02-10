@@ -59,6 +59,7 @@ class Command(BaseCommand):
 
 		enslaver_identities={}
 		enslaver_aliases={}
+		enslavercachedproperties=[]
 		enslavervoyageconnections=[]
 		enslaver_identity_pk_ai=max(EnslaverIdentity.objects.all().values_list('id'))[0]+1
 		enslaver_alias_pk_ai=max(EnslaverAlias.objects.all().values_list('id'))[0]+1
@@ -112,6 +113,9 @@ class Command(BaseCommand):
 						manual_id="Texas_"+str(enslaver_alias_pk_ai)
 					)
 				)
+				
+				ecp=EnslaverCachedProperties(identity=enslaver_identity,enslaved_count=0)
+				enslavercachedproperties.append(ecp)
 				
 				if enslavername in captains_voyages:
 					captain_voyages=captains_voyages[enslavername]
@@ -299,17 +303,14 @@ class Command(BaseCommand):
 				
 					enslavement_relation_type=enslavement_relation_types['Ownership']
 					enslaver_role=enslaver_roles['Owner']
-				
-					enslavement_relation=EnslavementRelation(
-						id=enslavementrelation_pk_ai,
-						relation_type=enslavement_relation_type,
-						date=relation_date
-					)
-					enslavement_relations.append(enslavement_relation)
-					enslavementrelation_pk_ai+=1
-				
 					for owner_name in owner_names:
-
+						enslavement_relation=EnslavementRelation(
+							id=enslavementrelation_pk_ai,
+							relation_type=enslavement_relation_type,
+							date=relation_date
+						)
+						enslavement_relations.append(enslavement_relation)
+						enslavementrelation_pk_ai+=1
 						enslaver_in_relation=getuniqueorcreatenew(
 							EnslaverInRelation.objects.all().filter(enslaver_alias=enslaver_aliases[owner_name],relation=enslavement_relation,role=enslaver_role),
 							EnslaverInRelation(id=enslaverinrelation_pk_ai,enslaver_alias=enslaver_aliases[owner_name],relation=enslavement_relation,role=enslaver_role)
@@ -317,26 +318,16 @@ class Command(BaseCommand):
 						enslaverinrelation_pk_ai+=1
 						enslaver_in_relations.append(enslaver_in_relation)
 					
-					enslaved_in_relation=getuniqueorcreatenew(
-						EnslavedInRelation.objects.all().filter(enslaved=enslaved_person,relation=enslavement_relation),
-						EnslavedInRelation(id=enslavedinrelation_pk_ai,enslaved=enslaved_person,relation=enslavement_relation)
-					)
-					enslavedinrelation_pk_ai+=1
-					enslaved_in_relations.append(enslaved_in_relation)
+						enslaved_in_relation=getuniqueorcreatenew(
+							EnslavedInRelation.objects.all().filter(enslaved=enslaved_person,relation=enslavement_relation),
+							EnslavedInRelation(id=enslavedinrelation_pk_ai,enslaved=enslaved_person,relation=enslavement_relation)
+						)
+						enslavedinrelation_pk_ai+=1
+						enslaved_in_relations.append(enslaved_in_relation)
 			
-			
-# 				transporters=[]
 				shipper_names=list(set([row[i] for i in ['Shipper'] if row[i]!='']))
-# 				captain_names=list(set([row[i] for i in ['Captain A'] if row[i]!='']))
 				voyage_id=noblank(row['VOYAGEID'],"int")
 				voyage=noblank(list(v for v in allvoyages.filter(voyage_id=voyage_id)))
-			
-# 				for shipper_name in shipper_names:
-# 					transporters.append({'name':shipper_name,'role':'Shipper'})
-# 				for captain_name in captain_names:
-# 					transporters.append({'name':captain_name,'role':'Captain'})
-					
-				
 				for shipper_name in shipper_names:
 
 					enslavement_relation_type=enslavement_relation_types['Transportation']
@@ -389,7 +380,8 @@ class Command(BaseCommand):
 			enslaver_aliases,
 			enslaver_in_relations,
 			enslaved_in_relations,
-			enslavervoyageconnections
+			enslavervoyageconnections,
+			enslavercachedproperties
 		]
 	
 		for itemlist in itemlists:
