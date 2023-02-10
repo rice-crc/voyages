@@ -3,10 +3,15 @@ function resetPagination(datatable) {
 }
 
 var selected_tab=location.toString().split("#");
-if (selected_tab.length>1) {
-	var currentTab = selected_tab[selected_tab.length-1]
+
+
+
+if (selected_tab.length>1 && !selected_tab[selected_tab.length-1].includes("searchId=")) {
+
+		var currentTab = selected_tab[selected_tab.length-1]
 } else {
-	var currentTab = "results"
+		var currentTab = "results"
+
 };
 
 // console.log(location.toString().split("#"));
