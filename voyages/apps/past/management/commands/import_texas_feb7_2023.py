@@ -14,6 +14,23 @@ class Command(BaseCommand):
 	
 	def handle(self, *args, **options):
 
+		def noblank(v,c=None,blank=False):
+			if type(v)==list:
+				v=v[0]
+
+			if v in ['',None]:
+				if blank:
+					return ''
+				else:
+					return None
+			else:
+				if c=='int':
+					return(int(float(v)))
+				elif c=='float':
+					return(float(v))
+				else:
+					return v
+
 		def getuniqueorcreatenew(uniqueobj,objdata):
 			if len(uniqueobj)==1:
 				return uniqueobj[0]
@@ -29,35 +46,55 @@ class Command(BaseCommand):
 		##IT DOES NOT WRITE NEW DATA TO THESE ENSLAVERS IF THEY EXIST (BECAUSE OUR BIOGRAPHICAL DATA ON THEM RIGHT NOW IS MINIMAL)
 		##BUT IT DOES CREATE NEW ALIAS AND IDENTITY OBJECTS AS NEEDED ON THE BASIS OF THE UNIQUE NAME CONSTRAING -- AND THEN LINK THEM
 
+		enslaver_roles={}
+	
+		for enslaver_role_name in ['Owner','Shipper','Captain']:
+		
+			enslaver_role=getuniqueorcreatenew(
+				EnslaverRole.objects.all().filter(name=enslaver_role_name),
+				EnslaverRole(name=enslaver_role_name)
+			)
+		
+			enslaver_roles[enslaver_role_name]=enslaver_role
+
 		enslaver_identities={}
 		enslaver_aliases={}
-	
+		enslavervoyageconnections=[]
 		enslaver_identity_pk_ai=max(EnslaverIdentity.objects.all().values_list('id'))[0]+1
 		enslaver_alias_pk_ai=max(EnslaverAlias.objects.all().values_list('id'))[0]+1
 
-
+		allvoyages=Voyage.all_dataset_objects.all().filter(dataset=1)
 	
 		with open('voyages/apps/past/management/commands/texas_enslaved.csv',encoding='utf-8-sig') as csvfile:
 
 			reader = csv.DictReader(csvfile)
 		
 			enslavernames=[]
+			captains_voyages={}
 			enslavercolumnnames=['Captain A','Shipper','Owner A','Owner B']
 			for row in reader:
 				for ecn in enslavercolumnnames:
 					enslavernames.append(row[ecn])
+					if ecn=='Captain A':
+						captain_name=row[ecn]
+						voyage_id=noblank(row['VOYAGEID'],"int")
+						voyage=noblank(list(v for v in allvoyages.filter(voyage_id=voyage_id)))
+						if captain_name in captains_voyages:
+							if voyage not in captains_voyages[captain_name]:
+								captains_voyages[captain_name].append(voyage)
+						else:
+							captains_voyages[captain_name]=[voyage]
 				
 			###along the way, create name-keyed dictionaries for the enslavers' identities			
 			enslavernames=[i for i in list(set(enslavernames)) if i!='']
-		
+# 			captain_names=[i for i in list(set(captain_names)) if i!='']
 			texas_enslaver_aliases=EnslaverAlias.objects.all().filter(manual_id__icontains='Texas')
 			texas_enslaver_identities=EnslaverIdentity.objects.all().filter(aliases__manual_id__icontains='Texas')
-						
-		
+
 		
 		
 			for enslavername in enslavernames:
-			
+				
 				enslaver_identity=getuniqueorcreatenew(
 					texas_enslaver_identities.filter(aliases__alias=enslavername),
 					EnslaverIdentity(
@@ -75,6 +112,29 @@ class Command(BaseCommand):
 						manual_id="Texas_"+str(enslaver_alias_pk_ai)
 					)
 				)
+				
+				if enslavername in captains_voyages:
+					captain_voyages=captains_voyages[enslavername]
+					for voyage in captain_voyages:
+					
+						enslaver_voyage_connection=getuniqueorcreatenew(
+							EnslaverVoyageConnection.objects.all().filter(
+								enslaver_alias=enslaver_alias,
+								role=enslaver_roles['Captain'],
+								voyage=voyage),
+							EnslaverVoyageConnection(
+								enslaver_alias=enslaver_alias,
+								role=enslaver_roles['Captain'],
+								voyage=voyage
+							)
+						)
+						enslavervoyageconnections.append(enslaver_voyage_connection)
+
+
+					
+					
+					
+
 			
 				enslaver_aliases[enslavername]=enslaver_alias
 				enslaver_identities[enslavername]=enslaver_identity
@@ -119,30 +179,12 @@ class Command(BaseCommand):
 		##step 3: enslaved
 		enslaveds={}
 		enslavedsourceconnections=[]
-		voyages=Voyage.all_dataset_objects.all().filter(dataset=1)
 		captivefates={}
 		captivefatenamesdict={97:'Embarked, subsequent fate unknown'}
 		places=Place.objects.all()
 		with open('voyages/apps/past/management/commands/texas_enslaved.csv',encoding='utf-8-sig') as csvfile:
 
 			reader = csv.DictReader(csvfile)
-		
-			def noblank(v,c=None,blank=False):
-				if type(v)==list:
-					v=v[0]
-
-				if v in ['',None]:
-					if blank:
-						return ''
-					else:
-						return None
-				else:
-					if c=='int':
-						return(int(float(v)))
-					elif c=='float':
-						return(float(v))
-					else:
-						return v
 
 			enslaved=Enslaved.objects.all()
 		
@@ -175,7 +217,7 @@ class Command(BaseCommand):
 				enslaved_id=int(row['ID'])
 				last_known_location=noblank(places.filter(value=noblank(row['Last known loction'],'int')))
 				voyage_id=noblank(row['VOYAGEID'],"int")
-				voyage=noblank(list(v for v in voyages.filter(voyage_id=voyage_id)))
+				voyage=noblank(list(v for v in allvoyages.filter(voyage_id=voyage_id)))
 				age=noblank(row['Age'],'int')
 				gender=noblank(row['Sex'],'int')
 				height=noblank(row['Height in inches'],'float')
@@ -218,16 +260,6 @@ class Command(BaseCommand):
 		enslavement_relations=[]
 		enslaver_in_relations=[]
 		enslaved_in_relations=[]
-		enslaver_roles={}
-	
-		for enslaver_role_name in ['Owner','Shipper','Captain']:
-		
-			enslaver_role=getuniqueorcreatenew(
-				EnslaverRole.objects.all().filter(name=enslaver_role_name),
-				EnslaverRole(name=enslaver_role_name)
-			)
-		
-			enslaver_roles[enslaver_role_name]=enslaver_role
 	
 		enslavement_relation_types={}
 	
@@ -240,7 +272,6 @@ class Command(BaseCommand):
 		
 			enslavement_relation_types[enslavement_relation_type_name]=enslavement_relation_type
 		enslavementrelation_pk_ai=max(EnslavementRelation.objects.all().values_list('id'))[0]+1
-	
 		enslaverinrelation_pk_ai=max(EnslaverInRelation.objects.all().values_list('id'))[0]+1
 		enslavedinrelation_pk_ai=max(EnslavedInRelation.objects.all().values_list('id'))[0]+1
 	
@@ -294,30 +325,33 @@ class Command(BaseCommand):
 					enslaved_in_relations.append(enslaved_in_relation)
 			
 			
-				transporters=[]
+# 				transporters=[]
 				shipper_names=list(set([row[i] for i in ['Shipper'] if row[i]!='']))
-				captain_names=list(set([row[i] for i in ['Captain A'] if row[i]!='']))
+# 				captain_names=list(set([row[i] for i in ['Captain A'] if row[i]!='']))
 				voyage_id=noblank(row['VOYAGEID'],"int")
-				voyage=noblank(list(v for v in voyages.filter(voyage_id=voyage_id)))
+				voyage=noblank(list(v for v in allvoyages.filter(voyage_id=voyage_id)))
 			
+# 				for shipper_name in shipper_names:
+# 					transporters.append({'name':shipper_name,'role':'Shipper'})
+# 				for captain_name in captain_names:
+# 					transporters.append({'name':captain_name,'role':'Captain'})
+					
+				
 				for shipper_name in shipper_names:
-					transporters.append({'name':shipper_name,'role':'Shipper'})
-				for captain_name in captain_names:
-					transporters.append({'name':captain_name,'role':'Captain'})
 
-				enslavement_relation_type=enslavement_relation_types['Transportation']
-				enslavement_relation=EnslavementRelation(
-					id=enslavementrelation_pk_ai,
-					relation_type=enslavement_relation_type,
-					date=relation_date,
-					voyage=voyage
-				)
-				enslavement_relations.append(enslavement_relation)
-				enslavementrelation_pk_ai+=1
-			
-				for transporter in transporters:
-					enslaver_alias=enslaver_aliases[transporter['name']]
-					enslaver_role=enslaver_roles[transporter['role']]
+					enslavement_relation_type=enslavement_relation_types['Transportation']
+					enslavement_relation=EnslavementRelation(
+						id=enslavementrelation_pk_ai,
+						relation_type=enslavement_relation_type,
+						date=relation_date,
+						voyage=voyage
+					)
+					enslavement_relations.append(enslavement_relation)
+					enslavementrelation_pk_ai+=1
+					
+					
+					enslaver_alias=enslaver_aliases[shipper_name]
+					enslaver_role=enslaver_roles["Shipper"]
 				
 					enslaver_in_relation=getuniqueorcreatenew(
 						EnslaverInRelation.objects.all().filter(enslaver_alias=enslaver_alias,relation=enslavement_relation,role=enslaver_role),
@@ -341,6 +375,7 @@ class Command(BaseCommand):
 		print("%d enslavement relations" %len(enslavement_relations))
 		print("%d enslaver in relations" %len(enslaver_in_relations))
 		print("%d enslaved in relations" %len(enslaved_in_relations))
+		print("%d enslaver voyage connections" %len(enslavervoyageconnections))
 		print("%d enslaver roles" %len(enslaver_roles))
 	
 		itemlists=[
@@ -353,7 +388,8 @@ class Command(BaseCommand):
 			enslaver_identities,
 			enslaver_aliases,
 			enslaver_in_relations,
-			enslaved_in_relations
+			enslaved_in_relations,
+			enslavervoyageconnections
 		]
 	
 		for itemlist in itemlists:
