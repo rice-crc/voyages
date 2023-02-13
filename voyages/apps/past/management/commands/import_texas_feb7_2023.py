@@ -7,7 +7,7 @@ from django.db.transaction import atomic
 import csv
 from voyages.apps.common.utils import *
 from voyages.apps.past.models import Enslaved, EnslavedInRelation, EnslavedSourceConnection, EnslavementRelation, EnslavementRelationType, EnslaverAlias, EnslaverIdentity, EnslaverIdentitySourceConnection, EnslaverInRelation, EnslaverRole, EnslaverVoyageConnection, EnslaverCachedProperties,CaptiveFate
-from voyages.apps.voyage.models import Place, Voyage,VoyageSources
+from voyages.apps.voyage.models import Place, Voyage,VoyageSources,VoyageShipOwnerConnection,VoyageCaptainConnection
 import re
 
 class Command(BaseCommand):
@@ -17,7 +17,6 @@ class Command(BaseCommand):
 		def noblank(v,c=None,blank=False):
 			if type(v)==list:
 				v=v[0]
-
 			if v in ['',None]:
 				if blank:
 					return ''
@@ -32,70 +31,144 @@ class Command(BaseCommand):
 					return v
 
 		def getuniqueorcreatenew(uniqueobj,objdata):
-			if len(uniqueobj)==1:
+			if len(uniqueobj)!=0:
 				return uniqueobj[0]
-			elif len(uniqueobj)==0:
-				return objdata
 			else:
-				print("unique failed. quitting.",uniqueobj)
+				return objdata
 
-
-
-		##step 1: enslavers (aliases and names mapped)
-		##THIS IS VERY SIMPLE RIGHT NOW. IT ASSUMES UNIQUE NAMES FOR ALL ENSLAVERS WHOSE ALIASES HAVE "TEXAS" IN THEIR MANUAL ID FIELD.
-		##IT DOES NOT WRITE NEW DATA TO THESE ENSLAVERS IF THEY EXIST (BECAUSE OUR BIOGRAPHICAL DATA ON THEM RIGHT NOW IS MINIMAL)
-		##BUT IT DOES CREATE NEW ALIAS AND IDENTITY OBJECTS AS NEEDED ON THE BASIS OF THE UNIQUE NAME CONSTRAING -- AND THEN LINK THEM
-
-		enslaver_roles={}
-	
-		for enslaver_role_name in ['Owner','Shipper','Captain']:
+		allvoyages=Voyage.all_dataset_objects.all().filter(dataset=1)
 		
+		##step 1: enslaver setup
+		enslavercachedproperties=[]
+		enslavervoyageconnections=[]
+		enslaver_identities={}
+		enslaver_aliases={}
+		enslaver_identity_pk_ai=max(EnslaverIdentity.objects.all().values_list('id'))[0]+1
+		enslaver_alias_pk_ai=max(EnslaverAlias.objects.all().values_list('id'))[0]+1
+
+		texas_enslaver_aliases=EnslaverAlias.objects.all().filter(manual_id__icontains='Texas')
+		texas_enslaver_identities=EnslaverIdentity.objects.all().filter(aliases__manual_id__icontains='Texas')
+		enslaver_roles={}
+		for enslaver_role_name in ['Owner','Shipper','Captain','Investor']:
 			enslaver_role=getuniqueorcreatenew(
 				EnslaverRole.objects.all().filter(name=enslaver_role_name),
 				EnslaverRole(name=enslaver_role_name)
 			)
-		
 			enslaver_roles[enslaver_role_name]=enslaver_role
 
-		enslaver_identities={}
-		enslaver_aliases={}
-		enslavercachedproperties=[]
-		enslavervoyageconnections=[]
-		enslaver_identity_pk_ai=max(EnslaverIdentity.objects.all().values_list('id'))[0]+1
-		enslaver_alias_pk_ai=max(EnslaverAlias.objects.all().values_list('id'))[0]+1
+		##step 1A: captains and vessel owners ('investors') from the voyages table, corresponding with the voyages in this sheet
+		with open('voyages/apps/past/management/commands/texas_enslaved.csv',encoding='utf-8-sig') as csvfile:
+			reader = csv.DictReader(csvfile)
+			sheet_voyage_ids=[]
+			for row in reader:
+				voyage_id=noblank(row['VOYAGEID'],"int")
+				sheet_voyage_ids.append(voyage_id)
 
-		allvoyages=Voyage.all_dataset_objects.all().filter(dataset=1)
-	
+		sheet_voyage_ids=list(set(sheet_voyage_ids))
+
+		sheet_voyages=[noblank(list(v for v in allvoyages.filter(voyage_id=vi))) for vi in sheet_voyage_ids]
+		shipownernames={}
+		shipcaptainnames={}
+
+		for voy in sheet_voyages:
+			shipowners=[vsoc.owner for vsoc in VoyageShipOwnerConnection.objects.all().filter(voyage=voy) if vsoc.owner.name is not None]
+			shipcaptains=[vcc.captain for vcc in VoyageCaptainConnection.objects.all().filter(voyage=voy) if vcc.captain.name is not None]
+			for shipowner in shipowners:
+				shipownername=shipowner.name
+				if shipownername in shipownernames:
+					shipownernames[shipownername].append(voy)
+				else:
+					shipownernames[shipownername]=[voy]
+			for shipcaptain in shipcaptains:
+				shipcaptainname=shipcaptain.name
+				if shipcaptainname in shipcaptainnames:
+					shipcaptainnames[shipcaptainname].append(voy)
+				else:
+					shipcaptainnames[shipcaptainname]=[voy]
+		
+		role=enslaver_roles['Investor']
+		for enslavername in shipownernames:
+			enslaver_identity=EnslaverIdentity(
+				id=enslaver_identity_pk_ai,
+				principal_alias=enslavername
+			)
+			enslaver_identity.save()
+			enslaver_alias=EnslaverAlias(
+				id=enslaver_alias_pk_ai,
+				identity=enslaver_identity,
+				alias=enslavername,
+				manual_id="Texas_"+str(enslaver_alias_pk_ai)
+			)
+			enslaver_alias.save()
+			
+			ecp=EnslaverCachedProperties(identity=enslaver_identity,enslaved_count=0)
+			ecp.save()
+			enslaver_identity_pk_ai+=1
+			enslaver_alias_pk_ai+=1
+			for voy in shipownernames[enslavername]:
+				enslaver_voyage_connection=EnslaverVoyageConnection(
+					enslaver_alias=enslaver_alias,
+					role=role,
+					voyage=voy
+				)
+				enslaver_voyage_connection.save()
+				enslavervoyageconnections.append(enslaver_voyage_connection)
+		
+		role=enslaver_roles['Captain']
+		for enslavername in shipcaptainnames:
+			enslaver_identity=EnslaverIdentity(
+				id=enslaver_identity_pk_ai,
+				principal_alias=enslavername
+			)
+			enslaver_identity.save()
+			enslaver_alias=EnslaverAlias(
+				id=enslaver_alias_pk_ai,
+				identity=enslaver_identity,
+				alias=enslavername,
+				manual_id="Texas_"+str(enslaver_alias_pk_ai)
+			)
+			enslaver_alias.save()
+			
+			ecp=EnslaverCachedProperties(identity=enslaver_identity,enslaved_count=0)
+			ecp.save()
+			enslaver_identity_pk_ai+=1
+			enslaver_alias_pk_ai+=1
+			for voy in shipcaptainnames[enslavername]:
+				enslaver_voyage_connection=EnslaverVoyageConnection(
+					enslaver_alias=enslaver_alias,
+					role=role,
+					voyage=voy
+				)
+				enslaver_voyage_connection.save()
+				enslavervoyageconnections.append(enslaver_voyage_connection)
+		
+		print("%d captain names" %len(shipcaptainnames))
+		print("%d captain & owner aliases" %len(shipownernames))
+		print("%d captain & owner voyage connections" %len(enslavervoyageconnections))
+
+		##step 1B: enslavers with direct enslavement connections
+		##THIS IS VERY SIMPLE RIGHT NOW. IT ASSUMES UNIQUE NAMES FOR ALL ENSLAVERS WHOSE ALIASES HAVE "TEXAS" IN THEIR MANUAL ID FIELD.
+		##IT DOES NOT WRITE NEW DATA TO THESE ENSLAVERS IF THEY EXIST (BECAUSE OUR BIOGRAPHICAL DATA ON THEM RIGHT NOW IS MINIMAL)
+		##BUT IT DOES CREATE NEW ALIAS AND IDENTITY OBJECTS AS NEEDED ON THE BASIS OF THE UNIQUE NAME CONSTRAING -- AND THEN LINK THEM
+
+
 		with open('voyages/apps/past/management/commands/texas_enslaved.csv',encoding='utf-8-sig') as csvfile:
 
 			reader = csv.DictReader(csvfile)
 		
 			enslavernames=[]
 			captains_voyages={}
-			enslavercolumnnames=['Captain A','Shipper','Owner A','Owner B']
+			enslavercolumnnames=['Shipper','Owner A','Owner B']
+
+
 			for row in reader:
 				for ecn in enslavercolumnnames:
 					enslavernames.append(row[ecn])
-					if ecn=='Captain A':
-						captain_name=row[ecn]
-						voyage_id=noblank(row['VOYAGEID'],"int")
-						voyage=noblank(list(v for v in allvoyages.filter(voyage_id=voyage_id)))
-						if captain_name in captains_voyages:
-							if voyage not in captains_voyages[captain_name]:
-								captains_voyages[captain_name].append(voyage)
-						else:
-							captains_voyages[captain_name]=[voyage]
-				
-			###along the way, create name-keyed dictionaries for the enslavers' identities			
+	
 			enslavernames=[i for i in list(set(enslavernames)) if i!='']
 # 			captain_names=[i for i in list(set(captain_names)) if i!='']
-			texas_enslaver_aliases=EnslaverAlias.objects.all().filter(manual_id__icontains='Texas')
-			texas_enslaver_identities=EnslaverIdentity.objects.all().filter(aliases__manual_id__icontains='Texas')
-
-		
 		
 			for enslavername in enslavernames:
-				
 				enslaver_identity=getuniqueorcreatenew(
 					texas_enslaver_identities.filter(aliases__alias=enslavername),
 					EnslaverIdentity(
@@ -113,32 +186,8 @@ class Command(BaseCommand):
 						manual_id="Texas_"+str(enslaver_alias_pk_ai)
 					)
 				)
-				
 				ecp=EnslaverCachedProperties(identity=enslaver_identity,enslaved_count=0)
 				enslavercachedproperties.append(ecp)
-				
-				if enslavername in captains_voyages:
-					captain_voyages=captains_voyages[enslavername]
-					for voyage in captain_voyages:
-					
-						enslaver_voyage_connection=getuniqueorcreatenew(
-							EnslaverVoyageConnection.objects.all().filter(
-								enslaver_alias=enslaver_alias,
-								role=enslaver_roles['Captain'],
-								voyage=voyage),
-							EnslaverVoyageConnection(
-								enslaver_alias=enslaver_alias,
-								role=enslaver_roles['Captain'],
-								voyage=voyage
-							)
-						)
-						enslavervoyageconnections.append(enslaver_voyage_connection)
-
-
-					
-					
-					
-
 			
 				enslaver_aliases[enslavername]=enslaver_alias
 				enslaver_identities[enslavername]=enslaver_identity
@@ -146,13 +195,13 @@ class Command(BaseCommand):
 				enslaver_alias_pk_ai+=1
 			print("%d enslaver identities" %len(enslaver_identities))
 			print("%d enslaver aliases" %len(enslaver_aliases))
-		
+
 
 		##step 2: sources
 		sourcecolumnnames=['SOURCEA','SOURCEB']
 		sources={}
 		with open('voyages/apps/past/management/commands/texas_enslaved.csv',encoding='utf-8-sig') as csvfile:
-			tmp_sources={}
+			tmp_sources=[]
 			reader = csv.DictReader(csvfile)
 			#very basic -- the first letters before the comma.
 			#Erik Engquist: when you think you've solved a problem with regular expressions, you've got three problems
@@ -163,20 +212,20 @@ class Command(BaseCommand):
 					entry=row[scn]
 					if entry!='':
 						shortref=re.search("[^,]+",row[scn]).group(0)
-						leftover=row[scn][len(shortref)+1:]
-						tmp_sources[shortref]=leftover
+						tmp_sources.append(shortref)
+			tmp_sources=list(set(tmp_sources))
 			db_sources=VoyageSources.objects.all()
-			for source in tmp_sources:
+			for short_ref in tmp_sources:
 				this_source=getuniqueorcreatenew(
-					db_sources.filter(short_ref=source),
+					db_sources.filter(short_ref=short_ref),
 					VoyageSources(
-						short_ref=source,
+						short_ref=short_ref,
 						source_type_id=1,
-						full_ref=source
+						full_ref=short_ref
 					)
 				)
 		# 				print(this_source)
-				sources[source]={'obj':this_source,'text_ref':tmp_sources[source]}
+				sources[short_ref]=this_source
 
 		print("%d sources" %len(sources))
 		
@@ -191,19 +240,21 @@ class Command(BaseCommand):
 			reader = csv.DictReader(csvfile)
 
 			enslaved=Enslaved.objects.all()
-		
-			for row in reader:
-				enslavement_sources_shortrefs=list(set([re.search("[^,]+",row[i]).group(0) for i in ['SOURCEA','SOURCEB'] if row[i]!='']))
-			
-				enslaved_sources=[sources[i] for i in enslavement_sources_shortrefs]
 
+			for row in reader:
+				enslavement_sources=[row[i] for i in sourcecolumnnames if row[i]!='']
+				tmp_sources={}
+				for enslavement_source in enslavement_sources:
+					shortref=re.search("[^,]+",enslavement_source).group(0)
+					leftover=enslavement_source[len(shortref)+2:]
+					tmp_sources[shortref]={"obj":sources[shortref],"text_ref":leftover}
 
 				captive_fate_id=row['Captive fate']
 				if captive_fate_id != '':
-				
+		
 					captive_fate_id=int(captive_fate_id)
 					captive_fate_name=captivefatenamesdict.get(captive_fate_id) or "Unknown Value"
-				
+		
 					captive_fate=getuniqueorcreatenew(
 						CaptiveFate.objects.all().filter(id=captive_fate_id),
 						CaptiveFate(
@@ -212,7 +263,7 @@ class Command(BaseCommand):
 						)
 					)
 					captivefates[captive_fate_id]=captive_fate
-				
+		
 				else:
 					captive_fate=None
 
@@ -244,8 +295,8 @@ class Command(BaseCommand):
 			
 				c=1
 			
-				for source in enslaved_sources:
-				
+				for shortref in tmp_sources:
+					source=tmp_sources[shortref]
 					enslavedsourceconnection=EnslavedSourceConnection(
 						enslaved=enslaved_person,
 						source=source['obj'],
@@ -357,21 +408,15 @@ class Command(BaseCommand):
 					)
 					enslavedinrelation_pk_ai+=1
 					enslaved_in_relations.append(enslaved_in_relation)
-				
-				
-				
-	
-		sources2={sources[source]['obj'] for source in sources}
 	
 		print("%d enslavement relations" %len(enslavement_relations))
 		print("%d enslaver in relations" %len(enslaver_in_relations))
 		print("%d enslaved in relations" %len(enslaved_in_relations))
-		print("%d enslaver voyage connections" %len(enslavervoyageconnections))
 		print("%d enslaver roles" %len(enslaver_roles))
-	
+
 		itemlists=[
 			captivefates,
-			sources2,
+# 			sources,
 			enslaveds,
 			enslavedsourceconnections,
 			enslavement_relations,
@@ -380,24 +425,25 @@ class Command(BaseCommand):
 			enslaver_aliases,
 			enslaver_in_relations,
 			enslaved_in_relations,
-			enslavervoyageconnections,
 			enslavercachedproperties
 		]
-	
+
 		for itemlist in itemlists:
-		
-			if type(itemlist)==list:
+
+			if type(itemlist)==list and len(itemlist)>0:
 				print("importing objects like this-->",itemlist[0])
 				for item in itemlist:
 					try:
 						item.save()
 					except:
 						print(item.__dict__)
-				
-			elif type(itemlist)==dict:
+		
+			elif type(itemlist)==dict and len(itemlist)>0:
 				print("importing objects like this-->",itemlist[list(itemlist.keys())[0]])
 				for k in itemlist:
 					try:
 						itemlist[k].save()
 					except:
 						print(print(k,itemlist[k].__dict__))
+
+
