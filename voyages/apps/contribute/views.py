@@ -2246,9 +2246,7 @@ def _expand_contrib(c):
         "contributed_language_groups": [{
                 "entry_pk": cl.pk,
                 "language_group_pk": cl.language_group.id,
-                "language_group_name": cl.language_group.name,
-                "modern_country_pk": cl.modern_country_id,
-                "modern_country_name": cl.modern_country.name if cl.modern_country else None
+                "language_group_name": cl.language_group.name
             } for cl in c.contributed_language_groups.all()
         ],
         "notes": c.notes,
@@ -2320,8 +2318,7 @@ def get_origins_contrib_details(request, contrib_pk):
             .values( \
                 'pk', 'gender', 'modern_name', 'documented_name', 'notes', \
                 'name_first', 'name_second', 'name_third', \
-                'language_group_id', 'modern_country_id', \
-                'language_group__name', 'modern_country__name', \
+                'language_group_id', 'language_group__name', \
                 embarkation=F('voyage__voyage_itinerary__imp_principal_place_of_slave_purchase__place'))
     else:
         propagation_candidates = []

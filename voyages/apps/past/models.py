@@ -706,10 +706,7 @@ class Enslaved(models.Model):
     skin_color = models.CharField(max_length=100, null=True, db_index=True)
     language_group = models.ForeignKey(LanguageGroup, null=True,
                                        on_delete=models.CASCADE,
-                                       db_index=True)                             
-    modern_country = models.ForeignKey(ModernCountry, null=True, default=None,
-                                        on_delete=models.CASCADE,
-                                        db_index=True)
+                                       db_index=True)
     register_country = models.ForeignKey(RegisterCountry, null=True,
                                          on_delete=models.CASCADE,
                                         db_index=True)
@@ -772,7 +769,6 @@ class EnslavedContributionLanguageEntry(models.Model):
                                      related_name='contributed_language_groups')
     language_group = models.ForeignKey(LanguageGroup, null=True,
                                        on_delete=models.CASCADE)
-    modern_country = models.ForeignKey(ModernCountry, null=True, default=None, on_delete=models.CASCADE)
     order = models.IntegerField()
 
 

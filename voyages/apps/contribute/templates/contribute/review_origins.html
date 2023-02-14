@@ -74,13 +74,9 @@
                     <h3>Propagation</h3>                    
                     <label for="propagatedName">{% trans "Propagated Name" %}:</label>
                     <input class="form-control" name="propagatedName" type="text" v-model="propagatedName" />
-                    <label for="propagatedCountry">{% trans "Propagated Modern Country" %}:</label>
+                    <label for="propagatedCountry">{% trans "Modern Country" %}:</label>
                     <select id="propagatedCountry" class="form-control" v-model="propagatedCountry">
                         <option value=""></option>
-                        <option value="remove">{% trans "Delink Modern Country" %}</option>
-                        <option v-if="contribData.contributed_language_groups" disabled>--- {% trans "User Contributed" %} ---</option>
-                        <option v-if="contribCountries" v-for="pair in contribCountries" v-bind:value="pair[0]">[[ pair[1] ]]</option>
-                        <option disabled>--- {% trans "Editorial Choices" %} ---</option>
                         <option v-for="country in modernCountryChoices" v-bind:value="country.pk">[[ country.name ]]</option>
                     </select>
                     <label for="propagatedLang">{% trans "Propagated Language Group" %}:</label>
@@ -105,7 +101,6 @@
                                 <th>{% trans "Embarkation" %}</th>
                                 <th>{% trans "Name" %}</th>
                                 <th>{% trans "Language Group" %}</th>
-                                <th>{% trans "Country" %}</th>
                                 <th>{% trans "Notes" %}</th>
                             </tr>
                         </thead>
@@ -256,14 +251,6 @@
                         return data;
                     }
                 }, {
-                    data: row => ({ pk: row.pk, country: row.modern_country__name }),
-                    render: function(data, type) {
-                        if (type === 'display') {
-                            return `<input type="checkbox" checked="true" v-bind:disabled="!propagatedCountry" id="check_C${data.pk}" value="C${data.pk}"> <span id="cell_C${data.pk}" class="font-weight-light overwrite">${data.country}</span>`;
-                        }
-                        return data;
-                    }
-                }, {
                     data: row => ({ pk: row.pk, notes: row.notes }),
                     render: function(data, type) {
                         if (type === 'display') {
@@ -276,7 +263,7 @@
                 }
             ],
             scrollY: '30vh',
-            paginate: contribData.propagation_candidates.length > 10,
+            paginate: false, // Use scrolling instead since all the data is loaded upfront anyway
             info: false,
             bFilter: false,
             pageLength: 10,
@@ -319,7 +306,6 @@
             for (const candidate of contribData.propagation_candidates) {
                 const propName = $(`#check_N${candidate.pk}`).prop('checked');
                 const propLang = $(`#check_L${candidate.pk}`).prop('checked');
-                const propCountry = $(`#check_C${candidate.pk}`).prop('checked');
                 // Create an action (update or preserve for each propagation field).
                 actions.push(makeAction(propName, candidate, 'modern_name', vmodel.propagatedName));
                 actions.push(makeAction(
@@ -327,11 +313,6 @@
                     candidate,
                     'language_group_id',
                     getSelectionId(vmodel.propagatedLanguage)));
-                actions.push(makeAction(
-                    propCountry && !!vmodel.propagatedCountry,
-                    candidate,
-                    'modern_country_id',
-                    getSelectionId(vmodel.propagatedCountry)));
                 const notes = $("#notes_" + candidate.pk).text();
                 if (!!notes || !!candidate.notes) {
                     actions.push(makeAction(true, candidate, 'notes', notes));

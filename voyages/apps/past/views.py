@@ -578,7 +578,6 @@ def enslaved_contribution(request):
             name_ids.append(name_entry.pk)
         result['name_ids'] = name_ids
         language_ids = []
-        print("-->",languages)
 #         for i, lang in enumerate(languages):
         for i in languages:
             lang_entry = EnslavedContributionLanguageEntry()
@@ -591,13 +590,6 @@ def enslaved_contribution(request):
                 transaction.rollback()
                 return HttpResponseBadRequest(
                     'Invalid language entry in contribution')
-#             modern_country_id = lang.get('modern_country_id', None)
-#             lang_entry.modern_country = ModernCountry.objects.get(
-#                 pk=modern_country_id) if modern_country_id else None
-#             if modern_country_id is None:
-#                 transaction.rollback()
-#                 return HttpResponseBadRequest(
-#                     'Invalid modern country entry in contribution')
             lang_entry.save()
             language_ids.append(lang_entry.pk)
         result['language_ids'] = language_ids
