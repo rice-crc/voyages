@@ -143,6 +143,7 @@ def perform_search(search, lang):
             dataset = VoyageDataset.Transatlantic
     if dataset >= 0:
         search_terms[u'var_dataset__exact'] = dataset
+    print(f"search_terms: {search_terms}, custom_terms: {custom_terms}")
     result = sqs.models(Voyage).filter(**search_terms)
     for ct in custom_terms:
         result = result.filter(content=Raw(ct, clean=True))
@@ -659,11 +660,13 @@ def get_download_header(var_name):
     def follow_field(model, name_to_follow):
         split = name_to_follow.find('__')
         current = name_to_follow[:split] if split > 0 else name_to_follow
+        f = None
+        result = None
         try:
             f = model._meta.get_field(current)
-        except Exception:
-            f = None
-        result = f.verbose_name if f else ''
+            result = f.verbose_name
+        except:
+            pass
         if split > 0 and f:
             result += ' ' + \
                 follow_field(f.remote_field.model, name_to_follow[split + 2:])

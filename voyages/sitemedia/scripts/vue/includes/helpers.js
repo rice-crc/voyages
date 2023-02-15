@@ -339,6 +339,14 @@ function resetFilter(filter, group, subGroup) {
   }
 }
 
+const safePercentageFilter = (val, fallback) => {
+  const num = parseInt(val);
+  if (isNaN(num) || num < 0) {
+    return fallback;
+  }
+  return num * 0.01;
+};
+
 // serialize a filter
 function serializeFilter(filter) {
   return JSON.stringify(filter);
@@ -459,8 +467,7 @@ function searchAll(filter, filterData) {
                     "PercentageVariable"
                   ) {
                     item["searchTerm"] =
-                      parseInt(filter[key1][key2][key3].value["searchTerm"]) /
-                      100;
+                      safePercentageFilter(filter[key1][key2][key3].value["searchTerm"], 0);
                   } else {
                     item["searchTerm"] =
                       filter[key1][key2][key3].value["searchTerm"];
@@ -521,11 +528,9 @@ function searchAll(filter, filterData) {
                     "PercentageVariable"
                   ) {
                     var searchTerm0 =
-                      parseInt(filter[key1][key2][key3].value["searchTerm0"]) /
-                      100;
+                      safePercentageFilter(filter[key1][key2][key3].value["searchTerm0"], 0);
                     var searchTerm1 =
-                      parseInt(filter[key1][key2][key3].value["searchTerm1"]) /
-                      100;
+                      safePercentageFilter(filter[key1][key2][key3].value["searchTerm1"], 1);
                     item["searchTerm"] = [searchTerm0, searchTerm1];
                   }
                 }

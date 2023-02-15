@@ -130,10 +130,14 @@ def get_modern_countries(_):
 
 
 @csrf_exempt
-@cache_page(0)
+@cache_page(3600)
 def get_language_groups(request):
     #we need a switch between used and unused language groups (search should only have used, contribute should have all)
-    active_only=json.loads(request.body).get('active_only')
+    active_only = True
+    try:
+        active_only = json.loads(request.body).get('active_only', active_only)
+    except:
+        pass
     countries_list_key = "countries_list"
     alt_names_key = "alt_names_list"
     country_helper = MultiValueHelper(countries_list_key, ModernCountry.languages.through, 'languagegroup_id', modern_country_id='moderncountry__pk', country_name='moderncountry__name')
