@@ -24,7 +24,7 @@ urlpatterns = [
     url(r'^downloads',
         TemplateView.as_view(template_name='downloads.html'),
         name='downloads'),
-    url(r'^maps$', redirect_to_blog, name='maps'),
+    url(r'^maps$', redirect_to_blog_maps, name='maps'),
     url(r'^ship',
         TemplateView.as_view(template_name='ship.html'), name='ship'),
     url(r'^navire', TemplateView.as_view(template_name='navire.html'), name='navire'),
