@@ -13,7 +13,7 @@ const contributeCol = { data: "id", header: "", name: "contribute", className: "
 
 var allColumns = [
   // name
-  { data: "alias_list", category: 0, header: gettext("Full Name"), isImputed: false, orderable: false },
+  { data: "alias_list", category: 0, header: gettext("Full Name"), isImputed: false, orderable: true },
   { data: "ranking", category: 0, header: gettext("Search Ranking"), isImputed: false, isUserSearchBased: true, visible: false },
   
   // voyages

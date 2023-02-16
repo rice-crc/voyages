@@ -366,11 +366,22 @@ class BitsAndFunc(Func):
     template = '(%(expressions)s)'
 
 
+class Lower(Func):
+    function = 'LOWER'
+
+
 class PowerFunc(Func):
     arity = 2
     function = 'POWER'
     arg_joiner = ','
     template = 'POWER(%(expressions)s)'
+
+
+class RemoveNonAlphaChars(Func):
+    arity = 1
+    function = 'REGEXP_REPLACE'
+    arg_joiner = ','
+    template = r"""REGEXP_REPLACE(%(expressions)s, '[^[[:alpha:]]]', '')"""
 
 
 class EnslaverCachedProperties(models.Model):
@@ -386,6 +397,10 @@ class EnslaverCachedProperties(models.Model):
     # The voyage datasets that contain voyages associated with the enslavers. We
     # encode the aggregation as a bitwise OR of the powers of two of dataset values.
     voyage_datasets = models.IntegerField(db_index=True, null=True)
+    # Store lexicographically smallest and largest aliases for each Enslaver.
+    # This can then be used to sort
+    min_alias = models.CharField(blank=True, db_index=True, max_length=255)
+    max_alias = models.CharField(blank=True, db_index=True, max_length=255)
 
     @staticmethod
     def compute(identities=None):
@@ -394,11 +409,12 @@ class EnslaverCachedProperties(models.Model):
         EnslaverCachedProperties table which can be used to search and sort
         enslavers based on aggregated values.
         """
-        def apply_filter(q):
-            return q.filter(**{f"{identity_field}__in": identities}) if identities is not None else q
+        identity_field = 'enslaver_alias__identity__id'
+
+        def apply_filter(q, matching_field=None):
+            return q.filter(**{f"{matching_field or identity_field}__in": identities}) if identities is not None else q
 
         helper = PropHelper()
-        identity_field = 'enslaver_alias__identity__id'
         voyage_year_field = 'voyage__voyage_dates__imp_arrival_at_port_of_dis'
         q_years = EnslaverVoyageConnection.objects \
             .select_related(voyage_year_field) \
@@ -419,6 +435,20 @@ class EnslaverCachedProperties(models.Model):
         for row in q_years:
             helper.set(int(row[0]), 'min_year', get_year(row[1]))
             helper.set(int(row[0]), 'max_year', get_year(row[2]))
+
+        # Process the alias field so that sorting behaves decently even with
+        # some badly formatted entries we currently have (e.g. with question
+        # marks, commas, digits etc)
+        alias_field = RemoveNonAlphaChars(Lower(F('alias')))
+        q_aliases = EnslaverAlias.objects \
+            .values('identity_id') \
+            .annotate(min_alias=Min(alias_field)) \
+            .annotate(max_alias=Max(alias_field)) \
+            .values_list('identity_id', 'min_alias', 'max_alias')
+        q_aliases = apply_filter(q_aliases, 'identity_id')
+        for row in q_aliases:
+            helper.set(int(row[0]), 'min_alias', row[1])
+            helper.set(int(row[0]), 'max_alias', row[2])
 
         q_datasets = EnslaverVoyageConnection.objects \
             .select_related('voyage__dataset') \
@@ -490,6 +520,14 @@ class EnslaverCachedProperties(models.Model):
             props.transactions_amount = item.get('tot_amount', 0)
             props.first_year = item.get('min_year', None)
             props.last_year = item.get('max_year', None)
+            props.min_alias = item.get('min_alias', '')
+            props.max_alias = item.get('max_alias', '')
+            # Avoid blank entries messing up alias sorting with some hardcoded
+            # balues that should place these last in their respective sorts.
+            if props.min_alias == '':
+                props.min_alias = 'zzzzzzzzzz'
+            if props.max_alias == '':
+                props.max_alias = 'aaaaaaaaaa'
             props.voyage_datasets = item.get('datasets', 0)
             yield props
 
@@ -1533,6 +1571,9 @@ class EnslaverSearch:
                     orm_orderby = []
                     break
                 is_desc = x['direction'].lower() == 'desc'
+                if col_name == 'alias_list':
+                    orm_orderby.append(f"{'-' if is_desc else ''}cached_properties__{'max' if is_desc else 'min'}_alias")
+                    continue
                 order_field = F(col_name)
                 if is_desc:
                     order_field = order_field.desc(nulls_last=True)
