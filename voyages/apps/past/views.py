@@ -263,6 +263,19 @@ def refresh_maps_cache(request):
 
 refresh_maps_cache(None)
 
+def process_search_query_post(user_query):
+    # Initially we started with a simple approach that does not include the
+    # operators on variables and thus can be immediately passed to the
+    # EnslavedSearch constructor. However, that decision causes pain for the
+    # saved query feature since the UI should know which operator was used for
+    # the query in order to properly reproduce it. We are therefore handling
+    # both situations here by simply removing what we don't need at the backend
+    # and allowing the saved query to follow the same format as before.
+    if 'items' in user_query:
+        # This is the newer format with the operation encoded.
+        user_query = {item['varName']: item['searchTerm'] for item in user_query['items']}
+    return user_query
+
 @require_POST
 @csrf_exempt
 def search_enslaved(request):
@@ -271,7 +284,8 @@ def search_enslaved(request):
     # decoded from the JSON body as arguments to the EnslavedSearch
     # constructor.
     data = json.loads(request.body)
-    search = EnslavedSearch(**data['search_query'])
+    user_query = process_search_query_post(data['search_query'])
+    search = EnslavedSearch(**user_query)
     fields=data.get('fields',None)
     output_type = data.get('output', 'resultsTable')
     
@@ -508,7 +522,8 @@ def search_enslaved(request):
 @csrf_exempt
 def search_enslaver(request):
     data = json.loads(request.body)
-    search = EnslaverSearch(**data['search_query'])
+    user_query = process_search_query_post(data['search_query'])
+    search = EnslaverSearch(**user_query)
     fields = data.get('fields')
     if fields is None:
         fields = [

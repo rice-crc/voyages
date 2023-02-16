@@ -967,6 +967,13 @@ def _year_range_conv(range):
     """
     return [',,' + str(y) for y in range]
 
+def single_val(source):
+    try:
+        if isinstance(source, list):
+            source = source[0]
+    except:
+        pass
+    return source
 
 class EnslavedSearch:
     """
@@ -1022,7 +1029,6 @@ class EnslavedSearch:
                 exact or fuzzy
         @param: gender The gender ('male' or 'female').
         @param: age_range A pair (a, b) where a is the min and b is maximum age
-        @param: voyage_dataset A list of voyage datasets that restrict the search.
         @param: height_range A pair (a, b) where a is the min and b is maximum
                 height
         @param: year_range A pair (a, b) where a is the min voyage year and b
@@ -1043,13 +1049,14 @@ class EnslavedSearch:
                 'columnName': 'NAME', 'direction': 'ASC or DESC' }.
                 Note that if the search is fuzzy, then the fallback value of
                 order_by is the ranking of the fuzzy search.
+        @param: voyage_dataset A list of voyage datasets that restrict the search.
         @param: skin_color a textual description for skin color (Racial Descriptor)
         @param: vessel_fate a list of fates for the associated voyage vessel.
         """
-        self.enslaved_dataset = enslaved_dataset
-        self.searched_name = searched_name
-        self.exact_name_search = exact_name_search
-        self.gender = gender
+        self.enslaved_dataset = single_val(enslaved_dataset)
+        self.searched_name = single_val(searched_name)
+        self.exact_name_search = single_val(exact_name_search)
+        self.gender = single_val(gender)
         self.age_range = age_range
         self.height_range = height_range
         self.year_range = year_range
@@ -1057,13 +1064,13 @@ class EnslavedSearch:
         self.disembarkation_ports = disembarkation_ports
         self.post_disembark_location = post_disembark_location
         self.language_groups = language_groups
-        self.ship_name = ship_name
+        self.ship_name = single_val(ship_name)
         self.voyage_id = voyage_id
         self.enslaved_id = enslaved_id
-        self.source = source
+        self.source = single_val(source)
         self.order_by = order_by or [{'columnName': 'pk', 'direction': 'asc'}]
         self.voyage_dataset = voyage_dataset
-        self.skin_color = skin_color
+        self.skin_color = single_val(skin_color)
         self.vessel_fate = vessel_fate
 
     def get_order_for_field(self, field):
@@ -1414,20 +1421,22 @@ class EnslaverSearch:
                 associated enslaved count between a and b.
         @param: roles a list of role pks that should be matched (an enslaver may
                 appear in multiple roles).
+        @param: a list of Voyage datasets that should be used to match voyages 
+                connected to the enslaver.
         @param: order_by An array of dicts {
                 'columnName': 'NAME', 'direction': 'ASC or DESC' }.
                 Note that if the search is fuzzy, then the fallback value of
                 order_by is the ranking of the fuzzy search.
         """
-        self.searched_name = searched_name
-        self.exact_name_search = exact_name_search
+        self.searched_name = single_val(searched_name)
+        self.exact_name_search = single_val(exact_name_search)
         self.year_range = year_range
         self.embarkation_ports = embarkation_ports
         self.disembarkation_ports = disembarkation_ports
         self.departure_ports = departure_ports
-        self.ship_name = ship_name
+        self.ship_name = single_val(ship_name)
         self.voyage_id = voyage_id
-        self.source = source
+        self.source = single_val(source)
         self.enslaved_count = enslaved_count
         self.roles = roles
         self.voyage_datasets = voyage_datasets
