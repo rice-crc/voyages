@@ -53,7 +53,7 @@
                             <span v-if="contribData.is_multilingual">{% trans "Multilingual" %}</span>
                             <ul>
                                 <li v-for="cl in contribData.contributed_language_groups">
-                                    [[ cl.language_group_name ]] ([[ cl.modern_country_name ]])
+                                    [[ cl.language_group_name ]]
                                 </li>
                             </ul>
                             <div v-if="contribData.prev_language_group_contributions.length > 0">
