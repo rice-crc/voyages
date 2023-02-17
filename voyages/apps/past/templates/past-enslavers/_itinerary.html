@@ -24,16 +24,7 @@
         :filter="scope.filters.var_year_range"
         @change="changed">
       </v-number>
-
-      <v-number @change="changed"
-        :filter="scope.filters.var_enslaved_count">
-      </v-number>
-
-      <v-treeselect
-        :filter="scope.filters.var_roles"
-        @change="changed">
-      </v-treeselect>
-
+      
       <v-treeselect
         :filter="scope.filters.var_voyage_datasets"
         @change="changed">

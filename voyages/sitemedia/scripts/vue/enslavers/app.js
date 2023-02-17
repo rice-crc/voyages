@@ -17,6 +17,7 @@ var searchBar = new Vue({
       enslaverName: enslaverName,
       // identity: identity,
       // personalData: personalData,
+      enslaver_details: enslaver_details,
       itinerary: itinerary,
       places: places,
       // culturalAssociation: culturalAssociation,
