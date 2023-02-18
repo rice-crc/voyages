@@ -309,6 +309,7 @@ def search_enslaved(request):
             'skin_color',
             'language_group__name',
             'register_country__name',
+            'notes',
             'voyage_id',
             'voyage__voyage_ship__ship_name',
             'voyage__voyage_dates__first_dis_of_slaves',

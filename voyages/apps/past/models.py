@@ -877,7 +877,8 @@ class EnslaverInRelation(models.Model):
 
 _special_empty_string_fields = {
     'voyage__voyage_ship__ship_name': 1,
-    'voyage__voyage_dates__first_dis_of_slaves': '2'
+    'voyage__voyage_dates__first_dis_of_slaves': '2',
+    'notes': 1
 }
 
 _name_fields = ['documented_name', 'name_first', 'name_second', 'name_third']
