@@ -1014,6 +1014,31 @@ def single_val(source):
         pass
     return source
 
+
+class PivotTableDefinition:
+    AGG_COUNT = 'COUNT'
+    AGG_SUM = 'SUM'
+
+    def __init__(self, row_fields, agg_field, agg_mode):
+        self.row_fields = row_fields
+        self.agg_field = F(agg_field) if isinstance(agg_field, str) else agg_field
+        self.agg_mode = agg_mode
+
+    def adapt_query(self, model, query):
+        # The query is  used to select the results from which a pivot table will
+        # be built. We use it as an inner query and let the db do the
+        # aggregation over it.
+        ptq = model.objects.filter(pk__in=Subquery(query.values('pk')))
+        ptq = ptq.values(**{k: F(v) if isinstance(v, str) else v for k, v in self.row_fields.items()})
+        aggregator = self.agg_field
+        if self.agg_mode == PivotTableDefinition.AGG_COUNT:
+            aggregator = Count(aggregator)
+        if self.agg_mode == PivotTableDefinition.AGG_SUM:
+            aggregator = Sum(aggregator)
+        ptq = ptq.annotate(cell=aggregator)
+        return ptq
+
+
 class EnslavedSearch:
     """
     Search parameters for enslaved persons.
@@ -1057,18 +1082,19 @@ class EnslavedSearch:
                  order_by=None,
                  voyage_dataset=None,
                  skin_color=None,
-                 vessel_fate=None):
+                 vessel_fate=None,
+                 pivot_table=None):
         """
-        Search the Enslaved database. If a parameter is set to None, it will
-        not be included in the search.
-        @param: enslaved_dataset The enslaved dataset to be searched
+        Search the Enslaved database. If a parameter is set to None, it will not
+        be included in the search. @param: enslaved_dataset The enslaved dataset
+        to be searched
                 (either None to search all or an integer code).
-        @param: searched_name A name string to be searched
-        @param: exact_name_search Boolean indicating whether the search is
+        @param: searched_name A name string to be searched @param:
+        exact_name_search Boolean indicating whether the search is
                 exact or fuzzy
-        @param: gender The gender ('male' or 'female').
-        @param: age_range A pair (a, b) where a is the min and b is maximum age
-        @param: height_range A pair (a, b) where a is the min and b is maximum
+        @param: gender The gender ('male' or 'female'). @param: age_range A pair
+        (a, b) where a is the min and b is maximum age @param: height_range A
+        pair (a, b) where a is the min and b is maximum
                 height
         @param: year_range A pair (a, b) where a is the min voyage year and b
                 the max
@@ -1079,18 +1105,22 @@ class EnslavedSearch:
         @param: post_disembark_location A list of place ids where the enslaved
                 was located after disembarkation
         @param: language_groups A list of language groups ids for the enslaved
-        @param: ship_name The ship name that the enslaved embarked
-        @param: voyage_id A pair (a, b) where the a <= voyage_id <= b
-        @param: enslaved_id A pair (a, b) where the a <= enslaved_id <= b
-        @param: source A text fragment that should match Source's text_ref or
+        @param: ship_name The ship name that the enslaved embarked @param:
+        voyage_id A pair (a, b) where the a <= voyage_id <= b @param:
+        enslaved_id A pair (a, b) where the a <= enslaved_id <= b @param: source
+        A text fragment that should match Source's text_ref or
                 full_ref
         @param: order_by An array of dicts {
-                'columnName': 'NAME', 'direction': 'ASC or DESC' }.
-                Note that if the search is fuzzy, then the fallback value of
-                order_by is the ranking of the fuzzy search.
-        @param: voyage_dataset A list of voyage datasets that restrict the search.
-        @param: skin_color a textual description for skin color (Racial Descriptor)
-        @param: vessel_fate a list of fates for the associated voyage vessel.
+                'columnName': 'NAME', 'direction': 'ASC or DESC' }. Note that if
+                the search is fuzzy, then the fallback value of order_by is the
+                ranking of the fuzzy search.
+        @param: voyage_dataset A list of voyage datasets that restrict the
+        search. @param: skin_color a textual description for skin color (Racial
+        Descriptor) @param: vessel_fate a list of fates for the associated
+        voyage vessel.
+        @param: pivot_table is the specification for the aggregation of data in
+        a pivot table. The search filters will be applied to the Enslaved and
+        then the aggregation will only take place over matches.
         """
         self.enslaved_dataset = single_val(enslaved_dataset)
         self.searched_name = single_val(searched_name)
@@ -1111,6 +1141,8 @@ class EnslavedSearch:
         self.voyage_dataset = voyage_dataset
         self.skin_color = single_val(skin_color)
         self.vessel_fate = vessel_fate
+        self.pivot_table = pivot_table
+
 
     def get_order_for_field(self, field):
         if isinstance(self.order_by, list):
@@ -1290,6 +1322,9 @@ class EnslavedSearch:
                 q = q.order_by(*orm_orderby)
             else:
                 q = q.order_by('enslaved_id')
+
+        if self.pivot_table:
+            return self.pivot_table.adapt_query(Enslaved, q)
 
         # Save annotations to circumvent Django bug 28811 (see below).
         # https://code.djangoproject.com/ticket/28811

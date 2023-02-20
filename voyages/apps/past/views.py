@@ -25,7 +25,7 @@ from voyages.apps.common.views import get_filtered_results
 from .models import (AltLanguageGroupName, Enslaved,
                      EnslavedContribution, EnslavedContributionLanguageEntry,
                      EnslavedContributionNameEntry, EnslavedContributionStatus, EnslavedInRelation, EnslavedSearch, EnslavementRelation, EnslaverContribution, EnslaverInRelation, EnslaverRole, EnslaverSearch, EnslaverVoyageConnection,
-                     LanguageGroup, MultiValueHelper, ModernCountry, EnslavedNameSearchCache,
+                     LanguageGroup, MultiValueHelper, ModernCountry, EnslavedNameSearchCache, PivotTableDefinition,
                      _modern_name_fields, _name_fields)
 from voyages.apps.voyage.models import Place,Region
 from collections import Counter
@@ -276,6 +276,18 @@ def process_search_query_post(user_query):
         user_query = {item['varName']: item['searchTerm'] for item in user_query['items']}
     return user_query
 
+# TODO: Summary tables have fixed column structures so we pre-generate their
+# definitions to simplify the API for clients.
+from django.db.models.expressions import RawSQL
+_summary_pivot_gender = PivotTableDefinition(
+    { 'gender_code': 'gender' },
+    'enslaved_id',
+    PivotTableDefinition.AGG_COUNT)
+_summary_pivot_language = PivotTableDefinition(
+    { 'language': 'language_group__name', 'gender_code': 'gender', 'age_minor': RawSQL('COALESCE(age, 100) < 16', ()) },
+    'enslaved_id',
+    PivotTableDefinition.AGG_COUNT)
+
 @require_POST
 @csrf_exempt
 def search_enslaved(request):
@@ -285,9 +297,11 @@ def search_enslaved(request):
     # constructor.
     data = json.loads(request.body)
     user_query = process_search_query_post(data['search_query'])
-    search = EnslavedSearch(**user_query)
-    fields=data.get('fields',None)
     output_type = data.get('output', 'resultsTable')
+    if output_type == 'summary':
+        user_query['pivot_table'] = _summary_pivot_gender
+    search = EnslavedSearch(**user_query)
+    fields = data.get('fields',None)
     
     if output_type == 'maps':
         fields = [
@@ -362,7 +376,8 @@ def search_enslaved(request):
                 [entry[f] for f in _name_fields if f in entry])
         print("TABLE enslavedsearch response time:",time.time()-st)
         return JsonResponse(table)
-    elif output_type=='maps':
+    
+    if output_type == 'maps':
         
         mapmode=data.get('mapmode', 'points')
         paginator = Paginator(query, len(query))
@@ -516,6 +531,9 @@ def search_enslaved(request):
         print("MAP enslavedsearch response time:",time.time()-st)    
         return JsonResponse(final_result,safe=False)
     
+    if output_type == 'summary' or output_type == 'pivot':
+        return JsonResponse({'table': list(query)})
+
     return JsonResponse({'error': 'Unsupported'})
 
 
