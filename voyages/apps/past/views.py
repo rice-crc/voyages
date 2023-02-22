@@ -279,14 +279,25 @@ def process_search_query_post(user_query):
 # TODO: Summary tables have fixed column structures so we pre-generate their
 # definitions to simplify the API for clients.
 from django.db.models.expressions import RawSQL
-_summary_pivot_gender = PivotTableDefinition(
-    { 'gender_code': 'gender' },
-    'enslaved_id',
-    PivotTableDefinition.AGG_COUNT)
-_summary_pivot_language = PivotTableDefinition(
-    { 'language': 'language_group__name', 'gender_code': 'gender', 'age_minor': RawSQL('COALESCE(age, 100) < 16', ()) },
-    'enslaved_id',
-    PivotTableDefinition.AGG_COUNT)
+
+_pivot_summaries = {
+    'enslaved_gender': PivotTableDefinition(
+        { 'gender_code': 'gender' },
+        'enslaved_id',
+        PivotTableDefinition.AGG_COUNT),
+    'enslaved_lang_captives': PivotTableDefinition(
+        { 'language': 'language_group__name' },
+        'enslaved_id',
+        PivotTableDefinition.AGG_COUNT),
+    'enslaved_lang_voyages': PivotTableDefinition(
+        { 'language': 'language_group__name' },
+        'voyage_id',
+        PivotTableDefinition.AGG_COUNT),
+    'todo': PivotTableDefinition(
+        { 'language': 'language_group__name', 'gender_code': 'gender', 'age_minor': RawSQL('COALESCE(age, 100) < 16', ()) },
+        'enslaved_id',
+        PivotTableDefinition.AGG_COUNT)
+}
 
 @require_POST
 @csrf_exempt
@@ -299,7 +310,17 @@ def search_enslaved(request):
     user_query = process_search_query_post(data['search_query'])
     output_type = data.get('output', 'resultsTable')
     if output_type == 'summary':
-        user_query['pivot_table'] = _summary_pivot_gender
+        selection = data.get('summary_selection', _pivot_summaries.keys())
+        results = {}
+        for sel in selection:
+            pivot = _pivot_summaries.get(sel)
+            if pivot is None:
+                return JsonResponse({ 'error': f"Invalid request: summary selection {sel} not found" })
+            user_query['pivot_table'] = pivot
+            q = EnslavedSearch(**user_query)
+            results[sel] = list(q.execute(None))
+        return JsonResponse(results)
+
     search = EnslavedSearch(**user_query)
     fields = data.get('fields',None)
     
@@ -530,9 +551,6 @@ def search_enslaved(request):
             final_result[itinerary_group_name]=result
         print("MAP enslavedsearch response time:",time.time()-st)    
         return JsonResponse(final_result,safe=False)
-    
-    if output_type == 'summary' or output_type == 'pivot':
-        return JsonResponse({'table': list(query)})
 
     return JsonResponse({'error': 'Unsupported'})
 

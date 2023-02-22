@@ -1032,7 +1032,7 @@ class PivotTableDefinition:
         ptq = ptq.values(**{k: F(v) if isinstance(v, str) else v for k, v in self.row_fields.items()})
         aggregator = self.agg_field
         if self.agg_mode == PivotTableDefinition.AGG_COUNT:
-            aggregator = Count(aggregator)
+            aggregator = Count(aggregator, distinct=True)
         if self.agg_mode == PivotTableDefinition.AGG_SUM:
             aggregator = Sum(aggregator)
         ptq = ptq.annotate(cell=aggregator)
