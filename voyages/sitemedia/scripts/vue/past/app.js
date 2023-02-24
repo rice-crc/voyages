@@ -361,12 +361,13 @@ var searchBar = new Vue({
 
     // set the current tab to be the active tab
     setActive(tab) {
+      if (this.currentTab === tab) {
+        return;
+      }
       this.currentTab = tab;
-      if (location.href != location.origin + location.pathname + "#" + tab) {
+      if (location.href !== location.origin + location.pathname + "#" + tab) {
         location.href = location.origin + location.pathname + "#" + tab;
-//         console.log(location)
       };
-//       console.log(tab)
     },
 
     // update tab options
@@ -693,15 +694,12 @@ var readURL = function() {
   var url = window.location.href;
   if (url.includes("#")) {
     var activeTab = url.substring(url.indexOf("#") + 1);
-    var presetTabs = [
-      "results",
-      "maps"
-    ];
-    
-    if (presetTabs.includes(activeTab)) {
-      $('.nav-tabs a[href="#' + activeTab + '"]').tab("show"); // Activate a Bootstrap 4 tab
-      searchBar.setActive(activeTab);
+    const getTab = () => $('.nav-tabs a[href="#' + activeTab + '"]');
+    if (getTab().length === 0) {
+      activeTab = "results";
     }
+    getTab().tab("show"); // Activate a Bootstrap 4 tab
+    searchBar.setActive(activeTab);
   }
 };
 

@@ -1019,7 +1019,7 @@ class PivotTableDefinition:
     AGG_COUNT = 'COUNT'
     AGG_SUM = 'SUM'
 
-    def __init__(self, row_fields, agg_field, agg_mode):
+    def __init__(self, row_fields, agg_field, agg_mode=AGG_COUNT):
         self.row_fields = row_fields
         self.agg_field = F(agg_field) if isinstance(agg_field, str) else agg_field
         self.agg_mode = agg_mode

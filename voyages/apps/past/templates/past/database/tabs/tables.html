@@ -1,0 +1,63 @@
+{% load i18n %}
+
+<div id="tabs-tables-control">
+    <div class="row">
+      <div class="col-md-6 col-sm-12 col-lg-3">
+        <v-dropdown title="{% trans 'Row' %}" description="{% trans '' %}" @changed="updateTabOptions" :options="tabs[enslavedDataset].tables.row.options" :variable="tabs[enslavedDataset].tables.row" :clearable="false"></v-dropdown>
+        </div>
+      <div class="col-md-6 col-sm-12 col-lg-3">
+        <v-dropdown title="{% trans 'Column' %}" description="{% trans '' %}" @changed="updateTabOptions" :options="tabs[enslavedDataset].tables.column.options" :variable="tabs[enslavedDataset].tables.column" :clearable="false"></v-dropdown>
+      </div>
+      <div class="col-md-6 col-sm-12 col-lg-3">
+        <v-dropdown title="{% trans 'Cell' %}" description="{% trans '' %}" @changed="updateTabOptions" :options="tabs[enslavedDataset].tables.cell.options" :variable="tabs[enslavedDataset].tables.cell" :clearable="false"></v-dropdown>
+      </div>
+      <table id="v-tables" class="table table-striped table-bordered nowrap" cellspacing="0" width="100%" >
+        <thead>
+        </thead>
+        <tbody>
+        </tbody>
+        <tfoot>
+        </tfoot>
+      </table>
+  
+    </div>
+  </div>
+
+  <script type="text/javascript">
+    const updateTable = async () => {
+        if (searchBar.currentTab !== 'tables') {
+            return;
+        }
+        // Fetch data.
+        const pivot_fields = [];
+        // 
+        const post = {
+            search_query: searchAll(searchBar.filter, searchBar.filterData),
+            output: 'pivot',
+            pivot_fields
+        };
+        const res = await fetch('/past/api/search_enslaved', {
+            method: 'POST',
+            body: JSON.stringify(post)
+        });
+        const data = await res.json();
+        const tableId = "#v-tables";
+        if ($.fn.dataTable.isDataTable(tableId)) {
+            $(tableId).DataTable().destroy();
+        }
+        let tableData = [];
+        $(tableId).DataTable({
+            data: tableData,
+            paging: false,
+            info: false,
+            bFilter: false
+        });
+    };
+
+    document.addEventListener('readystatechange', async () => {
+        if (document.readyState === "interactive") {
+            await updateTable();
+            searchBar.$on('refresh', updateTable);
+        }
+    });
+  </script>

@@ -18,6 +18,9 @@
 
 <script type="text/javascript">
     const updateSummaryTable = async () => {
+        if (searchBar.currentTab !== 'summary') {
+            return;
+        }
         // Fetch data.
         const dataset = parseInt(searchBar.enslavedDataset);
         const selection = dataset === 0
@@ -73,10 +76,11 @@
             bFilter: false
         });
     };
-    document.onreadystatechange = async () => {
+    
+    document.addEventListener('readystatechange', async () => {
         if (document.readyState === "interactive") {
             await updateSummaryTable();
             searchBar.$on('refresh', updateSummaryTable);
         }
-    };
+    });
 </script>

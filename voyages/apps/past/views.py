@@ -278,25 +278,51 @@ def process_search_query_post(user_query):
 
 # TODO: Summary tables have fixed column structures so we pre-generate their
 # definitions to simplify the API for clients.
-from django.db.models.expressions import RawSQL
+from django.db.models.expressions import RawSQL, Func, Value
+
+_pivot_year_field = F('voyage__voyage_dates__imp_arrival_at_port_of_dis')
+
+class CoalesceFunc(Func):
+    function = 'COALESCE'
+    arity = 2
+    arg_joiner = ','
+    template = 'COALESCE(%(expressions)s)'
+
+class LessThanFunc(Func):
+    function = '<'
+    arity = 2
+    arg_joiner = '<'
+    template = '%(expressions)s'
+
+class RightFunc(Func):
+    function = 'RIGHT'
+    arity = 2
+    arg_joiner = ','
+    template = 'RIGHT(%(expressions)s)'
+
+class DivFunc(Func):
+    function = 'DIV'
+    arity = 2
+    arg_joiner = ' DIV '
+    template = '%(expressions)s'
+
+_pivot_fields = {
+    'language': 'language_group__name',
+    'gender_code': 'gender',
+    # Separate (age < 16) vs (age >= 16 OR age IS NULL).
+    'age_group': LessThanFunc(CoalesceFunc(F('age'), Value(100)), Value(16)),
+    'year': _pivot_year_field,
+    # The year is given in ",,{year}" string format, so we first get the 4 right
+    # most values, then subtract 1 and do an integer division by 5. The
+    # subtraction is so that the year ranges are of the form [xxx1, xxx5],
+    # [xxx6, xxx0].
+    'year_5': DivFunc(RightFunc(_pivot_year_field, Value(4)) - Value(1), Value(5))
+}
 
 _pivot_summaries = {
-    'enslaved_gender': PivotTableDefinition(
-        { 'gender_code': 'gender' },
-        'enslaved_id',
-        PivotTableDefinition.AGG_COUNT),
-    'enslaved_lang_captives': PivotTableDefinition(
-        { 'language': 'language_group__name' },
-        'enslaved_id',
-        PivotTableDefinition.AGG_COUNT),
-    'enslaved_lang_voyages': PivotTableDefinition(
-        { 'language': 'language_group__name' },
-        'voyage_id',
-        PivotTableDefinition.AGG_COUNT),
-    'todo': PivotTableDefinition(
-        { 'language': 'language_group__name', 'gender_code': 'gender', 'age_minor': RawSQL('COALESCE(age, 100) < 16', ()) },
-        'enslaved_id',
-        PivotTableDefinition.AGG_COUNT)
+    'enslaved_gender': PivotTableDefinition({ 'gender_code': 'gender' }, 'enslaved_id'),
+    'enslaved_lang_captives': PivotTableDefinition({ 'language': 'language_group__name' }, 'enslaved_id'),
+    'enslaved_lang_voyages': PivotTableDefinition({ 'language': 'language_group__name' }, 'voyage_id')
 }
 
 @require_POST
@@ -318,8 +344,20 @@ def search_enslaved(request):
                 return JsonResponse({ 'error': f"Invalid request: summary selection {sel} not found" })
             user_query['pivot_table'] = pivot
             q = EnslavedSearch(**user_query)
-            results[sel] = list(q.execute(None))
+            results[sel] = list(q.execute([]))
+        print("SUMMARY enslavedsearch response time:",time.time() - st)
         return JsonResponse(results)
+    
+    if output_type == 'pivot':
+        pivot_fields = data.get('pivot_fields')
+        if not pivot_fields:
+            return JsonResponse({ "error": f"No pivot fields specified: {pivot_fields}" })
+        pivot_fields = {k: _pivot_fields.get(k, k) for k in pivot_fields}
+        pivot = PivotTableDefinition(pivot_fields, 'enslaved_id')
+        user_query['pivot_table'] = pivot
+        res = list(EnslavedSearch(**user_query).execute([]))
+        print("PIVOT enslavedsearch response time:",time.time() - st)
+        return JsonResponse({ 'results': res })
 
     search = EnslavedSearch(**user_query)
     fields = data.get('fields',None)
