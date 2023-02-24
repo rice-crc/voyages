@@ -357,7 +357,17 @@ def search_enslaved(request):
         user_query['pivot_table'] = pivot
         res = list(EnslavedSearch(**user_query).execute([]))
         print("PIVOT enslavedsearch response time:",time.time() - st)
-        return JsonResponse({ 'results': res })
+        # Compute margin aggregates (e.g. for each field, a dict: field val => sum of cells).
+        margins = {}
+        for item in res:
+            cell = item['cell']
+            for k, v in item.items():
+                if k == 'cell':
+                    continue
+                margin = margins.setdefault(k, {})
+                margin[v] = margin.get(v, 0) + cell
+        margins = {k: sorted(v.items(), key=lambda x: -x[1]) for k, v in margins.items()}
+        return JsonResponse({ 'results': res, 'margins': margins })
 
     search = EnslavedSearch(**user_query)
     fields = data.get('fields',None)

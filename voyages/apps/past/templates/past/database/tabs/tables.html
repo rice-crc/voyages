@@ -29,8 +29,31 @@
             return;
         }
         // Fetch data.
-        const pivot_fields = [];
-        // 
+        const dataset = parseInt(searchBar.enslavedDataset);
+        const defProps = ["sourceVarName", "varName"];
+        const getField = (f, props) => {
+          const src = searchBar.tabs[enslavedDataset].tables[f];
+          const sel = src.value;
+          const matches = src.options.filter(o => o.id === sel);
+          if (matches.length !== 1) {
+            return null;
+          }
+          props = props || defProps;
+          const match = matches[0];
+          for (const p of props) {
+            if (match[p] != null) {
+              return match[p];
+            }
+          }
+          return null;
+        };
+        const colField = getField('column');
+        if (!colField) {
+          alert('Cannot build this PivotTable!');
+          return;
+        }
+        const pivot_fields = [getField('row'), colField, getField('cell')]
+          .filter(x => !!x);
         const post = {
             search_query: searchAll(searchBar.filter, searchBar.filterData),
             output: 'pivot',
@@ -45,13 +68,64 @@
         if ($.fn.dataTable.isDataTable(tableId)) {
             $(tableId).DataTable().destroy();
         }
-        let tableData = [];
-        $(tableId).DataTable({
-            data: tableData,
+        const columns = [];
+        // Generate columns for the table.
+        columns.push({ title: getField('row', ['label']), className: "bold" });
+        const nullText = gettext('Null');
+        let idxOthersCol = -1;
+        let counter = 0;
+        let maxCols = getField('column', ['maxResults']) ?? 1000;
+        const colIndex = {};
+        for (const m of data.margins[colField]) {
+          if (++counter > maxCols) {
+            idxOthersCol = columns.length;
+            columns.push({ title: gettext('Other') });
+            break;
+          }
+          colIndex[m[0]] = columns.length;
+          columns.push({ title: m[0] ?? nullText, className: "right" });
+        }
+        const idxTotalsCol = columns.length;
+        columns.push({ title: gettext('Totals'), className: "bold right" });
+        const totalsRow = new Array(columns.length);
+        totalsRow.fill(0);
+        totalsRow[0] = gettext('Totals');
+        const rows = { };
+        const rowKeySrc = getField('row', ['varName']);
+        for (const item of data.results) {
+          let rowKey = item[rowKeySrc];
+          if (rowKeySrc === 'year_5') {
+            rowKey = parseInt(rowKey);
+            rowKey = `${rowKey * 5 + 1}-${(rowKey + 1) * 5}`;
+          }
+          let arr = rows[rowKey];
+          if (!arr) {
+            arr = new Array(columns.length);
+            arr.fill(0);
+            arr[0] = rowKey;
+            rows[rowKey] = arr;
+          }
+          const colKey = item[colField];
+          let idxCol = colIndex[colKey];
+          if (!idxCol) {
+            idxCol = idxOthersCol;
+          }
+          if (idxCol > 0) {
+            arr[idxCol] += item.cell;
+            totalsRow[idxCol] += item.cell;
+          }
+          arr[idxTotalsCol] += item.cell;
+          totalsRow[idxTotalsCol] += item.cell;
+        }
+        const dt = $(tableId).DataTable({
+            data: Object.values(rows),
+            columns,
             paging: false,
             info: false,
             bFilter: false
         });
+        let footer = totalsRow.map((c, i) => `<td class="bold${i > 0 ? ' right' : ''}">${c}</td>`).join('');
+        $(`${tableId} tfoot`).html(`<tr>${footer}</tr>`);
     };
 
     document.addEventListener('readystatechange', async () => {
