@@ -8,9 +8,9 @@ var selected_tab=location.toString().split("#");
 
 if (selected_tab.length>1 && !selected_tab[selected_tab.length-1].includes("searchId=")) {
 
-		var currentTab = selected_tab[selected_tab.length-1]
+    var currentTab = selected_tab[selected_tab.length-1]
 } else {
-		var currentTab = "results"
+    var currentTab = "results"
 
 };
 
@@ -429,7 +429,7 @@ var searchBar = new Vue({
       //but outside of the results tab, it's just a placeholder element
       //and so resetting the pagination fails
       if (this.currentTab=='results'){
-		  resetPagination($("#results_main_table").DataTable());
+      resetPagination($("#results_main_table").DataTable());
       }
     },
 
@@ -487,9 +487,9 @@ var searchBar = new Vue({
             query = JSON.parse(response.data.items);
           }
 
-          var mappedVarNames = $.map(query, function(value, varName) {
-            return 'var_' + varName;
-          });
+          var mappedVarNames = query.map(
+            variable => 'var_' + variable.varName
+          );
 
           vm.clearFilter(vm.filter);
 
@@ -500,26 +500,34 @@ var searchBar = new Vue({
                 for (varName in vm.filter[group][subGroup]) {
                   if (mappedVarNames.includes(varName)) {
                     var varNameMapping = varName.replace('var_', '');
-                    var variable = query[varNameMapping];
+                    var variable = query.find(obj => {
+                      return ('var_' + obj.varName) == varName;
+                    });
 
                     vm.filter[group][subGroup][varName].activated = true;
                     vm.filter[group][subGroup][varName].changed = true;
+                    vm.filter[group][subGroup][varName].value.op =
+                      variable.op == "equals" ? "is equal to" : variable.op;
 
                     if (vm.filter[group][subGroup][varName] instanceof PlaceVariable ||
                       vm.filter[group][subGroup][varName] instanceof LanguageGroupVariable ||
                       vm.filter[group][subGroup][varName] instanceof TreeselectVariable)
                     {
-                      vm.filter[group][subGroup][varName].value.searchTerm = variable;
+                      vm.filter[group][subGroup][varName].value.searchTerm = variable.searchTerm;
                     }
                     else if (vm.filter[group][subGroup][varName] instanceof PercentageVariable ||
-                      Array.isArray(variable))
+                      Array.isArray(variable.searchTerm))
                     {
-                      vm.filter[group][subGroup][varName].value.searchTerm0 = variable[0];
-                      vm.filter[group][subGroup][varName].value.searchTerm1 = variable[1];
+                      vm.filter[group][subGroup][varName].value.searchTerm0 = variable.searchTerm[0];
+                      vm.filter[group][subGroup][varName].value.searchTerm1 = variable.searchTerm[1];
                     }
                     else
                     {
-                      vm.filter[group][subGroup][varName].value.searchTerm = variable;
+                      vm.filter[group][subGroup][varName].value.searchTerm = variable.searchTerm;
+                    }
+
+                    if (vm.filter[group][subGroup][varName].value.op == 'is at most') {
+                      vm.filter[group][subGroup][varName].value.searchTerm0 = variable.searchTerm[1];
                     }
                   }
                 }
@@ -548,7 +556,7 @@ var searchBar = new Vue({
       var vm = this;
       axios
         .post("/voyage/save-query", {
-          items: items
+          items: serializeFilter(items)
         })
         .then(function(response) {
           var exists = false;
@@ -724,34 +732,34 @@ jQuery(document).on("shown.bs.tab", 'a[data-toggle="tab"]', function(e) {
 
 // for maps: passes map node clicks into filter
 function linkfilter(ids,tag) {
-	
-	switch (tag) {
-		case 'embarkation':
-			var this_search_var = searchBar.filter.itinerary.itinerary.var_embarkation_ports;
-			break;
-		case 'disembarkation':
-			var this_search_var = searchBar.filter.itinerary.itinerary.var_disembarkation_ports;
-			break;
-		case 'post-disembarkation':
-			var this_search_var = searchBar.filter.fate.fate.var_post_disembark_location;
-			break;
-		case 'origin':
-			var this_search_var = searchBar.filter.culturalAssociation.culturalAssociation.var_language_groups;
-			break;
-		default:
-			console.log(tag);
-	};
-	var goodtogo=false;
-	ids.toString().split('-').forEach(id=>{
-		if (typeof(eval(id))=="number" && !this_search_var.value.searchTerm.includes(eval(id))) {
-			this_search_var.value.searchTerm.push(eval(id));
-			goodtogo=true
-		}
-	})
-	
-	if (goodtogo) {
-		this_search_var.activated = true;
-		this_search_var.changed = true;
-		searchBar.refresh();
-	}
+  
+  switch (tag) {
+    case 'embarkation':
+      var this_search_var = searchBar.filter.itinerary.itinerary.var_embarkation_ports;
+      break;
+    case 'disembarkation':
+      var this_search_var = searchBar.filter.itinerary.itinerary.var_disembarkation_ports;
+      break;
+    case 'post-disembarkation':
+      var this_search_var = searchBar.filter.fate.fate.var_post_disembark_location;
+      break;
+    case 'origin':
+      var this_search_var = searchBar.filter.culturalAssociation.culturalAssociation.var_language_groups;
+      break;
+    default:
+      console.log(tag);
+  };
+  var goodtogo=false;
+  ids.toString().split('-').forEach(id=>{
+    if (typeof(eval(id))=="number" && !this_search_var.value.searchTerm.includes(eval(id))) {
+      this_search_var.value.searchTerm.push(eval(id));
+      goodtogo=true
+    }
+  })
+  
+  if (goodtogo) {
+    this_search_var.activated = true;
+    this_search_var.changed = true;
+    searchBar.refresh();
+  }
 };

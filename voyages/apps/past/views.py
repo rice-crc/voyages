@@ -272,8 +272,11 @@ def process_search_query_post(user_query):
     # both situations here by simply removing what we don't need at the backend
     # and allowing the saved query to follow the same format as before.
     if 'items' in user_query:
+        order_by = user_query.get('order_by')
         # This is the newer format with the operation encoded.
         user_query = {item['varName']: item['searchTerm'] for item in user_query['items']}
+        if (order_by is not None):
+            user_query['order_by'] = order_by
     return user_query
 
 # TODO: Summary tables have fixed column structures so we pre-generate their

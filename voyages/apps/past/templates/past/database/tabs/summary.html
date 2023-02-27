@@ -23,7 +23,7 @@
             ? ['enslaved_lang_captives', 'enslaved_lang_voyages']
             : ['enslaved_gender'];
         const post = {
-            search_query: searchAll(searchBar.filter, searchBar.filterData),
+            search_query: {items: searchAll(searchBar.filter, searchBar.filterData)},
             output: 'summary',
             summary_selection: selection
         };
