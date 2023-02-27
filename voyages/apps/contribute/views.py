@@ -2599,7 +2599,7 @@ def _create_enslaver_update_actions(contrib, check_transaction_tags=None):
     aliases_keys = [aid for si in saved_identities for aid in si['aliases'].keys()]
     if check_transaction_tags:
         # Remap tags to ids when checking.
-        aliases_keys = [check_transaction_tags.get(x, x) if not _isint(x) else int(x) for x in aliases_keys]
+        aliases_keys = [check_transaction_tags.get(f"{EnslaverAlias.__name__}_{x}", x) if not _isint(x) else int(x) for x in aliases_keys]
     current_aliases = {int(a['pk']): a for a in EnslaverAlias.objects \
         .filter(pk__in=[aid for aid in aliases_keys if _isint(aid)]) \
         .values('pk', 'identity_id', 'alias')}
@@ -2612,16 +2612,24 @@ def _create_enslaver_update_actions(contrib, check_transaction_tags=None):
     current_relations = {int(r['relation_id']): r for r in EnslaverInRelation.objects \
         .filter(enslaver_alias_id__in=current_aliases.keys()) \
         .values('enslaver_alias_id', 'relation_id')}
+    
+    def remap_identity_id(iid):
+        if _isint(iid):
+            return iid
+        if check_transaction_tags:
+            return check_transaction_tags.get(f"{EnslaverIdentity.__name__}_{iid}")
+        return None
+
     current_sources = {int(s.pk): s for s in EnslaverIdentitySourceConnection.objects \
-        .filter(identity_id__in=[k for k in identities.keys() if _isint(k)])}
+        .filter(identity_id__in=[remap_identity_id(k) for k in identities.keys()])}
     proposed_voyage_conn = {}
     proposed_relations = {}
     for si in saved_identities:
         for aid, a in si['aliases'].items():
             current = None
             tag = None
-            if check_transaction_tags and not _isint(aid) and aid in check_transaction_tags:
-                aid = check_transaction_tags.get(aid)
+            if check_transaction_tags and not _isint(aid) and f"{EnslaverAlias.__name__}_{aid}" in check_transaction_tags:
+                aid = check_transaction_tags.get(f"{EnslaverAlias.__name__}_{aid}")
             if _isint(aid):
                 current = current_aliases.get(int(aid))
                 if current is not None:
@@ -2653,7 +2661,7 @@ def _create_enslaver_update_actions(contrib, check_transaction_tags=None):
                     'description': u_('Creating a new enslaver alias'),
                     'action': 'new',
                     'model': EnslaverAlias.__name__,
-                    'data': { 'identity_id': si['id'], 'alias': a['name'] },
+                    'data': { 'identity_id': identity_tag_or_id, 'alias': a['name'] },
                     'tag': tag
                 })
             for vc in a['voyages']:
@@ -2713,13 +2721,20 @@ def _create_enslaver_update_actions(contrib, check_transaction_tags=None):
                 source_conn_data['source_order'] = source_order
                 source_conn_data.pop('pk', None)
                 source_order += 1
-                actions.append({
-                    'description': u_('Creating an enslaver identity <-> biographical source connection'),
-                    'action': 'new',
-                    'model': EnslaverIdentitySourceConnection.__name__,
-                    'data': source_conn_data,
-                    'tag': source_conn_tag
-                })
+                if not source_conn_data.get('text_ref'):
+                    actions.append({
+                        'description': u_("A text reference is required for the biographical source connection. Use the 'Connect Reference' button in the 'Biographical Sources' tab to set a text_ref."),
+                        'action': 'noop',
+                        'data': source_conn_data
+                    })
+                else:                    
+                    actions.append({
+                        'description': u_('Creating an enslaver identity <-> biographical source connection'),
+                        'action': 'new',
+                        'model': EnslaverIdentitySourceConnection.__name__,
+                        'data': source_conn_data,
+                        'tag': source_conn_tag
+                    })
             else:
                 # Keep the source conn alive by removing it from the
                 # current_sources dict (any remaining connection will be marked
@@ -2911,7 +2926,7 @@ def submit_enslaver_editorial_review(request):
                 target = list(q)
                 if len(target) != 1:
                     transaction.set_rollback(True)
-                    return JsonResponse({ "error": "Failed to find matching record", "action_index": idx })
+                    return JsonResponse({ "error": "Failed to find matching record", "action_index": idx, "action": a })
                 target = target[0]
             else:
                 target = model()
@@ -2920,7 +2935,7 @@ def submit_enslaver_editorial_review(request):
                     target.delete()
                 except Exception as ex:
                     transaction.set_rollback(True)
-                    return JsonResponse({ "error": "Failed to delete record", "action_index": idx, 'details': str(ex) })
+                    return JsonResponse({ "error": "Failed to delete record", "action_index": idx, 'details': str(ex), "action": a })
             else:
                 # Set/update model fields.
                 for k, v in _get_tag_replaced_data(a['data'], tags).items():
@@ -2931,7 +2946,8 @@ def submit_enslaver_editorial_review(request):
                     transaction.set_rollback(True)
                     return JsonResponse({
                         "error": f"Failed to {'insert' if action_type == 'new' else action_type} record", "action_index": idx,
-                        'details': str(ex)
+                        'details': str(ex),
+                        "action": a
                     })
                 if action_type == 'new' and 'tag' in a:
                     # Include newly saved pk in the tagged dict.
@@ -2943,7 +2959,7 @@ def submit_enslaver_editorial_review(request):
             missing_actions = _create_enslaver_update_actions(data['interim'], tags)
             if len(missing_actions) > 0:
                 transaction.set_rollback(True)
-                return JsonResponse({ "error": "Contribution not in sync with transactional update", "details": missing_actions })
+                return JsonResponse({ "error": "Contribution not in sync with transactional update", "details": missing_actions, "all_actions": actions, "tags": tags })
         # Update Cached properties for the identities in this contribution.
         for prop in EnslaverCachedProperties.compute(all_identities):
             prop.save()
