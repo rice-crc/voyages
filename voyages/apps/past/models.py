@@ -2,6 +2,7 @@ from __future__ import absolute_import, unicode_literals
 
 import operator
 import threading
+from typing import Iterable
 
 import unidecode
 from builtins import range, str
@@ -873,6 +874,48 @@ class EnslaverInRelation(models.Model):
         on_delete=models.CASCADE)
     enslaver_alias = models.ForeignKey(EnslaverAlias, null=False, on_delete=models.CASCADE)
     role = models.ForeignKey(EnslaverRole, null=False, on_delete=models.CASCADE, help_text="The role of the enslaver in this relation")
+
+
+class EnslavementBipartiteGraph:
+    """
+    A cache of the bipartite graph connecting enslaved to its enslavers.
+    """
+    _enslaved_to_enslavers: "dict[int, set[int]]" = dict()
+    _enslavers_principal_alias: "dict[int, str]" = dict()
+    _lock = threading.Lock()
+    _init = False
+
+    @classmethod
+    def load(cls, force_reload=False):
+        with cls._lock:
+            if force_reload or not cls._init:
+                enslaved_to_rel = {}
+                relation_ids = set()
+                q_enslaved = EnslavedInRelation.objects.values_list('relation_id', 'enslaved_id')
+                for rel_id, enslaved_id in q_enslaved:
+                    relation_ids.add(rel_id) ; enslaved_to_rel.setdefault(enslaved_id, set()).add(rel_id)
+
+                enslavers_by_rel = {}
+                q_enslavers = EnslaverInRelation.objects.select_related('enslaver_alias__identity_id').values_list('relation_id', 'enslaver_alias__identity_id')
+                for rel_id, enslaver_id in q_enslavers:
+                    if rel_id in relation_ids: enslavers_by_rel.setdefault(rel_id, set()).add(enslaver_id)
+
+                bipartite = {}
+                for enslaved_id, relations in enslaved_to_rel.items():
+                    bipartite[enslaved_id] = set(enslaver_id for rel_id in relations for enslaver_id in enslavers_by_rel.get(rel_id, []))
+                cls._enslaved_to_enslavers = bipartite
+                cls._enslavers_principal_alias = {int(x[0]): x[1] for x in EnslaverIdentity.objects.values_list('id', 'principal_alias')}
+                cls._init = True
+                return bipartite
+
+    @classmethod
+    def get_top_enslavers(cls, enslaved_ids: "Iterable[int]", n = 5):
+        counts : "dict[int, int]" = {}
+        for enslaved_id in enslaved_ids:
+            for enslaver_id in cls._enslaved_to_enslavers.get(enslaved_id, []):
+                counts[enslaver_id] = counts.get(enslaver_id, 0) + 1
+        return [(item[0], cls._enslavers_principal_alias.get(item[0]), item[1]) 
+                for item in sorted(counts.items(), key=lambda x: -x[1])[:n]]
 
 
 _special_empty_string_fields = {

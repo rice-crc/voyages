@@ -24,7 +24,7 @@ from voyages.apps.common.models import SavedQuery
 from voyages.apps.common.views import get_filtered_results
 from .models import (AltLanguageGroupName, Enslaved,
                      EnslavedContribution, EnslavedContributionLanguageEntry,
-                     EnslavedContributionNameEntry, EnslavedContributionStatus, EnslavedInRelation, EnslavedSearch, EnslavementRelation, EnslaverContribution, EnslaverInRelation, EnslaverRole, EnslaverSearch, EnslaverVoyageConnection,
+                     EnslavedContributionNameEntry, EnslavedContributionStatus, EnslavedInRelation, EnslavedSearch, EnslavementBipartiteGraph, EnslavementRelation, EnslaverContribution, EnslaverInRelation, EnslaverRole, EnslaverSearch, EnslaverVoyageConnection,
                      LanguageGroup, MultiValueHelper, ModernCountry, EnslavedNameSearchCache, PivotTableDefinition,
                      _modern_name_fields, _name_fields)
 from voyages.apps.voyage.models import Place,Region
@@ -343,12 +343,22 @@ def search_enslaved(request):
             if pivot is None:
                 return JsonResponse({ 'error': f"Invalid request: summary selection {sel} not found" })
             user_query['pivot_table'] = pivot
-            q = EnslavedSearch(**user_query)
-            results[sel] = list(q.execute([]))
+            search = EnslavedSearch(**user_query)
+            results[sel] = list(search.execute([]))
         print("SUMMARY enslavedsearch response time:",time.time() - st)
         return JsonResponse(results)
     
     if output_type == 'pivot':
+        special = data.get('special_pivot')
+        if special == 'top_enslavers':
+            # This is a special query that requires access to the cache.
+            search = EnslavedSearch(**user_query)
+            q = search.execute(['enslaved_id'])
+            q = q[0:q.count()] # Take an explicit slice since we do not paginate
+            EnslavementBipartiteGraph.load()
+            top = EnslavementBipartiteGraph.get_top_enslavers(x['enslaved_id'] for x in q)
+            print("PIVOT enslavedsearch | top_enslavers response time:",time.time() - st)
+            return JsonResponse({ 'results': top })
         pivot_fields = data.get('pivot_fields')
         if not pivot_fields:
             return JsonResponse({ "error": f"No pivot fields specified: {pivot_fields}" })

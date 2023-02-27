@@ -1,18 +1,14 @@
 {% load i18n %}
 
+<div v-if="enslavedDataset == 1" class="content">
+<select class="form-control col-md-4" id="ookSummarySel" >
+    <option value="0">{% trans "Group by gender" %}</option>
+    <option value="1">{% trans "Most active enslavers" %}</option>
+</select>
+</div>
+
 <table id="summary_table" class="table table-striped table-bordered dataTable">
-    <thead v-if="enslavedDataset == 0">
-        <tr>
-            <th>{% trans "Language" %}</th>
-            <th>{% trans "Total Captives" %}</th>
-            <th>{% trans "Total Voyages" %}</th>
-        </tr>
-    </thead>
-    <thead v-if="enslavedDataset == 1">
-        <tr>
-            <th>{% trans "Gender" %}</th>
-            <th>{% trans "Enslaved People" %}</th>
-        </tr>
+    <thead>
     </thead>
 </table>
 
@@ -31,6 +27,11 @@
             output: 'summary',
             summary_selection: selection
         };
+        if (dataset === 1 && parseInt($("#ookSummarySel").val()) === 1) {
+            delete(post.summary_selection);
+            post['special_pivot'] = 'top_enslavers';
+            post['output'] = 'pivot';
+        }
         const res = await fetch('/past/api/search_enslaved', {
             method: 'POST',
             body: JSON.stringify(post)
@@ -41,6 +42,7 @@
             $(tableId).DataTable().destroy();
         }
         let tableData = [];
+        let columns = [];
         if (dataset === 0) {
             const nullText = gettext('Null');
             const otherText = gettext('Other');
@@ -65,12 +67,31 @@
                 }
             }
             tableData = Object.entries(top).map(([k, v]) => [k, v.captives, v.voyages]);
+            columns = [
+                { title: gettext('Language') },
+                { title: gettext('Total Captives') },
+                { title: gettext('Total Voyages') }
+            ];
         } else {
-            const genderLabels = [gettext('Unspecified'), gettext('Male'), gettext('Female')];
-            tableData = data.enslaved_gender.map(x => [genderLabels[x.gender_code || 0], x.cell]);
+            if (parseInt($("#ookSummarySel").val()) === 1) {
+                columns = [
+                    { title: gettext('Enslaver') },
+                    { title: gettext('Enslaved People') }
+                ];
+                tableData = data.results.map(([a, b, c]) => [b, c]);
+            } else {
+                columns = [
+                    { title: gettext('Gender') },
+                    { title: gettext('Enslaved People') }
+                ];
+                const genderLabels = [gettext('Unspecified'), gettext('Male'), gettext('Female')];
+                tableData = data.enslaved_gender.map(x => [genderLabels[x.gender_code || 0], x.cell]);
+            }
         }
         $(tableId).DataTable({
             data: tableData,
+            columns,
+            order: [[1, 'desc']],
             paging: false,
             info: false,
             bFilter: false
@@ -81,6 +102,7 @@
         if (document.readyState === "interactive") {
             await updateSummaryTable();
             searchBar.$on('refresh', updateSummaryTable);
+            $("#ookSummarySel").change(updateSummaryTable);
         }
     });
 </script>
