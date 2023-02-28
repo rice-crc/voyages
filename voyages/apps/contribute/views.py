@@ -2514,6 +2514,8 @@ def _compare_data(left, right):
     for k, v in left.items():
         right_val = right.get(k)
         changed = v != right_val
+        if changed and v in _null_value_strings and right_val in _null_value_strings:
+            changed = False
         if changed and _isint(v) and _isint(right_val):
             # Sometimes we may get a string vs number and we need to
             # cast for the correct comparison.
@@ -2879,6 +2881,8 @@ def get_enslaver_contribution_list(request):
             item['enslaver_identity'] =  next(iter(data['identities'].values()))['personal_data']['principal_alias']
     return JsonResponse({ 'count': count, 'results': results })
 
+_null_value_strings = ['(blank)', 'null', '', None]
+
 @login_required
 @csrf_exempt
 @require_POST
@@ -2939,7 +2943,18 @@ def submit_enslaver_editorial_review(request):
             else:
                 # Set/update model fields.
                 for k, v in _get_tag_replaced_data(a['data'], tags).items():
-                    setattr(target, k, v)
+                    try:
+                        internal_type = model._meta.get_field(k).get_internal_type()
+                    except:
+                        # Not a field in the target.
+                        continue
+                    val = v
+                    if val in _null_value_strings:
+                        if internal_type == 'CharField' or internal_type == 'TextField':
+                            val = ''
+                        else:
+                            val = None
+                    setattr(target, k, val)
                 try:
                     target.save()
                 except Exception as ex:
