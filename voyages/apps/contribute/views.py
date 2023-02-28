@@ -2480,7 +2480,14 @@ def init_enslaver_interim(request):
     identities = { e['id']: e for e in [_get_enslaver_data(enslaver) for enslaver in originals] }
     if mode == 'merge':
         merged = {}
+        merged_sources = {}
         for d in identities.values():
+            for k, v in d['sources'].items():
+                src_pk = f"new_src_{len(merged_sources)}"
+                src = {}
+                src.update(v)
+                src['pk'] = src_pk
+                merged_sources[src_pk] = src
             for k, v in d['personal_data'].items():
                 if v is not None:
                     merged.setdefault(k, set()).add(v)
@@ -2490,7 +2497,12 @@ def init_enslaver_interim(request):
                 merged[k] = v[0]
             else:
                 merged[k] = "conflict"
-        identities['merged'] = { 'id': 'merged', 'personal_data': merged, 'aliases': { k: v for identity in identities.values() for k, v in identity['aliases'].items() } }
+        identities['merged'] = { 
+            'id': 'merged',
+            'personal_data': merged,
+            'aliases': { k: v for identity in identities.values() for k, v in identity['aliases'].items() },
+            'sources': merged_sources
+        }
         for k in identities.keys():
             if k != 'merged':
                 # Clear the aliases from the original.
