@@ -175,7 +175,20 @@ def restore_enslaved_permalink(_, link_id):
     q = SavedQuery.objects.get(pk=link_id)
     query = json.loads(q.query)
     # Detect the dataset of the query.
-    dataset = query.get('items', {}).get('enslaved_dataset')
+    items = query.get('items', {})
+    if isinstance(items, str):
+        # For many queries, the items have been saved as a JSON string itself...
+        # We may decide to fix that in the future (that requires front-end
+        # changes and a script to modify all existing saved queries that are
+        # shaped like this).
+        items = json.loads(items)
+    dataset = 0
+    if isinstance(items, dict):
+        dataset = items.get('enslaved_dataset')
+    if isinstance(items, list):
+        matches = [item for item in items if item.get('varName') == 'enslaved_dataset']
+        if len(matches) == 1:
+            dataset = matches[0].get('searchTerm')[0]
     ds_name = ''
     try:
         ds_name = '/' + ENSLAVED_DATASETS[int(dataset)]
