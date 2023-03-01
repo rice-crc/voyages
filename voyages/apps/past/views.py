@@ -277,32 +277,29 @@ def refresh_maps_cache(request):
 refresh_maps_cache(None)
 
 def process_search_query_post(user_query):
-    # Initially we started with a simple approach that does not include the
-    # operators on variables and thus can be immediately passed to the
-    # EnslavedSearch constructor. However, that decision causes pain for the
-    # saved query feature since the UI should know which operator was used for
-    # the query in order to properly reproduce it. We are therefore handling
-    # both situations here by simply removing what we don't need at the backend
-    # and allowing the saved query to follow the same format as before.
-    if 'items' in user_query:
+    # Support user queries made in different "formats".
+    # The output is a dictionary that could be used in the construction of
+    # Enslave[d|r]Search.
+    items = None
+    order_by = None
+    try:
+        items = user_query.get('items')
         order_by = user_query.get('order_by')
+    except:
+        pass
+    if isinstance(user_query, list):
+        items = user_query
+        user_query = {}
+    if items is not None:
         # This is the newer format with the operation encoded.
-        user_query = {item['varName']: item['searchTerm'] for item in user_query['items']}
-        if (order_by is not None):
-            user_query['order_by'] = order_by
+        user_query = {item['varName']: item['searchTerm'] for item in items}
+    if order_by is not None:
+        user_query['order_by'] = order_by
     return user_query
 
-# TODO: Summary tables have fixed column structures so we pre-generate their
-# definitions to simplify the API for clients.
 from django.db.models.expressions import RawSQL, Func, Value
 
 _pivot_year_field = F('voyage__voyage_dates__imp_arrival_at_port_of_dis')
-
-class CoalesceFunc(Func):
-    function = 'COALESCE'
-    arity = 2
-    arg_joiner = ','
-    template = 'COALESCE(%(expressions)s)'
 
 class LessThanFunc(Func):
     function = '<'
@@ -325,8 +322,7 @@ class DivFunc(Func):
 _pivot_fields = {
     'language': 'language_group__name',
     'gender_code': 'gender',
-    # Separate (age < 16) vs (age >= 16 OR age IS NULL).
-    'age_group': LessThanFunc(CoalesceFunc(F('age'), Value(100)), Value(16)),
+    'age_group': LessThanFunc(F('age'), Value(16)),
     'year': _pivot_year_field,
     # The year is given in ",,{year}" string format, so we first get the 4 right
     # most values, then subtract 1 and do an integer division by 5. The

@@ -8,11 +8,9 @@
   <li class="nav-item">
     <a class="nav-link" @click="setActive('summary')" href="#summary" data-toggle="tab" data-target="#summary">{% trans 'Summary statistics' %}</a>
   </li>
-  <!--
-  <li class="nav-item">
+  <li class="nav-item" v-if="enslavedDataset == 0">
     <a class="nav-link" @click="setActive('tables')" href="#tables" data-toggle="tab" data-target="#tables">{% trans 'Tables' %}</a>
   </li>
-  -->
   <li class="nav-item" v-if="enslavedDataset==0">
     <a class="nav-link" @click="setActive('maps')" href="#maps" data-toggle="tab" data-target="#maps">{% trans 'Maps' %}</a>
   </li>
@@ -28,11 +26,9 @@
   <div id="summary" class="tab-pane" height=500>
     {% include "past/database/tabs/summary.html" %}
   </div>
-  {% comment %}
-  <div id="tables" class="tab-pane" height=500>
+  <div id="tables" class="tab-pane" height=500 v-if="enslavedDataset == 0">
     {% include "past/database/tabs/tables.html" %}
   </div>
-  {% endcomment %}
   <div id="maps" class="tab-pane" v-if="enslavedDataset==0" height=500>
     {% include "past/database/tabs/maps.html" %}
   </div>

@@ -3,13 +3,13 @@
 <div id="tabs-tables-control">
     <div class="row">
       <div class="col-md-6 col-sm-12 col-lg-3">
-        <v-dropdown title="{% trans 'Row' %}" description="{% trans '' %}" @changed="updateTabOptions" :options="tabs[enslavedDataset].tables.row.options" :variable="tabs[enslavedDataset].tables.row" :clearable="false"></v-dropdown>
+        <v-dropdown title="{% trans 'Row' %}" description="{% trans '' %}" @changed="tabUpdate" :options="tabs[enslavedDataset].tables.row.options" :variable="tabs[enslavedDataset].tables.row" :clearable="false"></v-dropdown>
         </div>
       <div class="col-md-6 col-sm-12 col-lg-3">
-        <v-dropdown title="{% trans 'Column' %}" description="{% trans '' %}" @changed="updateTabOptions" :options="tabs[enslavedDataset].tables.column.options" :variable="tabs[enslavedDataset].tables.column" :clearable="false"></v-dropdown>
+        <v-dropdown title="{% trans 'Column' %}" description="{% trans '' %}" @changed="tabUpdate" :options="tabs[enslavedDataset].tables.column.options" :variable="tabs[enslavedDataset].tables.column" :clearable="false"></v-dropdown>
       </div>
       <div class="col-md-6 col-sm-12 col-lg-3">
-        <v-dropdown title="{% trans 'Cell' %}" description="{% trans '' %}" @changed="updateTabOptions" :options="tabs[enslavedDataset].tables.cell.options" :variable="tabs[enslavedDataset].tables.cell" :clearable="false"></v-dropdown>
+        <v-dropdown title="{% trans 'Cell' %}" description="{% trans '' %}" @changed="tabUpdate" :options="tabs[enslavedDataset].tables.cell.options" :variable="tabs[enslavedDataset].tables.cell" :clearable="false"></v-dropdown>
       </div>
       <table id="v-tables" class="table table-striped table-bordered nowrap" cellspacing="0" width="100%" >
         <thead>
@@ -24,6 +24,12 @@
   </div>
 
   <script type="text/javascript">
+    const prefixLen = "tabs.".length;
+    // We do this redirection because Vue apparently strips the [] accessor in
+    // the v-bind attribute.
+    const tabUpdate = (a, b) => searchBar
+      .updateTabOptions(a.substring(prefixLen), b, searchBar.tabs[searchBar.enslavedDataset]);
+
     const updateTable = async () => {
         if (searchBar.currentTab !== 'tables') {
             return;
@@ -47,13 +53,27 @@
           }
           return null;
         };
+        const tableId = "#v-tables";
+        if ($.fn.dataTable.isDataTable(tableId)) {
+            $(tableId).DataTable().destroy();
+            $(tableId + "> thead > tr").remove();
+            $(tableId + "> tfoot").remove();
+            $(tableId + "> tbody").children().remove();
+            $(tableId).append('<tfoot></tfoot');
+        }
+        const rowField = getField('row');
         const colField = getField('column');
-        if (!colField) {
+        if (!rowField || !colField) {
           alert('Cannot build this PivotTable!');
           return;
         }
-        const pivot_fields = [getField('row'), colField, getField('cell')]
+        const cellField = getField('cell');
+        const pivot_fields = [rowField, colField, cellField]
           .filter(x => !!x);
+        if (pivot_fields.length <= 1 || pivot_fields[0] === pivot_fields[1]) {
+          alert(gettext('This combination of row and column is not valid'));
+          return;
+        }
         const post = {
             search_query: searchAll(searchBar.filter, searchBar.filterData),
             output: 'pivot',
@@ -64,13 +84,13 @@
             body: JSON.stringify(post)
         });
         const data = await res.json();
-        const tableId = "#v-tables";
-        if ($.fn.dataTable.isDataTable(tableId)) {
-            $(tableId).DataTable().destroy();
-        }
         const columns = [];
         // Generate columns for the table.
-        columns.push({ title: getField('row', ['label']), className: "bold" });
+        const mkData = () => ({
+          _: `${columns.length}.text`,
+          sort: `${columns.length}.sortVal`
+        });
+        columns.push({ title: getField('row', ['label']), className: "bold", data: 0 });
         const nullText = gettext('Null');
         let idxOthersCol = -1;
         let counter = 0;
@@ -79,30 +99,46 @@
         for (const m of data.margins[colField]) {
           if (++counter > maxCols) {
             idxOthersCol = columns.length;
-            columns.push({ title: gettext('Other') });
+            columns.push({ title: gettext('Other'), data: mkData() });
             break;
           }
           colIndex[m[0]] = columns.length;
-          columns.push({ title: m[0] ?? nullText, className: "right" });
+          columns.push({ title: m[0] ?? nullText, className: "right", data: mkData() });
         }
         const idxTotalsCol = columns.length;
-        columns.push({ title: gettext('Totals'), className: "bold right" });
-        const totalsRow = new Array(columns.length);
-        totalsRow.fill(0);
-        totalsRow[0] = gettext('Totals');
-        const rows = { };
+        columns.push({ title: gettext('Totals'), data: mkData(), className: "bold right" });
+        const totalCell = '_total';
+        const initRow = (header) => {
+          const row = new Array(columns.length);
+          for (let i = 1; i < row.length; ++i) {
+            row[i] = {[totalCell]: 0};
+          }
+          row[0] = header;
+          return row
+        }
+        const totalsRow = initRow(gettext('Totals'));
+        const increment = (entry, cell, val) => {
+          if (cell !== totalCell) {
+            increment(entry, totalCell, val);
+          }
+          if (!!entry[cell]) {
+            val += entry[cell];
+          }
+          entry[cell] = val;
+        };
+        const rows = {};
         const rowKeySrc = getField('row', ['varName']);
         for (const item of data.results) {
-          let rowKey = item[rowKeySrc];
+          let rowKey = item[rowField];
           if (rowKeySrc === 'year_5') {
             rowKey = parseInt(rowKey);
             rowKey = `${rowKey * 5 + 1}-${(rowKey + 1) * 5}`;
+          } else if (rowKeySrc === "year") {
+            rowKey = parseInt(rowKey.match(/\d+$/)[0]);
           }
           let arr = rows[rowKey];
           if (!arr) {
-            arr = new Array(columns.length);
-            arr.fill(0);
-            arr[0] = rowKey;
+            arr = initRow(rowKey);
             rows[rowKey] = arr;
           }
           const colKey = item[colField];
@@ -110,22 +146,58 @@
           if (!idxCol) {
             idxCol = idxOthersCol;
           }
+          const cell = item[cellField] ?? totalCell;
           if (idxCol > 0) {
-            arr[idxCol] += item.cell;
-            totalsRow[idxCol] += item.cell;
+            increment(arr[idxCol], cell, item.cell);
+            increment(totalsRow[idxCol], cell, item.cell);
           }
-          arr[idxTotalsCol] += item.cell;
-          totalsRow[idxTotalsCol] += item.cell;
+          increment(arr[idxTotalsCol], cell, item.cell);
+          increment(totalsRow[idxTotalsCol], cell, item.cell);
         }
+        let cellLabels = {};
+        if (cellField === 'gender_code') {
+          cellLabels = {
+            1: pgettext('male gender single letter abbreviation', 'M'),
+            2: pgettext('female gender single letter abbreviation', 'F'),
+          };
+        } else if (cellField === 'age_group') {
+          cellLabels = {
+            0: pgettext('adult age group letter abbreviation', 'A'),
+            1: pgettext('child (< 16) age group letter abbreviation', 'C'),
+          };
+        }
+        const percent = num => Math.round(num * 100).toFixed(0) + '%';
+        const mapCell = (c, i) => { 
+          if (i == 0) {
+            return c;
+          }
+          const totalVal = c[totalCell];
+          const sortVal = String(totalVal).padStart(8, '0');
+          if (!cellField) {
+            return { text: totalVal, sortVal };
+          }
+          const cellText = [];
+          for (const [key, val] of Object.entries(c)) {
+            const label = cellLabels[key];
+            if (label) {
+              cellText.push(`${label}: ${percent(val / totalVal)}`);
+            }
+          }
+          cellText.push(`(${totalVal})`);
+          return { text: cellText.join(' '), sortVal };
+        }
+        const processedRows = Object.values(rows)
+          .map(r => r.map(mapCell));
+        let footer = totalsRow.map((c, i) => `<td class="bold${i > 0 ? ' right' : ''}">${mapCell(c, i).text}</td>`).join('');
+        $(`${tableId} tfoot`).html(`<tr>${footer}</tr>`);
         const dt = $(tableId).DataTable({
-            data: Object.values(rows),
+            data: processedRows,
             columns,
             paging: false,
             info: false,
-            bFilter: false
+            bFilter: false,
+            scrollX: true
         });
-        let footer = totalsRow.map((c, i) => `<td class="bold${i > 0 ? ' right' : ''}">${c}</td>`).join('');
-        $(`${tableId} tfoot`).html(`<tr>${footer}</tr>`);
     };
 
     document.addEventListener('readystatechange', async () => {
