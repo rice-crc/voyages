@@ -328,7 +328,8 @@ _pivot_fields = {
     # most values, then subtract 1 and do an integer division by 5. The
     # subtraction is so that the year ranges are of the form [xxx1, xxx5],
     # [xxx6, xxx0].
-    'year_5': DivFunc(RightFunc(_pivot_year_field, Value(4)) - Value(1), Value(5))
+    'year_5': DivFunc(RightFunc(_pivot_year_field, Value(4)) - Value(1), Value(5)),
+    'age_5': DivFunc(F('age') - Value(1), Value(5))
 }
 
 _pivot_summaries = {

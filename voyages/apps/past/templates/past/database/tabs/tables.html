@@ -86,27 +86,34 @@
         const data = await res.json();
         const columns = [];
         // Generate columns for the table.
-        const mkData = () => ({
-          _: `${columns.length}.text`,
-          sort: `${columns.length}.sortVal`
+        const mkData = idx => ({
+          _: `${idx}.text`,
+          sort: `${idx}.sortVal`
         });
-        columns.push({ title: getField('row', ['label']), className: "bold", data: 0 });
+        columns.push({ title: getField('row', ['label']), className: "bold" });
         const nullText = gettext('Null');
         let idxOthersCol = -1;
         let counter = 0;
         let maxCols = getField('column', ['maxResults']) ?? 1000;
         const colIndex = {};
+        const customColHeader = {
+            "gender_code": genderLabels
+          }[colField] 
+          ?? {};
         for (const m of data.margins[colField]) {
           if (++counter > maxCols) {
             idxOthersCol = columns.length;
-            columns.push({ title: gettext('Other'), data: mkData() });
+            columns.push({ title: gettext('Other') });
             break;
           }
           colIndex[m[0]] = columns.length;
-          columns.push({ title: m[0] ?? nullText, className: "right", data: mkData() });
+          columns.push({ title: customColHeader[m[0]] ?? m[0] ?? nullText, className: "right" });
         }
         const idxTotalsCol = columns.length;
-        columns.push({ title: gettext('Totals'), data: mkData(), className: "bold right" });
+        columns.push({ title: gettext('Totals'), className: "bold right" });
+        for (let i = 0; i < columns.length; ++i) {
+          columns[i].data = mkData(i);
+        }
         const totalCell = '_total';
         const initRow = (header) => {
           const row = new Array(columns.length);
@@ -166,13 +173,26 @@
             1: pgettext('child (< 16) age group letter abbreviation', 'C'),
           };
         }
-        const percent = num => Math.round(num * 100).toFixed(0) + '%';
+        const percent = num => Math.round(num * 100).toFixed(0) + '%';        
+        const sortValue = val => String(val).padStart(8, '0');
         const mapCell = (c, i) => { 
           if (i == 0) {
-            return c;
+            let text = c;
+            let sortVal = c;
+            if (rowField === "age_5") {
+              text = parseInt(text) * 5;
+              if (isNaN(text)) {
+                sortVal = sortValue(10000000);
+                text = c;
+              } else {
+                sortVal = sortValue(text);
+                text = `${text + 1}-${text + 5}`;
+              }
+            }
+            return { text, sortVal };
           }
           const totalVal = c[totalCell];
-          const sortVal = String(totalVal).padStart(8, '0');
+          const sortVal = sortValue(totalVal);
           if (!cellField) {
             return { text: totalVal, sortVal };
           }

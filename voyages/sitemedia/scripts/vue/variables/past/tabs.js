@@ -42,30 +42,32 @@ const tabOoK = {
         row: {
             // currently selected value
             variable: "tabs.tables.row",
-            value: 4,
+            value: 0,
             options: [
-                { id: 0, varName: "var_imputed_nationality_idnum", label: gettext("Flag*") },
-                { id: 4, varName: "var_imp_principal_region_of_slave_purchase_idnum", label: gettext("Embarkation regions")},
-                { id: 5, varName: "var_imp_principal_place_of_slave_purchase_idnum", label: gettext("Principal place of purchase*")},
+                { id: 0, varName: "age_5", label: gettext("Age (5-year steps)") },
+                { id: 1, varName: "voyage__voyage_itinerary__imp_principal_place_of_slave_purchase__place", label: gettext("Principal place of purchase*") }
             ],
         },
         column: {
             // currently selected value
             variable: "tabs.tables.column",
-            value: 7,
+            value: 0,
             options: [
-                { id: 8, varName: "var_imp_principal_port_slave_dis_idnum", label: gettext("Principal place of landing*") }
+                { id: 0, varName: "gender_code", label: gettext("Gender") },
+                { id: 1, varName: "voyage__voyage_itinerary__imp_principal_port_slave_dis__place", label: gettext("Principal place of landing*") },
             ],
         },
         cell: {
             // currently selected value
             variable: "tabs.tables.cell",
-            value: 1,
+            value: 0,
             options: [
-                { id: 0, label: gettext("Number of voyages"), functions: { "cell": "unique(var_voyage_id)" } }
+                { id: 0, varName: "number_of_captives", sourceVarName: "", label: gettext("Number of captives") },
             ]
         }
     }
 };
 
 const tabs = [tabAO, tabOoK];
+
+const genderLabels = [gettext('Unspecified'), gettext('Male'), gettext('Female')];

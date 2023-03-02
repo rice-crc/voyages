@@ -84,7 +84,6 @@
                     { title: gettext('Gender') },
                     { title: gettext('Enslaved People') }
                 ];
-                const genderLabels = [gettext('Unspecified'), gettext('Male'), gettext('Female')];
                 tableData = data.enslaved_gender.map(x => [genderLabels[x.gender_code || 0], x.cell]);
             }
         }
