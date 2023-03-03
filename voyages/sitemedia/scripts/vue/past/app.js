@@ -365,6 +365,7 @@ var searchBar = new Vue({
         return;
       }
       this.currentTab = tab;
+      this.$emit('tabChanged');
       if (location.href !== location.origin + location.pathname + "#" + tab) {
         location.href = location.origin + location.pathname + "#" + tab;
       };
