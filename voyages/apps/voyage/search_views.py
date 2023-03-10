@@ -94,6 +94,12 @@ def perform_search(search, lang):
         is_list = isinstance(term, list)
         if is_list and not operator.list_type:
             term = term[0]
+        if _op_between == operator and is_list and len(term) == 2:
+            # Ensure that we get a valid range in case some input is missing.
+            if term[0] is None:
+                term[0] = -99999999
+            if term[1] is None:
+                term[1] = 99999999
         skip = False
         if operator.front_end_op_str == _op_contains.front_end_op_str:
             m = re.match(r'^\s*["\u201c](\*?)([^\*]*)(\*?)["\u201d]\s*$', str(term))
