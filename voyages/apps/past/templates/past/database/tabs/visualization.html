@@ -1,0 +1,85 @@
+{% load i18n %}
+
+<div id="tabs-tables-control">
+    <div class="row">
+        <div class="col-md-6 col-sm-12 col-lg-3">
+          <v-dropdown title="{% trans 'X Axis' %}" description="{% trans '' %}" @changed="chartTabUpdate" :options="tabs[enslavedDataset].visualization.scatter.x.options" :variable="tabs[0].visualization.scatter.x" :is-multiple="false" :clearable="false"></v-dropdown>
+          </div>
+        <div class="col-md-6 col-sm-12 col-lg-3">
+          <v-dropdown title="{% trans 'Y Axis' %}" description="{% trans '' %}" @changed="chartTabUpdate" :options="tabs[enslavedDataset].visualization.scatter.y.options" :variable="tabs[0].visualization.scatter.y" :is-multiple="false" :clearable="false"></v-dropdown>
+        </div>
+        <div id="chartHost">            
+        </div>
+    </div>
+</div>
+
+<script src="{{ STATIC_URL }}scripts/vue/past/includes/charts.js"></script>
+
+<script type="text/javascript">
+    const chartTabUpdate = (a, b) => searchBar
+      .updateTabOptions(a.substring(prefixLen), b, searchBar.tabs[searchBar.enslavedDataset]);
+
+    const updateChart = async () => {
+        if (searchBar.currentTab !== 'visualization') {
+            return;
+        }
+        const dataset = parseInt(searchBar.enslavedDataset);
+        const chartConfig = searchBar.tabs[dataset].visualization.scatter;
+        // We fetch a pivot table with the data that will be presented as an
+        // XY-plot. The trick is to always include the X field as a pivot field
+        // and the Y field can be either the aggregation field if it is an id
+        // (enslaved/voyage) or another pivot field that we will alter process
+        // (gender code/age group).
+        const xField = chartConfig.x.options[chartConfig.x.value].varName;
+        const pivot_fields = [xField];
+        const post = {
+            search_query: searchAll(searchBar.filter, searchBar.filterData),
+            output: 'pivot',
+            pivot_fields
+        };
+        const yField = chartConfig.y.options[chartConfig.y.value].varName;
+        if (yField.endsWith('_id')) {
+            post['agg_field'] = yField;
+        } else {
+            pivot_fields.push(yField);
+        }
+        const res = await fetch('/past/api/search_enslaved', {
+            method: 'POST',
+            body: JSON.stringify(post)
+        });
+        const rawData = (await res.json()).results;
+        // Process data so that it consists of (x, y) points.
+        const xIndex = {};
+        const targetFieldValue = [-1, -1, 2, 1, 1][chartConfig.y.value];
+        for (const entry of rawData) {
+            let xVal = entry[xField];
+            if (xField === 'year') {
+                xVal = parseInt(xVal.replaceAll(',', ''));
+            }
+            let yVal = xIndex[xVal];
+            if (!yVal) {
+                xIndex[xVal] = yVal = { xVal, total: 0, filtered: 0 };
+            }
+            yVal.total += entry.cell;
+            if (pivot_fields.length === 2) {
+                // This is the more complex case where we need to compute
+                // percentages.
+                if (entry[yField] === targetFieldValue) {
+                    yVal.filtered += entry.cell;
+                }
+            }
+        }
+        const data = [];
+        for (const [key, val] of Object.entries(xIndex)) {
+            data.push({ x: key, y: pivot_fields.length === 2 ? val.filtered / val.total : val.total });
+        }
+        document.getElementById('chartHost').replaceChildren(createLineChart(data, { marginLeft: 60 }));
+    };
+    
+    document.addEventListener('readystatechange', async () => {
+        if (document.readyState === "interactive") {
+            await updateChart();
+            searchBar.$on('refresh', updateChart);
+        }
+    });
+</script>

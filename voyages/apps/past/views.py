@@ -376,7 +376,7 @@ def search_enslaved(request):
         if not pivot_fields:
             return JsonResponse({ "error": f"No pivot fields specified: {pivot_fields}" })
         pivot_fields = {k: _pivot_fields.get(k, k) for k in pivot_fields}
-        pivot = PivotTableDefinition(pivot_fields, 'enslaved_id')
+        pivot = PivotTableDefinition(pivot_fields, data.get('agg_field', 'enslaved_id'))
         user_query['pivot_table'] = pivot
         res = list(EnslavedSearch(**user_query).execute([]))
         print("PIVOT enslavedsearch response time:",time.time() - st)

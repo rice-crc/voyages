@@ -12,6 +12,9 @@
     <a class="nav-link" @click="setActive('tables')" href="#tables" data-toggle="tab" data-target="#tables">{% trans 'Tables' %}</a>
   </li>
   <li class="nav-item" v-if="enslavedDataset==0">
+    <a class="nav-link" @click="setActive('visualization')" href="#visualization" data-toggle="tab" data-target="#visualization">{% trans 'Data visualization' %}</a>
+  </li>
+  <li class="nav-item" v-if="enslavedDataset==0">
     <a class="nav-link" @click="setActive('diaspora')" href="#diaspora" data-toggle="tab" data-target="#diaspora">{% trans 'Diaspora' %}</a>
   </li>
   <li class="nav-item" v-if="enslavedDataset==0">
@@ -31,6 +34,9 @@
   </div>
   <div id="tables" class="tab-pane" height=500>
     {% include "past/database/tabs/tables.html" %}
+  </div>
+  <div v-if="enslavedDataset==0" id="visualization" class="tab-pane" height=500>
+    {% include "past/database/tabs/visualization.html" %}
   </div>
   <div id="diaspora" class="tab-pane" v-if="enslavedDataset==0" height=500>
     {% include "past/database/tabs/diaspora.html" %}

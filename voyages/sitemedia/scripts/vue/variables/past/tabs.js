@@ -33,6 +33,31 @@ const tabAO = {
                 { id: 2, varName: "age_group", label: gettext("Age group (A: adult, C: child)") }
             ]
         }
+    },    
+    visualization: {
+        scatter: {
+            x: {
+                // currently selected value
+                variable: "tabs.visualization.scatter.x",
+                value: 0,
+                options: [
+                    { id: 0, varName: "year", label: gettext("Year") },
+                    { id: 1, varName: "language", label: gettext("Language groups") }
+                ]
+            },
+            y: {
+                // currently selected value
+                variable: "tabs.visualization.scatter.y",
+                value: 0,
+                options: [
+                    { id: 0, varName: "enslaved_id", sourceVarName: "enslaved_id", label: gettext("Number of captives") },
+                    { id: 1, varName: "voyage_id", label: gettext("Number of voyages") },
+                    { id: 2, varName: "gender_code", label: gettext("Percent female") },
+                    { id: 3, varName: "gender_code", label: gettext("Percent male") },
+                    { id: 4, varName: "age_group", label: gettext("Percent under 16 years of age") }
+                ]
+            },
+        }
     }
 };
 
