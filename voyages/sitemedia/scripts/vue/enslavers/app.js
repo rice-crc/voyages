@@ -489,6 +489,7 @@ var searchBar = new Vue({
         this.tabs,
         this.options
       );
+      this.$emit('refresh');
     },
 
     load(value) {

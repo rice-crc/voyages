@@ -1,0 +1,34 @@
+{% load i18n %}
+
+<table id="summary_table" class="table table-striped table-bordered dataTable">
+    <thead>
+    </thead>
+</table>
+
+<div id="tmp"></div>
+
+<script type="text/javascript">
+    const updateSummaryTable = async () => {
+        if (searchBar.currentTab !== 'summary') {
+            return;
+        }
+        // Fetch data.
+        const post = {
+            search_query: {items: searchAll(searchBar.filter, searchBar.filterData)},
+            output: 'summary',
+        };
+        const res = await fetch('/past/api/search_enslaver', {
+            method: 'POST',
+            body: JSON.stringify(post)
+        });
+        //const data = await res.json();
+        document.getElementById('tmp').innerText = await res.text();
+    };
+    
+    document.addEventListener('readystatechange', async () => {
+        if (document.readyState === "interactive") {
+            await updateSummaryTable();
+            searchBar.$on('refresh', updateSummaryTable);
+        }
+    });
+</script>

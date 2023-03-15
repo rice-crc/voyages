@@ -333,9 +333,9 @@ _pivot_fields = {
 }
 
 _pivot_summaries = {
-    'enslaved_gender': PivotTableDefinition({ 'gender_code': 'gender' }, 'enslaved_id'),
-    'enslaved_lang_captives': PivotTableDefinition({ 'language': 'language_group__name' }, 'enslaved_id'),
-    'enslaved_lang_voyages': PivotTableDefinition({ 'language': 'language_group__name' }, 'voyage_id')
+    'enslaved_gender': PivotTableDefinition({ 'gender_code': 'gender' }, agg_field='enslaved_id'),
+    'enslaved_lang_captives': PivotTableDefinition({ 'language': 'language_group__name' }, agg_field='enslaved_id'),
+    'enslaved_lang_voyages': PivotTableDefinition({ 'language': 'language_group__name' }, agg_field='voyage_id')
 }
 
 @require_POST
@@ -376,7 +376,7 @@ def search_enslaved(request):
         if not pivot_fields:
             return JsonResponse({ "error": f"No pivot fields specified: {pivot_fields}" })
         pivot_fields = {k: _pivot_fields.get(k, k) for k in pivot_fields}
-        pivot = PivotTableDefinition(pivot_fields, data.get('agg_field', 'enslaved_id'))
+        pivot = PivotTableDefinition(pivot_fields, agg_field=data.get('agg_field', 'enslaved_id'))
         user_query['pivot_table'] = pivot
         res = list(EnslavedSearch(**user_query).execute([]))
         print("PIVOT enslavedsearch response time:",time.time() - st)
@@ -646,8 +646,21 @@ def search_enslaver(request):
             EnslaverSearch.RELATIONS_LIST
         ]
     query = search.execute(fields)
-    output_type = data.get('output', 'resultsTable')
-    # For now we only support outputing the results to DataTables.
+    output_type = data.get('output', 'resultsTable')    
+    if output_type == 'summary':
+        pivot = PivotTableDefinition(
+            {},
+            aggregates={
+                'embarked_total': ('voyage_slaves_numbers__imp_total_num_slaves_embarked', PivotTableDefinition.AGG_SUM),
+                'embarked_avg': ('voyage_slaves_numbers__imp_total_num_slaves_embarked', PivotTableDefinition.AGG_AVG),
+                'embarked_std': ('voyage_slaves_numbers__imp_total_num_slaves_embarked', PivotTableDefinition.AGG_STD),
+                'percentage_male': ('voyage_slaves_numbers__percentage_men_among_embarked_slaves', PivotTableDefinition.AGG_AVG),
+                'voyage_count': ('voyage_id', PivotTableDefinition.AGG_COUNT)
+            })
+        user_query['pivot_table'] = pivot
+        search = EnslaverSearch(**user_query)
+        results = search.execute([])
+        return JsonResponse(results)
     if output_type == 'resultsTable':
 
         def adapter(page):
