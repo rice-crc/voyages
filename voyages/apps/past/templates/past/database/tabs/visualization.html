@@ -47,14 +47,20 @@
             method: 'POST',
             body: JSON.stringify(post)
         });
-        const rawData = (await res.json()).results;
+        const { results, margins } = await res.json();
         // Process data so that it consists of (x, y) points.
         const xIndex = {};
         const targetFieldValue = [-1, -1, 2, 1, 1][chartConfig.y.value];
-        for (const entry of rawData) {
+        const MAX_CATEGORIES = 30;
+        const isCategorical = xField === 'language';
+        const topKeys = isCategorical ? margins[xField].filter(x => !!x[0]).slice(0, MAX_CATEGORIES).map(x => x[0]) : [];
+        for (const entry of results) {
             let xVal = entry[xField];
             if (xField === 'year') {
                 xVal = parseInt(xVal.replaceAll(',', ''));
+            }
+            if (isCategorical && !topKeys.includes(xVal)) {
+                continue;
             }
             let yVal = xIndex[xVal];
             if (!yVal) {
@@ -73,7 +79,16 @@
         for (const [key, val] of Object.entries(xIndex)) {
             data.push({ x: key, y: pivot_fields.length === 2 ? val.filtered / val.total : val.total });
         }
-        document.getElementById('chartHost').replaceChildren(createLineChart(data, { marginLeft: 60 }));
+        if (isCategorical) {
+            data.sort((r, s) => s.y - r.y);
+        }
+        const createChart = isCategorical ? createBarChart : createLineChart;
+        const settings = { marginLeft: 60 };
+        if (isCategorical) {
+            settings.marginLeft = 80;
+            settings.marginBottom = 150;
+        }
+        document.getElementById('chartHost').replaceChildren(createChart(data, settings));
     };
     
     document.addEventListener('readystatechange', async () => {
