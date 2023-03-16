@@ -77,18 +77,37 @@
         }
         const data = [];
         for (const [key, val] of Object.entries(xIndex)) {
-            data.push({ x: key, y: pivot_fields.length === 2 ? val.filtered / val.total : val.total });
+            data.push({ x: xField === 'year' ? parseInt(key) : key, y: pivot_fields.length === 2 ? val.filtered / val.total : val.total });
         }
         if (isCategorical) {
+            // Sort by descending y-values.
             data.sort((r, s) => s.y - r.y);
+        } else {
+            // Sort by x-values.
+            const xSort = () => data.sort((r, s) => r.x - s.x);
+            xSort();
+            if (xField === 'year' && data.length >= 2) {
+                // Fill any gap years.
+                const min = data[0].x;
+                const max = data[1].x;
+                let hasGaps = false;
+                for (let i = min + 1; i < max; ++i) {
+                    if (xIndex[i] === undefined) {
+                        hasGaps = true;
+                        data.push({ x: i, y: 0 });
+                    }
+                }
+                if (hasGaps) {
+                    xSort();
+                }
+            }
         }
-        const createChart = isCategorical ? createBarChart : createLineChart;
         const settings = { marginLeft: 60 };
         if (isCategorical) {
             settings.marginLeft = 80;
             settings.marginBottom = 150;
         }
-        document.getElementById('chartHost').replaceChildren(createChart(data, settings));
+        document.getElementById('chartHost').replaceChildren(createBarChart(data, settings));
     };
     
     document.addEventListener('readystatechange', async () => {
