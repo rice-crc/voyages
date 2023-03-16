@@ -8,7 +8,8 @@ const _createChartCore = (data, { xScaleCore, plot }, settings) => {
         marginBottom = 40,
         marginTop = 40,
         width = 800,
-        height = 500
+        height = 500,
+        isPercentage = false
     } = settings ?? {};
     const svg = d3.create("svg")
         .attr("width", width)
@@ -23,10 +24,14 @@ const _createChartCore = (data, { xScaleCore, plot }, settings) => {
         .domain(d3.extent(Y))
         .range([height - marginBottom, marginTop]);
     const xAxis = d3.axisBottom(xScale).ticks(width / 60);
-    const yAxis = svg
+    let yAxis = d3.axisRight(yScale)
+        .tickSize(width - marginRight);
+    if (isPercentage) {
+        yAxis = yAxis.tickFormat(d3.format(".0%"));
+    }
+    svg
         .attr("transform", `translate(${marginLeft},0)`)
-        .call(d3.axisRight(yScale)
-            .tickSize(width - marginRight))
+        .call(yAxis)
         .call(g => g.select(".domain")
             .remove())
         .call(g => g.selectAll(".tick line")
@@ -75,8 +80,7 @@ const createLineChart = (data, settings) => {
 const createBarChart = (data, settings) => {
     const { 
         color = "steelblue",
-        xPadding = 0.1,
-        marginBottom = 40
+        xPadding = 0.1
     } = settings ?? {};
     return _createChartCore(
         data, { 

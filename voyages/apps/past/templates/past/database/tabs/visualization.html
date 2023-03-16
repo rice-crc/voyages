@@ -53,7 +53,9 @@
         const targetFieldValue = [-1, -1, 2, 1, 1][chartConfig.y.value];
         const MAX_CATEGORIES = 30;
         const isCategorical = xField === 'language';
-        const topKeys = isCategorical ? margins[xField].filter(x => !!x[0]).slice(0, MAX_CATEGORIES).map(x => x[0]) : [];
+        const topKeys = isCategorical
+            ? margins[xField].filter(x => !!x[0]).slice(0, MAX_CATEGORIES).map(x => x[0])
+            : [];
         for (const entry of results) {
             let xVal = entry[xField];
             if (xField === 'year') {
@@ -102,7 +104,8 @@
                 }
             }
         }
-        const settings = { marginLeft: 60 };
+        const isPercentage = yField === 'gender_code' || yField === 'age_group';
+        const settings = { marginLeft: 60, isPercentage };
         if (isCategorical) {
             settings.marginLeft = 80;
             settings.marginBottom = 150;
