@@ -1,0 +1,107 @@
+{% load i18n %}
+
+<div v-if="enslavedDataset == 1" class="content">
+<select class="form-control col-md-4" id="ookSummarySel" >
+    <option value="0">{% trans "Group by gender" %}</option>
+    <option value="1">{% trans "Most active enslavers" %}</option>
+</select>
+</div>
+
+<table id="summary_table" class="table table-striped table-bordered dataTable">
+    <thead>
+    </thead>
+</table>
+
+<script type="text/javascript">
+    const updateSummaryTable = async () => {
+        if (searchBar.currentTab !== 'summary') {
+            return;
+        }
+        // Fetch data.
+        const dataset = parseInt(searchBar.enslavedDataset);
+        const selection = dataset === 0
+            ? ['enslaved_lang_captives', 'enslaved_lang_voyages']
+            : ['enslaved_gender'];
+        const post = {
+            search_query: {items: searchAll(searchBar.filter, searchBar.filterData)},
+            output: 'summary',
+            summary_selection: selection
+        };
+        if (dataset === 1 && parseInt($("#ookSummarySel").val()) === 1) {
+            delete(post.summary_selection);
+            post['special_pivot'] = 'top_enslavers';
+            post['output'] = 'pivot';
+        }
+        const res = await fetch('/past/api/search_enslaved', {
+            method: 'POST',
+            body: JSON.stringify(post)
+        });
+        const data = await res.json();
+        const tableId = "#summary_table";
+        if ($.fn.dataTable.isDataTable(tableId)) {
+            $(tableId).DataTable().destroy();
+        }
+        let tableData = [];
+        let columns = [];
+        if (dataset === 0) {
+            const nullText = gettext('Null');
+            const otherText = gettext('Other');
+            // Sort language groups by captive count descending.
+            const sorted = data.enslaved_lang_captives.sort((x, y) => y.cell - x.cell);
+            const top = { [otherText]: { captives: 0, voyages: 0 } };
+            const TOP_SEL = 5;
+            for (i = 0; i < sorted.length; ++i) {
+                const item = sorted[i];
+                if (i < TOP_SEL) {
+                    top[item.language || nullText] = { captives: parseInt(item.cell) };
+                } else {
+                    top[otherText].captives += parseInt(item.cell);
+                }
+            }
+            for (const { language, cell } of data.enslaved_lang_voyages) {
+                let key = language || nullText;
+                if (top.hasOwnProperty(key)) {
+                    top[key]['voyages'] = parseInt(cell);
+                } else {
+                    top[otherText].voyages += parseInt(cell);
+                }
+            }
+            tableData = Object.entries(top).map(([k, v]) => [k, v.captives, v.voyages]);
+            columns = [
+                { title: gettext('Language') },
+                { title: gettext('Total Captives') },
+                { title: gettext('Total Voyages') }
+            ];
+        } else {
+            if (parseInt($("#ookSummarySel").val()) === 1) {
+                columns = [
+                    { title: gettext('Enslaver') },
+                    { title: gettext('Enslaved People') }
+                ];
+                tableData = data.results.map(([a, b, c]) => [b, c]);
+            } else {
+                columns = [
+                    { title: gettext('Gender') },
+                    { title: gettext('Enslaved People') }
+                ];
+                tableData = data.enslaved_gender.map(x => [genderLabels[x.gender_code || 0], x.cell]);
+            }
+        }
+        $(tableId).DataTable({
+            data: tableData,
+            columns,
+            order: [[1, 'desc']],
+            paging: false,
+            info: false,
+            bFilter: false
+        });
+    };
+    
+    document.addEventListener('readystatechange', async () => {
+        if (document.readyState === "interactive") {
+            await updateSummaryTable();
+            searchBar.$on('refresh', updateSummaryTable);
+            $("#ookSummarySel").change(updateSummaryTable);
+        }
+    });
+</script>

@@ -24,8 +24,8 @@ from voyages.apps.common.models import SavedQuery
 from voyages.apps.common.views import get_filtered_results
 from .models import (AltLanguageGroupName, Enslaved,
                      EnslavedContribution, EnslavedContributionLanguageEntry,
-                     EnslavedContributionNameEntry, EnslavedContributionStatus, EnslavedInRelation, EnslavedSearch, EnslavementRelation, EnslaverContribution, EnslaverInRelation, EnslaverSearch, EnslaverVoyageConnection,
-                     LanguageGroup, MultiValueHelper, ModernCountry, EnslavedNameSearchCache,
+                     EnslavedContributionNameEntry, EnslavedContributionStatus, EnslavedInRelation, EnslavedSearch, EnslavementBipartiteGraph, EnslavementRelation, EnslaverContribution, EnslaverInRelation, EnslaverRole, EnslaverSearch, EnslaverVoyageConnection,
+                     LanguageGroup, MultiValueHelper, ModernCountry, EnslavedNameSearchCache, PivotTableDefinition,
                      _modern_name_fields, _name_fields)
 from voyages.apps.voyage.models import Place,Region
 from collections import Counter
@@ -130,10 +130,14 @@ def get_modern_countries(_):
 
 
 @csrf_exempt
-@cache_page(0)
+@cache_page(3600)
 def get_language_groups(request):
     #we need a switch between used and unused language groups (search should only have used, contribute should have all)
-    active_only=json.loads(request.body).get('active_only')
+    active_only = True
+    try:
+        active_only = json.loads(request.body).get('active_only', active_only)
+    except:
+        pass
     countries_list_key = "countries_list"
     alt_names_key = "alt_names_list"
     country_helper = MultiValueHelper(countries_list_key, ModernCountry.languages.through, 'languagegroup_id', modern_country_id='moderncountry__pk', country_name='moderncountry__name')
@@ -152,6 +156,12 @@ def get_language_groups(request):
         return JsonResponse([{ "id": item["id"], "name": item["name"], "lat": item["latitude"], "lng": item["longitude"], "alts": item[alt_names_key], "countries": item[countries_list_key] }
             for item in items], safe=False)
 
+
+@csrf_exempt
+@cache_page(3600)
+def get_enslaver_roles(request):
+    return JsonResponse([{"id": r.id, "label": r.name} for r in EnslaverRole.objects.all()], safe=False)
+
 @csrf_exempt
 @cache_page(3600)
 def get_enumeration(_, model_name):
@@ -165,7 +175,20 @@ def restore_enslaved_permalink(_, link_id):
     q = SavedQuery.objects.get(pk=link_id)
     query = json.loads(q.query)
     # Detect the dataset of the query.
-    dataset = query.get('items', {}).get('enslaved_dataset')
+    items = query.get('items', {})
+    if isinstance(items, str):
+        # For many queries, the items have been saved as a JSON string itself...
+        # We may decide to fix that in the future (that requires front-end
+        # changes and a script to modify all existing saved queries that are
+        # shaped like this).
+        items = json.loads(items)
+    dataset = 0
+    if isinstance(items, dict):
+        dataset = items.get('enslaved_dataset')
+    if isinstance(items, list):
+        matches = [item for item in items if item.get('varName') == 'enslaved_dataset']
+        if len(matches) == 1:
+            dataset = matches[0].get('searchTerm')[0]
     ds_name = ''
     try:
         ds_name = '/' + ENSLAVED_DATASETS[int(dataset)]
@@ -253,6 +276,68 @@ def refresh_maps_cache(request):
 
 refresh_maps_cache(None)
 
+def process_search_query_post(user_query):
+    # Support user queries made in different "formats".
+    # The output is a dictionary that could be used in the construction of
+    # Enslave[d|r]Search.
+    items = None
+    order_by = None
+    try:
+        items = user_query.get('items')
+        order_by = user_query.get('order_by')
+    except:
+        pass
+    if isinstance(user_query, list):
+        items = user_query
+        user_query = {}
+    if items is not None:
+        # This is the newer format with the operation encoded.
+        user_query = {item['varName']: item['searchTerm'] for item in items}
+    if order_by is not None:
+        user_query['order_by'] = order_by
+    return user_query
+
+from django.db.models.expressions import RawSQL, Func, Value
+
+_pivot_year_field = F('voyage__voyage_dates__imp_arrival_at_port_of_dis')
+
+class LessThanFunc(Func):
+    function = '<'
+    arity = 2
+    arg_joiner = '<'
+    template = '%(expressions)s'
+
+class RightFunc(Func):
+    function = 'RIGHT'
+    arity = 2
+    arg_joiner = ','
+    template = 'RIGHT(%(expressions)s)'
+
+class DivFunc(Func):
+    function = 'DIV'
+    arity = 2
+    arg_joiner = ' DIV '
+    template = '%(expressions)s'
+
+_pivot_fields = {
+    'language': 'language_group__name',
+    'gender_code': 'gender',
+    'age_group': LessThanFunc(F('age'), Value(16)),
+    'year': _pivot_year_field,
+    # The year is given in ",,{year}" string format, so we first get the 4 right
+    # most values, then subtract 1 and do an integer division by 5. The
+    # subtraction is so that the year ranges are of the form [xxx1, xxx5],
+    # [xxx6, xxx0].
+    'year_5': DivFunc(RightFunc(_pivot_year_field, Value(4)) - Value(1), Value(5)),
+    'age_5': DivFunc(F('age') - Value(1), Value(5))
+}
+
+_pivot_summaries = {
+    'enslaved_gender': PivotTableDefinition({ 'gender_code': 'gender' }, 'enslaved_id'),
+    'enslaved_lang_captives': PivotTableDefinition({ 'language': 'language_group__name' }, 'enslaved_id'),
+    'enslaved_lang_voyages': PivotTableDefinition({ 'language': 'language_group__name' }, 'voyage_id')
+}
+
 @require_POST
 @csrf_exempt
 def search_enslaved(request):
@@ -261,9 +346,54 @@ def search_enslaved(request):
     # decoded from the JSON body as arguments to the EnslavedSearch
     # constructor.
     data = json.loads(request.body)
-    search = EnslavedSearch(**data['search_query'])
-    fields=data.get('fields',None)
+    user_query = process_search_query_post(data['search_query'])
     output_type = data.get('output', 'resultsTable')
+    if output_type == 'summary':
+        selection = data.get('summary_selection', _pivot_summaries.keys())
+        results = {}
+        for sel in selection:
+            pivot = _pivot_summaries.get(sel)
+            if pivot is None:
+                return JsonResponse({ 'error': f"Invalid request: summary selection {sel} not found" })
+            user_query['pivot_table'] = pivot
+            search = EnslavedSearch(**user_query)
+            results[sel] = list(search.execute([]))
+        print("SUMMARY enslavedsearch response time:",time.time() - st)
+        return JsonResponse(results)
+    
+    if output_type == 'pivot':
+        special = data.get('special_pivot')
+        if special == 'top_enslavers':
+            # This is a special query that requires access to the cache.
+            search = EnslavedSearch(**user_query)
+            q = search.execute(['enslaved_id'])
+            q = q[0:q.count()] # Take an explicit slice since we do not paginate
+            EnslavementBipartiteGraph.load()
+            top = EnslavementBipartiteGraph.get_top_enslavers(x['enslaved_id'] for x in q)
+            print("PIVOT enslavedsearch | top_enslavers response time:",time.time() - st)
+            return JsonResponse({ 'results': top })
+        pivot_fields = data.get('pivot_fields')
+        if not pivot_fields:
+            return JsonResponse({ "error": f"No pivot fields specified: {pivot_fields}" })
+        pivot_fields = {k: _pivot_fields.get(k, k) for k in pivot_fields}
+        pivot = PivotTableDefinition(pivot_fields, 'enslaved_id')
+        user_query['pivot_table'] = pivot
+        res = list(EnslavedSearch(**user_query).execute([]))
+        print("PIVOT enslavedsearch response time:",time.time() - st)
+        # Compute margin aggregates (e.g. for each field, a dict: field val => sum of cells).
+        margins = {}
+        for item in res:
+            cell = item['cell']
+            for k, v in item.items():
+                if k == 'cell':
+                    continue
+                margin = margins.setdefault(k, {})
+                margin[v] = margin.get(v, 0) + cell
+        margins = {k: sorted(v.items(), key=lambda x: -x[1]) for k, v in margins.items()}
+        return JsonResponse({ 'results': res, 'margins': margins })
+
+    search = EnslavedSearch(**user_query)
+    fields = data.get('fields',None)
     
     if output_type == 'maps':
         fields = [
@@ -285,6 +415,7 @@ def search_enslaved(request):
             'skin_color',
             'language_group__name',
             'register_country__name',
+            'notes',
             'voyage_id',
             'voyage__voyage_ship__ship_name',
             'voyage__voyage_dates__first_dis_of_slaves',
@@ -337,7 +468,8 @@ def search_enslaved(request):
                 [entry[f] for f in _name_fields if f in entry])
         print("TABLE enslavedsearch response time:",time.time()-st)
         return JsonResponse(table)
-    elif output_type=='maps':
+    
+    if output_type == 'maps':
         
         mapmode=data.get('mapmode', 'points')
         paginator = Paginator(query, len(query))
@@ -490,7 +622,7 @@ def search_enslaved(request):
             final_result[itinerary_group_name]=result
         print("MAP enslavedsearch response time:",time.time()-st)    
         return JsonResponse(final_result,safe=False)
-    
+
     return JsonResponse({'error': 'Unsupported'})
 
 
@@ -498,7 +630,8 @@ def search_enslaved(request):
 @csrf_exempt
 def search_enslaver(request):
     data = json.loads(request.body)
-    search = EnslaverSearch(**data['search_query'])
+    user_query = process_search_query_post(data['search_query'])
+    search = EnslaverSearch(**user_query)
     fields = data.get('fields')
     if fields is None:
         fields = [
@@ -572,7 +705,6 @@ def enslaved_contribution(request):
             name_ids.append(name_entry.pk)
         result['name_ids'] = name_ids
         language_ids = []
-        print("-->",languages)
 #         for i, lang in enumerate(languages):
         for i in languages:
             lang_entry = EnslavedContributionLanguageEntry()
@@ -585,13 +717,6 @@ def enslaved_contribution(request):
                 transaction.rollback()
                 return HttpResponseBadRequest(
                     'Invalid language entry in contribution')
-#             modern_country_id = lang.get('modern_country_id', None)
-#             lang_entry.modern_country = ModernCountry.objects.get(
-#                 pk=modern_country_id) if modern_country_id else None
-#             if modern_country_id is None:
-#                 transaction.rollback()
-#                 return HttpResponseBadRequest(
-#                     'Invalid modern country entry in contribution')
             lang_entry.save()
             language_ids.append(lang_entry.pk)
         result['language_ids'] = language_ids

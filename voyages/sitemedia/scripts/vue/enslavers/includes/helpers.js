@@ -157,18 +157,6 @@ function processResponse(json, mainDatatable, fuzzySearch) {
       row.ranking++;
     }
 
-    if (row.enslavers_list) {
-      var enslaversList = {};
-      row.enslavers_list.forEach((value, index) => {
-        if (enslaversList[value.enslaver_name] === undefined) {
-          enslaversList[value.enslaver_name] = [];
-        }
-
-        enslaversList[value.enslaver_name].push(gettext(searchBar.enslaverRoles[value.enslaver_role]));
-      });
-      row.enslavers_list = enslaversList;
-    }
-
     if (row.alias_list) {
       var aliasList = {};
       aliasList = row.alias_list.filter((element) => {
@@ -351,8 +339,20 @@ function serializeFilter(filter) {
   return JSON.stringify(filter);
 }
 
+function replaceKey(key) {
+  if (key == "is less than") {
+    return "is at most";
+  } else if (key == "is more than") {
+    return "is at least";
+  } else if (key == "is equal to") {
+    return "equals";
+  } else {
+    return key;
+  }
+}
+
 function searchAll(filter, filterData) {
-  var items = {};
+  var items = [];
   for (key1 in filter) {
     if (key1 !== "count") {
       for (key2 in filter[key1]) {
@@ -362,6 +362,7 @@ function searchAll(filter, filterData) {
               if (filter[key1][key2][key3].activated) {
                 var item = {};
                 var searchTerm = [];
+                item["op"] = replaceKey(filter[key1][key2][key3].value["op"]);
                 if (filter[key1][key2][key3].value["searchTerm0"] === undefined) {
                   // if it's a multi-tiered place variable
                   if (filter[key1][key2][key3].constructor.name === "PlaceVariable") {
@@ -445,7 +446,6 @@ function searchAll(filter, filterData) {
                       var sortedSelections = filter[key1][key2][key3].value["searchTerm"].sort(sortNumber);
                       var searchTerm = [];
 
-                      console.log(sortedSelections);
                       if (sortedSelections.includes("0")) {
                         // select all
                         filterData.treeselectOptions[varName][0].children.forEach(
@@ -468,7 +468,7 @@ function searchAll(filter, filterData) {
 
                     item["searchTerm"] = searchTerm;
                   } else if (filter[key1][key2][key3].constructor.name === "PercentageVariable") {
-                    item["searchTerm"] = parseInt(filter[key1][key2][key3].value["searchTerm"]) / 100;
+                    item["searchTerm"] = safePercentageFilter(filter[key1][key2][key3].value["searchTerm"], 0);
                   } else {
                     item["searchTerm"] = filter[key1][key2][key3].value["searchTerm"];
                   }
@@ -483,27 +483,29 @@ function searchAll(filter, filterData) {
                     // if user chose to search against a particular day, make sure it is searching against a range
                     // i.e. add 23:59:59 to searchTerm0
                     if (filter[key1][key2][key3].value["op"] == "is equal to") {
+                      filter[key1][key2][key3].value["op"] = "is between";
                       filter[key1][key2][key3].value["searchTerm1"] = filter[key1][key2][key3].value["searchTerm0"].substring(0, 10);
                       filter[key1][key2][key3].value["searchTerm0"] = filter[key1][key2][key3].value["searchTerm1"].replace("/", "-") + "T00:00:00Z";
-                      filter[key1][key2][key3].value["searchTerm1"] = filter[key1][key2][key3].value["searchTerm1"] + "T23:59:59Z";
+                      filter[key1][key2][key3].value["searchTerm1"] = filter[key1][key2][key3].value["searchTerm1"].substring(0, 10) + "T23:59:59Z";
                     }
                     // make the to date always inclusive (add 23:59:59)
                     if (filter[key1][key2][key3].value["searchTerm1"] !== null) {
                       if (filter[key1][key2][key3].value["searchTerm0"].substring(0, 10) != filter[key1][key2][key3].value["searchTerm1"].substring(0, 10)) {
                         // filter[key1][key2][key3].value["searchTerm1"] = moment(filter[key1][key2][key3].value["searchTerm1"], SOLR_DATE_FORMAT).add(1, "days").subtract(1, "seconds");
-                        filter[key1][key2][key3].value["searchTerm1"] = filter[key1][key2][key3].value["searchTerm1"].replace("/", "-") + "T23:59:59Z";
+                        filter[key1][key2][key3].value["searchTerm1"] = filter[key1][key2][key3].value["searchTerm1"].substring(0, 10).replace("/", "-") + "T23:59:59Z";
                       }
                     }
                     item["searchTerm"] = [
                       filter[key1][key2][key3].value["searchTerm0"],
                       filter[key1][key2][key3].value["searchTerm1"]
                     ];
+                    item["op"] = filter[key1][key2][key3].value["op"];
                   }
 
                   // patch for percentage variables
                   if (filter[key1][key2][key3].constructor.name === "PercentageVariable") {
-                    var searchTerm0 = parseInt(filter[key1][key2][key3].value["searchTerm0"]) / 100;
-                    var searchTerm1 = parseInt(filter[key1][key2][key3].value["searchTerm1"]) / 100;
+                    var searchTerm0 = safePercentageFilter(filter[key1][key2][key3].value["searchTerm0"], 0);
+                    var searchTerm1 = safePercentageFilter(filter[key1][key2][key3].value["searchTerm1"], 1);
                     item["searchTerm"] = [searchTerm0, searchTerm1];
                   }
 
@@ -533,7 +535,8 @@ function searchAll(filter, filterData) {
                   }
                 }
 
-                items[filter[key1][key2][key3].varName] = item["searchTerm"];
+                item["varName"] = filter[key1][key2][key3].varName;
+                items.push(item);
               }
             }
           }
@@ -600,7 +603,7 @@ function getTreeselectLabel(currentVariable, searchTerms, treeselectOptions) {
     if (Array.isArray(searchTerms)) {
       searchTerms.forEach(function(searchTerm) {
         treeselectOptions.forEach(function(treeselectOption) {
-          if (treeselectOption.value == searchTerm || treeselectOption.id == searchTerms) {
+          if (treeselectOption.value == searchTerm || treeselectOption.id == searchTerm) {
             labels.push(treeselectOption.label);
           }
         });
@@ -732,11 +735,11 @@ function loadTreeselectOptions(vm, vTreeselect, filter, callback) {
         case 'modern_country':
           var apiUrl = '/past/api/modern-countries';
           break;
-        case 'ethnicity':
-          var apiUrl = '/past/api/ethnicities';
-          break;
         case 'language_groups':
           var apiUrl = '/past/api/language-groups';
+          break;
+        case 'roles':
+          var apiUrl = '/past/api/enslaver-roles';
           break;
         default:
           callback("Error: varName " + varName + " is not acceptable");
@@ -750,14 +753,16 @@ function loadTreeselectOptions(vm, vTreeselect, filter, callback) {
           switch (varName) {
             case 'register_country':
             case 'modern_country':
-              var options = parseCountries(response);
+              options = parseCountries(response);
               break;
             case 'ethnicity':
-              var options = parseEthnicities(response);
+              options = parseEthnicities(response);
               break;
             case 'language_groups':
-              var options = parseLanguageGroups(response);
+              options = parseLanguageGroups(response);
               break;
+            default:
+              options = response.data;
           }
 
           vm.filterData.treeselectOptions[varName] = options;
@@ -1061,9 +1066,22 @@ var mainDatatable = null;
 
 function refreshUi(filter, filterData, currentTab, tabData, options) {
   if (currentTab == "results") {
-    var currentSearchObj = searchAll(filter, filterData);
+    var currentSearchObj = {
+      items: searchAll(filter, filterData),
+      order_by: []
+    };
     var fuzzySearch = false;
-    if (!currentSearchObj.exact_name_search && currentSearchObj.searched_name) {
+    var exactNameSearch = false;
+    var searchedName = false;
+    currentSearchObj.items.forEach(item=>{
+      if (item.varName == 'exact_name_search') {
+        exactNameSearch = true;
+      }
+      if (item.varName == 'searched_name') {
+        searchedName = true;
+      }
+    });
+    if (!exactNameSearch && searchedName) {
       fuzzySearch = true;
     }
 
