@@ -33,9 +33,28 @@
     {% endblock title %}
   </div>
 	<div class="navbar-subtitle flex">
-		
 	</div>
 </div>
+
+{% if intro %}
+<div id="blog_intro" class="blog_intro container-new">
+</div>
+<script type="text/javascript">
+  const introHtml = `{{ intro|safe }}`
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(introHtml, "text/html");
+  const langCode = "{{ LANGUAGE_CODE }}";
+  const filteredNodes = [...doc.body.children]
+    .filter(node => {
+      const lang = node.attributes.getNamedItem('lang')?.nodeValue
+      return !lang || lang === langCode;
+    });
+  const eIntro = document.getElementById('blog_intro');
+  for (const node of filteredNodes) {
+    eIntro.appendChild(node);
+  }
+</script>
+{% endif %}
 
 <div class="container-new">
 

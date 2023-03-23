@@ -1,0 +1,229 @@
+{% load i18n %}
+
+<div id="tabs-tables-control">
+    <div class="row">
+      <div class="col-md-6 col-sm-12 col-lg-3">
+        <v-dropdown title="{% trans 'Row' %}" description="{% trans '' %}" @changed="tabUpdate" :options="tabs[enslavedDataset].tables.row.options" :variable="tabs[enslavedDataset].tables.row" :clearable="false"></v-dropdown>
+        </div>
+      <div class="col-md-6 col-sm-12 col-lg-3">
+        <v-dropdown title="{% trans 'Column' %}" description="{% trans '' %}" @changed="tabUpdate" :options="tabs[enslavedDataset].tables.column.options" :variable="tabs[enslavedDataset].tables.column" :clearable="false"></v-dropdown>
+      </div>
+      <div class="col-md-6 col-sm-12 col-lg-3">
+        <v-dropdown title="{% trans 'Cell' %}" description="{% trans '' %}" @changed="tabUpdate" :options="tabs[enslavedDataset].tables.cell.options" :variable="tabs[enslavedDataset].tables.cell" :clearable="false"></v-dropdown>
+      </div>
+      <table id="v-tables" class="table table-striped table-bordered nowrap" cellspacing="0" width="100%" >
+        <thead>
+        </thead>
+        <tbody>
+        </tbody>
+        <tfoot>
+        </tfoot>
+      </table>
+  
+    </div>
+  </div>
+
+  <script type="text/javascript">
+    const prefixLen = "tabs.".length;
+    // We do this redirection because Vue apparently strips the [] accessor in
+    // the v-bind attribute.
+    const tabUpdate = (a, b) => searchBar
+      .updateTabOptions(a.substring(prefixLen), b, searchBar.tabs[searchBar.enslavedDataset]);
+
+    const updateTable = async () => {
+        if (searchBar.currentTab !== 'tables') {
+            return;
+        }
+        // Fetch data.
+        const dataset = parseInt(searchBar.enslavedDataset);
+        const defProps = ["sourceVarName", "varName"];
+        const getField = (f, props) => {
+          const src = searchBar.tabs[enslavedDataset].tables[f];
+          const sel = src.value;
+          const matches = src.options.filter(o => o.id === sel);
+          if (matches.length !== 1) {
+            return null;
+          }
+          props = props || defProps;
+          const match = matches[0];
+          for (const p of props) {
+            if (match[p] != null) {
+              return match[p];
+            }
+          }
+          return null;
+        };
+        const tableId = "#v-tables";
+        if ($.fn.dataTable.isDataTable(tableId)) {
+            $(tableId).DataTable().destroy();
+            $(tableId + "> thead > tr").remove();
+            $(tableId + "> tfoot").remove();
+            $(tableId + "> tbody").children().remove();
+            $(tableId).append('<tfoot></tfoot');
+        }
+        const rowField = getField('row');
+        const colField = getField('column');
+        if (!rowField || !colField) {
+          alert('Cannot build this PivotTable!');
+          return;
+        }
+        const cellField = getField('cell');
+        const pivot_fields = [rowField, colField, cellField]
+          .filter(x => !!x);
+        if (pivot_fields.length <= 1 || pivot_fields[0] === pivot_fields[1]) {
+          alert(gettext('This combination of row and column is not valid'));
+          return;
+        }
+        const post = {
+            search_query: searchAll(searchBar.filter, searchBar.filterData),
+            output: 'pivot',
+            pivot_fields
+        };
+        const res = await fetch('/past/api/search_enslaved', {
+            method: 'POST',
+            body: JSON.stringify(post)
+        });
+        const data = await res.json();
+        const columns = [];
+        // Generate columns for the table.
+        const mkData = idx => ({
+          _: `${idx}.text`,
+          sort: `${idx}.sortVal`
+        });
+        columns.push({ title: getField('row', ['label']), className: "bold" });
+        const nullText = gettext('Null');
+        let idxOthersCol = -1;
+        let counter = 0;
+        let maxCols = getField('column', ['maxResults']) ?? 1000;
+        const colIndex = {};
+        const customColHeader = {
+            "gender_code": genderLabels
+          }[colField] 
+          ?? {};
+        for (const m of data.margins[colField]) {
+          if (++counter > maxCols) {
+            idxOthersCol = columns.length;
+            columns.push({ title: gettext('Other') });
+            break;
+          }
+          colIndex[m[0]] = columns.length;
+          columns.push({ title: customColHeader[m[0]] ?? m[0] ?? nullText, className: "right" });
+        }
+        const idxTotalsCol = columns.length;
+        columns.push({ title: gettext('Totals'), className: "bold right" });
+        for (let i = 0; i < columns.length; ++i) {
+          columns[i].data = mkData(i);
+        }
+        const totalCell = '_total';
+        const initRow = (header) => {
+          const row = new Array(columns.length);
+          for (let i = 1; i < row.length; ++i) {
+            row[i] = {[totalCell]: 0};
+          }
+          row[0] = header;
+          return row
+        }
+        const totalsRow = initRow(gettext('Totals'));
+        const increment = (entry, cell, val) => {
+          if (cell !== totalCell) {
+            increment(entry, totalCell, val);
+          }
+          if (!!entry[cell]) {
+            val += entry[cell];
+          }
+          entry[cell] = val;
+        };
+        const rows = {};
+        const rowKeySrc = getField('row', ['varName']);
+        for (const item of data.results) {
+          let rowKey = item[rowField];
+          if (rowKeySrc === 'year_5') {
+            rowKey = parseInt(rowKey);
+            rowKey = `${rowKey * 5 + 1}-${(rowKey + 1) * 5}`;
+          } else if (rowKeySrc === "year") {
+            rowKey = parseInt(rowKey.match(/\d+$/)[0]);
+          }
+          let arr = rows[rowKey];
+          if (!arr) {
+            arr = initRow(rowKey);
+            rows[rowKey] = arr;
+          }
+          const colKey = item[colField];
+          let idxCol = colIndex[colKey];
+          if (!idxCol) {
+            idxCol = idxOthersCol;
+          }
+          const cell = item[cellField] ?? totalCell;
+          if (idxCol > 0) {
+            increment(arr[idxCol], cell, item.cell);
+            increment(totalsRow[idxCol], cell, item.cell);
+          }
+          increment(arr[idxTotalsCol], cell, item.cell);
+          increment(totalsRow[idxTotalsCol], cell, item.cell);
+        }
+        let cellLabels = {};
+        if (cellField === 'gender_code') {
+          cellLabels = {
+            1: pgettext('male gender single letter abbreviation', 'M'),
+            2: pgettext('female gender single letter abbreviation', 'F'),
+          };
+        } else if (cellField === 'age_group') {
+          cellLabels = {
+            0: pgettext('adult age group letter abbreviation', 'A'),
+            1: pgettext('child (< 16) age group letter abbreviation', 'C'),
+          };
+        }
+        const percent = num => Math.round(num * 100).toFixed(0) + '%';        
+        const sortValue = val => String(val).padStart(8, '0');
+        const mapCell = (c, i) => { 
+          if (i == 0) {
+            let text = c;
+            let sortVal = c;
+            if (rowField === "age_5") {
+              text = parseInt(text) * 5;
+              if (isNaN(text)) {
+                sortVal = sortValue(10000000);
+                text = c;
+              } else {
+                sortVal = sortValue(text);
+                text = `${text + 1}-${text + 5}`;
+              }
+            }
+            return { text, sortVal };
+          }
+          const totalVal = c[totalCell];
+          const sortVal = sortValue(totalVal);
+          if (!cellField) {
+            return { text: totalVal, sortVal };
+          }
+          const cellText = [];
+          for (const [key, val] of Object.entries(c)) {
+            const label = cellLabels[key];
+            if (label) {
+              cellText.push(`${label}: ${percent(val / totalVal)}`);
+            }
+          }
+          cellText.push(`(${totalVal})`);
+          return { text: cellText.join(' '), sortVal };
+        }
+        const processedRows = Object.values(rows)
+          .map(r => r.map(mapCell));
+        let footer = totalsRow.map((c, i) => `<td class="bold${i > 0 ? ' right' : ''}">${mapCell(c, i).text}</td>`).join('');
+        $(`${tableId} tfoot`).html(`<tr>${footer}</tr>`);
+        const dt = $(tableId).DataTable({
+            data: processedRows,
+            columns,
+            paging: false,
+            info: false,
+            bFilter: false,
+            scrollX: true
+        });
+    };
+
+    document.addEventListener('readystatechange', async () => {
+        if (document.readyState === "interactive") {
+            await updateTable();
+            searchBar.$on('refresh', updateTable);
+        }
+    });
+  </script>

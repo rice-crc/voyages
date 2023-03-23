@@ -6,6 +6,11 @@ from django.views.generic import RedirectView, TemplateView
 import voyages.apps.static_content.views
 import voyages.apps.voyage.search_views
 import voyages.apps.voyage.views
+from django.urls import reverse
+from django.http import HttpResponsePermanentRedirect
+
+def redirect_to_blog_maps(_):
+    return HttpResponsePermanentRedirect(reverse('blog:tag', args=['intro-maps']))
 
 urlpatterns = [
 
@@ -19,8 +24,7 @@ urlpatterns = [
     url(r'^downloads',
         TemplateView.as_view(template_name='downloads.html'),
         name='downloads'),
-    url(r'^maps',
-        TemplateView.as_view(template_name='maps.html'), name='maps'),
+    url(r'^maps$', redirect_to_blog_maps, name='maps'),
     url(r'^ship',
         TemplateView.as_view(template_name='ship.html'), name='ship'),
     url(r'^navire', TemplateView.as_view(template_name='navire.html'), name='navire'),

@@ -1,0 +1,27 @@
+{% load i18n %}
+
+<li class="nav-item dropdown">
+  <v-menu-title :count="filter.enslaver_details.count" title="{% trans 'Enslaver Details' %}"></v-menu-title>
+
+  <v-panel-singular @apply="apply" @reset="reset" group="enslaver_details" title="{% trans 'Enslaver Details' %}" sub-group="enslaver_details"
+    :filters="filter.enslaver_details.enslaver_details" align="left">
+    <div slot="v-panel-header">
+      <v-panel-header title="{% trans 'Enslaver Details' %}" description="{% trans '' context 'Enslaver details search panel description' %}">
+        <div slot="v-modal-content"></div>
+      </v-panel-header>
+    </div>
+    <div slot="v-panel-content" slot-scope="scope">
+
+      <v-number @change="changed"
+        :filter="scope.filters.var_enslaved_count">
+      </v-number>
+
+      <v-treeselect
+        :filter="scope.filters.var_roles"
+        @change="changed">
+      </v-treeselect>
+      
+    </div>
+
+  </v-panel-singular>
+</li>
