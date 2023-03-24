@@ -1085,6 +1085,10 @@ class PivotTableDefinition:
         if len(self.row_fields) > 0:
             qfields = {k: PivotTableDefinition._make_field(v) for k, v in self.row_fields.items()}
             ptq = ptq.values(**qfields)
+            # We remove any ordering in the query since it seems that Django
+            # adds the ordering fields to the GROUP BY clause, which can
+            # obviously cause issues.
+            ptq.query.clear_ordering(True)
             ptq = ptq.annotate(**aggregators)
         else:
             ptq = ptq.aggregate(**aggregators)
