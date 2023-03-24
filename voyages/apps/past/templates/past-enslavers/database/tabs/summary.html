@@ -1,8 +1,51 @@
 {% load i18n %}
 
+<p>
+    {% blocktrans %}
+    
+    The aggregation is performed over all voyages that are connected with
+    Enslavers matching the search query. In particular, even if the search query
+    includes voyage variables, the aggregation may include data from voyages
+    that do not match these search filters.
+    
+    {% endblocktrans %}
+</p>
+
 <table id="summary_table" class="table table-striped table-bordered dataTable">
     <thead>
+        <tr>
+            <th></th>
+            <th>{% trans "Count/Value" %}</th>
+            <th>{% trans "Average" %}</th>
+            <th>{% trans "Std. deviation" %}</th>
+        </tr>
     </thead>
+    <tbody>
+        <tr>
+            <th>{% trans "Embarked" %}</th>
+            <td class="right" id="embarked_total"></td>
+            <td class="right" id="embarked_avg"></td>
+            <td class="right" id="embarked_std"></td>
+        </tr>
+        <tr>
+            <th>{% trans "Voyages" %}</th>
+            <td class="right" id="voyage_count"></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <th>{% trans "Percentage male" %}</th>
+            <td class="right" id="percentage_male"></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <th>{% trans "Percentage children" %}</th>
+            <td class="right" id="percentage_child"></td>
+            <td></td>
+            <td></td>
+        </tr>
+    </tbody>
 </table>
 
 <div id="tmp"></div>
@@ -21,8 +64,13 @@
             method: 'POST',
             body: JSON.stringify(post)
         });
-        //const data = await res.json();
-        document.getElementById('tmp').innerText = await res.text();
+        const data = await res.json();
+        for (const [key, val] of Object.entries(data)) {
+            const el = document.getElementById(key);
+            if (!!el) {
+                el.innerText = val;
+            }
+        }
     };
     
     document.addEventListener('readystatechange', async () => {

@@ -1076,11 +1076,11 @@ class PivotTableDefinition:
             # The aggregates should be explicitly passed to the constructor.
             self.aggregates = kwargs['aggregates']
 
-    def adapt_query(self, model_objects, query, pk_field=None):
+    def adapt_query(self, model_objects, query, inner_pk_field=None, outer_pk_field=None):
         # The query is  used to select the results from which a pivot table will
         # be built. We use it as an inner query and let the db do the
         # aggregation over it.
-        ptq = model_objects.filter(pk__in=Subquery(query.values(pk_field or 'pk')))
+        ptq = model_objects.filter(**{f"{outer_pk_field or 'pk'}__in": Subquery(query.values(inner_pk_field or 'pk'))})
         aggregators = {k: PivotTableDefinition._map_agg_fn(v) for k, v in self.aggregates.items()}
         if len(self.row_fields) > 0:
             qfields = {k: PivotTableDefinition._make_field(v) for k, v in self.row_fields.items()}
@@ -1700,7 +1700,17 @@ class EnslaverSearch:
         if self.pivot_table:
             # Unlike the EnslavedSearch, here we actually pivot on Voyages
             # connected to the Enslavers matching the search.
-            return self.pivot_table.adapt_query(Voyage.all_dataset_objects, q, 'aliases__enslavervoyageconnection__voyage_id')
+            # We need several "hops" to get the data we need, as voyages are
+            # linked to aliases, but the search matches against identities,
+            # hence we go Enslaver Identity [matches] => Aliases =>
+            # EnslaverVoyageConnections => Voyages.
+            ptq = EnslaverAlias.objects.filter(identity_id__in=Subquery(q.values('pk')))
+            ptq = EnslaverVoyageConnection.objects \
+                .filter(enslaver_alias_id__in=Subquery(ptq.values('pk')))
+            return self.pivot_table.adapt_query(
+                Voyage.all_dataset_objects,
+                ptq,
+                inner_pk_field='voyage_id')
 
         MultiValueHelper.set_group_concat_limit()
         if is_fuzzy:

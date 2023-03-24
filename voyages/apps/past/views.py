@@ -655,6 +655,7 @@ def search_enslaver(request):
                 'embarked_avg': ('voyage_slaves_numbers__imp_total_num_slaves_embarked', PivotTableDefinition.AGG_AVG),
                 'embarked_std': ('voyage_slaves_numbers__imp_total_num_slaves_embarked', PivotTableDefinition.AGG_STD),
                 'percentage_male': ('voyage_slaves_numbers__percentage_men_among_embarked_slaves', PivotTableDefinition.AGG_AVG),
+                'percentage_child': ('voyage_slaves_numbers__percentage_child', PivotTableDefinition.AGG_AVG),
                 'voyage_count': ('voyage_id', PivotTableDefinition.AGG_COUNT)
             })
         user_query['pivot_table'] = pivot

@@ -701,14 +701,12 @@ var readURL = function() {
   var url = window.location.href;
   if (url.includes("#")) {
     var activeTab = url.substring(url.indexOf("#") + 1);
-    var presetTabs = [
-      "results",
-    ];
-
-    if (presetTabs.includes(activeTab)) {
-      $('.nav-tabs a[href="#' + activeTab + '"]').tab("show"); // Activate a Bootstrap 4 tab
-      searchBar.setActive(activeTab);
+    const getTab = () => $('.nav-tabs a[href="#' + activeTab + '"]');
+    if (getTab().length === 0) {
+      activeTab = "results";
     }
+    getTab().tab("show"); // Activate a Bootstrap 4 tab
+    searchBar.setActive(activeTab);
   }
 };
 
