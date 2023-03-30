@@ -364,10 +364,6 @@ var searchBar = new Vue({
         currentObjState = currentObjState[levels[i]];
       }
       currentObjState.value = value;
-      var refreshTabs = ["tables", "visualization", "timeline"];
-      if (refreshTabs.indexOf(this.currentTab) >= 0) {
-        this.refresh();
-      }
     },
 
     // go over items and update counts when the inputs are changed

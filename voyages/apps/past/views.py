@@ -324,7 +324,7 @@ _pivot_summaries = {
     'enslaved_lang_voyages': PivotTableDefinition({ 'language': 'language_group__name' }, agg_field='voyage_id')
 }
 
-def _execute_pivot_search(search, user_query, pivot_fields, agg_field, voyage_fields_prefix):
+def _execute_pivot_search(search, user_query, pivot_fields, agg_field, agg_mode, voyage_fields_prefix):
     _pivot_year_field = F(f"{voyage_fields_prefix or ''}voyage_dates__imp_arrival_at_port_of_dis")
     _pivot_fields = {
         'language': 'language_group__name',
@@ -339,13 +339,13 @@ def _execute_pivot_search(search, user_query, pivot_fields, agg_field, voyage_fi
         'age_5': DivFunc(F('age') - Value(1), Value(5))
     }
     pivot_fields = {k: _pivot_fields.get(k, k) for k in pivot_fields}
-    pivot = PivotTableDefinition(pivot_fields, agg_field=agg_field)
+    pivot = PivotTableDefinition(pivot_fields, agg_field=agg_field, agg_mode=agg_mode)
     user_query['pivot_table'] = pivot
     res = list(search(**user_query).execute([]))
     # Compute margin aggregates (e.g. for each field, a dict: field val => sum of cells).
     margins = {}
     for item in res:
-        cell = item['cell']
+        cell = item['cell'] or 0
         for k, v in item.items():
             if k == 'cell':
                 continue
@@ -391,7 +391,13 @@ def search_enslaved(request):
         pivot_fields = data.get('pivot_fields')
         if not pivot_fields:
             return JsonResponse({ "error": f"No pivot fields specified: {pivot_fields}" })
-        pivot_res = _execute_pivot_search(EnslavedSearch, user_query, pivot_fields, data.get('agg_field', 'enslaved_id'), 'voyage__')
+        pivot_res = _execute_pivot_search( \
+            EnslavedSearch, \
+            user_query, \
+            pivot_fields, \
+            data.get('agg_field', 'enslaved_id'), \
+            data.get('agg_mode', PivotTableDefinition.AGG_COUNT), \
+            'voyage__')
         print("PIVOT enslavedsearch response time:",time.time() - st)
         return JsonResponse(pivot_res)
 
@@ -645,18 +651,26 @@ def search_enslaver(request):
                 'embarked_std': ('voyage_slaves_numbers__imp_total_num_slaves_embarked', PivotTableDefinition.AGG_STD),
                 'percentage_male': ('voyage_slaves_numbers__percentage_men_among_embarked_slaves', PivotTableDefinition.AGG_AVG),
                 'percentage_child': ('voyage_slaves_numbers__percentage_child', PivotTableDefinition.AGG_AVG),
-                'voyage_count': ('voyage_id', PivotTableDefinition.AGG_COUNT)
+                'voyage_count': ('voyage_id', PivotTableDefinition.AGG_COUNT),
+                'tonnage_avg': ('voyage_ship__tonnage', PivotTableDefinition.AGG_AVG),
             })
         user_query['pivot_table'] = pivot
         search = EnslaverSearch(**user_query)
         results = search.execute([])
         return JsonResponse(results)
     
-    if output_type == 'table':
+    if output_type == 'pivot':
         pivot_fields = data.get('pivot_fields')
         if not pivot_fields:
             return JsonResponse({ "error": f"No pivot fields specified: {pivot_fields}" })
-        return JsonResponse(_execute_pivot_search(EnslaverSearch, user_query, pivot_fields, data.get('agg_field', 'voyage_id'), ''))
+        res = _execute_pivot_search( \
+            EnslaverSearch, \
+            user_query, \
+            pivot_fields, \
+            data.get('agg_field', 'voyage_id'), \
+            data.get('agg_mode', PivotTableDefinition.AGG_COUNT), \
+            '')
+        return JsonResponse(res)
 
     if output_type == 'resultsTable':
         def adapter(page):

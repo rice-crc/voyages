@@ -3,13 +3,13 @@
 <div id="tabs-tables-control">
     <div class="row">
       <div class="col-md-6 col-sm-12 col-lg-3">
-        <v-dropdown title="{% trans 'Row' %}" description="{% trans '' %}" @changed="tabUpdate" :options="tabs[enslavedDataset ?? 0].tables.row.options" :variable="tabs[enslavedDataset ?? 0].tables.row" :clearable="false"></v-dropdown>
+        <v-dropdown title="{% trans 'Row' %}" description="{% trans '' %}" @changed="updateTabOptions" :options="tabs.tables.row.options" :variable="tabs.tables.row" :clearable="false"></v-dropdown>
         </div>
       <div class="col-md-6 col-sm-12 col-lg-3">
-        <v-dropdown title="{% trans 'Column' %}" description="{% trans '' %}" @changed="tabUpdate" :options="tabs[enslavedDataset ?? 0].tables.column.options" :variable="tabs[enslavedDataset ?? 0].tables.column" :clearable="false"></v-dropdown>
+        <v-dropdown title="{% trans 'Column' %}" description="{% trans '' %}" @changed="updateTabOptions" :options="tabs.tables.column.options" :variable="tabs.tables.column" :clearable="false"></v-dropdown>
       </div>
       <div class="col-md-6 col-sm-12 col-lg-3">
-        <v-dropdown title="{% trans 'Cell' %}" description="{% trans '' %}" @changed="tabUpdate" :options="tabs[enslavedDataset ?? 0].tables.cell.options" :variable="tabs[enslavedDataset ?? 0].tables.cell" :clearable="false"></v-dropdown>
+        <v-dropdown title="{% trans 'Cell' %}" description="{% trans '' %}" @changed="updateTabOptions" :options="tabs.tables.cell.options" :variable="tabs.tables.cell" :clearable="false"></v-dropdown>
       </div>
       <table id="v-tables" class="table table-striped table-bordered nowrap" cellspacing="0" width="100%" >
         <thead>
@@ -21,24 +21,17 @@
       </table>
   
     </div>
-  </div>
+</div>
 
-  <script type="text/javascript">
-    const prefixLen = "tabs.".length;
-    // We do this redirection because Vue apparently strips the [] accessor in
-    // the v-bind attribute.
-    const tabUpdate = (a, b) => searchBar
-      .updateTabOptions(a.substring(prefixLen), b, searchBar.tabs[searchBar.enslavedDataset]);
-
+<script type="text/javascript">
     const updateTable = async () => {
         if (searchBar.currentTab !== 'tables') {
             return;
         }
         // Fetch data.
-        const dataset = parseInt(searchBar.enslavedDataset);
         const defProps = ["sourceVarName", "varName"];
         const getField = (f, props) => {
-          const src = searchBar.tabs[enslavedDataset].tables[f];
+          const src = searchBar.tabs.tables[f];
           const sel = src.value;
           const matches = src.options.filter(o => o.id === sel);
           if (matches.length !== 1) {
@@ -68,18 +61,21 @@
           return;
         }
         const cellField = getField('cell');
-        const pivot_fields = [rowField, colField, cellField]
+        const pivot_fields = [rowField, colField]
           .filter(x => !!x);
         if (pivot_fields.length <= 1 || pivot_fields[0] === pivot_fields[1]) {
           alert(gettext('This combination of row and column is not valid'));
           return;
         }
+        const agg_mode = getField('cell', ['agg_mode']) || "COUNT";
         const post = {
             search_query: searchAll(searchBar.filter, searchBar.filterData),
             output: 'pivot',
-            pivot_fields
+            pivot_fields,
+            agg_field: cellField,
+            agg_mode
         };
-        const res = await fetch('/past/api/search_enslaved', {
+        const res = await fetch('/past/api/search_enslaver', {
             method: 'POST',
             body: JSON.stringify(post)
         });
@@ -96,10 +92,6 @@
         let counter = 0;
         let maxCols = getField('column', ['maxResults']) ?? 1000;
         const colIndex = {};
-        const customColHeader = {
-            "gender_code": genderLabels
-          }[colField] 
-          ?? {};
         for (const m of data.margins[colField]) {
           if (++counter > maxCols) {
             idxOthersCol = columns.length;
@@ -107,7 +99,7 @@
             break;
           }
           colIndex[m[0]] = columns.length;
-          columns.push({ title: customColHeader[m[0]] ?? m[0] ?? nullText, className: "right" });
+          columns.push({ title: m[0] ?? nullText, className: "right" });
         }
         const idxTotalsCol = columns.length;
         columns.push({ title: gettext('Totals'), className: "bold right" });
@@ -168,18 +160,6 @@
           increment(arr[idxTotalsCol], cell, item.cell);
           increment(totalsRow[idxTotalsCol], cell, item.cell);
         }
-        let cellLabels = {};
-        if (cellField === 'gender_code') {
-          cellLabels = {
-            1: pgettext('male gender single letter abbreviation', 'M'),
-            2: pgettext('female gender single letter abbreviation', 'F'),
-          };
-        } else if (cellField === 'age_group') {
-          cellLabels = {
-            0: pgettext('adult age group letter abbreviation', 'A'),
-            1: pgettext('child (< 16) age group letter abbreviation', 'C'),
-          };
-        }
         const percent = num => Math.round(num * 100).toFixed(0) + '%';        
         const sortValue = val => String(val).padStart(8, '0');
         const mapCell = (c, i) => { 
@@ -200,18 +180,7 @@
           }
           const totalVal = c[totalCell];
           const sortVal = sortValue(totalVal);
-          if (!cellField) {
-            return { text: totalVal, sortVal };
-          }
-          const cellText = [];
-          for (const [key, val] of Object.entries(c)) {
-            const label = cellLabels[key];
-            if (label) {
-              cellText.push(`${label}: ${percent(val / totalVal)}`);
-            }
-          }
-          cellText.push(`(${totalVal})`);
-          return { text: cellText.join(' '), sortVal };
+          return { text: totalVal, sortVal };
         }
         const processedRows = Object.values(rows)
           .map(r => r.map(mapCell));
@@ -233,4 +202,4 @@
             searchBar.$on('refresh', updateTable);
         }
     });
-  </script>
+</script>

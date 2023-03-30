@@ -1,12 +1,11 @@
 {% load i18n %}
 
 <p>
-    {% blocktrans %}
+    {% blocktrans %} 
     
-    The aggregation is performed over all voyages that are connected with
-    Enslavers matching the search query. In particular, even if the search query
-    includes voyage variables, the aggregation may include data from voyages
-    that do not match these search filters.
+    The table includes data from all voyages linked to the Enslaver(s) specified
+    in the query. But if the query includes voyage variables, the table may
+    include voyages that do not match the search filters.
     
     {% endblocktrans %}
 </p>
@@ -43,6 +42,12 @@
             <th>{% trans "Percentage children" %}</th>
             <td class="right" id="percentage_child"></td>
             <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <th>{% trans "Tonnage of vessel" %}</th>
+            <td></td>
+            <td class="right" id="tonnage_avg"></td>
             <td></td>
         </tr>
     </tbody>
