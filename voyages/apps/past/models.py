@@ -422,6 +422,7 @@ class EnslaverCachedProperties(models.Model):
             .values(identity_field) \
             .annotate(min_year=Min(voyage_year_field)) \
             .annotate(max_year=Max(voyage_year_field)) \
+            .exclude(**{voyage_year_field: ',,'}) \
             .values_list(identity_field, 'min_year', 'max_year')
         q_years = apply_filter(q_years)
 

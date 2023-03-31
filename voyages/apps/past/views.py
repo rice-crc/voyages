@@ -685,6 +685,8 @@ def search_enslaver(request):
                 'birth_year', 'birth_month', 'birth_day',
                 'death_year', 'death_month', 'death_day',
                 'cached_properties__enslaved_count',
+                'cached_properties__first_year',
+                'cached_properties__last_year',
                 EnslaverSearch.ALIASES_LIST,
                 EnslaverSearch.VOYAGES_LIST,
                 EnslaverSearch.SOURCES_LIST,
