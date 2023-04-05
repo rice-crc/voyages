@@ -8,7 +8,7 @@ register = template.Library()
 
 class PostList(generic.ListView):
     template_name = 'blog/index.html'
-    paginate_by = 10
+    paginate_by = 12
 
     base_query = Post.objects.select_related()
     
@@ -124,7 +124,7 @@ class InstitutionDetail(generic.DetailView):
 
 class AuthorList(generic.ListView):    
     template_name = 'blog/authors.html'
-    paginate_by = 10
+    paginate_by = 12
 
     def get_queryset(self):
         return Author.objects.order_by('name')
@@ -132,7 +132,7 @@ class AuthorList(generic.ListView):
 
 class InstitutionList(generic.ListView):    
     template_name = 'blog/institutions.html'
-    paginate_by = 10
+    paginate_by = 12
 
     def get_queryset(self):
         return Institution.objects.order_by('name')
