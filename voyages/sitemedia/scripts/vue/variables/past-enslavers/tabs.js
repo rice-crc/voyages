@@ -49,8 +49,7 @@ const tabs = {
                 variable: "tabs.visualization.scatter.x",
                 value: 0,
                 options: [
-                    { id: 0, varName: "year", label: gettext("Year") },
-                    { id: 1, varName: "language", label: gettext("Language groups") }
+                    { id: 0, varName: "year", label: gettext("Year") }
                 ]
             },
             y: {
@@ -58,11 +57,10 @@ const tabs = {
                 variable: "tabs.visualization.scatter.y",
                 value: 0,
                 options: [
-                    { id: 0, varName: "enslaved_id", sourceVarName: "enslaved_id", label: gettext("Number of captives") },
-                    { id: 1, varName: "voyage_id", label: gettext("Number of voyages") },
-                    { id: 2, varName: "gender_code", label: gettext("Percent female") },
-                    { id: 3, varName: "gender_code", label: gettext("Percent male") },
-                    { id: 4, varName: "age_group", label: gettext("Percent under 16 years of age") }
+                    { id: 0, varName: "voyage_slaves_numbers__imp_total_num_slaves_embarked", label: gettext("Number of captives"), agg_mode: 'SUM' },
+                    { id: 1, varName: "voyage_id", label: gettext("Number of voyages"), agg_mode: 'COUNT' },
+                    { id: 2, varName: "voyage_slaves_numbers__percentage_men_among_embarked_slaves", label: gettext("Percent male"), agg_mode: 'AVG' },
+                    { id: 3, varName: "voyage_slaves_numbers__percentage_child", label: gettext("Percent under 16 years of age"), agg_mode: 'AVG' }
                 ]
             },
         }

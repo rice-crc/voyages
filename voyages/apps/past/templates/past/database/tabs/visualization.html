@@ -91,7 +91,7 @@
             if (xField === 'year' && data.length >= 2) {
                 // Fill any gap years.
                 const min = data[0].x;
-                const max = data[1].x;
+                const max = data[data.length - 1].x;
                 let hasGaps = false;
                 for (let i = min + 1; i < max; ++i) {
                     if (xIndex[i] === undefined) {

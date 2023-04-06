@@ -11,6 +11,9 @@
   <li class="nav-item">
     <a class="nav-link" @click="setActive('tables')" href="#tables" data-toggle="tab" data-target="#tables">{% trans 'Tables' %}</a>
   </li>
+  <li class="nav-item">
+    <a class="nav-link" @click="setActive('visualization')" href="#visualization" data-toggle="tab" data-target="#visualization">{% trans 'Data visualization' %}</a>
+  </li>
 </ul>
 <!-- End of Tabs -->
 
@@ -26,6 +29,9 @@
   </div>
   <div id="tables" class="tab-pane">
     {% include "past-enslavers/database/tabs/tables.html" %}
+  </div>
+  <div id="visualization" class="tab-pane">
+    {% include "past-enslavers/database/tabs/visualization.html" %}
   </div>
 </div>
 <!-- End of TabContainers -->

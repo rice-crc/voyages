@@ -9,7 +9,8 @@ const _createChartCore = (data, { xScaleCore, plot }, settings) => {
         marginTop = 40,
         width = 800,
         height = 500,
-        isPercentage = false
+        isPercentage = false,
+        isCategorical = false
     } = settings ?? {};
     const svg = d3.create("svg")
         .attr("width", width)
@@ -23,7 +24,21 @@ const _createChartCore = (data, { xScaleCore, plot }, settings) => {
     const yScale = d3.scaleLinear()
         .domain(d3.extent(Y))
         .range([height - marginBottom, marginTop]);
-    const xAxis = d3.axisBottom(xScale).ticks(width / 60);
+    let xAxis = d3.axisBottom(xScale);
+    if (isCategorical) {
+        const MAX_TICKS = 30;
+        if (X.length > MAX_TICKS) {
+            // Avoid placing too many ticks.
+            const tvals = [];
+            const step = Math.round(X.length / MAX_TICKS);
+            for (let i = 0; i < X.length; i += step) {
+                tvals.push(X[i]);
+            }
+            xAxis = xAxis.tickValues(tvals);
+        }
+    } else {
+        xAxis = xAxis.ticks(width / 60);
+    }
     let yAxis = d3.axisRight(yScale)
         .tickSize(width - marginRight);
     if (isPercentage) {
@@ -103,5 +118,5 @@ const createBarChart = (data, settings) => {
                         .attr("transform", "rotate(-45)"));
             }
         },
-        settings);
+        {isCategorical: true, ...settings});
 }

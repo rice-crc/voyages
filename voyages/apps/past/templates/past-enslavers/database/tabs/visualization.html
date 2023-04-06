@@ -1,0 +1,96 @@
+{% load i18n %}
+
+<div id="tabs-tables-control">
+    <div class="row">
+        <div class="col-md-6 col-sm-12 col-lg-3">
+          <v-dropdown title="{% trans 'X Axis' %}" description="{% trans '' %}" @changed="updateTabOptions" :options="tabs.visualization.scatter.x.options" :variable="tabs.visualization.scatter.x" :is-multiple="false" :clearable="false"></v-dropdown>
+          </div>
+        <div class="col-md-6 col-sm-12 col-lg-3">
+          <v-dropdown title="{% trans 'Y Axis' %}" description="{% trans '' %}" @changed="updateTabOptions" :options="tabs.visualization.scatter.y.options" :variable="tabs.visualization.scatter.y" :is-multiple="false" :clearable="false"></v-dropdown>
+        </div>
+        <div id="chartHost">            
+        </div>
+    </div>
+</div>
+
+<script src="{{ STATIC_URL }}scripts/vue/past/includes/charts.js"></script>
+
+<script type="text/javascript">
+    const updateChart = async () => {
+        if (searchBar.currentTab !== 'visualization') {
+            return;
+        }
+        const chartConfig = searchBar.tabs.visualization.scatter;
+        const xField = chartConfig.x.options[chartConfig.x.value].varName;
+        const pivot_fields = [xField];
+        const yField = chartConfig.y.options[chartConfig.y.value].varName;
+        const post = {
+            search_query: searchAll(searchBar.filter, searchBar.filterData),
+            output: 'pivot',
+            agg_mode: chartConfig.y.options[chartConfig.y.value].agg_mode,
+            agg_field: yField,
+            pivot_fields
+        };
+        const res = await fetch('/past/api/search_enslaver', {
+            method: 'POST',
+            body: JSON.stringify(post)
+        });
+        const { results, margins } = await res.json();
+        // Process data so that it consists of (x, y) points.
+        const xIndex = {};
+        const targetFieldValue = [-1, -1, 2, 1, 1][chartConfig.y.value];
+        for (const entry of results) {
+            let xVal = entry[xField];
+            if (xField === 'year') {
+                xVal = parseInt(xVal.replaceAll(',', ''));
+                if (isNaN(xVal)) {
+                    continue;
+                }
+            }
+            let yVal = xIndex[xVal];
+            if (!yVal) {
+                xIndex[xVal] = yVal = { xVal, total: 0, filtered: 0 };
+            }
+            yVal.total += entry.cell;
+            if (pivot_fields.length === 2) {
+                // This is the more complex case where we need to compute
+                // percentages.
+                if (entry[yField] === targetFieldValue) {
+                    yVal.filtered += entry.cell;
+                }
+            }
+        }
+        const data = [];
+        for (const [key, val] of Object.entries(xIndex)) {
+            data.push({ x: xField === 'year' ? parseInt(key) : key, y: pivot_fields.length === 2 ? val.filtered / val.total : val.total });
+        }
+        // Sort by x-values.
+        const xSort = () => data.sort((r, s) => r.x - s.x);
+        xSort();
+        if (xField === 'year' && data.length >= 2) {
+            // Fill any gap years.
+            const min = data[0].x;
+            const max = data[data.length - 1].x;
+            let hasGaps = false;
+            for (let i = min + 1; i < max; ++i) {
+                if (xIndex[i] === undefined) {
+                    hasGaps = true;
+                    data.push({ x: i, y: 0 });
+                }
+            }
+            if (hasGaps) {
+                xSort();
+            }
+        }
+        const isPercentage = yField.includes('percentage');
+        const settings = { marginLeft: 60, isPercentage };
+        document.getElementById('chartHost').replaceChildren(createBarChart(data, settings));
+    };
+    
+    document.addEventListener('readystatechange', async () => {
+        if (document.readyState === "interactive") {
+            await updateChart();
+            searchBar.$on('refresh', updateChart);
+        }
+    });
+</script>
