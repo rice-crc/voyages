@@ -299,7 +299,6 @@ def process_search_query_post(user_query):
 
 from django.db.models.expressions import RawSQL, Func, Value
 
-_pivot_year_field = F('voyage__voyage_dates__imp_arrival_at_port_of_dis')
 
 class LessThanFunc(Func):
     function = '<'
@@ -319,24 +318,41 @@ class DivFunc(Func):
     arg_joiner = ' DIV '
     template = '%(expressions)s'
 
-_pivot_fields = {
-    'language': 'language_group__name',
-    'gender_code': 'gender',
-    'age_group': LessThanFunc(F('age'), Value(16)),
-    'year': _pivot_year_field,
-    # The year is given in ",,{year}" string format, so we first get the 4 right
-    # most values, then subtract 1 and do an integer division by 5. The
-    # subtraction is so that the year ranges are of the form [xxx1, xxx5],
-    # [xxx6, xxx0].
-    'year_5': DivFunc(RightFunc(_pivot_year_field, Value(4)) - Value(1), Value(5)),
-    'age_5': DivFunc(F('age') - Value(1), Value(5))
+_pivot_summaries = {
+    'enslaved_gender': PivotTableDefinition({ 'gender_code': 'gender' }, agg_field='enslaved_id'),
+    'enslaved_lang_captives': PivotTableDefinition({ 'language': 'language_group__name' }, agg_field='enslaved_id'),
+    'enslaved_lang_voyages': PivotTableDefinition({ 'language': 'language_group__name' }, agg_field='voyage_id')
 }
 
-_pivot_summaries = {
-    'enslaved_gender': PivotTableDefinition({ 'gender_code': 'gender' }, 'enslaved_id'),
-    'enslaved_lang_captives': PivotTableDefinition({ 'language': 'language_group__name' }, 'enslaved_id'),
-    'enslaved_lang_voyages': PivotTableDefinition({ 'language': 'language_group__name' }, 'voyage_id')
-}
+def _execute_pivot_search(search, user_query, pivot_fields, agg_field, agg_mode, voyage_fields_prefix):
+    _pivot_year_field = F(f"{voyage_fields_prefix or ''}voyage_dates__imp_arrival_at_port_of_dis")
+    _pivot_fields = {
+        'language': 'language_group__name',
+        'gender_code': 'gender',
+        'age_group': LessThanFunc(F('age'), Value(16)),
+        'year': _pivot_year_field,
+        # The year is given in ",,{year}" string format, so we first get the 4 right
+        # most values, then subtract 1 and do an integer division by 5. The
+        # subtraction is so that the year ranges are of the form [xxx1, xxx5],
+        # [xxx6, xxx0].
+        'year_5': DivFunc(RightFunc(_pivot_year_field, Value(4)) - Value(1), Value(5)),
+        'age_5': DivFunc(F('age') - Value(1), Value(5))
+    }
+    pivot_fields = {k: _pivot_fields.get(k, k) for k in pivot_fields}
+    pivot = PivotTableDefinition(pivot_fields, agg_field=agg_field, agg_mode=agg_mode)
+    user_query['pivot_table'] = pivot
+    res = list(search(**user_query).execute([]))
+    # Compute margin aggregates (e.g. for each field, a dict: field val => sum of cells).
+    margins = {}
+    for item in res:
+        cell = item['cell'] or 0
+        for k, v in item.items():
+            if k == 'cell':
+                continue
+            margin = margins.setdefault(k, {})
+            margin[v] = margin.get(v, 0) + cell
+    margins = {k: sorted(v.items(), key=lambda x: -x[1]) for k, v in margins.items()}
+    return { 'results': res, 'margins': margins }
 
 @require_POST
 @csrf_exempt
@@ -375,22 +391,15 @@ def search_enslaved(request):
         pivot_fields = data.get('pivot_fields')
         if not pivot_fields:
             return JsonResponse({ "error": f"No pivot fields specified: {pivot_fields}" })
-        pivot_fields = {k: _pivot_fields.get(k, k) for k in pivot_fields}
-        pivot = PivotTableDefinition(pivot_fields, 'enslaved_id')
-        user_query['pivot_table'] = pivot
-        res = list(EnslavedSearch(**user_query).execute([]))
+        pivot_res = _execute_pivot_search( \
+            EnslavedSearch, \
+            user_query, \
+            pivot_fields, \
+            data.get('agg_field', 'enslaved_id'), \
+            data.get('agg_mode', PivotTableDefinition.AGG_COUNT), \
+            'voyage__')
         print("PIVOT enslavedsearch response time:",time.time() - st)
-        # Compute margin aggregates (e.g. for each field, a dict: field val => sum of cells).
-        margins = {}
-        for item in res:
-            cell = item['cell']
-            for k, v in item.items():
-                if k == 'cell':
-                    continue
-                margin = margins.setdefault(k, {})
-                margin[v] = margin.get(v, 0) + cell
-        margins = {k: sorted(v.items(), key=lambda x: -x[1]) for k, v in margins.items()}
-        return JsonResponse({ 'results': res, 'margins': margins })
+        return JsonResponse(pivot_res)
 
     search = EnslavedSearch(**user_query)
     fields = data.get('fields',None)
@@ -632,31 +641,61 @@ def search_enslaver(request):
     data = json.loads(request.body)
     user_query = process_search_query_post(data['search_query'])
     search = EnslaverSearch(**user_query)
-    fields = data.get('fields')
-    if fields is None:
-        fields = [
-            'id',
-            'principal_alias',
-            'birth_year', 'birth_month', 'birth_day',
-            'death_year', 'death_month', 'death_day',
-            'cached_properties__enslaved_count',
-            EnslaverSearch.ALIASES_LIST,
-            EnslaverSearch.VOYAGES_LIST,
-            EnslaverSearch.SOURCES_LIST,
-            EnslaverSearch.RELATIONS_LIST
-        ]
-    query = search.execute(fields)
-    output_type = data.get('output', 'resultsTable')
-    # For now we only support outputing the results to DataTables.
-    if output_type == 'resultsTable':
+    output_type = data.get('output', 'resultsTable')    
+    if output_type == 'summary':
+        pivot = PivotTableDefinition(
+            {},
+            aggregates={
+                'embarked_total': ('voyage_slaves_numbers__imp_total_num_slaves_embarked', PivotTableDefinition.AGG_SUM),
+                'embarked_avg': ('voyage_slaves_numbers__imp_total_num_slaves_embarked', PivotTableDefinition.AGG_AVG),
+                'embarked_std': ('voyage_slaves_numbers__imp_total_num_slaves_embarked', PivotTableDefinition.AGG_STD),
+                'percentage_male': ('voyage_slaves_numbers__percentage_men_among_embarked_slaves', PivotTableDefinition.AGG_AVG),
+                'percentage_child': ('voyage_slaves_numbers__percentage_child', PivotTableDefinition.AGG_AVG),
+                'voyage_count': ('voyage_id', PivotTableDefinition.AGG_COUNT),
+                'tonnage_avg': ('voyage_ship__tonnage', PivotTableDefinition.AGG_AVG),
+            })
+        user_query['pivot_table'] = pivot
+        search = EnslaverSearch(**user_query)
+        results = search.execute([])
+        return JsonResponse(results)
+    
+    if output_type == 'pivot':
+        pivot_fields = data.get('pivot_fields')
+        if not pivot_fields:
+            return JsonResponse({ "error": f"No pivot fields specified: {pivot_fields}" })
+        res = _execute_pivot_search( \
+            EnslaverSearch, \
+            user_query, \
+            pivot_fields, \
+            data.get('agg_field', 'voyage_id'), \
+            data.get('agg_mode', PivotTableDefinition.AGG_COUNT), \
+            '')
+        return JsonResponse(res)
 
+    if output_type == 'resultsTable':
         def adapter(page):
             for row in page:
                 EnslaverSearch.patch_row(row)
             return page
-
+        fields = data.get('fields')
+        if fields is None:
+            fields = [
+                'id',
+                'principal_alias',
+                'birth_year', 'birth_month', 'birth_day',
+                'death_year', 'death_month', 'death_day',
+                'cached_properties__enslaved_count',
+                'cached_properties__first_year',
+                'cached_properties__last_year',
+                EnslaverSearch.ALIASES_LIST,
+                EnslaverSearch.VOYAGES_LIST,
+                EnslaverSearch.SOURCES_LIST,
+                EnslaverSearch.RELATIONS_LIST
+            ]
+        query = search.execute(fields)
         table = _generate_table(query, data.get('tableParams', {}), adapter)
         return JsonResponse(table)
+    
     return JsonResponse({'error': 'Unsupported'})
 
 @require_POST

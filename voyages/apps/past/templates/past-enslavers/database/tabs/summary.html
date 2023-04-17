@@ -1,0 +1,87 @@
+{% load i18n %}
+
+<p>
+    {% blocktrans %} 
+    
+    The table includes data from all voyages linked to the Enslaver(s) specified
+    in the query. But if the query includes voyage variables, the table may
+    include voyages that do not match the search filters.
+    
+    {% endblocktrans %}
+</p>
+
+<table id="summary_table" class="table table-striped table-bordered dataTable">
+    <thead>
+        <tr>
+            <th></th>
+            <th>{% trans "Count/Value" %}</th>
+            <th>{% trans "Average" %}</th>
+            <th>{% trans "Std. deviation" %}</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <th>{% trans "Embarked" %}</th>
+            <td class="right" id="embarked_total"></td>
+            <td class="right" id="embarked_avg"></td>
+            <td class="right" id="embarked_std"></td>
+        </tr>
+        <tr>
+            <th>{% trans "Voyages" %}</th>
+            <td class="right" id="voyage_count"></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <th>{% trans "Percentage male" %}</th>
+            <td class="right" id="percentage_male"></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <th>{% trans "Percentage children" %}</th>
+            <td class="right" id="percentage_child"></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <th>{% trans "Tonnage of vessel" %}</th>
+            <td></td>
+            <td class="right" id="tonnage_avg"></td>
+            <td></td>
+        </tr>
+    </tbody>
+</table>
+
+<div id="tmp"></div>
+
+<script type="text/javascript">
+    const updateSummaryTable = async () => {
+        if (searchBar.currentTab !== 'summary') {
+            return;
+        }
+        // Fetch data.
+        const post = {
+            search_query: {items: searchAll(searchBar.filter, searchBar.filterData)},
+            output: 'summary',
+        };
+        const res = await fetch('/past/api/search_enslaver', {
+            method: 'POST',
+            body: JSON.stringify(post)
+        });
+        const data = await res.json();
+        for (const [key, val] of Object.entries(data)) {
+            const el = document.getElementById(key);
+            if (!!el) {
+                el.innerText = val;
+            }
+        }
+    };
+    
+    document.addEventListener('readystatechange', async () => {
+        if (document.readyState === "interactive") {
+            await updateSummaryTable();
+            searchBar.$on('refresh', updateSummaryTable);
+        }
+    });
+</script>

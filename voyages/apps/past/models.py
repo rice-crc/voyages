@@ -12,7 +12,7 @@ from datetime import datetime
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.db import (connection, models, transaction)
-from django.db.models import (Aggregate, Case, CharField, Count, F, Func, IntegerField, Max, Min, Q, Sum, Value, When)
+from django.db.models import (Aggregate, Case, CharField, Count, F, Func, IntegerField, Avg, Max, Min, Q, Sum, Value, When, StdDev)
 from django.db.models.expressions import Subquery, OuterRef
 from django.db.models.fields import TextField
 from django.db.models.functions import Coalesce, Concat, Length, Substr
@@ -422,6 +422,7 @@ class EnslaverCachedProperties(models.Model):
             .values(identity_field) \
             .annotate(min_year=Min(voyage_year_field)) \
             .annotate(max_year=Max(voyage_year_field)) \
+            .exclude(**{voyage_year_field: ',,'}) \
             .values_list(identity_field, 'min_year', 'max_year')
         q_years = apply_filter(q_years)
 
@@ -1059,27 +1060,57 @@ def single_val(source):
 
 
 class PivotTableDefinition:
+    AGG_AVG = 'AVG'
     AGG_COUNT = 'COUNT'
     AGG_SUM = 'SUM'
+    AGG_STD = 'STD'
 
-    def __init__(self, row_fields, agg_field, agg_mode=AGG_COUNT):
+    def __init__(self, row_fields, **kwargs):
         self.row_fields = row_fields
-        self.agg_field = F(agg_field) if isinstance(agg_field, str) else agg_field
-        self.agg_mode = agg_mode
+        agg_field = kwargs.get('agg_field')
+        if agg_field:
+            self.aggregates = {
+                'cell': (PivotTableDefinition._make_field(agg_field),
+                         kwargs.get('agg_mode', PivotTableDefinition.AGG_COUNT))
+            }
+        else:
+            # The aggregates should be explicitly passed to the constructor.
+            self.aggregates = kwargs['aggregates']
 
-    def adapt_query(self, model, query):
+    def adapt_query(self, model_objects, query, inner_pk_field=None, outer_pk_field=None):
         # The query is  used to select the results from which a pivot table will
         # be built. We use it as an inner query and let the db do the
         # aggregation over it.
-        ptq = model.objects.filter(pk__in=Subquery(query.values('pk')))
-        ptq = ptq.values(**{k: F(v) if isinstance(v, str) else v for k, v in self.row_fields.items()})
-        aggregator = self.agg_field
-        if self.agg_mode == PivotTableDefinition.AGG_COUNT:
-            aggregator = Count(aggregator, distinct=True)
-        if self.agg_mode == PivotTableDefinition.AGG_SUM:
-            aggregator = Sum(aggregator)
-        ptq = ptq.annotate(cell=aggregator)
+        ptq = model_objects.filter(**{f"{outer_pk_field or 'pk'}__in": Subquery(query.values(inner_pk_field or 'pk'))})
+        aggregators = {k: PivotTableDefinition._map_agg_fn(v) for k, v in self.aggregates.items()}
+        if len(self.row_fields) > 0:
+            qfields = {k: PivotTableDefinition._make_field(v) for k, v in self.row_fields.items()}
+            ptq = ptq.values(**qfields)
+            # We remove any ordering in the query since it seems that Django
+            # adds the ordering fields to the GROUP BY clause, which can
+            # obviously cause issues.
+            ptq.query.clear_ordering(True)
+            ptq = ptq.annotate(**aggregators)
+        else:
+            ptq = ptq.aggregate(**aggregators)
         return ptq
+    
+    @staticmethod
+    def _map_agg_fn(a):
+        field = PivotTableDefinition._make_field(a[0])
+        if a[1] == PivotTableDefinition.AGG_COUNT:
+            return Count(field, distinct=True)
+        if a[1] == PivotTableDefinition.AGG_SUM:
+            return Sum(field)
+        if a[1] == PivotTableDefinition.AGG_AVG:
+            return Avg(field)
+        if a[1] == PivotTableDefinition.AGG_STD:
+            return StdDev(field)
+        raise Exception(f"Aggregation function '{a[1]}' not supported")
+    
+    @staticmethod
+    def _make_field(f):
+        return F(f) if isinstance(f, str) else f
 
 
 class EnslavedSearch:
@@ -1367,7 +1398,7 @@ class EnslavedSearch:
                 q = q.order_by('enslaved_id')
 
         if self.pivot_table:
-            return self.pivot_table.adapt_query(Enslaved, q)
+            return self.pivot_table.adapt_query(Enslaved.objects, q)
 
         # Save annotations to circumvent Django bug 28811 (see below).
         # https://code.djangoproject.com/ticket/28811
@@ -1514,7 +1545,8 @@ class EnslaverSearch:
                  enslaved_count=None,
                  roles=None,
                  voyage_datasets=None,
-                 order_by=None):
+                 order_by=None,
+                 pivot_table=None):
         """
         Search the Enslaver database. If a parameter is set to None, it will
         not be included in the search.
@@ -1544,6 +1576,9 @@ class EnslaverSearch:
                 'columnName': 'NAME', 'direction': 'ASC or DESC' }.
                 Note that if the search is fuzzy, then the fallback value of
                 order_by is the ranking of the fuzzy search.
+        @param: pivot_table is the specification for the aggregation of data in
+                a pivot table. The search filters will be applied to the Enslaver and
+                then the aggregation will only take place over matches.
         """
         self.searched_name = single_val(searched_name)
         self.exact_name_search = single_val(exact_name_search)
@@ -1558,6 +1593,7 @@ class EnslaverSearch:
         self.roles = roles
         self.voyage_datasets = voyage_datasets
         self.order_by = order_by or [{'columnName': 'pk', 'direction': 'asc'}]
+        self.pivot_table = pivot_table
 
     def execute(self, fields):
         """
@@ -1665,6 +1701,21 @@ class EnslaverSearch:
                 q = q.order_by(*orm_orderby)
             else:
                 q = q.order_by('-cached_properties__enslaved_count')
+
+        if self.pivot_table:
+            # Unlike the EnslavedSearch, here we actually pivot on Voyages
+            # connected to the Enslavers matching the search.
+            # We need several "hops" to get the data we need, as voyages are
+            # linked to aliases, but the search matches against identities,
+            # hence we go Enslaver Identity [matches] => Aliases =>
+            # EnslaverVoyageConnections => Voyages.
+            ptq = EnslaverAlias.objects.filter(identity_id__in=Subquery(q.values('pk')))
+            ptq = EnslaverVoyageConnection.objects \
+                .filter(enslaver_alias_id__in=Subquery(ptq.values('pk')))
+            return self.pivot_table.adapt_query(
+                Voyage.all_dataset_objects,
+                ptq,
+                inner_pk_field='voyage_id')
 
         MultiValueHelper.set_group_concat_limit()
         if is_fuzzy:

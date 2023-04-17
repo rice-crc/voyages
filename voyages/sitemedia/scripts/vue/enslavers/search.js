@@ -23,6 +23,8 @@ var allColumns = [
   // details
   { data: "relations_list", className: "dt-control text-center relations", category: 4, header: gettext("Relations"), isImputed: false, orderable: false, defaultContent: '' },
   { data: "cached_properties__enslaved_count", className: "text-right", category: 4, header: gettext("Number of Captives"), isImputed: false, defaultContent: '' },
+  { data: "cached_properties__first_year", className: "text-right", category: 4, header: gettext("First Year"), isImputed: false, defaultContent: '' }, 
+  { data: "cached_properties__last_year", className: "text-right", category: 4, header: gettext("Last Year"), isImputed: false, defaultContent: '' },
 
   // personal data
   { data: "birth_day", className: "text-right", category: 2, header: gettext("Birth Day"), isImputed: false },

@@ -364,10 +364,6 @@ var searchBar = new Vue({
         currentObjState = currentObjState[levels[i]];
       }
       currentObjState.value = value;
-      var refreshTabs = ["tables", "visualization", "timeline"];
-      if (refreshTabs.indexOf(this.currentTab) >= 0) {
-        this.refresh();
-      }
     },
 
     // go over items and update counts when the inputs are changed
@@ -489,6 +485,7 @@ var searchBar = new Vue({
         this.tabs,
         this.options
       );
+      this.$emit('refresh');
     },
 
     load(value) {
@@ -700,14 +697,12 @@ var readURL = function() {
   var url = window.location.href;
   if (url.includes("#")) {
     var activeTab = url.substring(url.indexOf("#") + 1);
-    var presetTabs = [
-      "results",
-    ];
-
-    if (presetTabs.includes(activeTab)) {
-      $('.nav-tabs a[href="#' + activeTab + '"]').tab("show"); // Activate a Bootstrap 4 tab
-      searchBar.setActive(activeTab);
+    const getTab = () => $('.nav-tabs a[href="#' + activeTab + '"]');
+    if (getTab().length === 0) {
+      activeTab = "results";
     }
+    getTab().tab("show"); // Activate a Bootstrap 4 tab
+    searchBar.setActive(activeTab);
   }
 };
 
