@@ -2,6 +2,7 @@ from __future__ import absolute_import, unicode_literals
 
 import operator
 import threading
+from typing import Iterable
 
 import unidecode
 from builtins import range, str
@@ -368,11 +369,22 @@ class BitsAndFunc(Func):
     template = '(%(expressions)s)'
 
 
+class Lower(Func):
+    function = 'LOWER'
+
+
 class PowerFunc(Func):
     arity = 2
     function = 'POWER'
     arg_joiner = ','
     template = 'POWER(%(expressions)s)'
+
+
+class RemoveNonAlphaChars(Func):
+    arity = 1
+    function = 'REGEXP_REPLACE'
+    arg_joiner = ','
+    template = r"""REGEXP_REPLACE(%(expressions)s, '[^[[:alpha:]]]', '')"""
 
 
 class EnslaverCachedProperties(models.Model):
@@ -388,6 +400,10 @@ class EnslaverCachedProperties(models.Model):
     # The voyage datasets that contain voyages associated with the enslavers. We
     # encode the aggregation as a bitwise OR of the powers of two of dataset values.
     voyage_datasets = models.IntegerField(db_index=True, null=True)
+    # Store lexicographically smallest and largest aliases for each Enslaver.
+    # This can then be used to sort
+    min_alias = models.CharField(blank=True, db_index=True, max_length=255)
+    max_alias = models.CharField(blank=True, db_index=True, max_length=255)
 
     @staticmethod
     def compute(identities=None):
@@ -396,11 +412,12 @@ class EnslaverCachedProperties(models.Model):
         EnslaverCachedProperties table which can be used to search and sort
         enslavers based on aggregated values.
         """
-        def apply_filter(q):
-            return q.filter(**{f"{identity_field}__in": identities}) if identities is not None else q
+        identity_field = 'enslaver_alias__identity__id'
+
+        def apply_filter(q, matching_field=None):
+            return q.filter(**{f"{matching_field or identity_field}__in": identities}) if identities is not None else q
 
         helper = PropHelper()
-        identity_field = 'enslaver_alias__identity__id'
         voyage_year_field = 'voyage__voyage_dates__imp_arrival_at_port_of_dis'
         q_years = EnslaverVoyageConnection.objects \
             .select_related(voyage_year_field) \
@@ -421,6 +438,20 @@ class EnslaverCachedProperties(models.Model):
         for row in q_years:
             helper.set(int(row[0]), 'min_year', get_year(row[1]))
             helper.set(int(row[0]), 'max_year', get_year(row[2]))
+
+        # Process the alias field so that sorting behaves decently even with
+        # some badly formatted entries we currently have (e.g. with question
+        # marks, commas, digits etc)
+        alias_field = RemoveNonAlphaChars(Lower(F('alias')))
+        q_aliases = EnslaverAlias.objects \
+            .values('identity_id') \
+            .annotate(min_alias=Min(alias_field)) \
+            .annotate(max_alias=Max(alias_field)) \
+            .values_list('identity_id', 'min_alias', 'max_alias')
+        q_aliases = apply_filter(q_aliases, 'identity_id')
+        for row in q_aliases:
+            helper.set(int(row[0]), 'min_alias', row[1])
+            helper.set(int(row[0]), 'max_alias', row[2])
 
         q_datasets = EnslaverVoyageConnection.objects \
             .select_related('voyage__dataset') \
@@ -484,10 +515,22 @@ class EnslaverCachedProperties(models.Model):
             props = EnslaverCachedProperties()
             props.identity_id = id
             props.enslaved_count = item.get('enslaved_count', 0)
-            props.roles = ','.join([str(role) for role in item.get('roles', [])])
+            # Note: we leave a comma after each number *on purpose*. This is so
+            # we can search for roles by querying for contains "{role_id},".
+            # Without the comma in the end, we could get false positives for ids
+            # with multiple digits.
+            props.roles = ''.join(sorted(f"{role}," for role in item.get('roles', [])))
             props.transactions_amount = item.get('tot_amount', 0)
             props.first_year = item.get('min_year', None)
             props.last_year = item.get('max_year', None)
+            props.min_alias = item.get('min_alias', '')
+            props.max_alias = item.get('max_alias', '')
+            # Avoid blank entries messing up alias sorting with some hardcoded
+            # balues that should place these last in their respective sorts.
+            if props.min_alias == '':
+                props.min_alias = 'zzzzzzzzzz'
+            if props.max_alias == '':
+                props.max_alias = 'aaaaaaaaaa'
             props.voyage_datasets = item.get('datasets', 0)
             yield props
 
@@ -704,10 +747,7 @@ class Enslaved(models.Model):
     skin_color = models.CharField(max_length=100, null=True, db_index=True)
     language_group = models.ForeignKey(LanguageGroup, null=True,
                                        on_delete=models.CASCADE,
-                                       db_index=True)                             
-    modern_country = models.ForeignKey(ModernCountry, null=True, default=None,
-                                        on_delete=models.CASCADE,
-                                        db_index=True)
+                                       db_index=True)
     register_country = models.ForeignKey(RegisterCountry, null=True,
                                          on_delete=models.CASCADE,
                                         db_index=True)
@@ -770,7 +810,6 @@ class EnslavedContributionLanguageEntry(models.Model):
                                      related_name='contributed_language_groups')
     language_group = models.ForeignKey(LanguageGroup, null=True,
                                        on_delete=models.CASCADE)
-    modern_country = models.ForeignKey(ModernCountry, null=True, default=None, on_delete=models.CASCADE)
     order = models.IntegerField()
 
 
@@ -839,9 +878,52 @@ class EnslaverInRelation(models.Model):
     role = models.ForeignKey(EnslaverRole, null=False, on_delete=models.CASCADE, help_text="The role of the enslaver in this relation")
 
 
+class EnslavementBipartiteGraph:
+    """
+    A cache of the bipartite graph connecting enslaved to its enslavers.
+    """
+    _enslaved_to_enslavers: "dict[int, set[int]]" = dict()
+    _enslavers_principal_alias: "dict[int, str]" = dict()
+    _lock = threading.Lock()
+    _init = False
+
+    @classmethod
+    def load(cls, force_reload=False):
+        with cls._lock:
+            if force_reload or not cls._init:
+                enslaved_to_rel = {}
+                relation_ids = set()
+                q_enslaved = EnslavedInRelation.objects.values_list('relation_id', 'enslaved_id')
+                for rel_id, enslaved_id in q_enslaved:
+                    relation_ids.add(rel_id) ; enslaved_to_rel.setdefault(enslaved_id, set()).add(rel_id)
+
+                enslavers_by_rel = {}
+                q_enslavers = EnslaverInRelation.objects.select_related('enslaver_alias__identity_id').values_list('relation_id', 'enslaver_alias__identity_id')
+                for rel_id, enslaver_id in q_enslavers:
+                    if rel_id in relation_ids: enslavers_by_rel.setdefault(rel_id, set()).add(enslaver_id)
+
+                bipartite = {}
+                for enslaved_id, relations in enslaved_to_rel.items():
+                    bipartite[enslaved_id] = set(enslaver_id for rel_id in relations for enslaver_id in enslavers_by_rel.get(rel_id, []))
+                cls._enslaved_to_enslavers = bipartite
+                cls._enslavers_principal_alias = {int(x[0]): x[1] for x in EnslaverIdentity.objects.values_list('id', 'principal_alias')}
+                cls._init = True
+                return bipartite
+
+    @classmethod
+    def get_top_enslavers(cls, enslaved_ids: "Iterable[int]", n = 5):
+        counts : "dict[int, int]" = {}
+        for enslaved_id in enslaved_ids:
+            for enslaver_id in cls._enslaved_to_enslavers.get(enslaved_id, []):
+                counts[enslaver_id] = counts.get(enslaver_id, 0) + 1
+        return [(item[0], cls._enslavers_principal_alias.get(item[0]), item[1]) 
+                for item in sorted(counts.items(), key=lambda x: -x[1])[:n]]
+
+
 _special_empty_string_fields = {
     'voyage__voyage_ship__ship_name': 1,
-    'voyage__voyage_dates__first_dis_of_slaves': '2'
+    'voyage__voyage_dates__first_dis_of_slaves': '2',
+    'notes': 1
 }
 
 _name_fields = ['documented_name', 'name_first', 'name_second', 'name_third']
@@ -969,6 +1051,38 @@ def _year_range_conv(range):
     """
     return [',,' + str(y) for y in range]
 
+def single_val(source):
+    try:
+        if isinstance(source, list):
+            source = source[0]
+    except:
+        pass
+    return source
+
+
+class PivotTableDefinition:
+    AGG_COUNT = 'COUNT'
+    AGG_SUM = 'SUM'
+
+    def __init__(self, row_fields, agg_field, agg_mode=AGG_COUNT):
+        self.row_fields = row_fields
+        self.agg_field = F(agg_field) if isinstance(agg_field, str) else agg_field
+        self.agg_mode = agg_mode
+
+    def adapt_query(self, model, query):
+        # The query is  used to select the results from which a pivot table will
+        # be built. We use it as an inner query and let the db do the
+        # aggregation over it.
+        ptq = model.objects.filter(pk__in=Subquery(query.values('pk')))
+        ptq = ptq.values(**{k: F(v) if isinstance(v, str) else v for k, v in self.row_fields.items()})
+        aggregator = self.agg_field
+        if self.agg_mode == PivotTableDefinition.AGG_COUNT:
+            aggregator = Count(aggregator, distinct=True)
+        if self.agg_mode == PivotTableDefinition.AGG_SUM:
+            aggregator = Sum(aggregator)
+        ptq = ptq.annotate(cell=aggregator)
+        return ptq
+
 
 class EnslavedSearch:
     """
@@ -1013,19 +1127,19 @@ class EnslavedSearch:
                  order_by=None,
                  voyage_dataset=None,
                  skin_color=None,
-                 vessel_fate=None):
+                 vessel_fate=None,
+                 pivot_table=None):
         """
-        Search the Enslaved database. If a parameter is set to None, it will
-        not be included in the search.
-        @param: enslaved_dataset The enslaved dataset to be searched
+        Search the Enslaved database. If a parameter is set to None, it will not
+        be included in the search. @param: enslaved_dataset The enslaved dataset
+        to be searched
                 (either None to search all or an integer code).
-        @param: searched_name A name string to be searched
-        @param: exact_name_search Boolean indicating whether the search is
+        @param: searched_name A name string to be searched @param:
+        exact_name_search Boolean indicating whether the search is
                 exact or fuzzy
-        @param: gender The gender ('male' or 'female').
-        @param: age_range A pair (a, b) where a is the min and b is maximum age
-        @param: voyage_dataset A list of voyage datasets that restrict the search.
-        @param: height_range A pair (a, b) where a is the min and b is maximum
+        @param: gender The gender ('male' or 'female'). @param: age_range A pair
+        (a, b) where a is the min and b is maximum age @param: height_range A
+        pair (a, b) where a is the min and b is maximum
                 height
         @param: year_range A pair (a, b) where a is the min voyage year and b
                 the max
@@ -1036,22 +1150,27 @@ class EnslavedSearch:
         @param: post_disembark_location A list of place ids where the enslaved
                 was located after disembarkation
         @param: language_groups A list of language groups ids for the enslaved
-        @param: ship_name The ship name that the enslaved embarked
-        @param: voyage_id A pair (a, b) where the a <= voyage_id <= b
-        @param: enslaved_id A pair (a, b) where the a <= enslaved_id <= b
-        @param: source A text fragment that should match Source's text_ref or
+        @param: ship_name The ship name that the enslaved embarked @param:
+        voyage_id A pair (a, b) where the a <= voyage_id <= b @param:
+        enslaved_id A pair (a, b) where the a <= enslaved_id <= b @param: source
+        A text fragment that should match Source's text_ref or
                 full_ref
         @param: order_by An array of dicts {
-                'columnName': 'NAME', 'direction': 'ASC or DESC' }.
-                Note that if the search is fuzzy, then the fallback value of
-                order_by is the ranking of the fuzzy search.
-        @param: skin_color a textual description for skin color (Racial Descriptor)
-        @param: vessel_fate a list of fates for the associated voyage vessel.
+                'columnName': 'NAME', 'direction': 'ASC or DESC' }. Note that if
+                the search is fuzzy, then the fallback value of order_by is the
+                ranking of the fuzzy search.
+        @param: voyage_dataset A list of voyage datasets that restrict the
+        search. @param: skin_color a textual description for skin color (Racial
+        Descriptor) @param: vessel_fate a list of fates for the associated
+        voyage vessel.
+        @param: pivot_table is the specification for the aggregation of data in
+        a pivot table. The search filters will be applied to the Enslaved and
+        then the aggregation will only take place over matches.
         """
-        self.enslaved_dataset = enslaved_dataset
-        self.searched_name = searched_name
-        self.exact_name_search = exact_name_search
-        self.gender = gender
+        self.enslaved_dataset = single_val(enslaved_dataset)
+        self.searched_name = single_val(searched_name)
+        self.exact_name_search = single_val(exact_name_search)
+        self.gender = single_val(gender)
         self.age_range = age_range
         self.height_range = height_range
         self.year_range = year_range
@@ -1059,14 +1178,16 @@ class EnslavedSearch:
         self.disembarkation_ports = disembarkation_ports
         self.post_disembark_location = post_disembark_location
         self.language_groups = language_groups
-        self.ship_name = ship_name
+        self.ship_name = single_val(ship_name)
         self.voyage_id = voyage_id
         self.enslaved_id = enslaved_id
-        self.source = source
+        self.source = single_val(source)
         self.order_by = order_by or [{'columnName': 'pk', 'direction': 'asc'}]
         self.voyage_dataset = voyage_dataset
-        self.skin_color = skin_color
+        self.skin_color = single_val(skin_color)
         self.vessel_fate = vessel_fate
+        self.pivot_table = pivot_table
+
 
     def get_order_for_field(self, field):
         if isinstance(self.order_by, list):
@@ -1247,6 +1368,9 @@ class EnslavedSearch:
             else:
                 q = q.order_by('enslaved_id')
 
+        if self.pivot_table:
+            return self.pivot_table.adapt_query(Enslaved, q)
+
         # Save annotations to circumvent Django bug 28811 (see below).
         # https://code.djangoproject.com/ticket/28811
         aux_annotations = q.query.annotation_select.copy()
@@ -1390,6 +1514,7 @@ class EnslaverSearch:
                  voyage_id=None,
                  source=None,
                  enslaved_count=None,
+                 roles=None,
                  voyage_datasets=None,
                  order_by=None):
         """
@@ -1413,21 +1538,26 @@ class EnslaverSearch:
                 full_ref
         @param: enslaved_count A pair (a, b) such that the enslaver has an
                 associated enslaved count between a and b.
+        @param: roles a list of role pks that should be matched (an enslaver may
+                appear in multiple roles).
+        @param: a list of Voyage datasets that should be used to match voyages 
+                connected to the enslaver.
         @param: order_by An array of dicts {
                 'columnName': 'NAME', 'direction': 'ASC or DESC' }.
                 Note that if the search is fuzzy, then the fallback value of
                 order_by is the ranking of the fuzzy search.
         """
-        self.searched_name = searched_name
-        self.exact_name_search = exact_name_search
+        self.searched_name = single_val(searched_name)
+        self.exact_name_search = single_val(exact_name_search)
         self.year_range = year_range
         self.embarkation_ports = embarkation_ports
         self.disembarkation_ports = disembarkation_ports
         self.departure_ports = departure_ports
-        self.ship_name = ship_name
+        self.ship_name = single_val(ship_name)
         self.voyage_id = voyage_id
-        self.source = source
+        self.source = single_val(source)
         self.enslaved_count = enslaved_count
+        self.roles = roles
         self.voyage_datasets = voyage_datasets
         self.order_by = order_by or [{'columnName': 'pk', 'direction': 'asc'}]
 
@@ -1487,6 +1617,12 @@ class EnslaverSearch:
             q = add_voyage_field(q, 'voyage_dates__imp_arrival_at_port_of_dis', 'range', _year_range_conv(self.year_range))
         if self.enslaved_count:
             q = q.filter(cached_properties__enslaved_count__range=self.enslaved_count)
+        if self.roles:
+            terms = None
+            for pk in self.roles:
+                term = Q(cached_properties__roles__contains=f"{pk},")
+                terms = (term | terms) if terms else term
+            q = q.filter(terms)
         if self.voyage_datasets is not None:
             bitvec = 0
             for x in self.voyage_datasets:
@@ -1516,6 +1652,9 @@ class EnslaverSearch:
                     orm_orderby = []
                     break
                 is_desc = x['direction'].lower() == 'desc'
+                if col_name == 'alias_list':
+                    orm_orderby.append(f"{'-' if is_desc else ''}cached_properties__{'max' if is_desc else 'min'}_alias")
+                    continue
                 order_field = F(col_name)
                 if is_desc:
                     order_field = order_field.desc(nulls_last=True)

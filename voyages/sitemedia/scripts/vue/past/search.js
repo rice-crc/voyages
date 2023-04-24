@@ -43,15 +43,16 @@ var allColumns = [
     { data: "voyage__voyage_itinerary__int_first_port_dis__place", category: 2, header: gettext("Intended Disembarkation Port"), isImputed: false },
 
     //fate
-    { data: "captive_fate__name", category: 3, header: gettext("Captive Fate"), isImputed: false },
-    { data: "post_disembark_location__place", category: 3, header: gettext("Post Disembarkation Location"), isImputed: false },
-    { data: "voyage__voyage_name_outcome__vessel_captured_outcome__label", category: 3, header: gettext("Vessel Fate"), isImputed: false },
+    { data: "captive_fate__name", category: 4, header: gettext("Captive Fate"), isImputed: false },
+    { data: "post_disembark_location__place", category: 4, header: gettext("Post Disembarkation Location"), isImputed: false },
+    { data: "voyage__voyage_name_outcome__vessel_captured_outcome__label", category: 4, header: gettext("Vessel Fate"), isImputed: false },
 
     // sources
-    { data: "sources_list", category: 4, header: gettext("Sources"), isImputed: false, visible: false, orderable: false },
+    { data: "sources_list", category: 5, header: gettext("Sources"), isImputed: false, visible: false, orderable: false },
+    { data: "notes", category: 5, header: gettext("Notes"), isImputed: false, visible: false, orderable: true },
 
-    { data: "recordings", category: 5, header: '<i class="fa fa-volume-up" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></i>', isImputed: false, isAudible: true, orderable: false },
-    { data: "enslaved_id", category: 5, header: gettext("Contribute"), isImputed: false, isContribute: true, orderable: false  },
+    { data: "recordings", category: 6, header: '<i class="fa fa-volume-up" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></i>', isImputed: false, isAudible: true, orderable: false },
+    { data: "enslaved_id", category: 6, header: gettext("Contribute"), isImputed: false, isContribute: true, orderable: false  },
   ],
   [
     // Identity
@@ -80,6 +81,7 @@ var allColumns = [
 
     // sources
     { data: "sources_list", category: 4, header: gettext("Sources"), isImputed: false, visible: false, orderable: false },
+    { data: "notes", category: 4, header: gettext("Notes"), isImputed: false, visible: false, orderable: true }
   ]
 ];
 

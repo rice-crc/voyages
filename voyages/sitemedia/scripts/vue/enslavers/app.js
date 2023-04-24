@@ -17,6 +17,7 @@ var searchBar = new Vue({
       enslaverName: enslaverName,
       // identity: identity,
       // personalData: personalData,
+      enslaver_details: enslaver_details,
       itinerary: itinerary,
       places: places,
       // culturalAssociation: culturalAssociation,
@@ -44,15 +45,6 @@ var searchBar = new Vue({
           label: gettext("Neither")
         }]
       }
-    },
-    enslaverRoles: {
-      1: "Captain",
-      2: "Investor",
-      3: "Buyer",
-      4: "Seller",
-      5: "Owner",
-      6: "Shipper",
-      7: "Consignor",
     },
     activated: false,
     saved: [],
@@ -512,9 +504,9 @@ var searchBar = new Vue({
             query = JSON.parse(response.data.items);
           }
 
-          var mappedVarNames = $.map(query, function(value, varName) {
-            return 'var_' + varName;
-          });
+          var mappedVarNames = query.map(
+            variable => 'var_' + variable.varName
+          );
 
           vm.clearFilter(vm.filter);
 
@@ -525,26 +517,34 @@ var searchBar = new Vue({
                 for (varName in vm.filter[group][subGroup]) {
                   if (mappedVarNames.includes(varName)) {
                     var varNameMapping = varName.replace('var_', '');
-                    var variable = query[varNameMapping];
+                    var variable = query.find(obj => {
+                      return ('var_' + obj.varName) == varName;
+                    });
 
                     vm.filter[group][subGroup][varName].activated = true;
                     vm.filter[group][subGroup][varName].changed = true;
+                    vm.filter[group][subGroup][varName].value.op =
+                      variable.op == "equals" ? "is equal to" : variable.op;
 
                     if (vm.filter[group][subGroup][varName] instanceof PlaceVariable ||
                       vm.filter[group][subGroup][varName] instanceof LanguageGroupVariable ||
                       vm.filter[group][subGroup][varName] instanceof TreeselectVariable)
                     {
-                      vm.filter[group][subGroup][varName].value.searchTerm = variable;
+                      vm.filter[group][subGroup][varName].value.searchTerm = variable.searchTerm;
                     }
                     else if (vm.filter[group][subGroup][varName] instanceof PercentageVariable ||
-                      Array.isArray(variable))
+                      Array.isArray(variable.searchTerm))
                     {
-                      vm.filter[group][subGroup][varName].value.searchTerm0 = variable[0];
-                      vm.filter[group][subGroup][varName].value.searchTerm1 = variable[1];
+                      vm.filter[group][subGroup][varName].value.searchTerm0 = variable.searchTerm[0];
+                      vm.filter[group][subGroup][varName].value.searchTerm1 = variable.searchTerm[1];
                     }
                     else
                     {
-                      vm.filter[group][subGroup][varName].value.searchTerm = variable;
+                      vm.filter[group][subGroup][varName].value.searchTerm = variable.searchTerm;
+                    }
+
+                    if (vm.filter[group][subGroup][varName].value.op == 'is at most') {
+                      vm.filter[group][subGroup][varName].value.searchTerm0 = variable.searchTerm[1];
                     }
                   }
                 }
@@ -573,7 +573,7 @@ var searchBar = new Vue({
       var vm = this;
       axios
         .post("/voyage/save-query", {
-          items: items
+          items: serializeFilter(items)
         })
         .then(function(response) {
           var exists = false;

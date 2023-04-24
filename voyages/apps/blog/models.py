@@ -44,6 +44,9 @@ class Author(models.Model):
 class Tag(models.Model):
     name = models.CharField(max_length=200,unique=True)
     slug = models.SlugField(max_length=200, unique=True)
+
+    intro = models.TextField(blank=True)
+
     class Meta:
         ordering = ['name']
     

@@ -1,8 +1,9 @@
 var categoryNames = [
   gettext("Name"),
-  gettext("Itinerary"),
+  gettext("Voyages"),
   gettext("Personal Data"),
-  gettext("Biographical Sources")
+  gettext("Biographical Sources"),
+  gettext("Enslaver Details")
 ];
 
 function bioSourceHeader() {
@@ -13,13 +14,15 @@ const contributeCol = { data: "id", header: "", name: "contribute", className: "
 
 var allColumns = [
   // name
-  { data: "alias_list", category: 0, header: gettext("Full Name"), isImputed: false, orderable: false },
+  { data: "alias_list", category: 0, header: gettext("Full Name"), isImputed: false, orderable: true },
   { data: "ranking", category: 0, header: gettext("Search Ranking"), isImputed: false, isUserSearchBased: true, visible: false },
   
   // voyages
   { data: "voyages_list", className: "dt-control text-center voyages", category: 1, header: gettext("Voyages"), isImputed: false, orderable: false, defaultContent: '' },
-  { data: "relations_list", className: "dt-control text-center relations", category: 1, header: gettext("Relations"), isImputed: false, orderable: false, defaultContent: '' },
-  { data: "cached_properties__enslaved_count", className: "text-right", category: 1, header: gettext("Number of Captives"), isImputed: false, defaultContent: '' },
+  
+  // details
+  { data: "relations_list", className: "dt-control text-center relations", category: 4, header: gettext("Relations"), isImputed: false, orderable: false, defaultContent: '' },
+  { data: "cached_properties__enslaved_count", className: "text-right", category: 4, header: gettext("Number of Captives"), isImputed: false, defaultContent: '' },
 
   // personal data
   { data: "birth_day", className: "text-right", category: 2, header: gettext("Birth Day"), isImputed: false },

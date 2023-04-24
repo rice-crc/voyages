@@ -1,6 +1,7 @@
 from django.contrib import admin
 
-from voyages.apps.voyage.forms import extract
+from django import forms
+from django.db import models
 
 from .models import LanguageGroup, AltLanguageGroupName, ModernCountry, RegisterCountry, CaptiveFate, CaptiveStatus
 
@@ -17,8 +18,13 @@ class AltLanguageGroupNameInline(admin.TabularInline):
 class LanguageGroupForm(NamedModelFormAbstractBase):
     inlines = (AltLanguageGroupNameInline,)
 
+class ModernCountryForm(NamedModelFormAbstractBase):
+    formfield_overrides = {
+        models.ManyToManyField: {'widget': forms.CheckboxSelectMultiple},
+    }
+
 admin.site.register(LanguageGroup, LanguageGroupForm)
-admin.site.register(ModernCountry, NamedModelFormAbstractBase)
+admin.site.register(ModernCountry, ModernCountryForm)
 admin.site.register(RegisterCountry, NamedModelFormAbstractBase)
 admin.site.register(CaptiveFate, NamedModelFormAbstractBase)
 admin.site.register(CaptiveStatus, NamedModelFormAbstractBase)

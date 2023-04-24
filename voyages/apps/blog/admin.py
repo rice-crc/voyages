@@ -8,6 +8,8 @@ from django.conf.urls import url
 
 from django.template.response import TemplateResponse
 
+from voyages.extratools import AdvancedEditor
+
 from .models import Post
 from .models import Tag
 from .models import Institution
@@ -225,8 +227,23 @@ class PostAdmin(admin.ModelAdmin):
     actions = [make_published,make_draft,translate_to_new_languages,force_translation]
 
 
+class TagAdminForm(forms.ModelForm):
+    """
+    Form for editing HTML for FAQ answer
+    """
+    intro = forms.CharField(widget=AdvancedEditor(
+        attrs={'class': 'tinymcetextarea'}))
+
+    class Meta:
+        fields = '__all__'
+        model = Tag
+
 class TagAdmin(admin.ModelAdmin):
     prepopulated_fields = {'slug':('name',)}
+
+    form = TagAdminForm
+
+    
 
 class InstitutionAdmin(admin.ModelAdmin):
     prepopulated_fields = {'slug':('name',)}

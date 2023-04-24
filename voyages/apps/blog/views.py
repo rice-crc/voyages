@@ -6,24 +6,30 @@ from .models import Institution
 from django import template
 register = template.Library()
 
-class PostList(generic.ListView):    
+class PostList(generic.ListView):
     template_name = 'blog/index.html'
-    paginate_by = 10
+    paginate_by = 12
+
+    base_query = Post.objects.select_related()
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title_override'] = self.kwargs.get('title_override')
+        tag_slug = self.kwargs.get('tag')
+        if tag_slug:
+            tag = Tag.objects.get(slug=tag_slug)
+            if tag and tag.intro:
+                context['intro'] = tag.intro
         return context
 	
     def get_queryset(self):
         lang_code = self.request.LANGUAGE_CODE or "en"
-
+        q = self.__class__.base_query
         if self.request.resolver_match.url_name == 'news':
-            return Post.objects.filter(status=PUBLISH_STATUS, language=lang_code, tags__slug__in=['news']).order_by('-created_on').order_by('-created_on')
-        elif self.kwargs.get('tag') is None:
-            return Post.objects.filter(status=PUBLISH_STATUS, language=lang_code).order_by('-created_on').exclude(tags__in = Tag.objects.filter(slug__in = ['author-profile','institution-profile']) )
-            
-        return Post.objects.filter(status=PUBLISH_STATUS, language=lang_code, tags__slug__in=[self.kwargs['tag']]).order_by('-created_on')
+            return q.filter(status=PUBLISH_STATUS, language=lang_code, tags__slug__in=['news']).order_by('-created_on').order_by('-created_on')
+        if self.kwargs.get('tag') is None:
+            return q.filter(status=PUBLISH_STATUS, language=lang_code).order_by('-created_on').exclude(tags__in = Tag.objects.filter(slug__in = ['author-profile','institution-profile']) )
+        return q.filter(status=PUBLISH_STATUS, language=lang_code, tags__slug__in=[self.kwargs['tag']]).order_by('-created_on')
 
 
 
@@ -118,7 +124,7 @@ class InstitutionDetail(generic.DetailView):
 
 class AuthorList(generic.ListView):    
     template_name = 'blog/authors.html'
-    paginate_by = 10
+    paginate_by = 12
 
     def get_queryset(self):
         return Author.objects.order_by('name')
@@ -126,7 +132,7 @@ class AuthorList(generic.ListView):
 
 class InstitutionList(generic.ListView):    
     template_name = 'blog/institutions.html'
-    paginate_by = 10
+    paginate_by = 12
 
     def get_queryset(self):
         return Institution.objects.order_by('name')
