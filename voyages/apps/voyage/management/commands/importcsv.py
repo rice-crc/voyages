@@ -5,6 +5,7 @@ from builtins import input, next, str
 from django.core.management.base import BaseCommand
 from django.db import connection
 from django.db import transaction
+from django.db.models import F
 from django.utils.encoding import smart_str
 from voyages.apps.contribute.publication import CARGO_COLUMN_COUNT
 
@@ -40,14 +41,21 @@ def _migrate_enslavers_from_legacy():
     from unidecode import unidecode
 
     def clean_name(name):
-        # Remove diacritics to increase the number of positive matches.
-        name = unidecode(name)
+        # Remove diacritics to increase the number of positive matches and put
+        # everything in lower case.
+        name = unidecode(name).lower()
         # Remove anything that is not a letter or space
         return re.sub(r'[^\w]', '', name)
 
     alias_to_identities = {} # Maps an alias (name) to the set of all identity ids
     identities_to_aliases = {} # Maps an identity id to all its aliases.
     connections = {} # Map an identity with all the voyages connected to one of its aliases.
+    conn_fake_pk = 0
+    voyage_data = {v['pk']: v for v in Voyage.all_dataset_objects \
+                   .values('pk',
+                           year=F('voyage_dates__imp_arrival_at_port_of_dis'),
+                           ship_name=F('voyage_ship__ship_name'),
+                           disembark=F('voyage_itinerary__imp_principal_port_slave_dis__region_id'))}
     for alias in EnslaverAlias.objects.all():
         name = clean_name(alias.alias)
         alias_to_identities.setdefault(name, set()).add(alias.identity_id)
@@ -56,14 +64,24 @@ def _migrate_enslavers_from_legacy():
     for conn in EnslaverVoyageConnection.objects.select_related().all():
         connections.setdefault(conn.enslaver_alias.identity_id, set()).add((conn.voyage_id, conn.role_id, conn.pk))
 
+    non_natural_person_name_inc = ['company', 'compania', 'companhia', 'compagnie']
+    def is_natural_person(name):
+        for co_name in non_natural_person_name_inc:
+            if co_name in name:
+                return False
+        return True
+
     def get_actions(name_and_voyages, role_ids):
+        nonlocal conn_fake_pk
         migration_actions = []
         for name, voyage_id in name_and_voyages:
             decodedname = clean_name(name)
+            natural_person = is_natural_person(decodedname)
             matches = alias_to_identities.get(decodedname)
             item = {
                 'voyage_id': voyage_id,
                 'name': name,
+                'decodedname': decodedname,
                 'reason': '',
                 'steps': []
             }
@@ -72,24 +90,13 @@ def _migrate_enslavers_from_legacy():
                 good_match = None
                 for identity_id in matches:
                     matching_with_voyage = [x for x in connections.get(identity_id, set()) if x[0] == voyage_id]
-                    exact_role = any(x[1] == x[0] for x in matching_with_voyage)
-                    if exact_role or any(x[1] in role_ids for x in matching_with_voyage):
+                    exact_role = any(x[1] in role_ids for x in matching_with_voyage)
+                    if exact_role:
                         # Happy path! The appropriate voyage connection already
                         # exists for one of the identities with the given alias.
                         found = True
                         item['category'] = 1
                         item['reason'] = 'Exact match for voyage, enslaver alias, and role in ' + EnslaverVoyageConnection.__name__
-                        if not exact_role:
-                            # Due to "composite" owner_captain roles, here we
-                            # propose the specific role instead.
-                            item['steps'].append({
-                                'type': EnslaverVoyageConnection.__name__,
-                                'mode': 'update',
-                                'pk': matching_with_voyage[0][2],
-                                'values': {
-                                    'role_id': role_ids[0]
-                                }
-                            })
                         break
                     if matching_with_voyage:
                         # A connection to the voyage already exists for this
@@ -98,6 +105,38 @@ def _migrate_enslavers_from_legacy():
                         # is assumed to be the proper identity for the
                         # connection.
                         good_match = identity_id
+                def get_voyage_year(v):
+                    try:
+                        return int(v['year'].replace(',', ''))
+                    except:
+                        return None
+                if not found and len(matches) > 1 and not good_match:
+                    # Our last chance to figure out a good match. We will use
+                    # voyage associated to a candidate identity to match a year
+                    # range and either ship name or disembarkation region.
+                    current_voyage_data = voyage_data[voyage_id]
+                    current_voyage_year = get_voyage_year(current_voyage_data)
+                    if current_voyage_year:
+                        MAX_YEAR_DIFF = 20
+                        for iid in matches:
+                            cluster = [voyage_data[vid] for (vid, _, _) in connections[iid]]
+                            if natural_person:
+                                # Only apply year heuristic if this is a natural
+                                # person.
+                                years = [y for y in [get_voyage_year(v) for v in cluster] if y]
+                                if len(years) == 0:
+                                    continue
+                                max_year = max(years)
+                                min_year = min(years)
+                                if current_voyage_year < min(min_year, max_year - MAX_YEAR_DIFF) or \
+                                        current_voyage_year > max(max_year, min(years) + MAX_YEAR_DIFF):
+                                    continue
+                            for field in ['ship_name', 'disembark']:
+                                if current_voyage_data[field] in [v[field] for v in cluster]:
+                                    good_match = iid
+                                    break
+                            if good_match:
+                                break
                 if not found:
                     if len(matches) == 1 or good_match:
                         # OK path
@@ -110,11 +149,10 @@ def _migrate_enslavers_from_legacy():
                                 break
                         if not match_alias_id:
                             raise Exception(f"Expected to find matching alias id: {identities_to_aliases[match_enslaver_id]} for '{decodedname}'")
-                        item['reason'] = 'Found a single matching identity with the alias'
-                        conn_fake_pk = -1 - len(connections)
+                        item['reason'] = 'Found a single or "good" matching identity with the alias'
+                        conn_fake_pk -= 1
                         item['steps'].append({
                             'type': EnslaverVoyageConnection.__name__,
-                            'mode': 'insert',
                             'pk_ref': conn_fake_pk,
                             'values': {
                                 'enslaver_alias_id': match_alias_id,
@@ -128,9 +166,9 @@ def _migrate_enslavers_from_legacy():
                         found = True
                         item['category'] = 2
                     else:
-                        # Not so good path.
-                        # There are multiple identities maching this name so we
-                        # cannot determine for sure which is the right one.
+                        # Not so good path. There are multiple identities
+                        # maching this name and we could not determine for sure
+                        # which is the right one.
                         item['category'] = 3
                         item['reason'] = 'Multiple identities containing the same alias'
             else:
@@ -139,26 +177,24 @@ def _migrate_enslavers_from_legacy():
             if not found:
                 item['steps'].append({
                     'type': EnslaverIdentity.__name__,
-                    'mode': 'insert',
                     'values': {
                         'principal_alias': name
                     }
                 })
+                next_id = -len(identities_to_aliases)
                 item['steps'].append({
                     'type': EnslaverAlias.__name__,
-                    'mode': 'insert',
+                    'pk_ref': next_id,
                     'values': {
                         'alias': name
                     }
                 })
-                next_id = -len(identities_to_aliases)
                 alias_to_identities.setdefault(decodedname, set()).add(next_id)
                 identities_to_aliases[next_id] = [(decodedname, next_id)]
-                conn_fake_pk = -1 - len(connections)
+                conn_fake_pk -= 1
                 connections[next_id] = {(voyage_id, role_ids[0], conn_fake_pk)}
                 item['steps'].append({
                     'type': EnslaverVoyageConnection.__name__,
-                    'mode': 'insert',
                     'pk_ref': conn_fake_pk,
                     'values': {
                         'enslaver_alias_id': next_id,
@@ -183,11 +219,65 @@ def _migrate_enslavers_from_legacy():
     # Usage in django shell
     # from voyages.apps.voyage.management.commands import importcsv
     # actions = importcsv._migrate_enslavers_from_legacy()
-    # for a in actual:
+    # by_reason = {}
+    # for a in actions:
     #     by_reason.setdefault(a['reason'], []).append(a)
     # [(k, len(v)) for k, v in by_reason.items()]
     return actions
 
+
+def _execute_migration_actions(actions, start_pk=None):
+    from django.conf import settings
+    if settings.VOYAGE_ENSLAVERS_MIGRATION_STAGE <= 1:
+        # Not really necessary but it is convenient to reference the stage
+        # settings variable so that we can later remove dead code paths once the
+        # migration is finalized.
+        return []    
+    from voyages.apps.past.models import EnslaverAlias, EnslaverIdentity, EnslaverVoyageConnection
+    
+    def copy_values(source, target):
+        for k, v in source.items():
+            setattr(target, k, v)
+
+    next_enslaver_identity_pk = start_pk
+    next_enslaver_alias_pk = start_pk
+    alias_pk_ref = {}
+    with transaction.atomic():
+        for item in actions:
+            enslaver_identity_inserted_id = None
+            enslaver_alias_inserted_id = None
+            for step in item['steps']:
+                if step['type'] == EnslaverIdentity.__name__:
+                    eid = EnslaverIdentity()
+                    copy_values(step['values'], eid)
+                    if next_enslaver_identity_pk:
+                        eid.pk = next_enslaver_identity_pk
+                        next_enslaver_identity_pk += 1
+                    eid.save()
+                    enslaver_identity_inserted_id = eid.pk
+                elif step['type'] == EnslaverAlias.__name__:
+                    # We need the identity inserted first.
+                    if enslaver_identity_inserted_id is None:
+                        raise Exception("Unexpected step mode")
+                    ealias = EnslaverAlias()
+                    copy_values(step['values'], ealias)
+                    ealias.identity_id = enslaver_identity_inserted_id
+                    if next_enslaver_alias_pk:
+                        ealias.pk = next_enslaver_alias_pk
+                        next_enslaver_alias_pk += 1
+                    ealias.save()
+                    enslaver_alias_inserted_id = ealias.pk
+                    alias_pk_ref[step['pk_ref']] = ealias.pk
+                elif step['type'] == EnslaverVoyageConnection.__name__:
+                    conn = EnslaverVoyageConnection()
+                    copy_values(step['values'], conn)
+                    if enslaver_alias_inserted_id:
+                        conn.enslaver_alias_id = enslaver_alias_inserted_id
+                    elif conn.enslaver_alias_id < 0:
+                        conn.enslaver_alias_id = alias_pk_ref[conn.enslaver_alias_id]
+                    conn.save()
+                else:
+                    raise Exception('Unexpected model type')
 
 class Command(BaseCommand):
     help = ('Imports a CSV file with the full Voyages dataset and converts the data '

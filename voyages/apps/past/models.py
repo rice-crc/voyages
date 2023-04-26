@@ -605,15 +605,16 @@ class VoyageCaptainOwnerHelper:
     A simple helper class to fetch enslavers associated with a voyage based on
     their role.
     """
-
-    _captain_through_table = Voyage.voyage_captain.through._meta.db_table
-    _owner_through_table = Voyage.voyage_ship_owner.through._meta.db_table
+    if settings.VOYAGE_ENSLAVERS_MIGRATION_STAGE <= 2:
+        _captain_through_table = Voyage.voyage_captain.through._meta.db_table
+        _owner_through_table = Voyage.voyage_ship_owner.through._meta.db_table
 
     def __init__(self):
+        filter_type = 'icontains' if settings.VOYAGE_ENSLAVERS_MIGRATION_STAGE <= 2 else 'iexact'
         self.owner_role_ids = list( \
-            EnslaverRole.objects.filter(name__icontains='owner').order_by('id').values_list('pk', flat=True))
+            EnslaverRole.objects.filter(**{f"name__{filter_type}": 'owner'}).order_by('id').values_list('pk', flat=True))
         self.captain_role_ids = list( \
-            EnslaverRole.objects.filter(name__icontains='captain').order_by('id').values_list('pk', flat=True))
+            EnslaverRole.objects.filter(**{f"name__{filter_type}": 'captain'}).order_by('id').values_list('pk', flat=True))
 
 
     class UniqueHelper:
@@ -661,7 +662,7 @@ class VoyageCaptainOwnerHelper:
     def get_all_with_roles(voyage, roles):
         for ens in voyage.enslavers:
             if ens.role_id in roles:
-                yield ens.enslaver_alias.alias
+                yield f"{ens.enslaver_alias.alias} [{ens.enslaver_alias.identity_id}]"
 
 
 class LanguageGroup(NamedModelAbstractBase):

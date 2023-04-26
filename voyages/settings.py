@@ -255,7 +255,7 @@ def is_feature_enabled(feature_name):
 # 4 - After enough testing on stage 3, the legacy tables will be removed from
 # the db.
 
-VOYAGE_ENSLAVERS_MIGRATION_STAGE = 2
+VOYAGE_ENSLAVERS_MIGRATION_STAGE = 3
 
 
 # Modify HAYSTACK config for fixture loading durring tests
