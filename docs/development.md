@@ -96,7 +96,13 @@ Build and run the containers necessary to work on the project.
 For details, see `docker-compose.yml`.
 
 ```bash
+# Without Apple Silicon
 host:~/Projects/voyages$ docker-compose up -d --build
+
+# With Apple Silicon
+#
+# Go to Docker Desktop settings > Features in Development > Enable "Use Rosetta" > Click "Apply & Restart"
+host:~/Projects/voyages$ docker-compose -f docker-compose-as.yml up -d --build
 ```
 
 Create the database. Note: append a suffix for the branch (e.g.
