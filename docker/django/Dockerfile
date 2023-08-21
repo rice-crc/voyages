@@ -1,20 +1,20 @@
 ###
-### Ubuntu 1804 with default Python 3.6
+### Ubuntu 20.04 with default Python 3.6
 ###
 
 # -- Base --
 
-FROM ubuntu:18.04 AS base
+FROM ubuntu:20.04 AS base
 
 RUN apt-get update -y \
   && apt-get install --yes --no-upgrade --no-install-recommends \
-    gettext=0.19.8.1-6ubuntu0.3 \
-    mysql-client=5.7.41-0ubuntu0.18.04.1 \
-    libmysqlclient-dev=5.7.41-0ubuntu0.18.04.1 \
-    python3=3.6.7-1~18.04 \
-    python3-pip=9.0.1-2.3~ubuntu1.18.04.8 \
-    python3-future=0.15.2-4ubuntu2 \
-    python3-pygit2=0.26.2-2 \
+    gettext \
+    mysql-client-8.0 \
+    libmysqlclient-dev \
+    python3 \
+    python3-pip \
+    python3-future \
+    python3-pygit2 \
   && apt-get clean \
   && rm -rf \
     /tmp/* \
@@ -29,10 +29,11 @@ FROM base AS build
 
 RUN apt-get update \
   && apt-get install --yes --no-upgrade --no-install-recommends \
-    gcc=4:7.4.0-1ubuntu2.3 \
-    libxml2-dev=2.9.4+dfsg1-6.1ubuntu1.8 \
-    libxslt1-dev=1.1.29-5ubuntu0.3 \
-    python3-dev=3.6.7-1~18.04 \
+    gcc \
+    g++ \
+    libxml2-dev \
+    libxslt1-dev \
+    python3-dev \
   && apt-get clean \
   && rm -rf \
     /tmp/* \
