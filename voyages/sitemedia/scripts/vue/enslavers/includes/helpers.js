@@ -1035,30 +1035,29 @@ function formatRelations ( d ) {
       '<th>'+gettext("Role")+'</th>'+
       '<th>'+gettext("Year")+'</th>'+
     '</tr>';
-
-    d.relations_list.forEach((relation) => {
-      relation.enslaved.forEach((person) => {
-        if (person.id !== d.id) {
-          relationsTable += '<tr>'+
-            '<td class="text-right">'+relation.relation_id+'</td>'+
-            '<td>'+person.alias+'</td>'+
-            '<td>'+relation.role+'</td>'+
-            '<td class="text-right">'+relation.relation_year+'</td>'+
-          '</tr>';
-        }
-      });
-      relation.enslavers.forEach((person) => {
-        if (person.id !== d.id) {
-          relationsTable += '<tr>'+
-            '<td class="text-right">'+relation.relation_id+'</td>'+
-            '<td>'+person.alias+'</td>'+
-            '<td>'+relation.role+'</td>'+
-            '<td class="text-right">'+relation.relation_year+'</td>'+
-          '</tr>';
-        }
-      });
+  d.relations_list.forEach((relation) => {
+    relation.enslaved.forEach((person) => {
+      //if (person.id !== d.id) {
+        relationsTable += '<tr>'+
+          '<td class="text-right">'+relation.relation_id+'</td>'+
+          '<td>'+person.alias+'</td>'+
+          '<td>'+relation.role+'</td>'+
+          '<td class="text-right">'+relation.relation_year+'</td>'+
+        '</tr>';
+      //}
     });
-    relationsTable += '</table></div></td></tr><tr>';
+    relation.enslavers.forEach((person) => {
+      //if (person.id !== d.id) {
+        relationsTable += '<tr>'+
+          '<td class="text-right">'+relation.relation_id+'</td>'+
+          '<td>'+person.alias+'</td>'+
+          '<td>'+relation.role+'</td>'+
+          '<td class="text-right">'+relation.relation_year+'</td>'+
+        '</tr>';
+      //}
+    });
+  });
+  relationsTable += '</table></div></td></tr><tr>';
   return relationsTable;
 }
 

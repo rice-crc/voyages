@@ -515,11 +515,11 @@ class EnslaverCachedProperties(models.Model):
             props = EnslaverCachedProperties()
             props.identity_id = id
             props.enslaved_count = item.get('enslaved_count', 0)
-            # Note: we leave a comma after each number *on purpose*. This is so
-            # we can search for roles by querying for contains "{role_id},".
-            # Without the comma in the end, we could get false positives for ids
-            # with multiple digits.
-            props.roles = ''.join(sorted(f"{role}," for role in item.get('roles', [])))
+            # Note: we leave a comma before and after each number *on purpose*.
+            # This is so we can search for roles by querying for contains
+            # "{role_id},". Without the comma in the end, we could get false
+            # positives for ids with multiple digits.
+            props.roles = ',' + ''.join(sorted(f"{role}," for role in item.get('roles', [])))
             props.transactions_amount = item.get('tot_amount', 0)
             props.first_year = item.get('min_year', None)
             props.last_year = item.get('max_year', None)
@@ -1621,7 +1621,7 @@ class EnslaverSearch:
         if self.roles:
             terms = None
             for pk in self.roles:
-                term = Q(cached_properties__roles__contains=f"{pk},")
+                term = Q(cached_properties__roles__contains=f",{pk},")
                 terms = (term | terms) if terms else term
             q = q.filter(terms)
         if self.voyage_datasets is not None:
