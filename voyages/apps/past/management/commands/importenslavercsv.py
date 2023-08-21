@@ -117,6 +117,7 @@ class Command(BaseCommand):
         source_connections = []
         enslaver_sources = {}
         enslavement_relations = [] # (rel: EnslavementRelation, enslaved: EnslavedInRelation[], enslavers: EnslaverInRelation[])
+        export_enslavement_relation = {} # enslaver_id => (EnslavementRelation (unnamed_enslaved_count), EnslaverInRelation)
         marriage_relation_type = EnslavementRelationType.objects.get(name='Marriage')
         spouse_role = EnslaverRole.objects.get(name='Spouse')
 
@@ -210,6 +211,7 @@ class Command(BaseCommand):
                 for r in reader:
                     pid = r.get("person id")
                     if pid is None or pid == '':
+                        print(f"Missing person id in {file} after {len(rows)} rows imported")
                         continue
                     enslavers_by_pid.setdefault(pid, []).append(len(rows))
                     row = {key: val for key, val in r.items()}
@@ -324,11 +326,13 @@ class Command(BaseCommand):
                         voyage_list.append(voyage)
                 role = None
                 try:
-                    role = rh.get_by_value(EnslaverRole, "role", "name", allow_null=False)
+                    role = rh.get_by_value(EnslaverRole, "role", "name", allow_null=False, remap={'10': 'African merchant'})
                 except:
-                    if not skip_invalid:
-                        raise
+                    pass
+                if role is None and not skip_invalid:
+                    raise Exception("Role not found")
                 if role is None and skip_invalid:
+                    print(f"Role {rh.get('role')} not found")
                     continue
                 principal_alias = clean_name(rh.get('full name', max_chars=MAX_NAME_CHARS))
                 if principal_alias is None and skip_invalid:
@@ -456,11 +460,11 @@ class Command(BaseCommand):
                 # Parse sources associated with this enslaver.
                 for key in get_multi_valued_column_suffix(6):
                     source_ref = rh.get('source ' + key)
+                    if source_ref is None or empty.match(source_ref):
+                        break
                     if len(source_ref) > MAX_NAME_CHARS:
                         error_reporting.report(f"Source ref too long (> {MAX_NAME_CHARS}): {source_ref}")
                         source_ref = source_ref[:MAX_NAME_CHARS]
-                    if source_ref is None or empty.match(source_ref):
-                        break
                     (source, match) = source_finder.get(source_ref)
                     if source is None and short_ref_remap is not None:
                         # Try remapping the short ref to address missing
@@ -488,6 +492,26 @@ class Command(BaseCommand):
                     source_connections.append(source_connection)
                 add_spouse(clean_name(rh.get('s1 name')), rh.get('s1 marriage date'))
                 add_spouse(clean_name(rh.get('s2 name')), rh.get('s2 marriage date'))
+
+                exported = rh.get('number of slaves exported')
+                if exported is not None:
+                    pair = export_enslavement_relation.get(enslaver.pk)
+                    if pair is None:
+                        rel = create(EnslavementRelation)
+                        eir = create(EnslaverInRelation)
+                        eir.relation = rel
+                        eir.role_id = 10
+                        eir.enslaver_alias = e_principal
+                        export_enslavement_relation[enslaver.pk] = (rel, eir)
+                    else:
+                        rel = pair[0]
+                    rel.relation_type_id = 6 # Export
+                    if rel.unnamed_enslaved_count is None:
+                        rel.unnamed_enslaved_count = 0
+                    try:
+                        rel.unnamed_enslaved_count += round(float(exported))
+                    except:
+                        error_reporting.report(f"Invalid exported number: {exported}")
         all_aliases = [a for a in all_aliases if a.identity_id in enslavers]
         print('Constructed ' + str(len(enslavers)) + ' Enslavers from CSV.')
 
@@ -524,6 +548,8 @@ class Command(BaseCommand):
                 helper.bulk_insert(EnslaverIdentitySourceConnection, source_connections)
                 helper.bulk_insert(EnslaverAlias, all_aliases)
                 helper.bulk_insert(EnslaverVoyageConnection, enslaver_voyage_conn)
+                helper.bulk_insert(EnslavementRelation, [rel for (rel, _) in export_enslavement_relation.values()])
+                helper.bulk_insert(EnslaverInRelation, [enslaver_in_rel for (_, enslaver_in_rel) in export_enslavement_relation.values()])
                 helper.bulk_insert(EnslavementRelation, [rel for (rel, _, _) in enslavement_relations])
                 helper.bulk_insert(EnslavedInRelation, [enslaved_in_rel for (_, enslaved, _) in enslavement_relations for enslaved_in_rel in enslaved])
                 helper.bulk_insert(EnslaverInRelation, [enslaver_in_rel for (_, _, enslaver) in enslavement_relations for enslaver_in_rel in enslaver])
