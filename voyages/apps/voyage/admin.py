@@ -1,24 +1,27 @@
 from __future__ import unicode_literals
 
+from django.conf import settings
 from django.contrib import admin
 from django.contrib.flatpages.admin import FlatPageAdmin
 from django.contrib.flatpages.models import FlatPage
 from django.utils.translation import ugettext_lazy as _
 from autocomplete_light import shortcuts as autocomplete_light
 
-from .forms import (VoyageCaptainConnectionForm, VoyageCrewForm,
+from .forms import (VoyageCrewForm,
                     VoyageDatesForm, VoyageItineraryForm, VoyageOutcomeForm,
-                    VoyageShipForm, VoyageShipOwnerConnectionForm,
+                    VoyageShipForm,
                     VoyageSlavesNumbersForm, VoyageSourcesConnectionForm,
                     VoyagesSourcesAdminForm)
 from .models import (AfricanInfo, BroadRegion, CargoType, CargoUnit, LinkedVoyages, Nationality, OwnerOutcome, ParticularOutcome,
                      Place, Region, RigOfVessel, SlavesOutcome, TonType,
-                     VesselCapturedOutcome, Voyage, VoyageCaptainConnection,
+                     VesselCapturedOutcome, Voyage,
                      VoyageCrew, VoyageDates, VoyageGroupings, VoyageItinerary,
-                     VoyageOutcome, VoyageShip, VoyageShipOwnerConnection,
+                     VoyageOutcome, VoyageShip,
                      VoyageSlavesNumbers, VoyageSources,
                      VoyageSourcesConnection, VoyageSourcesType)
 
+if settings.VOYAGE_ENSLAVERS_MIGRATION_STAGE <= 2:
+    from .forms import (VoyageCaptainConnectionForm, VoyageShipOwnerConnectionForm)
 
 # Define a new FlatPageAdmin
 class FlatPageAdmin(FlatPageAdmin):
@@ -91,28 +94,60 @@ class VoyageShipInline(admin.StackedInline):
         """
         return {}
 
+if settings.VOYAGE_ENSLAVERS_MIGRATION_STAGE <= 2:
+    from .models import VoyageCaptainConnection, VoyageShipOwnerConnection
 
-class VoyageShipOwnerInline(admin.TabularInline):
-    """
-    Inline model for Captain Connection.
-    """
-    form = VoyageShipOwnerConnectionForm
-    model = VoyageShipOwnerConnection
-    extra = 3
+    class VoyageShipOwnerInline(admin.TabularInline):
+        """
+        Inline model for Captain Connection.
+        """
+        form = VoyageShipOwnerConnectionForm
+        model = VoyageShipOwnerConnection
+        extra = 3
 
+    class VoyageShipOwnerAdmin(admin.ModelAdmin):
+        """
+        Admin for VoyageShipOwner.
+        """
+        list_display = ('name',)
+        list_display_links = ('name',)
+        search_fields = ['name']
+        # def get_model_perms(self, request):
+        #    """
+        #    Return empty perms dict thus hiding the model from admin index.
+        #    """
+        #    return {}
+        
+    class VoyageCaptainAdmin(admin.ModelAdmin):
+        fields = ('name',)
+        # def get_model_perms(self, request):
+        #    """
+        #    Return empty perms dict thus hiding the model from admin index.
+        #    """
+        #    return {}
 
-class VoyageShipOwnerAdmin(admin.ModelAdmin):
-    """
-    Admin for VoyageShipOwner.
-    """
-    list_display = ('name',)
-    list_display_links = ('name',)
-    search_fields = ['name']
-    # def get_model_perms(self, request):
-    #    """
-    #    Return empty perms dict thus hiding the model from admin index.
-    #    """
-    #    return {}
+    class VoyageCaptainConnectionAdmin(admin.ModelAdmin):
+        """
+        Admin for VoyageOutcome.VesselCapturedOutcome
+        """
+        list_display = (
+            'voyage',
+            'captain_order',
+            'captain',
+        )
+        # def get_model_perms(self, request):
+        #    """
+        #    Return empty perms dict thus hiding the model from admin index.
+        #    """
+        #    return {}
+
+    class VoyageCaptainConnectionInline(admin.TabularInline):
+        """
+        Inline model for Captain Connection.
+        """
+        form = VoyageCaptainConnectionForm
+        model = VoyageCaptainConnection
+        extra = 3
 
 
 class VoyageNationalityAdmin(admin.ModelAdmin):
@@ -215,41 +250,6 @@ class VoyageDatesInline(admin.StackedInline):
         return {}
 
 
-# Voyage Captain and Crew
-class VoyageCaptainAdmin(admin.ModelAdmin):
-    fields = ('name',)
-    # def get_model_perms(self, request):
-    #    """
-    #    Return empty perms dict thus hiding the model from admin index.
-    #    """
-    #    return {}
-
-
-class VoyageCaptainConnectionAdmin(admin.ModelAdmin):
-    """
-    Admin for VoyageOutcome.VesselCapturedOutcome
-    """
-    list_display = (
-        'voyage',
-        'captain_order',
-        'captain',
-    )
-    # def get_model_perms(self, request):
-    #    """
-    #    Return empty perms dict thus hiding the model from admin index.
-    #    """
-    #    return {}
-
-
-class VoyageCaptainConnectionInline(admin.TabularInline):
-    """
-    Inline model for Captain Connection.
-    """
-    form = VoyageCaptainConnectionForm
-    model = VoyageCaptainConnection
-    extra = 3
-
-
 class VoyageCrewInline(admin.TabularInline):
     """
     Inline model for Captain Connection.
@@ -332,10 +332,15 @@ class VoyageAdmin(admin.ModelAdmin):
     Admin panel for Voyage class.
     It contains inlines elements and form for autocompleting as typing.
     """
-    inlines = (VoyageCaptainConnectionInline, VoyageShipInline,
-               VoyageShipOwnerInline, VoyageOutcomeInline,
-               VoyageItineraryInline, VoyageDatesInline, VoyageCrewInline,
-               VoyageSlavesNumbersInline, VoyageSourcesConnectionInline)
+    if settings.VOYAGE_ENSLAVERS_MIGRATION_STAGE <= 2:
+        inlines = (VoyageCaptainConnectionInline, VoyageShipInline,
+                VoyageShipOwnerInline, VoyageOutcomeInline,
+                VoyageItineraryInline, VoyageDatesInline, VoyageCrewInline,
+                VoyageSlavesNumbersInline, VoyageSourcesConnectionInline)
+    else:
+        inlines = (VoyageShipInline, VoyageOutcomeInline,
+                VoyageItineraryInline, VoyageDatesInline, VoyageCrewInline,
+                VoyageSlavesNumbersInline, VoyageSourcesConnectionInline)
     form = autocomplete_light.modelform_factory(Voyage, fields='__all__')
     list_display = ['voyage_id']
     list_display_links = ['voyage_id']
@@ -367,7 +372,6 @@ admin.site.register(Place, PlaceAdmin)
 admin.site.register(VoyageGroupings, VoyageGroupingsAdmin)
 
 # Ship, Nation, Owners
-# admin.site.register(VoyageShipOwner, VoyageShipOwnerAdmin)
 admin.site.register(Nationality, VoyageNationalityAdmin)
 admin.site.register(TonType, VoyageTonTypeAdmin)
 admin.site.register(RigOfVessel, VoyageRigOfVesselAdmin)

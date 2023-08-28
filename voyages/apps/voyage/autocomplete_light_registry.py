@@ -1,11 +1,26 @@
 from __future__ import unicode_literals
 
 from autocomplete_light import shortcuts as autocomplete_light
+from django.conf import settings
 
 from .models import (BroadRegion, Nationality, OwnerOutcome, ParticularOutcome,
                      Place, Region, Resistance, RigOfVessel, SlavesOutcome,
-                     TonType, VesselCapturedOutcome, VoyageCaptain,
-                     VoyageGroupings, VoyageShipOwner, VoyageSources)
+                     TonType, VesselCapturedOutcome,
+                     VoyageGroupings, VoyageSources)
+
+
+if settings.VOYAGE_ENSLAVERS_MIGRATION_STAGE <= 2:
+    from .models import (VoyageCaptain, VoyageShipOwner)
+    autocomplete_light.register(
+        VoyageCaptain,
+        search_fields=('name',),
+        autocomplete_js_attributes={'placeholder': 'Captain name...'})
+
+    autocomplete_light.register(
+        VoyageShipOwner,
+        search_fields=('name',),
+        autocomplete_js_attributes={'placeholder': 'Owner name...'})
+
 
 # Register autocomplete for 'autocomplete as you type'
 
@@ -13,11 +28,6 @@ autocomplete_light.register(
     VoyageGroupings,
     search_fields=('value',),
     autocomplete_js_attributes={'placeholder': 'Grouping name...'})
-
-autocomplete_light.register(
-    VoyageCaptain,
-    search_fields=('name',),
-    autocomplete_js_attributes={'placeholder': 'Captain name...'})
 
 autocomplete_light.register(
     Nationality,
@@ -48,11 +58,6 @@ autocomplete_light.register(
     BroadRegion,
     search_fields=('broad_region',),
     autocomplete_js_attributes={'placeholder': 'Broad region...'})
-
-autocomplete_light.register(
-    VoyageShipOwner,
-    search_fields=('name',),
-    autocomplete_js_attributes={'placeholder': 'Owner name...'})
 
 autocomplete_light.register(
     ParticularOutcome,

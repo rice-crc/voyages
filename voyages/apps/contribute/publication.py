@@ -24,15 +24,16 @@ from voyages.apps.contribute.models import (ContributionStatus,
                                             ReviewRequest,
                                             ReviewRequestDecision)
 from voyages.apps.past.models import VoyageCaptainOwnerHelper
-from voyages.apps.voyage.models import (Voyage, VoyageCaptain,
-                                        VoyageCaptainConnection, VoyageCargoConnection, VoyageCrew,
-                                        VoyageDataset, VoyageDates,
+from voyages.apps.voyage.models import (Voyage,
+                                        VoyageCargoConnection, VoyageCrew,
+                                        VoyageDates,
                                         VoyageItinerary, VoyageOutcome,
                                         VoyagesFullQueryHelper, VoyageShip,
-                                        VoyageShipOwner,
-                                        VoyageShipOwnerConnection,
                                         VoyageSlavesNumbers, VoyageSources,
                                         VoyageSourcesConnection)
+
+if settings.VOYAGE_ENSLAVERS_MIGRATION_STAGE <= 2:
+    from voyages.apps.voyage.models import (VoyageCaptain, VoyageCaptainConnection, VoyageShipOwner, VoyageShipOwnerConnection)
 
 CARGO_COLUMN_COUNT = 10
 
@@ -931,9 +932,10 @@ def _save_editorial_version(review_request,
         _delete_child_fk(voyage, 'voyage_crew')
         _delete_child_fk(voyage, 'voyage_slaves_numbers')
         voyage.voyage_name_outcome.clear()
-        voyage.voyage_captain.clear()
-        voyage.voyage_ship_owner.clear()
         voyage.voyage_sources.clear()
+        if settings.VOYAGE_ENSLAVERS_MIGRATION_STAGE <= 2:
+            voyage.voyage_captain.clear()
+            voyage.voyage_ship_owner.clear()
 
     voyage.dataset = review_request.dataset
     voyage.comments = interim.voyage_comments
@@ -1003,7 +1005,7 @@ def _save_editorial_version(review_request,
             conn.captain_order = order
             conn.voyage = voyage
             conn.save()
-        if settings.VOYAGE_ENSLAVERS_MIGRATION_STAGE <= 2:
+        if settings.VOYAGE_ENSLAVERS_MIGRATION_STAGE >= 2:
             # TODO detect existing alias/identity and create connection or
             # create new identity/alias if needed.
             pass

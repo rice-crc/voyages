@@ -53,14 +53,13 @@ from voyages.apps.contribute.publication import (
     export_contributions, export_from_voyages, full_contribution_id,
     get_csv_writer, get_filtered_contributions, get_header_csv_text,
     publish_accepted_contributions, safe_writerow)
-from voyages.apps.past.models import Enslaved, EnslavedContribution, EnslavedContributionLanguageEntry, EnslavedContributionNameEntry, EnslavedContributionStatus, EnslavementRelation, EnslaverAlias, EnslaverCachedProperties, EnslaverContribution, EnslaverIdentity, EnslaverInRelation, EnslaverVoyageConnection, LanguageGroup, ModernCountry, EnslaverIdentitySourceConnection
+from voyages.apps.past.models import Enslaved, EnslavedContribution, EnslavedContributionLanguageEntry, EnslavedContributionNameEntry, EnslavedContributionStatus, EnslavementRelation, EnslaverAlias, EnslaverCachedProperties, EnslaverContribution, EnslaverIdentity, EnslaverInRelation, EnslaverVoyageConnection, LanguageGroup, ModernCountry, EnslaverIdentitySourceConnection, VoyageCaptainOwnerHelper
 from voyages.apps.past.views import _get_audio_filename
 from voyages.apps.voyage.cache import VoyageCache
 from voyages.apps.voyage.forms import VoyagesSourcesAdminForm
 from voyages.apps.voyage.models import (Voyage, VoyageDataset, VoyageDates,
-                                        VoyageShipOwnerConnection,
                                         VoyageSources, VoyageSourcesConnection,
-                                        VoyageSourcesType)
+                                        VoyageSourcesType, VoyagesFullQueryHelper)
 from voyages.apps.voyage.views import voyage_variables_data
 
 from . import imputed
@@ -104,11 +103,12 @@ def legal(request):
 
 def get_summary(v):
     dates = v.voyage_dates
+    helper = VoyageCaptainOwnerHelper()
     return {
         'voyage_id':
             v.voyage_id,
         'captain':
-            ', '.join([c.name for c in v.voyage_captain.all()]),
+            ', '.join(helper.get_captains(v)),
         'ship':
             v.voyage_ship.ship_name,
         'year_arrived':
@@ -131,7 +131,8 @@ def get_voyage_by_id(request):
     if voyage_id is None:
         return JsonResponse({'error': 'Missing voyage_id field in POST'})
     voyage_id = int(voyage_id)
-    v = Voyage.all_dataset_objects.filter(voyage_id=voyage_id).first()
+    helper = VoyagesFullQueryHelper()
+    v = helper.get_query().filter(voyage_id=voyage_id).first()
     if v is None:
         return JsonResponse({
             'error': 'No voyage found with voyage_id = ' + str(voyage_id)
@@ -799,6 +800,7 @@ def voyage_to_dict(voyage):
     # Ship, nation, owners
     VoyageCache.load()
     ship = voyage.voyage_ship
+    coHelper = VoyageCaptainOwnerHelper()
 
     def get_label(obj, field='name'):
         if obj is None:
@@ -826,16 +828,14 @@ def voyage_to_dict(voyage):
         dikt['ton_type_name'] = get_label(
             VoyageCache.ton_types.get(ship.ton_type_id), 'label')
         dikt['guns_mounted'] = ship.guns_mounted
-        owners = list(
-            VoyageShipOwnerConnection.objects.filter(voyage=voyage).extra(
-                order_by=['owner_order']))
+        owners = coHelper.get_owners(voyage)
         if len(owners) > 0:
-            dikt['first_ship_owner'] = owners[0].owner.name
+            dikt['first_ship_owner'] = owners[0]
         if len(owners) > 1:
-            dikt['second_ship_owner'] = owners[1].owner.name
+            dikt['second_ship_owner'] = owners[1]
         if len(owners) > 2:
             dikt['additional_ship_owners'] = '\n'.join(
-                [x.owner.name for x in owners[2:]])
+                [x for x in owners[2:]])
     # Outcome
     outcome = voyage.voyage_name_outcome.get()
     if outcome is not None:
@@ -956,10 +956,10 @@ def voyage_to_dict(voyage):
     dikt['comments'] = voyage.comments
 
     # Captains
-    captains = voyage.voyage_captain.all()
+    captains = coHelper.get_captains(voyage)
     captain_keys = ['first', 'second', 'third']
     for i, captain in enumerate(captains):
-        dikt[captain_keys[i] + '_captain'] = captain.name
+        dikt[captain_keys[i] + '_captain'] = captain
     # Crew numbers
     crew = voyage.voyage_crew
     if crew is not None:

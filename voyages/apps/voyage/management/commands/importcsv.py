@@ -2,6 +2,7 @@ from __future__ import print_function, unicode_literals
 
 from builtins import input, next, str
 
+from django.conf import settings
 from django.core.management.base import BaseCommand
 from django.db import connection
 from django.db import transaction
@@ -14,17 +15,18 @@ from voyages.apps.voyage.models import (AfricanInfo, BroadRegion, CargoType, Car
                                         ParticularOutcome, Place, Region,
                                         Resistance, RigOfVessel, SlavesOutcome,
                                         TonType, VesselCapturedOutcome, Voyage,
-                                        VoyageCaptain, VoyageCaptainConnection, VoyageCargoConnection,
+                                        VoyageCargoConnection,
                                         VoyageCrew, VoyageDates,
                                         VoyageGroupings, VoyageItinerary,
                                         VoyageOutcome, VoyageShip,
-                                        VoyageShipOwner,
-                                        VoyageShipOwnerConnection,
-                                        VoyageSlavesNumbers, VoyageSources,
+                                        VoyageSlavesNumbers,
                                         VoyageSourcesConnection)
 from voyages.apps.common.utils import *
 
 import re
+
+if settings.VOYAGE_ENSLAVERS_MIGRATION_STAGE <= 2:
+    from voyages.apps.voyage.models import (VoyageCaptain, VoyageCaptainConnection, VoyageShipOwner, VoyageShipOwnerConnection)
 
 def _migrate_enslavers_from_legacy():
     from django.conf import settings
@@ -311,8 +313,9 @@ class Command(BaseCommand):
         voyages = {}
         captains = {}
         ship_owners = {}
-        captain_connections = []
-        ship_owner_connections = []
+        if settings.VOYAGE_ENSLAVERS_MIGRATION_STAGE <= 2:
+            captain_connections = []
+            ship_owner_connections = []
         source_connections = []
         afrinfo_conn = []
         cargo_conn = []
@@ -759,36 +762,40 @@ class Command(BaseCommand):
                     voyage_dates.append(row_to_dates(rh, voyage))
                     crews.append(row_to_crew(rh, voyage))
                     voyage_numbers.append(row_to_numbers(rh, voyage))
-                    # Captains
-                    for order, key in enumerate(get_multi_valued_column_suffix(3)):
-                        captain_name = rh.get('captain' + key)
-                        if captain_name is None or empty.match(captain_name):
-                            continue
-                        captain_model = captains.get(captain_name)
-                        if captain_model is None:
-                            captain_model = VoyageCaptain()
-                            captain_model.name = captain_name
-                            captains[captain_name] = captain_model
-                        captain_connection = VoyageCaptainConnection()
-                        captain_connection.captain = captain_model
-                        captain_connection.captain_order = order + 1
-                        captain_connection.voyage = voyage
-                        captain_connections.append(captain_connection)
-                    # Ship owners
-                    for order, key in enumerate(get_multi_valued_column_suffix(45)):
-                        owner_name = rh.get('owner' + key)
-                        if owner_name is None or empty.match(owner_name):
-                            continue
-                        owner_model = ship_owners.get(owner_name)
-                        if owner_model is None:
-                            owner_model = VoyageShipOwner()
-                            owner_model.name = owner_name
-                            ship_owners[owner_name] = owner_model
-                        owner_connection = VoyageShipOwnerConnection()
-                        owner_connection.owner = owner_model
-                        owner_connection.owner_order = order + 1
-                        owner_connection.voyage = voyage
-                        ship_owner_connections.append(owner_connection)
+                    if settings.VOYAGE_ENSLAVERS_MIGRATION_STAGE <= 2:
+                        # After the migration, captain and owners have to be
+                        # imported separately using a specific import for PAST.
+                        #
+                        # Captains
+                        for order, key in enumerate(get_multi_valued_column_suffix(3)):
+                            captain_name = rh.get('captain' + key)
+                            if captain_name is None or empty.match(captain_name):
+                                continue
+                            captain_model = captains.get(captain_name)
+                            if captain_model is None:
+                                captain_model = VoyageCaptain()
+                                captain_model.name = captain_name
+                                captains[captain_name] = captain_model
+                            captain_connection = VoyageCaptainConnection()
+                            captain_connection.captain = captain_model
+                            captain_connection.captain_order = order + 1
+                            captain_connection.voyage = voyage
+                            captain_connections.append(captain_connection)
+                        # Ship owners
+                        for order, key in enumerate(get_multi_valued_column_suffix(45)):
+                            owner_name = rh.get('owner' + key)
+                            if owner_name is None or empty.match(owner_name):
+                                continue
+                            owner_model = ship_owners.get(owner_name)
+                            if owner_model is None:
+                                owner_model = VoyageShipOwner()
+                                owner_model.name = owner_name
+                                ship_owners[owner_name] = owner_model
+                            owner_connection = VoyageShipOwnerConnection()
+                            owner_connection.owner = owner_model
+                            owner_connection.owner_order = order + 1
+                            owner_connection.voyage = voyage
+                            ship_owner_connections.append(owner_connection)
                     # Sources
                     for order, key in enumerate(get_multi_valued_column_suffix(18)):
                         source_ref = rh.get('source' + key)
@@ -899,17 +906,18 @@ class Command(BaseCommand):
                 clear_fk('voyage_dates_id')
                 clear_fk('voyage_crew_id')
                 clear_fk('voyage_slaves_numbers_id')
+                if settings.VOYAGE_ENSLAVERS_MIGRATION_STAGE <= 2:
+                    helper.delete_all(cursor, VoyageCaptainConnection)
+                    helper.delete_all(cursor, VoyageCaptain)
+                    helper.delete_all(cursor, VoyageShipOwnerConnection)
+                    helper.delete_all(cursor, VoyageShipOwner)
                 helper.delete_all(cursor, LinkedVoyages)
-                helper.delete_all(cursor, VoyageCaptainConnection)
-                helper.delete_all(cursor, VoyageShipOwnerConnection)
                 helper.delete_all(cursor, VoyageSourcesConnection)
-                helper.delete_all(cursor, VoyageCaptain)
                 helper.delete_all(cursor, VoyageCrew)
                 helper.delete_all(cursor, VoyageDates)
                 helper.delete_all(cursor, VoyageItinerary)
                 helper.delete_all(cursor, VoyageOutcome)
                 helper.delete_all(cursor, VoyageShip)
-                helper.delete_all(cursor, VoyageShipOwner)
                 helper.delete_all(cursor, VoyageSlavesNumbers)
                 helper.delete_all(cursor, Voyage.african_info.through)
                 helper.delete_all(cursor, VoyageCargoConnection)
@@ -968,17 +976,18 @@ class Command(BaseCommand):
                 bulk_insert(VoyageOutcome, outcomes)
 
                 # Now insert the many-to-many connections
-                set_voyages_fk(captain_connections)
-                set_foreign_keys(captain_connections, captains,
-                                lambda x: x.captain.name, 'captain')
-                set_voyages_fk(ship_owner_connections)
-                set_foreign_keys(ship_owner_connections, ship_owners,
-                                lambda x: x.owner.name, 'owner')
                 set_foreign_keys(source_connections, voyages,
                                 lambda x: x.group.voyage_id, 'group')
+                if settings.VOYAGE_ENSLAVERS_MIGRATION_STAGE <= 2:
+                    set_voyages_fk(captain_connections)
+                    set_foreign_keys(captain_connections, captains,
+                                    lambda x: x.captain.name, 'captain')
+                    set_voyages_fk(ship_owner_connections)
+                    set_foreign_keys(ship_owner_connections, ship_owners,
+                                    lambda x: x.owner.name, 'owner')
+                    bulk_insert(VoyageCaptainConnection, captain_connections)
+                    bulk_insert(VoyageShipOwnerConnection, ship_owner_connections)
                 bulk_insert(LinkedVoyages, voyage_links)
-                bulk_insert(VoyageCaptainConnection, captain_connections)
-                bulk_insert(VoyageShipOwnerConnection, ship_owner_connections)
                 bulk_insert(VoyageSourcesConnection, source_connections)
                 bulk_insert(Voyage.african_info.through, afrinfo_conn)
                 bulk_insert(VoyageCargoConnection, cargo_conn)

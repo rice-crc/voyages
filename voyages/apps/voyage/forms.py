@@ -3,6 +3,7 @@ from __future__ import absolute_import, unicode_literals
 from builtins import map, str
 
 from django import forms
+from django.conf import settings
 from django.utils.translation import ugettext_lazy as u_
 from autocomplete_light import shortcuts as autocomplete_light
 
@@ -11,10 +12,32 @@ from voyages.extratools import AdvancedEditor
 from . import graphs
 from .globals import (list_months, table_columns, table_functions,
                       table_rows, voyage_timeline_variables)
-from .models import (VoyageCaptainConnection, VoyageCrew, VoyageDates,
+from .models import (VoyageCrew, VoyageDates,
                      VoyageItinerary, VoyageOutcome, VoyageShip,
-                     VoyageShipOwnerConnection, VoyageSlavesNumbers,
+                     VoyageSlavesNumbers,
                      VoyageSources, VoyageSourcesConnection)
+
+if settings.VOYAGE_ENSLAVERS_MIGRATION_STAGE <= 2:
+    from .models import (VoyageCaptainConnection, VoyageShipOwnerConnection)
+
+    # Voyage Captain and Crew
+    class VoyageCaptainConnectionForm(autocomplete_light.ModelForm):
+        """
+        Form for Captain Connection (this is inline).
+        """
+
+        class Meta:
+            model = VoyageCaptainConnection
+            fields = '__all__'
+            
+    class VoyageShipOwnerConnectionForm(autocomplete_light.ModelForm):
+        """
+        Form for Ship Owner Outcome (this is inline).
+        """
+
+        class Meta:
+            model = VoyageShipOwnerConnection
+            fields = '__all__'
 
 
 class UploadFileForm(forms.Form):
@@ -54,16 +77,6 @@ class VoyageShipForm(autocomplete_light.ModelForm):
         fields = '__all__'
 
 
-class VoyageShipOwnerConnectionForm(autocomplete_light.ModelForm):
-    """
-    Form for Ship Owner Outcome (this is inline).
-    """
-
-    class Meta:
-        model = VoyageShipOwnerConnection
-        fields = '__all__'
-
-
 # Voyage Outcome
 class VoyageOutcomeForm(autocomplete_light.ModelForm):
     """
@@ -94,17 +107,6 @@ class VoyageDatesForm(autocomplete_light.ModelForm):
 
     class Meta:
         model = VoyageDates
-        fields = '__all__'
-
-
-# Voyage Captain and Crew
-class VoyageCaptainConnectionForm(autocomplete_light.ModelForm):
-    """
-    Form for Captain Connection (this is inline).
-    """
-
-    class Meta:
-        model = VoyageCaptainConnection
         fields = '__all__'
 
 
