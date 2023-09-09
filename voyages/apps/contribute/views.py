@@ -369,8 +369,11 @@ def interim_main(request, contribution, interim):
     numbers = {
         k: float(v)
         for k, v in list(request.POST.items())
-        if k.startswith(prefix) and v != ''
+        if k.startswith(prefix) and v not in ('','null')
     }
+    for k,v in list(request.POST.items()):
+        if k.startswith(prefix) and v in ('','null'):
+            numbers[k]=None
     sources_post = request.POST.get('sources', '[]')
     sources = [(create_source(x, interim), x.get('__index'))
                for x in json.loads(sources_post)]
@@ -428,11 +431,19 @@ def interim_main(request, contribution, interim):
                 src_pks[view_item_index] = src.pk
         # Clear previous numbers and save new ones.
         for k, v in list(numbers.items()):
-            number = InterimSlaveNumber()
-            number.interim_voyage = interim
-            number.var_name = k[len(prefix):]
-            number.number = v
-            number.save()
+            allnumbers=InterimSlaveNumber.objects.all()
+            matchingnumbers=allnumbers.filter(
+                interim_voyage=interim,
+                var_name=k[len(prefix):]
+            )
+            if len(matchingnumbers)>0:
+            	matchingnumbers.delete()
+            elif v!=None:
+                    thisnumber = InterimSlaveNumber()
+                    thisnumber.interim_voyage = interim
+                    thisnumber.var_name = k[len(prefix):]
+                    thisnumber.number = v
+                    thisnumber.save()
     return result, form, numbers, src_pks
 
 
