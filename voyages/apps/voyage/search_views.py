@@ -728,6 +728,10 @@ def ajax_download(request):
     lang = request.LANGUAGE_CODE
     columns = data['cols']
     excel_mode = data.get('excel_mode', True)
+    ## The "All Columns" setting keeps breaking on port names, presumably because there's
+    ### some hard-coded list of itinerary variable names. I've decided that rather than
+    ### keep patching that, we'll disable the "all columns" setting. If users want "all"
+    ### the data, they can go to the downloads page, or they can select all the columns.
 
     if len(columns) == 0:
         columns = [col if 'lang' not in col or 'lang_' in col else col + '_' + lang

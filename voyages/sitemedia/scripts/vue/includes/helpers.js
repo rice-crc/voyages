@@ -1147,18 +1147,18 @@ function refreshUi(filter, filterData, currentTab, tabData, options) {
               extend: "collection",
               text: "CSV",
               buttons: [
-                {
-                  text: gettext("All results with all columns"),
-                  action: makeDownloadFunction(false, false, false)
-                },
+//                 {
+//                   text: gettext("All results with all columns"),
+//                   action: makeDownloadFunction(false, false, false)
+//                 },
                 {
                   text: gettext("All results with visible columns"),
                   action: makeDownloadFunction(false, false, true)
                 },
-                {
-                  text: gettext("Filtered results with all columns"),
-                  action: makeDownloadFunction(false, true, false)
-                },
+//                 {
+//                   text: gettext("Filtered results with all columns"),
+//                   action: makeDownloadFunction(false, true, false)
+//                 },
                 {
                   text: gettext("Filtered results with visible columns"),
                   action: makeDownloadFunction(false, true, true)
