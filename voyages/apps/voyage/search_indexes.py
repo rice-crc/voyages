@@ -733,7 +733,7 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
     var_afrinfo = indexes.MultiValueField(indexed=True, stored=True, null=True)
     var_cargo = indexes.MultiValueField(indexed=True, stored=True, null=True)
     var_afrinfo_ids = indexes.MultiValueField(indexed=True, stored=True, null=True)
-    var_cargo_ids = indexes.MultiValueField(indexed=True, stored=True, null=True)
+#     var_cargo_ids = indexes.MultiValueField(indexed=True, stored=True, null=True)
 
     def get_model(self):
         return Voyage

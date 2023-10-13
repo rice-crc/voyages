@@ -667,15 +667,16 @@ def get_download_header(var_name):
         split = name_to_follow.find('__')
         current = name_to_follow[:split] if split > 0 else name_to_follow
         f = None
-        result = None
+        result = ''
         try:
             f = model._meta.get_field(current)
             result = f.verbose_name
         except:
             pass
         if split > 0 and f:
-            result += ' ' + \
-                follow_field(f.remote_field.model, name_to_follow[split + 2:])
+            entry = follow_field(f.remote_field.model, name_to_follow[split + 2:])
+            result += ' ' + entry
+                
         return result
 
     def smart(h):
