@@ -786,6 +786,7 @@ _options_model = {
 
 
 @csrf_exempt
+@cache_page(3600)
 def get_var_options(request):
     """
     This API fetches the values allowed for a given variable on
@@ -823,6 +824,7 @@ def get_var_options(request):
 
 @csrf_exempt
 @require_POST
+@cache_page(3600)
 def get_filtered_places(request):
     """
     Obtains a list of places and corresponding regions/broad regions
