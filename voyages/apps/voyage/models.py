@@ -3,7 +3,7 @@ from __future__ import unicode_literals
 from builtins import str
 
 from django.db import models
-from django.db.models import Prefetch
+from django.db.models import Prefetch, Value
 from django.utils.translation import ugettext as _
 from voyages.apps.common.models import NamedModelAbstractBase
 
@@ -2063,6 +2063,8 @@ class VoyagesFullQueryHelper:
             dataset) if dataset else Voyage.all_dataset_objects
 
     def get_query(self, dataset=None):
-        return self.get_manager(dataset).select_related(
-            *list(self.related_models.keys())).prefetch_related(
-                *self.prefetch_fields).all()
+        return self.get_manager(dataset) \
+            .annotate(full_query=Value(True, output_field=models.BooleanField())) \
+            .select_related( \
+                *list(self.related_models.keys())).prefetch_related( \
+                    *self.prefetch_fields).all()
