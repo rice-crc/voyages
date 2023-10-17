@@ -2091,6 +2091,7 @@
             return getMonthLocaleName(locale, i);
         };
         var leadingZero = function(d) {
+            d = parseInt(d);
             return d < 10 ? '0' + d : '' + d;
         };
         for (var i = 1; i <= 12; ++i) {
