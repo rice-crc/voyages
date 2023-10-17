@@ -64,6 +64,10 @@ urlpatterns = [
         r'/submit_editorial_decision',
         views.submit_editorial_decision,
         name='submit_editorial_decision'),
+    url(r'editorial_review/(?P<editor_contribution_id>\d+)'
+        r'/delete_editorial_review',
+        views.delete_editorial_review,
+        name='delete_editorial_review'),        
     url(r'editorial_review/(?P<review_request_id>\d+)',
         views.editorial_review,
         name='editorial_review'),

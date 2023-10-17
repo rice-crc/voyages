@@ -389,6 +389,7 @@ def interim_main(request, contribution, interim):
 
         del_children(InterimSlaveNumber)
         # Get pre-existing sources.
+        update_interim_pre_sources(interim)
         for src in interim.pre_existing_sources.all():
             src.action = request.POST.get(
                 'pre_existing_source_action_' + str(src.pk), 0)
@@ -1166,7 +1167,7 @@ def get_reviews_by_status(statuses, display_interim_data=False):
                 ] else u_('Posted'))
             res['reviewer_comments'] = active_request.reviewer_comments
             res['reviewer_final_decision'] = active_request.get_status_msg()
-            if active_request.final_decision:
+            if active_request.final_decision and active_request.pk in editor_contributions_req_dict:
                 # Fetch if of the editor's contribution.
                 res['editor_contribution_id'] = editor_contributions_req_dict[
                     active_request.pk].pk
@@ -1665,6 +1666,19 @@ def editorial_review(request, review_request_id):
             'sources_post': sources_post,
             'voyages_data': json.dumps(previous_data)
         })
+
+@login_required()
+@require_POST
+def delete_editorial_review(request, editor_contribution_id):
+    try:
+        contribution = get_object_or_404(EditorVoyageContribution,
+                                     pk=editor_contribution_id)
+        with transaction.atomic():
+            contribution.request.delete()
+            contribution.delete()
+    except Exception as ex:
+        return JsonResponse({ 'result': 'Failed', 'errors': str(ex) })
+    return JsonResponse({ 'result': 'OK' })
 
 
 @login_required()
@@ -3006,3 +3020,21 @@ def get_language_choices(request):
         'languageGroupChoices': list(LanguageGroup.objects.values('pk', 'name')),
         'm2m': list(ModernCountry.languages.through.objects.values())
     })
+
+def update_interim_pre_sources(interim):
+    # Since the sources may be edited, we make sure that the information is up
+    # to date here.
+    psrefs = [ps.original_short_ref for ps in interim.pre_existing_sources.all()]
+    if len(psrefs) == 0:
+        return
+    sources = {s.short_ref: s for s in VoyageSources.objects.filter(short_ref__in=psrefs)}
+    for ps in interim.pre_existing_sources.all():
+        source = sources.get(ps.original_short_ref)
+        if not source:
+            # The source was probably deleted!
+            ps.full_ref = f"WARNING! The source ${ps.original_short_ref} was not found!"
+        elif ps.full_ref != source.full_ref:
+            ps.full_ref = source.full_ref
+        else:
+            continue
+        ps.save()
