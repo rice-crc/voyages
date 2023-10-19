@@ -53,14 +53,13 @@ from voyages.apps.contribute.publication import (
     export_contributions, export_from_voyages, full_contribution_id,
     get_csv_writer, get_filtered_contributions, get_header_csv_text,
     publish_accepted_contributions, safe_writerow)
-from voyages.apps.past.models import Enslaved, EnslavedContribution, EnslavedContributionLanguageEntry, EnslavedContributionNameEntry, EnslavedContributionStatus, EnslavementRelation, EnslaverAlias, EnslaverCachedProperties, EnslaverContribution, EnslaverIdentity, EnslaverInRelation, EnslaverVoyageConnection, LanguageGroup, ModernCountry, EnslaverIdentitySourceConnection
+from voyages.apps.past.models import Enslaved, EnslavedContribution, EnslavedContributionLanguageEntry, EnslavedContributionNameEntry, EnslavedContributionStatus, EnslavementRelation, EnslaverAlias, EnslaverCachedProperties, EnslaverContribution, EnslaverIdentity, EnslaverInRelation, EnslaverVoyageConnection, LanguageGroup, ModernCountry, EnslaverIdentitySourceConnection, VoyageCaptainOwnerHelper
 from voyages.apps.past.views import _get_audio_filename
 from voyages.apps.voyage.cache import VoyageCache
 from voyages.apps.voyage.forms import VoyagesSourcesAdminForm
 from voyages.apps.voyage.models import (Voyage, VoyageDataset, VoyageDates,
-                                        VoyageShipOwnerConnection,
                                         VoyageSources, VoyageSourcesConnection,
-                                        VoyageSourcesType)
+                                        VoyageSourcesType, VoyagesFullQueryHelper)
 from voyages.apps.voyage.views import voyage_variables_data
 
 from . import imputed
@@ -104,11 +103,12 @@ def legal(request):
 
 def get_summary(v):
     dates = v.voyage_dates
+    helper = VoyageCaptainOwnerHelper()
     return {
         'voyage_id':
             v.voyage_id,
         'captain':
-            ', '.join([c.name for c in v.voyage_captain.all()]),
+            ', '.join(helper.get_captains(v)),
         'ship':
             v.voyage_ship.ship_name,
         'year_arrived':
@@ -131,7 +131,8 @@ def get_voyage_by_id(request):
     if voyage_id is None:
         return JsonResponse({'error': 'Missing voyage_id field in POST'})
     voyage_id = int(voyage_id)
-    v = Voyage.all_dataset_objects.filter(voyage_id=voyage_id).first()
+    helper = VoyagesFullQueryHelper()
+    v = helper.get_query().filter(voyage_id=voyage_id).first()
     if v is None:
         return JsonResponse({
             'error': 'No voyage found with voyage_id = ' + str(voyage_id)
@@ -369,11 +370,8 @@ def interim_main(request, contribution, interim):
     numbers = {
         k: float(v)
         for k, v in list(request.POST.items())
-        if k.startswith(prefix) and v not in ('','null')
+        if k.startswith(prefix) and v != ''
     }
-    for k,v in list(request.POST.items()):
-        if k.startswith(prefix) and v in ('','null'):
-            numbers[k]=None
     sources_post = request.POST.get('sources', '[]')
     sources = [(create_source(x, interim), x.get('__index'))
                for x in json.loads(sources_post)]
@@ -391,6 +389,7 @@ def interim_main(request, contribution, interim):
 
         del_children(InterimSlaveNumber)
         # Get pre-existing sources.
+        update_interim_pre_sources(interim)
         for src in interim.pre_existing_sources.all():
             src.action = request.POST.get(
                 'pre_existing_source_action_' + str(src.pk), 0)
@@ -431,19 +430,11 @@ def interim_main(request, contribution, interim):
                 src_pks[view_item_index] = src.pk
         # Clear previous numbers and save new ones.
         for k, v in list(numbers.items()):
-            allnumbers=InterimSlaveNumber.objects.all()
-            matchingnumbers=allnumbers.filter(
-                interim_voyage=interim,
-                var_name=k[len(prefix):]
-            )
-            if len(matchingnumbers)>0:
-            	matchingnumbers.delete()
-            elif v!=None:
-                    thisnumber = InterimSlaveNumber()
-                    thisnumber.interim_voyage = interim
-                    thisnumber.var_name = k[len(prefix):]
-                    thisnumber.number = v
-                    thisnumber.save()
+            number = InterimSlaveNumber()
+            number.interim_voyage = interim
+            number.var_name = k[len(prefix):]
+            number.number = v
+            number.save()
     return result, form, numbers, src_pks
 
 
@@ -810,6 +801,7 @@ def voyage_to_dict(voyage):
     # Ship, nation, owners
     VoyageCache.load()
     ship = voyage.voyage_ship
+    coHelper = VoyageCaptainOwnerHelper()
 
     def get_label(obj, field='name'):
         if obj is None:
@@ -837,16 +829,14 @@ def voyage_to_dict(voyage):
         dikt['ton_type_name'] = get_label(
             VoyageCache.ton_types.get(ship.ton_type_id), 'label')
         dikt['guns_mounted'] = ship.guns_mounted
-        owners = list(
-            VoyageShipOwnerConnection.objects.filter(voyage=voyage).extra(
-                order_by=['owner_order']))
+        owners = coHelper.get_owners(voyage)
         if len(owners) > 0:
-            dikt['first_ship_owner'] = owners[0].owner.name
+            dikt['first_ship_owner'] = owners[0]
         if len(owners) > 1:
-            dikt['second_ship_owner'] = owners[1].owner.name
+            dikt['second_ship_owner'] = owners[1]
         if len(owners) > 2:
             dikt['additional_ship_owners'] = '\n'.join(
-                [x.owner.name for x in owners[2:]])
+                [x for x in owners[2:]])
     # Outcome
     outcome = voyage.voyage_name_outcome.get()
     if outcome is not None:
@@ -967,10 +957,10 @@ def voyage_to_dict(voyage):
     dikt['comments'] = voyage.comments
 
     # Captains
-    captains = voyage.voyage_captain.all()
+    captains = coHelper.get_captains(voyage)
     captain_keys = ['first', 'second', 'third']
     for i, captain in enumerate(captains):
-        dikt[captain_keys[i] + '_captain'] = captain.name
+        dikt[captain_keys[i] + '_captain'] = captain
     # Crew numbers
     crew = voyage.voyage_crew
     if crew is not None:
@@ -1177,7 +1167,7 @@ def get_reviews_by_status(statuses, display_interim_data=False):
                 ] else u_('Posted'))
             res['reviewer_comments'] = active_request.reviewer_comments
             res['reviewer_final_decision'] = active_request.get_status_msg()
-            if active_request.final_decision:
+            if active_request.final_decision and active_request.pk in editor_contributions_req_dict:
                 # Fetch if of the editor's contribution.
                 res['editor_contribution_id'] = editor_contributions_req_dict[
                     active_request.pk].pk
@@ -1676,6 +1666,19 @@ def editorial_review(request, review_request_id):
             'sources_post': sources_post,
             'voyages_data': json.dumps(previous_data)
         })
+
+@login_required()
+@require_POST
+def delete_editorial_review(request, editor_contribution_id):
+    try:
+        contribution = get_object_or_404(EditorVoyageContribution,
+                                     pk=editor_contribution_id)
+        with transaction.atomic():
+            contribution.request.delete()
+            contribution.delete()
+    except Exception as ex:
+        return JsonResponse({ 'result': 'Failed', 'errors': str(ex) })
+    return JsonResponse({ 'result': 'OK' })
 
 
 @login_required()
@@ -2444,7 +2447,7 @@ def init_enslaver_interim(request):
             'birth_day', 'birth_place', 'death_year', 'death_month', 'death_day',
             'death_place', 'father_name', 'father_occupation', 'mother_name',
             'probate_date', 'will_value_pounds', 'will_value_dollars', 
-            'will_court', 'principal_location', 'notes']
+            'will_court', 'principal_location', 'notes', 'is_natural_person']
         identities[mode] = {
             'id': mode,
             'aliases': {},
@@ -3017,3 +3020,21 @@ def get_language_choices(request):
         'languageGroupChoices': list(LanguageGroup.objects.values('pk', 'name')),
         'm2m': list(ModernCountry.languages.through.objects.values())
     })
+
+def update_interim_pre_sources(interim):
+    # Since the sources may be edited, we make sure that the information is up
+    # to date here.
+    psrefs = [ps.original_short_ref for ps in interim.pre_existing_sources.all()]
+    if len(psrefs) == 0:
+        return
+    sources = {s.short_ref: s for s in VoyageSources.objects.filter(short_ref__in=psrefs)}
+    for ps in interim.pre_existing_sources.all():
+        source = sources.get(ps.original_short_ref)
+        if not source:
+            # The source was probably deleted!
+            ps.full_ref = f"WARNING! The source ${ps.original_short_ref} was not found!"
+        elif ps.full_ref != source.full_ref:
+            ps.full_ref = source.full_ref
+        else:
+            continue
+        ps.save()
