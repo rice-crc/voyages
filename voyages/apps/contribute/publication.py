@@ -24,15 +24,16 @@ from voyages.apps.contribute.models import (ContributionStatus,
                                             ReviewRequest,
                                             ReviewRequestDecision)
 from voyages.apps.past.models import VoyageCaptainOwnerHelper
-from voyages.apps.voyage.models import (Voyage, VoyageCaptain,
-                                        VoyageCaptainConnection, VoyageCargoConnection, VoyageCrew,
-                                        VoyageDataset, VoyageDates,
+from voyages.apps.voyage.models import (Voyage,
+                                        VoyageCargoConnection, VoyageCrew,
+                                        VoyageDates,
                                         VoyageItinerary, VoyageOutcome,
                                         VoyagesFullQueryHelper, VoyageShip,
-                                        VoyageShipOwner,
-                                        VoyageShipOwnerConnection,
                                         VoyageSlavesNumbers, VoyageSources,
                                         VoyageSourcesConnection)
+
+if settings.VOYAGE_ENSLAVERS_MIGRATION_STAGE <= 2:
+    from voyages.apps.voyage.models import (VoyageCaptain, VoyageCaptainConnection, VoyageShipOwner, VoyageShipOwnerConnection)
 
 CARGO_COLUMN_COUNT = 10
 
@@ -931,9 +932,10 @@ def _save_editorial_version(review_request,
         _delete_child_fk(voyage, 'voyage_crew')
         _delete_child_fk(voyage, 'voyage_slaves_numbers')
         voyage.voyage_name_outcome.clear()
-        voyage.voyage_captain.clear()
-        voyage.voyage_ship_owner.clear()
         voyage.voyage_sources.clear()
+        if settings.VOYAGE_ENSLAVERS_MIGRATION_STAGE <= 2:
+            voyage.voyage_captain.clear()
+            voyage.voyage_ship_owner.clear()
 
     voyage.dataset = review_request.dataset
     voyage.comments = interim.voyage_comments
@@ -979,7 +981,7 @@ def _save_editorial_version(review_request,
             conn.owner_order = order
             conn.voyage = voyage
             conn.save()
-        if settings.VOYAGE_ENSLAVERS_MIGRATION_STAGE <= 2:
+        if settings.VOYAGE_ENSLAVERS_MIGRATION_STAGE >= 2:
             # TODO detect existing alias/identity and create connection or
             # create new identity/alias if needed.
             pass
@@ -1003,7 +1005,7 @@ def _save_editorial_version(review_request,
             conn.captain_order = order
             conn.voyage = voyage
             conn.save()
-        if settings.VOYAGE_ENSLAVERS_MIGRATION_STAGE <= 2:
+        if settings.VOYAGE_ENSLAVERS_MIGRATION_STAGE >= 2:
             # TODO detect existing alias/identity and create connection or
             # create new identity/alias if needed.
             pass
@@ -1367,19 +1369,21 @@ def _save_editorial_version(review_request,
                                 source_order)
         source_order += 1
 
+    Voyage.african_info.through.objects.filter(voyage=voyage).delete()
     if interim.african_info:
         afrinfo = json.loads(interim.african_info)
         for a in afrinfo:
             afrinfo_conn = Voyage.african_info.through(voyage_id=voyage.voyage_id, africaninfo_id=a)
             afrinfo_conn.save()
+    VoyageCargoConnection.objects.filter(voyage=voyage).delete()
     if interim.cargo:
         cargo = json.loads(interim.cargo)
         for c in cargo:
             cargo_conn = VoyageCargoConnection()
             cargo_conn.voyage = voyage
             cargo_conn.cargo_id = c['cargo_type']
-            cargo_conn.unit_id = c['unit']
-            cargo_conn.amount = c['amount']
+            cargo_conn.unit_id = c.get('unit')
+            cargo_conn.amount = c.get('amount')
             cargo_conn.save()
 
     # Set voyage foreign keys (this is redundant, but we are keeping the
