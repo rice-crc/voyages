@@ -834,11 +834,10 @@ function SlaveNumbersTable(table_id, numbers, editable, column_count, row_count,
         for (var i = 0; i < self.rows.length; ++i) {
             for (var j = 0; j < self.rows[i].length; ++j) {
                 var value = parseFloat($(self.rows[i][j]).html());
-                if (isNaN(value)) {
-                	value=null
+                if (!isNaN(value)) {
+                    var name = position_to_var_name(i, j);
+                    form.append('<input class="' + APPENDED_FIELD_CLASS + '" type="hidden" id="' + name + '" name="' + name + '" value="' + value + '" />');
                 }
-				var name = position_to_var_name(i, j);
-				form.append('<input class="' + APPENDED_FIELD_CLASS + '" type="hidden" id="' + name + '" name="' + name + '" value="' + value + '" />');
             }
         }
     };
@@ -877,9 +876,18 @@ function ageAndSexTable(numbers, editable, pre_existing_data) {
 
 // Construct the demographics table, with preset column and row headers.
 function demographicsTable(numbers, editable, pre_existing_data) {
-    var DEMOGRAPHICS_COLUMN_HEADERS = ['MEN', 'WOMEN', 'BOY', 'GIRL', 'MALE', 'FEMALE', 'ADULT', 'CHILD', 'INFANT'];
+    var DEMOGRAPHICS_COLUMN_HEADERS = ['MEN', 'WOMEN', 'BOY', 'GIRL', 'MALE', ['FEMALE', 'FEML'], ['ADULT', 'ADLT'], ['CHILD', 'CHIL'], 'INFANT'];
     var DEMOGRAPHICS_ROW_HEADERS = ['1', '4', '5', '2', '3', '6', '1IMP', '3IMP', '7', '2IMP'];
     var regex = new RegExp('^' + NUMBERS_KEY_PREFIX + '([A-Z]+)([0-9](IMP)?)$');
+    var findCol = (header) => {
+        for (var i = 0; i < DEMOGRAPHICS_COLUMN_HEADERS.length; ++i) {
+            var candidates = DEMOGRAPHICS_COLUMN_HEADERS[i];
+            if (candidates === header || (Array.isArray(candidates) && candidates.indexOf(header) >= 0)) {
+                return i;
+            }
+        }
+        return -1;
+    };
     return SlaveNumbersTable(
         'demographics_table',
         numbers,
@@ -890,8 +898,11 @@ function demographicsTable(numbers, editable, pre_existing_data) {
         function (key) {
             var match = regex.exec(key);
             if (match) {
-                var col = DEMOGRAPHICS_COLUMN_HEADERS.indexOf(match[1]);
+                var col = findCol(match[1]);
                 var row = DEMOGRAPHICS_ROW_HEADERS.indexOf(match[2]);
+                if (col < 0 || row < 0) {
+                    return null;
+                }
                 return { columnIndex: col, rowIndex: row };
             }
             return null;
