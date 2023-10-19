@@ -597,6 +597,8 @@ class EnslaverVoyageConnection(models.Model):
 
 
 class VoyageCaptainOwnerHelper:
+    _instance = None
+
     """
     A simple helper class to fetch enslavers associated with a voyage based on
     their role.
@@ -612,6 +614,11 @@ class VoyageCaptainOwnerHelper:
         self.captain_role_ids = list( \
             EnslaverRole.objects.filter(**{f"name__{filter_type}": 'captain'}).order_by('id').values_list('pk', flat=True))
 
+    @classmethod
+    def get_instance(cls):
+        if cls._instance is None:
+            cls._instance = VoyageCaptainOwnerHelper()
+        return cls._instance
 
     class UniqueHelper:
         """

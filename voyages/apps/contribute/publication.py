@@ -398,8 +398,6 @@ def _get_label_value(x):
 def _get_region_value(place):
     return place.region.value if place else None
 
-_captain_owner_helper = VoyageCaptainOwnerHelper()
-
 def _map_voyage_to_spss(voyage):
     data = {'STATUS': 'PUBLISHED'}
     data['VOYAGEID'] = voyage.voyage_id
@@ -473,14 +471,15 @@ def _map_voyage_to_spss(voyage):
     data['TONMOD'] = ship.tonnage_mod if ship else None
 
     aux = list(get_multi_valued_column_suffix(16, True))
-    all_owners = _captain_owner_helper.get_owners(voyage)
+    captain_owner_helper = VoyageCaptainOwnerHelper.get_instance()
+    all_owners = captain_owner_helper.get_owners(voyage)
     for i, owner in enumerate(all_owners):
         if i >= len(aux):
             break
         data['OWNER' + aux[i]] = owner
 
     aux = list(get_multi_valued_column_suffix(3, True))
-    all_captains = _captain_owner_helper.get_captains(voyage)
+    all_captains = captain_owner_helper.get_captains(voyage)
     for i, captain in enumerate(all_captains):
         if i >= len(aux):
             break

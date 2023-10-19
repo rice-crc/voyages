@@ -73,9 +73,6 @@ def mkdate(year, month, day):
               "Day: " + day + " Month: " + month + " Year: " + year)
         return date(year, month, day)
 
-
-_captain_owner_helper = VoyageCaptainOwnerHelper()
-
 # Index for Sources
 
 
@@ -765,7 +762,7 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
 
     def prepare_var_owner(self, obj):
         try:
-            return '<br/> '.join(_captain_owner_helper.get_owners(obj))
+            return '<br/> '.join(VoyageCaptainOwnerHelper.get_instance().get_owners(obj))
         except AttributeError:
             return None
 
@@ -902,7 +899,7 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
 
     # Voyage crew
     def prepare_var_captain(self, obj):
-        return '<br/> '.join(_captain_owner_helper.get_captains(obj))
+        return '<br/> '.join(VoyageCaptainOwnerHelper.get_instance().get_captains(obj))
 
     def prepare_var_captain_plaintext(self, obj):
         return self.prepare_var_captain(obj)
