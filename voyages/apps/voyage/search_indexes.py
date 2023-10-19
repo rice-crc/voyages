@@ -751,6 +751,13 @@ class VoyageIndex(indexes.SearchIndex, indexes.Indexable):
         helper = VoyagesFullQueryHelper()
         return helper.get_query()
 
+
+    def prepare(self, obj):
+        if not hasattr(obj, 'full_query'):
+            # This object did not come from VoyagesFullQueryHelper!
+            obj = self.index_queryset().get(pk=obj.pk)
+        return super().prepare(obj)
+        
     def prepare_var_imp_voyage_began(self, obj):
         try:
             return get_year(obj.voyage_dates.imp_voyage_began)
