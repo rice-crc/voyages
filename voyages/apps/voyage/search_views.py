@@ -611,7 +611,7 @@ download_header_map = {
         pgettext_lazy("datatable column header", "PORTRET"),
     "var_port_of_call_before_atl_crossing_id":
         "Places of call before Atlantic crossing",
-    "var_registered_place_idnum":
+    "var_registered_place":
         "Place registered",
     "var_registered_year":
         "Year registered",
@@ -797,10 +797,10 @@ def get_var_options(request):
     data = json.loads(request.body)
     var_name = data.get('var_name', '(blank)')
     options_model = _options_model.get(var_name)
-    if not options_model:
+    if options_model is None:
         return HttpResponseBadRequest(
             f'Caller passed: "{var_name}". '
-            f'Must specify some var_name in ' + list(_options_model.keys()))
+            f'Must specify some var_name in {list(_options_model.keys())}')
     # Check if we have the results cached to avoid a db hit.
     cache_key = '_options_' + var_name
     response_data = cache.get(cache_key)

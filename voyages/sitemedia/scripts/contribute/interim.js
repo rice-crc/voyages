@@ -908,7 +908,12 @@ function demographicsTable(numbers, editable, pre_existing_data) {
             return null;
         },
         function (i, j) {
-            return NUMBERS_KEY_PREFIX + DEMOGRAPHICS_COLUMN_HEADERS[j] + DEMOGRAPHICS_ROW_HEADERS[i];
+            var rh = DEMOGRAPHICS_ROW_HEADERS[i];
+            var ch = DEMOGRAPHICS_COLUMN_HEADERS[j];
+            if (Array.isArray(ch)) {
+                ch = rh.includes('IMP') ? ch[1] : ch[0];
+            }
+            return NUMBERS_KEY_PREFIX + ch + rh;
         }
     );
 }
