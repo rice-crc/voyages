@@ -387,7 +387,6 @@ def interim_main(request, contribution, interim):
         for src_type in interim_new_source_types:
             del_children(src_type)
 
-        del_children(InterimSlaveNumber)
         # Get pre-existing sources.
         update_interim_pre_sources(interim)
         for src in interim.pre_existing_sources.all():
@@ -429,6 +428,7 @@ def interim_main(request, contribution, interim):
             if view_item_index is not None:
                 src_pks[view_item_index] = src.pk
         # Clear previous numbers and save new ones.
+        del_children(InterimSlaveNumber)
         for k, v in list(numbers.items()):
             number = InterimSlaveNumber()
             number.interim_voyage = interim
