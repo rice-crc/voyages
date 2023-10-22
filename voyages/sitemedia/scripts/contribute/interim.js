@@ -834,10 +834,11 @@ function SlaveNumbersTable(table_id, numbers, editable, column_count, row_count,
         for (var i = 0; i < self.rows.length; ++i) {
             for (var j = 0; j < self.rows[i].length; ++j) {
                 var value = parseFloat($(self.rows[i][j]).html());
-                if (!isNaN(value)) {
-                    var name = position_to_var_name(i, j);
-                    form.append('<input class="' + APPENDED_FIELD_CLASS + '" type="hidden" id="' + name + '" name="' + name + '" value="' + value + '" />');
+                if (isNaN(value)) {
+                    value = '';
                 }
+                var name = position_to_var_name(i, j);
+                form.append('<input class="' + APPENDED_FIELD_CLASS + '" type="hidden" id="' + name + '" name="' + name + '" value="' + value + '" />');
             }
         }
     };
