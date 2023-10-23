@@ -86,11 +86,18 @@
 					<a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false" >{% trans 'Blog' %}</a>
 					<div class="dropdown-menu dropdown-menu-right">						
 						<a class="dropdown-item" href="{% url 'blog:blog' %}">{% trans "All Posts" %}</a>
+<!-- 
 						<a class="dropdown-item" href="{% url 'blog:institutions' %}">{% trans "Institutions" %}</a>
 						<a class="dropdown-item" href="{% url 'blog:authors' %}">{% trans "Authors" %}</a>
+ -->
+						<a class="dropdown-item" href="{% url 'blog:tag' tag='intro-maps' %}">{% trans "Maps" %}</a>
+						<a class="dropdown-item" href="{% url 'blog:tag' tag='news' %}">{% trans "News" %}</a>
+						<a class="dropdown-item" href="{% url 'blog:tag' tag='texas-bound' %}">{% trans "Texas Bound" %}</a>
+						<a class="dropdown-item" href="{% url 'blog:tag' tag='voyage-stories' %}">{% trans "Voyage Stories" %}</a>
+<!-- 						<a class="dropdown-item" href="{% url 'blog:tag' tag='intro-maps' %}">{% trans "Voyage Stories" %}</a> -->
 						
 					</div>
-				</li>						
+				</li>					
 				{% endif %}
 		
 				{% get_current_language as LANGUAGE_CODE %}
