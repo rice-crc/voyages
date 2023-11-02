@@ -1458,7 +1458,7 @@
     {% endif %}
 </form>
 {% if mode == 'editorial_review' %}
-    <a id="return_btn" class="btn btn-default" href="/contribute/editor_main?tab=requests">{% trans "Return to requests list" %}</a>
+    <a id="return_btn" class="btn btn-outline" href="/contribute/editor_main?tab=requests">{% trans "Return to requests list" %}</a>
 {% endif %}
 {% if mode == 'review' %}
     <a id="return_btn" class="btn btn-default" href="/contribute">{% trans "Return to Contribute home" %}</a>
@@ -2091,6 +2091,7 @@
             return getMonthLocaleName(locale, i);
         };
         var leadingZero = function(d) {
+            d = parseInt(d);
             return d < 10 ? '0' + d : '' + d;
         };
         for (var i = 1; i <= 12; ++i) {

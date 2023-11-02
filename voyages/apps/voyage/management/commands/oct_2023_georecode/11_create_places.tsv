@@ -1,0 +1,188 @@
+Type	Name	Old Code	New Code	Parent Name
+Place	Pass Cavallo		22178	Texas
+Place	Asunción		42014	Rio de la Plata
+Place	Concepción del Uruguay		42015	Rio de la Plata
+Place	Curupaity		42016	Rio de la Plata
+Place	Gualeguay		42017	Rio de la Plata
+Place	Humaitá		42018	Rio de la Plata
+Place	Manaus		50112	Amazonia
+Place	Maguay		50222	Bahia
+Place	Prado		50223	Bahia
+Place	Penedo		50314	Pernambuco
+Place	Vila Bela		50315	Pernambuco
+Place	Cerrito		50482	Southeast Brazil
+Place	Fazenda do Largo 		50483	Southeast Brazil
+Place	Guarainha		50484	Southeast Brazil
+Place	Imbetiba		50485	Southeast Brazil
+Place	Ipanema		50486	Southeast Brazil
+Place	Itacuruçá		50487	Southeast Brazil
+Place	Leopoldina 		50488	Southeast Brazil
+Place	Pelotas		50489	Southeast Brazil
+Place	Piúma		50490	Southeast Brazil
+Place	São João da Barra		50491	Southeast Brazil
+Place	East Asia, port unspecified		80699	East Asia
+Place	Angossy Bay		60839	East Africa and Indian Ocean islands
+Place	Antongil Bay		60840	East Africa and Indian Ocean islands
+Place	Assada		60841	East Africa and Indian Ocean islands
+Place	Boina		60842	East Africa and Indian Ocean islands
+Place	Bombetoc; Bombetoka; Mahajanga; Majunga		60843	East Africa and Indian Ocean islands
+Place	Bonnivoul		60844	East Africa and Indian Ocean islands
+Place	Farantangane		60845	East Africa and Indian Ocean islands
+Place	Foulpointe		60846	East Africa and Indian Ocean islands
+Place	Luna Roads		60847	East Africa and Indian Ocean islands
+Place	Manabullo		60848	East Africa and Indian Ocean islands
+Place	Manazary; Manajary		60849	East Africa and Indian Ocean islands
+Place	Mangally		60850	East Africa and Indian Ocean islands
+Place	Maningare; Manningare		60851	East Africa and Indian Ocean islands
+Place	Massalege; Massaliege; Massaly; Magelage; Mazalagem		60852	East Africa and Indian Ocean islands
+Place	Matitanana		60853	East Africa and Indian Ocean islands
+Place	Morondava		60854	East Africa and Indian Ocean islands
+Place	Morongany; Morongambo; Maringando		60855	East Africa and Indian Ocean islands
+Place	Pointe Larée		60856	East Africa and Indian Ocean islands
+Place	Sadian Bon Porto		60857	East Africa and Indian Ocean islands
+Place	Saint Augustine's Bay; St. Augustin Bay		60858	East Africa and Indian Ocean islands
+Place	Sainte Luce		60859	East Africa and Indian Ocean islands
+Place	Tsiribihina		60860	East Africa and Indian Ocean islands
+Place	Vohemar; Wohemar Bay		60861	East Africa and Indian Ocean islands
+Place	Delagoa Bay		60862	East Africa and Indian Ocean islands
+Place	Swahili coast		60863	East Africa and Indian Ocean islands
+Place	Lindi		60864	East Africa and Indian Ocean islands
+Place	Malimbe		60865	East Africa and Indian Ocean islands
+Place	Manguira		60866	East Africa and Indian Ocean islands
+Place	Mikindani		60867	East Africa and Indian Ocean islands
+Place	Mongale		60868	East Africa and Indian Ocean islands
+Place	Comoro islands, port unspecified		60869	East Africa and Indian Ocean islands
+Place	Mohilla		60870	East Africa and Indian Ocean islands
+Place	Seychelles, port unspecified		60871	East Africa and Indian Ocean islands
+Place	Horn of Africa		60872	East Africa and Indian Ocean islands
+Place	Massawa		60873	East Africa and Indian Ocean islands
+Place	East Africa, port unspecified		60898	East Africa and Indian Ocean islands
+Place	Middle East, port unspecified		70199	Other Middle East
+Place	Aden		70201	Red Sea and Gulf of Aden
+Place	Assab		70202	Red Sea and Gulf of Aden
+Place	Berbera		70203	Red Sea and Gulf of Aden
+Place	Hodeidah		70204	Red Sea and Gulf of Aden
+Place	Jeddah		70205	Red Sea and Gulf of Aden
+Place	Massawa		70206	Red Sea and Gulf of Aden
+Place	Port Sudan		70207	Red Sea and Gulf of Aden
+Place	Suakin		70208	Red Sea and Gulf of Aden
+Place	Red Sea and Gulf of Aden, port unspecified		70299	Red Sea and Gulf of Aden
+Place	Abu Dhabi		70401	Persian Gulf and the Gulf of Oman
+Place	Bahrain		70402	Persian Gulf and the Gulf of Oman
+Place	Bandar Abbas		70403	Persian Gulf and the Gulf of Oman
+Place	Bander Jask		70404	Persian Gulf and the Gulf of Oman
+Place	Bander Kangan		70405	Persian Gulf and the Gulf of Oman
+Place	Bander Lingah		70406	Persian Gulf and the Gulf of Oman
+Place	Bander Rig		70407	Persian Gulf and the Gulf of Oman
+Place	Basrah		70408	Persian Gulf and the Gulf of Oman
+Place	Chah Bahar		70409	Persian Gulf and the Gulf of Oman
+Place	Damman		70410	Persian Gulf and the Gulf of Oman
+Place	Doha		70411	Persian Gulf and the Gulf of Oman
+Place	Dubai		70412	Persian Gulf and the Gulf of Oman
+Place	Guwadar		70413	Persian Gulf and the Gulf of Oman
+Place	Jubayl		70414	Persian Gulf and the Gulf of Oman
+Place	Kuwait		70415	Persian Gulf and the Gulf of Oman
+Place	Manamah		70416	Persian Gulf and the Gulf of Oman
+Place	Muharraq		70417	Persian Gulf and the Gulf of Oman
+Place	Muscat		70418	Persian Gulf and the Gulf of Oman
+Place	Ras al-Hadd		70419	Persian Gulf and the Gulf of Oman
+Place	Ras al-Khaymah		70420	Persian Gulf and the Gulf of Oman
+Place	Suhar		70421	Persian Gulf and the Gulf of Oman
+Place	Sur		70422	Persian Gulf and the Gulf of Oman
+Place	Zubarah		70423	Persian Gulf and the Gulf of Oman
+Place	Persian Gulf and Gulf of Oman, port unspecified		70499	Persian Gulf and the Gulf of Oman
+Place	Northwestern India, port unspecified		80202	South Asia
+Place	Bombay		80203	South Asia
+Place	Cambay		80204	South Asia
+Place	Daman		80205	South Asia
+Place	Diu		80206	South Asia
+Place	Surat		80208	South Asia
+Place	Malabar Coast, port unspecified		80209	South Asia
+Place	Anjengo		80210	South Asia
+Place	Calicut		80211	South Asia
+Place	Cochin		80212	South Asia
+Place	Tellicherry		80213	South Asia
+Place	Arakan		80214	South Asia
+Place	Angarcale		80215	South Asia
+Place	Dianga		80216	South Asia
+Place	Chandernagore		80219	South Asia
+Place	Chittagong		80220	South Asia
+Place	Kedgeree/Kagery		80221	South Asia
+Place	Coromandel Coast, port unspecified		80222	South Asia
+Place	Bimilipatam		80223	South Asia
+Place	Coringa		80224	South Asia
+Place	Cuddalore		80225	South Asia
+Place	Devanampatnam		80226	South Asia
+Place	Ganjam		80227	South Asia
+Place	Jaggernatpooram		80228	South Asia
+Place	Karaikal		80229	South Asia
+Place	Madras/Fort St. George		80230	South Asia
+Place	Madurai		80231	South Asia
+Place	Masulipatam		80232	South Asia
+Place	Nagapatam		80233	South Asia
+Place	Pondichéry		80234	South Asia
+Place	Porto Novo		80235	South Asia
+Place	Pulicat		80236	South Asia
+Place	Tegnapatam/Fort St. David		80237	South Asia
+Place	Tranquebar		80238	South Asia
+Place	Vizagapatam		80239	South Asia
+Place	Wattara		80240	South Asia
+Place	Yanam		80241	South Asia
+Place	Ceylon		80242	South Asia
+Place	Colombo		80243	South Asia
+Place	Galle		80244	South Asia
+Place	Trincomalee		80245	South Asia
+Place	Alor		80402	Insular Southeast Asia
+Place	Bali		80403	Insular Southeast Asia
+Place	Batak		80404	Insular Southeast Asia
+Place	Borneo; Kalimantan		80405	Insular Southeast Asia
+Place	Banjarmasin		80406	Insular Southeast Asia
+Place	Burma		80407	Insular Southeast Asia
+Place	Cambodia		80408	Insular Southeast Asia
+Place	Ende		80409	Insular Southeast Asia
+Place	Flores		80410	Insular Southeast Asia
+Place	Java		80411	Insular Southeast Asia
+Place	Bantam; Banten		80412	Insular Southeast Asia
+Place	Batavia		80413	Insular Southeast Asia
+Place	Lombok		80414	Insular Southeast Asia
+Place	Malay Peninsula; Malaya		80415	Insular Southeast Asia
+Place	Kedah; Quedah		80416	Insular Southeast Asia
+Place	Malacca		80417	Insular Southeast Asia
+Place	Penang		80418	Insular Southeast Asia
+Place	Singapore		80419	Insular Southeast Asia
+Place	Manado		80420	Insular Southeast Asia
+Place	Manggarai		80421	Insular Southeast Asia
+Place	Mentawai Islands, port unspecified		80422	Insular Southeast Asia
+Place	Moluccas; Malukus		80423	Insular Southeast Asia
+Place	Amboina; Ambon		80424	Insular Southeast Asia
+Place	Banda		80425	Insular Southeast Asia
+Place	Nias		80427	Insular Southeast Asia
+Place	Papua		80428	Insular Southeast Asia
+Place	Bohol		80430	Insular Southeast Asia
+Place	Cebu		80431	Insular Southeast Asia
+Place	Leyte		80432	Insular Southeast Asia
+Place	Manila		80433	Insular Southeast Asia
+Place	Mindanao		80434	Insular Southeast Asia
+Place	Negros		80435	Insular Southeast Asia
+Place	Panay		80436	Insular Southeast Asia
+Place	Riau		80437	Insular Southeast Asia
+Place	Samar		80438	Insular Southeast Asia
+Place	Sulawesi		80439	Insular Southeast Asia
+Place	Makassar		80440	Insular Southeast Asia
+Place	Sulu Archipelago, port unspecified		80441	Insular Southeast Asia
+Place	Jolo		80442	Insular Southeast Asia
+Place	Sumatra		80443	Insular Southeast Asia
+Place	Acheh; Banda Aceh		80444	Insular Southeast Asia
+Place	Bencoolen; Benkulu; Bengkulu		80445	Insular Southeast Asia
+Place	Pryaman		80446	Insular Southeast Asia
+Place	Sumbawa		80447	Insular Southeast Asia
+Place	Tawi-Tawi		80448	Insular Southeast Asia
+Place	Ternate		80449	Insular Southeast Asia
+Place	Thailand, port unspecified		80450	Insular Southeast Asia
+Place	Timor		80451	Insular Southeast Asia
+Place	Vietnam, port unspecified		80452	Insular Southeast Asia
+Place	Southeast Asia, port unspecified		80499	Insular Southeast Asia
+Place	China, port unspecified		80602	East Asia
+Place	Japan, port unspecified		80604	East Asia
+Place	Nagasaki		80605	East Asia
+Place	Korea, port unspecified		80606	East Asia

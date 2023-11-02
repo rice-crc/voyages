@@ -1,0 +1,51 @@
+Type	Name	Old Code	New Code	Parent Name
+Place	Americas, port unspecified	80299	90299	Americas
+Place	South Asia, port unspecified	80699	80299	South Asia
+Place	Other, non Geographical	80799	90799	Non-geographical
+Place	At sea	80719	90719	Non-geographical
+Place	Iberian World, port unspecified	80718	90718	Non-geographical
+Place	Seized at sea by Spanish officials	80717	90717	Non-geographical
+Place	Taken at sea from pirates	80716	90716	Non-geographical
+Place	Prize (taken from USA)	80715	90715	Non-geographical
+Place	Prize (taken from Portuguese)	80714	90714	Non-geographical
+Place	Slaves rescued at sea from a shipwreck	80713	90713	Non-geographical
+Place	Wreck	80712	90712	Non-geographical
+Place	Sold at sea to another vessel	80711	90711	Non-geographical
+Place	Prize (taken from Spanish)	80710	90710	Non-geographical
+Place	Prize (taken from French)	80709	90709	Non-geographical
+Place	Prize (taken from Dutch)	80708	90708	Non-geographical
+Place	Prize (unknown place)	80707	90707	Non-geographical
+Place	Captured interloper	80706	90706	Non-geographical
+Place	Captured by WIC	80705	90705	Non-geographical
+Place	Non-British	80704	90704	Non-geographical
+Place	British plantations	80703	90703	Non-geographical
+Place	British Americas, port unspecified	80599	90599	British Americas
+Place	Kingston, Savannah, Maryland	80501	90501	British Americas
+Place	Spanish Americas, port unspecified	80499	90499	Spanish Americas
+Place	Spanish American Mainland, port unspecified	80401	90401	Spanish Americas
+Place	Marrader (Morada?), location undetermined	80205	90205	Americas
+Place	Imfors Bay, location undetermined	80204	90204	Americas
+Place	Kalas, location undetermined	80203	90203	Americas
+Place	Rocus, location undetermined	80202	90202	Americas
+Place	Guecka, location undetermined	80201	90201	Americas
+Place	Ovingham	555555	10302	Great Britain
+Place	Dedham	105962	20436	Massachusetts
+Place	Ainsdale, Southport	10487	10301	Great Britain
+Place	Calcutta	80603	80218	South Asia
+Place	Goa	80602	80207	South Asia
+Place	Bengal	80601	80217	South Asia
+Place	Asia e Africa, port unspecified	80399	90601	Asia e Africa
+Place	Macau	71004	80603	East Asia
+Place	Philippines, port unspecified	70101	80429	Insular Southeast Asia
+Place	Columbia County	21312	21312	South Carolina
+Place	Western District	20269	60269	Sierra Leone
+Place	Mile end Liverpool	20513	104990	England and Wales
+Place	Charleston, WV	21126	21929	Other North America
+Place	Mount Alexander	34221	34421	Grenada
+Place	Rattan (a) Roatán	41220	41220	British Honduras
+Place	Americas, region unspecified	77780200	77790299	Americas
+Place	Asia, port unspecified	77780199	77780999	Other Asia
+Place	Basse Indre	77780604	77710764	France
+Place	Caribbean (colony unspecified)	39002	77739001	Other Caribbean
+Place	Columbia	22125	77722117	Texas
+Place	Bristol	104991	77710404	England and Wales

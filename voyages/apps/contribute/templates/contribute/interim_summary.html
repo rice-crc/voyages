@@ -935,7 +935,7 @@
         var date = dateFormat($this.html());
         $this.html(date);
         if (date == '') {
-            $this.parent().addClass('blank');
+            $this.parent().children('span').addClass('blank');
         }
     });
 
@@ -1012,7 +1012,7 @@
         color: lightgray;
     }
 
-    .blank > span:after {
+    .blank > span:after, span.blank:after {
         color: gray;
         content: '{% trans "(blank)" %}';
     }

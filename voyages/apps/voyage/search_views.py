@@ -611,7 +611,7 @@ download_header_map = {
         pgettext_lazy("datatable column header", "PORTRET"),
     "var_port_of_call_before_atl_crossing_id":
         "Places of call before Atlantic crossing",
-    "var_registered_place_idnum":
+    "var_registered_place":
         "Place registered",
     "var_registered_year":
         "Year registered",
@@ -667,15 +667,16 @@ def get_download_header(var_name):
         split = name_to_follow.find('__')
         current = name_to_follow[:split] if split > 0 else name_to_follow
         f = None
-        result = None
+        result = ''
         try:
             f = model._meta.get_field(current)
             result = f.verbose_name
         except:
             pass
         if split > 0 and f:
-            result += ' ' + \
-                follow_field(f.remote_field.model, name_to_follow[split + 2:])
+            entry = follow_field(f.remote_field.model, name_to_follow[split + 2:])
+            result += ' ' + entry
+                
         return result
 
     def smart(h):
@@ -728,6 +729,10 @@ def ajax_download(request):
     lang = request.LANGUAGE_CODE
     columns = data['cols']
     excel_mode = data.get('excel_mode', True)
+    ## The "All Columns" setting keeps breaking on port names, presumably because there's
+    ### some hard-coded list of itinerary variable names. I've decided that rather than
+    ### keep patching that, we'll disable the "all columns" setting. If users want "all"
+    ### the data, they can go to the downloads page, or they can select all the columns.
 
     if len(columns) == 0:
         columns = [col if 'lang' not in col or 'lang_' in col else col + '_' + lang
@@ -781,6 +786,7 @@ _options_model = {
 
 
 @csrf_exempt
+@cache_page(3600)
 def get_var_options(request):
     """
     This API fetches the values allowed for a given variable on
@@ -791,10 +797,10 @@ def get_var_options(request):
     data = json.loads(request.body)
     var_name = data.get('var_name', '(blank)')
     options_model = _options_model.get(var_name)
-    if not options_model:
+    if options_model is None:
         return HttpResponseBadRequest(
             f'Caller passed: "{var_name}". '
-            f'Must specify some var_name in ' + list(_options_model.keys()))
+            f'Must specify some var_name in {list(_options_model.keys())}')
     # Check if we have the results cached to avoid a db hit.
     cache_key = '_options_' + var_name
     response_data = cache.get(cache_key)
@@ -818,6 +824,7 @@ def get_var_options(request):
 
 @csrf_exempt
 @require_POST
+@cache_page(3600)
 def get_filtered_places(request):
     """
     Obtains a list of places and corresponding regions/broad regions

@@ -1,0 +1,7 @@
+Type	Name	Old Code	New Code	Parent Name
+Region	Americas	80200	90200	Other
+Region	Spanish Americas	80400	90400	Other
+Region	British Americas	80500	90500	Other
+Region	Asia e Africa	80300	90600	Other
+Region	Non-geographical	80700	90700	Other
+Region	Insular Southeast Asia	70100	80400	Asia
