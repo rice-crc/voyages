@@ -10,6 +10,8 @@ urlpatterns = [
         voyages.apps.past.views.search_enslaved, name='search_enslaved'),
     url(r'^api/search_enslaver',
         voyages.apps.past.views.search_enslaver, name='search_enslaver'),
+    url(r'^api/get_enslaver/(?P<pk>[0-9]+)$',
+        voyages.apps.past.views.get_enslaver, name='get_enslaver'),
     url(r'^api/modern-countries',
         voyages.apps.past.views.get_modern_countries,
         name='modern-countries'),

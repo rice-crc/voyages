@@ -79,10 +79,18 @@ class RawQueryWrapper:
         return len(self)
 
     def __getitem__(self, k):
+        result = None
+        was_int = isinstance(k, int)
+        if was_int:
+            k = slice(k, k + 1)
         if isinstance(k, slice):
             sliced = RawQuery(self._replace_limit(f"LIMIT {k.start},{k.stop - k.start}"), self.data_query.using, self.data_query.params)
-            return RawQueryWrapper(sliced, self.len_query, self.fields)
-        raise Exception('not supported')
+            result = RawQueryWrapper(sliced, self.len_query, self.fields)
+        if result is None:
+            raise Exception('not supported')
+        if was_int:
+            result = result.__iter__().__next__()
+        return result
     
     def __iter__(self):
         qiter = iter(self.data_query)
@@ -1510,7 +1518,7 @@ class EnslaverSearch:
     def __init__(self,
                  searched_name=None,
                  exact_name_search=False,
-                 year_range=None,
+                year_range=None,
                  embarkation_ports=None,
                  disembarkation_ports=None,
                  departure_ports=None,
@@ -1520,15 +1528,17 @@ class EnslaverSearch:
                  enslaved_count=None,
                  roles=None,
                  voyage_datasets=None,
+                 enslaver_identity_ids=None,
                  order_by=None):
         """
-        Search the Enslaver database. If a parameter is set to None, it will
-        not be included in the search.
-        @param: searched_name A name string to be searched
-        @param: exact_name_search Boolean indicating whether the search is
+        Search the Enslaver database. If a parameter is set to None, it will not
+        be included in the search. @param: searched_name A name string to be
+        searched @param: exact_name_search Boolean indicating whether the search
+        is
                 exact or fuzzy
-        @param: voyage_dataset A list of voyage datasets that restrict the search.
-        @param: year_range A pair (a, b) where a is the min voyage year and b
+        @param: voyage_dataset A list of voyage datasets that restrict the
+        search. @param: year_range A pair (a, b) where a is the min voyage year
+        and b
                 the max
         @param: embarkation_ports A list of port ids where the enslaved
                 embarked
@@ -1536,20 +1546,21 @@ class EnslaverSearch:
                 disembarked
         @param: departure_ports A list of port ids where the voyage
                 begin
-        @param: ship_name The ship name that the enslaved embarked
-        @param: voyage_id A pair (a, b) where the a <= voyage_id <= b
-        @param: source A text fragment that should match Source's text_ref or
+        @param: ship_name The ship name that the enslaved embarked @param:
+        voyage_id A pair (a, b) where the a <= voyage_id <= b @param: source A
+        text fragment that should match Source's text_ref or
                 full_ref
         @param: enslaved_count A pair (a, b) such that the enslaver has an
                 associated enslaved count between a and b.
         @param: roles a list of role pks that should be matched (an enslaver may
                 appear in multiple roles).
-        @param: a list of Voyage datasets that should be used to match voyages 
-                connected to the enslaver.
+        @param: voyage_datasets a list of Voyage datasets that should be used to
+                match voyages connected to the enslaver.
+        @param: enslaver_ids a list of ids of enslavers
         @param: order_by An array of dicts {
-                'columnName': 'NAME', 'direction': 'ASC or DESC' }.
-                Note that if the search is fuzzy, then the fallback value of
-                order_by is the ranking of the fuzzy search.
+                'columnName': 'NAME', 'direction': 'ASC or DESC' }. Note that if
+                the search is fuzzy, then the fallback value of order_by is the
+                ranking of the fuzzy search.
         """
         self.searched_name = single_val(searched_name)
         self.exact_name_search = single_val(exact_name_search)
@@ -1563,6 +1574,7 @@ class EnslaverSearch:
         self.enslaved_count = enslaved_count
         self.roles = roles
         self.voyage_datasets = voyage_datasets
+        self.enslaver_identity_ids = enslaver_identity_ids
         self.order_by = order_by or [{'columnName': 'pk', 'direction': 'asc'}]
 
     def execute(self, fields):
@@ -1621,6 +1633,8 @@ class EnslaverSearch:
             q = add_voyage_field(q, 'voyage_dates__imp_arrival_at_port_of_dis', 'range', _year_range_conv(self.year_range))
         if self.enslaved_count:
             q = q.filter(cached_properties__enslaved_count__range=self.enslaved_count)
+        if self.enslaver_identity_ids:
+            q = q.filter(pk__in=self.enslaver_identity_ids)
         if self.roles:
             terms = None
             for pk in self.roles:

@@ -624,6 +624,26 @@ def search_enslaved(request):
 
     return JsonResponse({'error': 'Unsupported'})
 
+_all_displayable_enslaver_fields = [
+    'id',
+    'principal_alias',
+    'birth_year', 'birth_month', 'birth_day',
+    'death_year', 'death_month', 'death_day',
+    'cached_properties__enslaved_count',
+    'cached_properties__first_year',
+    'cached_properties__last_year',
+    EnslaverSearch.ALIASES_LIST,
+    EnslaverSearch.VOYAGES_LIST,
+    EnslaverSearch.SOURCES_LIST,
+    EnslaverSearch.RELATIONS_LIST
+]
+
+def get_enslaver(request, pk):
+    search = EnslaverSearch(enslaver_identity_ids=[pk])
+    query = search.execute(_all_displayable_enslaver_fields)
+    count = len(query)
+    return JsonResponse(EnslaverSearch.patch_row(query[0])) if count == 1 else \
+        JsonResponse({ 'error': f"{count} matches to enslaver id={pk}" })
 
 @require_POST
 @csrf_exempt
@@ -633,19 +653,7 @@ def search_enslaver(request):
     search = EnslaverSearch(**user_query)
     fields = data.get('fields')
     if fields is None:
-        fields = [
-            'id',
-            'principal_alias',
-            'birth_year', 'birth_month', 'birth_day',
-            'death_year', 'death_month', 'death_day',
-            'cached_properties__enslaved_count',
-            'cached_properties__first_year',
-            'cached_properties__last_year',
-            EnslaverSearch.ALIASES_LIST,
-            EnslaverSearch.VOYAGES_LIST,
-            EnslaverSearch.SOURCES_LIST,
-            EnslaverSearch.RELATIONS_LIST
-        ]
+        fields = _all_displayable_enslaver_fields
     query = search.execute(fields)
     output_type = data.get('output', 'resultsTable')
     # For now we only support outputing the results to DataTables.
