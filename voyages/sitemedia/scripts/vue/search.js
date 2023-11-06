@@ -22,7 +22,7 @@ var allColumns = [
   // ship nation owner
   { data: "var_voyage_id", category: 1, header: gettext("Voyage ID"), isImputed: false },
   { data: "var_ship_name", category: 1, header: gettext("Vessel name"), isImputed: false },
-  { data: "var_owner", category: 1, header: gettext("Vessel owner"), visible: false, isImputed: false },
+  { data: "var_owner", class:"owner", category: 1, header: gettext("Vessel owner"), visible: false, isImputed: false },
   { data: "var_year_of_construction", category: 1, header: gettext("Year constructed"), visible: false, isImputed: false },
   { data: "var_vessel_construction_place_lang", category: 1, header: gettext("Place constructed"), visible: false, isImputed: false },
   { data: "var_registered_year", category: 1, header: gettext("Year registered"), visible: false, isImputed: false },
@@ -84,7 +84,7 @@ var allColumns = [
   { data: "var_voyage_completed_partial", category: 4, header: pgettext("datatable column header", "DATARR43"), visible: false, isImputed: false },
 
   // captain and crew
-  { data: "var_captain", category: 5, header: gettext("Captain's name"), isImputed: false },
+  { data: "var_captain", class:"captain", category: 5, header: gettext("Captain's name"), isImputed: false },
   { data: "var_crew_voyage_outset", category: 5, header: gettext("Crew at voyage outset"), visible: false, isImputed: false },
   { data: "var_crew_first_landing", category: 5, header: pgettext("datatable column header", "CREW3"), visible: false, isImputed: false },
   { data: "var_crew_died_complete_voyage", category: 5, header: gettext("Crew deaths during voyage"), visible: false, isImputed: false },
@@ -164,6 +164,17 @@ allColumns.forEach(function(c, index) {
         formattedString = getFormattedCargo(data);
       } else if (c.data == 'var_afrinfo') {
         formattedString = getFormattedAfricanInfo(data);
+      } else if (c.data == 'var_captain' || c.data == 'var_owner') {
+        var people = data.split('<br/> ');
+        people.forEach(function (value, index) {
+          var found = value.match(/\[(\d+)?\]/);
+          if (found.length > 1) {
+            people[index] = `<a href="#" onClick="openEnslaverModal(${found[1]})">${value}</a>`;
+          } else {
+            people[index] = "<span>" + data + "</span>";
+          }
+        });
+        formattedString += people.join('<br/> ');
       } else {
         formattedString = "<span>" + data + "</span>";
       }
