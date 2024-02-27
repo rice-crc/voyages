@@ -70,6 +70,11 @@ var searchBar = new Vue({
       data: null,
       collapseVisible: true
     },
+    enslaverRow: {
+      // store current row's data; used for displaying entry full details
+      data: null,
+      collapseVisible: true
+    },
     currentQuery: {},
     hasCurrentQuery: false,
     rowModalShow: false,
@@ -332,6 +337,68 @@ var searchBar = new Vue({
             }
             results.push(datum);
           }
+        }
+        this.row.results = results;
+
+        // collect ids for the group collapse. there might be a better way
+        var ids = "";
+        for (group in this.row.results) {
+          ids = ids + this.row.results[group]["group"] + ".";
+        }
+        this.row.ids = ids.slice(0, -1);
+      },
+      deep: true
+    },
+
+    enslaverRow: {
+      handler: function() {
+        var results = [];
+        if (this.enslaverRow.data) {
+          var rowData = this.enslaverRow.data;
+          enslaverColumns.forEach(function(group, key){
+            if (group.group !== "year") {
+              var datum = {
+                group: group.group,
+                groupName: group.groupName,
+                variables: {}
+              };
+              group.fields.forEach(function(field, key){
+                var varName = field.data;
+                var label = field.label !== undefined ? field.label : field.data;
+                var value = rowData[varName];
+                var isImputed = field.isImputed !== undefined ? field.isImputed : false;
+
+                if (varName.indexOf('percentage') != -1 || varName.indexOf('mortality') != -1) {
+                  value = roundDecimal(value * 100, 1) + "%";
+                }
+                else if (varName == 'var_sources') {
+                  value = getVoyageFormattedSource(value);
+                }
+                else if (varName == 'voyages_list') {
+                  if (rowData.voyages_list.length) {
+                    value = formatVoyages(rowData, 'modal-enslaver-voyages-table', true);
+                  } else {
+                    value = null;
+                  }
+                }
+                else if (varName == 'relations_list') {
+                  if (rowData.relations_list.length) {
+                    value = formatRelations(rowData, 'modal-enslaver-relations-table', true);
+                  } else {
+                    value = null;
+                  }
+                }
+
+                datum.variables[varName] = {
+                  varName: varName,
+                  label: label,
+                  value: value,
+                  isImputed: isImputed
+                };
+              });
+              results.push(datum);
+            }
+          });
         }
         this.row.results = results;
 
@@ -738,6 +805,26 @@ var searchBar = new Vue({
         }
       }
     }
+
+    this.$root.$on('bv::modal::shown', (bvEvent, modalId) => {
+      $("#modal-enslaver-voyages-table").css('width', '100%').addClass('table').addClass('table-striped').addClass('table-bordered');
+      $("#modal-enslaver-voyages-table").DataTable({
+        paging: false,
+        searching: false,
+        info: false,
+        destroy: true,
+        scrollY: "200px",
+      });
+
+      $("#modal-enslaver-relations-table").css('width', '100%').addClass('table').addClass('table-striped').addClass('table-bordered');
+      $("#modal-enslaver-relations-table").DataTable({
+        paging: false,
+        searching: false,
+        info: false,
+        destroy: true,
+        scrollY: "200px"
+      });
+    })
 
   },
 

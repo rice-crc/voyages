@@ -2,9 +2,11 @@ from __future__ import print_function, unicode_literals
 
 from builtins import input, next, str
 
+from django.conf import settings
 from django.core.management.base import BaseCommand
 from django.db import connection
 from django.db import transaction
+from django.db.models import F
 from django.utils.encoding import smart_str
 from voyages.apps.contribute.publication import CARGO_COLUMN_COUNT
 
@@ -13,17 +15,18 @@ from voyages.apps.voyage.models import (AfricanInfo, BroadRegion, CargoType, Car
                                         ParticularOutcome, Place, Region,
                                         Resistance, RigOfVessel, SlavesOutcome,
                                         TonType, VesselCapturedOutcome, Voyage,
-                                        VoyageCaptain, VoyageCaptainConnection, VoyageCargoConnection,
+                                        VoyageCargoConnection,
                                         VoyageCrew, VoyageDates,
                                         VoyageGroupings, VoyageItinerary,
                                         VoyageOutcome, VoyageShip,
-                                        VoyageShipOwner,
-                                        VoyageShipOwnerConnection,
-                                        VoyageSlavesNumbers, VoyageSources,
+                                        VoyageSlavesNumbers,
                                         VoyageSourcesConnection)
 from voyages.apps.common.utils import *
 
 import re
+
+if settings.VOYAGE_ENSLAVERS_MIGRATION_STAGE <= 2:
+    from voyages.apps.voyage.models import (VoyageCaptain, VoyageCaptainConnection, VoyageShipOwner, VoyageShipOwnerConnection)
 
 def _migrate_enslavers_from_legacy():
     from django.conf import settings
@@ -38,53 +41,141 @@ def _migrate_enslavers_from_legacy():
     # is already associated with the existing voyage.
     from voyages.apps.past.models import EnslaverAlias, EnslaverIdentity, EnslaverVoyageConnection, VoyageCaptainOwnerHelper
     from unidecode import unidecode
-    aliases = {}
+
+    def clean_name(name):
+        # Remove diacritics to increase the number of positive matches and put
+        # everything in lower case.
+        name = unidecode(name).lower()
+        # Remove anything that is not a letter or space
+        return re.sub(r'[^\w]', '', name)
+
+    alias_to_identities = {} # Maps an alias (name) to the set of all identity ids
+    identities_to_aliases = {} # Maps an identity id to all its aliases.
+    connections = {} # Map an identity with all the voyages connected to one of its aliases.
+    conn_fake_pk = 0
+    voyage_data = {v['pk']: v for v in Voyage.all_dataset_objects \
+                   .values('pk',
+                           year=F('voyage_dates__imp_arrival_at_port_of_dis'),
+                           ship_name=F('voyage_ship__ship_name'),
+                           disembark=F('voyage_itinerary__imp_principal_port_slave_dis__region_id'))}
     for alias in EnslaverAlias.objects.all():
-        aliases.setdefault(unidecode(alias.alias), []).append((alias.id, alias.identity_id))
-    connections = {}
-    for conn in EnslaverVoyageConnection.objects.all():
-        connections.setdefault(conn.enslaver_alias_id, []).append((conn.voyage_id, conn.role_id))
+        name = clean_name(alias.alias)
+        alias_to_identities.setdefault(name, set()).add(alias.identity_id)
+        identities_to_aliases.setdefault(alias.identity_id, []).append((name, alias.pk))
+        connections.setdefault(alias.identity_id, set())
+    for conn in EnslaverVoyageConnection.objects.select_related().all():
+        connections.setdefault(conn.enslaver_alias.identity_id, set()).add((conn.voyage_id, conn.role_id, conn.pk))
+
+    non_natural_person_name_inc = ['company', 'compania', 'companhia', 'compagnie']
+    def is_natural_person(name):
+        for co_name in non_natural_person_name_inc:
+            if co_name in name:
+                return False
+        return True
 
     def get_actions(name_and_voyages, role_ids):
+        nonlocal conn_fake_pk
         migration_actions = []
         for name, voyage_id in name_and_voyages:
-            matches = aliases.get(unidecode(name))
+            decodedname = clean_name(name)
+            natural_person = is_natural_person(decodedname)
+            matches = alias_to_identities.get(decodedname)
             item = {
                 'voyage_id': voyage_id,
                 'name': name,
+                'decodedname': decodedname,
                 'reason': '',
                 'steps': []
             }
             found = False
             if matches:
-                for alias_id, _ in matches:
-                    if voyage_id in [x[0] for x in connections.get(alias_id, []) if x[1] in role_ids]:
-                        # Happy path!
-                        # The appropriate voyage connection already exists.
+                good_match = None
+                for identity_id in matches:
+                    matching_with_voyage = [x for x in connections.get(identity_id, set()) if x[0] == voyage_id]
+                    exact_role = any(x[1] in role_ids for x in matching_with_voyage)
+                    if exact_role:
+                        # Happy path! The appropriate voyage connection already
+                        # exists for one of the identities with the given alias.
                         found = True
-                        item['reason'] = 'Exact match for voyage, name, and role in ' + EnslaverVoyageConnection.__name__
+                        item['category'] = 1
+                        item['reason'] = 'Exact match for voyage, enslaver alias, and role in ' + EnslaverVoyageConnection.__name__
                         break
+                    if matching_with_voyage:
+                        # A connection to the voyage already exists for this
+                        # identity, but not with the same role, if we cannot
+                        # find any better match (in another identity), then this
+                        # is assumed to be the proper identity for the
+                        # connection.
+                        good_match = identity_id
+                def get_voyage_year(v):
+                    try:
+                        return int(v['year'].replace(',', ''))
+                    except:
+                        return None
+                if not found and len(matches) > 1 and not good_match:
+                    # Our last chance to figure out a good match. We will use
+                    # voyage associated to a candidate identity to match a year
+                    # range and either ship name or disembarkation region.
+                    current_voyage_data = voyage_data[voyage_id]
+                    current_voyage_year = get_voyage_year(current_voyage_data)
+                    if current_voyage_year:
+                        MAX_YEAR_DIFF = 20
+                        for iid in matches:
+                            cluster = [voyage_data[vid] for (vid, _, _) in connections[iid]]
+                            if natural_person:
+                                # Only apply year heuristic if this is a natural
+                                # person.
+                                years = [y for y in [get_voyage_year(v) for v in cluster] if y]
+                                if len(years) == 0:
+                                    continue
+                                max_year = max(years)
+                                min_year = min(years)
+                                if current_voyage_year < min(min_year, max_year - MAX_YEAR_DIFF) or \
+                                        current_voyage_year > max(max_year, min(years) + MAX_YEAR_DIFF):
+                                    continue
+                            for field in ['ship_name', 'disembark']:
+                                if current_voyage_data[field] in [v[field] for v in cluster]:
+                                    good_match = iid
+                                    break
+                            if good_match:
+                                break
                 if not found:
-                    if len({x[1] for x in matches}) > 1:
-                        # Not so good path.
-                        # There are multiple identities maching this name so we
-                        # cannot determine for sure which is the right one.
-                        item['reason'] = 'Multiple identities containing the same alias'
-                    else:
+                    if len(matches) == 1 or good_match:
                         # OK path
-                        # We only need to create the connection for the existing alias.
-                        item['reason'] = 'Found a single matching identity with the alias'
+                        # We only need to create the connection for an existing alias.
+                        match_alias_id = None
+                        match_enslaver_id = good_match or next(matches.__iter__())
+                        for alias_name, alias_id in identities_to_aliases[match_enslaver_id]:
+                            if alias_name == decodedname:
+                                match_alias_id = alias_id
+                                break
+                        if not match_alias_id:
+                            raise Exception(f"Expected to find matching alias id: {identities_to_aliases[match_enslaver_id]} for '{decodedname}'")
+                        item['reason'] = 'Found a single or "good" matching identity with the alias'
+                        conn_fake_pk -= 1
                         item['steps'].append({
                             'type': EnslaverVoyageConnection.__name__,
+                            'pk_ref': conn_fake_pk,
                             'values': {
-                                'enslaver_alias_id': matches[0][0],
+                                'enslaver_alias_id': match_alias_id,
                                 'voyage_id': voyage_id,
+                                'role_id': role_ids[0]
                             }
                         })
+                        # Store this in connections for future matches.
+                        connections[match_enslaver_id].add((voyage_id, role_ids[0], conn_fake_pk))
                         # Treat this as a found alias.
                         found = True
+                        item['category'] = 2
+                    else:
+                        # Not so good path. There are multiple identities
+                        # maching this name and we could not determine for sure
+                        # which is the right one.
+                        item['category'] = 3
+                        item['reason'] = 'Multiple identities containing the same alias'
             else:
                 item['reason'] = 'No match found for enslaver alias'
+                item['category'] = 4
             if not found:
                 item['steps'].append({
                     'type': EnslaverIdentity.__name__,
@@ -92,10 +183,25 @@ def _migrate_enslavers_from_legacy():
                         'principal_alias': name
                     }
                 })
+                next_id = -len(identities_to_aliases)
                 item['steps'].append({
                     'type': EnslaverAlias.__name__,
+                    'pk_ref': next_id,
                     'values': {
                         'alias': name
+                    }
+                })
+                alias_to_identities.setdefault(decodedname, set()).add(next_id)
+                identities_to_aliases[next_id] = [(decodedname, next_id)]
+                conn_fake_pk -= 1
+                connections[next_id] = {(voyage_id, role_ids[0], conn_fake_pk)}
+                item['steps'].append({
+                    'type': EnslaverVoyageConnection.__name__,
+                    'pk_ref': conn_fake_pk,
+                    'values': {
+                        'enslaver_alias_id': next_id,
+                        'voyage_id': voyage_id,
+                        'role_id': role_ids[0]
                     }
                 })
             migration_actions.append(item)
@@ -115,11 +221,65 @@ def _migrate_enslavers_from_legacy():
     # Usage in django shell
     # from voyages.apps.voyage.management.commands import importcsv
     # actions = importcsv._migrate_enslavers_from_legacy()
-    # for a in actual:
+    # by_reason = {}
+    # for a in actions:
     #     by_reason.setdefault(a['reason'], []).append(a)
     # [(k, len(v)) for k, v in by_reason.items()]
     return actions
 
+
+def _execute_migration_actions(actions, start_pk=None):
+    from django.conf import settings
+    if settings.VOYAGE_ENSLAVERS_MIGRATION_STAGE <= 1:
+        # Not really necessary but it is convenient to reference the stage
+        # settings variable so that we can later remove dead code paths once the
+        # migration is finalized.
+        return []    
+    from voyages.apps.past.models import EnslaverAlias, EnslaverIdentity, EnslaverVoyageConnection
+    
+    def copy_values(source, target):
+        for k, v in source.items():
+            setattr(target, k, v)
+
+    next_enslaver_identity_pk = start_pk
+    next_enslaver_alias_pk = start_pk
+    alias_pk_ref = {}
+    with transaction.atomic():
+        for item in actions:
+            enslaver_identity_inserted_id = None
+            enslaver_alias_inserted_id = None
+            for step in item['steps']:
+                if step['type'] == EnslaverIdentity.__name__:
+                    eid = EnslaverIdentity()
+                    copy_values(step['values'], eid)
+                    if next_enslaver_identity_pk:
+                        eid.pk = next_enslaver_identity_pk
+                        next_enslaver_identity_pk += 1
+                    eid.save()
+                    enslaver_identity_inserted_id = eid.pk
+                elif step['type'] == EnslaverAlias.__name__:
+                    # We need the identity inserted first.
+                    if enslaver_identity_inserted_id is None:
+                        raise Exception("Unexpected step mode")
+                    ealias = EnslaverAlias()
+                    copy_values(step['values'], ealias)
+                    ealias.identity_id = enslaver_identity_inserted_id
+                    if next_enslaver_alias_pk:
+                        ealias.pk = next_enslaver_alias_pk
+                        next_enslaver_alias_pk += 1
+                    ealias.save()
+                    enslaver_alias_inserted_id = ealias.pk
+                    alias_pk_ref[step['pk_ref']] = ealias.pk
+                elif step['type'] == EnslaverVoyageConnection.__name__:
+                    conn = EnslaverVoyageConnection()
+                    copy_values(step['values'], conn)
+                    if enslaver_alias_inserted_id:
+                        conn.enslaver_alias_id = enslaver_alias_inserted_id
+                    elif conn.enslaver_alias_id < 0:
+                        conn.enslaver_alias_id = alias_pk_ref[conn.enslaver_alias_id]
+                    conn.save()
+                else:
+                    raise Exception('Unexpected model type')
 
 class Command(BaseCommand):
     help = ('Imports a CSV file with the full Voyages dataset and converts the data '
@@ -153,8 +313,9 @@ class Command(BaseCommand):
         voyages = {}
         captains = {}
         ship_owners = {}
-        captain_connections = []
-        ship_owner_connections = []
+        if settings.VOYAGE_ENSLAVERS_MIGRATION_STAGE <= 2:
+            captain_connections = []
+            ship_owner_connections = []
         source_connections = []
         afrinfo_conn = []
         cargo_conn = []
@@ -601,36 +762,40 @@ class Command(BaseCommand):
                     voyage_dates.append(row_to_dates(rh, voyage))
                     crews.append(row_to_crew(rh, voyage))
                     voyage_numbers.append(row_to_numbers(rh, voyage))
-                    # Captains
-                    for order, key in enumerate(get_multi_valued_column_suffix(3)):
-                        captain_name = rh.get('captain' + key)
-                        if captain_name is None or empty.match(captain_name):
-                            continue
-                        captain_model = captains.get(captain_name)
-                        if captain_model is None:
-                            captain_model = VoyageCaptain()
-                            captain_model.name = captain_name
-                            captains[captain_name] = captain_model
-                        captain_connection = VoyageCaptainConnection()
-                        captain_connection.captain = captain_model
-                        captain_connection.captain_order = order + 1
-                        captain_connection.voyage = voyage
-                        captain_connections.append(captain_connection)
-                    # Ship owners
-                    for order, key in enumerate(get_multi_valued_column_suffix(45)):
-                        owner_name = rh.get('owner' + key)
-                        if owner_name is None or empty.match(owner_name):
-                            continue
-                        owner_model = ship_owners.get(owner_name)
-                        if owner_model is None:
-                            owner_model = VoyageShipOwner()
-                            owner_model.name = owner_name
-                            ship_owners[owner_name] = owner_model
-                        owner_connection = VoyageShipOwnerConnection()
-                        owner_connection.owner = owner_model
-                        owner_connection.owner_order = order + 1
-                        owner_connection.voyage = voyage
-                        ship_owner_connections.append(owner_connection)
+                    if settings.VOYAGE_ENSLAVERS_MIGRATION_STAGE <= 2:
+                        # After the migration, captain and owners have to be
+                        # imported separately using a specific import for PAST.
+                        #
+                        # Captains
+                        for order, key in enumerate(get_multi_valued_column_suffix(3)):
+                            captain_name = rh.get('captain' + key)
+                            if captain_name is None or empty.match(captain_name):
+                                continue
+                            captain_model = captains.get(captain_name)
+                            if captain_model is None:
+                                captain_model = VoyageCaptain()
+                                captain_model.name = captain_name
+                                captains[captain_name] = captain_model
+                            captain_connection = VoyageCaptainConnection()
+                            captain_connection.captain = captain_model
+                            captain_connection.captain_order = order + 1
+                            captain_connection.voyage = voyage
+                            captain_connections.append(captain_connection)
+                        # Ship owners
+                        for order, key in enumerate(get_multi_valued_column_suffix(45)):
+                            owner_name = rh.get('owner' + key)
+                            if owner_name is None or empty.match(owner_name):
+                                continue
+                            owner_model = ship_owners.get(owner_name)
+                            if owner_model is None:
+                                owner_model = VoyageShipOwner()
+                                owner_model.name = owner_name
+                                ship_owners[owner_name] = owner_model
+                            owner_connection = VoyageShipOwnerConnection()
+                            owner_connection.owner = owner_model
+                            owner_connection.owner_order = order + 1
+                            owner_connection.voyage = voyage
+                            ship_owner_connections.append(owner_connection)
                     # Sources
                     for order, key in enumerate(get_multi_valued_column_suffix(18)):
                         source_ref = rh.get('source' + key)
@@ -741,17 +906,18 @@ class Command(BaseCommand):
                 clear_fk('voyage_dates_id')
                 clear_fk('voyage_crew_id')
                 clear_fk('voyage_slaves_numbers_id')
+                if settings.VOYAGE_ENSLAVERS_MIGRATION_STAGE <= 2:
+                    helper.delete_all(cursor, VoyageCaptainConnection)
+                    helper.delete_all(cursor, VoyageCaptain)
+                    helper.delete_all(cursor, VoyageShipOwnerConnection)
+                    helper.delete_all(cursor, VoyageShipOwner)
                 helper.delete_all(cursor, LinkedVoyages)
-                helper.delete_all(cursor, VoyageCaptainConnection)
-                helper.delete_all(cursor, VoyageShipOwnerConnection)
                 helper.delete_all(cursor, VoyageSourcesConnection)
-                helper.delete_all(cursor, VoyageCaptain)
                 helper.delete_all(cursor, VoyageCrew)
                 helper.delete_all(cursor, VoyageDates)
                 helper.delete_all(cursor, VoyageItinerary)
                 helper.delete_all(cursor, VoyageOutcome)
                 helper.delete_all(cursor, VoyageShip)
-                helper.delete_all(cursor, VoyageShipOwner)
                 helper.delete_all(cursor, VoyageSlavesNumbers)
                 helper.delete_all(cursor, Voyage.african_info.through)
                 helper.delete_all(cursor, VoyageCargoConnection)
@@ -810,17 +976,18 @@ class Command(BaseCommand):
                 bulk_insert(VoyageOutcome, outcomes)
 
                 # Now insert the many-to-many connections
-                set_voyages_fk(captain_connections)
-                set_foreign_keys(captain_connections, captains,
-                                lambda x: x.captain.name, 'captain')
-                set_voyages_fk(ship_owner_connections)
-                set_foreign_keys(ship_owner_connections, ship_owners,
-                                lambda x: x.owner.name, 'owner')
                 set_foreign_keys(source_connections, voyages,
                                 lambda x: x.group.voyage_id, 'group')
+                if settings.VOYAGE_ENSLAVERS_MIGRATION_STAGE <= 2:
+                    set_voyages_fk(captain_connections)
+                    set_foreign_keys(captain_connections, captains,
+                                    lambda x: x.captain.name, 'captain')
+                    set_voyages_fk(ship_owner_connections)
+                    set_foreign_keys(ship_owner_connections, ship_owners,
+                                    lambda x: x.owner.name, 'owner')
+                    bulk_insert(VoyageCaptainConnection, captain_connections)
+                    bulk_insert(VoyageShipOwnerConnection, ship_owner_connections)
                 bulk_insert(LinkedVoyages, voyage_links)
-                bulk_insert(VoyageCaptainConnection, captain_connections)
-                bulk_insert(VoyageShipOwnerConnection, ship_owner_connections)
                 bulk_insert(VoyageSourcesConnection, source_connections)
                 bulk_insert(Voyage.african_info.through, afrinfo_conn)
                 bulk_insert(VoyageCargoConnection, cargo_conn)

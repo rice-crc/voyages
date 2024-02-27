@@ -131,79 +131,7 @@ function processResponse(json, mainDatatable, fuzzySearch) {
   var rankingIndex = getColumnIndex('ranking');
 
   json.data.forEach(function(row) {
-    row.names = $.map(row.names, function(s) { return s.replace(' ', '&nbsp;'); }).join('<br>');
-
-    var arrivalDateArray = row.voyage__voyage_dates__first_dis_of_slaves ? row.voyage__voyage_dates__first_dis_of_slaves.split([',']) : '';
-    var arrivalDate = '';
-
-    if (arrivalDateArray.length == 3) {
-      arrivalDate = arrivalDateArray[2];
-    } else if (arrivalDateArray.length == 1) {
-      arrivalDate = arrivalDateArray[0];
-    }
-    row.voyage__voyage_dates__first_dis_of_slaves = arrivalDate;
-
-    var gender = '';
-    if (row.gender == 1) {
-      gender = gettext("Male");
-    } else if (row.gender == 2) {
-      gender = gettext("Female");
-    }
-    row.gender = gender;
-
-    if (!row.ranking) {
-      row.ranking = '1';
-    } else {
-      row.ranking++;
-    }
-
-    if (row.alias_list) {
-      var aliasList = {};
-      aliasList = row.alias_list.filter((element) => {
-        return row.principal_alias != element;
-      });
-      row.alias_list = aliasList;
-    }
-
-    if (row.voyages_list) {
-      row.voyages_list.forEach((value) => {
-        var arrivalDateArray = value.voyage_year ? value.voyage_year.split([',']) : '';
-        var arrivalDate = '';
-
-        if (arrivalDateArray.length == 3) {
-          arrivalDate = arrivalDateArray[2];
-        } else if (arrivalDateArray.length == 1) {
-          arrivalDate = arrivalDateArray[0];
-        }
-        value.voyage_year = arrivalDate;
-      });
-    }
-
-    if (row.relations_list) {
-      row.relations_list.forEach((value) => {
-        var arrivalDateArray = value.date ? value.date.split([',']) : '';
-        var arrivalDate = '';
-
-        if (arrivalDateArray.length == 3) {
-          arrivalDate = arrivalDateArray[2];
-        } else if (arrivalDateArray.length == 1) {
-          arrivalDate = arrivalDateArray[0];
-        }
-        value.relation_year = arrivalDate;
-      });
-    }
-
-    if (!row.cached_properties__enslaved_count) {
-      row.cached_properties__enslaved_count = 0;
-    }
-
-    // source formatting
-    row.sources_raw = row.sources_list;
-    row.sources_list = getFormattedSourceInTable(
-      row.sources_list
-    );
-
-    data.push(row);
+    data.push(processResponseItem(row));
   });
 
   if (rankingIndex !== null) {
@@ -254,24 +182,6 @@ function getVoyageFormattedSource(sources) {
     value += "<div><span class='source-title'>" + first + ": </span>";
     value += "<span class='source-content'>" + second + "</span></div>";
   });
-  return value;
-}
-
-function getFormattedSourceInTable(sources) {
-  var value = ""; // empty value string
-  try {
-    sources.forEach(function(source) {
-      value +=
-        "<div><span data-toggle='tooltip' data-placement='top' data-html='true' data-original-title='" +
-        source.full_ref +
-        "'>" +
-        source.text_ref +
-        "</span></div>";
-    });
-  }
-  catch(err) {
-    console.log(`Error in getFormattedSourceInTable: ${err.message}`);
-  }
   return value;
 }
 
@@ -997,69 +907,6 @@ function displayColumnOrder(order) {
 
     styleElem.innerHTML = innerHTML;
   }
-}
-
-function formatVoyages ( d ) {
-  var voyagesTable = '<div style="width: 100%; background-color: #FFFFFF;" class="d-flex flex-row-reverse enslaver-voyages"><table id="nested_enslaver_voyage_table" cellpadding="5" cellspacing="0" border="0">'+
-    '<thead><tr>'+
-      '<th>'+gettext("Voyage ID")+'</th>'+
-      '<th>'+gettext("Enslaver Alias")+'</th>'+
-      '<th>'+gettext("Voyage Year")+'</th>'+
-      '<th>'+gettext("Disembarkation Port")+'</th>'+
-      '<th>'+gettext("Embarkation Port")+'</th>'+
-      '<th>'+gettext("Role")+'</th>'+
-      '<th>'+gettext("Ship Name")+'</th>'+
-      '<th><span>' + gettext("Captives Embarked") + '</span> <span class="badge badge-pill badge-secondary" data-toggle="tooltip" data-placement="top" title="' + gettext("Imputed results are calculated by an algorithm.") + '"> IMP </span></th>'+
-    '</tr></thead><tbody>';
-    d.voyages_list.forEach((item) => {
-      voyagesTable += '<tr>'+
-        '<td class="text-right">'+'<a href="javascript:void(0)" onclick="openVoyageModal(' + item.voyage_id + ');">' + item.voyage_id + '</a>'+'</td>'+
-        '<td>'+item.alias+'</td>'+
-        '<td class="text-right">'+item.voyage_year+'</td>'+
-        '<td>'+item.disembarkation_port+'</td>'+
-        '<td>'+item.embarkation_port+'</td>'+
-        '<td>'+item.role+'</td>'+
-        '<td>'+item.ship_name+'</td>'+
-        '<td class="text-right">'+item.slaves_embarked+'</td>'+
-      '</tr>';
-    });
-    voyagesTable += '</tbody></table></div></td></tr><tr>';
-  return voyagesTable;
-}
-
-function formatRelations ( d ) {
-  var relationsTable = '<div style="width: 100%; background-color: #FFFFFF; max-height:200px; overflow:auto;" class="d-flex flex-row-reverse enslaver-relations"><table cellpadding="5" cellspacing="0" border="0">'+
-    '<tr>'+
-      '<th>'+gettext("Relation ID")+'</th>'+
-      '<th>'+gettext("Alias")+'</th>'+
-      '<th>'+gettext("Role")+'</th>'+
-      '<th>'+gettext("Year")+'</th>'+
-    '</tr>';
-
-    d.relations_list.forEach((relation) => {
-      relation.enslaved.forEach((person) => {
-        if (person.id !== d.id) {
-          relationsTable += '<tr>'+
-            '<td class="text-right">'+relation.relation_id+'</td>'+
-            '<td>'+person.alias+'</td>'+
-            '<td>'+relation.role+'</td>'+
-            '<td class="text-right">'+relation.relation_year+'</td>'+
-          '</tr>';
-        }
-      });
-      relation.enslavers.forEach((person) => {
-        if (person.id !== d.id) {
-          relationsTable += '<tr>'+
-            '<td class="text-right">'+relation.relation_id+'</td>'+
-            '<td>'+person.alias+'</td>'+
-            '<td>'+relation.role+'</td>'+
-            '<td class="text-right">'+relation.relation_year+'</td>'+
-          '</tr>';
-        }
-      });
-    });
-    relationsTable += '</table></div></td></tr><tr>';
-  return relationsTable;
 }
 
 var mainDatatable = null;
