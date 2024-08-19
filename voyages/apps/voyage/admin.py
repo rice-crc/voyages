@@ -35,8 +35,7 @@ class FlatPageAdmin(FlatPageAdmin):
 
     class Media:
         js = (
-            '//cdn.tiny.cloud/1/evau54786a4pxb62mp84sjc26h72hrpdu9b5'
-            'ht3zzn8oisd5/tinymce/5/tinymce.min.js',
+            '//cdn.tiny.cloud/1/s12zokrfdqicajy5cxdauxuczwq653y00bx98ae9qhwklhh3/tinymce/7/tinymce.min.js',
             'scripts/tiny_mce/textareas.js',
         )
 
