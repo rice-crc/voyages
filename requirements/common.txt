@@ -23,7 +23,7 @@ haversine
 libsass==0.13.3
 django-appconf==1.0.3
 django-compressor==2.2
-django-sass-processor
+django-sass-processor==1.2.2
 django-storages==1.7.1
 six==1.10.0
 Levenshtein_search
