@@ -27,7 +27,7 @@ class AdvancedEditorManager(forms.Textarea):
     class Media:
         js = (
             '//cdn.tiny.cloud/1/s12zokrfdqicajy5cxdauxuczwq653y00bx98ae9qhwklhh3/tinymce/7/tinymce.min.js',
-            'scripts/tiny_mce/textareas.js')
+            'scripts/tiny_mce/textareas.js',)
 
     def __init__(self, language=None, attrs=None):
         self.language = language or settings.LANGUAGE_CODE[:2]
