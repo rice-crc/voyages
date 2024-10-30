@@ -1,16 +1,25 @@
+function FileBrowserPopup(callback, value, type) {
+    var fbURL = '/admin/filebrowser/browse/?pop=5';
+    fbURL = fbURL + "&type=" + type.filetype;
+    if(value)
+        fbURL += '&input=';
+    const instanceApi = tinyMCE.activeEditor.windowManager.openUrl({
+        title: 'Filebrowser image/media/file picker',
+        url: fbURL,
+        width: 1280,
+        height: 800,
+        onMessage: function(dialogApi, details) {
+            callback(details.content);
+            instanceApi.close();
+        }
+    });
+    return false;
+}
+
 tinymce.init({
     selector: "textarea",
-    plugins: [
-        "advlist autolink lists link image charmap print preview hr anchor pagebreak",
-        "searchreplace wordcount visualblocks visualchars code fullscreen",
-        "insertdatetime media nonbreaking save table contextmenu directionality",
-        "emoticons template paste textcolor"
-    ],
-    toolbar1: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image",
-    toolbar2: "print preview media | forecolor backcolor emoticons",
+    plugins: "link image media",
+//     images_upload_url: '/documents/blog/images/',
     image_advtab: true,
-    templates: [
-        {title: 'Test template 1', content: 'Test 1'},
-        {title: 'Test template 2', content: 'Test 2'}
-    ],
+    file_picker_callback: FileBrowserPopup,
 });
