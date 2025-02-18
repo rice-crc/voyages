@@ -7,92 +7,31 @@
 {% block center-content %}
 <div class="page-title-1">{% trans "Contribute" %}</div>
 
-{% url 'voyage:guide' as voyage_guide_url %}
 {% url 'contribute:guidelines' as contribute_guidelines_url %}
-{% url 'account_signup' as contribute_newuser_url %}
-{% url 'account_reset_password'  as password_reset_url %}
 
 <p>
-	{% blocktrans %}The Contribute section allows users of the Voyages website to supply and/or revise existing information
-    in the Voyages Database. A team of slave trade scholars will review each contribution as part of the peer-review process.
-    New and/or revised information will be incorporated in the subsequent updates to the Voyages Database.{% endblocktrans %}
+	{% blocktrans %}Dear Contributors,{% endblocktrans %}
 </p>
 
 <p>
-	{% blocktrans %}The Contribute feature facilitates collaborative research and information sharing among the global
-    network of scholars working to continuously improve the store of knowledge about the slave trade.  These scholars are
-    increasingly working across diverse forms of media, from written documents to collections of machine-readable data.
-    The Voyages Database is itself the product of extensive revisions since the publication of the CD-ROM version of the
-    dataset in 1999. The Contribute section allows the database to continue evolving in a way that respects the high
-    standards of scholarship governing the construction of the original database.{% endblocktrans %}
+	{% blocktrans %}We are currently working to update our website, including its Contribute and the Editorial Platform pages. As a consequence, we will have to temporarily deactivate our contribution channels, including this portal. All other resources will remain intact.
+{% endblocktrans %}
 </p>
 
 <p>
-	{% blocktrans %}Step-by-step instructions on how to use the Contribute forms are provided in the Voyages Guide,
-    a PDF file accessible in <a href="{{ voyage_guide_url }}">“Understanding the Database”</a>.
-    For further advice on contributing new data, we ask you to read our
-    <a href="{{ contribute_guidelines_url }}">“Guidelines for Contributors.”</a>{% endblocktrans %}
+	{% blocktrans %}If you have any contribution that you would like to make – new voyages, details about existing voyages, information on enslaved and enslaver individuals – we kindly ask you to wait until we reactivate our contribution channels. Alternatively, you may submit your data by email to our project's Operational Committee at <a href="mailto:svopcom@googlegroups.com">svopcom@googlegroups.com</a>. We will save your contribution and submit it for review by our editors. Any approved contribution will be subsequently merged with the SlaveVoyages database.{% endblocktrans %}
 </p>
 
 <p>
-	{% blocktrans %}For purposes of managing contributions to the website, contributors are asked to register
-	for an account and provide an email address for communication.{% endblocktrans %}
+	{% blocktrans %}SlaveVoyages is a collaborative project. Our database is freely available to the public, and we welcome contributions from researchers and members of the general public. We are currently reviewing contributions to over 3,000 records of voyages and many more records of individual enslaved and enslavers. The forthcoming website update requires us to clear the review of these contributions. We deeply value your collaboration and appreciate your patience. Once the portal reopens, we will notify all users by email and through social media. Thank you very much for your understanding!{% endblocktrans %}
 </p>
-
-{% if user.is_authenticated %}
-	{% trans "You are already signed in." %}
-{% else %}
-
-<div class="page-title-2">{% trans "Sign in" %}</div>
 
 <p>
-	{% trans "In order to access the Contribute section, please sign in." %}
+	{% blocktrans %}Sincerely,{% endblocktrans %}
 </p>
 
-<div style="padding: 1rem; background-color: #FFF8CE; border-top: 1px solid #DDCA9D; border-bottom: 1px solid #DDCA9D;">
-	{% if form.errors %}
-	<p style="color: red">
-		{% trans "Your username/email and password didn't match. Please try again." %}
-	</p>
-	{% endif %}
-
-	<form method="post" action="{% url 'account_login' %}">
-		{% csrf_token %}
-		<table>
-            {{ form.as_table }}
-		</table>
-        {% if redirect_field_value %}
-        <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
-        {% endif %}
-		<input type="hidden" name="next" value="{% url 'contribute:legal' %}" />
-		<button type="submit" class="local_account_login_btn">
-			{% trans 'Sign in' %}
-		</button>
-	</form>
-
-	<form action="/accounts/google/login" style="margin: 1rem 0;">
-		<button type="submit" class="google_login_btn">
-			<img src="{{ STATIC_URL}}images/site/google_logo.png" width="16px" height="16px" /> {% trans 'Sign in with Google' %}
-		</button>
-	</form>
-
-	{% blocktrans %}
-	If you don't have an account, <a href="{{ contribute_newuser_url }}">Create an Account</a>.
-	If you have forgotten your password, <a href="{{ password_reset_url }}">Retrieve Password</a>.
-	{% endblocktrans %}
-</div>
-
-
-{% endif %}
-
-<script type="text/javascript" src="{{ STATIC_URL }}scripts/legacy/utils.js"></script>
-<script type="text/javascript">
-    var params = pageGetParams();
-    if (params.next) {
-        $('input[name={{ redirect_field_name }}]').remove();
-        $('form').append('<input type="hidden" name="{{ redirect_field_name }}" value="' + params.next + '" />');
-		sessionStorage.setItem('loginRedirectUrl', params.next);
-    }
-</script>
+<p>
+	{% blocktrans %}The SlaveVoyages Team{% endblocktrans %}
+</p>
 
 {% endblock %}
