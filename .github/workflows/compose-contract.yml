@@ -1,0 +1,12 @@
+name: Compose contract
+on:
+  pull_request:
+    paths: ['docker-compose*.yml', 'tests/test_compose_contract.py', '.github/workflows/compose-contract.yml']
+  push:
+    paths: ['docker-compose*.yml', 'tests/test_compose_contract.py', '.github/workflows/compose-contract.yml']
+jobs:
+  compose:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: python3 tests/test_compose_contract.py
