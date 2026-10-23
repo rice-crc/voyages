@@ -86,18 +86,6 @@ services:
       - "./voyages/sitemedia:/mnt/sv_share/sitemedia"
       - "./voyages/static:/mnt/sv_share/static"
 
-  voyages-adminer:
-    image: "adminer:latest"
-    container_name: "voyages-adminer"
-    hostname: "voyages-adminer"
-    restart: "on-failure"
-    depends_on:
-      - "voyages-mysql"
-    ports:
-      - "8080:8080"
-    networks:
-      - "voyages"
-
   voyages-mailhog:
     image: "mailhog/mailhog:latest"
     platform: "linux/amd64"
